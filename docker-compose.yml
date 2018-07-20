@@ -10,3 +10,5 @@ services:
       - "3000:3000"
       - "9009:9009"
     privileged: true
+    environment:
+      REACT_APP_HIF_API_URL: http://localhost:4567/
