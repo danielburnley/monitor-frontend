@@ -1,6 +1,8 @@
-import React from "react";
-import './App.css'
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import React from 'react';
+import FormField from './components/FormField';
+
+import './App.css';
+import {BrowserRouter as Router, Route} from 'react-router-dom';
 
 const App = () => (
   <Router>
@@ -19,193 +21,218 @@ const Home = () => (
 
 class Review extends React.Component {
   constructor() {
-    super()
-    this.state = { loading: true }
-
-    this.fetchData = this.fetchData.bind(this)
+    super();
+    this.state = {loading: true};
   }
 
-  async fetchData() {
-    let raw_review = await fetch(`${process.env.REACT_APP_HIF_API_URL}project/find?id=${this.props.match.params.id}`)
-    let json_review = await raw_review.json()
-    this.setState({ loading: false, reviewData: json_review })
-  }
+  fetchData = async () => {
+    let raw_review = await fetch(
+      `${process.env.REACT_APP_HIF_API_URL}project/find?id=${
+        this.props.match.params.id
+      }`,
+    );
+    let json_review = await raw_review.json();
+    await this.setState({loading: false, reviewData: json_review});
+  };
 
-  componentDidMount() {
-    this.fetchData() 
+  async componentDidMount() {
+    await this.fetchData();
   }
 
   renderForm() {
-    if(this.state.loading) {
-      return (<div />)
+    if (this.state.loading) {
+      return <div />;
     }
 
     return (
-      <ReviewForm reviewId={this.props.match.params.id} data={this.state.reviewData.data} />
-    )
+      <ReviewForm
+        reviewId={this.props.match.params.id}
+        data={this.state.reviewData.data}
+      />
+    );
   }
 
   render() {
-    return (
-      <div>
-        {this.renderForm()}
-      </div>
-    )
+    return <div>{this.renderForm()}</div>;
   }
 }
 
-class FormField extends React.Component {
-  constructor() {
-    super()
-    this.onFieldChange = this.onFieldChange.bind(this)
-  }
-
-  onFieldChange(e) {
-    this.props.updateField(this.props.fieldName, e.target.value)
-  }
-
-  render() {
-    return (
-      <div className="form-field">
-        <div>
-          <label htmlFor={this.props.fieldName}>{this.props.fieldLabel}</label>
-        </div>
-        <div>
-          <input type="text" id={this.props.fieldName} name={this.props.fieldName} onChange={this.onFieldChange} value={this.props.initialValue}/>
-        </div>
-      </div>
-    )
-  }
-} 
-
 class ReviewForm extends React.Component {
-  constructor() {
-    super()
-    this.state = {formData: {}}
+  constructor(props) {
+    super(props);
+
+    this.state = {formData: this.initialFormData()};
   }
 
-  onFormSubmit = async (e) => {
-    e.preventDefault()
+  initialFormData = () => {
+    return {
+      projectName: this.props.data.summary.projectName,
+      description: this.props.data.summary.description,
+      projectStatus: this.props.data.summary.status,
+      leadAuthority: this.props.data.summary.leadAuthority,
+      infraType: this.props.data.infrastructure.type,
+      infraDescription: this.props.data.infrastructure.description,
+      infraCompletion: this.props.data.infrastructure.completionDate,
+      financialDate: this.props.data.financial.date,
+      fundedThroughHIF: this.props.data.financial.fundedThroughHIF
+        ? 'Yes'
+        : 'No',
+    };
+  };
+
+  onFormSubmit = async e => {
+    e.preventDefault();
     let reviewData = {
-      "id": this.props.reviewId,
-      "project": {
-        "type": "hif",
-        "baselineData": {
-          "summary": {
-            "description": this.state.formData['description'],
-            "projectName": this.state.formData['projectName'],
-            "leadAuthority": this.state.formData['leadAuthority'],
+      id: this.props.reviewId,
+      project: {
+        type: 'hif',
+        baselineData: {
+          summary: {
+            description: this.state.formData['description'],
+            projectName: this.state.formData['projectName'],
+            leadAuthority: this.state.formData['leadAuthority'],
+            status: this.state.formData['projectStatus'],
+            statusCommentary: this.state.formData['projectStatusCommentary']
           },
-          "infrastructures": [
-            {
-              "completionDate": this.state.formData['infraCompletion'],
-              "description": this.state.formData['infraDescription'],
-              "type": this.state.formData['infraType']
-            }
-          ],
-          "financials": [
-            {
-              "date": this.state.formData['financialDate'],
-              "fundedThroughHIF": this.state.formData['fundedThroughHIF'] === 'Yes'
-            }
-          ]
-        }
-      }
-    }
+          infrastructure: {
+            completionDate: this.state.formData['infraCompletion'],
+            description: this.state.formData['infraDescription'],
+            type: this.state.formData['infraType'],
+          },
+          financial: {
+            date: this.state.formData['financialDate'],
+            fundedThroughHIF: this.state.formData['fundedThroughHIF'] === 'Yes',
+          },
+        },
+      },
+    };
 
-    const response = await fetch(`${process.env.REACT_APP_HIF_API_URL}project/update`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(reviewData)
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_HIF_API_URL}project/update`,
+      {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(reviewData),
+      },
+    );
 
-    if(response.ok) {
-      alert('Review submitted successfully!')
+    if (response.ok) {
+      alert('Review submitted successfully!');
     } else {
-      alert('Review submission unsuccessful')
+      alert('Review submission unsuccessful');
     }
-  }
+  };
 
   onFieldChange = (fieldName, fieldValue) => {
-    let formData = this.state.formData
-    formData[fieldName] = fieldValue
-    this.setState({ formData })
-  }
-
-  componentDidMount() {
-    let formData = {
-      'projectName': this.props.data.summary.projectName,
-      'description': this.props.data.summary.description,
-      'leadAuthority': this.props.data.summary.leadAuthority,
-      'infraType': this.props.data.infrastructures[0].type,
-      'infraDescription': this.props.data.infrastructures[0].description,
-      'infraCompletion': this.props.data.infrastructures[0].completionDate,
-      'financialDate': this.props.data.financials[0].date,
-      'fundedThroughHIF': this.props.data.financials[0].fundedThroughHIF ? 'Yes' : 'No'
-    }
-
-    this.setState({ formData })
-  }
+    let formData = this.state.formData;
+    formData[fieldName] = fieldValue;
+    this.setState({formData});
+  };
 
   render() {
     return (
       <div className="form-container">
-      <form className="review-form" onSubmit={this.onFormSubmit}>
-      <h2>Summary</h2>
-      <FormField 
-        fieldLabel='Project Name'
-        fieldName='projectName' updateField={this.onFieldChange} 
-        initialValue={this.state.formData['projectName']} 
-      />
+        <form className="review-form" onSubmit={this.onFormSubmit}>
+          <h2>Summary</h2>
 
-      <FormField 
-        fieldLabel='Project Description'
-        fieldName='description' updateField={this.onFieldChange} 
-        initialValue={this.state.formData['description']} 
-      />
+          <FormField
+            type="text"
+            fieldLabel="Project Name"
+            baseline={true}
+            fieldName="projectName"
+            updateField={this.onFieldChange}
+            initialValue={this.state.formData['projectName']}
+          />
 
-      <FormField 
-        fieldLabel='Lead authority'
-        fieldName='leadAuthority' updateField={this.onFieldChange} 
-        initialValue={this.state.formData['leadAuthority']} 
-      />
+          <FormField
+            type="text"
+            fieldLabel="Project Description"
+            baseline={true}
+            fieldName="description"
+            updateField={this.onFieldChange}
+            initialValue={this.state.formData['description']}
+          />
 
-      <h2>Infrastructure</h2>
-      <FormField 
-        fieldLabel='Type'
-        fieldName='infraType' updateField={this.onFieldChange} 
-        initialValue={this.state.formData['infraType']} 
-      />
+          <FormField
+            type="text"
+            fieldLabel="Lead authority"
+            baseline={true}
+            fieldName="leadAuthority"
+            updateField={this.onFieldChange}
+            initialValue={this.state.formData['leadAuthority']}
+          />
 
-      <FormField 
-        fieldLabel='Description'
-        fieldName='infraDescription' updateField={this.onFieldChange} 
-        initialValue={this.state.formData['infraDescription']} 
-      />
+          <FormField
+            type="status"
+            fieldLabel="Project Status"
+            baseline={false}
+            fieldName="projectStatus"
+            updateField={this.onFieldChange}
+            initialValue={this.state.formData['projectStatus']}
+          />
 
-      <FormField 
-        fieldLabel='Completion Date'
-        fieldName='infraCompletion' updateField={this.onFieldChange} 
-        initialValue={this.state.formData['infraCompletion']} 
-      />
+          <FormField
+            type="text"
+            fieldLabel="Commentary (if updated)"
+            baseline={false}
+            fieldName="projectStatusCommentary"
+            updateField={this.onFieldChange}
+            initialValue={this.state.formData['projectStatusCommentary']}
+          />
 
-      <h2>Financials</h2>
-      <FormField 
-        fieldLabel='Funding Date'
-        fieldName='financialDate' updateField={this.onFieldChange} 
-        initialValue={this.state.formData['financialDate']} 
-      />
+          <h2>Infrastructure</h2>
 
-      <FormField 
-        fieldLabel='Funded through HIF'
-        fieldName='fundedThroughHIF' updateField={this.onFieldChange} 
-        initialValue={this.state.formData['fundedThroughHIF']} 
-      />
+          <FormField
+            type="text"
+            fieldLabel="Type"
+            baseline={true}
+            fieldName="infraType"
+            updateField={this.onFieldChange}
+            initialValue={this.state.formData['infraType']}
+          />
 
-      <button type="submit">Submit Review</button>
-      </form>
+          <FormField
+            type="text"
+            fieldLabel="Description"
+            baseline={true}
+            fieldName="infraDescription"
+            updateField={this.onFieldChange}
+            initialValue={this.state.formData['infraDescription']}
+          />
+
+          <FormField
+            type="text"
+            fieldLabel="Completion Date"
+            baseline={true}
+            fieldName="infraCompletion"
+            updateField={this.onFieldChange}
+            initialValue={this.state.formData['infraCompletion']}
+          />
+
+          <h2>Financials</h2>
+
+          <FormField
+            type="text"
+            fieldLabel="Funding Date"
+            baseline={true}
+            fieldName="financialDate"
+            updateField={this.onFieldChange}
+            initialValue={this.state.formData['financialDate']}
+          />
+
+          <FormField
+            type="yes/no"
+            fieldLabel="Funded through HIF"
+            baseline={true}
+            fieldName="fundedThroughHIF"
+            updateField={this.onFieldChange}
+            initialValue={this.state.formData['fundedThroughHIF']}
+          />
+
+          <button type="submit">Submit Review</button>
+        </form>
       </div>
-    )
+    );
   }
 }
 

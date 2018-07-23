@@ -7,6 +7,21 @@
   width: 960px;
 }
 
+.form-field input:disabled {
+  background-color: #FCBDBD;
+  color: black;
+}
+
+.form-field select:disabled {
+  background-color: #FCBDBD;
+  color: black;
+}
+
+.form-field select {
+  background-color: #FFE644;
+  color: black;
+}
+
 input {
   width: 100%;
   padding: 12px 20px;
@@ -15,6 +30,6 @@ input {
 }
 
 button {
-  align-self: flex-end;
+  float: right;
 }
 
