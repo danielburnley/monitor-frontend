@@ -1,6 +1,6 @@
 import React from 'react';
-import FormField from './components/FormField';
-import ProjectForm from './components/ProjectForm';
+import FormField from './Components/FormField';
+import ProjectForm from './Components/ProjectForm';
 import GetProject from './UseCase/GetProject';
 import ProjectGateway from './Gateway/ProjectGateway';
 
@@ -46,10 +46,12 @@ class Project extends React.Component {
         infraType: infrastructure.type,
         description: infrastructure.description,
         completionDate: infrastructure.completionDate,
+        planning: {
+          estimatedSubmission: infrastructure.planning.estimatedSubmission,
+        },
       },
       financial: {
-        dateReceived: financial.date,
-        fundedThroughHIF: financial.fundedThroughHIF,
+        estimatedTotalAmount: financial.estimatedTotalAmount,
       },
     };
 

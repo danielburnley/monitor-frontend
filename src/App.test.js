@@ -28,8 +28,13 @@ describe('Viewing at a project', () => {
           type: 'Building',
           description: 'A big building with a stage',
           completionDate: '2019-01-01',
+          planning: {
+            estimatedSubmission: '2018-01-01'
+          }
         },
-        financial: {date: '2018-06-01', fundedThroughHIF: true},
+        financial: {
+          estimatedTotalAmount: '£ 1,000,000.00'
+        }
       },
     };
 
@@ -40,8 +45,8 @@ describe('Viewing at a project', () => {
       'Building',
       'A big building with a stage',
       '2019-01-01',
-      '2018-06-01',
-      true,
+      '2018-01-01',
+      '£ 1,000,000.00',
     ];
 
     let projectRequest = nock('http://cat.meow')

@@ -2,46 +2,6 @@ import React from 'react';
 import Form from 'react-jsonschema-form';
 
 export default class ProjectForm extends React.Component {
-  submitFormData = async formData => {
-    let reviewData = {
-      id: this.props.reviewId,
-      project: {
-        type: 'hif',
-        baselineData: {
-          summary: {
-            description: formData.summary.description,
-            projectName: formData.summary.name,
-            leadAuthority: formData.summary.leadAuthority,
-          },
-          infrastructure: {
-            completionDate: formData.infrastructure.completionDate,
-            description: formData.infrastructure.description,
-            type: formData.infrastructure.infraType,
-          },
-          financial: {
-            date: formData.financial.dateReceived,
-            fundedThroughHIF: formData.financial.fundedThroughHIF,
-          },
-        },
-      },
-    };
-
-    const response = await fetch(
-      `${process.env.REACT_APP_HIF_API_URL}project/update`,
-      {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(reviewData),
-      },
-    );
-
-    if (response.ok) {
-      alert('Review submitted successfully!');
-    } else {
-      alert('Review submission unsuccessful');
-    }
-  };
-
   render() {
     const schema = {
       title: 'HIF Review',
@@ -53,7 +13,7 @@ export default class ProjectForm extends React.Component {
           properties: {
             name: {type: 'string', title: 'Name'},
             description: {type: 'string', title: 'Description'},
-            leadAuthority: {type: 'string', title: 'Lead Authority'}
+            leadAuthority: {type: 'string', title: 'Lead Authority'},
           },
         },
         infrastructure: {
@@ -67,18 +27,27 @@ export default class ProjectForm extends React.Component {
               format: 'date',
               title: 'Completion Date',
             },
+            planning: {
+              type: 'object',
+              title: 'Planning permission',
+              properties: {
+                estimatedSubmission: {
+                  type: 'string',
+                  format: 'date',
+                  title: 'Estimated date of submission',
+                },
+              },
+            },
           },
         },
         financial: {
           type: 'object',
           title: 'Financial information',
           properties: {
-            dateReceived: {
+            estimatedTotalAmount: {
               type: 'string',
-              format: 'date',
-              title: 'Date received',
+              title: 'Estimated total amount required',
             },
-            fundedThroughHIF: {type: 'boolean', title: 'Funded through HIF?'},
           },
         },
       },
@@ -94,11 +63,13 @@ export default class ProjectForm extends React.Component {
         infraType: {'ui:readonly': true},
         description: {'ui:readonly': true},
         completionDate: {'ui:readonly': true},
+        planning: {
+          estimatedSubmission: {'ui:readonly': true},
+        },
       },
       financial: {
-        dateReceived: {'ui:readonly': true},
-        fundedThroughHIF: {'ui:readonly': true}
-      }
+        estimatedTotalAmount: {'ui:readonly': true},
+      },
     };
 
     return (
