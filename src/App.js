@@ -1,6 +1,6 @@
 import React from 'react';
-import FormField from './Components/FormField';
 import ProjectForm from './Components/ProjectForm';
+import ReturnForm from './Components/ReturnForm';
 import GetProject from './UseCase/GetProject';
 import ProjectGateway from './Gateway/ProjectGateway';
 
@@ -11,7 +11,8 @@ const App = () => (
   <Router>
     <div>
       <Route exact path="/" component={Home} />
-      <Route path="/project/:id" component={Project} />
+      <Route exact path="/project/:id" component={Project} />
+      <Route exact path="/project/:projectId/return" component={Return} />
     </div>
   </Router>
 );
@@ -23,6 +24,74 @@ const Home = () => (
 );
 
 const getProjectUsecase = new GetProject(new ProjectGateway());
+
+class Return extends React.Component {
+  constructor() {
+    super();
+    this.state = {loading: true};
+  }
+
+  onFormSubmit = async formData => {
+    console.log(formData)
+  }
+
+  presentProject = async projectData => {
+    const summary = projectData.data.summary;
+    const infrastructure = projectData.data.infrastructure;
+    const financial = projectData.data.financial;
+
+    const formData = {
+      summary: {
+        name: summary.projectName,
+        description: summary.description,
+        status: summary.status,
+        leadAuthority: summary.leadAuthority,
+      },
+      infrastructure: {
+        infraType: infrastructure.type,
+        description: infrastructure.description,
+        completionDate: infrastructure.completionDate,
+        planning: {
+          estimatedSubmission: infrastructure.planning.estimatedSubmission,
+        },
+      },
+      financial: {
+        estimatedTotalAmount: financial.estimatedTotalAmount,
+      },
+    };
+
+    await this.setState({loading: false, formData: formData});
+  };
+
+  fetchData = () => {
+    getProjectUsecase.execute(this, {id: this.props.match.params.projectId});
+  };
+
+  async componentDidMount() {
+    await this.fetchData();
+  }
+
+  renderForm() {
+    if (this.state.loading) {
+      return <div />;
+    }
+
+    return (
+      <ReturnForm
+        onSubmit={this.onFormSubmit}
+        data={this.state.formData}
+      />
+    );
+  }
+
+  render() {
+    return (
+      <div className="container-fluid">
+        <div className="col-md-10 col-md-offset-1">{this.renderForm()}</div>
+      </div>
+    );
+  }
+}
 
 class Project extends React.Component {
   constructor() {
