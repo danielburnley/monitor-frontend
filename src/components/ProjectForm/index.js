@@ -12,8 +12,6 @@ export default class ProjectForm extends React.Component {
             description: formData.summary.description,
             projectName: formData.summary.name,
             leadAuthority: formData.summary.leadAuthority,
-            status: formData.summary.status,
-            statusCommentary: formData.summary.comments,
           },
           infrastructure: {
             completionDate: formData.infrastructure.completionDate,
@@ -43,6 +41,7 @@ export default class ProjectForm extends React.Component {
       alert('Review submission unsuccessful');
     }
   };
+
   render() {
     const schema = {
       title: 'HIF Review',
@@ -54,16 +53,7 @@ export default class ProjectForm extends React.Component {
           properties: {
             name: {type: 'string', title: 'Name'},
             description: {type: 'string', title: 'Description'},
-            leadAuthority: {type: 'string', title: 'Lead Authority'},
-            status: {
-              type: 'string',
-              title: 'Status',
-              enum: ['Completed', 'On Schedule', 'Delayed'],
-            },
-            comments: {
-              type: 'string',
-              title: 'Comments',
-            },
+            leadAuthority: {type: 'string', title: 'Lead Authority'}
           },
         },
         infrastructure: {
@@ -94,12 +84,27 @@ export default class ProjectForm extends React.Component {
       },
     };
 
+    const uiSchema = {
+      summary: {
+        name: {'ui:readonly': true},
+        description: {'ui:readonly': true},
+        leadAuthority: {'ui:readonly': true},
+      },
+      infrastructure: {
+        infraType: {'ui:readonly': true},
+        description: {'ui:readonly': true},
+        completionDate: {'ui:readonly': true},
+      },
+      financial: {
+        dateReceived: {'ui:readonly': true},
+        fundedThroughHIF: {'ui:readonly': true}
+      }
+    };
+
     return (
-      <Form
-        schema={schema}
-        formData={this.props.data}
-        onSubmit={({formData}) => this.submitFormData(formData)}
-      />
+      <Form schema={schema} uiSchema={uiSchema} formData={this.props.data}>
+        <div />
+      </Form>
     );
   }
 }
