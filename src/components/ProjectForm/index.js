@@ -1,7 +1,7 @@
 import React from 'react';
 import Form from 'react-jsonschema-form';
 
-export default class ReviewForm extends React.Component {
+export default class ProjectForm extends React.Component {
   submitFormData = async formData => {
     let reviewData = {
       id: this.props.reviewId,
@@ -94,32 +94,10 @@ export default class ReviewForm extends React.Component {
       },
     };
 
-    const summary = this.props.data.summary;
-    const infrastructure = this.props.data.infrastructure;
-    const financial = this.props.data.financial;
-
-    const formData = {
-      summary: {
-        name: summary.projectName,
-        description: summary.description,
-        status: summary.status,
-        leadAuthority: summary.leadAuthority,
-      },
-      infrastructure: {
-        infraType: infrastructure.type,
-        description: infrastructure.description,
-        completionDate: infrastructure.completionDate,
-      },
-      financial: {
-        dateReceived: financial.date,
-        fundedThroughHIF: financial.fundedThroughHIF,
-      },
-    };
-
     return (
       <Form
         schema={schema}
-        formData={formData}
+        formData={this.props.data}
         onSubmit={({formData}) => this.submitFormData(formData)}
       />
     );

@@ -1,6 +1,6 @@
 import React from 'react';
 import FormField from './components/FormField';
-import ReviewForm from './components/ReviewForm';
+import ProjectForm from './components/ProjectForm';
 import GetProject from './UseCase/GetProject';
 import ProjectGateway from './Gateway/ProjectGateway';
 
@@ -11,7 +11,7 @@ const App = () => (
   <Router>
     <div>
       <Route exact path="/" component={Home} />
-      <Route path="/review/:id" component={Review} />
+      <Route path="/review/:id" component={Project} />
     </div>
   </Router>
 );
@@ -24,14 +24,36 @@ const Home = () => (
 
 const getProjectUsecase = new GetProject(new ProjectGateway());
 
-class Review extends React.Component {
+class Project extends React.Component {
   constructor() {
     super();
     this.state = {loading: true};
   }
 
   presentProject = async projectData => {
-    await this.setState({loading: false, reviewData: projectData});
+    const summary = projectData.data.summary;
+    const infrastructure = projectData.data.infrastructure;
+    const financial = projectData.data.financial;
+
+    const formData = {
+      summary: {
+        name: summary.projectName,
+        description: summary.description,
+        status: summary.status,
+        leadAuthority: summary.leadAuthority,
+      },
+      infrastructure: {
+        infraType: infrastructure.type,
+        description: infrastructure.description,
+        completionDate: infrastructure.completionDate,
+      },
+      financial: {
+        dateReceived: financial.date,
+        fundedThroughHIF: financial.fundedThroughHIF,
+      },
+    };
+
+    await this.setState({loading: false, formData: formData});
   };
 
   fetchData = () => {
@@ -48,9 +70,9 @@ class Review extends React.Component {
     }
 
     return (
-      <ReviewForm
+      <ProjectForm
         reviewId={this.props.match.params.id}
-        data={this.state.reviewData.data}
+        data={this.state.formData}
       />
     );
   }
