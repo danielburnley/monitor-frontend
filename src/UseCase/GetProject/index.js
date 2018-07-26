@@ -3,8 +3,8 @@ export default class GetProject {
     this.projectGateway = projectGateway
   }
 
-  execute(presenter, request) {
-    let {success, foundProject} = this.projectGateway.findById(request.id)
+  async execute(presenter, request) {
+    let {success, foundProject} = await this.projectGateway.findById(request.id)
     if(success) {
       presenter.presentProject(foundProject)
     } else {
