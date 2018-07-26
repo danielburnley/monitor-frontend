@@ -1,6 +1,8 @@
 import React from 'react';
 import FormField from './components/FormField';
-import ReviewForm from './components/ReviewForm';
+import ProjectForm from './components/ProjectForm';
+import GetProject from './UseCase/GetProject';
+import ProjectGateway from './Gateway/ProjectGateway';
 
 import './App.css';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
@@ -9,7 +11,7 @@ const App = () => (
   <Router>
     <div>
       <Route exact path="/" component={Home} />
-      <Route path="/review/:id" component={Review} />
+      <Route path="/review/:id" component={Project} />
     </div>
   </Router>
 );
@@ -20,20 +22,42 @@ const Home = () => (
   </div>
 );
 
-class Review extends React.Component {
+const getProjectUsecase = new GetProject(new ProjectGateway());
+
+class Project extends React.Component {
   constructor() {
     super();
     this.state = {loading: true};
   }
 
-  fetchData = async () => {
-    let raw_review = await fetch(
-      `${process.env.REACT_APP_HIF_API_URL}project/find?id=${
-        this.props.match.params.id
-      }`,
-    );
-    let json_review = await raw_review.json();
-    await this.setState({loading: false, reviewData: json_review});
+  presentProject = async projectData => {
+    const summary = projectData.data.summary;
+    const infrastructure = projectData.data.infrastructure;
+    const financial = projectData.data.financial;
+
+    const formData = {
+      summary: {
+        name: summary.projectName,
+        description: summary.description,
+        status: summary.status,
+        leadAuthority: summary.leadAuthority,
+      },
+      infrastructure: {
+        infraType: infrastructure.type,
+        description: infrastructure.description,
+        completionDate: infrastructure.completionDate,
+      },
+      financial: {
+        dateReceived: financial.date,
+        fundedThroughHIF: financial.fundedThroughHIF,
+      },
+    };
+
+    await this.setState({loading: false, formData: formData});
+  };
+
+  fetchData = () => {
+    getProjectUsecase.execute(this, { id: this.props.match.params.id })
   };
 
   async componentDidMount() {
@@ -46,9 +70,9 @@ class Review extends React.Component {
     }
 
     return (
-      <ReviewForm
+      <ProjectForm
         reviewId={this.props.match.params.id}
-        data={this.state.reviewData.data}
+        data={this.state.formData}
       />
     );
   }
@@ -56,11 +80,9 @@ class Review extends React.Component {
   render() {
     return (
       <div className="container-fluid">
-        <div className="col-md-10 col-md-offset-1">
-          {this.renderForm()}
-        </div>
+        <div className="col-md-10 col-md-offset-1">{this.renderForm()}</div>
       </div>
-    )
+    );
   }
 }
 

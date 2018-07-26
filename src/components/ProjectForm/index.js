@@ -1,7 +1,7 @@
 import React from 'react';
 import Form from 'react-jsonschema-form';
 
-export default class ReviewForm extends React.Component {
+export default class ProjectForm extends React.Component {
   submitFormData = async formData => {
     let reviewData = {
       id: this.props.reviewId,
@@ -12,8 +12,6 @@ export default class ReviewForm extends React.Component {
             description: formData.summary.description,
             projectName: formData.summary.name,
             leadAuthority: formData.summary.leadAuthority,
-            status: formData.summary.status,
-            statusCommentary: formData.summary.comments,
           },
           infrastructure: {
             completionDate: formData.infrastructure.completionDate,
@@ -43,6 +41,7 @@ export default class ReviewForm extends React.Component {
       alert('Review submission unsuccessful');
     }
   };
+
   render() {
     const schema = {
       title: 'HIF Review',
@@ -54,16 +53,7 @@ export default class ReviewForm extends React.Component {
           properties: {
             name: {type: 'string', title: 'Name'},
             description: {type: 'string', title: 'Description'},
-            leadAuthority: {type: 'string', title: 'Lead Authority'},
-            status: {
-              type: 'string',
-              title: 'Status',
-              enum: ['Completed', 'On Schedule', 'Delayed'],
-            },
-            comments: {
-              type: 'string',
-              title: 'Comments',
-            },
+            leadAuthority: {type: 'string', title: 'Lead Authority'}
           },
         },
         infrastructure: {
@@ -94,34 +84,27 @@ export default class ReviewForm extends React.Component {
       },
     };
 
-    const summary = this.props.data.summary;
-    const infrastructure = this.props.data.infrastructure;
-    const financial = this.props.data.financial;
-
-    const formData = {
+    const uiSchema = {
       summary: {
-        name: summary.projectName,
-        description: summary.description,
-        status: summary.status,
-        leadAuthority: summary.leadAuthority,
+        name: {'ui:readonly': true},
+        description: {'ui:readonly': true},
+        leadAuthority: {'ui:readonly': true},
       },
       infrastructure: {
-        infraType: infrastructure.type,
-        description: infrastructure.description,
-        completionDate: infrastructure.completionDate,
+        infraType: {'ui:readonly': true},
+        description: {'ui:readonly': true},
+        completionDate: {'ui:readonly': true},
       },
       financial: {
-        dateReceived: financial.date,
-        fundedThroughHIF: financial.fundedThroughHIF,
-      },
+        dateReceived: {'ui:readonly': true},
+        fundedThroughHIF: {'ui:readonly': true}
+      }
     };
 
     return (
-      <Form
-        schema={schema}
-        formData={formData}
-        onSubmit={({formData}) => this.submitFormData(formData)}
-      />
+      <Form schema={schema} uiSchema={uiSchema} formData={this.props.data}>
+        <div />
+      </Form>
     );
   }
 }
