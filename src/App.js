@@ -11,7 +11,7 @@ const App = () => (
   <Router>
     <div>
       <Route exact path="/" component={Home} />
-      <Route path="/review/:id" component={Project} />
+      <Route path="/project/:id" component={Project} />
     </div>
   </Router>
 );
@@ -57,7 +57,7 @@ class Project extends React.Component {
   };
 
   fetchData = () => {
-    getProjectUsecase.execute(this, { id: this.props.match.params.id })
+    getProjectUsecase.execute(this, {id: this.props.match.params.id});
   };
 
   async componentDidMount() {
