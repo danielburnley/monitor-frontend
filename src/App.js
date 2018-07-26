@@ -13,6 +13,7 @@ const App = () => (
       <Route exact path="/" component={Home} />
       <Route exact path="/project/:id" component={Project} />
       <Route exact path="/project/:projectId/return" component={Return} />
+      <Route exact path="/project/:projectId/return/:returnId" component={Return} />
     </div>
   </Router>
 );
@@ -67,6 +68,10 @@ class Return extends React.Component {
     getProjectUsecase.execute(this, {id: this.props.match.params.projectId});
   };
 
+  isReadOnly = () => {
+    return !(this.props.match.params.returnId === undefined)
+  }
+
   async componentDidMount() {
     await this.fetchData();
   }
@@ -80,6 +85,7 @@ class Return extends React.Component {
       <ReturnForm
         onSubmit={this.onFormSubmit}
         data={this.state.formData}
+        readOnly={this.isReadOnly()}
       />
     );
   }
