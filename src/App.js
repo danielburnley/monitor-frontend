@@ -2,7 +2,9 @@ import React from 'react';
 import ProjectForm from './Components/ProjectForm';
 import ReturnForm from './Components/ReturnForm';
 import GetProject from './UseCase/GetProject';
+import CreateReturn from './UseCase/CreateReturn'
 import ProjectGateway from './Gateway/ProjectGateway';
+import ReturnGateway from './Gateway/ReturnGateway'
 
 import './App.css';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
@@ -25,6 +27,7 @@ const Home = () => (
 );
 
 const getProjectUsecase = new GetProject(new ProjectGateway());
+const createReturn = new CreateReturn(new ReturnGateway());
 
 class Return extends React.Component {
   constructor() {
@@ -32,8 +35,12 @@ class Return extends React.Component {
     this.state = {loading: true};
   }
 
+  submissionSuccessful = returnId => {
+    this.props.history.push(`return/${returnId}`);
+  }
+
   onFormSubmit = async formData => {
-    console.log(formData)
+    createReturn.execute(this, {projectId: this.props.match.params.projectId, data: formData})
   }
 
   presentProject = async projectData => {
@@ -53,7 +60,7 @@ class Return extends React.Component {
         description: infrastructure.description,
         completionDate: infrastructure.completionDate,
         planning: {
-          estimatedSubmission: infrastructure.planning.submissionEstimated,
+          estimatedSubmission: infrastructure.planning.submissionEstimated
         },
       },
       financial: {
