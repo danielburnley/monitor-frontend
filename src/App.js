@@ -53,11 +53,11 @@ class Return extends React.Component {
         description: infrastructure.description,
         completionDate: infrastructure.completionDate,
         planning: {
-          estimatedSubmission: infrastructure.planning.estimatedSubmission,
+          estimatedSubmission: infrastructure.planning.submissionEstimated,
         },
       },
       financial: {
-        estimatedTotalAmount: financial.estimatedTotalAmount,
+        estimatedTotalAmount: financial.totalAmountEstimated,
       },
     };
 
@@ -122,11 +122,11 @@ class Project extends React.Component {
         description: infrastructure.description,
         completionDate: infrastructure.completionDate,
         planning: {
-          estimatedSubmission: infrastructure.planning.estimatedSubmission,
+          estimatedSubmission: infrastructure.planning.submissionEstimated,
         },
       },
       financial: {
-        estimatedTotalAmount: financial.estimatedTotalAmount,
+        estimatedTotalAmount: financial.totalAmountEstimated,
       },
     };
 

@@ -29,11 +29,11 @@ describe('Viewing at a project', () => {
           description: 'A big building with a stage',
           completionDate: '2019-01-01',
           planning: {
-            estimatedSubmission: '2018-01-01'
+            submissionEstimated: '2018-01-01'
           }
         },
         financial: {
-          estimatedTotalAmount: '£ 1,000,000.00'
+          totalAmountEstimated: '£ 1,000,000.00'
         }
       },
     };
@@ -70,6 +70,6 @@ describe('Viewing at a project', () => {
       return node.getDOMNode().value;
     });
 
-    expect(expectedInputValues).toEqual(actualInputs)
+    expect(actualInputs).toEqual(expectedInputValues)
   });
 });
