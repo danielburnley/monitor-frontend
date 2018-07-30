@@ -2,6 +2,10 @@ import nock from 'nock';
 import ProjectGateway from '.';
 
 describe('Project Gateway', () => {
+  afterEach(() => {
+    nock.cleanAll();
+  });
+
   describe('Given a Project is found', () => {
     let projectRequest, response;
 
@@ -41,7 +45,10 @@ describe('Project Gateway', () => {
       });
 
       it('Projects the response from the api', () => {
-        expect(response).toEqual({success: true, foundProject: {other: 'things'}});
+        expect(response).toEqual({
+          success: true,
+          foundProject: {other: 'things'},
+        });
       });
     });
   });
@@ -54,10 +61,8 @@ describe('Project Gateway', () => {
         .get('/project/find?id=5')
         .reply(404);
       let gateway = new ProjectGateway();
-      let response = await gateway.findById(5)
-      expect(response).toEqual({ success: false })
+      let response = await gateway.findById(5);
+      expect(response).toEqual({success: false});
     });
   });
 });
-
-

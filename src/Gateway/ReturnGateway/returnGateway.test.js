@@ -2,6 +2,10 @@ import nock from 'nock';
 import ReturnGateway from '.';
 
 describe('Return Gateway', () => {
+  afterEach(() => {
+    nock.cleanAll();
+  });
+
   describe('Given a Return is found', () => {
     let returnRequest, response;
 
