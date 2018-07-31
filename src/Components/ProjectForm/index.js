@@ -4,7 +4,7 @@ import Form from 'react-jsonschema-form';
 export default class ProjectForm extends React.Component {
   render() {
     const schema = {
-      title: 'HIF Review',
+      title: 'HIF Project',
       type: 'object',
       properties: {
         summary: {

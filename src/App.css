@@ -2,6 +2,11 @@
   margin: 30px;
 }
 
+.back-to-project {
+  margin-bottom: 10px;
+  font-size: 40px;
+}
+
 .form-container {
   display: flex;
   justify-content: center;
