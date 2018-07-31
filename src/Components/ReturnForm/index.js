@@ -2,6 +2,13 @@ import React from 'react';
 import Form from 'react-jsonschema-form';
 
 export default class ReturnForm extends React.Component {
+  renderSubmit = () => {
+    if(this.props.readOnly) {
+      return(<div />)
+    } else {
+      return
+    }
+  }
   getUiSchema = () => {
     let uiSchema = {
       summary: {
@@ -116,8 +123,9 @@ export default class ReturnForm extends React.Component {
         schema={schema}
         onSubmit={({formData}) => this.props.onSubmit(formData)}
         uiSchema={this.getUiSchema()}
-        formData={this.props.data}
-      />
+        formData={this.props.data}>
+        {this.renderSubmit()}
+      </Form>
     );
   }
 }

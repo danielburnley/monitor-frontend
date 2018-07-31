@@ -3,8 +3,8 @@ export default class GetReturn {
     this.returnGateway = returnGateway;
   }
 
-  execute(presenter, request) {
-    let {success, foundReturn} = this.returnGateway.findById(request.id);
+  async execute(presenter, request) {
+    let {success, foundReturn} = await this.returnGateway.findById(request.id);
     if (success) {
       presenter.presentReturn(foundReturn);
     } else {
