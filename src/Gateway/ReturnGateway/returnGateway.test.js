@@ -15,7 +15,7 @@ describe("Return Gateway", () => {
           process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
           returnRequest = nock("http://cat.meow")
             .matchHeader("Content-Type", "application/json")
-            .get("/return/1")
+            .get("/return/get?id=1")
             .reply(200, { some: "data" });
           let gateway = new ReturnGateway();
           response = await gateway.findById(1);
@@ -38,7 +38,7 @@ describe("Return Gateway", () => {
           process.env.REACT_APP_HIF_API_URL = "http://dog.woof/";
           let returnRequest = nock("http://dog.woof")
             .matchHeader("Content-Type", "application/json")
-            .get("/return/5")
+            .get("/return/get?id=5")
             .reply(200, { other: "things" });
           let gateway = new ReturnGateway();
           response = await gateway.findById(5);
@@ -62,7 +62,7 @@ describe("Return Gateway", () => {
         process.env.REACT_APP_HIF_API_URL = "http://dog.woof/";
         let returnRequest = nock("http://dog.woof")
           .matchHeader("Content-Type", "application/json")
-          .get("/return/5")
+          .get("/return/get?id=5")
           .reply(404);
         let gateway = new ReturnGateway();
         let response = await gateway.findById(5);

@@ -28,15 +28,15 @@ describe('GetReturn', () => {
         useCase = getUseCase(foundReturn);
       });
 
-      it('Calls the gateway with the correct ID', () => {
+      it('Calls the gateway with the correct ID', async () => {
         let presenterSpy = {presentReturn: jest.fn()};
-        useCase.execute(presenterSpy, {id: 1});
+        await useCase.execute(presenterSpy, {id: 1});
         expect(returnGatewaySpy.findById).toBeCalledWith(1);
       });
 
-      it('Presents the return', () => {
+      it('Presents the return', async () => {
         let presenterSpy = {presentReturn: jest.fn()};
-        useCase.execute(presenterSpy, {id: 1});
+        await useCase.execute(presenterSpy, {id: 1});
         expect(presenterSpy.presentReturn).toBeCalledWith(foundReturn);
       });
     });
@@ -55,28 +55,28 @@ describe('GetReturn', () => {
         useCase = getUseCase(foundReturn);
       });
 
-      it('Calls the gateway with the correct ID', () => {
+      it('Calls the gateway with the correct ID', async () => {
         let presenterSpy = {presentReturn: jest.fn()};
-        useCase.execute(presenterSpy, {id: 5});
+        await useCase.execute(presenterSpy, {id: 5});
         expect(returnGatewaySpy.findById).toBeCalledWith(5);
       });
 
-      it('Presents the return', () => {
+      it('Presents the return', async () => {
         let presenterSpy = {presentReturn: jest.fn()};
-        useCase.execute(presenterSpy, {id: 5});
+        await useCase.execute(presenterSpy, {id: 5});
         expect(presenterSpy.presentReturn).toBeCalledWith(foundReturn);
       });
     });
   });
 
   describe('Given a return is not found', () => {
-    it('Presents the return not found', () => {
+    it('Presents the return not found', async () => {
       let returnGatewaySpy = {
         findById: jest.fn(() => ({success: false})),
       };
       let useCase = new GetReturn(returnGatewaySpy);
       let presenterSpy = {presentReturnNotFound: jest.fn()};
-      useCase.execute(presenterSpy, {id: 5});
+      await useCase.execute(presenterSpy, {id: 5});
       expect(presenterSpy.presentReturnNotFound).toBeCalled();
     });
   });

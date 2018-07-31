@@ -3,7 +3,7 @@ import fetch from "isomorphic-fetch";
 export default class ReturnGateway {
   async findById(id) {
     let rawResponse = await fetch(
-      `${process.env.REACT_APP_HIF_API_URL}return/${id}`,
+      `${process.env.REACT_APP_HIF_API_URL}return/get?id=${id}`,
       {
         headers: { "Content-Type": "application/json" }
       }
