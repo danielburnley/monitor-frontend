@@ -135,9 +135,17 @@ class Return extends React.Component {
     );
   }
 
+  backToProject = (e) => {
+    this.props.history.push(`/project/${this.props.match.params.projectId}`)
+    e.preventDefault()
+  }
+
   render() {
     return (
       <div className="container-fluid">
+        <div className="col-md-2 back-to-project">
+          <button className="btn btn-link btn-lg btn-block" onClick={this.backToProject}>Back to project overview</button>
+        </div>
         <div className="col-md-10 col-md-offset-1">{this.renderForm()}</div>
       </div>
     );
