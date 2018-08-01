@@ -24,6 +24,7 @@ describe('GetProject', () => {
           data: {
             cat: 'meow',
           },
+          schema: {cows: 'moo'}
         };
 
         useCase = getUseCase(foundProject);
@@ -51,6 +52,7 @@ describe('GetProject', () => {
           data: {
             dog: 'woof',
           },
+          schema: {cows: 'moo'}
         };
 
         useCase = getUseCase(foundProject);
@@ -82,5 +84,3 @@ describe('GetProject', () => {
     });
   });
 });
-
-

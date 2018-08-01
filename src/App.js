@@ -31,7 +31,9 @@ const getProjectUsecase = new GetProject(new ProjectGateway());
 const getReturnUsecase = new GetReturn(new ReturnGateway());
 const createReturn = new CreateReturn(new ReturnGateway());
 
+//Presenters
 class Return extends React.Component {
+
   constructor() {
     super();
     this.state = {loading: true};
@@ -46,63 +48,11 @@ class Return extends React.Component {
   }
 
   presentReturn = async projectData => {
-    const summary = projectData.data.summary;
-    const infrastructure = projectData.data.infrastructure;
-    const financial = projectData.data.financial;
-
-    const formData = {
-      summary: {
-        name: summary.name,
-        description: summary.description,
-        status: summary.status,
-        leadAuthority: summary.leadAuthority,
-      },
-      infrastructure: {
-        infraType: infrastructure.infraType,
-        description: infrastructure.description,
-        completionDate: infrastructure.completionDate,
-        planning: {
-          estimatedSubmission: infrastructure.planning.estimatedSubmission,
-          actualSubmission: infrastructure.planning.actualSubmission,
-          submissionDelayReason: infrastructure.planning.submissionDelayReason
-        },
-      },
-      financial: {
-        estimatedTotalAmount: financial.estimatedTotalAmount,
-        actualTotalAmount: financial.actualTotalAmount,
-        totalAmountChangeReason: financial.totalAmountChangeReason,
-      },
-    };
-
-    await this.setState({loading: false, formData: formData});
+    await this.setState({loading: false, formData: projectData.data, formSchema: projectData.schema});
   };
 
   presentProject = async projectData => {
-    const summary = projectData.data.summary;
-    const infrastructure = projectData.data.infrastructure;
-    const financial = projectData.data.financial;
-
-    const formData = {
-      summary: {
-        name: summary.projectName,
-        description: summary.description,
-        status: summary.status,
-        leadAuthority: summary.leadAuthority,
-      },
-      infrastructure: {
-        infraType: infrastructure.type,
-        description: infrastructure.description,
-        completionDate: infrastructure.completionDate,
-        planning: {
-          estimatedSubmission: infrastructure.planning.submissionEstimated
-        },
-      },
-      financial: {
-        estimatedTotalAmount: financial.totalAmountEstimated,
-      },
-    };
-
-    await this.setState({loading: false, formData: formData});
+    await this.setState({loading: false, formData: projectData.data, formSchema: projectData.schema});
   };
 
   fetchData = () => {
@@ -130,6 +80,7 @@ class Return extends React.Component {
       <ReturnForm
         onSubmit={this.onFormSubmit}
         data={this.state.formData}
+        schema={this.state.formSchema}
         readOnly={this.isReadOnly()}
       />
     );
@@ -159,35 +110,11 @@ class Project extends React.Component {
   }
 
   presentProject = async projectData => {
-    const summary = projectData.data.summary;
-    const infrastructure = projectData.data.infrastructure;
-    const financial = projectData.data.financial;
-
-    const formData = {
-      summary: {
-        name: summary.projectName,
-        description: summary.description,
-        status: summary.status,
-        leadAuthority: summary.leadAuthority,
-      },
-      infrastructure: {
-        infraType: infrastructure.type,
-        description: infrastructure.description,
-        completionDate: infrastructure.completionDate,
-        planning: {
-          estimatedSubmission: infrastructure.planning.submissionEstimated,
-        },
-      },
-      financial: {
-        estimatedTotalAmount: financial.totalAmountEstimated,
-      },
-    };
-
-    await this.setState({loading: false, formData: formData});
+    await this.setState({loading: false, formData: projectData.data, formSchema: projectData.schema });
   };
 
-  fetchData = () => {
-    getProjectUsecase.execute(this, {id: this.props.match.params.id});
+  fetchData = async () => {
+    await getProjectUsecase.execute(this, {id: this.props.match.params.id});
   };
 
   async componentDidMount() {
@@ -209,6 +136,7 @@ class Project extends React.Component {
         <ProjectForm
           reviewId={this.props.match.params.id}
           data={this.state.formData}
+          schema={this.state.formSchema}
         />
         <button className="btn btn-primary" onClick={this.createReturn}>Create a new return</button>
       </div>

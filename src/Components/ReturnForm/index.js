@@ -41,8 +41,8 @@ export default class ReturnForm extends React.Component {
     return uiSchema;
   };
 
-  render() {
-    const schema = {
+  getSchema = () => {
+    return {
       title: 'HIF Return',
       type: 'object',
       properties: {
@@ -117,10 +117,12 @@ export default class ReturnForm extends React.Component {
         },
       },
     };
+  }
 
+  render() {
     return (
       <Form
-        schema={schema}
+        schema={this.getSchema()}
         onSubmit={({formData}) => this.props.onSubmit(formData)}
         uiSchema={this.getUiSchema()}
         formData={this.props.data}>

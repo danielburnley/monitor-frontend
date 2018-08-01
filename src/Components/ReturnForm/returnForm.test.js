@@ -10,4 +10,3 @@ describe('<ReturnForm>', () => {
     expect(submitSpy).toHaveBeenCalled()
   })
 })
-

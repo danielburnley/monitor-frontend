@@ -1,5 +1,6 @@
 import nock from "nock";
 import ReturnGateway from ".";
+import Project from "../../Domain/Project";
 
 describe("Return Gateway", () => {
   afterEach(() => {
@@ -39,7 +40,7 @@ describe("Return Gateway", () => {
           let returnRequest = nock("http://dog.woof")
             .matchHeader("Content-Type", "application/json")
             .get("/return/get?id=5")
-            .reply(200, { other: "things" });
+            .reply(200, { data:{cats:'meow'}, schema:{dogs:'woof'}});
           let gateway = new ReturnGateway();
           response = await gateway.findById(5);
         });
@@ -49,9 +50,10 @@ describe("Return Gateway", () => {
         });
 
         it("Returns the response from the api", () => {
+          let project = new Project({cats:'meow'},{dogs:'woof'});
           expect(response).toEqual({
             success: true,
-            foundReturn: { other: "things" }
+            foundReturn: { data: project.data, schema: project.schema }
           });
         });
       });
@@ -144,7 +146,7 @@ describe("Return Gateway", () => {
         let response = await gateway.submit(2, { dogs: "woof" });
 
         expect(response.success).toBeFalsy();
-      }); 
+      });
     });
   });
 });

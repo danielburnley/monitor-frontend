@@ -1,3 +1,4 @@
+import Project from '../../Domain/Project'
 import fetch from 'isomorphic-fetch'
 
 export default class ProjectGateway {
@@ -9,7 +10,8 @@ export default class ProjectGateway {
       },
     );
     if (rawResponse.ok) {
-      let foundProject = await rawResponse.json();
+      let projectResponse = await rawResponse.json();
+      let foundProject = new Project(projectResponse.data,projectResponse.schema);
       return {success: true, foundProject};
     } else {
       return {success: false};
