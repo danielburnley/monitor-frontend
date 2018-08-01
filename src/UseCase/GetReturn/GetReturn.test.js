@@ -23,6 +23,7 @@ describe('GetReturn', () => {
           data: {
             cat: 'meow',
           },
+          schema: { cow: 'scema' }
         };
 
         useCase = getUseCase(foundReturn);
@@ -50,6 +51,7 @@ describe('GetReturn', () => {
           data: {
             dog: 'woof',
           },
+          schema: {wolf: 'Awoo'}
         };
 
         useCase = getUseCase(foundReturn);

@@ -5,7 +5,7 @@ import App from './App';
 import nock from 'nock';
 
 async function waitForRequestToFinish() {
-  await new Promise(resolve => setTimeout(resolve, 20));
+  await new Promise(resolve => setTimeout(resolve, 100));
 }
 
 describe('Viewing at a project', () => {
@@ -15,17 +15,67 @@ describe('Viewing at a project', () => {
 
   it('Renders the project with information from the API', async () => {
     process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
+    let projectSchema = {
+      title: 'HIF Project',
+      type: 'object',
+      properties: {
+        summary: {
+          type: 'object',
+          title: 'Project Summary',
+          properties: {
+            name: {type: 'string', title: 'Name'},
+            description: {type: 'string', title: 'Description'},
+            leadAuthority: {type: 'string', title: 'Lead Authority'},
+          },
+        },
+        infrastructure: {
+          type: 'object',
+          title: 'Infrastructure',
+          properties: {
+            infraType: {type: 'string', title: 'Type'},
+            description: {type: 'string', title: 'Description'},
+            completionDate: {
+              type: 'string',
+              format: 'date',
+              title: 'Completion Date',
+            },
+            planning: {
+              type: 'object',
+              title: 'Planning permission',
+              properties: {
+                submissionEstimated: {
+                  type: 'string',
+                  format: 'date',
+                  title: 'Estimated date of submission',
+                },
+              },
+            },
+          },
+        },
+        financial: {
+          type: 'object',
+          title: 'Financial information',
+          properties: {
+            totalAmountEstimated: {
+              type: 'string',
+              title: 'Estimated total amount required',
+            },
+          },
+        },
+      },
+    };
+
     let projectResponse = {
       type: 'hif',
       data: {
         summary: {
-          projectName: 'Homes England Showcase Project',
+          name: 'Homes England Showcase Project',
           description:
             'A building specifically for showcasing our fantastic system',
           leadAuthority: 'Made Tech'
         },
         infrastructure: {
-          type: 'Building',
+          infraType: 'Building',
           description: 'A big building with a stage',
           completionDate: '2019-01-01',
           planning: {
@@ -36,6 +86,7 @@ describe('Viewing at a project', () => {
           totalAmountEstimated: '£ 1,000,000.00'
         }
       },
+      schema: projectSchema
     };
 
     let expectedInputValues = [
@@ -63,6 +114,7 @@ describe('Viewing at a project', () => {
     await waitForRequestToFinish();
 
     wrapper.update();
+
     let actualInputs = wrapper.find('input').map(node => {
       if (node.getDOMNode().type === 'checkbox') {
         return node.getDOMNode().checked;
