@@ -124,4 +124,65 @@ describe('Viewing at a project', () => {
 
     expect(actualInputs).toEqual(expectedInputValues)
   });
+
+  it('Renders the return with information from the API', async () => {
+    process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
+    let returnSchema = {
+      title: 'Cat Return',
+      type: 'object',
+      properties: {
+        cats: {
+          type: 'object',
+          title: 'Cats',
+          properties: {
+            noise: {type: 'string', title: 'Noise'},
+            description: {type: 'string', title: 'Description'},
+            toes: {type: 'string', title: 'Toes'},
+          },
+        },
+      },
+    };
+
+    let returnResponse = {
+      type: 'hif',
+      data: {
+        cats: {
+          noise: 'Meow',
+          description: 'Fluffy balls of friendship',
+          toes: 'Beans'
+        },
+      },
+      schema: returnSchema
+    };
+
+    let expectedInputValues = [
+      'Meow',
+      'Fluffy balls of friendship',
+      'Beans',
+    ];
+
+    let projectRequest = nock('http://cat.meow')
+      .matchHeader('Content-Type', 'application/json')
+      .get('/return/get?id=0')
+      .reply(200, returnResponse);
+
+    let wrapper = mount(
+      <MemoryRouter initialEntries={['/project/0/return/0']}>
+        <App />
+      </MemoryRouter>,
+    );
+
+    await waitForRequestToFinish();
+
+    wrapper.update();
+
+    let actualInputs = wrapper.find('input').map(node => {
+      if (node.getDOMNode().type === 'checkbox') {
+        return node.getDOMNode().checked;
+      }
+      return node.getDOMNode().value;
+    });
+
+    expect(actualInputs).toEqual(expectedInputValues)
+  });
 });
