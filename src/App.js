@@ -47,8 +47,8 @@ class Return extends React.Component {
     createReturn.execute(this, {projectId: this.props.match.params.projectId, data: formData})
   }
 
-  presentReturn = async projectData => {
-    await this.setState({loading: false, formData: projectData.data, formSchema: projectData.schema});
+  presentReturn = async returnData => {
+    await this.setState({loading: false, formData: returnData.data, formSchema: returnData.schema});
   };
 
   presentProject = async projectData => {
