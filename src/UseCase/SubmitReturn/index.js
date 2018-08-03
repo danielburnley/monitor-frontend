@@ -1,4 +1,4 @@
-export default class CreateReturn {
+export default class SubmitReturn {
   constructor(returnGateway) {
     this.returnGateway = returnGateway;
   }

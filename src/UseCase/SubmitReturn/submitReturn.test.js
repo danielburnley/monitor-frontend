@@ -1,6 +1,6 @@
-import CreateReturn from ".";
+import SubmitReturn from ".";
 
-describe("CreateReturn", () => {
+describe("SubmitReturn", () => {
   let submitGatewaySpy, presenterSpy;
 
   function getUseCase(successfulSubmission, returnId = undefined) {
@@ -8,7 +8,7 @@ describe("CreateReturn", () => {
       submit: jest.fn(() => ({ success: successfulSubmission, returnId }))
     };
 
-    return new CreateReturn(submitGatewaySpy);
+    return new SubmitReturn(submitGatewaySpy);
   }
 
   beforeEach(() => {

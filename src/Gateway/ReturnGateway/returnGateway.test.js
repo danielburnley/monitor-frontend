@@ -82,17 +82,17 @@ describe('Return Gateway', () => {
       });
 
       it('Submits the data to the API', async () => {
-        let createReturnRequest = nock('http://cat.meow')
+        let submitReturnRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
           .post('/return/create', {project_id: 1, data: {cats: 'meow'}})
           .reply(200, {id: 1});
         await gateway.submit(1, {cats: 'meow'});
 
-        expect(createReturnRequest.isDone()).toBeTruthy();
+        expect(submitReturnRequest.isDone()).toBeTruthy();
       });
 
       it('Returns successful & the return id', async () => {
-        let createReturnRequest = nock('http://cat.meow')
+        let submitReturnRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
           .post('/return/create', {project_id: 1, data: {cats: 'meow'}})
           .reply(200, {id: 1});
@@ -110,17 +110,17 @@ describe('Return Gateway', () => {
       });
 
       it('Submits the data to the API', async () => {
-        let createReturnRequest = nock('http://cat.meow')
+        let submitReturnRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
           .post('/return/create', {project_id: 2, data: {dogs: 'woof'}})
           .reply(200, {id: 2});
         await gateway.submit(2, {dogs: 'woof'});
 
-        expect(createReturnRequest.isDone()).toBeTruthy();
+        expect(submitReturnRequest.isDone()).toBeTruthy();
       });
 
       it('Returns successful & the return id', async () => {
-        let createReturnRequest = nock('http://cat.meow')
+        let submitReturnRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
           .post('/return/create', {project_id: 2, data: {dogs: 'woof'}})
           .reply(200, {id: 2});
@@ -138,7 +138,7 @@ describe('Return Gateway', () => {
       });
 
       it('Returns unsuccessful', async () => {
-        let createReturnRequest = nock('http://cat.meow')
+        let submitReturnRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
           .post('/return/create', {project_id: 2, data: {dogs: 'woof'}})
           .reply(500);

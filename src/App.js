@@ -5,7 +5,7 @@ import ReturnPage from './Components/ReturnPage';
 import GetProject from './UseCase/GetProject';
 import GetReturn from './UseCase/GetReturn';
 import GetBaseReturn from './UseCase/GetBaseReturn';
-import CreateReturn from './UseCase/CreateReturn';
+import SubmitReturn from './UseCase/SubmitReturn';
 import ProjectGateway from './Gateway/ProjectGateway';
 import ReturnGateway from './Gateway/ReturnGateway';
 
@@ -15,7 +15,7 @@ import {BrowserRouter as Router, Route} from 'react-router-dom';
 const getProjectUseCase = new GetProject(new ProjectGateway());
 const getReturnUseCase = new GetReturn(new ReturnGateway());
 const getBaseReturnUseCase = new GetBaseReturn(new ReturnGateway());
-const createReturnUseCase = new CreateReturn(new ReturnGateway());
+const submitReturnUseCase = new SubmitReturn(new ReturnGateway());
 
 const App = () => (
   <Router>
@@ -41,7 +41,7 @@ const App = () => (
             getProject={getProjectUseCase}
             getReturn={getReturnUseCase}
             getBaseReturn={getBaseReturnUseCase}
-            createReturn={createReturnUseCase}
+            submitReturn={submitReturnUseCase}
           />
         )}
       />
@@ -54,7 +54,7 @@ const App = () => (
             getProject={getProjectUseCase}
             getReturn={getReturnUseCase}
             getBaseReturn={getBaseReturnUseCase}
-            createReturn={createReturnUseCase}
+            submitReturn={submitReturnUseCase}
           />
         )}
       />
