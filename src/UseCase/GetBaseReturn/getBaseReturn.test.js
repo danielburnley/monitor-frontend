@@ -5,7 +5,7 @@ describe('GetBaseReturnForProject', () => {
 
   describe('Given a base return is found', () => {
     describe('Example one', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         returnGateway = {
           baseReturnFor: jest.fn(() => ({
             success: true,
@@ -15,7 +15,7 @@ describe('GetBaseReturnForProject', () => {
         presenterSpy = {presentReturn: jest.fn()};
         useCase = new GetBaseReturnForProject(returnGateway);
 
-        useCase.execute(presenterSpy, {projectId: 1});
+        await useCase.execute(presenterSpy, {projectId: 1});
       });
 
       it('Passes the project ID to the gateway', () => {
@@ -28,7 +28,7 @@ describe('GetBaseReturnForProject', () => {
     });
 
     describe('Example two', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         returnGateway = {
           baseReturnFor: jest.fn(() => ({
             success: true,
@@ -38,7 +38,7 @@ describe('GetBaseReturnForProject', () => {
         presenterSpy = {presentReturn: jest.fn()};
         useCase = new GetBaseReturnForProject(returnGateway);
 
-        useCase.execute(presenterSpy, {projectId: 5});
+        await useCase.execute(presenterSpy, {projectId: 5});
       });
 
       it('Passes the project ID to the gateway', () => {
@@ -52,13 +52,13 @@ describe('GetBaseReturnForProject', () => {
   });
 
   describe('Given a base return is not found', () => {
-    it('Calls the presenter with return not found', () => {
+    it('Calls the presenter with return not found', async () => {
       returnGateway = {
         baseReturnFor: jest.fn(() => ({success: false, foundReturn: {}})),
       };
       presenterSpy = {presentReturnNotFound: jest.fn()};
       useCase = new GetBaseReturnForProject(returnGateway);
-      useCase.execute(presenterSpy, {projectId: 404})
+      await useCase.execute(presenterSpy, {projectId: 404})
 
       expect(presenterSpy.presentReturnNotFound).toBeCalled();
     });

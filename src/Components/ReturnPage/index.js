@@ -40,8 +40,8 @@ export default class ReturnPage extends React.Component {
         id: this.props.match.params.returnId,
       });
     } else {
-      this.props.getProject.execute(this, {
-        id: this.props.match.params.projectId,
+      this.props.getBaseReturn.execute(this, {
+        projectId: this.props.match.params.projectId,
       });
     }
   };

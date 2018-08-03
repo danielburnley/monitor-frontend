@@ -4,6 +4,7 @@ import ProjectPage from './Components/ProjectPage';
 import ReturnPage from './Components/ReturnPage';
 import GetProject from './UseCase/GetProject';
 import GetReturn from './UseCase/GetReturn';
+import GetBaseReturn from './UseCase/GetBaseReturn';
 import CreateReturn from './UseCase/CreateReturn';
 import ProjectGateway from './Gateway/ProjectGateway';
 import ReturnGateway from './Gateway/ReturnGateway';
@@ -11,9 +12,10 @@ import ReturnGateway from './Gateway/ReturnGateway';
 import './App.css';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 
-const getProjectUsecase = new GetProject(new ProjectGateway());
-const getReturnUsecase = new GetReturn(new ReturnGateway());
-const createReturn = new CreateReturn(new ReturnGateway());
+const getProjectUseCase = new GetProject(new ProjectGateway());
+const getReturnUseCase = new GetReturn(new ReturnGateway());
+const getBaseReturnUseCase = new GetBaseReturn(new ReturnGateway());
+const createReturnUseCase = new CreateReturn(new ReturnGateway());
 
 const App = () => (
   <Router>
@@ -25,9 +27,8 @@ const App = () => (
         render={props => (
           <ProjectPage
             {...props}
-            getProject={getProjectUsecase}
-            getReturn={getReturnUsecase}
-            createReturn={createReturn}
+            getProject={getProjectUseCase}
+            getReturn={getReturnUseCase}
           />
         )}
       />
@@ -37,9 +38,10 @@ const App = () => (
         render={props => (
           <ReturnPage
             {...props}
-            getProject={getProjectUsecase}
-            getReturn={getReturnUsecase}
-            createReturn={createReturn}
+            getProject={getProjectUseCase}
+            getReturn={getReturnUseCase}
+            getBaseReturn={getBaseReturnUseCase}
+            createReturn={createReturnUseCase}
           />
         )}
       />
@@ -49,9 +51,10 @@ const App = () => (
         render={props => (
           <ReturnPage
             {...props}
-            getProject={getProjectUsecase}
-            getReturn={getReturnUsecase}
-            createReturn={createReturn}
+            getProject={getProjectUseCase}
+            getReturn={getReturnUseCase}
+            getBaseReturn={getBaseReturnUseCase}
+            createReturn={createReturnUseCase}
           />
         )}
       />

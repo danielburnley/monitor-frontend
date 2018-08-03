@@ -3,8 +3,8 @@ export default class GetBaseReturnForProject {
     this.returnGateway = returnGateway;
   }
 
-  execute(presenter, request) {
-    let { success, foundReturn } = this.returnGateway.baseReturnFor(request.projectId);
+  async execute(presenter, request) {
+    let { success, foundReturn } = await this.returnGateway.baseReturnFor(request.projectId);
     if(success) {
       presenter.presentReturn(foundReturn)
     } else {
