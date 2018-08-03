@@ -52,19 +52,35 @@ export default class ReturnGateway {
     }
   }
 
+  async update(return_id, data) {
+    let response = await fetch(
+      `${process.env.REACT_APP_HIF_API_URL}return/update`,
+      {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({return_id, data}),
+      },
+    );
+
+    if (response.ok) {
+      return {success: true};
+    } else {
+      return {success: false};
+    }
+  }
+
   async submit(return_id, data) {
-    let rawResponse = await fetch(
+    let response = await fetch(
       `${process.env.REACT_APP_HIF_API_URL}return/submit`,
       {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ return_id, data}),
+        body: JSON.stringify({return_id, data}),
       },
     );
 
-    if (rawResponse.ok) {
-      let jsonResponse = await rawResponse.json();
-      return {success: true, returnId: jsonResponse.id};
+    if (response.ok) {
+      return {success: true};
     } else {
       return {success: false};
     }

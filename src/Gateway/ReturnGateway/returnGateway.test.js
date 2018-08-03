@@ -85,7 +85,7 @@ describe('Return Gateway', () => {
         let submitReturnRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
           .post('/return/submit', {return_id: 1, data: {cats: 'meow'}})
-          .reply(200, {id: 1});
+          .reply(200);
         await gateway.submit(1, {cats: 'meow'});
 
         expect(submitReturnRequest.isDone()).toBeTruthy();
@@ -97,7 +97,7 @@ describe('Return Gateway', () => {
           .post('/return/submit', {return_id: 1, data: {cats: 'meow'}})
           .reply(200, {id: 1});
         let response = await gateway.submit(1, {cats: 'meow'});
-        expect(response).toEqual({success: true, returnId: 1});
+        expect(response).toEqual({success: true});
       });
     });
 
@@ -113,7 +113,7 @@ describe('Return Gateway', () => {
         let submitReturnRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
           .post('/return/submit', {return_id: 2, data: {dogs: 'woof'}})
-          .reply(200, {id: 2});
+          .reply(200);
         await gateway.submit(2, {dogs: 'woof'});
 
         expect(submitReturnRequest.isDone()).toBeTruthy();
@@ -125,7 +125,7 @@ describe('Return Gateway', () => {
           .post('/return/submit', {return_id: 2, data: {dogs: 'woof'}})
           .reply(200, {id: 2});
         let response = await gateway.submit(2, {dogs: 'woof'});
-        expect(response).toEqual({success: true, returnId: 2});
+        expect(response).toEqual({success: true});
       });
     });
 
@@ -285,6 +285,83 @@ describe('Return Gateway', () => {
           .post('/return/create', {project_id: 2, data: {dogs: 'woof'}})
           .reply(500);
         let response = await gateway.create(2, {dogs: 'woof'});
+
+        expect(response.success).toBeFalsy();
+      });
+    });
+  });
+
+  describe('#Update', () => {
+    describe('Example one', () => {
+      let gateway;
+
+      beforeEach(async () => {
+        process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
+        gateway = new ReturnGateway();
+      });
+
+      it('Submits the data to the API', async () => {
+        let updateReturnRequest = nock('http://cat.meow')
+          .matchHeader('Content-Type', 'application/json')
+          .post('/return/update', {return_id: 1, data: {cats: 'meow'}})
+          .reply(200);
+        await gateway.update(1, {cats: 'meow'});
+
+        expect(updateReturnRequest.isDone()).toBeTruthy();
+      });
+
+      it('Returns successful', async () => {
+        let updateReturnRequest = nock('http://cat.meow')
+          .matchHeader('Content-Type', 'application/json')
+          .post('/return/update', {return_id: 1, data: {cats: 'meow'}})
+          .reply(200);
+        let response = await gateway.update(1, {cats: 'meow'});
+        expect(response).toEqual({success: true});
+      });
+    });
+
+    describe('Example two', () => {
+      let gateway;
+
+      beforeEach(async () => {
+        process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
+        gateway = new ReturnGateway();
+      });
+
+      it('Submits the data to the API', async () => {
+        let updateReturnRequest = nock('http://cat.meow')
+          .matchHeader('Content-Type', 'application/json')
+          .post('/return/update', {return_id: 2, data: {dogs: 'woof'}})
+          .reply(200);
+        await gateway.update(2, {dogs: 'woof'});
+
+        expect(updateReturnRequest.isDone()).toBeTruthy();
+      });
+
+      it('Returns successful', async () => {
+        let updateReturnRequest = nock('http://cat.meow')
+          .matchHeader('Content-Type', 'application/json')
+          .post('/return/update', {return_id: 2, data: {dogs: 'woof'}})
+          .reply(200);
+        let response = await gateway.update(2, {dogs: 'woof'});
+        expect(response).toEqual({success: true});
+      });
+    });
+
+    describe('With an unsuccessful response', () => {
+      let gateway;
+
+      beforeEach(async () => {
+        process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
+        gateway = new ReturnGateway();
+      });
+
+      it('Returns unsuccessful', async () => {
+        let updateReturnRequest = nock('http://cat.meow')
+          .matchHeader('Content-Type', 'application/json')
+          .post('/return/update', {return_id: 2, data: {dogs: 'woof'}})
+          .reply(500);
+        let response = await gateway.update(2, {dogs: 'woof'});
 
         expect(response.success).toBeFalsy();
       });
