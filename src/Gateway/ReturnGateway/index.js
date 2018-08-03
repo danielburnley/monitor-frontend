@@ -34,13 +34,31 @@ export default class ReturnGateway {
     }
   }
 
-  async submit(id, data) {
+  async create(id, data) {
     let rawResponse = await fetch(
       `${process.env.REACT_APP_HIF_API_URL}return/create`,
       {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({project_id: id, data}),
+      },
+    );
+
+    if (rawResponse.ok) {
+      let jsonResponse = await rawResponse.json();
+      return {success: true, returnId: jsonResponse.id};
+    } else {
+      return {success: false};
+    }
+  }
+
+  async submit(return_id, data) {
+    let rawResponse = await fetch(
+      `${process.env.REACT_APP_HIF_API_URL}return/submit`,
+      {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ return_id, data}),
       },
     );
 
