@@ -12,8 +12,9 @@ function getInputsFromPage(page) {
   return page.find('input').map(node => {
     if (node.getDOMNode().type === 'checkbox') {
       return node.getDOMNode().checked;
+    } else {
+      return node.getDOMNode().value;
     }
-    return node.getDOMNode().value;
   });
 }
 

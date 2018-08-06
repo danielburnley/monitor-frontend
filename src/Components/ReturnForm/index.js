@@ -9,14 +9,6 @@ export default class ReturnForm extends React.Component {
     this.state = {formData: props.data};
   }
 
-  renderSubmit = () => {
-    if (this.props.readOnly) {
-      return <div />;
-    } else {
-      return;
-    }
-  };
-
   getUiSchema = () => {
     let uiSchema = {
       summary: {
