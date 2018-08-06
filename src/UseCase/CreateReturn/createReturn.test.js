@@ -1,27 +1,27 @@
 import CreateReturn from ".";
 
-describe("CreateReturn", () => {
-  let submitGatewaySpy, presenterSpy;
+describe("SubmitReturn", () => {
+  let returnGatewaySpy, presenterSpy;
 
   function getUseCase(successfulSubmission, returnId = undefined) {
-    submitGatewaySpy = {
-      submit: jest.fn(() => ({ success: successfulSubmission, returnId }))
+    returnGatewaySpy = {
+      create: jest.fn(() => ({ success: successfulSubmission, returnId }))
     };
 
-    return new CreateReturn(submitGatewaySpy);
+    return new CreateReturn(returnGatewaySpy);
   }
 
   beforeEach(() => {
     presenterSpy = {
-      submissionSuccessful: jest.fn(),
-      submissionUnsuccessful: jest.fn()
+      creationSuccessful: jest.fn(),
+      creationUnsuccessful: jest.fn()
     };
   });
 
   describe("Example one", () => {
     let useCase;
 
-    describe("With successful submission", () => {
+    describe("With successful creation", () => {
       beforeEach(async () => {
         useCase = getUseCase(true, 1);
         await useCase.execute(presenterSpy, {
@@ -32,19 +32,19 @@ describe("CreateReturn", () => {
       });
 
       it("Passes the data to the gateway", () => {
-        expect(submitGatewaySpy.submit).toBeCalledWith(1, { cats: "meow" });
+        expect(returnGatewaySpy.create).toBeCalledWith(1, { cats: "meow" });
       });
 
-      it("Calls submission successful with the id on the presenter when the submission suceeded", () => {
-        expect(presenterSpy.submissionSuccessful).toBeCalledWith(1);
+      it("Calls creation successful with the id on the presenter when the creation suceeded", () => {
+        expect(presenterSpy.creationSuccessful).toBeCalledWith(1);
       });
     });
 
-    describe("With unsuccessful submission", () => {
-      it("Presenter recieves submission unsuccessful", async () => {
+    describe("With unsuccessful creation", () => {
+      it("Presenter recieves creation unsuccessful", async () => {
         useCase = getUseCase(false);
         await useCase.execute(presenterSpy, { data: { cats: "meow" } });
-        expect(presenterSpy.submissionUnsuccessful).toBeCalled();
+        expect(presenterSpy.creationUnsuccessful).toBeCalled();
       });
     });
   });
@@ -52,7 +52,7 @@ describe("CreateReturn", () => {
   describe("Example two", () => {
     let useCase;
 
-    describe("With successful submission", () => {
+    describe("With successful creation", () => {
       beforeEach(async () => {
         useCase = getUseCase(true, 2);
         await useCase.execute(presenterSpy, {
@@ -63,20 +63,21 @@ describe("CreateReturn", () => {
       });
 
       it("Passes the data to the gateway", async () => {
-        expect(submitGatewaySpy.submit).toBeCalledWith(2, { dogs: "woof" });
+        expect(returnGatewaySpy.create).toBeCalledWith(2, { dogs: "woof" });
       });
 
-      it("Calls submission successful with the id on the presenter when the submission suceeded", () => {
-        expect(presenterSpy.submissionSuccessful).toBeCalledWith(2);
+      it("Calls creation successful with the id on the presenter when the creation suceeded", () => {
+        expect(presenterSpy.creationSuccessful).toBeCalledWith(2);
       });
     });
 
-    describe("With unsuccessful submission", () => {
-      it("Presenter recieves submission unsuccessful", async () => {
+    describe("With unsuccessful creation", () => {
+      it("Presenter recieves creation unsuccessful", async () => {
         useCase = getUseCase(false);
         await useCase.execute(presenterSpy, { data: { dogs: "woof" } });
-        expect(presenterSpy.submissionUnsuccessful).toBeCalled();
+        expect(presenterSpy.creationUnsuccessful).toBeCalled();
       });
     });
   });
 });
+

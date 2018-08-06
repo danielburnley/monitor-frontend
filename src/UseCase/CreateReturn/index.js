@@ -4,15 +4,16 @@ export default class CreateReturn {
   }
 
   async execute(presenter, request) {
-    let { success, returnId } = await this.returnGateway.submit(
+    let { success, returnId } = await this.returnGateway.create(
       request.projectId,
       request.data
     );
 
     if (success) {
-      presenter.submissionSuccessful(returnId);
+      presenter.creationSuccessful(returnId);
     } else {
-      presenter.submissionUnsuccessful();
+      presenter.creationUnsuccessful();
     }
   }
 }
+
