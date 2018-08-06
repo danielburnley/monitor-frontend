@@ -4,7 +4,10 @@ import ProjectPage from './Components/ProjectPage';
 import ReturnPage from './Components/ReturnPage';
 import GetProject from './UseCase/GetProject';
 import GetReturn from './UseCase/GetReturn';
+import GetBaseReturn from './UseCase/GetBaseReturn';
 import CreateReturn from './UseCase/CreateReturn';
+import SubmitReturn from './UseCase/SubmitReturn';
+import UpdateReturn from './UseCase/UpdateReturn';
 import ProjectGateway from './Gateway/ProjectGateway';
 import ReturnGateway from './Gateway/ReturnGateway';
 import Footer from './Components/Footer'
@@ -13,9 +16,12 @@ import Header from './Components/Header'
 import './App.css';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 
-const getProjectUsecase = new GetProject(new ProjectGateway());
-const getReturnUsecase = new GetReturn(new ReturnGateway());
-const createReturn = new CreateReturn(new ReturnGateway());
+const getProjectUseCase = new GetProject(new ProjectGateway());
+const getReturnUseCase = new GetReturn(new ReturnGateway());
+const getBaseReturnUseCase = new GetBaseReturn(new ReturnGateway());
+const createReturnUseCase = new CreateReturn(new ReturnGateway());
+const submitReturnUseCase = new SubmitReturn(new ReturnGateway());
+const updateReturnUseCase = new UpdateReturn(new ReturnGateway());
 
 const App = () => (
   <Router>
@@ -32,9 +38,7 @@ const App = () => (
           render={props => (
             <ProjectPage
               {...props}
-              getProject={getProjectUsecase}
-              getReturn={getReturnUsecase}
-              createReturn={createReturn}
+              getProject={getProjectUseCase}
             />
           )}
         />
@@ -44,9 +48,11 @@ const App = () => (
           render={props => (
             <ReturnPage
               {...props}
-              getProject={getProjectUsecase}
-              getReturn={getReturnUsecase}
-              createReturn={createReturn}
+              getReturn={getReturnUseCase}
+              getBaseReturn={getBaseReturnUseCase}
+              createReturn={createReturnUseCase}
+              submitReturn={submitReturnUseCase}
+              updateReturn={updateReturnUseCase}
             />
           )}
         />
@@ -56,9 +62,11 @@ const App = () => (
           render={props => (
             <ReturnPage
               {...props}
-              getProject={getProjectUsecase}
-              getReturn={getReturnUsecase}
-              createReturn={createReturn}
+              getReturn={getReturnUseCase}
+              createReturn={createReturnUseCase}
+              getBaseReturn={getBaseReturnUseCase}
+              submitReturn={submitReturnUseCase}
+              updateReturn={updateReturnUseCase}
             />
           )}
         />
