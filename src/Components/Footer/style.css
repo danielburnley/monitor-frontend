@@ -1,12 +1,14 @@
 footer {
   background: #dee0e2;
   color: #444a4c;
-  border-top: 70 solid #005ea5;
   vertical-align: middle;
   width:100%;
-  height: 180px;
+  height: 190px;
   border-top: 10px solid #005ea5;
+  bottom:0;
+  position:relative;
 }
+
 .copyright {
   float: right;
   clear: none;
@@ -34,4 +36,3 @@ footer {
 footer a{
   color: inherit;
 }
-
