@@ -5,7 +5,7 @@ export default class UpdateReturn {
 
   async execute(presenter, request) {
     let { success, returnId } = await this.returnGateway.update(
-      request.projectId,
+      request.returnId,
       request.data
     );
 

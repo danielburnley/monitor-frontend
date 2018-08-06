@@ -23,7 +23,7 @@ export default class Project extends React.Component {
     await this.fetchData();
   }
 
-  createReturn = e => {
+  createReturn = async e => {
     this.props.history.push(`/project/${this.props.match.params.id}/return`);
     e.preventDefault();
   };
@@ -40,7 +40,7 @@ export default class Project extends React.Component {
           data={this.state.formData}
           schema={this.state.formSchema}
         />
-        <button className="btn btn-primary" onClick={this.createReturn}>
+        <button data-test="new-return-button" className="btn btn-primary" onClick={this.createReturn}>
           Create a new return
         </button>
       </div>

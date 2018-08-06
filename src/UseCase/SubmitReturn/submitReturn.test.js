@@ -25,7 +25,7 @@ describe("SubmitReturn", () => {
       beforeEach(async () => {
         useCase = getUseCase(true, 1);
         await useCase.execute(presenterSpy, {
-          projectId: 1,
+          returnId: 1,
           data: { cats: "meow" },
           schema: { ducks: "quack"}
         });
@@ -56,7 +56,7 @@ describe("SubmitReturn", () => {
       beforeEach(async () => {
         useCase = getUseCase(true, 2);
         await useCase.execute(presenterSpy, {
-          projectId: 2,
+          returnId: 2,
           data: { dogs: "woof" },
           schema: { cow: "moo"}
         });

@@ -5,7 +5,7 @@ import {storiesOf} from '@storybook/react';
 import {action} from '@storybook/addon-actions';
 import {linkTo} from '@storybook/addon-links';
 
-storiesOf('Return Form', module).add('Default', () => {
+storiesOf('Return Form', module).add('Simple form', () => {
   let schema = {
     title: 'A form about cats',
     description: 'A simple cat form',
