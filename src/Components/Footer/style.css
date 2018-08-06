@@ -1,0 +1,39 @@
+footer {
+  background: #dee0e2;
+  color: #444a4c;
+  vertical-align: middle;
+  width:100%;
+  height: 190px;
+  border-top: 10px solid #005ea5;
+  bottom:0;
+  position:relative;
+  flex-shrink: 0;
+}
+
+.copyright {
+  float: right;
+  clear: none;
+  height:180px;
+  margin-top: 0px;
+  text-align: center;
+}
+
+.copyright a {
+  text-decoration: none;
+}
+
+.copyright img{
+  padding-top: 10px;
+  width:170px;
+}
+
+.inner{
+  padding-top: 15px;
+  height:180px;
+  font-size: 12pt;
+  float: left;
+}
+
+footer a{
+  color: inherit;
+}

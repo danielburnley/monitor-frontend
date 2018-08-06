@@ -1,5 +1,16 @@
+html {
+  height: 100%;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
 .monitor-container {
   margin: 30px;
+  flex: 1 0 auto;
 }
 
 .back-to-project {
@@ -41,4 +52,3 @@ input {
 button {
   float: right;
 }
-

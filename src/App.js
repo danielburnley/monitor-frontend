@@ -10,6 +10,8 @@ import SubmitReturn from './UseCase/SubmitReturn';
 import UpdateReturn from './UseCase/UpdateReturn';
 import ProjectGateway from './Gateway/ProjectGateway';
 import ReturnGateway from './Gateway/ReturnGateway';
+import Footer from './Components/Footer'
+import Header from './Components/Header'
 
 import './App.css';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
@@ -23,46 +25,52 @@ const updateReturnUseCase = new UpdateReturn(new ReturnGateway());
 
 const App = () => (
   <Router>
-    <div className="monitor-container">
-      <Route exact path="/" component={Home} />
-      <Route
-        exact
-        path="/project/:id"
-        render={props => (
-          <ProjectPage
-            {...props}
-            getProject={getProjectUseCase}
-          />
-        )}
-      />
-      <Route
-        exact
-        path="/project/:projectId/return"
-        render={props => (
-          <ReturnPage
-            {...props}
-            getReturn={getReturnUseCase}
-            getBaseReturn={getBaseReturnUseCase}
-            createReturn={createReturnUseCase}
-            submitReturn={submitReturnUseCase}
-            updateReturn={updateReturnUseCase}
-          />
-        )}
-      />
-      <Route
-        exact
-        path="/project/:projectId/return/:returnId"
-        render={props => (
-          <ReturnPage
-            {...props}
-            getReturn={getReturnUseCase}
-            createReturn={createReturnUseCase}
-            getBaseReturn={getBaseReturnUseCase}
-            submitReturn={submitReturnUseCase}
-            updateReturn={updateReturnUseCase}
-          />
-        )}
-      />
+    <div class="app-container">
+      <Header/>
+
+      <div className="monitor-container">
+        <Route exact path="/" component={Home} />
+        <Route
+          exact
+          path="/project/:id"
+          render={props => (
+            <ProjectPage
+              {...props}
+              getProject={getProjectUseCase}
+            />
+          )}
+        />
+        <Route
+          exact
+          path="/project/:projectId/return"
+          render={props => (
+            <ReturnPage
+              {...props}
+              getReturn={getReturnUseCase}
+              getBaseReturn={getBaseReturnUseCase}
+              createReturn={createReturnUseCase}
+              submitReturn={submitReturnUseCase}
+              updateReturn={updateReturnUseCase}
+            />
+          )}
+        />
+        <Route
+          exact
+          path="/project/:projectId/return/:returnId"
+          render={props => (
+            <ReturnPage
+              {...props}
+              getReturn={getReturnUseCase}
+              createReturn={createReturnUseCase}
+              getBaseReturn={getBaseReturnUseCase}
+              submitReturn={submitReturnUseCase}
+              updateReturn={updateReturnUseCase}
+            />
+          )}
+        />
+      </div>
+
+      <Footer/>
     </div>
   </Router>
 );

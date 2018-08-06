@@ -1,0 +1,17 @@
+header {
+    height: 53px;
+    background: #0b0c0c;
+    color: white;
+    border-bottom: 10px solid #005ea5;
+}
+
+#logo {
+    height: 89%;
+    padding-left: 30px;
+    padding-top: 5px;
+    padding-bottom: 1px;
+}
+
+span {
+    vertical-align: bottom;
+}
