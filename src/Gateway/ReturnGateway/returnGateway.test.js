@@ -1,5 +1,5 @@
 import nock from 'nock';
-import Return from '../../Domain/Return'
+import Return from '../../Domain/Return';
 import ReturnGateway from '.';
 
 describe('Return Gateway', () => {
@@ -158,8 +158,10 @@ describe('Return Gateway', () => {
           process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
           returnRequest = nock('http://cat.meow')
             .matchHeader('Content-Type', 'application/json')
-            .get('/project/get-base-return?id=1')
-            .reply(200, {data: {some: 'data'}, schema: {some: 'schema'}});
+            .get('/project/1/return')
+            .reply(200, {
+              baseReturn: {data: {some: 'data'}, schema: {some: 'schema'}},
+            });
           let gateway = new ReturnGateway();
           response = await gateway.baseReturnFor(1);
         });
@@ -181,8 +183,10 @@ describe('Return Gateway', () => {
           process.env.REACT_APP_HIF_API_URL = 'http://dog.woof/';
           let returnRequest = nock('http://dog.woof')
             .matchHeader('Content-Type', 'application/json')
-            .get('/project/get-base-return?id=5')
-            .reply(200, {data: {cats: 'meow'}, schema: {dogs: 'woof'}});
+            .get('/project/5/return')
+            .reply(200, {
+              baseReturn: {data: {cats: 'meow'}, schema: {dogs: 'woof'}},
+            });
           let gateway = new ReturnGateway();
           response = await gateway.baseReturnFor(5);
         });
@@ -205,7 +209,7 @@ describe('Return Gateway', () => {
         process.env.REACT_APP_HIF_API_URL = 'http://dog.woof/';
         let returnRequest = nock('http://dog.woof')
           .matchHeader('Content-Type', 'application/json')
-          .get('/project/get-base-return?id=5')
+          .get('/project/5/return')
           .reply(404);
         let gateway = new ReturnGateway();
         let response = await gateway.baseReturnFor(5);

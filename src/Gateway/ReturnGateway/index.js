@@ -4,7 +4,7 @@ import Return from '../../Domain/Return';
 export default class ReturnGateway {
   async baseReturnFor(id) {
     let rawResponse = await fetch(
-      `${process.env.REACT_APP_HIF_API_URL}project/get-base-return?id=${id}`,
+      `${process.env.REACT_APP_HIF_API_URL}project/${id}/return`,
       {
         headers: {'Content-Type': 'application/json'},
       },
@@ -12,7 +12,7 @@ export default class ReturnGateway {
 
     if (rawResponse.ok) {
       let jsonResponse = await rawResponse.json();
-      let foundReturn = new Return(jsonResponse.data, jsonResponse.schema);
+      let foundReturn = new Return(jsonResponse.baseReturn.data, jsonResponse.baseReturn.schema);
       return {success: true, foundReturn};
     } else {
       return {success: false};

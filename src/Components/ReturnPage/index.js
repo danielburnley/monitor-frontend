@@ -12,10 +12,17 @@ export default class ReturnPage extends React.Component {
   };
 
   onFormSubmit = async formData => {
-    this.props.submitReturn.execute(this, {
-      projectId: this.props.match.params.projectId,
-      data: formData,
-    });
+    if (this.props.match.params.returnId) {
+      this.props.submitReturn.execute(this, {
+        projectId: this.props.match.params.projectId,
+        data: formData,
+      });
+    } else {
+      this.props.createReturn.execute(this, {
+        projectId: this.props.match.params.projectId,
+        data: formData
+      })
+    }
   };
 
   presentReturn = async returnData => {
@@ -34,13 +41,17 @@ export default class ReturnPage extends React.Component {
     });
   };
 
-  fetchData = () => {
+  creationSuccessful = async returnId => {
+    this.props.history.push(`return/${returnId}`);
+  }
+
+  fetchData = async () => {
     if (this.props.match.params.returnId) {
-      this.props.getReturn.execute(this, {
+      await this.props.getReturn.execute(this, {
         id: this.props.match.params.returnId,
       });
     } else {
-      this.props.getBaseReturn.execute(this, {
+      await this.props.getBaseReturn.execute(this, {
         projectId: this.props.match.params.projectId,
       });
     }

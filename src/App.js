@@ -6,6 +6,7 @@ import GetProject from './UseCase/GetProject';
 import GetReturn from './UseCase/GetReturn';
 import GetBaseReturn from './UseCase/GetBaseReturn';
 import SubmitReturn from './UseCase/SubmitReturn';
+import CreateReturn from './UseCase/CreateReturn';
 import ProjectGateway from './Gateway/ProjectGateway';
 import ReturnGateway from './Gateway/ReturnGateway';
 
@@ -16,6 +17,7 @@ const getProjectUseCase = new GetProject(new ProjectGateway());
 const getReturnUseCase = new GetReturn(new ReturnGateway());
 const getBaseReturnUseCase = new GetBaseReturn(new ReturnGateway());
 const submitReturnUseCase = new SubmitReturn(new ReturnGateway());
+const createReturnUseCase = new CreateReturn(new ReturnGateway());
 
 const App = () => (
   <Router>
@@ -28,7 +30,6 @@ const App = () => (
           <ProjectPage
             {...props}
             getProject={getProjectUseCase}
-            getReturn={getReturnUseCase}
           />
         )}
       />
@@ -38,8 +39,8 @@ const App = () => (
         render={props => (
           <ReturnPage
             {...props}
-            getProject={getProjectUseCase}
             getReturn={getReturnUseCase}
+            createReturn={createReturnUseCase}
             getBaseReturn={getBaseReturnUseCase}
             submitReturn={submitReturnUseCase}
           />
@@ -51,8 +52,8 @@ const App = () => (
         render={props => (
           <ReturnPage
             {...props}
-            getProject={getProjectUseCase}
             getReturn={getReturnUseCase}
+            createReturn={createReturnUseCase}
             getBaseReturn={getBaseReturnUseCase}
             submitReturn={submitReturnUseCase}
           />
