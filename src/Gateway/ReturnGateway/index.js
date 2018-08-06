@@ -52,13 +52,13 @@ export default class ReturnGateway {
     }
   }
 
-  async update(return_id, data) {
+  async update(return_id, return_data) {
     let response = await fetch(
       `${process.env.REACT_APP_HIF_API_URL}return/update`,
       {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({return_id, data}),
+        body: JSON.stringify({return_id, return_data}),
       },
     );
 

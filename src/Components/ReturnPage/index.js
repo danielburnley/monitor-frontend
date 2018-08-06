@@ -7,22 +7,37 @@ export default class ReturnPage extends React.Component {
     this.state = {loading: true};
   }
 
-  submissionSuccessful = returnId => {
-    this.props.history.push(`return/${returnId}`);
+  projectId = () => {
+    return this.props.match.params.projectId;
+  };
+
+  returnId = () => {
+    return this.props.match.params.returnId;
+  };
+
+  submissionSuccessful = () => {
+    this.setState({status: 'Submitted'})
   };
 
   onFormSubmit = async formData => {
-    if (this.props.match.params.returnId) {
-      this.props.submitReturn.execute(this, {
-        projectId: this.props.match.params.projectId,
-        data: formData,
-      });
-    } else {
-      this.props.createReturn.execute(this, {
-        projectId: this.props.match.params.projectId,
-        data: formData
-      })
-    }
+    this.props.submitReturn.execute(this, {
+      returnId: this.returnId(),
+      data: formData,
+    });
+  };
+
+  onFormCreate = async formData => {
+    this.props.createReturn.execute(this, {
+      projectId: this.projectId(),
+      data: formData,
+    });
+  };
+
+  onFormSave = async formData => {
+    this.props.updateReturn.execute(this, {
+      returnId: this.returnId(),
+      data: formData,
+    });
   };
 
   presentReturn = async returnData => {
@@ -30,35 +45,26 @@ export default class ReturnPage extends React.Component {
       loading: false,
       formData: returnData.data,
       formSchema: returnData.schema,
-    });
-  };
-
-  presentProject = async projectData => {
-    await this.setState({
-      loading: false,
-      formData: projectData.data,
-      formSchema: projectData.schema,
+      status: returnData.status || 'New',
     });
   };
 
   creationSuccessful = async returnId => {
-    this.props.history.push(`return/${returnId}`);
-  }
+    this.props.history.push(`/project/${this.projectId()}/return/${returnId}`);
+  };
+
+  updateSuccessful = async () => {};
 
   fetchData = async () => {
-    if (this.props.match.params.returnId) {
+    if (this.returnId()) {
       await this.props.getReturn.execute(this, {
-        id: this.props.match.params.returnId,
+        id: this.returnId(),
       });
     } else {
       await this.props.getBaseReturn.execute(this, {
-        projectId: this.props.match.params.projectId,
+        projectId: this.projectId(),
       });
     }
-  };
-
-  isReadOnly = () => {
-    return !(this.props.match.params.returnId === undefined);
   };
 
   async componentDidMount() {
@@ -72,16 +78,18 @@ export default class ReturnPage extends React.Component {
 
     return (
       <ReturnForm
+        onSave={this.onFormSave}
         onSubmit={this.onFormSubmit}
+        onCreate={this.onFormCreate}
         data={this.state.formData}
         schema={this.state.formSchema}
-        readOnly={this.isReadOnly()}
+        status={this.state.status}
       />
     );
   }
 
   backToProject = e => {
-    this.props.history.push(`/project/${this.props.match.params.projectId}`);
+    this.props.history.push(`/project/${this.projectId()}`);
     e.preventDefault();
   };
 
