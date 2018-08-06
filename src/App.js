@@ -19,10 +19,8 @@ const createReturn = new CreateReturn(new ReturnGateway());
 
 const App = () => (
   <Router>
-    <body>
-      <div className="Header">
-        <Route exact path="/" component={Header} />
-      </div>
+    <div class="app-container">
+      <Header/>
 
       <div className="monitor-container">
         <Route exact path="/" component={Home} />
@@ -64,10 +62,8 @@ const App = () => (
         />
       </div>
 
-      <div className="Footer">
-        <Route exact path="/" component={Footer} />
-      </div>
-    </body>
+      <Footer/>
+    </div>
   </Router>
 );
 
