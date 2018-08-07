@@ -60,6 +60,7 @@ const App = () => (
               submitReturn={submitReturnUseCase}
               updateReturn={updateReturnUseCase}
               generateUISchema={generateReadOnlySchema}
+              generateSubmittedSchema={generateDisabledUISchema}
             />
           )}
         />
@@ -75,6 +76,7 @@ const App = () => (
               submitReturn={submitReturnUseCase}
               updateReturn={updateReturnUseCase}
               generateUISchema={generateReadOnlySchema}
+              generateSubmittedSchema={generateDisabledUISchema}
             />
           )}
         />
