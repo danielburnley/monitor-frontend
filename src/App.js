@@ -1,32 +1,39 @@
 import React from 'react';
+
+import Footer from './Components/Footer';
+import Header from './Components/Header';
 import ProjectForm from './Components/ProjectForm';
 import ProjectPage from './Components/ProjectPage';
 import ReturnPage from './Components/ReturnPage';
+
+import CreateReturn from './UseCase/CreateReturn';
+import GenerateDisabledUISchema from './UseCase/GenerateDisabledUISchema'
+import GenerateReadOnlySchema from './UseCase/GenerateReadOnlySchema'
+import GetBaseReturn from './UseCase/GetBaseReturn';
 import GetProject from './UseCase/GetProject';
 import GetReturn from './UseCase/GetReturn';
-import GetBaseReturn from './UseCase/GetBaseReturn';
-import CreateReturn from './UseCase/CreateReturn';
 import SubmitReturn from './UseCase/SubmitReturn';
 import UpdateReturn from './UseCase/UpdateReturn';
+
 import ProjectGateway from './Gateway/ProjectGateway';
 import ReturnGateway from './Gateway/ReturnGateway';
-import Footer from './Components/Footer'
-import Header from './Components/Header'
 
 import './App.css';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 
+const createReturnUseCase = new CreateReturn(new ReturnGateway());
+const generateDisabledUISchema = new GenerateDisabledUISchema();
+const generateReadOnlySchema = new GenerateReadOnlySchema();
+const getBaseReturnUseCase = new GetBaseReturn(new ReturnGateway());
 const getProjectUseCase = new GetProject(new ProjectGateway());
 const getReturnUseCase = new GetReturn(new ReturnGateway());
-const getBaseReturnUseCase = new GetBaseReturn(new ReturnGateway());
-const createReturnUseCase = new CreateReturn(new ReturnGateway());
 const submitReturnUseCase = new SubmitReturn(new ReturnGateway());
 const updateReturnUseCase = new UpdateReturn(new ReturnGateway());
 
 const App = () => (
   <Router>
     <div class="app-container">
-      <Header/>
+      <Header />
 
       <div className="monitor-container">
         <Route exact path="/" component={Home} />
@@ -37,6 +44,7 @@ const App = () => (
             <ProjectPage
               {...props}
               getProject={getProjectUseCase}
+              generateUISchema={generateDisabledUISchema}
             />
           )}
         />
@@ -51,6 +59,7 @@ const App = () => (
               createReturn={createReturnUseCase}
               submitReturn={submitReturnUseCase}
               updateReturn={updateReturnUseCase}
+              generateUISchema={generateReadOnlySchema}
             />
           )}
         />
@@ -65,12 +74,13 @@ const App = () => (
               getBaseReturn={getBaseReturnUseCase}
               submitReturn={submitReturnUseCase}
               updateReturn={updateReturnUseCase}
+              generateUISchema={generateReadOnlySchema}
             />
           )}
         />
       </div>
 
-      <Footer/>
+      <Footer />
     </div>
   </Router>
 );
