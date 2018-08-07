@@ -8,10 +8,12 @@ export default class Project extends React.Component {
   }
 
   presentProject = async projectData => {
+    let uiSchema = this.props.generateUISchema.execute(projectData.schema)
     await this.setState({
       loading: false,
       formData: projectData.data,
       formSchema: projectData.schema,
+      formUISchema: uiSchema
     });
   };
 
@@ -39,6 +41,7 @@ export default class Project extends React.Component {
           reviewId={this.props.match.params.id}
           data={this.state.formData}
           schema={this.state.formSchema}
+          uiSchema={this.state.formUISchema}
         />
         <button data-test="new-return-button" className="btn btn-primary" onClick={this.createReturn}>
           Create a new return

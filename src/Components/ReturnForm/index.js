@@ -9,38 +9,6 @@ export default class ReturnForm extends React.Component {
     this.state = {formData: props.data};
   }
 
-  getUiSchema = () => {
-    let uiSchema = {
-      summary: {
-        name: {'ui:readonly': true},
-        description: {'ui:readonly': true},
-        leadAuthority: {'ui:readonly': true},
-      },
-      infrastructure: {
-        infraType: {'ui:readonly': true},
-        description: {'ui:readonly': true},
-        completionDate: {'ui:readonly': true},
-        planning: {
-          estimatedSubmission: {'ui:readonly': true},
-        },
-      },
-      financial: {
-        estimatedTotalAmount: {'ui:readonly': true},
-      },
-    };
-
-    if (this.props.readOnly) {
-      uiSchema.infrastructure.planning.actualSubmission = {'ui:readonly': true};
-      uiSchema.infrastructure.planning.submissionDelayReason = {
-        'ui:readonly': true,
-      };
-      uiSchema.financial.actualTotalAmount = {'ui:readonly': true};
-      uiSchema.financial.totalAmountChangeReason = {'ui:readonly': true};
-    }
-
-    return uiSchema;
-  };
-
   renderActions = () => {
     if (this.props.status === 'Submitted') {
       return <div />;
@@ -82,8 +50,8 @@ export default class ReturnForm extends React.Component {
       <div className="container">
         <Form
           schema={this.props.schema}
+          uiSchema={this.props.uiSchema}
           onChange={({formData}) => this.setState({formData})}
-          uiSchema={this.getUiSchema()}
           formData={this.state.formData}>
           <div />
         </Form>

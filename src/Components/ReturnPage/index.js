@@ -16,7 +16,7 @@ export default class ReturnPage extends React.Component {
   };
 
   submissionSuccessful = () => {
-    this.setState({status: 'Submitted'})
+    this.setState({status: 'Submitted'});
   };
 
   onFormSubmit = async formData => {
@@ -41,10 +41,13 @@ export default class ReturnPage extends React.Component {
   };
 
   presentReturn = async returnData => {
+    let uiSchema = this.props.generateUISchema.execute(returnData.schema);
+
     await this.setState({
       loading: false,
       formData: returnData.data,
       formSchema: returnData.schema,
+      formUISchema: uiSchema,
       status: returnData.status || 'New',
     });
   };
@@ -83,6 +86,7 @@ export default class ReturnPage extends React.Component {
         onCreate={this.onFormCreate}
         data={this.state.formData}
         schema={this.state.formSchema}
+        uiSchema={this.state.formUISchema}
         status={this.state.status}
       />
     );
