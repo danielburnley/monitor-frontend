@@ -29,7 +29,7 @@ describe('Viewing at a project', () => {
       title: 'Cat Return',
       type: 'object',
       properties: {
-        cats: {
+        summary: {
           type: 'object',
           title: 'Cats',
           properties: {
@@ -44,7 +44,7 @@ describe('Viewing at a project', () => {
     let projectResponse = {
       type: 'hif',
       data: {
-        cats: {
+        summary: {
           noise: 'Meow',
           description: 'Fluffy balls of friendship',
           toes: 'Beans',
@@ -52,8 +52,6 @@ describe('Viewing at a project', () => {
       },
       schema: projectSchema,
     };
-
-    let expectedInputValues = ['Meow', 'Fluffy balls of friendship', 'Beans'];
 
     let returnSchema = {
       title: 'Cat Return',
@@ -103,9 +101,18 @@ describe('Viewing at a project', () => {
 
     wrapper.update();
 
-    let actualInputs = getInputsFromPage(wrapper);
 
-    expect(actualInputs).toEqual(expectedInputValues);
+    let summary = wrapper.find('div[data-test="summary"]')
+
+    expect(summary.find('div[data-test="summary_noise"]').text()).toEqual(
+      'Meow',
+    );
+    expect(summary.find('div[data-test="summary_description"]').text()).toEqual(
+      'Fluffy balls of friendship',
+    );
+    expect(summary.find('div[data-test="summary_toes"]').text()).toEqual(
+      'Beans',
+    );
 
     let button = wrapper.find('[data-test="new-return-button"]');
     button.simulate('click');
@@ -113,8 +120,8 @@ describe('Viewing at a project', () => {
     await waitForRequestToFinish();
     wrapper.update();
 
-    expectedInputValues.push('');
-    actualInputs = getInputsFromPage(wrapper);
+    let expectedInputValues = ['Meow', 'Fluffy balls of friendship', 'Beans', ''];
+    let actualInputs = getInputsFromPage(wrapper);
 
     expect(actualInputs).toEqual(expectedInputValues);
   });
