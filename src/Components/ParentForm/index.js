@@ -31,7 +31,7 @@ export default class ProjectForm extends React.Component {
             Object.keys(this.props.schema.properties).map(property =>
               <label key={property}>
                 <input checked={
-                  property===this.first_property?true:false
+                  property===this.state.selected
                 } name="view_selector" onChange={this.viewSelectorOnChange} type="radio" id={property}/>
                 {property}
               </label>)
