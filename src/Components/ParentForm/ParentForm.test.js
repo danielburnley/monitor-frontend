@@ -12,36 +12,6 @@ async function updateFormField(input, value) {
 }
 
 describe('<ParentForm>', () => {
-  //Take one big schema and create a child for each top level property
-  //Parent, type object
-  it('creates children based on schema', () => {
-    let wrap = mount(
-      <ParentForm schema={{
-        type: 'object',
-        properties: {
-          cat: {
-            type: 'object',
-            properties: {
-              name: {
-                type: 'string'
-              }
-            }
-          },
-          dog: {
-            type: 'object',
-            properties: {
-              name: {
-                type: 'string'
-              }
-            }
-          }
-        }
-      }}/>
-    );
-
-    expect(wrap.find('Subform').length).toEqual(2);
-  });
-
   it('compiles a form from the children', async () => {
     let wrap = mount(
       <ParentForm schema={{
@@ -66,8 +36,40 @@ describe('<ParentForm>', () => {
         }
       }}/>
     );
-    let input = wrap.find('#cat').find("input");
+    let input = wrap.find('#cat_subform').find("input");
     await updateFormField(input, "Tabby");
     expect(wrap.state('formData')).toEqual({cat: {name: "Tabby"}}, 1);
   });
+
+  it('displays radio buttons to change the current view', async () => {
+    let wrap = mount(
+      <ParentForm schema={{
+        type: 'object',
+        properties: {
+          cat: {
+            type: 'object',
+            properties: {
+              name: {
+                type: 'string'
+              }
+            }
+          },
+          dog: {
+            type: 'object',
+            properties: {
+              name: {
+                type: 'string'
+              }
+            }
+          }
+        }
+      }}/>
+    );
+
+    //Find the radio button that selects the cat form
+    let cat_label = wrap.find('#cat');
+    cat_label.simulate('change', { target: { checked: true } });
+    expect(wrap.find('#cat_subform').length).toEqual(1);
+    expect(wrap.find('#dog_subform').length).toEqual(0);
+  })
 });
