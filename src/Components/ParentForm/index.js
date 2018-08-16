@@ -25,12 +25,12 @@ export default class ProjectForm extends React.Component {
 
   //We need a way to connect the input to the subforms cleanly
   render() {
-    return (<div>
+    return (<div className="ParentForm">
         <form>
           {
             Object.keys(this.props.schema.properties).map(property =>
-              <div>
-                <label key={property}>
+              <div key={property}>
+                <label>
                   <input checked={
                     property===this.state.selected
                   } name="view_selector" onChange={this.viewSelectorOnChange} type="radio" id={property}/>
@@ -39,15 +39,18 @@ export default class ProjectForm extends React.Component {
               </div>)
           }
         </form>
+
         <div>
         {
             this.state.selected &&
             <Subform
+              className="Subform"
               onChange={(formData) => {this.subformOnChange(this.state.selected, formData)}}
               id={this.state.selected+"_subform"}
               schema={this.props.schema.properties[this.state.selected]}></Subform>
         }
         </div>
+        <button className="btn btn-primary return-btn">Submit</button>
       </div>)
   }
 }

@@ -71,5 +71,34 @@ describe('<ParentForm>', () => {
     cat_label.simulate('change', { target: { checked: true } });
     expect(wrap.find('#cat_subform').length).toEqual(1);
     expect(wrap.find('#dog_subform').length).toEqual(0);
-  })
+  });
+
+  it('displays only one submit button outside the subforms', async () => {
+    let wrap = mount(
+      <ParentForm schema={{
+        type: 'object',
+        properties: {
+          cat: {
+            type: 'object',
+            properties: {
+              name: {
+                type: 'string'
+              }
+            }
+          },
+          dog: {
+            type: 'object',
+            properties: {
+              name: {
+                type: 'string'
+              }
+            }
+          }
+        }
+      }}/>
+    );
+
+    expect(wrap.find('.Subform button').length).toEqual(0);
+    expect(wrap.find('.ParentForm > button').length).toEqual(1);
+  });
 });
