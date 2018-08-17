@@ -1,5 +1,5 @@
 import APISimulator from "../test/ApiSimulator";
-import AppPage from '../test/AppPage'
+import AppPage from "../test/AppPage";
 import nock from "nock";
 
 describe("Viewing at a project", () => {
@@ -17,8 +17,8 @@ describe("Viewing at a project", () => {
   it("Given invalid token GetToken is shown", async () => {
     api.expendToken("Hello").unauthorised();
 
-    let page = new AppPage("/project/0?token=Hello")
-    await page.load()
+    let page = new AppPage("/project/0?token=Hello");
+    await page.load();
 
     expect(page.find("GetToken").length).toEqual(1);
     expect(page.find("ProjectPage").length).toEqual(0);
@@ -56,8 +56,8 @@ describe("Viewing at a project", () => {
 
       api.getProject(projectSchema, projectData).successfully();
 
-      let page = new AppPage("/project/0?token=Cats")
-      await page.load()
+      let page = new AppPage("/project/0?token=Cats");
+      await page.load();
 
       expect(page.find("GetToken").length).toEqual(0);
       expect(page.find("Project").length).toEqual(1);
@@ -90,8 +90,8 @@ describe("Viewing at a project", () => {
 
       api.getProject(projectSchema, projectData).successfully();
 
-      let page = new AppPage("/project/0?token=Cats")
-      await page.load()
+      let page = new AppPage("/project/0?token=Cats");
+      await page.load();
 
       let summary = page.summary();
 
@@ -161,8 +161,8 @@ describe("Viewing at a project", () => {
       api.getProject(projectSchema, projectData).successfully();
       api.getBaseReturn(returnSchema, returnData).successfully();
 
-      let page = new AppPage("/project/0?token=Cats")
-      await page.load()
+      let page = new AppPage("/project/0?token=Cats");
+      await page.load();
       await page.createNewReturn();
 
       let expectedInputValues = [
@@ -201,8 +201,8 @@ describe("Viewing at a project", () => {
       };
 
       api.getReturn(returnSchema, returnData).successfully();
-      let page = new AppPage("/project/0/return/0?token=Cats")
-      await page.load()
+      let page = new AppPage("/project/0/return/0?token=Cats");
+      await page.load();
 
       let expectedInputValues = ["Meow", "Fluffy balls of friendship", "Beans"];
       expect(page.getInputs()).toEqual(expectedInputValues);

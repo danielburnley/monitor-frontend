@@ -8,13 +8,15 @@ export default class ProjectForm extends React.Component {
     super(props);
     this.first_property = Object.keys(this.props.schema.properties)[0];
     this.state = {
-      formData: {},
+      uiSchema: this.props.uiSchema ? this.props.uiSchema : {},
+      formData: this.props.formData ? this.props.formData : {},
       selected: this.first_property
     }
   }
 
-  subformOnChange = (formDataKey, formData) => {
-    this.state.formData[formDataKey] = formData
+  subformOnChange = (formData) => {
+    this.state.formData[this.state.selected] = formData;
+    this.props.onChange({formData: this.state.formData});
   }
 
   viewSelectorOnChange = (changeEvent) => {
@@ -45,12 +47,13 @@ export default class ProjectForm extends React.Component {
             this.state.selected &&
             <Subform
               className="Subform"
-              onChange={(formData) => {this.subformOnChange(this.state.selected, formData)}}
+              onChange={(formData) => {this.subformOnChange(formData)}}
               id={this.state.selected+"_subform"}
-              schema={this.props.schema.properties[this.state.selected]}></Subform>
+              formData={this.state.formData[this.state.selected]}
+              schema={this.props.schema.properties[this.state.selected]}
+              uiSchema={this.props.uiSchema? this.props.uiSchema[this.state.selected] : {}}></Subform>
         }
         </div>
-        <button className="btn btn-primary return-btn">Submit</button>
       </div>)
   }
 }
