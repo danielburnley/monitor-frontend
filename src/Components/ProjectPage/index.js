@@ -2,8 +2,8 @@ import React from 'react'
 import ProjectForm from '../ProjectForm'
 
 export default class Project extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {loading: true};
   }
 
@@ -15,6 +15,10 @@ export default class Project extends React.Component {
       formSchema: projectData.schema,
       formUISchema: uiSchema
     });
+  };
+
+  presentProjectNotFound = async () => {
+
   };
 
   fetchData = async () => {
@@ -58,4 +62,3 @@ export default class Project extends React.Component {
     );
   }
 }
-

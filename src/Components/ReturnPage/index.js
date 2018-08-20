@@ -43,6 +43,10 @@ export default class ReturnPage extends React.Component {
     });
   };
 
+  presentReturnNotFound = async () => {
+
+  };
+
   presentReturn = async returnData => {
     let uiSchema = {};
     if (returnData.status === 'Submitted') {
