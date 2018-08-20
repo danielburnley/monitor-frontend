@@ -1,5 +1,5 @@
 import nock from 'nock';
-import apikey from '../../Domain/Apikey';
+import ApiKey from '../../Domain/Apikey';
 import TokenGateway from '.';
 
 describe('token gateway', () => {
