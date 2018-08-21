@@ -6,7 +6,8 @@ export default class ReturnGateway {
     let rawResponse = await fetch(
       `${process.env.REACT_APP_HIF_API_URL}project/${id}/return`,
       {
-        headers: {'Content-Type': 'application/json'},
+        headers: {'Content-Type': 'application/json',
+          'API_KEY': window.apiKey},
       },
     );
 
@@ -23,7 +24,8 @@ export default class ReturnGateway {
     let rawResponse = await fetch(
       `${process.env.REACT_APP_HIF_API_URL}return/get?id=${id}`,
       {
-        headers: {'Content-Type': 'application/json'},
+        headers: {'Content-Type': 'application/json',
+          'API_KEY': window.apiKey},
       },
     );
     if (rawResponse.ok) {
@@ -39,7 +41,8 @@ export default class ReturnGateway {
       `${process.env.REACT_APP_HIF_API_URL}return/create`,
       {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
+        headers: {'Content-Type': 'application/json',
+          'API_KEY': window.apiKey},
         body: JSON.stringify({project_id: id, data}),
       },
     );
@@ -57,7 +60,8 @@ export default class ReturnGateway {
       `${process.env.REACT_APP_HIF_API_URL}return/update`,
       {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
+        headers: {'Content-Type': 'application/json',
+          'API_KEY': window.apiKey},
         body: JSON.stringify({return_id, return_data}),
       },
     );
@@ -74,7 +78,8 @@ export default class ReturnGateway {
       `${process.env.REACT_APP_HIF_API_URL}return/submit`,
       {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
+        headers: {'Content-Type': 'application/json',
+          'API_KEY': window.apiKey},
         body: JSON.stringify({return_id, data}),
       },
     );

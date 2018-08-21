@@ -5,7 +5,7 @@ import FooterLogo from './crowncopyright.png'
 export default class Footer extends React.Component {
   render() {
     let sitemap = <footer>
-      <div class="inner">
+      <div className="inner">
         <ul>
           <li><a href="">Help</a></li>
           <li><a href="">Cookies</a></li>
@@ -14,7 +14,7 @@ export default class Footer extends React.Component {
           <li><a href="">Rhestr o Wasanaethau Cymraeg</a></li>
         </ul>
       </div>
-      <div class="copyright">
+      <div className="copyright">
         <img src={FooterLogo} alt="British Royal Coat of Arms"></img><br/>
         <a href="https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/">© Crown copyright</a>
       </div>
