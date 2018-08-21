@@ -25,4 +25,4 @@ Once you have cloned the repository you can run the application with the followi
 
 The `docker-compose.yml` sets the Local Authority Monitoring API in the `web:` `environment:` this is defaulted to : `REACT_APP_HIF_API_URL: 'http://localhost:4567/'`
 
-If you are running the API elsewhere you should update the field.
+If you are running the API elsewhere you should update the field
