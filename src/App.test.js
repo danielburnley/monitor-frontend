@@ -8,6 +8,14 @@ async function waitForRequestToFinish() {
   await new Promise(resolve => setTimeout(resolve, 100));
 }
 
+async function createNewReturn(wrapper) {
+  let button = wrapper.find('[data-test="new-return-button"]');
+  button.simulate('click');
+
+  await waitForRequestToFinish();
+  wrapper.update();
+}
+
 function getInputsFromPage(page) {
   return page.find('input').map(node => {
     if (node.getDOMNode().type === 'checkbox') {
@@ -105,7 +113,7 @@ describe('Viewing at a project', () => {
     expect(wrapper.find('ProjectPage').length).toEqual(0)
   });
 
-  xit('Renders the project with information from the API', async () => {
+  it('Renders the project with information from the API', async () => {
     process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
     let projectSchema = {
       title: 'Cat Return',
@@ -166,16 +174,16 @@ describe('Viewing at a project', () => {
   let projectRequest = nock('http://cat.meow')
       .matchHeader('Content-Type', 'application/json')
       .get('/project/find?id=0')
-      .reply(403);
+      .reply(200, projectResponse);
 
     nock('http://cat.meow')
       .matchHeader('Content-Type', 'application/json')
       .post('/token/expend', {access_token: 'Hello' })
-      .reply(403);
+      .reply(202, {apiKey: 'abc'});
 
 
     let wrapper = mount(
-      <MemoryRouter initialEntries={['/project/0?token=Hello ']}>
+      <MemoryRouter initialEntries={['/project/0?token=Hello']}>
         <App />
       </MemoryRouter>,
     );
@@ -196,7 +204,7 @@ describe('Viewing at a project', () => {
   });
 
   describe('Given valid token', () => {
-    xit('will not show GetToken', async () => {
+    it('will not show GetToken', async () => {
       process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
 
       nock('http://cat.meow')
@@ -253,7 +261,7 @@ describe('Viewing at a project', () => {
       expect(wrapper.find('Project').length).toEqual(1)
     });
 
-    xit('Renders the project with information from the API', async () => {
+    it('Renders the return with information from the API when creating a new return', async () => {
       nock('http://cat.meow')
         .matchHeader('Content-Type', 'application/json')
         .post('/token/expend', {access_token: 'Cats'})
@@ -287,8 +295,6 @@ describe('Viewing at a project', () => {
         },
         schema: projectSchema,
       };
-
-      let expectedInputValues = ['Meow', 'Fluffy balls of friendship', 'Beans'];
 
       let returnSchema = {
         title: 'Cat Return',
@@ -338,18 +344,10 @@ describe('Viewing at a project', () => {
 
       wrapper.update();
 
+      await createNewReturn(wrapper);
+
+      let expectedInputValues = ['Meow', 'Fluffy balls of friendship', 'Beans', ''];
       let actualInputs = getInputsFromPage(wrapper);
-
-      expect(actualInputs).toEqual(expectedInputValues);
-
-      let button = wrapper.find('[data-test="new-return-button"]');
-      button.simulate('click');
-
-      await waitForRequestToFinish();
-      wrapper.update();
-
-      expectedInputValues.push('');
-      actualInputs = getInputsFromPage(wrapper);
 
       expect(actualInputs).toEqual(expectedInputValues);
     });
