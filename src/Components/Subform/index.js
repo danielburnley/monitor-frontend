@@ -9,6 +9,7 @@ export default class Subform extends React.Component {
           children={<div />}
           formData={this.props.formData}
           onChange={({ formData }) => this.props.onChange(formData)}
+          uiSchema={this.props.uiSchema}
           schema={this.props.schema}
         />
       </div>
