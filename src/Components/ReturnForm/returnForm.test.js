@@ -85,7 +85,7 @@ describe('<ReturnForm>', () => {
     let wrapper = mount(
       <ReturnForm data={{cats: 'mew'}} schema={formSchema} onSave={saveSpy} />,
     );
-    let input = wrapper.find('input');
+    let input = wrapper.find('input[type="text"]');
     await updateFormField(input, 'New Meow');
     saveReturn(wrapper);
     expect(saveSpy).toHaveBeenCalledWith({cats: 'New Meow'});
