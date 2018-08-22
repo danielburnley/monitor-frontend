@@ -1,413 +1,211 @@
-import React from 'react';
-import {MemoryRouter} from 'react-router-dom';
-import {mount, shallow} from 'enzyme';
-import App from './App';
-import nock from 'nock';
+import APISimulator from "../test/ApiSimulator";
+import AppPage from '../test/AppPage'
+import nock from "nock";
 
-async function waitForRequestToFinish() {
-  await new Promise(resolve => setTimeout(resolve, 100));
-}
+describe("Viewing at a project", () => {
+  let api;
 
-async function createNewReturn(wrapper) {
-  let button = wrapper.find('[data-test="new-return-button"]');
-  button.simulate('click');
-
-  await waitForRequestToFinish();
-  wrapper.update();
-}
-
-function getInputsFromPage(page) {
-  return page.find('input').map(node => {
-    if (node.getDOMNode().type === 'checkbox') {
-      return node.getDOMNode().checked;
-    } else {
-      return node.getDOMNode().value;
-    }
+  beforeEach(() => {
+    process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
+    api = new APISimulator("http://cat.meow");
   });
-}
 
-describe('Viewing at a project', () => {
   afterEach(() => {
-    nock.cleanAll()
+    nock.cleanAll();
   });
 
-  it('Given invalid token GetToken is shown', async () => {
-    process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
-    let projectSchema = {
-      title: 'Cat Return',
-      type: 'object',
-      properties: {
-        summary: {
-          type: 'object',
-          title: 'Cats',
-          properties: {
-            noise: {type: 'string', title: 'Noise'},
-            description: {type: 'string', title: 'Description'},
-            toes: {type: 'string', title: 'Toes'},
-          },
-        },
-      },
-    };
+  it("Given invalid token GetToken is shown", async () => {
+    api.expendToken("Hello").unauthorised();
 
-    let projectResponse = {
-      type: 'hif',
-      data: {
-        summary: {
-          noise: 'Meow',
-          description: 'Fluffy balls of friendship',
-          toes: 'Beans',
-        },
-      },
-      schema: projectSchema,
-    };
+    let page = new AppPage("/project/0?token=Hello")
+    await page.load()
 
-    let returnSchema = {
-      title: 'Cat Return',
-      type: 'object',
-      properties: {
-        summary: {
-          type: 'object',
-          title: 'Cats',
-          properties: {
-            noise: {type: 'string', title: 'Noise'},
-            description: {type: 'string', title: 'Description'},
-            toes: {type: 'string', title: 'Toes'},
-            playtime: {type: 'string', title: 'Total playtime'},
-          },
-        },
-      },
-    };
-
-    let returnResponse = {
-      data: {
-        summary: {
-          noise: 'Meow',
-          description: 'Fluffy balls of friendship',
-          toes: 'Beans',
-        },
-      },
-      schema: returnSchema,
-    };
-
-    let projectRequest = nock('http://cat.meow')
-        .matchHeader('Content-Type', 'application/json')
-        .get('/project/find?id=0')
-        .reply(403);
-
-    nock('http://cat.meow')
-      .matchHeader('Content-Type', 'application/json')
-      .post('/token/expend', {access_token: 'Hello' })
-      .reply(403);
-
-
-    let wrapper = mount(
-      <MemoryRouter initialEntries={['/project/0?token=Hello ']}>
-        <App />
-      </MemoryRouter>,
-    );
-
-    await waitForRequestToFinish();
-    wrapper.update();
-
-    expect(wrapper.find('GetToken').length).toEqual(1)
-    expect(wrapper.find('ProjectPage').length).toEqual(0)
+    expect(page.find("GetToken").length).toEqual(1);
+    expect(page.find("ProjectPage").length).toEqual(0);
   });
 
-  it('Renders the project with information from the API', async () => {
-    process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
-    let projectSchema = {
-      title: 'Cat Return',
-      type: 'object',
-      properties: {
-        summary: {
-          type: 'object',
-          title: 'Cats',
-          properties: {
-            noise: {type: 'string', title: 'Noise'},
-            description: {type: 'string', title: 'Description'},
-            toes: {type: 'string', title: 'Toes'},
-          },
-        },
-      },
-    };
-
-    let projectResponse = {
-      type: 'hif',
-      data: {
-        summary: {
-          noise: 'Meow',
-          description: 'Fluffy balls of friendship',
-          toes: 'Beans',
-        },
-      },
-      schema: projectSchema,
-    };
-
-    let returnSchema = {
-      title: 'Cat Return',
-      type: 'object',
-      properties: {
-        summary: {
-          type: 'object',
-          title: 'Cats',
-          properties: {
-            noise: {type: 'string', title: 'Noise'},
-            description: {type: 'string', title: 'Description'},
-            toes: {type: 'string', title: 'Toes'},
-            playtime: {type: 'string', title: 'Total playtime'},
-          },
-        },
-      },
-    };
-
-    let returnResponse = {
-      data: {
-        summary: {
-          noise: 'Meow',
-          description: 'Fluffy balls of friendship',
-          toes: 'Beans',
-        },
-      },
-      schema: returnSchema,
-    };
-
-  let projectRequest = nock('http://cat.meow')
-      .matchHeader('Content-Type', 'application/json')
-      .get('/project/find?id=0')
-      .reply(200, projectResponse);
-
-    nock('http://cat.meow')
-      .matchHeader('Content-Type', 'application/json')
-      .post('/token/expend', {access_token: 'Hello' })
-      .reply(202, {apiKey: 'abc'});
-
-
-    let wrapper = mount(
-      <MemoryRouter initialEntries={['/project/0?token=Hello']}>
-        <App />
-      </MemoryRouter>,
-    );
-
-    await waitForRequestToFinish();
-    wrapper.update();
-    let summary = wrapper.find('div[data-test="summary"]')
-
-    expect(summary.find('div[data-test="summary_noise"]').text()).toEqual(
-      'Meow',
-    );
-    expect(summary.find('div[data-test="summary_description"]').text()).toEqual(
-      'Fluffy balls of friendship',
-    );
-    expect(summary.find('div[data-test="summary_toes"]').text()).toEqual(
-      'Beans',
-    );
-  });
-
-  describe('Given valid token', () => {
-    it('will not show GetToken', async () => {
-      process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
-
-      nock('http://cat.meow')
-        .matchHeader('Content-Type', 'application/json')
-        .post('/token/expend', {access_token: 'Cats'})
-        .reply(202, {apiKey: 'Dogs'});
-
-      let projectSchema = {
-        title: 'Cat Return',
-        type: 'object',
-        properties: {
-          summary: {
-            type: 'object',
-            title: 'Cats',
-            properties: {
-              noise: {type: 'string', title: 'Noise'},
-              description: {type: 'string', title: 'Description'},
-              toes: {type: 'string', title: 'Toes'},
-            },
-          },
-        },
-      };
-
-
-      let projectResponse = {
-        type: 'hif',
-        data: {
-          summary: {
-            noise: 'Meow',
-            description: 'Fluffy balls of friendship',
-            toes: 'Beans',
-          },
-        },
-        schema: projectSchema,
-      };
-
-      let projectRequest = nock('http://cat.meow')
-        .matchHeader('Content-Type', 'application/json')
-        .get('/project/find?id=0')
-        .reply(200, projectResponse);
-
-
-
-      let wrapper = mount(
-        <MemoryRouter initialEntries={['/project/0?token=Cats']}>
-          <App />
-        </MemoryRouter>,
-      );
-
-      await waitForRequestToFinish();
-      wrapper.update();
-
-      expect(wrapper.find('GetToken').length).toEqual(0)
-      expect(wrapper.find('Project').length).toEqual(1)
+  describe("Given valid token", () => {
+    beforeEach(() => {
+      api.expendToken("Cats").successfully();
     });
 
-    it('Renders the return with information from the API when creating a new return', async () => {
-      nock('http://cat.meow')
-        .matchHeader('Content-Type', 'application/json')
-        .post('/token/expend', {access_token: 'Cats'})
-        .reply(202, {apiKey: 'Dogs'});
-
-      process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
+    it("will not show GetToken", async () => {
       let projectSchema = {
-        title: 'Cat Return',
-        type: 'object',
+        title: "Cat Return",
+        type: "object",
         properties: {
           summary: {
-            type: 'object',
-            title: 'Cats',
+            type: "object",
+            title: "Cats",
             properties: {
-              noise: {type: 'string', title: 'Noise'},
-              description: {type: 'string', title: 'Description'},
-              toes: {type: 'string', title: 'Toes'},
-            },
-          },
-        },
+              noise: { type: "string", title: "Noise" },
+              description: { type: "string", title: "Description" },
+              toes: { type: "string", title: "Toes" }
+            }
+          }
+        }
       };
 
-      let projectResponse = {
-        type: 'hif',
-        data: {
+      let projectData = {
+        summary: {
+          noise: "Meow",
+          description: "Fluffy balls of friendship",
+          toes: "Beans"
+        }
+      };
+
+      api.getProject(projectSchema, projectData).successfully();
+
+      let page = new AppPage("/project/0?token=Cats")
+      await page.load()
+
+      expect(page.find("GetToken").length).toEqual(0);
+      expect(page.find("Project").length).toEqual(1);
+    });
+
+    it("Renders the project summary with information from the API", async () => {
+      let projectSchema = {
+        title: "Cat Return",
+        type: "object",
+        properties: {
           summary: {
-            noise: 'Meow',
-            description: 'Fluffy balls of friendship',
-            toes: 'Beans',
-          },
-        },
-        schema: projectSchema,
+            type: "object",
+            title: "Cats",
+            properties: {
+              noise: { type: "string", title: "Noise" },
+              description: { type: "string", title: "Description" },
+              toes: { type: "string", title: "Toes" }
+            }
+          }
+        }
+      };
+
+      let projectData = {
+        summary: {
+          noise: "Meow",
+          description: "Fluffy balls of friendship",
+          toes: "Beans"
+        }
+      };
+
+      api.getProject(projectSchema, projectData).successfully();
+
+      let page = new AppPage("/project/0?token=Cats")
+      await page.load()
+
+      let summary = page.summary();
+
+      expect(summary.find('div[data-test="summary_noise"]').text()).toEqual(
+        "Meow"
+      );
+
+      expect(
+        summary.find('div[data-test="summary_description"]').text()
+      ).toEqual("Fluffy balls of friendship");
+
+      expect(summary.find('div[data-test="summary_toes"]').text()).toEqual(
+        "Beans"
+      );
+    });
+
+    it("Renders the return with information from the API when creating a new return", async () => {
+      let projectSchema = {
+        title: "Cat Return",
+        type: "object",
+        properties: {
+          summary: {
+            type: "object",
+            title: "Cats",
+            properties: {
+              noise: { type: "string", title: "Noise" },
+              description: { type: "string", title: "Description" },
+              toes: { type: "string", title: "Toes" }
+            }
+          }
+        }
+      };
+
+      let projectData = {
+        summary: {
+          noise: "Meow",
+          description: "Fluffy balls of friendship",
+          toes: "Beans"
+        }
       };
 
       let returnSchema = {
-        title: 'Cat Return',
-        type: 'object',
+        title: "Cat Return",
+        type: "object",
         properties: {
           summary: {
-            type: 'object',
-            title: 'Cats',
+            type: "object",
+            title: "Cats",
             properties: {
-              noise: {type: 'string', title: 'Noise'},
-              description: {type: 'string', title: 'Description'},
-              toes: {type: 'string', title: 'Toes'},
-              playtime: {type: 'string', title: 'Total playtime'},
-            },
-          },
-        },
+              noise: { type: "string", title: "Noise" },
+              description: { type: "string", title: "Description" },
+              toes: { type: "string", title: "Toes" },
+              playtime: { type: "string", title: "Total playtime" }
+            }
+          }
+        }
       };
 
-      let returnResponse = {
-        data: {
-          summary: {
-            noise: 'Meow',
-            description: 'Fluffy balls of friendship',
-            toes: 'Beans',
-          },
-        },
-        schema: returnSchema,
+      let returnData = {
+        summary: {
+          noise: "Meow",
+          description: "Fluffy balls of friendship",
+          toes: "Beans"
+        }
       };
 
-      let projectRequest = nock('http://cat.meow')
-        .matchHeader('Content-Type', 'application/json')
-        .get('/project/find?id=0')
-        .reply(200, projectResponse);
+      api.getProject(projectSchema, projectData).successfully();
+      api.getBaseReturn(returnSchema, returnData).successfully();
 
-      let baseReturnRequest = nock('http://cat.meow')
-        .matchHeader('Content-Type', 'application/json')
-        .get('/project/0/return')
-        .reply(200, {baseReturn: returnResponse});
+      let page = new AppPage("/project/0?token=Cats")
+      await page.load()
+      await page.createNewReturn();
 
-      let wrapper = mount(
-        <MemoryRouter initialEntries={['/project/0?token=Cats']}>
-          <App />
-        </MemoryRouter>,
-      );
+      let expectedInputValues = [
+        "Meow",
+        "Fluffy balls of friendship",
+        "Beans",
+        ""
+      ];
 
-      await waitForRequestToFinish();
-
-      wrapper.update();
-
-      await createNewReturn(wrapper);
-
-      let expectedInputValues = ['Meow', 'Fluffy balls of friendship', 'Beans', ''];
-      let actualInputs = getInputsFromPage(wrapper);
-
-      expect(actualInputs).toEqual(expectedInputValues);
+      expect(page.getInputs()).toEqual(expectedInputValues);
     });
 
+    it("Renders the return with information from the API", async () => {
+      let returnSchema = {
+        title: "Cat Return",
+        type: "object",
+        properties: {
+          summary: {
+            type: "object",
+            title: "Cats",
+            properties: {
+              noise: { type: "string", title: "Noise" },
+              description: { type: "string", title: "Description" },
+              toes: { type: "string", title: "Toes" }
+            }
+          }
+        }
+      };
 
-    it('Renders the return with information from the API', async () => {
-        nock('http://cat.meow')
-          .matchHeader('Content-Type', 'application/json')
-          .post('/token/expend', {access_token: 'Cats'})
-          .reply(202, {apiKey: 'Dogs'});
+      let returnData = {
+        summary: {
+          noise: "Meow",
+          description: "Fluffy balls of friendship",
+          toes: "Beans"
+        }
+      };
 
-        process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
-        let returnSchema = {
-          title: 'Cat Return',
-          type: 'object',
-          properties: {
-            summary: {
-              type: 'object',
-              title: 'Cats',
-              properties: {
-                noise: {type: 'string', title: 'Noise'},
-                description: {type: 'string', title: 'Description'},
-                toes: {type: 'string', title: 'Toes'},
-              },
-            },
-          },
-        };
+      api.getReturn(returnSchema, returnData).successfully();
+      let page = new AppPage("/project/0/return/0?token=Cats")
+      await page.load()
 
-        let returnResponse = {
-          type: 'hif',
-          data: {
-            summary: {
-              noise: 'Meow',
-              description: 'Fluffy balls of friendship',
-              toes: 'Beans',
-            },
-          },
-          schema: returnSchema,
-        };
-
-        let expectedInputValues = ['Meow', 'Fluffy balls of friendship', 'Beans'];
-
-        let projectRequest = nock('http://cat.meow')
-          .matchHeader('Content-Type', 'application/json')
-          .get('/return/get?id=0')
-          .reply(200, returnResponse);
-
-        let wrapper = mount(
-          <MemoryRouter initialEntries={['/project/0/return/0?token=Cats']}>
-            <App />
-          </MemoryRouter>,
-        );
-
-        await waitForRequestToFinish();
-
-        wrapper.update();
-
-        let actualInputs = getInputsFromPage(wrapper);
-
-        expect(actualInputs).toEqual(expectedInputValues);
-      });
-  })
+      let expectedInputValues = ["Meow", "Fluffy balls of friendship", "Beans"];
+      expect(page.getInputs()).toEqual(expectedInputValues);
+    });
+  });
 });
