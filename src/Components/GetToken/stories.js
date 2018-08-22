@@ -1,13 +1,7 @@
-import React from 'react';
-import Footer from '.';
+import React from "react";
+import GetToken from ".";
+import { storiesOf } from "@storybook/react";
 
-import { storiesOf } from '@storybook/react';
-import { action } from '@storybook/addon-actions';
-import { linkTo } from '@storybook/addon-links';
-
-storiesOf('GetToken', module)
-  .add('Default', () => {
-    return (
-      <GetToken/>
-    )
-  })
+storiesOf("GetToken", module).add("Default", () => {
+  return <GetToken />;
+});

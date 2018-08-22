@@ -2,6 +2,55 @@ import APISimulator from "../test/ApiSimulator";
 import AppPage from "../test/AppPage";
 import nock from "nock";
 
+let projectSchema = {
+  title: "Cat Return",
+  type: "object",
+  properties: {
+    summary: {
+      type: "object",
+      title: "Cats",
+      properties: {
+        noise: { type: "string", title: "Noise" },
+        description: { type: "string", title: "Description" },
+        toes: { type: "string", title: "Toes" }
+      }
+    }
+  }
+};
+
+let projectData = {
+  summary: {
+    noise: "Meow",
+    description: "Fluffy balls of friendship",
+    toes: "Beans"
+  }
+};
+
+let returnSchema = {
+  title: "Cat Return",
+  type: "object",
+  properties: {
+    summary: {
+      type: "object",
+      title: "Cats",
+      properties: {
+        noise: { type: "string", title: "Noise" },
+        description: { type: "string", title: "Description" },
+        toes: { type: "string", title: "Toes" },
+        playtime: { type: "string", title: "Total playtime" }
+      }
+    }
+  }
+};
+
+let returnData = {
+  summary: {
+    noise: "Meow",
+    description: "Fluffy balls of friendship",
+    toes: "Beans"
+  }
+};
+
 describe("Viewing at a project", () => {
   let api;
 
@@ -30,30 +79,6 @@ describe("Viewing at a project", () => {
     });
 
     it("will not show GetToken", async () => {
-      let projectSchema = {
-        title: "Cat Return",
-        type: "object",
-        properties: {
-          summary: {
-            type: "object",
-            title: "Cats",
-            properties: {
-              noise: { type: "string", title: "Noise" },
-              description: { type: "string", title: "Description" },
-              toes: { type: "string", title: "Toes" }
-            }
-          }
-        }
-      };
-
-      let projectData = {
-        summary: {
-          noise: "Meow",
-          description: "Fluffy balls of friendship",
-          toes: "Beans"
-        }
-      };
-
       api.getProject(projectSchema, projectData).successfully();
 
       let page = new AppPage("/project/0?token=Cats");
@@ -64,30 +89,6 @@ describe("Viewing at a project", () => {
     });
 
     it("Renders the project summary with information from the API", async () => {
-      let projectSchema = {
-        title: "Cat Return",
-        type: "object",
-        properties: {
-          summary: {
-            type: "object",
-            title: "Cats",
-            properties: {
-              noise: { type: "string", title: "Noise" },
-              description: { type: "string", title: "Description" },
-              toes: { type: "string", title: "Toes" }
-            }
-          }
-        }
-      };
-
-      let projectData = {
-        summary: {
-          noise: "Meow",
-          description: "Fluffy balls of friendship",
-          toes: "Beans"
-        }
-      };
-
       api.getProject(projectSchema, projectData).successfully();
 
       let page = new AppPage("/project/0?token=Cats");
@@ -109,55 +110,6 @@ describe("Viewing at a project", () => {
     });
 
     it("Renders the return with information from the API when creating a new return", async () => {
-      let projectSchema = {
-        title: "Cat Return",
-        type: "object",
-        properties: {
-          summary: {
-            type: "object",
-            title: "Cats",
-            properties: {
-              noise: { type: "string", title: "Noise" },
-              description: { type: "string", title: "Description" },
-              toes: { type: "string", title: "Toes" }
-            }
-          }
-        }
-      };
-
-      let projectData = {
-        summary: {
-          noise: "Meow",
-          description: "Fluffy balls of friendship",
-          toes: "Beans"
-        }
-      };
-
-      let returnSchema = {
-        title: "Cat Return",
-        type: "object",
-        properties: {
-          summary: {
-            type: "object",
-            title: "Cats",
-            properties: {
-              noise: { type: "string", title: "Noise" },
-              description: { type: "string", title: "Description" },
-              toes: { type: "string", title: "Toes" },
-              playtime: { type: "string", title: "Total playtime" }
-            }
-          }
-        }
-      };
-
-      let returnData = {
-        summary: {
-          noise: "Meow",
-          description: "Fluffy balls of friendship",
-          toes: "Beans"
-        }
-      };
-
       api.getProject(projectSchema, projectData).successfully();
       api.getBaseReturn(returnSchema, returnData).successfully();
 
@@ -172,40 +124,16 @@ describe("Viewing at a project", () => {
         ""
       ];
 
-      expect(page.getInputs()).toEqual(expectedInputValues);
+      expect(page.getFormInputs()).toEqual(expectedInputValues);
     });
 
     it("Renders the return with information from the API", async () => {
-      let returnSchema = {
-        title: "Cat Return",
-        type: "object",
-        properties: {
-          summary: {
-            type: "object",
-            title: "Cats",
-            properties: {
-              noise: { type: "string", title: "Noise" },
-              description: { type: "string", title: "Description" },
-              toes: { type: "string", title: "Toes" }
-            }
-          }
-        }
-      };
-
-      let returnData = {
-        summary: {
-          noise: "Meow",
-          description: "Fluffy balls of friendship",
-          toes: "Beans"
-        }
-      };
-
       api.getReturn(returnSchema, returnData).successfully();
       let page = new AppPage("/project/0/return/0?token=Cats");
       await page.load();
 
-      let expectedInputValues = ["Meow", "Fluffy balls of friendship", "Beans"];
-      expect(page.getInputs()).toEqual(expectedInputValues);
+      let expectedInputValues = ["Meow", "Fluffy balls of friendship", "Beans", ""];
+      expect(page.getFormInputs()).toEqual(expectedInputValues);
     });
   });
 });
