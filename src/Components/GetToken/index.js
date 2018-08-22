@@ -18,7 +18,7 @@ export default class GetToken extends React.Component {
     return (<form onSubmit={this.sendRequest}>
       {"You do not have permission to view this page, please enter your email:"} <br/>
       <input data-test="email_input" type="text" onChange={this.emailChange}></input>
-      <input data-test="submit_button" type="submit"/>
+      <input data-test="submit_button" type="submit" value="Request Access"/>
     </form>)
   }
 }

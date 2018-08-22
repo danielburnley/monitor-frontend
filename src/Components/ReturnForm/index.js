@@ -1,5 +1,6 @@
 import './style.css';
 import React from 'react';
+import ParentForm from '../ParentForm'
 import Form from 'react-jsonschema-form';
 
 export default class ReturnForm extends React.Component {
@@ -48,13 +49,14 @@ export default class ReturnForm extends React.Component {
   render() {
     return (
       <div className="container">
-        <Form
+        <ParentForm
           schema={this.props.schema}
           uiSchema={this.props.uiSchema}
+          formData={this.state.formData}
           onChange={({formData}) => this.setState({formData})}
-          formData={this.state.formData}>
+          >
           <div />
-        </Form>
+        </ParentForm>
         {this.renderActions()}
       </div>
     );

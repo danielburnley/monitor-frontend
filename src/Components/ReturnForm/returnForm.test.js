@@ -7,7 +7,7 @@ async function wait() {
 }
 
 async function updateFormField(input, value) {
-  input.simulate('change', {target: {value: 'New Meow'}});
+  input.simulate('change', {target: {value: value}});
   await wait();
 }
 
@@ -85,7 +85,7 @@ describe('<ReturnForm>', () => {
     let wrapper = mount(
       <ReturnForm data={{cats: 'mew'}} schema={formSchema} onSave={saveSpy} />,
     );
-    let input = wrapper.find('input').first();
+    let input = wrapper.find('input[type="text"]');
     await updateFormField(input, 'New Meow');
     saveReturn(wrapper);
     expect(saveSpy).toHaveBeenCalledWith({cats: 'New Meow'});

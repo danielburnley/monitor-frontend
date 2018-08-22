@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import { MemoryRouter } from "react-router-dom";
 import { mount, shallow } from "enzyme";
 import App from "../../src/App";
@@ -12,12 +12,23 @@ export default class AppPage {
     );
   }
 
+  html() {
+    return this.page.html();
+  }
+
   summary() {
-    return this.find('div[data-test="summary"]')
+    return this.find('div[data-test="summary"]');
+  }
+
+  getFormInputs() {
+    let form = this.page.find('div[data-test="subform"]')
+    return form.find("input[type='text']").map(node => {
+      return node.getDOMNode().value;
+    });
   }
 
   find(selector) {
-    return this.page.find(selector)
+    return this.page.find(selector);
   }
 
   async waitForRequestToFinish() {
@@ -33,7 +44,7 @@ export default class AppPage {
     let button = this.page.find('[data-test="new-return-button"]');
     button.simulate("click");
 
-    await this.load()
+    await this.load();
   }
 
   getInputs() {
