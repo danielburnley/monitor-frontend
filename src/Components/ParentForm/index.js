@@ -20,28 +20,25 @@ export default class ProjectForm extends React.Component {
   }
 
   viewSelectorOnChange = (changeEvent) => {
-    if (changeEvent.target.value == 'on') {
-      this.setState({selected: changeEvent.target.id})
-    }
+    this.setState({selected: changeEvent.target.id})
   }
 
-  //We need a way to connect the input to the subforms cleanly
   render() {
-    return (<div className="ParentForm">
-        <form>
+    return (<div className="ParentForm" role="navigation">
+          <ul className="nav nav-tabs">
           {
             Object.keys(this.props.schema.properties).map(property =>
-              <div key={property}>
-                <label>
-                  <input checked={
-                    property===this.state.selected
-                  } name="view_selector" onChange={this.viewSelectorOnChange} type="radio" id={property}/>
-                  {this.props.schema.properties[property].title}
-                </label><br/>
-              </div>)
+                  <li key={property}
+                     role="presentation"
+                    className={property===this.state.selected ? "active":"inactive"}>
+                    <a role="button"
+                      id={property}
+                      onClick={this.viewSelectorOnChange}>
+                      {this.props.schema.properties[property].title}
+                    </a>
+                  </li>)
           }
-        </form>
-
+          </ul>
         <div>
         {
             this.state.selected &&
