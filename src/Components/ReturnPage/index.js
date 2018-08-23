@@ -119,7 +119,7 @@ export default class ReturnPage extends React.Component {
             Back to project overview
           </button>
         </div>
-        <div className="col-md-10 col-md-offset-1">{this.renderForm()}</div>
+        <div data-test="return" className="col-md-12">{this.renderForm()}</div>
       </div>
     );
   }

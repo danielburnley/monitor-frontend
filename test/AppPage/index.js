@@ -21,8 +21,8 @@ export default class AppPage {
   }
 
   getFormInputs() {
-    let form = this.page.find('div[data-test="subform"]')
-    return form.find("input[type='text']").map(node => {
+    let displayedReturn = this.page.find('div[data-test="return"]')
+    return displayedReturn.find("input[type='text']").map(node => {
       return node.getDOMNode().value;
     });
   }
