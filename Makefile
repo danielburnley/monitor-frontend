@@ -5,7 +5,7 @@ docker-stop:
 	docker-compose stop
 
 serve: docker-stop docker-build
-	docker-compose run --rm --service-ports web npm start
+	docker-compose up
 
 shell:
 	docker-compose run --rm web ash
