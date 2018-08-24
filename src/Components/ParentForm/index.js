@@ -1,6 +1,7 @@
 import React from "react";
 import Form from "react-jsonschema-form";
 import Sidebar from "../Sidebar";
+import HorizontalFields from '../HorizontalFields'
 import GenerateSidebarItems from "../../UseCase/GenerateSidebarItems";
 
 export default class ParentForm extends React.Component {
@@ -46,6 +47,7 @@ export default class ParentForm extends React.Component {
   }
 
   renderSelectedForm() {
+    const fields = {horizontal: HorizontalFields}
     return (
       <div data-test={`${this.state.selected}_subform`} className="subform">
         <Form
@@ -53,6 +55,7 @@ export default class ParentForm extends React.Component {
             this.subformOnChange(formData);
           }}
           formData={this.state.formData[this.state.selected]}
+          fields={fields}
           schema={this.props.schema.properties[this.state.selected]}
           uiSchema={
             this.props.uiSchema ? this.props.uiSchema[this.state.selected] : {}

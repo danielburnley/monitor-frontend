@@ -12,6 +12,7 @@ import Portal from './Components/Portal';
 import CreateReturn from './UseCase/CreateReturn';
 import GenerateDisabledUISchema from './UseCase/GenerateDisabledUISchema'
 import GenerateReadOnlySchema from './UseCase/GenerateReadOnlySchema'
+import GenerateUISchema from './UseCase/GenerateUISchema'
 import GetBaseReturn from './UseCase/GetBaseReturn';
 import CanAccessProject from './UseCase/CanAccessProject';
 import GetProject from './UseCase/GetProject';
@@ -30,6 +31,7 @@ import {BrowserRouter as Router, Route} from 'react-router-dom';
 const createReturnUseCase = new CreateReturn(new ReturnGateway());
 const generateDisabledUISchema = new GenerateDisabledUISchema();
 const generateReadOnlySchema = new GenerateReadOnlySchema();
+const generateUISchema = new GenerateUISchema();
 const getBaseReturnUseCase = new GetBaseReturn(new ReturnGateway());
 const getProjectUseCase = new GetProject(new ProjectGateway());
 const getReturnUseCase = new GetReturn(new ReturnGateway());
@@ -73,7 +75,7 @@ const App = () => (
               createReturn={createReturnUseCase}
               submitReturn={submitReturnUseCase}
               updateReturn={updateReturnUseCase}
-              generateUISchema={generateReadOnlySchema}
+              generateUISchema={generateUISchema}
               generateSubmittedSchema={generateDisabledUISchema}
             />
           )}
@@ -89,7 +91,7 @@ const App = () => (
               getBaseReturn={getBaseReturnUseCase}
               submitReturn={submitReturnUseCase}
               updateReturn={updateReturnUseCase}
-              generateUISchema={generateReadOnlySchema}
+              generateUISchema={generateUISchema}
               generateSubmittedSchema={generateDisabledUISchema}
             />
           )}

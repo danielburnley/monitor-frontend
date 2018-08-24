@@ -1,9 +1,9 @@
 import React from 'react';
-import ProjectPage from '.';
+import ReturnPage from '.';
 
 import { storiesOf } from '@storybook/react';
 
-storiesOf('ProjectPage', module)
+storiesOf('ReturnPage', module)
   .add('Default', () => {
     let schema = {
       type: 'object',
@@ -26,14 +26,15 @@ storiesOf('ProjectPage', module)
       },
     };
 
-    let getProjectUseCase = {
-      execute: (presenter, _) => { presenter.presentProject({ data, schema }) }
+    let getReturnUseCase = {
+      execute: (presenter, _) => { presenter.presentReturn({ data, schema }) }
     }
 
     return (
-      <ProjectPage
-        getProject={getProjectUseCase}
-        match={{ params: { projectId: 1 } }}
+      <ReturnPage
+        getReturn={getReturnUseCase}
+        match={{ params: { projectId: 1, returnId: 1 } }}
       />
     )
   })
+
