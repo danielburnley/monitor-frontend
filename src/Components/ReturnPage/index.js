@@ -23,7 +23,10 @@ export default class ReturnPage extends React.Component {
   };
 
   onFormSubmit = async formData => {
-    await this.onFormSave();
+    await this.props.updateReturn.execute(this, {
+      returnId: this.returnId(),
+      data: formData,
+    });
     this.props.submitReturn.execute(this, {
       returnId: this.returnId(),
       data: formData
