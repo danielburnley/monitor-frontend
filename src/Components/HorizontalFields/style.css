@@ -1,0 +1,8 @@
+.horizontal-items {
+  margin: 10px;
+  display: flex;
+}
+
+.horizontal-title {
+  display: block;
+}
