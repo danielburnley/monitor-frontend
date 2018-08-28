@@ -5,7 +5,7 @@ export default class GetBaseReturnForProject {
 
   async execute(presenter, request) {
     let { success, foundReturn } = await this.returnGateway.baseReturnFor(request.projectId);
-    if(success) {
+    if (success) {
       presenter.presentReturn(foundReturn)
     } else {
       presenter.presentReturnNotFound()
