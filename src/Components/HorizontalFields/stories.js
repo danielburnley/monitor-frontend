@@ -8,10 +8,10 @@ storiesOf("HorizontalFields", module)
       type: "object",
       title: "Summary",
       properties: {
-        firstName: { type: "string", title: "First Name" },
+        firstName: { type: "string", title: "First Name", readonly: true },
         surname: { type: "string", title: "Surname" },
-        foo: { type: "string", title: "Foo" },
-        meow: { type: "string", title: "Meow" },
+        foo: { type: "string", title: "Foo", readonly: true },
+        meow: { type: "string", title: "Meow", readonly: true },
         woof: { type: "string", title: "woof" },
         bar: { type: "string", title: "Bar" }
       }
@@ -40,10 +40,10 @@ storiesOf("HorizontalFields", module)
       type: "object",
       title: "Summary",
       properties: {
-        firstName: { type: "string", title: "First Name" },
+        firstName: { type: "string", title: "First Name", readonly: true },
         surname: { type: "string", title: "Surname" },
-        foo: { type: "string", title: "Foo" },
-        meow: { type: "string", title: "Meow" },
+        foo: { type: "string", title: "Foo", readonly: true },
+        meow: { type: "string", title: "Meow", readonly: true },
         woof: { type: "string", title: "woof" },
         bar: { type: "string", title: "Bar" }
       }

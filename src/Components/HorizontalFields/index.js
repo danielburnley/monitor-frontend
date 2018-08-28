@@ -25,6 +25,7 @@ export default class HorizontalFields extends React.Component {
           </label>
           <input
             id={k}
+            disabled={v.readonly}
             className="form-control"
             data-test={`${k}-input`}
             value={this.state[k]}
