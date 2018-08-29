@@ -87,6 +87,7 @@ export default class ReturnPage extends React.Component {
   };
 
   async componentDidMount() {
+    document.title = "Return - Homes England Monitor"
     await this.fetchData();
   }
 
