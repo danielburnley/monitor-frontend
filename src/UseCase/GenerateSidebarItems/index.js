@@ -3,7 +3,9 @@ export default class GenerateSidebarItems {
     let items = {};
 
     if (schema.type === "array") {
-      items = this.generateItemsForArray(schema, data);
+      if (data) {
+        items = this.generateItemsForArray(schema, data);
+      }
     } else {
       items = this.generateItemsForProperties(schema.properties, "#root");
     }
@@ -34,7 +36,10 @@ export default class GenerateSidebarItems {
     let items = {};
     Object.entries(properties).map(
       ([key, value]) =>
-        (items[key] = { title: value.title, link: `${link_root}_${key}__title` })
+        (items[key] = {
+          title: value.title,
+          link: `${link_root}_${key}__title`
+        })
     );
 
     return items;

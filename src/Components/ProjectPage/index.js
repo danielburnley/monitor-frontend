@@ -1,6 +1,7 @@
 import React from 'react'
 import ProjectForm from '../ProjectForm'
 import ProjectSummary from './ProjectSummary'
+import ParentForm from '../ParentForm'
 
 export default class Project extends React.Component {
   constructor(props) {
@@ -38,15 +39,21 @@ export default class Project extends React.Component {
       return <div />;
     }
 
+    console.log(this.state.formSchema)
     return (
       <div>
-        <ProjectSummary
+        <ParentForm
+          data={this.state.formData}
+          schema={this.state.formSchema}
+          onChange={({formData}) => this.setState({formData})}
+          />
+        {/* <ProjectSummary
           data={this.state.formData}
           schema={this.state.formSchema}
         />
         <button data-test="new-return-button" className="btn btn-primary" onClick={this.createReturn}>
           Create a new return
-        </button>
+        </button> */}
       </div>
     );
   }
