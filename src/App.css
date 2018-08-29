@@ -28,17 +28,17 @@ html {
 }
 
 .form-field input:disabled {
-  background-color: #FCBDBD;
+  background-color: #fcbdbd;
   color: black;
 }
 
 .form-field select:disabled {
-  background-color: #FCBDBD;
+  background-color: #fcbdbd;
   color: black;
 }
 
 .form-field select {
-  background-color: #FFE644;
+  background-color: #ffe644;
   color: black;
 }
 
@@ -51,4 +51,8 @@ input {
 
 button {
   float: right;
+}
+
+legend#root_0__title {
+  display: none;
 }

@@ -18,7 +18,7 @@ export default class ReturnForm extends React.Component {
       return (
         <div className="col-md-offset-9 col-md-3 return-actions">
           <button
-            className="btn btn-secondary return-btn"
+            className="btn btn-primary return-btn"
             data-test="create-return-button"
             onClick={() => this.props.onCreate(this.state.formData)}>
             Create Draft Return

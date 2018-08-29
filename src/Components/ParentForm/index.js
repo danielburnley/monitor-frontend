@@ -2,6 +2,7 @@ import React from "react";
 import Form from "react-jsonschema-form";
 import Sidebar from "../Sidebar";
 import HorizontalFields from '../HorizontalFields'
+import ArrayField from './ArrayField'
 import GenerateSidebarItems from "../../UseCase/GenerateSidebarItems";
 
 export default class ParentForm extends React.Component {
@@ -51,6 +52,7 @@ export default class ParentForm extends React.Component {
     return (
       <div data-test={`${this.state.selected}_subform`} className="subform">
         <Form
+          ArrayFieldTemplate={ArrayField}
           onChange={({ formData }) => {
             this.subformOnChange(formData);
           }}
