@@ -7,13 +7,13 @@ describe("CanAccessProject", () => {
   let useCase = new CanAccessProject(tokenGatewaySpy);
 
   it('Calls the token gateway', async () => {
-    await useCase.execute("")
-    expect(tokenGatewaySpy.getApiKey).toBeCalledWith("")
+    await useCase.execute("", 1)
+    expect(tokenGatewaySpy.getApiKey).toBeCalledWith("", 1)
   });
 
   it('Calls the token gateway with an access token', async () => {
-    await useCase.execute("Cats")
-    expect(tokenGatewaySpy.getApiKey).toBeCalledWith("Cats")
+    await useCase.execute("Cats", 3)
+    expect(tokenGatewaySpy.getApiKey).toBeCalledWith("Cats", 3)
   });
 
   describe('Given a valid token', () => {
@@ -23,7 +23,7 @@ describe("CanAccessProject", () => {
     let useCase = new CanAccessProject(tokenGatewaySpy);
 
     it('returns the api key', async () => {
-      expect((await useCase.execute("Doggos")).apiKey).toEqual('Cats')
+      expect((await useCase.execute("Doggos", 2)).apiKey).toEqual('Cats')
     });
 
   });
@@ -35,7 +35,7 @@ describe("CanAccessProject", () => {
     let useCase = new CanAccessProject(tokenGatewaySpy);
 
     it('Given empty string as access token it returns false', async () => {
-      expect((await useCase.execute("")).valid).toEqual(false)
+      expect((await useCase.execute("", 6)).valid).toEqual(false)
     });
   });
 });
