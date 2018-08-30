@@ -17,31 +17,19 @@ storiesOf('Parent Form', module)
           type: "object",
           title: "Details",
           properties: {
-            firstName: {
-              type: "string",
-              title: "First name"
-            },
-            lastName: {
-              type: "string",
-              title: "Last name"
-            },
-            age: {
-              type: "integer",
-              title: "Age"
-            },
-            bio: {
-              type: "string",
-              title: "Bio"
-            },
-            password: {
-              type: "string",
-              title: "Password",
-              minLength: 3
-            },
-            telephone: {
-              type: "string",
-              title: "Telephone",
-              minLength: 10
+            name: {
+              type: 'object',
+              title: 'Name',
+              properties: {
+                firstName: {
+                  type: "string",
+                  title: "First name"
+                },
+                lastName: {
+                  type: "string",
+                  title: "Last name"
+                }
+              }
             }
           }
         }
@@ -51,4 +39,36 @@ storiesOf('Parent Form', module)
     return (
       <ParentForm schema={schema}/>
     )
-  });
+  }).add('Meow', () => {
+  let schema = {
+    title: "A registration form",
+    description: "A simple form example.",
+    type: "object",
+    properties: {
+      infrastructures: {
+        type: "array",
+        title: "Infrastructures",
+        items: {
+          infrastructure: {
+            type: 'object',
+            title: 'Infrastructure',
+            properties: {
+              firstName: {
+                type: "string",
+                title: "First name"
+              },
+              lastName: {
+                type: "string",
+                title: "Last name"
+              }
+            }
+          }
+        }
+      }
+    }
+  };
+
+  return (
+    <ParentForm schema={schema}/>
+  )
+});

@@ -43,7 +43,11 @@ export default class ParentForm extends React.Component {
       this.props.schema.properties[this.state.selected],
       this.state.formData[this.state.selected]
     ).items;
-    return <Sidebar items={items} />;
+    return <Sidebar items={items} updateParentForm ={this.updateParentForm}/>;
+  }
+
+  updateParentForm(subSection){
+    console.log("Showing "+subSection)
   }
 
   renderSelectedForm() {

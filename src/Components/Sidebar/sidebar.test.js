@@ -27,11 +27,11 @@ describe("<Sidebar>", () => {
   });
 
   describe("Given a single item with no children", () => {
-    let updateParentFormSpy = jest.fn();
+    let itemClickSpy = jest.fn();
 
     beforeEach(() => {
       sidebar = mount(
-        <Sidebar items={{ cats: { title: "Cats", subSection: "aSubSectionAllAboutCats" } }} updateParentForm = {updateParentFormSpy}/>
+        <Sidebar items={{ cats: { title: "Cats", subSection: "aSubSectionAllAboutCats" } }} onItemClick={itemClickSpy}/>
       );
     });
 
@@ -51,7 +51,7 @@ describe("<Sidebar>", () => {
       let button = sidebarItems()
         .at(0)
         .find('[data-test="sidebar-item-button"]');
-      expect(button.props().onClick).not.toBeNull();
+      expect(button.props().onClick).not.toBeUndefined();
     });
 
     it("Calls updateParentForm method with subsection",()=>{
@@ -59,12 +59,12 @@ describe("<Sidebar>", () => {
         .at(0)
         .find('[data-test="sidebar-item-button"]');
       button.simulate("click");
-      expect(updateParentFormSpy).toHaveBeenCalledWith("aSubSectionAllAboutCats");
+      expect(itemClickSpy).toHaveBeenCalledWith("aSubSectionAllAboutCats");
     })
   });
 
   describe("Given two items with no children", () => {
-    let updateParentFormSpy = jest.fn();
+    let itemClickSpy = jest.fn();
 
     beforeEach(() => {
       sidebar = mount(
@@ -73,7 +73,7 @@ describe("<Sidebar>", () => {
             cows: { title: "Cows", subSection: "aSubSectionAllAboutCats" },
             dogs: { title: "Dogs", subSection: "aSubSectionAllAboutDogs" }
           }}
-          updateParentForm = {updateParentFormSpy}
+          onItemClick={itemClickSpy}
         />
       );
     });
@@ -92,11 +92,11 @@ describe("<Sidebar>", () => {
       let buttonOne = sidebarItems()
         .at(0)
         .find('[data-test="sidebar-item-button"]');
-      expect(buttonOne.props().onClick).not.toBeNull();
+      expect(buttonOne.props().onClick).not.toBeUndefined();
       let buttonTwo = sidebarItems()
         .at(1)
         .find('[data-test="sidebar-item-button"]');
-      expect(buttonTwo.props().onClick).not.toBeNull();
+      expect(buttonTwo.props().onClick).not.toBeUndefined();
 
     });
 
@@ -110,15 +110,15 @@ describe("<Sidebar>", () => {
 
 
       buttonOne.simulate("click");
-      expect(updateParentFormSpy).toHaveBeenCalledWith("aSubSectionAllAboutCats");
+      expect(itemClickSpy).toHaveBeenCalledWith("aSubSectionAllAboutCats");
 
       buttonTwo.simulate("click");
-      expect(updateParentFormSpy).toHaveBeenCalledWith("aSubSectionAllAboutDogs");
+      expect(itemClickSpy).toHaveBeenCalledWith("aSubSectionAllAboutDogs");
     })
   });
 
   describe("Given one item with a child", () => {
-    let updateParentFormSpy = jest.fn();
+    let itemClickSpy = jest.fn();
 
     beforeEach(() => {
       sidebar = mount(
@@ -126,22 +126,30 @@ describe("<Sidebar>", () => {
           items={{
             cows: {
               title: "Cows",
-              children: { noises: { title: "noises", subSection: "aSubSectionAllAboutNoises" } }
+              children: { noises: { title: "noises", index:0, subSection: "aSubSectionAllAboutNoises"} }
             }
           }}
-          updateParentForm = {updateParentFormSpy}
+          onItemClick={itemClickSpy}
         />
       );
     });
+
     it("An item and its child", () => {
       expect(sidebarItems().length).toEqual(1);
     });
-    
+
+    it("Has no onclick event on the parent", () => {
+      let button = sidebarItems()
+        .at(0)
+        .find('[data-test="sidebar-item-button"]');
+      expect(button.props().onClick).toBeUndefined();
+    });
+
     it("Creates a button with an onClick function assigned", () => {
       let button = sidebarItems()
         .at(0)
         .find('[data-test="sidebar-item-child-button"]');
-      expect(button.props().onClick).not.toBeNull();
+      expect(button.props().onClick).not.toBeUndefined();
     });
 
     it("sets the child title to the title given", () => {
@@ -154,13 +162,13 @@ describe("<Sidebar>", () => {
         .at(0)
         .find('[data-test="sidebar-item-child-button"]');
       button.simulate("click");
-      expect(updateParentFormSpy).toHaveBeenCalledWith("aSubSectionAllAboutNoises");
+      expect(itemClickSpy).toHaveBeenCalledWith("aSubSectionAllAboutNoises",0);
     })
 
   });
 
   describe("Given one item with two children", () => {
-    let updateParentFormSpy = jest.fn();
+    let itemClickSpy = jest.fn();
 
     beforeEach(() => {
       sidebar = mount(
@@ -169,12 +177,12 @@ describe("<Sidebar>", () => {
             cows: {
               title: "Cows",
               children: {
-                noises: { title: "noises", subSection: "aSubSectionAllAboutNoises" },
-                likes: { title: "people", subSection: "aSubSectionAboutHorriblePeople" }
+                noises: { title: "noises", index: 10, subSection: "aSubSectionAllAboutNoises" },
+                likes: { title: "people", index: 20, subSection: "aSubSectionAboutHorriblePeople" }
               }
             }
           }}
-          updateParentForm = {updateParentFormSpy}
+          onItemClick={itemClickSpy}
         />
       );
     });
@@ -184,8 +192,8 @@ describe("<Sidebar>", () => {
 
     it("Creates two buttons with an onClick function assigned", () => {
       let buttons = sidebar.find('[data-test="sidebar-item-child-button"]');
-      expect(buttons.at(0).props().onClick).not.toBeNull();
-      expect(buttons.at(1).props().onClick).not.toBeNull();
+      expect(buttons.at(0).props().onClick).not.toBeUndefined();
+      expect(buttons.at(1).props().onClick).not.toBeUndefined();
     });
 
 
@@ -199,16 +207,15 @@ describe("<Sidebar>", () => {
     it("Calls updateParentForm method with subsection",()=>{
       let buttons = sidebar.find('[data-test="sidebar-item-child-button"]');
       buttons.at(0).simulate("click");
-      expect(updateParentFormSpy).toHaveBeenCalledWith("aSubSectionAllAboutNoises");
+      expect(itemClickSpy).toHaveBeenCalledWith("aSubSectionAllAboutNoises", 10);
 
       buttons.at(1).simulate("click");
-      expect(updateParentFormSpy).toHaveBeenCalledWith("aSubSectionAboutHorriblePeople");
+      expect(itemClickSpy).toHaveBeenCalledWith("aSubSectionAboutHorriblePeople", 20);
     })
-
   });
 
   describe("Given two items with children", () => {
-    let updateParentFormSpy = jest.fn();
+    let itemClickSpy = jest.fn();
 
     beforeEach(() => {
       sidebar = mount(
@@ -217,16 +224,16 @@ describe("<Sidebar>", () => {
             cows: {
               title: "Cows",
               children: {
-                noises: { title: "noises", subSection: "aSubSectionAllAboutNoises" },
-                likes: { title: "people", subSection: "aSubSectionAboutHorriblePeople" }
+                noises: { title: "noises", index: 0, subSection: "aSubSectionAllAboutNoises" },
+                likes: { title: "people", index: 0, subSection: "aSubSectionAboutHorriblePeople" }
               }
             },
             dogs: {
               title: "Dogs",
-              children: { toys: { title: "Toys", subSection: "aSubSectionAboutToys4U.bark" } }
+              children: { toys: { title: "Toys", index: 1, subSection: "aSubSectionAboutToys4U.bark" } }
             }
           }}
-          updateParentForm = {updateParentFormSpy}
+          onItemClick={itemClickSpy}
         />
       );
     });
@@ -248,9 +255,9 @@ describe("<Sidebar>", () => {
         .at(1)
         .find('[data-test="sidebar-item-child-button"]');
 
-      expect(itemOneChildrenButtons.at(0).props().onClick).not.toBeNull();
-      expect(itemOneChildrenButtons.at(1).props().onClick).not.toBeNull();
-      expect(itemTwoChildrenButtons.at(0).props().onClick).not.toBeNull();
+      expect(itemOneChildrenButtons.at(0).props().onClick).not.toBeUndefined();
+      expect(itemOneChildrenButtons.at(1).props().onClick).not.toBeUndefined();
+      expect(itemTwoChildrenButtons.at(0).props().onClick).not.toBeUndefined();
 
     });
 
@@ -279,13 +286,13 @@ describe("<Sidebar>", () => {
         .find('[data-test="sidebar-item-child-button"]');
 
       itemOneChildrenButtons.at(0).simulate("click");
-      expect(updateParentFormSpy).toHaveBeenCalledWith("aSubSectionAllAboutNoises");
+      expect(itemClickSpy).toHaveBeenCalledWith("aSubSectionAllAboutNoises", 0);
 
       itemOneChildrenButtons.at(1).simulate("click");
-      expect(updateParentFormSpy).toHaveBeenCalledWith("aSubSectionAboutHorriblePeople");
+      expect(itemClickSpy).toHaveBeenCalledWith("aSubSectionAboutHorriblePeople", 0);
 
       itemTwoChildrenButtons.at(0).simulate("click");
-      expect(updateParentFormSpy).toHaveBeenCalledWith("aSubSectionAboutToys4U.bark");
+      expect(itemClickSpy).toHaveBeenCalledWith("aSubSectionAboutToys4U.bark", 1);
     })
   });
 });
