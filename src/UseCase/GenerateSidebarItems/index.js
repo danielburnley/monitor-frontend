@@ -5,7 +5,7 @@ export default class GenerateSidebarItems {
     if (schema.type === "array") {
       items = this.generateItemsForArray(schema, data);
     } else {
-      items = this.generateItemsForProperties(schema.properties, "#root");
+      items = this.generateItemsForProperties(schema.properties);
     }
 
     return { items };
@@ -17,12 +17,11 @@ export default class GenerateSidebarItems {
     data.forEach((_, i) => {
       let children = this.generateItemsForProperties(
         schema.items.properties,
-        `#root_${i}`
+        i
       );
 
       items[i] = {
         title: `${schema.items.title} ${i + 1}`,
-        link: `#root_${i}__title`,
         children
       };
     });
@@ -30,11 +29,11 @@ export default class GenerateSidebarItems {
     return items;
   }
 
-  generateItemsForProperties(properties, link_root) {
+  generateItemsForProperties(properties, index) {
     let items = {};
     Object.entries(properties).map(
       ([key, value]) =>
-        (items[key] = { title: value.title, link: `${link_root}_${key}__title` })
+        (items[key] = { title: value.title, subSection: key, index: index})
     );
 
     return items;

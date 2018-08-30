@@ -21,7 +21,7 @@ describe("GenerateSidebarItems", () => {
           };
           let response = useCase.execute(schema);
           expect(response).toEqual({
-            items: { cats: { title: "Cats", link: "#root_cats__title" } }
+            items: { cats: { title: "Cats", subSection: 'cats' } }
           });
         });
       });
@@ -34,7 +34,7 @@ describe("GenerateSidebarItems", () => {
           };
           let response = useCase.execute(schema);
           expect(response).toEqual({
-            items: { dogs: { title: "Dogs", link: "#root_dogs__title" } }
+            items: { dogs: { title: "Dogs", subSection: 'dogs' } }
           });
         });
       });
@@ -52,8 +52,8 @@ describe("GenerateSidebarItems", () => {
         let response = useCase.execute(schema);
         expect(response).toEqual({
           items: {
-            cows: { title: "Cows", link: "#root_cows__title" },
-            ducks: { title: "Ducks", link: "#root_ducks__title" }
+            cows: { title: "Cows", subSection: 'cows' },
+            ducks: { title: "Ducks", subSection: 'ducks' }
           }
         });
       });
@@ -77,7 +77,7 @@ describe("GenerateSidebarItems", () => {
             let response = useCase.execute(schema, data);
             expect(response).toEqual({
               items: {
-                0: { title: "Cat 1", link: "#root_0__title", children: {} }
+                0: { title: "Cat 1", children: {} }
               }
             });
           });
@@ -97,7 +97,7 @@ describe("GenerateSidebarItems", () => {
             let response = useCase.execute(schema, data);
             expect(response).toEqual({
               items: {
-                0: { title: "Dog 1", link: "#root_0__title", children: {} }
+                0: { title: "Dog 1", children: {} }
               }
             });
           });
@@ -119,8 +119,8 @@ describe("GenerateSidebarItems", () => {
             let response = useCase.execute(schema, data);
             expect(response).toEqual({
               items: {
-                0: { title: "Cat 1", link: "#root_0__title", children: {} },
-                1: { title: "Cat 2", link: "#root_1__title", children: {} }
+                0: { title: "Cat 1", children: {} },
+                1: { title: "Cat 2", children: {} }
               }
             });
           });
@@ -140,8 +140,8 @@ describe("GenerateSidebarItems", () => {
             let response = useCase.execute(schema, data);
             expect(response).toEqual({
               items: {
-                0: { title: "Dog 1", link: "#root_0__title", children: {} },
-                1: { title: "Dog 2", link: "#root_1__title", children: {} }
+                0: { title: "Dog 1", children: {} },
+                1: { title: "Dog 2", children: {} }
               }
             });
           });
@@ -171,9 +171,8 @@ describe("GenerateSidebarItems", () => {
               items: {
                 0: {
                   title: "Cat 1",
-                  link: "#root_0__title",
                   children: {
-                    noise: { title: "Noise", link: "#root_0_noise__title" }
+                    noise: { title: "Noise", index : 0, subSection: 'noise' }
                   }
                 }
               }
@@ -201,9 +200,8 @@ describe("GenerateSidebarItems", () => {
               items: {
                 0: {
                   title: "Dog 1",
-                  link: "#root_0__title",
                   children: {
-                    bark: { title: "Bark volume", link: "#root_0_bark__title" }
+                    bark: { title: "Bark volume", index:0, subSection: 'bark'}
                   }
                 }
               }
@@ -236,23 +234,19 @@ describe("GenerateSidebarItems", () => {
           items: {
             0: {
               title: "Cat 1",
-              link: "#root_0__title",
               children: {
-                noise: { title: "Noise", link: "#root_0_noise__title" },
+                noise: { title: "Noise", index: 0, subSection: 'noise' },
                 favouriteToy: {
-                  title: "Favourite toy",
-                  link: "#root_0_favouriteToy__title"
+                  title: "Favourite toy", index:0, subSection:'favouriteToy'
                 }
               }
             },
             1: {
               title: "Cat 2",
-              link: "#root_1__title",
               children: {
-                noise: { title: "Noise", link: "#root_1_noise__title" },
+                noise: { title: "Noise", index: 1, subSection: 'noise' },
                 favouriteToy: {
-                  title: "Favourite toy",
-                  link: "#root_1_favouriteToy__title"
+                  title: "Favourite toy", index:1, subSection:'favouriteToy',
                 }
               }
             }
