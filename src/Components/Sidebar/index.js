@@ -3,7 +3,7 @@ import React from "react";
 export default class Sidebar extends React.Component {
   renderChildren(children) {
     return Object.entries(children).map(([key, value]) => (
-      <li key={key} data-test="sidebar-item-child">x
+      <li key={key} data-test="sidebar-item-child">
         <button onClick={(_)=>this.props.updateParentForm(value.subSection)}  data-test="sidebar-item-child-button">{value.title}</button>
       </li>
     ));
