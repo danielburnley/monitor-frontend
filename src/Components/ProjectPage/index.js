@@ -25,6 +25,7 @@ export default class Project extends React.Component {
   };
 
   async componentDidMount() {
+    document.title = "Project - Homes England Monitor"
     await this.fetchData();
   }
 
