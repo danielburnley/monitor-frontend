@@ -29,10 +29,10 @@ class APISimulator {
     return new APIResponse(returnRequest, response);
   }
 
-  expendToken(token) {
+  expendToken(access_token, project_id) {
     let request = nock(this.url)
       .matchHeader("Content-Type", "application/json")
-      .post("/token/expend", { access_token: token });
+      .post("/token/expend", { access_token, project_id });
 
     return new APIResponse(request, { apiKey: "abc" });
   }
