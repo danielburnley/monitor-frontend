@@ -1,7 +1,6 @@
 import React from "react";
 import Sidebar from ".";
-import { mount } from "enzyme";
-import {shallow} from "enzyme/build/index";
+import {shallow ,mount} from "enzyme";
 
 describe("<Sidebar>", () => {
   let sidebar;
@@ -27,9 +26,10 @@ describe("<Sidebar>", () => {
   });
 
   describe("Given a single item with no children", () => {
-    let itemClickSpy = jest.fn();
+    let itemClickSpy;
 
     beforeEach(() => {
+      itemClickSpy = jest.fn();
       sidebar = mount(
         <Sidebar items={{ cats: { title: "Cats", subSection: "aSubSectionAllAboutCats" } }} onItemClick={itemClickSpy}/>
       );
@@ -47,13 +47,6 @@ describe("<Sidebar>", () => {
       ).toEqual("Cats");
     });
 
-    it("Creates a button with an onClick function assigned", () => {
-      let button = sidebarItems()
-        .at(0)
-        .find('[data-test="sidebar-item-button"]');
-      expect(button.props().onClick).not.toBeUndefined();
-    });
-
     it("Calls updateParentForm method with subsection",()=>{
       let button = sidebarItems()
         .at(0)
@@ -64,9 +57,10 @@ describe("<Sidebar>", () => {
   });
 
   describe("Given two items with no children", () => {
-    let itemClickSpy = jest.fn();
+    let itemClickSpy;
 
     beforeEach(() => {
+      itemClickSpy = jest.fn();
       sidebar = mount(
         <Sidebar
           items={{
@@ -118,9 +112,10 @@ describe("<Sidebar>", () => {
   });
 
   describe("Given one item with a child", () => {
-    let itemClickSpy = jest.fn();
+    let itemClickSpy;
 
     beforeEach(() => {
+      itemClickSpy = jest.fn();
       sidebar = mount(
         <Sidebar
           items={{
@@ -144,14 +139,7 @@ describe("<Sidebar>", () => {
         .find('[data-test="sidebar-item-button"]');
       expect(button.props().onClick).toBeUndefined();
     });
-
-    it("Creates a button with an onClick function assigned", () => {
-      let button = sidebarItems()
-        .at(0)
-        .find('[data-test="sidebar-item-child-button"]');
-      expect(button.props().onClick).not.toBeUndefined();
-    });
-
+    
     it("sets the child title to the title given", () => {
       let link = sidebar.find('[data-test="sidebar-item-child-button"]');
       expect(link.text()).toEqual("noises");
@@ -168,9 +156,10 @@ describe("<Sidebar>", () => {
   });
 
   describe("Given one item with two children", () => {
-    let itemClickSpy = jest.fn();
+    let itemClickSpy;
 
     beforeEach(() => {
+      itemClickSpy = jest.fn();
       sidebar = mount(
         <Sidebar
           items={{
@@ -215,9 +204,10 @@ describe("<Sidebar>", () => {
   });
 
   describe("Given two items with children", () => {
-    let itemClickSpy = jest.fn();
+    let itemClickSpy;
 
     beforeEach(() => {
+      itemClickSpy = jest.fn();
       sidebar = mount(
         <Sidebar
           items={{
