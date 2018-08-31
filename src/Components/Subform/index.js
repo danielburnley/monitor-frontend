@@ -9,7 +9,10 @@ class SpikeSubform extends React.Component {
     this.state = {
       selectedIndex: 0,
       selectedSection: 'details',
-      formData: [{details: { infraType: 'a', description: 'b'}, otherStuff: {cars: 'c', cats: 'd'}},{details: { infraType: 'e', description: 'f'}, otherStuff: {cars: 'g', cats: 'h'}}]
+      formData: [{
+        details: {infraType: 'a', description: 'b'},
+        otherStuff: {cars: 'c', cats: 'd'}
+      }, {details: {infraType: 'e', description: 'f'}, otherStuff: {cars: 'g', cats: 'h'}}]
     }
   }
 
@@ -55,23 +58,27 @@ export default class SubForm extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = { selectedSection: Object.keys(props.schema.items.properties)[0]}
+    this.state = {selectedSection: Object.keys(props.schema.items.properties)[0], selectedIndex: 0}
   }
 
   renderSidebar() {
     let items = new GenerateSidebarItems().execute(
       this.props.schema,
-      [{}]
+      this.props.formData
     ).items;
-
-    return <Sidebar items={items} onItemClick={(section, index) => {this.setState({selectedSection: section})}}/>;
+    return <Sidebar items={items} onItemClick={(section, index) => {
+      this.setState({selectedSection: section, selectedIndex: index})
+    }}/>;
   }
 
   render() {
     return (
       <div>
         {this.renderSidebar()}
-        <Form data-test={`${this.state.selectedSection}-form`} schema={this.props.schema} />
+        <Form data-test={`${this.state.selectedSection}-form`}
+              schema={this.props.schema.items.properties[this.state.selectedSection]}
+              formData={this.props.formData[this.state.selectedIndex][this.state.selectedSection]}
+        />
       </div>
     )
   }

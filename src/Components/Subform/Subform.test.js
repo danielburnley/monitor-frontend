@@ -4,6 +4,16 @@ import {mount, shallow} from 'enzyme';
 
 describe("<Subform>", () => {
   describe("Given an array schema", () => {
+    let wrapper, onChangeSpy;
+
+    function expectSelectedSectionToEqual(expectedSection) {
+      expect(wrapper.state().selectedSection).toEqual(expectedSection);
+    }
+
+    function expectSelectedIndexToEqual(expectedIndex) {
+      expect(wrapper.state().selectedIndex).toEqual(expectedIndex);
+    }
+
     describe("Example one", () => {
       let schema = {
         type: 'array',
@@ -28,34 +38,119 @@ describe("<Subform>", () => {
             }
           }
         }
-      }
+      };
 
-      let formData = [{}]
+      let formData = [
+        {
+          details: {firstName: 'name'},
+          pets: {favourite: 'All of them'}
+        }, {
+          details: {firstName: 'other name'},
+          pets: {favourite: 'All the dogs'}
+        }
+      ];
+
+      beforeEach(() => {
+        onChangeSpy = jest.fn();
+        wrapper = shallow(<Subform schema={schema} formData={formData} onChange={onChangeSpy}/>);
+      });
 
       it("Renders a sidebar", () => {
-        let wrapper = shallow(<Subform schema={schema} formData={formData} />)
         expect(wrapper.find('Sidebar').length).toEqual(1)
-      })
+      });
 
       it("Renders a form", () => {
-        let wrapper = shallow(<Subform schema={schema} formData={formData}/>)
         expect(wrapper.find('Form').length).toEqual(1)
+      });
+
+      describe("Selecting items on the sidebar", () => {
+        it("Displays the first child of the schema by default", () => {
+          expectSelectedSectionToEqual('details');
+          expectSelectedIndexToEqual(0);
+          expect(wrapper.find('[data-test="details-form"]').length).toEqual(1)
+        });
+
+        it("Displays the second child of the schema when selecting the item in the sidebar", () => {
+          wrapper.find('Sidebar').props().onItemClick('pets', 0);
+          wrapper.update();
+
+          expectSelectedSectionToEqual('pets');
+          expect(wrapper.find('[data-test="details-form"]').length).toEqual(0);
+          expect(wrapper.find('[data-test="pets-form"]').length).toEqual(1)
+        });
+
+        it("Displays the first child of the second item in the schema when selecting the item in the sidebar", () => {
+          wrapper.find('Sidebar').props().onItemClick('details', 1);
+          wrapper.update();
+
+          expectSelectedSectionToEqual('details');
+          expectSelectedIndexToEqual(1);
+          expect(wrapper.find('[data-test="details-form"]').length).toEqual(1)
+        });
+
+        it("Passes the first childs schema to the form by default", () => {
+          let expectedSchema = {
+            type: 'object',
+            title: 'Details',
+            properties: {
+              firstName: {type: 'string'},
+            }
+          };
+          expect(wrapper.find('Form').props().schema).toEqual(expectedSchema)
+        });
+
+        it("Passes the first childs form data to the form by default", () => {
+          let expectedFormData = {firstName: 'name'};
+
+          expect(wrapper.find('Form').props().formData).toEqual(expectedFormData)
+        });
+
+        it("Passes the selected childs schema to the form", () => {
+          wrapper.find('Sidebar').props().onItemClick('pets', 1);
+          wrapper.update();
+
+          let expectedSchema = {
+            type: 'object',
+            title: 'Pets',
+            properties: {
+              favourite: {type: 'string'},
+            }
+          };
+          expect(wrapper.find('Form').props().schema).toEqual(expectedSchema)
+        });
+
+        it("Passes the selected childs form data to the form", () => {
+          wrapper.find('Sidebar').props().onItemClick('pets', 1);
+          wrapper.update();
+
+          let expectedFormData = {favourite: 'All the dogs'};
+
+          expect(wrapper.find('Form').props().formData).toEqual(expectedFormData)
+        });
       })
 
-      it("Displays the first child of the schema by default", () => {
-        let wrapper = shallow(<Subform schema={schema} />)
-        expect(wrapper.find('[data-test="details-form"]').length).toEqual(1)
-      })
+      describe("Changing items within the form", () => {
+        it("Updates the subform form data with the new data", () => {
+          wrapper.find('Form').props().onChange({formData: {newData: 'Cats'}})
 
-      it("Displays the second child of the schema when selecting the item in the sidebar", () => {
-        let wrapper = mount(<Subform schema={schema} />)
-        wrapper.find('[data-test="sidebar-item-child-button"]').at(1).simulate('click')
-        wrapper.update()
-        expect(wrapper.find('[data-test="details-form"]').length).toEqual(0)
-        expect(wrapper.find('[data-test="pets-form"]').length).toEqual(1)
+          let expectedData = [
+            {
+              details: {newData: 'Cats'},
+              pets: {favourite: 'All of them'}
+            }, {
+              details: {firstName: 'other name'},
+              pets: {favourite: 'All the dogs'}
+            }
+          ]
 
+          expect(wrapper.state().formData).toEqual(expectedData)
+        })
+
+        it("Calls the onChange method with the subform formData", () => {
+
+        })
       })
-    })
+    });
 
     describe("Example two", () => {
       let schema = {
@@ -70,22 +165,109 @@ describe("<Subform>", () => {
               title: 'address',
               properties: {
                 lineOne: {type: 'string'}
+              },
+            },
+            contact: {
+              type: 'object',
+              title: 'contact',
+              properties: {
+                phoneNo: {type: 'string'}
               }
             }
           }
         }
-      }
+      };
 
-      let formData = [{}]
+      let formData = [
+        {
+          address: {lineOne: 'Meow'},
+          contact: {phoneNo: '01189998819991197253'}
+        }, {
+          address: {lineOne: 'Cats'},
+          contact: {phoneNo: '999'}
+        }
+      ];
+
+      beforeEach(() => {
+        onChangeSpy = jest.fn();
+        wrapper = shallow(<Subform schema={schema} formData={formData} onChange={onChangeSpy}/>);
+      });
 
       it("Renders a sidebar", () => {
-        let wrapper = shallow(<Subform schema={schema} />)
         expect(wrapper.find('Sidebar').length).toEqual(1)
-      })
+      });
 
-      it("Displays the first child of the schema by default", () => {
-        let wrapper = shallow(<Subform schema={schema} />)
-        expect(wrapper.find('[data-test="address-form"]').length).toEqual(1)
+
+      it("Renders a form", () => {
+        expect(wrapper.find('Form').length).toEqual(1)
+      });
+
+      describe("Selecting items on the sidebar", () => {
+        it("Displays the first child of the schema by default", () => {
+          expectSelectedSectionToEqual('address');
+          expectSelectedIndexToEqual(0);
+          expect(wrapper.find('[data-test="address-form"]').length).toEqual(1)
+        });
+
+        it("Displays the second child of the schema when selecting the item in the sidebar", () => {
+          wrapper.find('Sidebar').props().onItemClick('contact', 0);
+          wrapper.update();
+
+          expectSelectedSectionToEqual('contact');
+          expectSelectedIndexToEqual(0);
+          expect(wrapper.find('[data-test="address-form"]').length).toEqual(0);
+          expect(wrapper.find('[data-test="contact-form"]').length).toEqual(1)
+        });
+
+        it("Displays the first child of the second item in the schema when selecting the item in the sidebar", () => {
+          wrapper.find('Sidebar').props().onItemClick('address', 1);
+          wrapper.update();
+
+          expectSelectedSectionToEqual('address');
+          expectSelectedIndexToEqual(1);
+          expect(wrapper.find('[data-test="address-form"]').length).toEqual(1)
+        });
+
+        it("Passes the first childs schema to the form by default", () => {
+          let expectedSchema = {
+            type: 'object',
+            title: 'address',
+            properties: {
+              lineOne: {type: 'string'}
+            },
+          };
+          expect(wrapper.find('Form').props().schema).toEqual(expectedSchema)
+        });
+
+        it("Passes the first childs form data to the form by default", () => {
+          let expectedFormData = {lineOne: 'Meow'};
+
+          expect(wrapper.find('Form').props().formData).toEqual(expectedFormData)
+        });
+
+        it("Passes the selected childs schema to the form", () => {
+          wrapper.find('Sidebar').props().onItemClick('contact', 0);
+          wrapper.update();
+
+          let expectedSchema = {
+            type: 'object',
+            title: 'contact',
+            properties: {
+              phoneNo: {type: 'string'}
+            },
+          };
+
+          expect(wrapper.find('Form').props().schema).toEqual(expectedSchema)
+        });
+
+        it("Passes the selected childs form data to the form", () => {
+          wrapper.find('Sidebar').props().onItemClick('contact', 1);
+          wrapper.update();
+
+          let expectedFormData = {phoneNo: '999'};
+
+          expect(wrapper.find('Form').props().formData).toEqual(expectedFormData)
+        });
       })
     })
   })
