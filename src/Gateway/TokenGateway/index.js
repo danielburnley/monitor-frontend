@@ -6,25 +6,26 @@ export default class TokenGateway {
   constructor() {
     this.env = runtimeEnv()
   }
-  async requestToken(email_address, url) {
+
+  async requestToken(email_address, project_id, url) {
     let response = await fetch(
       `${this.env.REACT_APP_HIF_API_URL}token/request`,
       {
         method: 'POST',
         headers: {'Content-Type': 'application/json',
           'API_KEY': window.apiKey},
-        body: JSON.stringify({email_address, url}),
+        body: JSON.stringify({email_address, project_id, url}),
       },
     );
   }
 
-  async getApiKey(access_token) {
+  async getApiKey(access_token, project_id) {
     let response = await fetch(
       `${this.env.REACT_APP_HIF_API_URL}token/expend`,
       {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({access_token}),
+        body: JSON.stringify({access_token, project_id}),
       },
     );
 

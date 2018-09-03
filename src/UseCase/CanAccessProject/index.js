@@ -3,8 +3,8 @@ export default class CanAccessProject {
     this.tokenGateway = tokenGateway;
   }
 
-  async execute(access_token) {
-    let receivedApiKey = await this.tokenGateway.getApiKey(access_token);
+  async execute(access_token, project_id) {
+    let receivedApiKey = await this.tokenGateway.getApiKey(access_token, project_id);
     if (receivedApiKey === null) {
       return { valid: false }
     } else {
