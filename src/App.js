@@ -1,5 +1,5 @@
 import React from 'react';
-import QueryString from 'query-string';
+import qs from 'qs';
 
 import Footer from './Components/Footer';
 import Header from './Components/Header';
@@ -53,6 +53,7 @@ const App = () => (
           render={ props =>
             <Portal
               {...props}
+              projectId={props.match.params.id}
               onApiKey={(apiKey) => {window.apiKey = apiKey}}
               target={<ProjectPage
                 {...props}
@@ -60,8 +61,10 @@ const App = () => (
                 generateUISchema={generateDisabledUISchema}
               />}
 
-            requestToken={requestTokenUseCase}
-            token={QueryString.parse(props.location.search).token} canAccessProject={canAccessProjectUseCase}/>
+              requestToken={requestTokenUseCase}
+              token={qs.parse(props.location.search, { ignoreQueryPrefix: true }).token}
+              canAccessProject={canAccessProjectUseCase}
+            />
           }
         />
         <Route

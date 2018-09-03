@@ -64,7 +64,7 @@ describe("Viewing at a project", () => {
   });
 
   it("Given invalid token GetToken is shown", async () => {
-    api.expendToken("Hello").unauthorised();
+    api.expendToken("Hello", 0).unauthorised();
 
     let page = new AppPage("/project/0?token=Hello");
     await page.load();
@@ -75,7 +75,7 @@ describe("Viewing at a project", () => {
 
   describe("Given valid token", () => {
     beforeEach(() => {
-      api.expendToken("Cats").successfully();
+      api.expendToken("Cats", 0).successfully();
     });
 
     it("will not show GetToken", async () => {

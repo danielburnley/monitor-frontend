@@ -26,10 +26,10 @@ describe('Portal', () => {
   }
 
   it('calls the CanAccessProject use case', async () => {
-    let wrapper = mount(<Portal target={<div/>} token="Cats" canAccessProject={CanAccessProjectSpy}/>)
+    let wrapper = mount(<Portal projectId="1" target={<div/>} token="Cats" canAccessProject={CanAccessProjectSpy}/>)
 
     await wait()
-    expect(CanAccessProjectSpy.execute).toHaveBeenCalledWith("Cats")
+    expect(CanAccessProjectSpy.execute).toHaveBeenCalledWith("Cats", 1)
   });
 
   it('calls the requestToken use case', async () => {
@@ -40,7 +40,7 @@ describe('Portal', () => {
         }
       })
     }
-    let wrapper = mount(<Portal target={<div/>} token="Cats" canAccessProject={CanAccessProjectSpy} requestToken={RequestTokenSpy}/>)
+    let wrapper = mount(<Portal projectId="1" target={<div/>} token="Cats" canAccessProject={CanAccessProjectSpy} requestToken={RequestTokenSpy}/>)
 
     await wait()
     wrapper.update()
@@ -53,7 +53,7 @@ describe('Portal', () => {
     await wait()
     wrapper.update()
 
-    expect(RequestTokenSpy.execute).toHaveBeenCalledWith("cats@cathouse.com","http://localhost/")
+    expect(RequestTokenSpy.execute).toHaveBeenCalledWith("cats@cathouse.com", "1", "http://localhost/")
   });
 
   it('calls the onApiKey callback', async () => {
@@ -65,7 +65,7 @@ describe('Portal', () => {
       })
     }
     let OnApiKey = jest.fn()
-    let wrapper = mount(<Portal target={<div/>} onApiKey={OnApiKey} token="Cats" canAccessProject={CanAccessProjectSpy} requestToken={RequestTokenSpy}/>)
+    let wrapper = mount(<Portal projectId="1" target={<div/>} onApiKey={OnApiKey} token="Cats" canAccessProject={CanAccessProjectSpy} requestToken={RequestTokenSpy}/>)
     await wait()
     wrapper.update()
     expect(OnApiKey).toHaveBeenCalledWith("Dogs")
@@ -79,7 +79,7 @@ describe('Portal', () => {
         }
       })
     }
-    let wrapper = mount(<Portal target={<div/>} token="Cats" canAccessProject={CanAccessProjectSpy}/>)
+    let wrapper = mount(<Portal projectId="1" target={<div/>} token="Cats" canAccessProject={CanAccessProjectSpy}/>)
     await wait()
     wrapper.update()
     expect(wrapper.find('GetToken').length).toEqual(1)
@@ -94,7 +94,7 @@ describe('Portal', () => {
         }
       })
     }
-    let wrapper = mount(<Portal target={<div/>} token="Cats" canAccessProject={CanAccessProjectSpy}/>)
+    let wrapper = mount(<Portal projectId="1" target={<div/>} token="Cats" canAccessProject={CanAccessProjectSpy}/>)
     await wait()
     wrapper.update()
     expect(wrapper.find('GetToken').length).toEqual(0)
