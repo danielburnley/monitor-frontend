@@ -40,19 +40,18 @@ describe("<Subform>", () => {
         }
       };
 
-      let formData = [
-        {
-          details: {firstName: 'name'},
-          pets: {favourite: 'All of them'}
-        }, {
-          details: {firstName: 'other name'},
-          pets: {favourite: 'All the dogs'}
-        }
-      ];
-
       beforeEach(() => {
+        let data = [
+          {
+            details: {firstName: 'name'},
+            pets: {favourite: 'All of them'}
+          }, {
+            details: {firstName: 'other name'},
+            pets: {favourite: 'All the dogs'}
+          }
+        ]
         onChangeSpy = jest.fn();
-        wrapper = shallow(<Subform schema={schema} formData={formData} onChange={onChangeSpy}/>);
+        wrapper = shallow(<Subform schema={schema} data={data} onChange={onChangeSpy}/>);
       });
 
       it("Renders a sidebar", () => {
@@ -132,7 +131,6 @@ describe("<Subform>", () => {
       describe("Changing items within the form", () => {
         it("Updates the subform form data with the new data", () => {
           wrapper.find('Form').props().onChange({formData: {newData: 'Cats'}})
-
           let expectedData = [
             {
               details: {newData: 'Cats'},
@@ -142,8 +140,31 @@ describe("<Subform>", () => {
               pets: {favourite: 'All the dogs'}
             }
           ]
-
           expect(wrapper.state().formData).toEqual(expectedData)
+        })
+
+        it("Updates the subform form data with the new data", () => {
+          wrapper.find('Sidebar').props().onItemClick('pets', 0)
+          wrapper.find('Form').props().onChange({formData: {newData: 'Dogs'}})
+          let expectedData = [
+            {
+              details: {firstName: 'name'},
+              pets: {newData: 'Dogs'}
+            }, {
+              details: {firstName: 'other name'},
+              pets: {favourite: 'All the dogs'}
+            }
+          ];
+          expect(wrapper.state().formData).toEqual(expectedData)
+        })
+
+        it("Persists changes when changing a section in a form", () => {
+          wrapper.find('Form').props().onChange({formData: {newData: 'Dogs'}})
+          wrapper.find('Sidebar').props().onItemClick('pets', 0)
+          wrapper.update()
+          wrapper.find('Sidebar').props().onItemClick('details', 0)
+          wrapper.update()
+          expect(wrapper.find('Form').props().formData).toEqual({newData: 'Dogs'})
         })
 
         it("Calls the onChange method with the subform formData", () => {
@@ -178,19 +199,18 @@ describe("<Subform>", () => {
         }
       };
 
-      let formData = [
-        {
-          address: {lineOne: 'Meow'},
-          contact: {phoneNo: '01189998819991197253'}
-        }, {
-          address: {lineOne: 'Cats'},
-          contact: {phoneNo: '999'}
-        }
-      ];
-
       beforeEach(() => {
+        let data = [
+          {
+            address: {lineOne: 'Meow'},
+            contact: {phoneNo: '01189998819991197253'}
+          }, {
+            address: {lineOne: 'Cats'},
+            contact: {phoneNo: '999'}
+          }
+        ];
         onChangeSpy = jest.fn();
-        wrapper = shallow(<Subform schema={schema} formData={formData} onChange={onChangeSpy}/>);
+        wrapper = shallow(<Subform schema={schema} data={data} onChange={onChangeSpy}/>);
       });
 
       it("Renders a sidebar", () => {
