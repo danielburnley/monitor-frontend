@@ -249,7 +249,7 @@ describe("<ParentForm>", () => {
         parentForm
           .find(ArraySubform)
           .props()
-          .onChange({ formData: { newData: "meow" } });
+          .onChange({ newData: "meow" });
 
         expect(onChangeSpy).toHaveBeenCalledWith({
           formData: { cat: { newData: "meow" } }
@@ -260,7 +260,7 @@ describe("<ParentForm>", () => {
         parentForm
           .find(ArraySubform)
           .props()
-          .onChange({ formData: { woof: "bark" } });
+          .onChange({ woof: "bark" });
 
         expect(onChangeSpy).toHaveBeenCalledWith({
           formData: { cat: { woof: "bark" } }

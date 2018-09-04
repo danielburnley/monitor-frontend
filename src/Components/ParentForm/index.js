@@ -59,7 +59,8 @@ export default class ParentForm extends React.Component {
       return (
         <ArraySubform
           data-test={`${this.state.selected}_subform`}
-          onChange={({ formData }) => {
+          key={`${this.state.selected}_subform`}
+          onChange={formData => {
             this.subformOnChange(formData);
           }}
           data={this.state.formData[this.state.selected]}

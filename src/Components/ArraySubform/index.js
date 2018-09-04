@@ -1,9 +1,7 @@
 import React from "react";
-import PropTypes from "prop-types";
 import Form from "react-jsonschema-form";
 import Sidebar from "../Sidebar";
 import GenerateSidebarItems from "../../UseCase/GenerateSidebarItems";
-import ParentForm from "../ParentForm";
 
 export default class ArraySubForm extends React.Component {
   constructor(props) {
@@ -11,7 +9,7 @@ export default class ArraySubForm extends React.Component {
 
     this.state = {
       formData: props.data,
-      selectedSection: Object.keys(props.schema.items.properties)[0],
+      selectedFormSection: Object.keys(props.schema.items.properties)[0],
       selectedIndex: 0
     };
   }
@@ -26,7 +24,7 @@ export default class ArraySubForm extends React.Component {
       <Sidebar
         items={items}
         onItemClick={(section, index) => {
-          this.setState({ selectedSection: section, selectedIndex: index });
+          this.setState({ selectedFormSection: section, selectedIndex: index });
         }}
       />
     );
@@ -35,7 +33,7 @@ export default class ArraySubForm extends React.Component {
   onFormChange = formData => {
     let updatedData = [...this.state.formData];
     updatedData[this.state.selectedIndex][
-      this.state.selectedSection
+      this.state.selectedFormSection
     ] = formData;
 
     this.setState({ formData: updatedData }, () => {
@@ -46,23 +44,27 @@ export default class ArraySubForm extends React.Component {
   render() {
     return (
       <div>
-        {this.renderSidebar()}
-        <Form
-          data-test={`${this.state.selectedSection}-form`}
-          uiSchema={this.props.uiSchema[this.state.selectedSection]}
-          fields={this.props.fields}
-          schema={
-            this.props.schema.items.properties[this.state.selectedSection]
-          }
-          formData={
-            this.state.formData[this.state.selectedIndex][
-              this.state.selectedSection
-            ]
-          }
-          onChange={({ formData }) => {
-            this.onFormChange(formData);
-          }}
-        />
+        <div className="col-md-3">{this.renderSidebar()}</div>
+        <div className="col-md-9">
+          <Form
+            data-test={`${this.state.selectedFormSection}-form`}
+            uiSchema={this.props.uiSchema[this.state.selectedFormSection]}
+            fields={this.props.fields}
+            schema={
+              this.props.schema.items.properties[this.state.selectedFormSection]
+            }
+            formData={
+              this.state.formData[this.state.selectedIndex][
+                this.state.selectedFormSection
+              ]
+            }
+            onChange={({ formData }) => {
+              this.onFormChange(formData);
+            }}
+          >
+            <div />
+          </Form>
+        </div>
       </div>
     );
   }

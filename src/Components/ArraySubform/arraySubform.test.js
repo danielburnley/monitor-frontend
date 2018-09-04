@@ -7,7 +7,7 @@ describe("<ArraySubform>", () => {
     let wrapper, onChangeSpy;
 
     function expectSelectedSectionToEqual(expectedSection) {
-      expect(wrapper.state().selectedSection).toEqual(expectedSection);
+      expect(wrapper.state().selectedFormSection).toEqual(expectedSection);
     }
 
     function expectSelectedIndexToEqual(expectedIndex) {

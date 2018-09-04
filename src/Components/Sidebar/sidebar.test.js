@@ -1,6 +1,6 @@
 import React from "react";
 import Sidebar from ".";
-import {shallow ,mount} from "enzyme";
+import {mount} from "enzyme";
 
 describe("<Sidebar>", () => {
   let sidebar;
