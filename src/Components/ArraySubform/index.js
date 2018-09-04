@@ -2,6 +2,7 @@ import React from "react";
 import Form from "react-jsonschema-form";
 import Sidebar from "../Sidebar";
 import GenerateSidebarItems from "../../UseCase/GenerateSidebarItems";
+import './style.css'
 
 export default class ArraySubForm extends React.Component {
   constructor(props) {
@@ -44,8 +45,8 @@ export default class ArraySubForm extends React.Component {
   render() {
     return (
       <div>
-        <div className="col-md-3">{this.renderSidebar()}</div>
-        <div className="col-md-9">
+        <div className="col-md-3 subform-sidebar">{this.renderSidebar()}</div>
+        <div className="col-md-9 subform">
           <Form
             data-test={`${this.state.selectedFormSection}-form`}
             uiSchema={this.props.uiSchema[this.state.selectedFormSection]}

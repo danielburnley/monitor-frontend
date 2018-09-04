@@ -16,7 +16,7 @@ export default class ReturnForm extends React.Component {
 
     if (this.props.status === 'New') {
       return (
-        <div className="col-md-offset-9 col-md-3 return-actions">
+        <div className="col-md-offset-3 col-md-9 return-actions">
           <button
             className="btn btn-secondary return-btn"
             data-test="create-return-button"
@@ -28,7 +28,7 @@ export default class ReturnForm extends React.Component {
     }
 
     return (
-      <div className="col-md-offset-9 col-md-3 return-actions">
+      <div className="col-md-offset-3 col-md-9 return-actions">
         <button
           className="btn btn-secondary return-btn"
           data-test="save-return-button"
@@ -54,9 +54,8 @@ export default class ReturnForm extends React.Component {
           formData={this.state.formData}
           onChange={({formData}) => this.setState({formData})}
           >
-          <div />
+          {this.renderActions()}
         </ParentForm>
-        {this.renderActions()}
       </div>
     );
   }

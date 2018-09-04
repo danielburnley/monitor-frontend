@@ -5,6 +5,7 @@ import ArraySubform from "../ArraySubform";
 import Sidebar from "../Sidebar";
 import HorizontalFields from "../HorizontalFields";
 import GenerateSidebarItems from "../../UseCase/GenerateSidebarItems";
+import "./style.css";
 
 export default class ParentForm extends React.Component {
   constructor(props) {
@@ -109,8 +110,13 @@ export default class ParentForm extends React.Component {
   render() {
     return (
       <div className="ParentForm" role="navigation">
-        <ul className="nav nav-tabs">{this.renderNavigationTabs()}</ul>
-        {this.renderSubform()}
+        <div className="subform-selectors">
+          <ul className="col-md-offset-3 form-selection nav nav-tabs">
+            {this.renderNavigationTabs()}
+          </ul>
+        </div>
+        <div>{this.renderSubform()}</div>
+        {this.props.children}
       </div>
     );
   }

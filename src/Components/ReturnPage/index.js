@@ -1,10 +1,11 @@
-import React from 'react';
-import ReturnForm from '../ReturnForm';
+import React from "react";
+import ReturnForm from "../ReturnForm";
+import "./style.css";
 
 export default class ReturnPage extends React.Component {
   constructor() {
     super();
-    this.state = {loading: true};
+    this.state = { loading: true };
   }
 
   projectId = () => {
@@ -17,15 +18,15 @@ export default class ReturnPage extends React.Component {
 
   submissionSuccessful = () => {
     let uiSchema = this.props.generateSubmittedSchema.execute(
-      this.state.formSchema,
+      this.state.formSchema
     );
-    this.setState({status: 'Submitted', formUISchema: uiSchema});
+    this.setState({ status: "Submitted", formUISchema: uiSchema });
   };
 
   onFormSubmit = async formData => {
     await this.props.updateReturn.execute(this, {
       returnId: this.returnId(),
-      data: formData,
+      data: formData
     });
     this.props.submitReturn.execute(this, {
       returnId: this.returnId(),
@@ -36,24 +37,22 @@ export default class ReturnPage extends React.Component {
   onFormCreate = async formData => {
     this.props.createReturn.execute(this, {
       projectId: this.projectId(),
-      data: formData,
+      data: formData
     });
   };
 
   onFormSave = async formData => {
     this.props.updateReturn.execute(this, {
       returnId: this.returnId(),
-      data: formData,
+      data: formData
     });
   };
 
-  presentReturnNotFound = async () => {
-
-  };
+  presentReturnNotFound = async () => {};
 
   presentReturn = async returnData => {
     let uiSchema = {};
-    if (returnData.status === 'Submitted') {
+    if (returnData.status === "Submitted") {
       uiSchema = this.props.generateSubmittedSchema.execute(returnData.schema);
     } else {
       uiSchema = this.props.generateUISchema.execute(returnData.schema);
@@ -64,7 +63,7 @@ export default class ReturnPage extends React.Component {
       formData: returnData.data,
       formSchema: returnData.schema,
       formUISchema: uiSchema,
-      status: returnData.status || 'New',
+      status: returnData.status || "New"
     });
   };
 
@@ -77,17 +76,17 @@ export default class ReturnPage extends React.Component {
   fetchData = async () => {
     if (this.returnId()) {
       await this.props.getReturn.execute(this, {
-        id: this.returnId(),
+        id: this.returnId()
       });
     } else {
       await this.props.getBaseReturn.execute(this, {
-        projectId: this.projectId(),
+        projectId: this.projectId()
       });
     }
   };
 
   async componentDidMount() {
-    document.title = "Return - Homes England Monitor"
+    document.title = "Return - Homes England Monitor";
     await this.fetchData();
   }
 
@@ -116,15 +115,22 @@ export default class ReturnPage extends React.Component {
 
   render() {
     return (
-      <div className="container-fluid">
-        <div className="col-md-2 back-to-project">
-          <button
-            className="btn btn-link btn-lg btn-block"
-            onClick={this.backToProject}>
-            Back to project overview
-          </button>
+      <div className="">
+        <div className="row">
+          <div className="col-md-2 back-to-project">
+            <button
+              className="btn btn-link btn-lg btn-block"
+              onClick={this.backToProject}
+            >
+              Back to project overview
+            </button>
+          </div>
         </div>
-        <div data-test="return" className="col-md-12">{this.renderForm()}</div>
+        <div className="row">
+          <div data-test="return" className="return col-md-12">
+            {this.renderForm()}
+          </div>
+        </div>
       </div>
     );
   }
