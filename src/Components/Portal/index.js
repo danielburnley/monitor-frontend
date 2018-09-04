@@ -22,7 +22,7 @@ export default class Portal extends React.Component {
         if (this.props.onApiKey) {
           this.props.onApiKey(this.state.apiKey.apiKey)
         }
-        return this.props.target
+        return this.props.children
       } else {
         return <GetToken projectId={this.props.projectId} targetUrl={window.location.href} requestToken={this.props.requestToken}/>
       }

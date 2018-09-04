@@ -55,16 +55,15 @@ const App = () => (
               {...props}
               projectId={props.match.params.id}
               onApiKey={(apiKey) => {window.apiKey = apiKey}}
-              target={<ProjectPage
-                {...props}
-                getProject={getProjectUseCase}
-                generateUISchema={generateDisabledUISchema}
-              />}
-
               requestToken={requestTokenUseCase}
               token={qs.parse(props.location.search, { ignoreQueryPrefix: true }).token}
               canAccessProject={canAccessProjectUseCase}
-            />
+            ><ProjectPage
+                {...props}
+                getProject={getProjectUseCase}
+                generateUISchema={generateDisabledUISchema}
+              />
+              </Portal>
           }
         />
         <Route
