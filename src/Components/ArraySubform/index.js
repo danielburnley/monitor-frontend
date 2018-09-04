@@ -1,7 +1,9 @@
 import React from "react";
+import PropTypes from "prop-types";
 import Form from "react-jsonschema-form";
 import Sidebar from "../Sidebar";
 import GenerateSidebarItems from "../../UseCase/GenerateSidebarItems";
+import ParentForm from "../ParentForm";
 
 export default class ArraySubForm extends React.Component {
   constructor(props) {
@@ -19,6 +21,7 @@ export default class ArraySubForm extends React.Component {
       this.props.schema,
       this.props.data
     ).items;
+
     return (
       <Sidebar
         items={items}
@@ -36,7 +39,7 @@ export default class ArraySubForm extends React.Component {
     ] = formData;
 
     this.setState({ formData: updatedData }, () => {
-      this.props.onChange(updatedData)
+      this.props.onChange(updatedData);
     });
   };
 
@@ -46,6 +49,8 @@ export default class ArraySubForm extends React.Component {
         {this.renderSidebar()}
         <Form
           data-test={`${this.state.selectedSection}-form`}
+          uiSchema={this.props.uiSchema[this.state.selectedSection]}
+          fields={this.props.fields}
           schema={
             this.props.schema.items.properties[this.state.selectedSection]
           }

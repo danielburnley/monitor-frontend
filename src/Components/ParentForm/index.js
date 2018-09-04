@@ -1,7 +1,9 @@
 import React from "react";
+import PropTypes from "prop-types";
 import Form from "react-jsonschema-form";
+import ArraySubform from "../ArraySubform";
 import Sidebar from "../Sidebar";
-import HorizontalFields from '../HorizontalFields'
+import HorizontalFields from "../HorizontalFields";
 import GenerateSidebarItems from "../../UseCase/GenerateSidebarItems";
 
 export default class ParentForm extends React.Component {
@@ -43,15 +45,47 @@ export default class ParentForm extends React.Component {
       this.props.schema.properties[this.state.selected],
       this.state.formData[this.state.selected]
     ).items;
-    return <Sidebar items={items} updateParentForm ={this.updateParentForm}/>;
+    return <Sidebar items={items} onItemClick={() => {}} />;
   }
 
-  updateParentForm(subSection){
-    console.log("Showing "+subSection)
+  selectedSchema() {
+    return this.props.schema.properties[this.state.selected];
+  }
+
+  renderSubform() {
+    if (this.selectedSchema().type === "array") {
+      const fields = { horizontal: HorizontalFields };
+
+      return (
+        <ArraySubform
+          data-test={`${this.state.selected}_subform`}
+          onChange={({ formData }) => {
+            this.subformOnChange(formData);
+          }}
+          data={this.state.formData[this.state.selected]}
+          fields={fields}
+          schema={this.props.schema.properties[this.state.selected]}
+          uiSchema={
+            this.props.uiSchema
+              ? this.props.uiSchema[this.state.selected].items
+              : {}
+          }
+        />
+      );
+    }
+    return (
+      <div>
+        <div className="col-md-2">{this.renderSidebar()}</div>
+        <div className="col-md-10">
+          {this.state.selected && this.renderSelectedForm()}
+        </div>
+      </div>
+    );
   }
 
   renderSelectedForm() {
-    const fields = {horizontal: HorizontalFields}
+    const fields = { horizontal: HorizontalFields };
+
     return (
       <div data-test={`${this.state.selected}_subform`} className="subform">
         <Form
@@ -75,13 +109,13 @@ export default class ParentForm extends React.Component {
     return (
       <div className="ParentForm" role="navigation">
         <ul className="nav nav-tabs">{this.renderNavigationTabs()}</ul>
-        <div>
-          <div className="col-md-2">{this.renderSidebar()}</div>
-          <div className="col-md-10">
-            {this.state.selected && this.renderSelectedForm()}
-          </div>
-        </div>
+        {this.renderSubform()}
       </div>
     );
   }
 }
+
+ParentForm.propTypes = {
+  schema: PropTypes.object.isRequired,
+  formData: PropTypes.object
+};

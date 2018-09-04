@@ -55,6 +55,8 @@ describe("<ArraySubform>", () => {
         }
       };
 
+      let fields = { dog: () => {} };
+
       beforeEach(() => {
         let data = [
           {
@@ -68,7 +70,16 @@ describe("<ArraySubform>", () => {
         ];
         onChangeSpy = jest.fn();
         wrapper = shallow(
-          <ArraySubform schema={schema} data={data} onChange={onChangeSpy} />
+          <ArraySubform
+            schema={schema}
+            data={data}
+            onChange={onChangeSpy}
+            uiSchema={{
+              details: { firstName: "Meow" },
+              pets: { favourite: "Woof" }
+            }}
+            fields={fields}
+          />
         );
       });
 
@@ -78,6 +89,10 @@ describe("<ArraySubform>", () => {
 
       it("Renders a form", () => {
         expect(wrapper.find("Form").length).toEqual(1);
+      });
+
+      it("Passes the fields to the form", () => {
+        expect(wrapper.find("Form").props().fields).toEqual(fields);
       });
 
       describe("Selecting items on the sidebar", () => {
@@ -114,6 +129,12 @@ describe("<ArraySubform>", () => {
           expect(wrapper.find("Form").props().schema).toEqual(expectedSchema);
         });
 
+        it("Passes the uiSchema of the first child to the form", () => {
+          expect(wrapper.find("Form").props().uiSchema).toEqual({
+            firstName: "Meow"
+          });
+        });
+
         it("Passes the first childs form data to the form by default", () => {
           let expectedFormData = { firstName: "name" };
 
@@ -133,6 +154,14 @@ describe("<ArraySubform>", () => {
             }
           };
           expect(wrapper.find("Form").props().schema).toEqual(expectedSchema);
+        });
+
+        it("Passes the selected childs uiSchema to the form", () => {
+          selectSection(1, "pets");
+
+          expect(wrapper.find("Form").props().uiSchema).toEqual({
+            favourite: "Woof"
+          });
         });
 
         it("Passes the selected childs form data to the form", () => {
@@ -253,6 +282,8 @@ describe("<ArraySubform>", () => {
         }
       };
 
+      let fields = { a: () => {} };
+
       beforeEach(() => {
         let data = [
           {
@@ -266,7 +297,16 @@ describe("<ArraySubform>", () => {
         ];
         onChangeSpy = jest.fn();
         wrapper = shallow(
-          <ArraySubform schema={schema} data={data} onChange={onChangeSpy} />
+          <ArraySubform
+            schema={schema}
+            data={data}
+            onChange={onChangeSpy}
+            uiSchema={{
+              address: { lineOne: "Moo" },
+              contact: { phoneNo: "Quack" }
+            }}
+            fields={fields}
+          />
         );
       });
 
@@ -276,6 +316,10 @@ describe("<ArraySubform>", () => {
 
       it("Renders a form", () => {
         expect(wrapper.find("Form").length).toEqual(1);
+      });
+
+      it("Passes the fields to the form", () => {
+        expect(wrapper.find("Form").props().fields).toEqual(fields);
       });
 
       describe("Selecting items on the sidebar", () => {
@@ -313,6 +357,12 @@ describe("<ArraySubform>", () => {
           expect(wrapper.find("Form").props().schema).toEqual(expectedSchema);
         });
 
+        it("Passes the selected uiSchema to the form", () => {
+          expect(wrapper.find("Form").props().uiSchema).toEqual({
+            lineOne: "Moo"
+          });
+        });
+
         it("Passes the first childs form data to the form by default", () => {
           let expectedFormData = { lineOne: "Meow" };
 
@@ -333,6 +383,14 @@ describe("<ArraySubform>", () => {
           };
 
           expect(wrapper.find("Form").props().schema).toEqual(expectedSchema);
+        });
+
+        it("Passes the selected childs uiSchema to the form", () => {
+          selectSection(0, "contact");
+
+          expect(wrapper.find("Form").props().uiSchema).toEqual({
+            phoneNo: "Quack"
+          });
         });
 
         it("Passes the selected childs form data to the form", () => {

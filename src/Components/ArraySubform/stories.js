@@ -43,6 +43,7 @@ storiesOf("Subform", module)
       onChange={data => {
         console.log("Subform updated with: \n" + JSON.stringify(data));
       }}
+      uiSchema={{}}
     />
   ))
   .add("object", () => {
