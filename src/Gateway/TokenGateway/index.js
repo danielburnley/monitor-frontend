@@ -1,10 +1,15 @@
 import fetch from 'isomorphic-fetch';
 import ApiKey from '../../Domain/ApiKey';
+import runtimeEnv from '@mars/heroku-js-runtime-env'
 
 export default class TokenGateway {
+  constructor() {
+    this.env = runtimeEnv()
+  }
+
   async requestToken(email_address, project_id, url) {
     let response = await fetch(
-      `${process.env.REACT_APP_HIF_API_URL}token/request`,
+      `${this.env.REACT_APP_HIF_API_URL}token/request`,
       {
         method: 'POST',
         headers: {'Content-Type': 'application/json',
@@ -16,7 +21,7 @@ export default class TokenGateway {
 
   async getApiKey(access_token, project_id) {
     let response = await fetch(
-      `${process.env.REACT_APP_HIF_API_URL}token/expend`,
+      `${this.env.REACT_APP_HIF_API_URL}token/expend`,
       {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},

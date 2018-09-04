@@ -1,10 +1,15 @@
 import fetch from 'isomorphic-fetch';
 import Return from '../../Domain/Return';
+import runtimeEnv from '@mars/heroku-js-runtime-env';
 
 export default class ReturnGateway {
+  constructor() {
+    this.env = runtimeEnv()
+  }
+
   async baseReturnFor(id) {
     let rawResponse = await fetch(
-      `${process.env.REACT_APP_HIF_API_URL}project/${id}/return`,
+      `${this.env.REACT_APP_HIF_API_URL}project/${id}/return`,
       {
         headers: {'Content-Type': 'application/json',
           'API_KEY': window.apiKey},
@@ -22,7 +27,7 @@ export default class ReturnGateway {
 
   async findById(id) {
     let rawResponse = await fetch(
-      `${process.env.REACT_APP_HIF_API_URL}return/get?id=${id}`,
+      `${this.env.REACT_APP_HIF_API_URL}return/get?id=${id}`,
       {
         headers: {'Content-Type': 'application/json',
           'API_KEY': window.apiKey},
@@ -38,7 +43,7 @@ export default class ReturnGateway {
 
   async create(id, data) {
     let rawResponse = await fetch(
-      `${process.env.REACT_APP_HIF_API_URL}return/create`,
+      `${this.env.REACT_APP_HIF_API_URL}return/create`,
       {
         method: 'POST',
         headers: {'Content-Type': 'application/json',
@@ -57,7 +62,7 @@ export default class ReturnGateway {
 
   async update(return_id, return_data) {
     let response = await fetch(
-      `${process.env.REACT_APP_HIF_API_URL}return/update`,
+      `${this.env.REACT_APP_HIF_API_URL}return/update`,
       {
         method: 'POST',
         headers: {'Content-Type': 'application/json',
@@ -75,7 +80,7 @@ export default class ReturnGateway {
 
   async submit(return_id, data) {
     let response = await fetch(
-      `${process.env.REACT_APP_HIF_API_URL}return/submit`,
+      `${this.env.REACT_APP_HIF_API_URL}return/submit`,
       {
         method: 'POST',
         headers: {'Content-Type': 'application/json',
