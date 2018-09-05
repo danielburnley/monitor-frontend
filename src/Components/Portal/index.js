@@ -8,6 +8,7 @@ export default class Portal extends React.Component {
       apiKey: null
     }
   }
+
   componentDidMount() {
     this.props.canAccessProject.execute(this.props.token, parseInt(this.props.projectId)).then(apiKey => this.setState({apiKey}))
   }
