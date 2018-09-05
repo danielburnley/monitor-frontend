@@ -1,5 +1,4 @@
 import React from 'react';
-import Form from 'react-jsonschema-form';
 import GetToken from '../GetToken'
 
 export default class Portal extends React.Component {
