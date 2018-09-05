@@ -1,7 +1,6 @@
 import React from "react";
-import Subform from ".";
-
 import { storiesOf } from "@storybook/react";
+import ArraySubform from ".";
 
 let schema = {
   title: "Infrastructures",
@@ -35,46 +34,22 @@ let infraData = {
   otherStuff: { cars: "Zoom", cats: "Sleep" }
 };
 
-storiesOf("Subform", module)
-  .add("Array with one item", () => (
-    <Subform
-      schema={schema}
+storiesOf("ArraySubform", module)
+  .add("Default", () => (
+    <ArraySubform
       data={[infraData]}
-      onChange={data => {
-        console.log("Subform updated with: \n" + JSON.stringify(data));
-      }}
+      schema={schema}
+      selectedIndex={0}
+      selectedFormSection={"details"}
       uiSchema={{}}
     />
   ))
-  .add("object", () => {
-    let schema = {
-      title: "Infrastructure",
-      type: "object",
-      properties: {
-        details: {
-          type: "object",
-          title: "Details",
-          properties: {
-            infraType: { type: "string" },
-            description: { type: "string" }
-          }
-        },
-        otherStuff: {
-          type: "object",
-          title: "Other Stuff",
-          properties: {
-            cars: { type: "string" },
-            cats: { type: "string" }
-          }
-        }
-      }
-    };
-    return (
-      <Subform
-        schema={schema}
-        handleChange={data => {
-          console.log("Subform updated with: \n" + JSON.stringify(data));
-        }}
-      />
-    );
-  });
+  .add("With the second section selected", () => (
+    <ArraySubform
+      data={[infraData]}
+      schema={schema}
+      selectedIndex={0}
+      selectedFormSection={"otherStuff"}
+      uiSchema={{}}
+    />
+  ));

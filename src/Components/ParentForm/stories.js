@@ -71,5 +71,21 @@ storiesOf("Parent Form", module)
       }
     };
 
-    return <ParentForm schema={schema} formData={{ cats: [{}, {}] }} />;
+    return (
+      <ParentForm
+        schema={schema}
+        formData={{
+          cats: [
+            {
+              details: { name: "Name" },
+              moreDetails: { lastName: "Last Name" }
+            },
+            {
+              details: { name: "Meowington" },
+              moreDetails: { lastName: "Meowsters" }
+            }
+          ]
+        }}
+      />
+    );
   });

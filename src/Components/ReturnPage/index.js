@@ -1,6 +1,5 @@
 import React from "react";
 import ReturnForm from "../ReturnForm";
-import "./style.css";
 
 export default class ReturnPage extends React.Component {
   constructor() {

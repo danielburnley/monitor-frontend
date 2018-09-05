@@ -35,7 +35,9 @@ export default class ArraySubform extends React.Component {
           schema={this.schema()}
           onChange={this.onFormChange}
           uiSchema={this.uiSchema()}
-        />
+        >
+          <div />
+        </Form>
       </div>
     );
   }

@@ -25,3 +25,11 @@
   font-weight: bold;
   font-size: 18px;
 }
+
+.sidebar-column {
+  background-color: #e5eef6;
+}
+
+.parent-form-body {
+  display: flex;
+}
