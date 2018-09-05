@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Form from "react-jsonschema-form";
+import "./style.css";
 
 export default class ArraySubform extends React.Component {
   schema = () => {
@@ -28,7 +29,7 @@ export default class ArraySubform extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="subform">
         <Form
           fields={this.props.fields}
           formData={this.formData()}
