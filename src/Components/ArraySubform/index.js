@@ -1,72 +1,51 @@
 import React from "react";
+import PropTypes from "prop-types";
 import Form from "react-jsonschema-form";
-import Sidebar from "../Sidebar";
-import GenerateSidebarItems from "../../UseCase/GenerateSidebarItems";
-import './style.css'
 
-export default class ArraySubForm extends React.Component {
-  constructor(props) {
-    super(props);
+export default class ArraySubform extends React.Component {
+  schema = () => {
+    return this.props.schema.items.properties[this.props.selectedFormSection];
+  };
 
-    this.state = {
-      formData: props.data,
-      selectedFormSection: Object.keys(props.schema.items.properties)[0],
-      selectedIndex: 0
-    };
-  }
+  formData = () => {
+    return this.props.data[this.props.selectedIndex][
+      this.props.selectedFormSection
+    ];
+  };
 
-  renderSidebar() {
-    let items = new GenerateSidebarItems().execute(
-      this.props.schema,
-      this.props.data
-    ).items;
+  uiSchema = () => {
+    return this.props.uiSchema[this.props.selectedFormSection];
+  };
 
-    return (
-      <Sidebar
-        items={items}
-        onItemClick={(section, index) => {
-          this.setState({ selectedFormSection: section, selectedIndex: index });
-        }}
-      />
-    );
-  }
-
-  onFormChange = formData => {
-    let updatedData = [...this.state.formData];
-    updatedData[this.state.selectedIndex][
-      this.state.selectedFormSection
+  onFormChange = ({ formData }) => {
+    let updatedData = [...this.props.data];
+    updatedData[this.props.selectedIndex][
+      this.props.selectedFormSection
     ] = formData;
 
-    this.setState({ formData: updatedData }, () => {
-      this.props.onChange(updatedData);
-    });
+    this.props.onChange(updatedData);
   };
 
   render() {
     return (
       <div>
-        <div className="col-md-3 subform-sidebar">{this.renderSidebar()}</div>
-        <div className="col-md-9 subform">
-          <Form
-            data-test={`${this.state.selectedFormSection}-form`}
-            uiSchema={this.props.uiSchema[this.state.selectedFormSection]}
-            fields={this.props.fields}
-            schema={
-              this.props.schema.items.properties[this.state.selectedFormSection]
-            }
-            formData={
-              this.state.formData[this.state.selectedIndex][
-                this.state.selectedFormSection
-              ]
-            }
-            onChange={({ formData }) => {
-              this.onFormChange(formData);
-            }}
-          >
-            <div />
-          </Form>
-        </div>
+        <Form
+          fields={this.props.fields}
+          formData={this.formData()}
+          schema={this.schema()}
+          onChange={this.onFormChange}
+          uiSchema={this.uiSchema()}
+        />
       </div>
     );
   }
 }
+
+ArraySubform.propTypes = {
+  data: PropTypes.array.isRequired,
+  fields: PropTypes.object.isRequired,
+  schema: PropTypes.object.isRequired,
+  selectedIndex: PropTypes.number.isRequired,
+  selectedFormSection: PropTypes.string.isRequired,
+  uiSchema: PropTypes.object.isRequired
+};
