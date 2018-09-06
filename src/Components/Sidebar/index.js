@@ -54,7 +54,7 @@ export default class Sidebar extends React.Component {
       return <ul data-test="sidebar" />;
     }
     return (
-      <ul data-test="sidebar" className="sidebar list-unstyled sidebar">
+      <ul data-test="sidebar" className="sidebar list-unstyled">
         {this.renderItems()}
       </ul>
     );
