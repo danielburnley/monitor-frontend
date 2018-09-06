@@ -231,6 +231,41 @@ describe("GenerateUISchema", () => {
     });
   });
 
+  describe("Addable arrays", () => {
+    describe("Given an array that is addable", () => {
+      it("Marks them as addable", () => {
+        let useCase = new GenerateUISchema();
+        let schema = {
+          type: "object",
+          properties: {
+            a: {
+              type: "array",
+              addable: true,
+              items: {
+                type: "object",
+                properties: {
+                  b: { type: "string" },
+                  c: { type: "string" }
+                }
+              }
+            }
+          }
+        };
+        let response = useCase.execute(schema);
+        expect(response).toEqual({
+          a: {
+            "ui:options": {
+              addable: true,
+              orderable: false,
+              removable: true
+            },
+            items: {}
+          }
+        });
+      });
+    });
+  });
+
   describe("Horizontal", () => {
     describe("Given an object", () => {
       describe("That is horizontal", () => {

@@ -16,9 +16,9 @@ export default class GenerateUISchema {
       } else if (value.type === "array") {
         ret[key] = {};
         ret[key]["ui:options"] = {
-          addable: false,
+          addable: this.isAddableArray(value),
           orderable: false,
-          removable: false
+          removable: this.isAddableArray(value)
         };
         ret[key]["items"] = this.generateUISchema(value.items.properties);
       } else if (value.readonly) {
@@ -26,5 +26,9 @@ export default class GenerateUISchema {
       }
     });
     return ret;
+  }
+
+  isAddableArray(arr) {
+    return arr.addable ? true : false;
   }
 }
