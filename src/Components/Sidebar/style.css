@@ -1,0 +1,12 @@
+.sidebar {
+  margin-top: 15px;
+}
+
+.sidebar-parent {
+  font-size: 1.2em;
+  font-weight: bolder;
+}
+
+.sidebar-item {
+  color: black;
+}

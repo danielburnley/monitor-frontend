@@ -1,6 +1,7 @@
 .return-actions {
   display: flex;
-  justify-content: "space-between";
+  justify-content: flex-end;
+  background-color: white;
 }
 
 .return-btn {
@@ -15,6 +16,6 @@ input:disabled {
   -moz-box-shadow: none !important;
   -webkit-box-shadow: none !important;
   color: black;
-  cursor:default !important;
+  cursor: default !important;
   outline: none !important;
 }

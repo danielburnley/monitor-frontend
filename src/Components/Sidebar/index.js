@@ -1,10 +1,12 @@
 import React from "react";
+import "./style.css";
 
 export default class Sidebar extends React.Component {
   renderChildren(children) {
     return Object.entries(children).map(([key, value]) => (
       <li key={key} data-test="sidebar-item-child">
         <a
+          className="sidebar-item"
           onClick={_ => this.props.onItemClick(value.subSection, value.index)}
           data-test="sidebar-item-child-button"
         >
@@ -18,7 +20,9 @@ export default class Sidebar extends React.Component {
     if (item.children) {
       return (
         <React.Fragment>
-          <span data-test="sidebar-item-button">{item.title}</span>
+          <span className="sidebar-parent" data-test="sidebar-item-button">
+            {item.title}
+          </span>
           <ul data-test="sidebar-item-children">
             {this.renderChildren(item.children)}
           </ul>
@@ -27,6 +31,7 @@ export default class Sidebar extends React.Component {
     } else {
       return (
         <a
+          className="sidebar-item"
           onClick={_ => this.props.onItemClick(item.subSection)}
           data-test="sidebar-item-button"
         >
@@ -49,7 +54,7 @@ export default class Sidebar extends React.Component {
       return <ul data-test="sidebar" />;
     }
     return (
-      <ul data-test="sidebar" className="list-unstyled">
+      <ul data-test="sidebar" className="sidebar list-unstyled">
         {this.renderItems()}
       </ul>
     );
