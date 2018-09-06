@@ -1,17 +1,11 @@
-header {
-    height: 53px;
-    background: #0b0c0c;
-    color: white;
-    border-bottom: 10px solid #005ea5;
+.monitor-header {
+  background: #0b0c0c;
+  border-bottom: 10px solid #005ea5;
+  color: #ffffff;
+  height: 53px;
 }
 
-#logo {
-    height: 89%;
-    padding-left: 30px;
-    padding-top: 5px;
-    padding-bottom: 1px;
-}
-
-span {
-    vertical-align: bottom;
+.logo {
+  height: 89%;
+  padding: 5px 0 1px 30px;
 }
