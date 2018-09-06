@@ -9,4 +9,5 @@
 
 .sidebar-item {
   color: black;
+  cursor: pointer;
 }
