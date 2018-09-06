@@ -51,6 +51,41 @@ let returnData = {
   }
 };
 
+describe("Authentication against routes", () => {
+  let api;
+
+  beforeEach(() => {
+    process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
+    api = new APISimulator("http://cat.meow");
+    api.expendEmptyTokenForProject(0).unauthorised();
+  });
+
+  afterEach(() => {
+    nock.cleanAll();
+  });
+
+  it("Asks for authentication against the project page", async () => {
+    let page = new AppPage("/project/0");
+    await page.load();
+
+    expect(page.find("GetToken").length).toEqual(1);
+  });
+
+  it("Asks for authentication against the base return page", async () => {
+    let page = new AppPage("/project/0/return");
+    await page.load();
+
+    expect(page.find("GetToken").length).toEqual(1);
+  });
+
+  it("Asks for authentication against the view return page", async () => {
+    let page = new AppPage("/project/0/return/1");
+    await page.load();
+
+    expect(page.find("GetToken").length).toEqual(1);
+  });
+});
+
 describe("Viewing at a project", () => {
   let api;
 
@@ -132,7 +167,12 @@ describe("Viewing at a project", () => {
       let page = new AppPage("/project/0/return/0?token=Cats");
       await page.load();
 
-      let expectedInputValues = ["Meow", "Fluffy balls of friendship", "Beans", ""];
+      let expectedInputValues = [
+        "Meow",
+        "Fluffy balls of friendship",
+        "Beans",
+        ""
+      ];
       expect(page.getFormInputs()).toEqual(expectedInputValues);
     });
   });

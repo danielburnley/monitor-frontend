@@ -1,5 +1,4 @@
 import React from 'react';
-import Form from 'react-jsonschema-form';
 import GetToken from '../GetToken'
 
 export default class Portal extends React.Component {
@@ -9,6 +8,7 @@ export default class Portal extends React.Component {
       apiKey: null
     }
   }
+
   componentDidMount() {
     this.props.canAccessProject.execute(this.props.token, parseInt(this.props.projectId)).then(apiKey => this.setState({apiKey}))
   }
@@ -22,7 +22,7 @@ export default class Portal extends React.Component {
         if (this.props.onApiKey) {
           this.props.onApiKey(this.state.apiKey.apiKey)
         }
-        return this.props.target
+        return this.props.children
       } else {
         return <GetToken projectId={this.props.projectId} targetUrl={window.location.href} requestToken={this.props.requestToken}/>
       }
