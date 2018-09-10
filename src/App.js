@@ -20,6 +20,7 @@ import GetReturn from "./UseCase/GetReturn";
 import SubmitReturn from "./UseCase/SubmitReturn";
 import UpdateReturn from "./UseCase/UpdateReturn";
 import RequestToken from "./UseCase/RequestToken";
+import ValidateReturn from "./UseCase/ValidateReturn";
 
 import ProjectGateway from "./Gateway/ProjectGateway";
 import ReturnGateway from "./Gateway/ReturnGateway";
@@ -28,6 +29,7 @@ import TokenGateway from "./Gateway/TokenGateway";
 import "./App.css";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
+const validateReturnUseCase = new ValidateReturn(new ReturnGateway());
 const createReturnUseCase = new CreateReturn(new ReturnGateway());
 const generateDisabledUISchema = new GenerateDisabledUISchema();
 const generateReadOnlySchema = new GenerateReadOnlySchema();
@@ -43,6 +45,7 @@ const updateReturnUseCase = new UpdateReturn(new ReturnGateway());
 const renderReturnPage = props => (
   <ReturnPage
     {...props}
+    validateReturn={validateReturnUseCase}
     getReturn={getReturnUseCase}
     getBaseReturn={getBaseReturnUseCase}
     createReturn={createReturnUseCase}

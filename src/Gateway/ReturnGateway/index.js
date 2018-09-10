@@ -95,4 +95,21 @@ export default class ReturnGateway {
       return {success: false};
     }
   }
+
+  async validate(project_id, data) {
+    let response = await fetch(
+      `${this.env.REACT_APP_HIF_API_URL}return/validate`,
+      {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json',
+          'API_KEY': window.apiKey},
+        body: JSON.stringify({type: 'hif', project_id, data}),
+      },
+    );
+
+    if (response.ok) {
+      let response_json = await response.json();
+      return {valid: response_json.invalidPaths.length===0, invalidPaths: response_json.invalidPaths}
+    }
+  }
 }

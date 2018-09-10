@@ -3,58 +3,64 @@ import ValidateReturn from ".";
 describe('ValidateReturn', () => {
   let validationGatewaySpy, presenterSpy;
 
-  function getUseCase(valid = true, invalid_paths = []) {
+  presenterSpy = {
+    invalidateFields: jest.fn()
+  };
+
+  function getUseCase(valid = true, invalidPaths = []) {
     validationGatewaySpy = {
-      validate: jest.fn(() => ({ valid, invalid_paths }))
+      validate: jest.fn(async () => ({ valid, invalidPaths }))
     };
 
-    presenterSpy = {
-      invalidateFields: jest.fn()
-    };
-
-    return new ValidateReturn(validationGatewaySpy,presenterSpy);
+    return new ValidateReturn(validationGatewaySpy);
   }
 
   describe('example 1', () => {
-    it('calls the validation gateway', () => {
-      let schema = {
+    it('calls the validation gateway', async () => {
+      let data = {
         cats: 'meow'
       }
 
+      let project_id = 1;
       let useCase = getUseCase();
-      useCase.execute(schema);
-      expect(validationGatewaySpy.validate).toBeCalledWith(schema);
+      await useCase.execute(presenterSpy, project_id, data);
+      expect(validationGatewaySpy.validate).toBeCalledWith(project_id, data);
     });
 
-    it('calls the presenter with the invalid paths', () => {
-      let schema = {
+    it('calls the presenter with the invalid paths', async () => {
+      let data = {
         cats: 'meow'
       }
 
-      let useCase = getUseCase();
-      useCase.execute(schema);
-      expect(presenterSpy.invalidateFields).toBeCalledWith([]);
+      let useCase = getUseCase(false, ['cats']);
+      let project_id = 1;
+
+      await useCase.execute(presenterSpy, project_id, data);
+      expect(presenterSpy.invalidateFields).toBeCalledWith(['cats']);
     });
   });
 
   describe('example 2', () => {
-    it('calls the validation gateway', () => {
-      let schema = {
+    it('calls the validation gateway', async () => {
+      let data = {
         dogs: 'woof'
       }
 
+      let project_id = 3;
       let useCase = getUseCase();
-      useCase.execute(schema);
-      expect(validationGatewaySpy.validate).toBeCalledWith(schema);
+      await useCase.execute(presenterSpy, project_id, data);
+      expect(validationGatewaySpy.validate).toBeCalledWith(project_id, data);
     });
 
-    it('calls the presenter with the invalid paths', () => {
-      let schema = {
+    it('calls the presenter with the invalid paths', async () => {
+      let data = {
         dogs: 'woof'
       }
 
+      let project_id = 3;
+
       let useCase = getUseCase(false, ['dogs']);
-      useCase.execute(schema);
+      await useCase.execute(presenterSpy, project_id, data);
       expect(presenterSpy.invalidateFields).toBeCalledWith(['dogs']);
     });
   });

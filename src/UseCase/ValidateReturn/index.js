@@ -1,10 +1,13 @@
 export default class ValidateReturn {
-  constructor(validationGateway, presenter) {
+  constructor(validationGateway) {
     this.validationGateway = validationGateway;
-    this.presenter = presenter;
   }
-  execute(schema) {
-    let {valid, invalid_paths} = this.validationGateway.validate(schema);
-    this.presenter.invalidateFields(invalid_paths);
+
+  async execute(presenter, project_id, data) {
+    let {valid, invalidPaths} = await this.validationGateway.validate(project_id, data);
+    
+    if (!valid) {
+      await presenter.invalidateFields(invalidPaths);
+    }
   }
 }

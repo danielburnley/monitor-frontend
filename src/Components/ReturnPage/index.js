@@ -4,7 +4,7 @@ import ReturnForm from "../ReturnForm";
 export default class ReturnPage extends React.Component {
   constructor() {
     super();
-    this.state = { loading: true };
+    this.state = { loading: true, valid: true, invalid_paths: [] };
   }
 
   projectId = () => {
@@ -45,6 +45,13 @@ export default class ReturnPage extends React.Component {
       returnId: this.returnId(),
       data: formData
     });
+
+    this.setState({valid: true, invalid_paths: []});
+    this.props.validateReturn.execute(this, this.props.match.params.projectId, formData);
+  };
+
+  invalidateFields = async (pathList) => {
+    this.setState({valid: false, invalid_paths: pathList});
   };
 
   presentReturnNotFound = async () => {};
@@ -130,6 +137,11 @@ export default class ReturnPage extends React.Component {
             {this.renderForm()}
           </div>
         </div>
+        { !this.state.valid ?
+          <div className="alert-danger">
+            {this.state.invalid_paths}
+          </div> : <div/>
+        }
       </div>
     );
   }
