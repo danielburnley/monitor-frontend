@@ -57,7 +57,7 @@ export default class ParentForm extends React.Component {
       <li
         key={property}
         role="presentation"
-        className={property === this.state.selected ? "active" : "inactive"}
+        className={"nav-item " + (property === this.state.selected ? "active" : "inactive")}
       >
         <a role="button" id={property} onClick={this.viewSelectorOnChange}>
           {this.props.schema.properties[property].title}

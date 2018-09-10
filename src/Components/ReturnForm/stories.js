@@ -7,6 +7,22 @@ storiesOf("Return Form", module).add("Simple form", () => {
   let schema = {
     type: "object",
     properties: {
+      dogs: {
+        type: "object",
+        title: "Dogs",
+        properties: {
+          catDetails: {
+            title: 'Details',
+            type: 'object',
+            properties: {
+              name: {
+                type: "string",
+                title: "Name"
+              }
+            }
+          }
+        }
+      },
       cats: {
         type: "object",
         title: "Cats",
@@ -28,6 +44,23 @@ storiesOf("Return Form", module).add("Simple form", () => {
                 title: "Fluffiness",
                 enum: ["Slightly fluffy", "Very fluffy", "Too fluffy"],
                 enumName: ["slightly", "very", "too"]
+              },
+              ancestors: {
+                type: "array",
+                title: "Ancestry",
+                items: {
+                  type: "object",
+                  properties: {
+                    name: {
+                      title: "Name",
+                      type: "string"
+                    },
+                    breed: {
+                      title: "Breed",
+                      type: "string"
+                    }
+                  }
+                }
               }
             }
           }
