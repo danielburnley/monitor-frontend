@@ -21,6 +21,9 @@ export default class GenerateUISchema {
           removable: this.isAddableArray(value)
         };
         ret[key]["items"] = this.generateUISchema(value.items.properties);
+        if (value.items.horizontal) {
+          ret[key]["items"]["ui:field"] = "horizontal";
+        }
       } else if (value.readonly) {
         ret[key] = { "ui:disabled": true };
       }
