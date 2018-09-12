@@ -109,7 +109,7 @@ export default class ReturnGateway {
 
     if (response.ok) {
       let response_json = await response.json();
-      return {valid: response_json.invalidPaths.length===0, invalidPaths: response_json.invalidPaths}
+      return {valid: response_json.valid, invalidPaths: response_json.invalidPaths}
     }
   }
 }
