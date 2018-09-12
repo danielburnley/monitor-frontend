@@ -267,6 +267,37 @@ describe("GenerateUISchema", () => {
   });
 
   describe("Horizontal", () => {
+    describe("Given an array with horizontal items", () => {
+      fit("Sets the UI field to horizontal", () => {
+        let schema = {
+          type: "object",
+          properties: {
+            a: {
+              type: "array",
+              items: {
+                horizontal: true,
+                type: "object",
+                properties: {}
+              }
+            }
+          }
+        };
+
+        let response = useCase.execute(schema);
+
+        expect(response).toEqual({
+          a: {
+            items: { "ui:field": "horizontal" },
+            "ui:options": { 
+              addable: false, 
+              orderable: false, 
+              removable: false 
+            }
+          }
+        });
+      });
+    });
+
     describe("Given an object", () => {
       describe("That is horizontal", () => {
         describe("With no properties", () => {

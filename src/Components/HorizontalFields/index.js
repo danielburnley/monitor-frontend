@@ -17,8 +17,8 @@ export default class HorizontalFields extends React.Component {
       return (
         <div
           key={k}
-          className="form-group col-sm-3 col-md-3"
           data-test="form-field"
+          className="horizontal-item"
         >
           <label htmlFor={k} data-test={`${k}-label`}>
             {v.title}
@@ -26,7 +26,6 @@ export default class HorizontalFields extends React.Component {
           <input
             id={k}
             disabled={v.readonly}
-            className="form-control"
             data-test={`${k}-input`}
             value={this.state[k]}
             onChange={e => this.onChange(k, e.target.value)}

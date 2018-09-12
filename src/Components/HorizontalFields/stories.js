@@ -10,10 +10,12 @@ storiesOf("HorizontalFields", module)
       properties: {
         firstName: { type: "string", title: "First Name", readonly: true },
         surname: { type: "string", title: "Surname" },
-        foo: { type: "string", title: "Foo", readonly: true },
+        foo: { type: "string", title: "super long title that should go onto multiple lines meow meow meow" },
         meow: { type: "string", title: "Meow", readonly: true },
         woof: { type: "string", title: "woof" },
-        bar: { type: "string", title: "Bar" }
+        bar: { type: "string", title: "Bar" },
+        b: { type: "string", title: "Bear" },
+        r: { type: "string", title: "Rabbit" },
       }
     };
     let formData = {
