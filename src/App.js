@@ -8,7 +8,7 @@ import ProjectPage from "./Components/ProjectPage";
 import ReturnPage from "./Components/ReturnPage";
 import GetToken from "./Components/GetToken";
 import Portal from "./Components/Portal";
-import NotFound from './Components/NotFound';
+import NotFound from "./Components/NotFound";
 
 import CreateReturn from "./UseCase/CreateReturn";
 import GenerateDisabledUISchema from "./UseCase/GenerateDisabledUISchema";
@@ -102,7 +102,7 @@ const App = () => (
             )}
           />
 
-          <Route path='*' exact={true} component={NotFound} />
+          <Route path="*" exact={true} component={NotFound} />
         </Switch>
       </div>
 
