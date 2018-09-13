@@ -177,3 +177,13 @@ describe("Viewing at a project", () => {
     });
   });
 });
+
+describe("Page not found", () => {
+  it("Renders a 404 page", async () => {
+
+    let page = new AppPage("/non-existent");
+    await page.load();
+
+    expect(page.find('div[id="not-found"]').text()).toMatch(/404 page not found/);
+  });
+});
