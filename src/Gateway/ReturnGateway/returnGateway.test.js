@@ -7,6 +7,68 @@ describe('Return Gateway', () => {
     nock.cleanAll();
   });
 
+  describe('validation', () => {
+    describe('Example 1', () => {
+      let validationRequest, response, apiKeyGateway;
+      let data = {
+        dogs: 'woof'
+      };
+      let type = 'hif';
+      let project_id = 1;
+
+      beforeEach(async () => {
+        process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
+        apiKeyGateway = {getApiKey: () => 'superSecret'}
+        validationRequest = nock('http://cat.meow')
+          .matchHeader('Content-Type', 'application/json')
+          .matchHeader('API_KEY', 'superSecret')
+          .post('/return/validate',{type, project_id, data})
+          .reply(200, {valid: true, invalidPaths: []});
+        let gateway = new ReturnGateway(apiKeyGateway);
+
+        response = await gateway.validate(project_id, data);
+      });
+
+      it('fetches validation from the API', () => {
+        expect(validationRequest.isDone()).toBeTruthy();
+      });
+
+      it('returns a list of paths that were invalid', ()=>{
+        expect(response).toEqual({invalidPaths: [], valid: true});
+      });
+    });
+
+    describe('Example 2', () => {
+      let validationRequest, response, apiKeyGateway;
+      let data = {
+        cats: 'meow'
+      };
+      let type = 'hif';
+      let project_id = 1;
+
+      beforeEach(async () => {
+        process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
+        apiKeyGateway = {getApiKey: () => 'megaSecret'}
+        validationRequest = nock('http://cat.meow')
+          .matchHeader('Content-Type', 'application/json')
+          .matchHeader('API_KEY', 'megaSecret')
+          .post('/return/validate',{type, project_id, data})
+          .reply(200, {valid: false, invalidPaths: ['cats']});
+        let gateway = new ReturnGateway(apiKeyGateway);
+
+        response = await gateway.validate(project_id, data);
+      });
+
+      it('fetches validation from the API', () => {
+        expect(validationRequest.isDone()).toBeTruthy();
+      });
+
+      it('returns a list of paths that were invalid', ()=>{
+        expect(response).toEqual({invalidPaths: ['cats'], valid: false});
+      });
+    });
+  });
+
   describe('#FindById', () => {
     describe('Given a Return is found', () => {
       let returnRequest, response;
