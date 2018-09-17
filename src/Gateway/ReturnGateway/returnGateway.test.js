@@ -9,7 +9,7 @@ describe('Return Gateway', () => {
 
   describe('validation', () => {
     describe('Example 1', () => {
-      let validationRequest, response;
+      let validationRequest, response, apiKeyGateway;
       let data = {
         dogs: 'woof'
       };
@@ -18,11 +18,13 @@ describe('Return Gateway', () => {
 
       beforeEach(async () => {
         process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
+        apiKeyGateway = {getApiKey: () => 'superSecret'}
         validationRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
+          .matchHeader('API_KEY', 'superSecret')
           .post('/return/validate',{type, project_id, data})
           .reply(200, {valid: true, invalidPaths: []});
-        let gateway = new ReturnGateway();
+        let gateway = new ReturnGateway(apiKeyGateway);
 
         response = await gateway.validate(project_id, data);
       });
@@ -37,7 +39,7 @@ describe('Return Gateway', () => {
     });
 
     describe('Example 2', () => {
-      let validationRequest, response;
+      let validationRequest, response, apiKeyGateway;
       let data = {
         cats: 'meow'
       };
@@ -46,11 +48,13 @@ describe('Return Gateway', () => {
 
       beforeEach(async () => {
         process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
+        apiKeyGateway = {getApiKey: () => 'megaSecret'}
         validationRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
+          .matchHeader('API_KEY', 'megaSecret')
           .post('/return/validate',{type, project_id, data})
           .reply(200, {valid: false, invalidPaths: ['cats']});
-        let gateway = new ReturnGateway();
+        let gateway = new ReturnGateway(apiKeyGateway);
 
         response = await gateway.validate(project_id, data);
       });

@@ -24,23 +24,25 @@ import ValidateReturn from "./UseCase/ValidateReturn";
 
 import ProjectGateway from "./Gateway/ProjectGateway";
 import ReturnGateway from "./Gateway/ReturnGateway";
+import ApiKeyGateway from "./Gateway/ApiKeyGateway"
 import TokenGateway from "./Gateway/TokenGateway";
 
 import "./App.css";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
-const validateReturnUseCase = new ValidateReturn(new ReturnGateway());
-const createReturnUseCase = new CreateReturn(new ReturnGateway());
+const returnGateway = new ReturnGateway(new ApiKeyGateway())
+const validateReturnUseCase = new ValidateReturn(returnGateway);
+const createReturnUseCase = new CreateReturn(returnGateway);
 const generateDisabledUISchema = new GenerateDisabledUISchema();
 const generateReadOnlySchema = new GenerateReadOnlySchema();
 const generateUISchema = new GenerateUISchema();
-const getBaseReturnUseCase = new GetBaseReturn(new ReturnGateway());
+const getBaseReturnUseCase = new GetBaseReturn(returnGateway);
 const getProjectUseCase = new GetProject(new ProjectGateway());
-const getReturnUseCase = new GetReturn(new ReturnGateway());
+const getReturnUseCase = new GetReturn(returnGateway);
 const canAccessProjectUseCase = new CanAccessProject(new TokenGateway());
 const requestTokenUseCase = new RequestToken(new TokenGateway());
-const submitReturnUseCase = new SubmitReturn(new ReturnGateway());
-const updateReturnUseCase = new UpdateReturn(new ReturnGateway());
+const submitReturnUseCase = new SubmitReturn(returnGateway);
+const updateReturnUseCase = new UpdateReturn(returnGateway);
 
 const renderReturnPage = props => (
   <ReturnPage
