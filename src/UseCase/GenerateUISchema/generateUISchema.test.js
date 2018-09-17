@@ -268,7 +268,7 @@ describe("GenerateUISchema", () => {
 
   describe("Horizontal", () => {
     describe("Given an array with horizontal items", () => {
-      fit("Sets the UI field to horizontal", () => {
+      it("Sets the UI field to horizontal", () => {
         let schema = {
           type: "object",
           properties: {
@@ -288,10 +288,10 @@ describe("GenerateUISchema", () => {
         expect(response).toEqual({
           a: {
             items: { "ui:field": "horizontal" },
-            "ui:options": { 
-              addable: false, 
-              orderable: false, 
-              removable: false 
+            "ui:options": {
+              addable: false,
+              orderable: false,
+              removable: false
             }
           }
         });
@@ -358,6 +358,218 @@ describe("GenerateUISchema", () => {
               expect(response).toEqual({
                 a: { "ui:field": "horizontal", b: { "ui:disabled": true } }
               });
+            });
+          });
+        });
+      });
+    });
+  });
+
+  describe("With Dependencies", () => {
+    describe("With a single dependency", () => {
+      describe("Inside an object", () => {
+        describe("Example one", () => {
+          it("Sets the UI schema for dependencies", () => {
+            let schema = {
+              type: "object",
+              properties: {
+                a: {
+                  type: "object",
+                  properties: {
+                    cats: { readonly: true }
+                  },
+                  dependencies: {
+                    x: {
+                      oneOf: [
+                        {
+                          properties: {
+                            meow: {
+                              type: "object",
+                              horizontal: true,
+                              properties: {}
+                            },
+                            quack: { readonly: true }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            };
+
+            let response = useCase.execute(schema);
+
+            expect(response).toEqual({
+              a: {
+                cats: { "ui:disabled": true },
+                meow: { "ui:field": "horizontal" },
+                quack: { "ui:disabled": true }
+              }
+            });
+          });
+        });
+
+        describe("Example two", () => {
+          it("Sets the UI field to horizontal", () => {
+            let schema = {
+              type: "object",
+              properties: {
+                b: {
+                  type: "object",
+                  properties: {
+                    dogs: { readonly: true }
+                  },
+                  dependencies: {
+                    y: {
+                      oneOf: [
+                        {
+                          properties: {
+                            woof: {
+                              type: "object",
+                              horizontal: true,
+                              properties: {}
+                            },
+                            moo: { readonly: true }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            };
+
+            let response = useCase.execute(schema);
+
+            expect(response).toEqual({
+              b: {
+                dogs: { "ui:disabled": true },
+                woof: { "ui:field": "horizontal" },
+                moo: { "ui:disabled": true }
+              }
+            });
+          });
+        });
+      });
+    });
+
+    describe("With multiple dependencies", () => {
+      describe("Inside an object", () => {
+        describe("Example one", () => {
+          it("Sets the UI schema for dependencies", () => {
+            let schema = {
+              type: "object",
+              properties: {
+                a: {
+                  type: "object",
+                  properties: {},
+                  dependencies: {
+                    z: {
+                      oneOf: [
+                        {
+                          properties: {
+                            meow: {
+                              type: "object",
+                              horizontal: true,
+                              properties: {}
+                            },
+                            quack: {
+                              type: "array",
+                              addable: true,
+                              items: {
+                                type: "object",
+                                properties: {}
+                              }
+                            }
+                          }
+                        },
+                        {
+                          properties: {
+                            chirp: {
+                              type: "array",
+                              addable: true,
+                              items: { type: "object", properties: {} }
+                            },
+                            squeak: { readonly: true }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            };
+
+            let response = useCase.execute(schema);
+
+            expect(response).toEqual({
+              a: {
+                meow: { "ui:field": "horizontal" },
+                quack: {
+                  items: {},
+                  "ui:options": {
+                    addable: true,
+                    orderable: false,
+                    removable: true
+                  }
+                },
+                chirp: {
+                  items: {},
+                  "ui:options": {
+                    addable: true,
+                    orderable: false,
+                    removable: true
+                  }
+                },
+                squeak: { "ui:disabled": true }
+              }
+            });
+          });
+        });
+
+        describe("Example two", () => {
+          it("Sets the UI field to horizontal", () => {
+            let schema = {
+              type: "object",
+              properties: {
+                b: {
+                  type: "object",
+                  properties: {},
+                  dependencies: {
+                    q: {
+                      oneOf: [
+                        {
+                          properties: {
+                            woof: {
+                              type: "object",
+                              horizontal: true,
+                              properties: {}
+                            },
+                            moo: { readonly: true }
+                          }
+                        },
+                        {
+                          properties: {
+                            bark: { type: "string" },
+                            cluck: { readonly: true }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            };
+
+            let response = useCase.execute(schema);
+
+            expect(response).toEqual({
+              b: {
+                woof: { "ui:field": "horizontal" },
+                moo: { "ui:disabled": true },
+                cluck: { "ui:disabled": true }
+              }
             });
           });
         });
