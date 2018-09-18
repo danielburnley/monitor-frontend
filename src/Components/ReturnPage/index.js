@@ -23,14 +23,21 @@ export default class ReturnPage extends React.Component {
   };
 
   onFormSubmit = async formData => {
+    this.setState({valid: true, invalid_paths: []});
+    await this.props.validateReturn.execute(this, this.props.match.params.projectId, formData);
+
     await this.props.updateReturn.execute(this, {
       returnId: this.returnId(),
       data: formData
     });
-    this.props.submitReturn.execute(this, {
-      returnId: this.returnId(),
-      data: formData
-    });
+
+    if (this.state.valid)
+    {
+      this.props.submitReturn.execute(this, {
+        returnId: this.returnId(),
+        data: formData
+      });
+    }
   };
 
   onFormCreate = async formData => {
@@ -47,7 +54,7 @@ export default class ReturnPage extends React.Component {
     });
 
     this.setState({valid: true, invalid_paths: []});
-    this.props.validateReturn.execute(this, this.props.match.params.projectId, formData);
+    await this.props.validateReturn.execute(this, this.props.match.params.projectId, formData);
   };
 
   invalidateFields = async (pathList) => {
