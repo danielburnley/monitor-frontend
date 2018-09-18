@@ -8,19 +8,21 @@ export default class GenerateDisabledUISchema {
 
     Object.entries(data).forEach(([key, value]) => {
       if (value.type === "object") {
-        ret[key] = this.generateUISchema(value.properties);
-        if (value.dependencies) {
-          let dependencySchema = this.generateDependencySchema(value);
-          ret[key] = { ...ret[key], ...dependencySchema };
-        }
+        ret[key] = this.generateSchemaForObject(value)
       } else if (value.type === "array") {
         ret[key] = this.generateSchemaForArray(value);
       } else {
-        ret[key] = { "ui:disabled": true };
+        ret[key] = this.generateSchemaForItem(value);
       }
     });
 
     return ret;
+  }
+
+  generateSchemaForObject(object) {
+    let schema = this.generateUISchema(object.properties)
+    let dependencySchema = this.generateDependencySchema(object)
+    return this.mergeObjects(schema, dependencySchema)
   }
 
   generateSchemaForArray(value) {
@@ -38,12 +40,26 @@ export default class GenerateDisabledUISchema {
   }
 
   generateDependencySchema(value) {
-    let reducer = (acc, dependency) => ({
-      ...acc,
-      ...this.generateUISchema(dependency.properties)
-    });
+    if(!value.dependencies) {
+      return {}
+    }
+
+    let reducer = (acc, dependency) =>
+      this.mergeObjects(acc, this.generateUISchema(dependency.properties));
 
     let schema = Object.values(value.dependencies)[0];
     return schema.oneOf.reduce(reducer, {});
+  }
+
+  generateSchemaForItem(item) {
+    if (item.hidden) {
+      return { "ui:widget": "hidden" };
+    } else {
+      return { "ui:disabled": true };
+    }
+  }
+
+  mergeObjects(one, two) {
+    return { ...one, ...two };
   }
 }

@@ -11,8 +11,11 @@ export default class GenerateUISchema {
         ret[key] = this.generateSchemaForObject(value);
       } else if (value.type === "array") {
         ret[key] = this.generateSchemaForArray(value);
-      } else if (value.readonly) {
-        ret[key] = { "ui:disabled": true };
+      } else {
+        let itemSchema = this.generateSchemaForItem(value);
+        if (itemSchema) {
+          ret[key] = itemSchema;
+        }
       }
     });
     return ret;
@@ -27,7 +30,7 @@ export default class GenerateUISchema {
 
     if (value.dependencies) {
       let dependencySchema = this.generateSchemaForDependencies(value);
-      ret = { ...ret, ...dependencySchema };
+      ret = this.mergeObjects(ret, dependencySchema);
     }
 
     return ret;
@@ -51,16 +54,26 @@ export default class GenerateUISchema {
   }
 
   generateSchemaForDependencies(value) {
-    let reducer = (acc, dependency) => ({
-      ...acc,
-      ...this.generateSchemaForObject(dependency)
-    });
+    let reducer = (acc, dependency) =>
+      this.mergeObjects(acc, this.generateSchemaForObject(dependency));
 
     let dependencies = Object.values(value.dependencies)[0];
     return dependencies.oneOf.reduce(reducer, {});
   }
 
+  generateSchemaForItem(item) {
+    if (item.hidden) {
+      return { "ui:widget": "hidden" };
+    } else if (item.readonly) {
+      return { "ui:disabled": true };
+    }
+  }
+
   isAddableArray(arr) {
     return arr.addable ? true : false;
+  }
+
+  mergeObjects(one, two) {
+    return { ...one, ...two };
   }
 }

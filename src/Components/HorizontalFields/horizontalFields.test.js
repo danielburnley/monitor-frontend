@@ -165,4 +165,85 @@ describe("<HorizontalFields>", () => {
       });
     });
   });
+
+  describe("Given a hidden field", () => {
+    beforeEach(() => {
+      schema = {
+        title: "Cats",
+        properties: {
+          meow: { type: "text", title: "Meow" },
+          woof: { type: "text", title: "Woof", hidden: true }
+        }
+      };
+      formData = { meow: "Cat noise" };
+      onChangeSpy = jest.fn();
+      fields = mount(
+        <HorizontalFields
+          schema={schema}
+          formData={formData}
+          onChange={onChangeSpy}
+        />
+      );
+    });
+
+    it("Does not render the hidden field label", () => {
+      expect(fields.find("[data-test='meow-label']").length).toEqual(1);
+      expect(fields.find("[data-test='woof-label']").length).toEqual(0);
+    });
+
+    it("Does not render the hidden field input", () => {
+      expect(fields.find("[data-test='meow-input']").length).toEqual(1);
+      expect(fields.find("[data-test='woof-input']").length).toEqual(0);
+    });
+  });
+
+  describe("Given required fields", () => {
+    describe("Example one", () => {
+      it("Marks the field as required", () => {
+        schema = {
+          title: "Cats",
+          properties: {
+            meow: { type: "text", title: "Meow" },
+            woof: { type: "text", title: "Woof" }
+          },
+          required: ['meow']
+        };
+        formData = { meow: "Cat noise" };
+        onChangeSpy = jest.fn();
+        fields = mount(
+          <HorizontalFields
+            schema={schema}
+            formData={formData}
+            onChange={onChangeSpy}
+          />
+        );
+
+        expect(fields.find("[data-test='meow-label']").text()).toEqual("Meow *")
+      });
+    });
+    
+    describe("Example two", () => {
+      it("Marks the field as required", () => {
+        schema = {
+          title: "Cats",
+          properties: {
+            cow: { type: "text", title: "Cow" },
+            chicken: { type: "text", title: "Chicken" }
+          },
+          required: ['chicken']
+        };
+        formData = { meow: "Cat noise" };
+        onChangeSpy = jest.fn();
+        fields = mount(
+          <HorizontalFields
+            schema={schema}
+            formData={formData}
+            onChange={onChangeSpy}
+          />
+        );
+
+        expect(fields.find("[data-test='chicken-label']").text()).toEqual("Chicken *")
+      });
+    });
+  });
 });
