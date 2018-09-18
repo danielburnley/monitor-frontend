@@ -96,6 +96,47 @@ describe('GenerateDisabledUISchema', () => {
         },
       });
     });
+
+    it("Generates a ui schema from an object with dependencies", () => {
+      let useCase = new GenerateDisabledUISchema();
+      let schema = {
+        type: "object",
+        properties: {
+          a: {
+            type: "object",
+            properties: {
+              cats: { readonly: true }
+            },
+            dependencies: {
+              x: {
+                oneOf: [
+                  {
+                    properties: {
+                      meow: {
+                        type: "object",
+                        properties: {
+                          cat: { type: "string" }
+                        }
+                      },
+                      quack: { readonly: true }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      };
+
+      let response = useCase.execute(schema);
+      expect(response).toEqual({
+        a: {
+          cats: { "ui:disabled": true },
+          meow: { cat: { "ui:disabled": true } },
+          quack: { "ui:disabled": true }
+        }
+      });
+    });
   });
 
   describe('Example two', () => {
@@ -144,6 +185,47 @@ describe('GenerateDisabledUISchema', () => {
       let response = useCase.execute(schema);
       expect(response).toEqual({
         d: {e: {'ui:disabled': true}},
+      });
+    });
+
+    it("Generates a ui schema from an object with dependencies", () => {
+      let useCase = new GenerateDisabledUISchema();
+      let schema = {
+        type: "object",
+        properties: {
+          b: {
+            type: "object",
+            properties: {
+              dogs: { readonly: true }
+            },
+            dependencies: {
+              y: {
+                oneOf: [
+                  {
+                    properties: {
+                      woof: {
+                        type: "object",
+                        properties: {
+                          moo: { type: "string" }
+                        }
+                      },
+                      cluck: { readonly: true }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      };
+
+      let response = useCase.execute(schema);
+      expect(response).toEqual({
+        b: {
+          dogs: { "ui:disabled": true },
+          woof: { moo: { "ui:disabled": true } },
+          cluck: { "ui:disabled": true }
+        }
       });
     });
   });
