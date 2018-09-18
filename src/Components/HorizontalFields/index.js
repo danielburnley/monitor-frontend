@@ -12,14 +12,35 @@ export default class HorizontalFields extends React.Component {
     this.setState({ [name]: value }, () => this.props.onChange(this.state));
   };
 
+  requiredProperty(key) {
+    if(!this.props.schema.required) {
+      return false
+    }
+    return this.props.schema.required.indexOf(key) >= 0
+  }
+
+  renderLabel(schemaKey, property) {
+    if (this.requiredProperty(schemaKey)) {
+      return (
+        <label htmlFor={schemaKey} data-test={`${schemaKey}-label`}>
+          {property.title} *
+        </label>
+      );
+    }
+    
+    return (
+      <label htmlFor={schemaKey} data-test={`${schemaKey}-label`}>
+        {property.title}
+      </label>
+    );
+  }
+
   renderItems = () =>
     Object.entries(this.props.schema.properties).map(([k, v]) => {
       if (!v.hidden) {
         return (
           <div key={k} data-test="form-field" className="horizontal-item">
-            <label htmlFor={k} data-test={`${k}-label`}>
-              {v.title}
-            </label>
+            {this.renderLabel(k, v)}
             <input
               id={k}
               disabled={v.readonly}

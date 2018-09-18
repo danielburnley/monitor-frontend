@@ -196,4 +196,54 @@ describe("<HorizontalFields>", () => {
       expect(fields.find("[data-test='woof-input']").length).toEqual(0);
     });
   });
+
+  describe("Given required fields", () => {
+    describe("Example one", () => {
+      it("Marks the field as required", () => {
+        schema = {
+          title: "Cats",
+          properties: {
+            meow: { type: "text", title: "Meow" },
+            woof: { type: "text", title: "Woof" }
+          },
+          required: ['meow']
+        };
+        formData = { meow: "Cat noise" };
+        onChangeSpy = jest.fn();
+        fields = mount(
+          <HorizontalFields
+            schema={schema}
+            formData={formData}
+            onChange={onChangeSpy}
+          />
+        );
+
+        expect(fields.find("[data-test='meow-label']").text()).toEqual("Meow *")
+      });
+    });
+    
+    describe("Example two", () => {
+      it("Marks the field as required", () => {
+        schema = {
+          title: "Cats",
+          properties: {
+            cow: { type: "text", title: "Cow" },
+            chicken: { type: "text", title: "Chicken" }
+          },
+          required: ['chicken']
+        };
+        formData = { meow: "Cat noise" };
+        onChangeSpy = jest.fn();
+        fields = mount(
+          <HorizontalFields
+            schema={schema}
+            formData={formData}
+            onChange={onChangeSpy}
+          />
+        );
+
+        expect(fields.find("[data-test='chicken-label']").text()).toEqual("Chicken *")
+      });
+    });
+  });
 });
