@@ -14,24 +14,22 @@ export default class HorizontalFields extends React.Component {
 
   renderItems = () =>
     Object.entries(this.props.schema.properties).map(([k, v]) => {
-      return (
-        <div
-          key={k}
-          data-test="form-field"
-          className="horizontal-item"
-        >
-          <label htmlFor={k} data-test={`${k}-label`}>
-            {v.title}
-          </label>
-          <input
-            id={k}
-            disabled={v.readonly}
-            data-test={`${k}-input`}
-            value={this.state[k]}
-            onChange={e => this.onChange(k, e.target.value)}
-          />
-        </div>
-      );
+      if (!v.hidden) {
+        return (
+          <div key={k} data-test="form-field" className="horizontal-item">
+            <label htmlFor={k} data-test={`${k}-label`}>
+              {v.title}
+            </label>
+            <input
+              id={k}
+              disabled={v.readonly}
+              data-test={`${k}-input`}
+              value={this.state[k]}
+              onChange={e => this.onChange(k, e.target.value)}
+            />
+          </div>
+        );
+      }
     });
 
   render() {

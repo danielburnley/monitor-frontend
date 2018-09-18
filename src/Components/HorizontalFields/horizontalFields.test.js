@@ -165,4 +165,35 @@ describe("<HorizontalFields>", () => {
       });
     });
   });
+
+  describe("Given a hidden field", () => {
+    beforeEach(() => {
+      schema = {
+        title: "Cats",
+        properties: {
+          meow: { type: "text", title: "Meow" },
+          woof: { type: "text", title: "Woof", hidden: true }
+        }
+      };
+      formData = { meow: "Cat noise" };
+      onChangeSpy = jest.fn();
+      fields = mount(
+        <HorizontalFields
+          schema={schema}
+          formData={formData}
+          onChange={onChangeSpy}
+        />
+      );
+    });
+
+    it("Does not render the hidden field label", () => {
+      expect(fields.find("[data-test='meow-label']").length).toEqual(1);
+      expect(fields.find("[data-test='woof-label']").length).toEqual(0);
+    });
+
+    it("Does not render the hidden field input", () => {
+      expect(fields.find("[data-test='meow-input']").length).toEqual(1);
+      expect(fields.find("[data-test='woof-input']").length).toEqual(0);
+    });
+  });
 });
