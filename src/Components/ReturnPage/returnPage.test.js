@@ -19,7 +19,7 @@ async function updateFormField(input, value) {
 
 describe('ReturnPage', () => {
   describe('saving an invalid form', () => {
-    it('showsv a validation error', async () => {
+    it('shows a validation error', async () => {
       let validateReturnSpy = {execute: jest.fn((presenter, formdata) => {presenter.invalidateFields([['cathouse','cathouse']])})};
       let createReturnSpy = {execute: jest.fn()};
       let getReturnSpy = {execute: jest.fn()};

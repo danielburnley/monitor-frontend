@@ -117,6 +117,7 @@ storiesOf('ReturnPage', module)
           generateUISchema={new GenerateUISchema()}
           generateSubmittedSchema={new GenerateReadOnlySchema()}
           history={[]}
+          validateReturn={{execute: (presenter, formData) => {presenter.invalidateFields([['cat','catHouse'],['dog','dogHouse']])}}}
           createReturn={{execute: (presenter, request) => {presenter.creationSuccessful(1);}}}
           submitReturn={{execute: (presenter, request) => {presenter.submissionSuccessful(1);}}}
           updateReturn={{execute: (presenter, request) => {presenter.updateSuccessful(1);}}}
