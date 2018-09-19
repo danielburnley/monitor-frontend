@@ -23,9 +23,10 @@ export default class GenerateUISchema {
 
   generateSchemaForObject(value) {
     let ret = this.generateUISchema(value.properties);
+    let uiField = this.getUIFieldForObject(value);
 
-    if (value.horizontal) {
-      ret["ui:field"] = "horizontal";
+    if (uiField) {
+      ret["ui:field"] = uiField;
     }
 
     if (value.dependencies) {
@@ -75,5 +76,14 @@ export default class GenerateUISchema {
 
   mergeObjects(one, two) {
     return { ...one, ...two };
+  }
+
+  getUIFieldForObject(obj) {
+    if (obj.horizontal) {
+      return "horizontal";
+    }
+    if (obj.variance) {
+      return "variance";
+    }
   }
 }
