@@ -21,16 +21,60 @@ async function updateFormField(input, value) {
   await wait();
 }
 
+class getReturnStub {
+  async execute(presenter, request) {
+    await presenter.presentReturn({
+      status: 'Draft',
+      data: {cathouse: {cathouse: 'cat'}},
+      schema: {
+        type: 'object',
+        properties: {
+          cathouse: {
+            type: 'object',
+            title: 'cathouse',
+            properties: {
+              cathouse: {
+                type: 'string',
+                readonly: true
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+}
+class getBaseReturnStub {
+  async execute(presenter, request) {
+    await presenter.presentReturn({
+      status: 'Draft',
+      data: {},
+      schema: {
+        type: 'object',
+        properties: {
+          cathouse: {
+            type: 'object',
+            title: 'cathouse',
+            properties: {
+              cathouse: {
+                type: 'string',
+                readonly: true
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+}
 describe('ReturnPage', () => {
   describe('valid form ', () => {
-    let validateReturnSpy, createReturnSpy, getReturnSpy, updateReturnSpy, getBaseReturnSpy, submitReturnSpy;
+    let validateReturnSpy, createReturnSpy, updateReturnSpy, submitReturnSpy;
     beforeEach(() => {
       validateReturnSpy = {execute: jest.fn()};
       submitReturnSpy = {execute: jest.fn(() => {execute: (presenter, request) => {presenter.submissionSuccessful(1);}})};
       createReturnSpy = {execute: jest.fn(() => {execute: (presenter, request) => {presenter.creationSuccessful(1);}})};
-      getReturnSpy = {execute: jest.fn(() => {execute: (presenter, request) => {presenter.updateSuccessful(1);}})};
-      updateReturnSpy = {execute: jest.fn()};
-      getBaseReturnSpy = {execute: jest.fn()};
+      updateReturnSpy = {execute: jest.fn(() => {execute: (presenter, request) => {presenter.updateSuccessful(1);}})};
     });
 
     describe('saving', () => {
@@ -45,45 +89,8 @@ describe('ReturnPage', () => {
                 createReturn={createReturnSpy}
                 submitReturn={submitReturnSpy}
                 updateReturn={updateReturnSpy}
-                getReturn={{execute: (presenter, request) => {presenter.presentReturn({ //This needs to be a fake so it can cope with state change
-                  status: 'Draft',
-                  data: {cathouse: {cathouse: 'cat'}},
-                  schema: {
-                    type: 'object',
-                    properties: {
-                      cathouse: {
-                        type: 'object',
-                        title: 'cathouse',
-                        properties: {
-                          cathouse: {
-                            type: 'string',
-                            readonly: true
-                          }
-                        }
-                      }
-                    }
-                  }
-                });
-              }}}
-                getBaseReturn={{execute: (presenter, request) => {presenter.presentReturn({
-                  status: 'Draft',
-                  data: {},
-                  schema: {
-                    type: 'object',
-                    properties: {
-                      cathouse: {
-                        type: 'object',
-                        title: 'cathouse',
-                        properties: {
-                          cathouse: {
-                            type: 'string',
-                            readonly: true
-                          }
-                        }
-                      }
-                    }
-                  }
-                });}}}
+                getReturn={new getReturnStub()}
+                getBaseReturn={new getBaseReturnStub()}
               />);
 
         let input = wrap.find("[type='text'] input").first();
@@ -107,45 +114,8 @@ describe('ReturnPage', () => {
                 createReturn={createReturnSpy}
                 submitReturn={submitReturnSpy}
                 updateReturn={updateReturnSpy}
-                getReturn={{execute: (presenter, request) => {presenter.presentReturn({ //This needs to be a fake so it can cope with state change
-                  status: 'Draft',
-                  data: {cathouse: {cathouse: 'cat'}},
-                  schema: {
-                    type: 'object',
-                    properties: {
-                      cathouse: {
-                        type: 'object',
-                        title: 'cathouse',
-                        properties: {
-                          cathouse: {
-                            type: 'string',
-                            readonly: true
-                          }
-                        }
-                      }
-                    }
-                  }
-                });
-              }}}
-                getBaseReturn={{execute: (presenter, request) => {presenter.presentReturn({
-                  status: 'Draft',
-                  data: {},
-                  schema: {
-                    type: 'object',
-                    properties: {
-                      cathouse: {
-                        type: 'object',
-                        title: 'cathouse',
-                        properties: {
-                          cathouse: {
-                            type: 'string',
-                            readonly: true
-                          }
-                        }
-                      }
-                    }
-                  }
-                });}}}
+                getReturn={new getReturnStub()}
+                getBaseReturn={new getBaseReturnStub()}
               />);
 
         let input = wrap.find("[type='text'] input").first();
@@ -161,14 +131,12 @@ describe('ReturnPage', () => {
   });
 
   describe('invalid form', () => {
-    let validateReturnSpy, createReturnSpy, getReturnSpy, updateReturnSpy, getBaseReturnSpy, submitReturnSpy;
+    let validateReturnSpy, createReturnSpy, updateReturnSpy, submitReturnSpy;
     beforeEach(() => {
-      validateReturnSpy = {execute: jest.fn(async (presenter, formdata) => { await presenter.invalidateFields([['cathouse','cat']])})};
+      validateReturnSpy = {execute: jest.fn((presenter, formdata) => { presenter.invalidateFields([['cathouse','cat']])})};
       submitReturnSpy = {execute: jest.fn()};
       createReturnSpy = {execute: jest.fn((presenter, request) => {presenter.creationSuccessful(1);})};
-      getReturnSpy = {execute: jest.fn()};
       updateReturnSpy = {execute: jest.fn((presenter, request) => {presenter.updateSuccessful(1);})};
-      getBaseReturnSpy = {execute: jest.fn()};
     });
 
     describe('submitting', () => {
@@ -183,45 +151,8 @@ describe('ReturnPage', () => {
                 createReturn={createReturnSpy}
                 submitReturn={submitReturnSpy}
                 updateReturn={updateReturnSpy}
-                getReturn={{execute: (presenter, request) => {presenter.presentReturn({ //This needs to be a fake so it can cope with state change
-                  status: 'Draft',
-                  data: {cathouse: {cathouse: 'cat'}},
-                  schema: {
-                    type: 'object',
-                    properties: {
-                      cathouse: {
-                        type: 'object',
-                        title: 'cathouse',
-                        properties: {
-                          cathouse: {
-                            type: 'string',
-                            readonly: true
-                          }
-                        }
-                      }
-                    }
-                  }
-                });
-              }}}
-                getBaseReturn={{execute: (presenter, request) => {presenter.presentReturn({
-                  status: 'Draft',
-                  data: {},
-                  schema: {
-                    type: 'object',
-                    properties: {
-                      cathouse: {
-                        type: 'object',
-                        title: 'cathouse',
-                        properties: {
-                          cathouse: {
-                            type: 'string',
-                            readonly: true
-                          }
-                        }
-                      }
-                    }
-                  }
-                });}}}
+                getReturn={new getReturnStub()}
+                getBaseReturn={new getBaseReturnStub()}
               />);
 
         let input = wrap.find("[type='text'] input").first();
@@ -246,45 +177,8 @@ describe('ReturnPage', () => {
                 createReturn={createReturnSpy}
                 submitReturn={submitReturnSpy}
                 updateReturn={updateReturnSpy}
-                getReturn={{execute: (presenter, request) => {presenter.presentReturn({ //This needs to be a fake so it can cope with state change
-                  status: 'Draft',
-                  data: {cathouse: {cathouse: 'cat'}},
-                  schema: {
-                    type: 'object',
-                    properties: {
-                      cathouse: {
-                        type: 'object',
-                        title: 'cathouse',
-                        properties: {
-                          cathouse: {
-                            type: 'string',
-                            readonly: true
-                          }
-                        }
-                      }
-                    }
-                  }
-                });
-              }}}
-                getBaseReturn={{execute: (presenter, request) => {presenter.presentReturn({
-                  status: 'Draft',
-                  data: {},
-                  schema: {
-                    type: 'object',
-                    properties: {
-                      cathouse: {
-                        type: 'object',
-                        title: 'cathouse',
-                        properties: {
-                          cathouse: {
-                            type: 'string',
-                            readonly: true
-                          }
-                        }
-                      }
-                    }
-                  }
-                });}}}
+                getReturn={new getReturnStub()}
+                getBaseReturn={new getBaseReturnStub()}
               />);
 
         let input = wrap.find("[type='text'] input").first();
