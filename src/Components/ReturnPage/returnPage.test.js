@@ -98,7 +98,7 @@ describe('ReturnPage', () => {
         await saveReturn(wrap);
         await wait();
         expect(validateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), projectId, {cathouse: {cathouse: "Meow"}});
-        expect(wrap.find(".alert-danger").length).toEqual(0);
+        expect(wrap.find("[data-test='validationError']").length).toEqual(0);
       });
     });
 
@@ -124,7 +124,7 @@ describe('ReturnPage', () => {
         await wait();
         expect(validateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), projectId, {cathouse: {cathouse: 'cat'}});
         expect(submitReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), { returnId: 1, data: { cathouse: { cathouse: 'cat' } } });
-        expect(wrap.find(".alert-danger").length).toEqual(0);
+        expect(wrap.find("[data-test='validationError']").length).toEqual(0);
       });
     });
 
@@ -161,7 +161,7 @@ describe('ReturnPage', () => {
         await wait();
         expect(validateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), projectId, {cathouse: {}});
         expect(submitReturnSpy.execute).not.toHaveBeenCalled();
-        expect(wrap.find(".alert-danger").length).toEqual(1);
+        expect(wrap.find("[data-test='validationError']").length).toEqual(1);
       });
     });
 
@@ -186,7 +186,7 @@ describe('ReturnPage', () => {
         await saveReturn(wrap);
         await wait();
         expect(validateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), projectId, {cathouse: {}});
-        expect(wrap.find(".alert-danger").length).toEqual(1);
+        expect(wrap.find("[data-test='validationError']").length).toEqual(1);
       });
     });
   });

@@ -141,7 +141,7 @@ export default class ReturnPage extends React.Component {
         </div>
         <div className="row">
           { !this.state.valid ?
-            <div className="alert alert-danger" role="alert">
+            <div className="alert alert-danger" role="alert" data-test="validationError">
               This return is missing a required field
             </div> : <div/>
           }
