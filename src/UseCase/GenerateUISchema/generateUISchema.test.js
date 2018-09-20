@@ -266,6 +266,48 @@ describe("GenerateUISchema", () => {
     });
   });
 
+  describe("Variance", () => {
+    describe("Given an object which is marked as a variance field", () => {
+      describe("Example one", () => {
+        it("Sets the UI field to variance", () => {
+          let schema = {
+            type: "object",
+            properties: {
+              a: {
+                type: "object",
+                variance: true,
+                properties: {}
+              }
+            }
+          };
+
+          let response = useCase.execute(schema);
+
+          expect(response).toEqual({ a: { "ui:field": "variance" } });
+        });
+      });
+
+      describe("Example two", () => {
+        it("Sets the UI field to variance", () => {
+          let schema = {
+            type: "object",
+            properties: {
+              b: {
+                type: "object",
+                variance: true,
+                properties: {}
+              }
+            }
+          };
+
+          let response = useCase.execute(schema);
+
+          expect(response).toEqual({ b: { "ui:field": "variance" } });
+        });
+      });
+    });
+  });
+
   describe("Horizontal", () => {
     describe("Given an array with horizontal items", () => {
       it("Sets the UI field to horizontal", () => {
