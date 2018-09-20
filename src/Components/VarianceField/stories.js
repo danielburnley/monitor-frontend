@@ -37,4 +37,22 @@ storiesOf("Variance", module)
       onChange={formData => console.log(formData)}
       schema={{ title: "Storybook variance" }}
     />
+  ))
+  .add("Completed", () => (
+    <VarianceField
+      formData={{ baseline: "2020-01-01", status: "Completed" }}
+      onChange={formData => console.log(formData)}
+      schema={{ title: "Storybook variance" }}
+    />
+  ))
+  .add("Completed with data", () => (
+    <VarianceField
+      formData={{
+        baseline: "2020-01-01",
+        status: "Completed",
+        completedDate: "2025-01-01"
+      }}
+      onChange={formData => console.log(formData)}
+      schema={{ title: "Storybook variance" }}
+    />
   ));

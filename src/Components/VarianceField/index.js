@@ -14,8 +14,15 @@ export default class VarianceField extends React.Component {
       percentComplete: formData.percentComplete || 0,
       status: formData.status || "On schedule",
       current: formData.current || "",
-      reason: formData.reason || ""
+      reason: formData.reason || "",
+      completedDate: formData.completedDate || ""
     };
+  };
+
+  onFieldChange = (name, e) => {
+    this.setState({ [name]: e.target.value }, () => {
+      this.props.onChange(this.state);
+    });
   };
 
   renderCurrentValue = () => (
@@ -56,11 +63,23 @@ export default class VarianceField extends React.Component {
     </div>
   );
 
-  onFieldChange = (name, e) => {
-    this.setState({ [name]: e.target.value }, () => {
-      this.props.onChange(this.state);
-    });
-  };
+  renderCompletedDate = () => (
+    <div className="row">
+      <div className="col-md-3 form-group">
+        <label htmlFor="completed">Completed Date</label>
+        <input
+          className="form-control"
+          data-test="variance-completed"
+          id="completed"
+          onChange={e => this.onFieldChange("completedDate", e)}
+          type="text"
+          value={this.state.completedDate}
+        />
+      </div>
+    </div>
+  );
+
+  renderCompleted = () => <div>{this.renderCompletedDate()}</div>;
 
   renderTitle = () => (
     <div className="panel-heading" data-test="field-title">
@@ -89,6 +108,7 @@ export default class VarianceField extends React.Component {
       >
         <option>On schedule</option>
         <option>Delayed</option>
+        <option>Completed</option>
       </select>
     </div>
   );
@@ -115,6 +135,7 @@ export default class VarianceField extends React.Component {
         {this.renderPercentComplete()}
       </div>
       {this.state.status == "Delayed" && this.renderDelayed()}
+      {this.state.status == "Completed" && this.renderCompleted()}
     </div>
   );
 
@@ -132,9 +153,10 @@ VarianceField.propTypes = {
   formData: PropTypes.shape({
     baseline: PropTypes.string.isRequired,
     percentComplete: PropTypes.number,
-    status: PropTypes.oneOf(["Delayed", "On schedule"]),
+    status: PropTypes.oneOf(["Delayed", "On schedule", "Completed"]),
     current: PropTypes.string,
-    reason: PropTypes.string
+    reason: PropTypes.string,
+    completedDate: PropTypes.string
   }).isRequired,
   onChange: PropTypes.func.isRequired,
   schema: PropTypes.object.isRequired
