@@ -23,7 +23,7 @@ export default class ReturnPage extends React.Component {
   };
 
   onFormSubmit = async formData => {
-    this.setState({status: "Updating", valid: true, invalid_paths: []});
+    this.setState({lastAction: 'Submit', status: "Updating", valid: true, invalid_paths: []});
 
     await this.props.validateReturn.execute(this, this.props.match.params.projectId, formData);
 
@@ -50,7 +50,7 @@ export default class ReturnPage extends React.Component {
   };
 
   onFormSave = async formData => {
-    this.setState({status: "Updating", valid: true, invalid_paths: []});
+    this.setState({lastAction: 'Save', status: "Updating", valid: true, invalid_paths: []});
     this.props.updateReturn.execute(this, {
       returnId: this.returnId(),
       data: formData
@@ -143,6 +143,28 @@ export default class ReturnPage extends React.Component {
     })
   };
 
+  renderValidation = () => {
+    if (this.state.valid) {
+      return;
+    }
+
+    if (this.state.lastAction==="Submit") {
+      return (
+        <div className="alert alert-danger" role="alert" data-test="validationError">
+          Error: This return could not be submitted because the following fields were missing: <br/>
+          {this.renderInvalidPaths()}
+        </div>
+      );
+    }
+
+    return (
+      <div className="alert alert-warning" role="alert" data-test="validationWarning">
+        Warning: You will not be able to submit this return until the following fields are filled in: <br/>
+        {this.renderInvalidPaths()}
+      </div>
+    );
+  }
+
   render() {
     return (
       <div className="">
@@ -156,13 +178,8 @@ export default class ReturnPage extends React.Component {
             </button>
           </div>
         </div>
-        <div className="row"> {
-          !this.state.valid ?
-            <div className="alert alert-danger" role="alert" data-test="validationError">
-              This return cannot be submitted until the following fields are filled: <br/>
-              {this.renderInvalidPaths()}
-            </div> : <div/>
-          }
+        <div className="row">
+          {this.renderValidation()}
           <div data-test="return" className="return col-md-12">
             {this.renderForm()}
           </div>

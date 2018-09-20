@@ -107,7 +107,7 @@ describe('ReturnPage', () => {
         expect(wrap.find("[data-test='disabled-submit-return-button']").length).toEqual(1);
       });
 
-      it('doesnt show a validation error', async () => {
+      it('doesnt show a validation warning', async () => {
         let projectId = 1;
         let wrap = mount(<ReturnPage
                 validateReturn={validateReturnSpy}
@@ -127,7 +127,7 @@ describe('ReturnPage', () => {
         await saveReturn(wrap);
         await wait();
         expect(validateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), projectId, {cathouse: {cathouse: "Meow"}});
-        expect(wrap.find("[data-test='validationError']").length).toEqual(0);
+        expect(wrap.find("[data-test='validationWarning']").length).toEqual(0);
       });
     });
 
@@ -220,11 +220,12 @@ describe('ReturnPage', () => {
         expect(validateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), projectId, {cathouse: {}});
         expect(submitReturnSpy.execute).not.toHaveBeenCalled();
         expect(wrap.find("[data-test='validationError']").length).toEqual(1);
+        expect(wrap.find("[data-test='validationError']").text()).toEqual("Error: This return could not be submitted because the following fields were missing:  Cat House →  Cat House");
       });
     });
 
     describe('saving', () => {
-      it('shows a validation error', async () => {
+      it('shows a validation warning', async () => {
         let projectId = 1;
         let wrap = mount(<ReturnPage
                 validateReturn={validateReturnSpy}
@@ -244,8 +245,8 @@ describe('ReturnPage', () => {
         await saveReturn(wrap);
         await wait();
         expect(validateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), projectId, {cathouse: {}});
-        expect(wrap.find("[data-test='validationError']").length).toEqual(1);
-        expect(wrap.find("[data-test='validationError']").text()).toEqual("This return cannot be submitted until the following fields are filled:  Cat House →  Cat House");
+        expect(wrap.find("[data-test='validationWarning']").length).toEqual(1);
+        expect(wrap.find("[data-test='validationWarning']").text()).toEqual("Warning: You will not be able to submit this return until the following fields are filled in:  Cat House →  Cat House");
       });
     });
   });
