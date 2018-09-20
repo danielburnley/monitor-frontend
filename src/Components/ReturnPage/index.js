@@ -23,7 +23,8 @@ export default class ReturnPage extends React.Component {
   };
 
   onFormSubmit = async formData => {
-    this.setState({valid: true, invalid_paths: []});
+    this.setState({status: "Updating", valid: true, invalid_paths: []});
+
     await this.props.validateReturn.execute(this, this.props.match.params.projectId, formData);
 
     await this.props.updateReturn.execute(this, {
@@ -33,11 +34,12 @@ export default class ReturnPage extends React.Component {
 
     if (this.state.valid)
     {
-      this.props.submitReturn.execute(this, {
+      await this.props.submitReturn.execute(this, {
         returnId: this.returnId(),
         data: formData
       });
     }
+    this.setState({status: "Editing"});
   };
 
   onFormCreate = async formData => {
@@ -48,13 +50,14 @@ export default class ReturnPage extends React.Component {
   };
 
   onFormSave = async formData => {
+    this.setState({status: "Updating", valid: true, invalid_paths: []});
     this.props.updateReturn.execute(this, {
       returnId: this.returnId(),
       data: formData
     });
 
-    this.setState({valid: true, invalid_paths: []});
     await this.props.validateReturn.execute(this, this.props.match.params.projectId, formData);
+    this.setState({status: "Editing"});
   };
 
   invalidateFields = async (pathList) => {
@@ -85,6 +88,7 @@ export default class ReturnPage extends React.Component {
   };
 
   updateSuccessful = async () => {};
+  updateUnsuccessful = async () => {};
 
   fetchData = async () => {
     if (this.returnId()) {

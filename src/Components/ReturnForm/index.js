@@ -10,7 +10,7 @@ export default class ReturnForm extends React.Component {
   }
 
   renderActions = () => {
-    if (this.props.status === 'Submitted') {
+    if (this.props.status === 'Submitted' || this.props.status == 'Updating') {
       return <div />;
     }
 

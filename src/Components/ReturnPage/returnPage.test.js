@@ -78,6 +78,32 @@ describe('ReturnPage', () => {
     });
 
     describe('saving', () => {
+      it('it disables the save button until it finishes saving', async () => {
+        let unresolvingUpdateReturnStub = {execute: jest.fn(() => {execute: async (presenter, request) => {await new Promise(resolve => setTimeout(resolve, 14159265358));}})};
+
+        let projectId = 1;
+        let wrap = mount(<ReturnPage
+                validateReturn={validateReturnSpy}
+                match={{ params: { projectId: 1, returnId: 1 } }}
+                generateUISchema={new GenerateUISchema()}
+                generateSubmittedSchema={new GenerateReadOnlySchema()}
+                history={[]}
+                createReturn={createReturnSpy}
+                submitReturn={submitReturnSpy}
+                updateReturn={unresolvingUpdateReturnStub}
+                getReturn={new getReturnStub()}
+                getBaseReturn={new getBaseReturnStub()}
+              />);
+
+        let input = wrap.find("[type='text'] input").first();
+        await updateFormField(input, "Meow");
+        await saveReturn(wrap);
+        await wait();
+        
+        expect(wrap.find("[data-test='save-return-button']").length).toEqual(0);
+        expect(wrap.find("[data-test='submit-return-button']").length).toEqual(0);
+      });
+
       it('doesnt show a validation error', async () => {
         let projectId = 1;
         let wrap = mount(<ReturnPage
@@ -103,6 +129,31 @@ describe('ReturnPage', () => {
     });
 
     describe('submitting', () => {
+      it('it disables the save button until it finishes saving', async () => {
+        let unresolvingUpdateReturnStub = {execute: jest.fn(() => {execute: async (presenter, request) => {await new Promise(resolve => setTimeout(resolve, 14159265358));}})};
+
+        let projectId = 1;
+        let wrap = mount(<ReturnPage
+                validateReturn={validateReturnSpy}
+                match={{ params: { projectId: 1, returnId: 1 } }}
+                generateUISchema={new GenerateUISchema()}
+                generateSubmittedSchema={new GenerateReadOnlySchema()}
+                history={[]}
+                createReturn={createReturnSpy}
+                submitReturn={submitReturnSpy}
+                updateReturn={unresolvingUpdateReturnStub}
+                getReturn={new getReturnStub()}
+                getBaseReturn={new getBaseReturnStub()}
+              />);
+
+        let input = wrap.find("[type='text'] input").first();
+        await updateFormField(input, "Meow");
+        await submitReturn(wrap);
+        await wait();
+        expect(wrap.find("[data-test='save-return-button']").length).toEqual(0);
+        expect(wrap.find("[data-test='submit-return-button']").length).toEqual(0);
+      });
+
       it('permits submission', async () => {
         let projectId = 1;
         let wrap = mount(<ReturnPage
