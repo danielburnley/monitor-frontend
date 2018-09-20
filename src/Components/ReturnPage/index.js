@@ -1,10 +1,11 @@
 import React from "react";
 import ReturnForm from "../ReturnForm";
+import ValidationMessage from "../ValidationMessage";
 
 export default class ReturnPage extends React.Component {
   constructor() {
     super();
-    this.state = { loading: true, valid: true, invalid_paths: [] };
+    this.state = { loading: true, valid: true, invalidPaths: [], lastAction: "None" };
   }
 
   projectId = () => {
@@ -23,7 +24,7 @@ export default class ReturnPage extends React.Component {
   };
 
   onFormSubmit = async formData => {
-    this.setState({lastAction: 'Submit', status: "Updating", valid: true, invalid_paths: []});
+    this.setState({lastAction: 'Submit', status: "Updating", valid: true, invalidPaths: []});
 
     await this.props.validateReturn.execute(this, this.props.match.params.projectId, formData);
 
@@ -50,7 +51,7 @@ export default class ReturnPage extends React.Component {
   };
 
   onFormSave = async formData => {
-    this.setState({lastAction: 'Save', status: "Updating", valid: true, invalid_paths: []});
+    this.setState({lastAction: 'Save', status: "Updating", valid: true, invalidPaths: []});
     this.props.updateReturn.execute(this, {
       returnId: this.returnId(),
       data: formData
@@ -61,7 +62,7 @@ export default class ReturnPage extends React.Component {
   };
 
   invalidateFields = async (pathList) => {
-    this.setState({valid: false, invalid_paths: pathList});
+    this.setState({valid: false, invalidPaths: pathList});
   };
 
   presentReturnNotFound = async () => {};
@@ -130,49 +131,6 @@ export default class ReturnPage extends React.Component {
     e.preventDefault();
   };
 
-  decamelize = (string) => {
-    let all_camelcase_word_boundaries = /(^.|[A-Z])/g;
-    return string.replace(all_camelcase_word_boundaries, (character) => " "+character.toUpperCase()).substring(1);
-  }
-
-  formatPathNode = (node) => {
-    if (typeof node == 'string') {
-      return this.decamelize(node)
-    }
-    if (typeof node == 'number') {
-      return "Item " + (node + 1);
-    }
-  };
-
-  renderInvalidPaths = () => {
-    return this.state.invalid_paths.map(path => {
-      return (<span key={path}>
-        {path.map(this.formatPathNode).join(' → ')}<br/>
-      </span>)
-    })
-  };
-
-  renderValidation = () => {
-    if (this.state.valid) {
-      return;
-    }
-
-    if (this.state.lastAction==="Submit") {
-      return (
-        <div className="alert alert-danger" role="alert" data-test="validationError">
-          <strong>Error:</strong> This return could not be submitted because the following fields were missing: <br/>
-          {this.renderInvalidPaths()}
-        </div>
-      );
-    }
-
-    return (
-      <div className="alert alert-warning" role="alert" data-test="validationWarning">
-        <strong>Warning:</strong> You will not be able to submit this return until the following fields are filled in: <br/>
-        {this.renderInvalidPaths()}
-      </div>
-    );
-  }
 
   render() {
     return (
@@ -188,7 +146,7 @@ export default class ReturnPage extends React.Component {
           </div>
         </div>
         <div className="row">
-          {this.renderValidation()}
+          <ValidationMessage valid={this.state.valid} invalidPaths={this.state.invalidPaths} type={this.state.lastAction}/>
           <div data-test="return" className="return col-md-12">
             {this.renderForm()}
           </div>
