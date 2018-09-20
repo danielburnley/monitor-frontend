@@ -153,7 +153,7 @@ describe('ReturnPage', () => {
         await updateFormField(input, "Meow");
         await submitReturn(wrap);
         await wait();
-        
+
         expect(wrap.find("[data-test='save-return-button']").length).toEqual(0);
         expect(wrap.find("[data-test='submit-return-button']").length).toEqual(0);
 
@@ -191,7 +191,7 @@ describe('ReturnPage', () => {
   describe('invalid form', () => {
     let validateReturnSpy, createReturnSpy, updateReturnSpy, submitReturnSpy;
     beforeEach(() => {
-      validateReturnSpy = {execute: jest.fn((presenter, formdata) => { presenter.invalidateFields([['cathouse','cat']])})};
+      validateReturnSpy = {execute: jest.fn((presenter, formdata) => { presenter.invalidateFields([['catHouse','catHouse']])})};
       submitReturnSpy = {execute: jest.fn()};
       createReturnSpy = {execute: jest.fn((presenter, request) => {presenter.creationSuccessful(1);})};
       updateReturnSpy = {execute: jest.fn((presenter, request) => {presenter.updateSuccessful(1);})};
@@ -245,6 +245,7 @@ describe('ReturnPage', () => {
         await wait();
         expect(validateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), projectId, {cathouse: {}});
         expect(wrap.find("[data-test='validationError']").length).toEqual(1);
+        expect(wrap.find("[data-test='validationError']").text()).toEqual("This return cannot be submitted until the following fields are filled:  Cat House →  Cat House");
       });
     });
   });

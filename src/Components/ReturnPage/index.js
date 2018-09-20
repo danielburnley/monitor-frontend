@@ -130,6 +130,19 @@ export default class ReturnPage extends React.Component {
     e.preventDefault();
   };
 
+  decamelize = (string) => {
+    let all_camelcase_word_boundaries = /(^.|[A-Z])/g;
+    return string.replace(all_camelcase_word_boundaries, (character) => " "+character.toUpperCase());
+  }
+
+  renderInvalidPaths = () => {
+    return this.state.invalid_paths.map(path => {
+      return (<span key={path}>
+        {path.map(this.decamelize).join(' → ')}<br/>
+      </span>)
+    })
+  };
+
   render() {
     return (
       <div className="">
@@ -143,10 +156,11 @@ export default class ReturnPage extends React.Component {
             </button>
           </div>
         </div>
-        <div className="row">
-          { !this.state.valid ?
+        <div className="row"> {
+          !this.state.valid ?
             <div className="alert alert-danger" role="alert" data-test="validationError">
-              This return is missing a required field
+              This return cannot be submitted until the following fields are filled: <br/>
+              {this.renderInvalidPaths()}
             </div> : <div/>
           }
           <div data-test="return" className="return col-md-12">
