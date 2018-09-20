@@ -4,6 +4,10 @@ import React from "react";
 import ReturnPage from ".";
 import { shallow, mount } from "enzyme";
 
+function submitReturn(form) {
+  form.find('[data-test="submit-return-button"]').simulate("click");
+}
+
 function saveReturn(form) {
   form.find('[data-test="save-return-button"]').simulate("click");
 }
@@ -17,138 +21,231 @@ async function updateFormField(input, value) {
   await wait();
 }
 
+class getReturnStub {
+  async execute(presenter, request) {
+    await presenter.presentReturn({
+      status: 'Draft',
+      data: {cathouse: {cathouse: 'cat'}},
+      schema: {
+        type: 'object',
+        properties: {
+          cathouse: {
+            type: 'object',
+            title: 'cathouse',
+            properties: {
+              cathouse: {
+                type: 'string',
+                readonly: true
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+}
+class getBaseReturnStub {
+  async execute(presenter, request) {
+    await presenter.presentReturn({
+      status: 'Draft',
+      data: {},
+      schema: {
+        type: 'object',
+        properties: {
+          cathouse: {
+            type: 'object',
+            title: 'cathouse',
+            properties: {
+              cathouse: {
+                type: 'string',
+                readonly: true
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+}
 describe('ReturnPage', () => {
-  describe('saving an invalid form', () => {
-    it('showsv a validation error', async () => {
-      let validateReturnSpy = {execute: jest.fn((presenter, formdata) => {presenter.invalidateFields([['cathouse','cathouse']])})};
-      let createReturnSpy = {execute: jest.fn()};
-      let getReturnSpy = {execute: jest.fn()};
-      let updateReturnSpy = {execute: jest.fn()};
-      let getBaseReturnSpy = {execute: jest.fn()};
-
-      let projectId = 1;
-      let wrap = mount(<ReturnPage
-              validateReturn={validateReturnSpy}
-              match={{ params: { projectId: 1, returnId: 1 } }}
-              generateUISchema={new GenerateUISchema()}
-              generateSubmittedSchema={new GenerateReadOnlySchema()}
-              history={[]}
-              createReturn={{execute: (presenter, request) => {presenter.creationSuccessful(1);}}}
-              submitReturn={{execute: (presenter, request) => {presenter.submissionSuccessful(1);}}}
-              updateReturn={{execute: (presenter, request) => {presenter.updateSuccessful(1);}}}
-              getReturn={{execute: (presenter, request) => {presenter.presentReturn({ //This needs to be a fake so it can cope with state change
-                status: 'Draft',
-                data: {cathouse: {cathouse: 'cat'}},
-                schema: {
-                  type: 'object',
-                  properties: {
-                    cathouse: {
-                      type: 'object',
-                      title: 'cathouse',
-                      properties: {
-                        cathouse: {
-                          type: 'string',
-                          readonly: true
-                        }
-                      }
-                    }
-                  }
-                }
-              });
-            }}}
-              getBaseReturn={{execute: (presenter, request) => {presenter.presentReturn({
-                status: 'Draft',
-                data: {},
-                schema: {
-                  type: 'object',
-                  properties: {
-                    cathouse: {
-                      type: 'object',
-                      title: 'cathouse',
-                      properties: {
-                        cathouse: {
-                          type: 'string',
-                          readonly: true
-                        }
-                      }
-                    }
-                  }
-                }
-              });}}}
-            />);
-
-      let input = wrap.find("[type='text'] input").first();
-      await updateFormField(input, "");
-      await saveReturn(wrap);
-      await wait();
-      expect(validateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), projectId, {cathouse: {}});
-      expect(wrap.find(".alert-danger").length).toEqual(1);
+  describe('valid form ', () => {
+    let validateReturnSpy, createReturnSpy, updateReturnSpy, submitReturnSpy;
+    beforeEach(() => {
+      validateReturnSpy = {execute: jest.fn()};
+      submitReturnSpy = {execute: jest.fn(() => {execute: (presenter, request) => {presenter.submissionSuccessful(1);}})};
+      createReturnSpy = {execute: jest.fn(() => {execute: (presenter, request) => {presenter.creationSuccessful(1);}})};
+      updateReturnSpy = {execute: jest.fn(() => {execute: (presenter, request) => {presenter.updateSuccessful(1);}})};
     });
 
-    it('shows a validation error', async () => {
-      let validateReturnSpy = {execute: jest.fn((presenter, formdata) => {})};
-      let createReturnSpy = {execute: jest.fn()};
-      let getReturnSpy = {execute: jest.fn()};
-      let updateReturnSpy = {execute: jest.fn()};
-      let getBaseReturnSpy = {execute: jest.fn()};
+    describe('saving', () => {
+      it('it disables the save button until it finishes saving', async () => {
+        let unresolvingUpdateReturnStub = {execute: jest.fn(() => {execute: async (presenter, request) => {await new Promise(resolve => setTimeout(resolve, 14159265358));}})};
 
-      let projectId = 1;
-      let wrap = mount(<ReturnPage
-              validateReturn={validateReturnSpy}
-              match={{ params: { projectId: 1, returnId: 1 } }}
-              generateUISchema={new GenerateUISchema()}
-              generateSubmittedSchema={new GenerateReadOnlySchema()}
-              history={[]}
-              createReturn={{execute: (presenter, request) => {presenter.creationSuccessful(1);}}}
-              submitReturn={{execute: (presenter, request) => {presenter.submissionSuccessful(1);}}}
-              updateReturn={{execute: (presenter, request) => {presenter.updateSuccessful(1);}}}
-              getReturn={{execute: (presenter, request) => {presenter.presentReturn({ //This needs to be a fake so it can cope with state change
-                status: 'Draft',
-                data: {cathouse: {cathouse: 'cat'}},
-                schema: {
-                  type: 'object',
-                  properties: {
-                    cathouse: {
-                      type: 'object',
-                      title: 'cathouse',
-                      properties: {
-                        cathouse: {
-                          type: 'string',
-                          readonly: true
-                        }
-                      }
-                    }
-                  }
-                }
-              });
-            }}}
-              getBaseReturn={{execute: (presenter, request) => {presenter.presentReturn({
-                status: 'Draft',
-                data: {},
-                schema: {
-                  type: 'object',
-                  properties: {
-                    cathouse: {
-                      type: 'object',
-                      title: 'cathouse',
-                      properties: {
-                        cathouse: {
-                          type: 'string',
-                          readonly: true
-                        }
-                      }
-                    }
-                  }
-                }
-              });}}}
-            />);
+        let projectId = 1;
+        let wrap = mount(<ReturnPage
+                validateReturn={validateReturnSpy}
+                match={{ params: { projectId: 1, returnId: 1 } }}
+                generateUISchema={new GenerateUISchema()}
+                generateSubmittedSchema={new GenerateReadOnlySchema()}
+                history={[]}
+                createReturn={createReturnSpy}
+                submitReturn={submitReturnSpy}
+                updateReturn={unresolvingUpdateReturnStub}
+                getReturn={new getReturnStub()}
+                getBaseReturn={new getBaseReturnStub()}
+              />);
 
-      let input = wrap.find("[type='text'] input").first();
-      await updateFormField(input, "Meow");
-      await saveReturn(wrap);
-      await wait();
-      expect(validateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), projectId, {cathouse: {cathouse: "Meow"}});
-      expect(wrap.find(".alert-danger").length).toEqual(0);
+        let input = wrap.find("[type='text'] input").first();
+        await updateFormField(input, "Meow");
+        await saveReturn(wrap);
+        await wait();
+
+        expect(wrap.find("[data-test='save-return-button']").length).toEqual(0);
+        expect(wrap.find("[data-test='submit-return-button']").length).toEqual(0);
+
+        expect(wrap.find("[data-test='disabled-save-return-button']").length).toEqual(1);
+        expect(wrap.find("[data-test='disabled-submit-return-button']").length).toEqual(1);
+      });
+
+      it('doesnt show a validation error', async () => {
+        let projectId = 1;
+        let wrap = mount(<ReturnPage
+                validateReturn={validateReturnSpy}
+                match={{ params: { projectId: 1, returnId: 1 } }}
+                generateUISchema={new GenerateUISchema()}
+                generateSubmittedSchema={new GenerateReadOnlySchema()}
+                history={[]}
+                createReturn={createReturnSpy}
+                submitReturn={submitReturnSpy}
+                updateReturn={updateReturnSpy}
+                getReturn={new getReturnStub()}
+                getBaseReturn={new getBaseReturnStub()}
+              />);
+
+        let input = wrap.find("[type='text'] input").first();
+        await updateFormField(input, "Meow");
+        await saveReturn(wrap);
+        await wait();
+        expect(validateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), projectId, {cathouse: {cathouse: "Meow"}});
+        expect(wrap.find("[data-test='validationError']").length).toEqual(0);
+      });
+    });
+
+    describe('submitting', () => {
+      it('it disables the save button until it finishes saving', async () => {
+        let unresolvingUpdateReturnStub = {execute: jest.fn(() => {execute: async (presenter, request) => {await new Promise(resolve => setTimeout(resolve, 14159265358));}})};
+
+        let projectId = 1;
+        let wrap = mount(<ReturnPage
+                validateReturn={validateReturnSpy}
+                match={{ params: { projectId: 1, returnId: 1 } }}
+                generateUISchema={new GenerateUISchema()}
+                generateSubmittedSchema={new GenerateReadOnlySchema()}
+                history={[]}
+                createReturn={createReturnSpy}
+                submitReturn={submitReturnSpy}
+                updateReturn={unresolvingUpdateReturnStub}
+                getReturn={new getReturnStub()}
+                getBaseReturn={new getBaseReturnStub()}
+              />);
+
+        let input = wrap.find("[type='text'] input").first();
+        await updateFormField(input, "Meow");
+        await submitReturn(wrap);
+        await wait();
+        
+        expect(wrap.find("[data-test='save-return-button']").length).toEqual(0);
+        expect(wrap.find("[data-test='submit-return-button']").length).toEqual(0);
+
+        expect(wrap.find("[data-test='disabled-save-return-button']").length).toEqual(1);
+        expect(wrap.find("[data-test='disabled-submit-return-button']").length).toEqual(1);
+      });
+
+      it('permits submission', async () => {
+        let projectId = 1;
+        let wrap = mount(<ReturnPage
+                validateReturn={validateReturnSpy}
+                match={{ params: { projectId: 1, returnId: 1 } }}
+                generateUISchema={new GenerateUISchema()}
+                generateSubmittedSchema={new GenerateReadOnlySchema()}
+                history={[]}
+                createReturn={createReturnSpy}
+                submitReturn={submitReturnSpy}
+                updateReturn={updateReturnSpy}
+                getReturn={new getReturnStub()}
+                getBaseReturn={new getBaseReturnStub()}
+              />);
+
+        let input = wrap.find("[type='text'] input").first();
+        await updateFormField(input, "cat");
+        await submitReturn(wrap);
+        await wait();
+        expect(validateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), projectId, {cathouse: {cathouse: 'cat'}});
+        expect(submitReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), { returnId: 1, data: { cathouse: { cathouse: 'cat' } } });
+        expect(wrap.find("[data-test='validationError']").length).toEqual(0);
+      });
+    });
+
+  });
+
+  describe('invalid form', () => {
+    let validateReturnSpy, createReturnSpy, updateReturnSpy, submitReturnSpy;
+    beforeEach(() => {
+      validateReturnSpy = {execute: jest.fn((presenter, formdata) => { presenter.invalidateFields([['cathouse','cat']])})};
+      submitReturnSpy = {execute: jest.fn()};
+      createReturnSpy = {execute: jest.fn((presenter, request) => {presenter.creationSuccessful(1);})};
+      updateReturnSpy = {execute: jest.fn((presenter, request) => {presenter.updateSuccessful(1);})};
+    });
+
+    describe('submitting', () => {
+      it('prevents submission', async () => {
+        let projectId = 1;
+        let wrap = mount(<ReturnPage
+                validateReturn={validateReturnSpy}
+                match={{ params: { projectId: 1, returnId: 1 } }}
+                generateUISchema={new GenerateUISchema()}
+                generateSubmittedSchema={new GenerateReadOnlySchema()}
+                history={[]}
+                createReturn={createReturnSpy}
+                submitReturn={submitReturnSpy}
+                updateReturn={updateReturnSpy}
+                getReturn={new getReturnStub()}
+                getBaseReturn={new getBaseReturnStub()}
+              />);
+
+        let input = wrap.find("[type='text'] input").first();
+        await updateFormField(input, "");
+        await submitReturn(wrap);
+        await wait();
+        expect(validateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), projectId, {cathouse: {}});
+        expect(submitReturnSpy.execute).not.toHaveBeenCalled();
+        expect(wrap.find("[data-test='validationError']").length).toEqual(1);
+      });
+    });
+
+    describe('saving', () => {
+      it('shows a validation error', async () => {
+        let projectId = 1;
+        let wrap = mount(<ReturnPage
+                validateReturn={validateReturnSpy}
+                match={{ params: { projectId: 1, returnId: 1 } }}
+                generateUISchema={new GenerateUISchema()}
+                generateSubmittedSchema={new GenerateReadOnlySchema()}
+                history={[]}
+                createReturn={createReturnSpy}
+                submitReturn={submitReturnSpy}
+                updateReturn={updateReturnSpy}
+                getReturn={new getReturnStub()}
+                getBaseReturn={new getBaseReturnStub()}
+              />);
+
+        let input = wrap.find("[type='text'] input").first();
+        await updateFormField(input, "");
+        await saveReturn(wrap);
+        await wait();
+        expect(validateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), projectId, {cathouse: {}});
+        expect(wrap.find("[data-test='validationError']").length).toEqual(1);
+      });
     });
   });
 });
