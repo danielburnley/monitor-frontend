@@ -10,7 +10,7 @@ export default class ReturnForm extends React.Component {
   }
 
   renderActions = () => {
-    if (this.props.status === 'Submitted' || this.props.status == 'Updating') {
+    if (this.props.status === 'Submitted') {
       return <div />;
     }
 
@@ -22,6 +22,23 @@ export default class ReturnForm extends React.Component {
             data-test="create-return-button"
             onClick={() => this.props.onCreate(this.state.formData)}>
             Create Draft Return
+          </button>
+        </div>
+      );
+    }
+
+    if (this.props.status == 'Updating') {
+      return (
+        <div className="col-md-offset-3 col-md-9 return-actions">
+          <button
+            className="btn return-btn disabled"
+            data-test="disabled-save-return-button">
+            Save Draft
+          </button>
+          <button
+            className="btn return-btn disabled"
+            data-test="disabled-submit-return-button">
+            Submit Return
           </button>
         </div>
       );

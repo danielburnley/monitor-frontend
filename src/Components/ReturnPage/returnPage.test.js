@@ -99,9 +99,12 @@ describe('ReturnPage', () => {
         await updateFormField(input, "Meow");
         await saveReturn(wrap);
         await wait();
-        
+
         expect(wrap.find("[data-test='save-return-button']").length).toEqual(0);
         expect(wrap.find("[data-test='submit-return-button']").length).toEqual(0);
+
+        expect(wrap.find("[data-test='disabled-save-return-button']").length).toEqual(1);
+        expect(wrap.find("[data-test='disabled-submit-return-button']").length).toEqual(1);
       });
 
       it('doesnt show a validation error', async () => {
@@ -150,8 +153,12 @@ describe('ReturnPage', () => {
         await updateFormField(input, "Meow");
         await submitReturn(wrap);
         await wait();
+        
         expect(wrap.find("[data-test='save-return-button']").length).toEqual(0);
         expect(wrap.find("[data-test='submit-return-button']").length).toEqual(0);
+
+        expect(wrap.find("[data-test='disabled-save-return-button']").length).toEqual(1);
+        expect(wrap.find("[data-test='disabled-submit-return-button']").length).toEqual(1);
       });
 
       it('permits submission', async () => {
