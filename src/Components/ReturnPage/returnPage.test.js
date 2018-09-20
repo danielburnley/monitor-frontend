@@ -83,6 +83,7 @@ describe('ReturnPage', () => {
       await wait();
       expect(validateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), projectId, {cathouse: {}});
       expect(wrap.find(".alert-danger").length).toEqual(1);
+      expect(wrap.find(".alert-danger").text()).toEqual("This return cannot be submitted until the following fields are filled:  Cathouse →  Cathouse");
     });
 
     it('shows a validation error', async () => {
