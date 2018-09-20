@@ -51,6 +51,11 @@ describe("VarianceField", () => {
         expect(reason.length).toEqual(0);
       });
 
+      it("Does not show the completed date field", () => {
+        let completedDate = field.find("[data-test='variance-completed']");
+        expect(completedDate.length).toEqual(0);
+      });
+
       describe("When selecting Delayed", () => {
         beforeEach(() => {
           let status = field.find("[data-test='variance-status']");
@@ -65,6 +70,18 @@ describe("VarianceField", () => {
         it("Shows the reason for variance field", () => {
           let reason = field.find("[data-test='variance-reason']");
           expect(reason.length).toEqual(1);
+        });
+      });
+
+      describe("When selecting completed", () => {
+        beforeEach(() => {
+          let status = field.find("[data-test='variance-status']");
+          status.simulate("change", { target: { value: "Completed" } });
+        });
+
+        it("Shows the completed date field", () => {
+          let completedDate = field.find("[data-test='variance-completed']");
+          expect(completedDate.length).toEqual(1);
         });
       });
     });
@@ -128,6 +145,18 @@ describe("VarianceField", () => {
         it("Shows the reason for variance field", () => {
           let reason = field.find("[data-test='variance-reason']");
           expect(reason.length).toEqual(1);
+        });
+      });
+
+      describe("When selecting completed", () => {
+        beforeEach(() => {
+          let status = field.find("[data-test='variance-status']");
+          status.simulate("change", { target: { value: "Completed" } });
+        });
+
+        it("Shows the completed date field", () => {
+          let completedDate = field.find("[data-test='variance-completed']");
+          expect(completedDate.length).toEqual(1);
         });
       });
     });
@@ -263,142 +292,261 @@ describe("VarianceField", () => {
         });
       });
     });
+
+    describe("When completed", () => {
+      describe("Example one", () => {
+        it("Fills in the completed date correctly", () => {
+          let schema = { title: "Meow Meow Fuzzyface" };
+          let formData = {
+            baseline: "2020-12-31",
+            status: "Completed",
+            percentComplete: 100,
+            completedDate: "2021-01-01"
+          };
+          let field = shallow(
+            <VarianceField
+              schema={schema}
+              formData={formData}
+              onChange={jest.fn()}
+            />
+          );
+
+          let completedDate = field
+            .find("[data-test='variance-completed']")
+            .props().value;
+
+          expect(completedDate).toEqual("2021-01-01");
+        });
+      });
+
+      describe("Example two", () => {
+        it("Fills in the completed date correctly", () => {
+          let schema = { title: "Meow Meow Fuzzyface" };
+          let formData = {
+            baseline: "2020-12-31",
+            status: "Completed",
+            percentComplete: 100,
+            completedDate: "2025-01-01"
+          };
+          let field = shallow(
+            <VarianceField
+              schema={schema}
+              formData={formData}
+              onChange={jest.fn()}
+            />
+          );
+
+          let completedDate = field
+            .find("[data-test='variance-completed']")
+            .props().value;
+
+          expect(completedDate).toEqual("2025-01-01");
+        });
+      });
+    });
   });
 
   describe("When updating fields", () => {
     let onChangeSpy;
-    beforeEach(() => {
-      onChangeSpy = jest.fn();
-      let schema = { title: "Meow Meow Fuzzyface" };
-      let formData = {
-        baseline: "2020-12-31",
-        status: "Delayed",
-        percentComplete: 10,
-        current: "2050-01-01",
-        reason: "Super delays"
-      };
-      field = shallow(
-        <VarianceField
-          schema={schema}
-          formData={formData}
-          onChange={onChangeSpy}
-        />
-      );
-    });
 
-    describe("When changing the status", () => {
-      it("Calls the onChange prop with the updated form data", () => {
-        field
-          .find("[data-test='variance-status']")
-          .simulate("change", { target: { value: "On schedule" } });
-
-        expect(onChangeSpy).toHaveBeenCalledWith({
+    describe("When delayed", () => {
+      beforeEach(() => {
+        onChangeSpy = jest.fn();
+        let schema = { title: "Meow Meow Fuzzyface" };
+        let formData = {
           baseline: "2020-12-31",
-          status: "On schedule",
+          status: "Delayed",
           percentComplete: 10,
           current: "2050-01-01",
           reason: "Super delays"
+        };
+        field = shallow(
+          <VarianceField
+            schema={schema}
+            formData={formData}
+            onChange={onChangeSpy}
+          />
+        );
+      });
+
+      describe("When changing the status", () => {
+        it("Calls the onChange prop with the updated form data", () => {
+          field
+            .find("[data-test='variance-status']")
+            .simulate("change", { target: { value: "On schedule" } });
+
+          expect(onChangeSpy).toHaveBeenCalledWith({
+            baseline: "2020-12-31",
+            status: "On schedule",
+            percentComplete: 10,
+            current: "2050-01-01",
+            reason: "Super delays",
+            completedDate: ""
+          });
+        });
+      });
+
+      describe("When changing the percent complete", () => {
+        describe("Example one", () => {
+          it("Calls the onChange prop with the updated form data", () => {
+            field
+              .find("[data-test='variance-percentage']")
+              .simulate("change", { target: { value: 15 } });
+
+            expect(onChangeSpy).toHaveBeenCalledWith({
+              baseline: "2020-12-31",
+              status: "Delayed",
+              percentComplete: 15,
+              current: "2050-01-01",
+              reason: "Super delays",
+              completedDate: ""
+            });
+          });
+        });
+
+        describe("Example two", () => {
+          it("Calls the onChange prop with the updated form data", () => {
+            field
+              .find("[data-test='variance-percentage']")
+              .simulate("change", { target: { value: 90 } });
+
+            expect(onChangeSpy).toHaveBeenCalledWith({
+              baseline: "2020-12-31",
+              status: "Delayed",
+              percentComplete: 90,
+              current: "2050-01-01",
+              reason: "Super delays",
+              completedDate: ""
+            });
+          });
+        });
+      });
+
+      describe("When changing the current value", () => {
+        describe("Example one", () => {
+          it("Calls the onChange prop with the updated form data", () => {
+            field
+              .find("[data-test='variance-current']")
+              .simulate("change", { target: { value: "2040-01-01" } });
+
+            expect(onChangeSpy).toHaveBeenCalledWith({
+              baseline: "2020-12-31",
+              status: "Delayed",
+              percentComplete: 10,
+              current: "2040-01-01",
+              reason: "Super delays",
+              completedDate: ""
+            });
+          });
+        });
+
+        describe("Example two", () => {
+          it("Calls the onChange prop with the updated form data", () => {
+            field
+              .find("[data-test='variance-current']")
+              .simulate("change", { target: { value: "2020-05-01" } });
+
+            expect(onChangeSpy).toHaveBeenCalledWith({
+              baseline: "2020-12-31",
+              status: "Delayed",
+              percentComplete: 10,
+              current: "2020-05-01",
+              reason: "Super delays",
+              completedDate: ""
+            });
+          });
+        });
+      });
+
+      describe("When changing the reason value", () => {
+        describe("Example one", () => {
+          it("Calls the onChange prop with the updated form data", () => {
+            field
+              .find("[data-test='variance-reason']")
+              .simulate("change", { target: { value: "Mega delays" } });
+
+            expect(onChangeSpy).toHaveBeenCalledWith({
+              baseline: "2020-12-31",
+              status: "Delayed",
+              percentComplete: 10,
+              current: "2050-01-01",
+              reason: "Mega delays",
+              completedDate: ""
+            });
+          });
+        });
+
+        describe("Example two", () => {
+          it("Calls the onChange prop with the updated form data", () => {
+            field.find("[data-test='variance-reason']").simulate("change", {
+              target: { value: "Just the worst delays" }
+            });
+
+            expect(onChangeSpy).toHaveBeenCalledWith({
+              baseline: "2020-12-31",
+              status: "Delayed",
+              percentComplete: 10,
+              current: "2050-01-01",
+              reason: "Just the worst delays",
+              completedDate: ""
+            });
+          });
         });
       });
     });
 
-    describe("When changing the percent complete", () => {
-      describe("Example one", () => {
-        it("Calls the onChange prop with the updated form data", () => {
-          field
-            .find("[data-test='variance-percentage']")
-            .simulate("change", { target: { value: 15 } });
-
-          expect(onChangeSpy).toHaveBeenCalledWith({
-            baseline: "2020-12-31",
-            status: "Delayed",
-            percentComplete: 15,
-            current: "2050-01-01",
-            reason: "Super delays"
-          });
-        });
+    describe("When completed", () => {
+      beforeEach(() => {
+        onChangeSpy = jest.fn();
+        let schema = { title: "Meow Meow Fuzzyface" };
+        let formData = {
+          baseline: "2020-12-31",
+          status: "Completed",
+          percentComplete: 100,
+          current: "",
+          reason: ""
+        };
+        field = shallow(
+          <VarianceField
+            schema={schema}
+            formData={formData}
+            onChange={onChangeSpy}
+          />
+        );
       });
 
-      describe("Example two", () => {
-        it("Calls the onChange prop with the updated form data", () => {
-          field
-            .find("[data-test='variance-percentage']")
-            .simulate("change", { target: { value: 90 } });
+      describe("When changing the completed date", () => {
+        describe("Example one", () => {
+          it("Calls the onChange prop with the updated form data", () => {
+            field
+              .find("[data-test='variance-completed']")
+              .simulate("change", { target: { value: "2020-01-01" } });
 
-          expect(onChangeSpy).toHaveBeenCalledWith({
-            baseline: "2020-12-31",
-            status: "Delayed",
-            percentComplete: 90,
-            current: "2050-01-01",
-            reason: "Super delays"
+            expect(onChangeSpy).toHaveBeenCalledWith({
+              baseline: "2020-12-31",
+              status: "Completed",
+              percentComplete: 100,
+              current: "",
+              reason: "",
+              completedDate: "2020-01-01"
+            });
           });
         });
-      });
-    });
 
-    describe("When changing the current value", () => {
-      describe("Example one", () => {
-        it("Calls the onChange prop with the updated form data", () => {
-          field
-            .find("[data-test='variance-current']")
-            .simulate("change", { target: { value: "2040-01-01" } });
+        describe("Example one", () => {
+          it("Calls the onChange prop with the updated form data", () => {
+            field
+              .find("[data-test='variance-completed']")
+              .simulate("change", { target: { value: "2025-01-01" } });
 
-          expect(onChangeSpy).toHaveBeenCalledWith({
-            baseline: "2020-12-31",
-            status: "Delayed",
-            percentComplete: 10,
-            current: "2040-01-01",
-            reason: "Super delays"
-          });
-        });
-      });
-
-      describe("Example two", () => {
-        it("Calls the onChange prop with the updated form data", () => {
-          field
-            .find("[data-test='variance-current']")
-            .simulate("change", { target: { value: "2020-05-01" } });
-
-          expect(onChangeSpy).toHaveBeenCalledWith({
-            baseline: "2020-12-31",
-            status: "Delayed",
-            percentComplete: 10,
-            current: "2020-05-01",
-            reason: "Super delays"
-          });
-        });
-      });
-    });
-
-    describe("When changing the reason value", () => {
-      describe("Example one", () => {
-        it("Calls the onChange prop with the updated form data", () => {
-          field
-            .find("[data-test='variance-reason']")
-            .simulate("change", { target: { value: "Mega delays" } });
-
-          expect(onChangeSpy).toHaveBeenCalledWith({
-            baseline: "2020-12-31",
-            status: "Delayed",
-            percentComplete: 10,
-            current: "2050-01-01",
-            reason: "Mega delays"
-          });
-        });
-      });
-
-      describe("Example two", () => {
-        it("Calls the onChange prop with the updated form data", () => {
-          field
-            .find("[data-test='variance-reason']")
-            .simulate("change", { target: { value: "Just the worst delays" } });
-
-          expect(onChangeSpy).toHaveBeenCalledWith({
-            baseline: "2020-12-31",
-            status: "Delayed",
-            percentComplete: 10,
-            current: "2050-01-01",
-            reason: "Just the worst delays"
+            expect(onChangeSpy).toHaveBeenCalledWith({
+              baseline: "2020-12-31",
+              status: "Completed",
+              percentComplete: 100,
+              current: "",
+              reason: "",
+              completedDate: "2025-01-01"
+            });
           });
         });
       });
