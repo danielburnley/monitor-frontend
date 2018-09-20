@@ -8,6 +8,7 @@ import ProjectPage from "./Components/ProjectPage";
 import ReturnPage from "./Components/ReturnPage";
 import GetToken from "./Components/GetToken";
 import Portal from "./Components/Portal";
+import NotFound from "./Components/NotFound";
 
 import CreateReturn from "./UseCase/CreateReturn";
 import GenerateDisabledUISchema from "./UseCase/GenerateDisabledUISchema";
@@ -27,8 +28,9 @@ import ReturnGateway from "./Gateway/ReturnGateway";
 import ApiKeyGateway from "./Gateway/ApiKeyGateway"
 import TokenGateway from "./Gateway/TokenGateway";
 
+
 import "./App.css";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 const returnGateway = new ReturnGateway(new ApiKeyGateway())
 const validateReturnUseCase = new ValidateReturn(returnGateway);
@@ -72,37 +74,41 @@ const App = () => (
       <Header />
 
       <div className="monitor-container">
-        <Route exact path="/" component={Home} />
-        <Route
-          path="/project/:id"
-          render={props => (
-            <Portal
-              {...props}
-              projectId={props.match.params.id}
-              onApiKey={apiKey => {
-                window.apiKey = apiKey;
-              }}
-              requestToken={requestTokenUseCase}
-              token={
-                qs.parse(props.location.search, { ignoreQueryPrefix: true })
-                  .token
-              }
-              canAccessProject={canAccessProjectUseCase}
-            >
-              <Route exact path="/project/:id" render={renderProjectPage} />
-              <Route
-                exact
-                path="/project/:projectId/return"
-                render={renderReturnPage}
-              />
-              <Route
-                exact
-                path="/project/:projectId/return/:returnId"
-                render={renderReturnPage}
-              />
-            </Portal>
-          )}
-        />
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route
+            path="/project/:id"
+            render={props => (
+              <Portal
+                {...props}
+                projectId={props.match.params.id}
+                onApiKey={apiKey => {
+                  window.apiKey = apiKey;
+                }}
+                requestToken={requestTokenUseCase}
+                token={
+                  qs.parse(props.location.search, { ignoreQueryPrefix: true })
+                    .token
+                }
+                canAccessProject={canAccessProjectUseCase}
+              >
+                <Route exact path="/project/:id" render={renderProjectPage} />
+                <Route
+                  exact
+                  path="/project/:projectId/return"
+                  render={renderReturnPage}
+                />
+                <Route
+                  exact
+                  path="/project/:projectId/return/:returnId"
+                  render={renderReturnPage}
+                />
+              </Portal>
+            )}
+          />
+
+          <Route path="*" exact={true} component={NotFound} />
+        </Switch>
       </div>
 
       <Footer />

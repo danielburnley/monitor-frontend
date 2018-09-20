@@ -4,6 +4,7 @@ import Form from "react-jsonschema-form";
 import ArraySubform from "../ArraySubform";
 import Sidebar from "../Sidebar";
 import HorizontalFields from "../HorizontalFields";
+import VarianceField from "../VarianceField";
 import GenerateSidebarItems from "../../UseCase/GenerateSidebarItems";
 import "./style.css";
 
@@ -90,7 +91,7 @@ export default class ParentForm extends React.Component {
   }
 
   renderSubform() {
-    const fields = { horizontal: HorizontalFields };
+    const fields = { horizontal: HorizontalFields, variance: VarianceField };
     if (this.selectedSchema().type === "array") {
       return (
         <div className="col-md-10">
