@@ -1,6 +1,7 @@
 import React from 'react';
 import GetToken from '.';
 import {mount} from 'enzyme';
+import GetTokenPage from '../../../test/GetTokenPage';
 
 async function wait() {
   await new Promise(resolve => setTimeout(resolve, 100));
@@ -16,49 +17,37 @@ describe('GetToken', () => {
     let requestTokenSpy = {
       execute: jest.fn()
     };
-    let wrapper = mount(<GetToken projectId="1" requestToken={requestTokenSpy} targetUrl="http://localhost/"/>)
-
-    let email_input = wrapper.find('[data-test="email_input"]')
-    updateFormField(email_input, "bonsoir@corp")
-    let submit_button = wrapper.find('form')
-    await wait()
-    wrapper.update()
-
-    expect(wrapper.find('[data-test="disabled-submit-button"]').length).toEqual(0)
-    expect(wrapper.find('[data-test="submit-button"]').length).toEqual(1)
+    let page = new GetTokenPage("1", requestTokenSpy);
+    page.setEmail("bonsoir@corp")
+    page.load()
+    expect(page.submitButton().length).toEqual(1)
+    expect(page.disabledSubmitButton().length).toEqual(0)
   });
 
   it("shows a disabled button when no email is entered", async () => {
     let requestTokenSpy = {
       execute: jest.fn()
     };
-    let wrapper = mount(<GetToken projectId="1" requestToken={requestTokenSpy} targetUrl="http://localhost/"/>)
+    let page = new GetTokenPage(1, requestTokenSpy);
+    page.setEmail("")
+    page.submit()
+    page.load()
 
-    let email_input = wrapper.find('[data-test="email_input"]')
-    updateFormField(email_input, "")
-    let submit_button = wrapper.find('form')
-    await wait()
-    wrapper.update()
-
-    expect(wrapper.find('[data-test="disabled-submit-button"]').length).toEqual(1)
-    expect(wrapper.find('[data-test="submit-button"]').length).toEqual(0)
+    expect(page.submitButton().length).toEqual(0)
+    expect(page.disabledSubmitButton().length).toEqual(1)
   });
 
-  it("doesn't request a token when no email is entered a token", async () => {
+  it("doesn't request a token when no email is entered", async () => {
     let requestTokenSpy = {
       execute: jest.fn()
     };
-    let wrapper = mount(<GetToken projectId="1" requestToken={requestTokenSpy} targetUrl="http://localhost/"/>)
 
-    let email_input = wrapper.find('[data-test="email_input"]')
-    updateFormField(email_input, "")
-    let submit_button = wrapper.find('form')
-    submit_button.simulate('submit')
-    await wait()
-    wrapper.update()
+    let page = new GetTokenPage("1", requestTokenSpy);
+    page.setEmail("")
+    page.submit()
+    page.load()
 
     expect(requestTokenSpy.execute).not.toHaveBeenCalled()
-    expect(wrapper.find('[data-test="disabled-submit-button"]').length).toEqual(1)
   });
 
   it("requests a token", async () => {
@@ -67,12 +56,10 @@ describe('GetToken', () => {
     };
     let wrapper = mount(<GetToken projectId="1" requestToken={requestTokenSpy} targetUrl="http://localhost/"/>)
 
-    let email_input = wrapper.find('[data-test="email_input"]')
-    updateFormField(email_input, "cat@cathouse.com")
-    let submit_button = wrapper.find('form')
-    submit_button.simulate('submit')
-    await wait()
-    wrapper.update()
+    let page = new GetTokenPage("1", requestTokenSpy);
+    page.setEmail("cat@cathouse.com")
+    page.submit()
+    page.load()
 
     expect(requestTokenSpy.execute).toHaveBeenCalledWith("cat@cathouse.com", "1", "http://localhost/")
   });
@@ -82,18 +69,14 @@ describe('GetToken', () => {
       execute: jest.fn()
     };
 
-    let wrapper = mount(<GetToken projectId="1" requestToken={requestTokenSpy} targetUrl="http://localhost/"/>)
+    let page = new GetTokenPage("1", requestTokenSpy);
+    page.setEmail("cat@cathouse.com")
+    page.submit()
+    page.load()
 
-    let email_input = wrapper.find('[data-test="email_input"]')
-    updateFormField(email_input, "cat@cathouse.com")
-    let submit_button = wrapper.find('form')
-    submit_button.simulate('submit')
-    await wait()
-    wrapper.update()
-
-    expect(wrapper.find('[data-test="sent_message"]').length).toEqual(1)
-    expect(wrapper.find('[data-test="disabled-submit-button"]').length).toEqual(0)
-    expect(wrapper.find('[data-test="submit-button"]').length).toEqual(0)
+    expect(page.sentMessage().length).toEqual(1)
+    expect(page.disabledSubmitButton().length).toEqual(0)
+    expect(page.submitButton().length).toEqual(0)
   });
 
   it("does not show the 'sent' message before submitting", async () => {
@@ -101,8 +84,9 @@ describe('GetToken', () => {
       execute: jest.fn()
     };
 
-    let wrapper = mount(<GetToken projectId="1" requestToken={requestTokenSpy} targetUrl="http://localhost/"/>)
+    let page = new GetTokenPage("1", requestTokenSpy);
+    page.load()
 
-    expect(wrapper.find('[data-test="sent_message"]').length).toEqual(0)
+    expect(page.sentMessage().length).toEqual(0)
   });
 });
