@@ -33,8 +33,7 @@ export default class ReturnPage extends React.Component {
       data: formData
     });
 
-    if (this.state.valid)
-    {
+    if (this.state.valid) {
       await this.props.submitReturn.execute(this, {
         returnId: this.returnId(),
         data: formData
@@ -87,7 +86,10 @@ export default class ReturnPage extends React.Component {
     this.props.history.push(`/project/${this.projectId()}/return/${returnId}`);
   };
 
-  updateSuccessful = async () => {};
+  updateSuccessful = async () => {
+    this.setState({status: "Updated"});
+  };
+
   updateUnsuccessful = async () => {};
 
   fetchData = async () => {
@@ -108,7 +110,7 @@ export default class ReturnPage extends React.Component {
   }
 
   onFormChange = (e) => {
-    this.setState({lastAction: "Change"});
+    this.setState({status: "Editing", lastAction: "Change"});
   }
 
   renderForm() {
@@ -137,7 +139,7 @@ export default class ReturnPage extends React.Component {
 
 
   renderSaveSuccessAlert() {
-    if (this.state.lastAction === "Save") {
+    if (this.state.status === "Updated") {
       return (
         <div data-test="saveSuccess" role="alert" className="alert alert-success">
           Draft saved!

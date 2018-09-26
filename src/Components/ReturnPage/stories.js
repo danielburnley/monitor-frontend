@@ -117,7 +117,7 @@ storiesOf('ReturnPage', module)
         history={[]}
         createReturn={{execute: async (presenter, request) => {presenter.creationSuccessful(1);}}}
         submitReturn={{execute: async (presenter, request) => {presenter.submissionSuccessful(1);}}}
-        updateReturn={{execute: async (presenter, request) => {presenter.updateSuccessful(1);}}}
+        updateReturn={{execute: async (presenter, request) => {await new Promise(resolve => setTimeout(resolve, 300));presenter.updateSuccessful(1);}}}
         validateReturn={{execute: async (presenter, project_id, data) => {await new Promise(resolve => setTimeout(resolve, 300));}}}
         getReturn={{execute: (presenter, request) => {presenter.presentReturn({
           status: 'Draft',
