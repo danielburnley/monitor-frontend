@@ -86,6 +86,18 @@ describe("<ArraySubform>", () => {
       expect(subform.find("Form").length).toEqual(1);
     });
 
+    it("Sets the key on the form to the selected index and section", () => {
+      let subform = getSubform({
+        schema,
+        data,
+        uiSchema,
+        index: 0,
+        section: "details"
+      });
+
+      expect(subform.find("Form").key()).toEqual("0_details");
+    });
+
     it("Passes the fields to the form", () => {
       let subform = getSubform({
         schema,
@@ -162,6 +174,10 @@ describe("<ArraySubform>", () => {
         );
       });
 
+      it("Sets the key on the form to the selected index and section", () => {
+        expect(subform.find("Form").key()).toEqual("0_pets");
+      });
+
       it("Passes the selected form data to the form", () => {
         expect(subform.find("Form").props().formData).toEqual({
           favourite: "All of them"
@@ -205,6 +221,10 @@ describe("<ArraySubform>", () => {
         expect(subform.find("Form").props().formData).toEqual({
           firstName: "Barkington"
         });
+      });
+
+      it("Sets the key on the form to the selected index and section", () => {
+        expect(subform.find("Form").key()).toEqual("1_details");
       });
 
       it("Passes the updated form data to the onChange method", () => {
@@ -269,7 +289,7 @@ describe("<ArraySubform>", () => {
         contact: { phoneNo: { that: false } }
       };
 
-      fields = { bar: () => {}};
+      fields = { bar: () => {} };
 
       onChangeSpy = jest.fn();
     });
