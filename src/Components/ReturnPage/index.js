@@ -1,5 +1,6 @@
 import React from "react";
 import ReturnForm from "../ReturnForm";
+import ValidationMessage from "../ValidationMessage";
 
 export default class ReturnPage extends React.Component {
   constructor() {
@@ -61,7 +62,7 @@ export default class ReturnPage extends React.Component {
   };
 
   invalidateFields = async (pathList) => {
-    this.setState({valid: false, invalid_paths: pathList});
+    this.setState({valid: false, invalidPaths: pathList});
   };
 
   presentReturnNotFound = async () => {};
@@ -135,18 +136,6 @@ export default class ReturnPage extends React.Component {
     e.preventDefault();
   };
 
-  decamelize = (string) => {
-    let all_camelcase_word_boundaries = /(^.|[A-Z])/g;
-    return string.replace(all_camelcase_word_boundaries, (character) => " "+character.toUpperCase());
-  }
-
-  renderInvalidPaths = () => {
-    return this.state.invalid_paths.map(path => {
-      return (<span key={path}>
-        {path.map(this.decamelize).join(' → ')}<br/>
-      </span>)
-    })
-  };
 
   renderSuccessAlerts() {
     if (this.state.lastAction === "Save")
@@ -178,15 +167,16 @@ export default class ReturnPage extends React.Component {
             </button>
           </div>
         </div>
-        <div className="row"> {
-          !this.state.valid ?
-            <div className="alert alert-danger" role="alert" data-test="validationError">
-              This return cannot be submitted until the following fields are filled: <br/>
-              {this.renderInvalidPaths()}
-            </div> : this.renderSuccessAlerts()
+        <div className="row">
+          {
+            !this.state.valid ?
+            <ValidationMessage valid={this.state.valid} invalidPaths={this.state.invalidPaths} type={this.state.lastAction}/>:
+            this.renderSuccessAlerts()
           }
-          <div data-test="return" className="return col-md-12">
-            {this.renderForm()}
+          <div className="row">
+            <div data-test="return" className="return col-md-12">
+              {this.renderForm()}
+            </div>
           </div>
         </div>
       </div>
