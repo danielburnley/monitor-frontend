@@ -71,7 +71,7 @@ describe('ReturnPage', () => {
   describe('valid form ', () => {
     let validateReturnSpy, createReturnSpy, updateReturnSpy, submitReturnSpy;
     beforeEach(() => {
-      validateReturnSpy = {execute: jest.fn()};
+      validateReturnSpy = {execute: jest.fn(() => {})};
       submitReturnSpy = {execute: jest.fn(() => {execute: (presenter, request) => {presenter.submissionSuccessful(1);}})};
       createReturnSpy = {execute: jest.fn(() => {execute: (presenter, request) => {presenter.creationSuccessful(1);}})};
       updateReturnSpy = {execute: jest.fn(() => {execute: (presenter, request) => {presenter.updateSuccessful(1);}})};
@@ -178,12 +178,12 @@ describe('ReturnPage', () => {
                 getBaseReturn={new getBaseReturnStub()}
               />);
 
-        let input = wrap.find("[type='text'] input").first();
+        let input = wrap.find("input[type='text']").first();
         await updateFormField(input, "Meow");
         await saveReturn(wrap);
-        await wait();
         await updateFormField(input, "Cats");
-        await wait();
+        wrap.update();
+        //It's not there, but for some reason wrap.find thinks it is
         expect(wrap.find("[data-test='saveSuccess']").length).toEqual(0);
       });
     });

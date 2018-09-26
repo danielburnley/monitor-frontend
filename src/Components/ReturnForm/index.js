@@ -62,6 +62,12 @@ export default class ReturnForm extends React.Component {
     );
   };
 
+  onFormChange = ({formData}) => {
+    this.setState({formData});
+    if (this.props.onChange) {
+      this.props.onChange(this.state.formData);
+    }
+  }
   render() {
     return (
       <div>
@@ -69,7 +75,7 @@ export default class ReturnForm extends React.Component {
           schema={this.props.schema}
           uiSchema={this.props.uiSchema}
           formData={this.state.formData}
-          onChange={({formData}) => this.setState({formData})}
+          onChange={this.onFormChange}
           >
           {this.renderActions()}
         </ParentForm>

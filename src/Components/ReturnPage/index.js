@@ -107,6 +107,10 @@ export default class ReturnPage extends React.Component {
     await this.fetchData();
   }
 
+  onFormChange = (e) => {
+    this.setState({lastAction: "Change"});
+  }
+
   renderForm() {
     if (this.state.loading) {
       return <div />;
@@ -117,6 +121,7 @@ export default class ReturnPage extends React.Component {
         onSave={this.onFormSave}
         onSubmit={this.onFormSubmit}
         onCreate={this.onFormCreate}
+        onChange={this.onFormChange}
         data={this.state.formData}
         schema={this.state.formSchema}
         uiSchema={this.state.formUISchema}

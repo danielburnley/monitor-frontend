@@ -100,7 +100,7 @@ describe("<ReturnForm>", () => {
     let saveSpy = jest.fn();
     let changeSpy = jest.fn();
 
-    let wrapper = shallow(
+    let wrapper = mount(
       <ReturnForm
         data={initialData}
         schema={formSchema}
@@ -110,9 +110,9 @@ describe("<ReturnForm>", () => {
       />
     );
     await wait();
-    await updateFormField(wrapper.find('input[type="text"]'));
+    await updateFormField(wrapper.find('input[type="text"]'),"Cats");
     expect(changeSpy).toHaveBeenCalledWith({
-      cats: { details: { noise: "Meow" } }
+      cats: { details: { noise: "Cats" } }
     });
   });
 
