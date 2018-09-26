@@ -72,9 +72,9 @@ describe('ReturnPage', () => {
     let validateReturnSpy, createReturnSpy, updateReturnSpy, submitReturnSpy;
     beforeEach(() => {
       validateReturnSpy = {execute: jest.fn(() => {})};
-      submitReturnSpy = {execute: jest.fn(() => {execute: (presenter, request) => {presenter.submissionSuccessful(1);}})};
-      createReturnSpy = {execute: jest.fn(() => {execute: (presenter, request) => {presenter.creationSuccessful(1);}})};
-      updateReturnSpy = {execute: jest.fn(() => {execute: (presenter, request) => {presenter.updateSuccessful(1);}})};
+      submitReturnSpy = {execute: jest.fn(async (presenter) => {await presenter.submissionSuccessful(1);})};
+      createReturnSpy = {execute: jest.fn((presenter, request) => {presenter.creationSuccessful(1);})};
+      updateReturnSpy = {execute: jest.fn((presenter, request) => {presenter.updateSuccessful(1);})};
     });
 
     describe('nothing has been submitted', () => {
@@ -238,6 +238,7 @@ describe('ReturnPage', () => {
         await updateFormField(input, "cat");
         await submitReturn(wrap);
         await wait();
+        wrap.update();
         expect(validateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), projectId, {cathouse: {cathouse: 'cat'}});
         expect(submitReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), { returnId: 1, data: { cathouse: { cathouse: 'cat' } } });
         expect(wrap.find("[data-test='validationError']").length).toEqual(0);
@@ -245,7 +246,6 @@ describe('ReturnPage', () => {
         expect(wrap.find("[data-test='saveSuccess']").length).toEqual(0);
       });
     });
-
   });
 
   describe('invalid form', () => {
