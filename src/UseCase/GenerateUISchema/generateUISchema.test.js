@@ -308,6 +308,72 @@ describe("GenerateUISchema", () => {
     });
   });
 
+  describe("Risk", () => {
+    describe("Given an object which is marked as a risk field", () => {
+      describe("Example one", () => {
+        it("Sets the UI field to risk", () => {
+          let schema = {
+            type: "object",
+            properties: {
+              a: {
+                type: "array",
+                items: {
+                  risk: true,
+                  type: "object",
+                  properties: {}
+                }
+              }
+            }
+          };
+
+          let response = useCase.execute(schema);
+
+          expect(response).toEqual({
+            a: {
+              items: { "ui:field": "risk" },
+              "ui:options": {
+                addable: false,
+                orderable: false,
+                removable: false
+              }
+            }
+          });
+        });
+      });
+
+      describe("Example two", () => {
+        it("Sets the UI field to risk", () => {
+          let schema = {
+            type: "object",
+            properties: {
+              b: {
+                type: "array",
+                items: {
+                  risk: true,
+                  type: "object",
+                  properties: {}
+                }
+              }
+            }
+          };
+
+          let response = useCase.execute(schema);
+
+          expect(response).toEqual({
+            b: {
+              items: { "ui:field": "risk" },
+              "ui:options": {
+                addable: false,
+                orderable: false,
+                removable: false
+              }
+            }
+          });
+        });
+      });
+    });
+  });
+
   describe("Horizontal", () => {
     describe("Given an array with horizontal items", () => {
       it("Sets the UI field to horizontal", () => {

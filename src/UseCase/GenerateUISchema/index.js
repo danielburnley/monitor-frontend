@@ -49,6 +49,8 @@ export default class GenerateUISchema {
 
     if (value.items.horizontal) {
       ret["items"]["ui:field"] = "horizontal";
+    } else if (value.items.risk) {
+      ret["items"]["ui:field"] = "risk";
     }
 
     return ret;
