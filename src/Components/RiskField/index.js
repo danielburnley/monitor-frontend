@@ -13,9 +13,9 @@ export default class RiskField extends React.Component {
         this.props.formData.riskBaselineMitigationsInPlace,
       riskCurrentReturnLikelihood:
         this.props.formData.riskCurrentReturnLikelihood || "1",
-      riskChangeRisk: this.props.formData.riskChangeRisk || "No",
-      riskCurrentMitigationsInPlace:
-        this.props.formData.riskCurrentMitigationsInPlace 
+      riskAnyChange: this.props.formData.riskAnyChange || "No",
+      riskCurrentReturnMitigationsInPlace:
+        this.props.formData.riskCurrentReturnMitigationsInPlace 
     };
   }
 
@@ -102,9 +102,9 @@ export default class RiskField extends React.Component {
       <div className="row">
         <div className="col-md-12">
           <select
-            onChange={e => this.onFieldChange("riskChangeRisk", e)}
+            onChange={e => this.onFieldChange("riskAnyChange", e)}
             data-test="risk-change-in-risk"
-            value={this.state.riskChangeRisk}
+            value={this.state.riskAnyChange}
             className="form-control"
             id="anyChangeInRisk"
           >
@@ -124,9 +124,9 @@ export default class RiskField extends React.Component {
       <textarea
         className="form-control"
         id="currentReturnMitigationInPlace"
-        onChange={e => this.onFieldChange("riskCurrentMitigationsInPlace", e)}
+        onChange={e => this.onFieldChange("riskCurrentReturnMitigationsInPlace", e)}
         data-test="risk-current-mitigations-in-place"
-        value={this.state.riskCurrentMitigationsInPlace}
+        value={this.state.riskCurrentReturnMitigationsInPlace}
       />
     </div>
   );

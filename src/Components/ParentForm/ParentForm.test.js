@@ -520,4 +520,40 @@ describe("<ParentForm>", () => {
       });
     });
   });
+
+  describe("Given a schema with a risk field", () => {
+    it("Displays the risk field component", () => {
+      let parentForm = mount(
+        <ParentForm
+          schema={{
+            type: "object",
+            properties: {
+              cat: {
+                type: "object",
+                properties: {
+                  name: {
+                    type: "string"
+                  }
+                }
+              },
+              dog: {
+                type: "object",
+                properties: {
+                  name: {
+                    type: "string"
+                  }
+                }
+              }
+            }
+          }}
+          uiSchema={{
+            cat: {
+              "ui:field": "risk"
+            }
+          }}
+        />
+      );
+      expect(parentForm.find("RiskField").length).toEqual(1);
+    });
+  });
 });

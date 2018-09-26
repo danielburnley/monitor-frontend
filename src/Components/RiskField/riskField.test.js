@@ -144,8 +144,8 @@ describe("<RiskField>", () => {
             riskBaselineLikelihood: "4",
             riskBaselineMitigationsInPlace: "Cut down the tree",
             riskCurrentReturnLikelihood: "2",
-            riskChangeRisk: "No",
-            riskCurrentMitigationsInPlace: undefined
+            riskAnyChange: "No",
+            riskCurrentReturnMitigationsInPlace: undefined
           });
         });
       });
@@ -160,8 +160,8 @@ describe("<RiskField>", () => {
             riskBaselineLikelihood: "4",
             riskBaselineMitigationsInPlace: "Cut down the tree",
             riskCurrentReturnLikelihood: "5",
-            riskChangeRisk: "No",
-            riskCurrentMitigationsInPlace: undefined
+            riskAnyChange: "No",
+            riskCurrentReturnMitigationsInPlace: undefined
           });
         });
       });
@@ -177,8 +177,8 @@ describe("<RiskField>", () => {
             riskBaselineLikelihood: "4",
             riskBaselineMitigationsInPlace: "Cut down the tree",
             riskCurrentReturnLikelihood: "1",
-            riskChangeRisk: "Yes",
-            riskCurrentMitigationsInPlace: undefined
+            riskAnyChange: "Yes",
+            riskCurrentReturnMitigationsInPlace: undefined
           });
         });
       });
@@ -193,8 +193,8 @@ describe("<RiskField>", () => {
             riskBaselineLikelihood: "4",
             riskBaselineMitigationsInPlace: "Cut down the tree",
             riskCurrentReturnLikelihood: "1",
-            riskChangeRisk: "No",
-            riskCurrentMitigationsInPlace: undefined
+            riskAnyChange: "No",
+            riskCurrentReturnMitigationsInPlace: undefined
           });
         });
       });
@@ -212,8 +212,8 @@ describe("<RiskField>", () => {
             riskBaselineLikelihood: "4",
             riskBaselineMitigationsInPlace: "Cut down the tree",
             riskCurrentReturnLikelihood: "1",
-            riskChangeRisk: "No",
-            riskCurrentMitigationsInPlace:
+            riskAnyChange: "No",
+            riskCurrentReturnMitigationsInPlace:
               "We haven't done anything yet, stop nagging!"
           });
         });
@@ -229,8 +229,8 @@ describe("<RiskField>", () => {
             riskBaselineLikelihood: "4",
             riskBaselineMitigationsInPlace: "Cut down the tree",
             riskCurrentReturnLikelihood: "1",
-            riskChangeRisk: "No",
-            riskCurrentMitigationsInPlace: "Please, give us more time!"
+            riskAnyChange: "No",
+            riskCurrentReturnMitigationsInPlace: "Please, give us more time!"
           });
         });
       });
@@ -246,8 +246,8 @@ describe("<RiskField>", () => {
           riskBaselineLikelihood: "4",
           riskBaselineMitigationsInPlace: "Cut down the tree",
           riskCurrentReturnLikelihood: "5",
-          riskChangeRisk: "Yes",
-          riskCurrentMitigationsInPlace: "Nothing yet!"
+          riskAnyChange: "Yes",
+          riskCurrentReturnMitigationsInPlace: "Nothing yet!"
         };
         risk = new RiskComponent(formData, onChangeSpy);
       });
@@ -276,8 +276,8 @@ describe("<RiskField>", () => {
           riskBaselineLikelihood: "4",
           riskBaselineMitigationsInPlace: "Cut down the tree",
           riskCurrentReturnLikelihood: "3",
-          riskChangeRisk: "No",
-          riskCurrentMitigationsInPlace: "More cat teamwork!"
+          riskAnyChange: "No",
+          riskCurrentReturnMitigationsInPlace: "More cat teamwork!"
         };
         risk = new RiskComponent(formData, onChangeSpy);
       });
@@ -307,8 +307,8 @@ describe("<RiskField>", () => {
           riskBaselineLikelihood: "4",
           riskBaselineMitigationsInPlace: "Cut down the tree",
           riskCurrentReturnLikelihood: "5",
-          riskChangeRisk: "Yes",
-          riskCurrentMitigationsInPlace: "Nothing yet!"
+          riskAnyChange: "Yes",
+          riskCurrentReturnMitigationsInPlace: "Nothing yet!"
         };
         risk = new RiskComponent(formData, onChangeSpy);
       });
@@ -340,8 +340,8 @@ describe("<RiskField>", () => {
           riskBaselineLikelihood: "4",
           riskBaselineMitigationsInPlace: "Cut down the tree",
           riskCurrentReturnLikelihood: "5",
-          riskChangeRisk: "No",
-          riskCurrentMitigationsInPlace: "Nothing yet!"
+          riskAnyChange: "No",
+          riskCurrentReturnMitigationsInPlace: "Nothing yet!"
         };
         risk = new RiskComponent(formData, onChangeSpy);
       });
