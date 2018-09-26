@@ -77,6 +77,37 @@ describe('ReturnPage', () => {
       updateReturnSpy = {execute: jest.fn(() => {execute: (presenter, request) => {presenter.updateSuccessful(1);}})};
     });
 
+    describe('nothing has been submitted', () => {
+      it('does not show any messages', async () => {
+        let unresolvingUpdateReturnStub = {execute: jest.fn(() => {execute: async (presenter, request) => {await new Promise(resolve => setTimeout(resolve, 14159265358));}})};
+
+        let projectId = 1;
+        let wrap = mount(<ReturnPage
+                validateReturn={validateReturnSpy}
+                match={{ params: { projectId: 1, returnId: 1 } }}
+                generateUISchema={new GenerateUISchema()}
+                generateSubmittedSchema={new GenerateReadOnlySchema()}
+                history={[]}
+                createReturn={createReturnSpy}
+                submitReturn={submitReturnSpy}
+                updateReturn={unresolvingUpdateReturnStub}
+                getReturn={new getReturnStub()}
+                getBaseReturn={new getBaseReturnStub()}
+              />);
+        await wait();
+
+        expect(wrap.find("[data-test='save-return-button']").length).toEqual(1);
+        expect(wrap.find("[data-test='submit-return-button']").length).toEqual(1);
+
+        expect(wrap.find("[data-test='disabled-save-return-button']").length).toEqual(0);
+        expect(wrap.find("[data-test='disabled-submit-return-button']").length).toEqual(0);
+
+        expect(wrap.find("[data-test='validationError']").length).toEqual(0);
+        expect(wrap.find("[data-test='saveSuccess']").length).toEqual(0);
+        expect(wrap.find("[data-test='submitSuccess']").length).toEqual(0);
+      });
+    });
+
     describe('saving', () => {
       it('it disables the save button until it finishes saving', async () => {
         let unresolvingUpdateReturnStub = {execute: jest.fn(() => {execute: async (presenter, request) => {await new Promise(resolve => setTimeout(resolve, 14159265358));}})};
@@ -107,7 +138,7 @@ describe('ReturnPage', () => {
         expect(wrap.find("[data-test='disabled-submit-return-button']").length).toEqual(1);
       });
 
-      it('doesnt show a validation error', async () => {
+      it('shows a success message', async () => {
         let projectId = 1;
         let wrap = mount(<ReturnPage
                 validateReturn={validateReturnSpy}
@@ -128,6 +159,32 @@ describe('ReturnPage', () => {
         await wait();
         expect(validateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), projectId, {cathouse: {cathouse: "Meow"}});
         expect(wrap.find("[data-test='validationError']").length).toEqual(0);
+        expect(wrap.find("[data-test='saveSuccess']").length).toEqual(1);
+        expect(wrap.find("[data-test='submitSuccess']").length).toEqual(0);
+      });
+
+      it('hides the success message after data entry resumes', async () => {
+        let projectId = 1;
+        let wrap = mount(<ReturnPage
+                validateReturn={validateReturnSpy}
+                match={{ params: { projectId: 1, returnId: 1 } }}
+                generateUISchema={new GenerateUISchema()}
+                generateSubmittedSchema={new GenerateReadOnlySchema()}
+                history={[]}
+                createReturn={createReturnSpy}
+                submitReturn={submitReturnSpy}
+                updateReturn={updateReturnSpy}
+                getReturn={new getReturnStub()}
+                getBaseReturn={new getBaseReturnStub()}
+              />);
+
+        let input = wrap.find("[type='text'] input").first();
+        await updateFormField(input, "Meow");
+        await saveReturn(wrap);
+        await wait();
+        await updateFormField(input, "Cats");
+        await wait();
+        expect(wrap.find("[data-test='saveSuccess']").length).toEqual(0);
       });
     });
 
@@ -183,6 +240,8 @@ describe('ReturnPage', () => {
         expect(validateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), projectId, {cathouse: {cathouse: 'cat'}});
         expect(submitReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), { returnId: 1, data: { cathouse: { cathouse: 'cat' } } });
         expect(wrap.find("[data-test='validationError']").length).toEqual(0);
+        expect(wrap.find("[data-test='submitSuccess']").length).toEqual(1);
+        expect(wrap.find("[data-test='saveSuccess']").length).toEqual(0);
       });
     });
 
@@ -220,6 +279,7 @@ describe('ReturnPage', () => {
         expect(validateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), projectId, {cathouse: {}});
         expect(submitReturnSpy.execute).not.toHaveBeenCalled();
         expect(wrap.find("[data-test='validationError']").length).toEqual(1);
+        expect(wrap.find("[data-test='saveSuccess']").length).toEqual(0);
       });
     });
 
@@ -246,6 +306,7 @@ describe('ReturnPage', () => {
         expect(validateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), projectId, {cathouse: {}});
         expect(wrap.find("[data-test='validationError']").length).toEqual(1);
         expect(wrap.find("[data-test='validationError']").text()).toEqual("This return cannot be submitted until the following fields are filled:  Cat House →  Cat House");
+        expect(wrap.find("[data-test='submitSuccess']").length).toEqual(0);
       });
     });
   });

@@ -4,7 +4,7 @@ import ReturnForm from "../ReturnForm";
 export default class ReturnPage extends React.Component {
   constructor() {
     super();
-    this.state = { loading: true, valid: true, invalid_paths: [] };
+    this.state = { loading: true, valid: true, invalid_paths: [], lastAction: "Create" };
   }
 
   projectId = () => {
@@ -23,7 +23,7 @@ export default class ReturnPage extends React.Component {
   };
 
   onFormSubmit = async formData => {
-    this.setState({status: "Updating", valid: true, invalid_paths: []});
+    this.setState({status: "Updating", valid: true, invalid_paths: [], lastAction: "Submit"});
 
     await this.props.validateReturn.execute(this, this.props.match.params.projectId, formData);
 
@@ -50,7 +50,7 @@ export default class ReturnPage extends React.Component {
   };
 
   onFormSave = async formData => {
-    this.setState({status: "Updating", valid: true, invalid_paths: []});
+    this.setState({status: "Updating", valid: true, invalid_paths: [], lastAction: "Save"});
     this.props.updateReturn.execute(this, {
       returnId: this.returnId(),
       data: formData
@@ -143,6 +143,23 @@ export default class ReturnPage extends React.Component {
     })
   };
 
+  renderSuccessAlerts() {
+    if (this.state.lastAction === "Save")
+    {
+      return (
+        <div data-test="saveSuccess" role="alert" className="alert alert-success">
+          Draft saved!
+        </div>
+      )
+    } else if (this.state.lastAction === "Submit") {
+      return (
+        <div data-test="submitSuccess" role="alert" className="alert alert-success">
+          Return submitted!
+        </div>
+      )
+    }
+  }
+
   render() {
     return (
       <div className="">
@@ -161,7 +178,7 @@ export default class ReturnPage extends React.Component {
             <div className="alert alert-danger" role="alert" data-test="validationError">
               This return cannot be submitted until the following fields are filled: <br/>
               {this.renderInvalidPaths()}
-            </div> : <div/>
+            </div> : this.renderSuccessAlerts()
           }
           <div data-test="return" className="return col-md-12">
             {this.renderForm()}

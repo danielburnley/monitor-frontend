@@ -96,6 +96,27 @@ describe("<ReturnForm>", () => {
     });
   });
 
+  it("Calls the onChange function when changing", async () => {
+    let saveSpy = jest.fn();
+    let changeSpy = jest.fn();
+
+    let wrapper = shallow(
+      <ReturnForm
+        data={initialData}
+        schema={formSchema}
+        onSave={saveSpy}
+        onChange={changeSpy}
+        status="Draft"
+      />
+    );
+    await wait();
+    await updateFormField(wrapper.find('input[type="text"]'));
+    expect(changeSpy).toHaveBeenCalledWith({
+      cats: { details: { noise: "Meow" } }
+    });
+  });
+
+
   it("Calls the onSave function with the updated formData when edited", async () => {
     let saveSpy = jest.fn();
     let wrapper = mount(
