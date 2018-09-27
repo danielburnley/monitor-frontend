@@ -6,14 +6,9 @@ export default class ValidationMessage extends React.Component {
     super(props);
   }
 
-  format = (string) => {
-    // capitalize
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
-
   formatPathNode = (node) => {
     if (typeof node == 'string') {
-      return this.format(node)
+      return node
     }
     if (typeof node == 'number') {
       return "Item " + (node + 1);

@@ -191,7 +191,7 @@ describe('ReturnPage', () => {
   describe('invalid form', () => {
     let validateReturnSpy, createReturnSpy, updateReturnSpy, submitReturnSpy;
     beforeEach(() => {
-      validateReturnSpy = {execute: jest.fn((presenter, formdata) => { presenter.invalidateFields([['cat House',0,'cat House']])})};
+      validateReturnSpy = {execute: jest.fn((presenter, formdata) => { presenter.invalidateFields([['Cat House',0,'Cat House']])})};
       submitReturnSpy = {execute: jest.fn()};
       createReturnSpy = {execute: jest.fn((presenter, request) => {presenter.creationSuccessful(1);})};
       updateReturnSpy = {execute: jest.fn((presenter, request) => {presenter.updateSuccessful(1);})};
