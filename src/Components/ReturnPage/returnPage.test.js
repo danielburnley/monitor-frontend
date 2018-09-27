@@ -162,10 +162,10 @@ describe('ReturnPage', () => {
       });
 
       it('permits submission', async () => {
-        let projectId = 1;
+        let projectId = 9;
         let wrap = mount(<ReturnPage
                 validateReturn={validateReturnSpy}
-                match={{ params: { projectId: 1, returnId: 1 } }}
+                match={{ params: { projectId: 9, returnId: 1 } }}
                 generateUISchema={new GenerateUISchema()}
                 generateSubmittedSchema={new GenerateReadOnlySchema()}
                 history={[]}
@@ -180,8 +180,8 @@ describe('ReturnPage', () => {
         await updateFormField(input, "cat");
         await submitReturn(wrap);
         await wait();
+        expect(submitReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), { projectId: 9, returnId: 1, data: { cathouse: { cathouse: 'cat' } } });
         expect(validateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), projectId, {cathouse: {cathouse: 'cat'}});
-        expect(submitReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), { returnId: 1, data: { cathouse: { cathouse: 'cat' } } });
         expect(wrap.find("[data-test='validationError']").length).toEqual(0);
       });
     });

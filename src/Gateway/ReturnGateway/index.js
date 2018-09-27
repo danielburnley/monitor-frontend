@@ -79,14 +79,14 @@ export default class ReturnGateway {
     }
   }
 
-  async submit(return_id, data) {
+  async submit(project_id, return_id, data) {
     let response = await fetch(
       `${this.env.REACT_APP_HIF_API_URL}return/submit`,
       {
         method: 'POST',
         headers: {'Content-Type': 'application/json',
           'API_KEY': window.apiKey},
-        body: JSON.stringify({return_id, data}),
+        body: JSON.stringify({project_id, return_id, data}),
       },
     );
 

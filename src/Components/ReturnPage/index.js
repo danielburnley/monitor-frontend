@@ -36,6 +36,7 @@ export default class ReturnPage extends React.Component {
     if (this.state.valid)
     {
       await this.props.submitReturn.execute(this, {
+        projectId: this.projectId(),
         returnId: this.returnId(),
         data: formData
       });
