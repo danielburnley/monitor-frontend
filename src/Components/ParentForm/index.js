@@ -8,6 +8,7 @@ import VarianceField from "../VarianceField";
 import GenerateSidebarItems from "../../UseCase/GenerateSidebarItems";
 import "./style.css";
 import RiskField from "../RiskField";
+import BaselineData from "../BaselineData";
 
 export default class ParentForm extends React.Component {
   constructor(props) {
@@ -92,7 +93,7 @@ export default class ParentForm extends React.Component {
   }
 
   renderSubform() {
-    const fields = { horizontal: HorizontalFields, variance: VarianceField, risk: RiskField };
+    const fields = { horizontal: HorizontalFields, variance: VarianceField, risk: RiskField, base: BaselineData };
     if (this.selectedSchema().type === "array") {
       return (
         <div className="col-md-10">
