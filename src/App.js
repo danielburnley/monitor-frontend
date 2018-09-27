@@ -1,6 +1,7 @@
 import React from "react";
 import qs from "qs";
 
+import Homepage from "./Components/Homepage";
 import Footer from "./Components/Footer";
 import Header from "./Components/Header";
 import ProjectForm from "./Components/ProjectForm";
@@ -75,7 +76,9 @@ const App = () => (
 
       <div className="monitor-container">
         <Switch>
-          <Route exact path="/" component={Home} />
+          <Route exact path="/">
+            <Homepage/>
+          </Route>
           <Route
             path="/project/:id"
             render={props => (
@@ -114,12 +117,6 @@ const App = () => (
       <Footer />
     </div>
   </Router>
-);
-
-const Home = () => (
-  <div>
-    <h2>Home</h2>
-  </div>
 );
 
 export default App;
