@@ -1,6 +1,7 @@
 import React from "react";
 import ReturnForm from "../ReturnForm";
 import ValidationMessage from "../ValidationMessage";
+import "./style.css";
 
 export default class ReturnPage extends React.Component {
   constructor() {
@@ -115,7 +116,7 @@ export default class ReturnPage extends React.Component {
 
   renderForm() {
     if (this.state.loading) {
-      return <div />;
+      return <div/>;
     }
 
     return (
@@ -148,7 +149,8 @@ export default class ReturnPage extends React.Component {
     }
     if (this.state.status === "Submitted") {
       return (
-        <div data-test="submitSuccess" role="alert" className="alert alert-success">
+        <div data-test="submitSuccess" role="alert" className="submit-success">
+          <h3 className="checkmark">✔</h3>
           Return submitted!
         </div>
       )
@@ -174,9 +176,11 @@ export default class ReturnPage extends React.Component {
             this.renderSaveSuccessAlert()
           }
           <div className="row">
-            <div data-test="return" className="return col-md-12">
-              {this.renderForm()}
-            </div>
+            {this.state.status !== "Submitted" &&
+              <div data-test="return" className="return col-md-12">
+                {this.renderForm()}
+              </div>
+            }
           </div>
         </div>
       </div>

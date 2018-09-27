@@ -219,7 +219,7 @@ describe('ReturnPage', () => {
         expect(wrap.find("[data-test='disabled-submit-return-button']").length).toEqual(1);
       });
 
-      it('permits submission', async () => {
+      it('submits', async () => {
         let projectId = 1;
         let wrap = mount(<ReturnPage
                 validateReturn={validateReturnSpy}
@@ -243,6 +243,7 @@ describe('ReturnPage', () => {
         expect(submitReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), { returnId: 1, data: { cathouse: { cathouse: 'cat' } } });
         expect(wrap.find("[data-test='validationError']").length).toEqual(0);
         expect(wrap.find("[data-test='submitSuccess']").length).toEqual(1);
+        expect(wrap.find("[data-test='return']").length).toEqual(0);
         expect(wrap.find("[data-test='saveSuccess']").length).toEqual(0);
       });
     });
