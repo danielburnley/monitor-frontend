@@ -17,12 +17,14 @@ export default class GetToken extends React.Component {
   };
 
   sendRequest = e => {
-    this.props.requestToken.execute(
-      this.state.email,
-      this.props.projectId,
-      this.props.targetUrl
-    );
-    this.setState({ message_sent: true });
+    if (this.state.email) {
+      this.props.requestToken.execute(
+        this.state.email,
+        this.props.projectId,
+        this.props.targetUrl
+      );
+      this.setState({ message_sent: true });
+    }
     e.preventDefault();
   };
 
@@ -58,13 +60,22 @@ export default class GetToken extends React.Component {
                 onChange={this.emailChange}
               />
             </div>
-            <button
-              data-test="submit_button"
-              type="submit"
-              className="btn btn-primary"
-            >
-              Request Access
-            </button>
+            {
+              this.state.email ?
+              <button
+                data-test="submit-button"
+                type="submit"
+                className="btn btn-primary"
+              >
+                Request Access
+              </button> : <button
+                data-test="disabled-submit-button"
+                type="submit"
+                className="btn disabled"
+              >
+                Request Access
+              </button>
+          }
           </form>
         </div>
       );

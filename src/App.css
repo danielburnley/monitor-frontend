@@ -41,3 +41,9 @@ html {
   background-color: #FFE644;
   color: black;
 }
+
+.disabled {
+  color: #7c7878 !important;
+  background-color: #eeeeee;
+  cursor: not-allowed;
+}
