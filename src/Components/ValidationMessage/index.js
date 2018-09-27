@@ -6,14 +6,14 @@ export default class ValidationMessage extends React.Component {
     super(props);
   }
 
-  decamelize = (string) => {
-    let all_camelcase_word_boundaries = /(^.|[A-Z])/g;
-    return string.replace(all_camelcase_word_boundaries, (character) => " "+character.toUpperCase()).substring(1);
+  format = (string) => {
+    // capitalize
+    return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
   formatPathNode = (node) => {
     if (typeof node == 'string') {
-      return this.decamelize(node)
+      return this.format(node)
     }
     if (typeof node == 'number') {
       return "Item " + (node + 1);
