@@ -102,7 +102,7 @@ describe('ReturnPage', () => {
       updateReturnSpy = {execute: jest.fn((presenter, request) => {presenter.updateSuccessful(1);})};
     });
 
-    it('does not show any buttons or messages', async () => {
+    it('does not show any messages', async () => {
       let unresolvingUpdateReturnStub = {execute: jest.fn(() => {execute: async (presenter, request) => {await new Promise(resolve => setTimeout(resolve, 14159265358));}})};
 
       let projectId = 1;
@@ -123,13 +123,6 @@ describe('ReturnPage', () => {
       expect(wrap.find("[data-test='submitSuccess']").length).toEqual(0);
       expect(wrap.find("[data-test='saveSuccess']").length).toEqual(0);
       expect(wrap.find("[data-test='validationError']").length).toEqual(0);
-
-      //expect(wrap.find("[data-test='save-return-button']").length).toEqual(1);
-      //expect(wrap.find("[data-test='return']").length).toEqual(1);
-      //expect(wrap.find("[data-test='submit-return-button']").length).toEqual(1);
-
-      //expect(wrap.find("[data-test='disabled-save-return-button']").length).toEqual(0);
-      //expect(wrap.find("[data-test='disabled-submit-return-button']").length).toEqual(0);
 
     });
   });

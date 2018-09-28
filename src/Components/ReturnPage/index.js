@@ -151,7 +151,8 @@ export default class ReturnPage extends React.Component {
       return (
         <div data-test="submitSuccess" role="alert" className="submit-success">
           <h3 className="checkmark">✔</h3>
-          Return submitted!
+          <h3>Return submitted!</h3>
+          <h4 className="subheading">All members of this project have been sent an email with a link to view this return</h4>
         </div>
       )
     }
