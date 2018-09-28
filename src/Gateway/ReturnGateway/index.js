@@ -4,16 +4,16 @@ import runtimeEnv from '@mars/heroku-js-runtime-env';
 
 export default class ReturnGateway {
   constructor(apiKeyGateway) {
-    this.apiKeyGateway = apiKeyGateway
-    this.env = runtimeEnv()
+    this.apiKeyGateway = apiKeyGateway;
+    this.env = runtimeEnv();
   }
 
-  async baseReturnFor(id) {
+  async baseReturnFor(project_id) {
     let rawResponse = await fetch(
-      `${this.env.REACT_APP_HIF_API_URL}project/${id}/return`,
+      `${this.env.REACT_APP_HIF_API_URL}project/${project_id}/return`,
       {
         headers: {'Content-Type': 'application/json',
-          'API_KEY': window.apiKey},
+          'API_KEY': this.apiKeyGateway.getApiKey()},
       },
     );
 
@@ -31,7 +31,7 @@ export default class ReturnGateway {
       `${this.env.REACT_APP_HIF_API_URL}return/get?id=${id}`,
       {
         headers: {'Content-Type': 'application/json',
-          'API_KEY': window.apiKey},
+          'API_KEY': this.apiKeyGateway.getApiKey()},
       },
     );
     if (rawResponse.ok) {
@@ -42,14 +42,14 @@ export default class ReturnGateway {
     }
   }
 
-  async create(id, data) {
+  async create(project_id, data) {
     let rawResponse = await fetch(
       `${this.env.REACT_APP_HIF_API_URL}return/create`,
       {
         method: 'POST',
         headers: {'Content-Type': 'application/json',
-          'API_KEY': window.apiKey},
-        body: JSON.stringify({project_id: id, data}),
+          'API_KEY': this.apiKeyGateway.getApiKey()},
+        body: JSON.stringify({project_id, data}),
       },
     );
 
@@ -61,14 +61,14 @@ export default class ReturnGateway {
     }
   }
 
-  async update(return_id, return_data) {
+  async update(project_id, return_id, return_data) {
     let response = await fetch(
       `${this.env.REACT_APP_HIF_API_URL}return/update`,
       {
         method: 'POST',
         headers: {'Content-Type': 'application/json',
-          'API_KEY': window.apiKey},
-        body: JSON.stringify({return_id, return_data}),
+          'API_KEY': this.apiKeyGateway.getApiKey()},
+        body: JSON.stringify({project_id, return_id, return_data}),
       },
     );
 
@@ -79,14 +79,14 @@ export default class ReturnGateway {
     }
   }
 
-  async submit(return_id, data) {
+  async submit(project_id, return_id, data) {
     let response = await fetch(
       `${this.env.REACT_APP_HIF_API_URL}return/submit`,
       {
         method: 'POST',
         headers: {'Content-Type': 'application/json',
-          'API_KEY': window.apiKey},
-        body: JSON.stringify({return_id, data}),
+          'API_KEY': this.apiKeyGateway.getApiKey()},
+        body: JSON.stringify({project_id, return_id, data}),
       },
     );
 
