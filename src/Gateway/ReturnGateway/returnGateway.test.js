@@ -371,9 +371,9 @@ describe('Return Gateway', () => {
       it('Submits the data to the API', async () => {
         let updateReturnRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
-          .post('/return/update', {return_id: 1, return_data: {cats: 'meow'}})
+          .post('/return/update', {project_id: 9, return_id: 1, return_data: {cats: 'meow'}})
           .reply(200);
-        await gateway.update(1, {cats: 'meow'});
+        await gateway.update(9, 1, {cats: 'meow'});
 
         expect(updateReturnRequest.isDone()).toBeTruthy();
       });
@@ -381,9 +381,9 @@ describe('Return Gateway', () => {
       it('Returns successful', async () => {
         let updateReturnRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
-          .post('/return/update', {return_id: 1, return_data: {cats: 'meow'}})
+          .post('/return/update', {project_id: 6, return_id: 1, return_data: {cats: 'meow'}})
           .reply(200);
-        let response = await gateway.update(1, {cats: 'meow'});
+        let response = await gateway.update(6, 1, {cats: 'meow'});
         expect(response).toEqual({success: true});
       });
     });
@@ -399,9 +399,9 @@ describe('Return Gateway', () => {
       it('Submits the data to the API', async () => {
         let updateReturnRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
-          .post('/return/update', {return_id: 2, return_data: {dogs: 'woof'}})
+          .post('/return/update', {project_id: 4, return_id: 2, return_data: {dogs: 'woof'}})
           .reply(200);
-        await gateway.update(2, {dogs: 'woof'});
+        await gateway.update(4, 2, {dogs: 'woof'});
 
         expect(updateReturnRequest.isDone()).toBeTruthy();
       });
@@ -409,9 +409,9 @@ describe('Return Gateway', () => {
       it('Returns successful', async () => {
         let updateReturnRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
-          .post('/return/update', {return_id: 2, return_data: {dogs: 'woof'}})
+          .post('/return/update', {project_id: 4, return_id: 2, return_data: {dogs: 'woof'}})
           .reply(200);
-        let response = await gateway.update(2, {dogs: 'woof'});
+        let response = await gateway.update(4, 2, {dogs: 'woof'});
         expect(response).toEqual({success: true});
       });
     });
@@ -427,9 +427,9 @@ describe('Return Gateway', () => {
       it('Returns unsuccessful', async () => {
         let updateReturnRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
-          .post('/return/update', {return_id: 2, return_data: {dogs: 'woof'}})
+          .post('/return/update', {project_id: 12, return_id: 2, return_data: {dogs: 'woof'}})
           .reply(500);
-        let response = await gateway.update(2, {dogs: 'woof'});
+        let response = await gateway.update(12, 2, {dogs: 'woof'});
 
         expect(response.success).toBeFalsy();
       });

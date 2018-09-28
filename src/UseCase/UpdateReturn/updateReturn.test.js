@@ -3,9 +3,9 @@ import UpdateReturn from ".";
 describe("UpdateReturn", () => {
   let returnGatewaySpy, presenterSpy;
 
-  function getUseCase(successfulUpdate, returnId = undefined) {
+  function getUseCase(successfulUpdate, returnId, projectId) {
     returnGatewaySpy = {
-      update: jest.fn(() => ({ success: successfulUpdate, returnId }))
+      update: jest.fn(() => ({ success: successfulUpdate, projectId, returnId }))
     };
 
     return new UpdateReturn(returnGatewaySpy);
@@ -23,8 +23,9 @@ describe("UpdateReturn", () => {
 
     describe("With successful update", () => {
       beforeEach(async () => {
-        useCase = getUseCase(true, 1);
+        useCase = getUseCase(true, 1, 9);
         await useCase.execute(presenterSpy, {
+          projectId: 9,
           returnId: 1,
           data: { cats: "meow" },
           schema: { ducks: "quack"}
@@ -32,7 +33,7 @@ describe("UpdateReturn", () => {
       });
 
       it("Passes the data to the gateway", () => {
-        expect(returnGatewaySpy.update).toBeCalledWith(1, { cats: "meow" });
+        expect(returnGatewaySpy.update).toBeCalledWith(9, 1, { cats: "meow" });
       });
 
       it("Calls update successful with the id on the presenter when the update suceeded", () => {
@@ -54,8 +55,9 @@ describe("UpdateReturn", () => {
 
     describe("With successful update", () => {
       beforeEach(async () => {
-        useCase = getUseCase(true, 2);
+        useCase = getUseCase(true, 2, 3);
         await useCase.execute(presenterSpy, {
+          projectId: 3,
           returnId: 2,
           data: { dogs: "woof" },
           schema: { cow: "moo"}
@@ -63,7 +65,7 @@ describe("UpdateReturn", () => {
       });
 
       it("Passes the data to the gateway", async () => {
-        expect(returnGatewaySpy.update).toBeCalledWith(2, { dogs: "woof" });
+        expect(returnGatewaySpy.update).toBeCalledWith(3, 2, { dogs: "woof" });
       });
 
       it("Calls update successful with the id on the presenter when the update suceeded", () => {
@@ -80,4 +82,3 @@ describe("UpdateReturn", () => {
     });
   });
 });
-

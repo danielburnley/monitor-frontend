@@ -227,6 +227,8 @@ describe('ReturnPage', () => {
     describe('saving', () => {
       it('shows a validation warning', async () => {
         let projectId = 1;
+        let returnId = 1;
+
         let wrap = mount(<ReturnPage
                 validateReturn={validateReturnSpy}
                 match={{ params: { projectId: 1, returnId: 1 } }}
@@ -244,6 +246,7 @@ describe('ReturnPage', () => {
         await updateFormField(input, "");
         await saveReturn(wrap);
         await wait();
+        expect(updateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), {projectId, returnId, data: {cathouse: {}}});
         expect(validateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), projectId, {cathouse: {}});
         expect(wrap.find("[data-test='validationWarning']").length).toEqual(1);
         expect(wrap.find("[data-test='validationWarning']").text()).toEqual("Warning: You will not be able to submit this return until the following fields are filled in: Cat House → Item 1 → Cat House");
