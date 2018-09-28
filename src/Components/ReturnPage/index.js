@@ -147,7 +147,7 @@ export default class ReturnPage extends React.Component {
         </div>
       )
     }
-    if (this.state.status === "Submitted") {
+    if (this.state.status === "Submitted" && this.state.lastAction === "Submit") {
       return (
         <div data-test="submitSuccess" role="alert" className="submit-success">
           <h3 className="checkmark">✔</h3>
@@ -176,7 +176,7 @@ export default class ReturnPage extends React.Component {
             this.renderSaveSuccessAlert()
           }
           <div className="row">
-            {this.state.status !== "Submitted" &&
+            {(this.state.status !== "Submitted" || this.state.lastAction !== "Submit") &&
               <div data-test="return" className="return col-md-12">
                 {this.renderForm()}
               </div>

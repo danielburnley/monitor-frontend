@@ -21,6 +21,30 @@ async function updateFormField(input, value) {
   await wait();
 }
 
+class getSubmittedReturnStub {
+  async execute(presenter, request) {
+    await presenter.presentReturn({
+      status: 'Submitted',
+      data: {cathouse: {cathouse: 'cat'}},
+      schema: {
+        type: 'object',
+        properties: {
+          cathouse: {
+            type: 'object',
+            title: 'cathouse',
+            properties: {
+              cathouse: {
+                type: 'string',
+                readonly: true
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+}
+
 class getReturnStub {
   async execute(presenter, request) {
     await presenter.presentReturn({
@@ -67,7 +91,49 @@ class getBaseReturnStub {
     });
   }
 }
+
 describe('ReturnPage', () => {
+  describe('already submitted form', () => {
+    let validateReturnSpy, createReturnSpy, updateReturnSpy, submitReturnSpy;
+    beforeEach(() => {
+      validateReturnSpy = {execute: jest.fn(() => {})};
+      submitReturnSpy = {execute: jest.fn(async (presenter) => {await presenter.submissionSuccessful(1);})};
+      createReturnSpy = {execute: jest.fn((presenter, request) => {presenter.creationSuccessful(1);})};
+      updateReturnSpy = {execute: jest.fn((presenter, request) => {presenter.updateSuccessful(1);})};
+    });
+
+    it('does not show any buttons or messages', async () => {
+      let unresolvingUpdateReturnStub = {execute: jest.fn(() => {execute: async (presenter, request) => {await new Promise(resolve => setTimeout(resolve, 14159265358));}})};
+
+      let projectId = 1;
+      let wrap = mount(<ReturnPage
+              validateReturn={validateReturnSpy}
+              match={{ params: { projectId: 1, returnId: 1 } }}
+              generateUISchema={new GenerateUISchema()}
+              generateSubmittedSchema={new GenerateReadOnlySchema()}
+              history={[]}
+              createReturn={createReturnSpy}
+              submitReturn={submitReturnSpy}
+              updateReturn={unresolvingUpdateReturnStub}
+              getReturn={new getSubmittedReturnStub()}
+              getBaseReturn={new getBaseReturnStub()}
+            />);
+      await wait();
+
+      expect(wrap.find("[data-test='submitSuccess']").length).toEqual(0);
+      expect(wrap.find("[data-test='saveSuccess']").length).toEqual(0);
+      expect(wrap.find("[data-test='validationError']").length).toEqual(0);
+
+      //expect(wrap.find("[data-test='save-return-button']").length).toEqual(1);
+      //expect(wrap.find("[data-test='return']").length).toEqual(1);
+      //expect(wrap.find("[data-test='submit-return-button']").length).toEqual(1);
+
+      //expect(wrap.find("[data-test='disabled-save-return-button']").length).toEqual(0);
+      //expect(wrap.find("[data-test='disabled-submit-return-button']").length).toEqual(0);
+
+    });
+  });
+
   describe('valid form ', () => {
     let validateReturnSpy, createReturnSpy, updateReturnSpy, submitReturnSpy;
     beforeEach(() => {
