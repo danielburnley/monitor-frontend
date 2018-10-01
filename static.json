@@ -3,5 +3,14 @@
   "routes": {
     "/**": "index.html"
   },
-  "https_only": true
+  "https_only": true,
+  "headers": {
+    "/**": {
+      "Strict-Transport-Security": "max-age=7776000",
+      "X-Frame-Options": "DENY",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "no-referrer"
+    }
+  }    
 }

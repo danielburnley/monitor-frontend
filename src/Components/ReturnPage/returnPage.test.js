@@ -278,11 +278,11 @@ describe('ReturnPage', () => {
         expect(wrap.find("[data-test='disabled-submit-return-button']").length).toEqual(1);
       });
 
-      it('submits', async () => {
-        let projectId = 1;
+      it('permits submission', async () => {
+        let projectId = 9;
         let wrap = mount(<ReturnPage
                 validateReturn={validateReturnSpy}
-                match={{ params: { projectId: 1, returnId: 1 } }}
+                match={{ params: { projectId: 9, returnId: 1 } }}
                 generateUISchema={new GenerateUISchema()}
                 generateSubmittedSchema={new GenerateReadOnlySchema()}
                 history={[]}
@@ -298,8 +298,8 @@ describe('ReturnPage', () => {
         await submitReturn(wrap);
         await wait();
         wrap.update();
+        expect(submitReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), { projectId: 9, returnId: 1, data: { cathouse: { cathouse: 'cat' } } });
         expect(validateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), projectId, {cathouse: {cathouse: 'cat'}});
-        expect(submitReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), { returnId: 1, data: { cathouse: { cathouse: 'cat' } } });
         expect(wrap.find("[data-test='validationError']").length).toEqual(0);
         expect(wrap.find("[data-test='submitSuccess']").length).toEqual(1);
         expect(wrap.find("[data-test='return']").length).toEqual(0);
@@ -348,6 +348,8 @@ describe('ReturnPage', () => {
     describe('saving', () => {
       it('shows a validation warning', async () => {
         let projectId = 1;
+        let returnId = 1;
+
         let wrap = mount(<ReturnPage
                 validateReturn={validateReturnSpy}
                 match={{ params: { projectId: 1, returnId: 1 } }}
@@ -365,6 +367,7 @@ describe('ReturnPage', () => {
         await updateFormField(input, "");
         await saveReturn(wrap);
         await wait();
+        expect(updateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), {projectId, returnId, data: {cathouse: {}}});
         expect(validateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), projectId, {cathouse: {}});
         expect(wrap.find("[data-test='submitSuccess']").length).toEqual(0);
         expect(wrap.find("[data-test='validationWarning']").length).toEqual(1);

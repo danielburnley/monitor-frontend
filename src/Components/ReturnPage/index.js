@@ -30,12 +30,14 @@ export default class ReturnPage extends React.Component {
     await this.props.validateReturn.execute(this, this.props.match.params.projectId, formData);
 
     await this.props.updateReturn.execute(this, {
+      projectId: this.projectId(),
       returnId: this.returnId(),
       data: formData
     });
 
     if (this.state.valid) {
       await this.props.submitReturn.execute(this, {
+        projectId: this.projectId(),
         returnId: this.returnId(),
         data: formData
       });
@@ -52,6 +54,7 @@ export default class ReturnPage extends React.Component {
   onFormSave = async formData => {
     this.setState({status: "Updating", valid: true, invalidPaths: [], lastAction: "Save"});
     this.props.updateReturn.execute(this, {
+      projectId: this.projectId(),
       returnId: this.returnId(),
       data: formData
     });

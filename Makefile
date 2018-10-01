@@ -1,17 +1,23 @@
+.PHONY: docker-build
 docker-build:
 	docker-compose build
 
-docker-stop:
-	docker-compose stop
+.PHONY: docker-down
+docker-down:
+	docker-compose down
 
-serve: docker-stop docker-build
+.PHONY: serve
+serve: docker-down docker-build
 	docker-compose up
 
+.PHONY: shell
 shell:
 	docker-compose run --rm web ash
 
+.PHONY: storybook
 storybook: 
 	docker-compose run --rm --service-ports web npm run storybook
 
-test: docker-stop docker-build
+.PHONY: test
+test: docker-down docker-build
 	docker-compose run --rm web npm test

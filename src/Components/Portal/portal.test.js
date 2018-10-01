@@ -119,7 +119,7 @@ describe("Portal", () => {
     expect(wrapper.find("GetToken").length).toEqual(1);
   });
 
-  it("renders chidlren if the use case returns true", async () => {
+  it("renders children if the use case returns true", async () => {
     CanAccessProjectSpy = {
       execute: jest.fn(async () => {
         return {
