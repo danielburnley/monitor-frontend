@@ -87,9 +87,9 @@ export default class BaselineData extends React.Component {
 
   findInDependency = (dependency, key) => {
     let dependencyOptions = dependency.oneOf;
-    let dependencyConditions = dependencyOptions.find(item => {
-      return key in item.properties;
-    });
+    let dependencyConditions = dependencyOptions.find(
+      item => key in item.properties
+    );
     if (dependencyConditions) {
       return dependencyConditions.properties[key];
     }
