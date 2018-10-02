@@ -6,19 +6,10 @@ export default class ValidationMessage extends React.Component {
     super(props);
   }
 
-  formatPathNode = (node) => {
-    if (typeof node == 'string') {
-      return node
-    }
-    if (typeof node == 'number') {
-      return "Item " + (node + 1);
-    }
-  };
-
   renderInvalidPaths = () => {
     return this.props.invalidPaths.map(path => {
       return (<span key={path}>
-        {path.map(this.formatPathNode).join(' → ')}<br/>
+        {path.join(' → ')}<br/>
       </span>)
     })
   };
