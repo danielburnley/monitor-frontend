@@ -24,7 +24,7 @@ export default class ReturnPage extends React.Component {
   };
 
   onFormSubmit = async formData => {
-    this.setState({lastAction: 'Submit', status: "Updating", valid: true, invalidPaths: []});
+    this.setState({lastAction: 'Submit', status: "Updating", valid: true, invalidPaths: [], prettyInvalidPaths: []});
 
     await this.props.validateReturn.execute(this, this.props.match.params.projectId, formData);
 

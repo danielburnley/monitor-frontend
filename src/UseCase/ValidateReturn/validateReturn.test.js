@@ -7,9 +7,9 @@ describe('ValidateReturn', () => {
     invalidateFields: jest.fn()
   };
 
-  function getUseCase(valid = true, invalidPaths = []) {
+  function getUseCase(valid = true, prettyInvalidPaths = []) {
     validationGatewaySpy = {
-      validate: jest.fn(async () => ({ valid, invalidPaths }))
+      validate: jest.fn(async () => ({ valid, prettyInvalidPaths }))
     };
 
     return new ValidateReturn(validationGatewaySpy);
