@@ -4,10 +4,10 @@ export default class ValidateReturn {
   }
 
   async execute(presenter, project_id, data) {
-    let {valid, invalidPaths} = await this.validationGateway.validate(project_id, data);
+    let {valid, invalidPaths, prettyInvalidPaths} = await this.validationGateway.validate(project_id, data);
     
     if (!valid) {
-      await presenter.invalidateFields(invalidPaths);
+      await presenter.invalidateFields(prettyInvalidPaths);
     }
   }
 }

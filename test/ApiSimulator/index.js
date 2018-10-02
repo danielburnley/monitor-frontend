@@ -25,7 +25,7 @@ class APISimulator {
     let response = { schema, data };
     let returnRequest = nock(this.url)
       .matchHeader("Content-Type", "application/json")
-      .get("/return/get?id=0");
+      .get("/return/get?id=0&returnId=1");
     return new APIResponse(returnRequest, response);
   }
 

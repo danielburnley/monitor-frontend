@@ -25,7 +25,7 @@ describe('Return Gateway', () => {
           .matchHeader('Content-Type', 'application/json')
           .matchHeader('API_KEY', 'superSecret')
           .post('/return/validate',{type, project_id, data})
-          .reply(200, {valid: true, invalidPaths: []});
+          .reply(200, {valid: true, invalidPaths: [], prettyInvalidPaths: []});
         let gateway = new ReturnGateway(apiKeyGateway);
 
         response = await gateway.validate(project_id, data);
@@ -36,7 +36,7 @@ describe('Return Gateway', () => {
       });
 
       it('returns a list of paths that were invalid', ()=>{
-        expect(response).toEqual({invalidPaths: [], valid: true});
+        expect(response).toEqual({invalidPaths: [], prettyInvalidPaths: [], valid: true});
       });
     });
 
@@ -81,10 +81,10 @@ describe('Return Gateway', () => {
           apiKeyGateway = {getApiKey: () => 'catz'};
           returnRequest = nock('http://cat.meow')
             .matchHeader('Content-Type', 'application/json')
-            .get('/return/get?id=1')
+            .get('/return/get?id=0&returnId=1')
             .reply(200, {data: {some: 'data'}, schema: {some: 'schema'}, status: 'Draft'});
           let gateway = new ReturnGateway(apiKeyGateway);
-          response = await gateway.findById(1);
+          response = await gateway.findById(1, 0);
         });
 
         it('Fetches the return from the API', () => {
@@ -107,10 +107,10 @@ describe('Return Gateway', () => {
 
           let returnRequest = nock('http://dog.woof')
             .matchHeader('Content-Type', 'application/json')
-            .get('/return/get?id=5')
+            .get('/return/get?id=6&returnId=5')
             .reply(200, {data: {cats: 'meow'}, schema: {dogs: 'woof'}, status: 'Submitted'});
           let gateway = new ReturnGateway(apiKeyGateway);
-          response = await gateway.findById(5);
+          response = await gateway.findById(5, 6);
         });
 
         it('Fetches the return from the API', () => {
@@ -132,10 +132,10 @@ describe('Return Gateway', () => {
         process.env.REACT_APP_HIF_API_URL = 'http://dog.woof/';
         let returnRequest = nock('http://dog.woof')
           .matchHeader('Content-Type', 'application/json')
-          .get('/return/get?id=5')
+            .get('/return/get?id=6&returnId=5')
           .reply(404);
         let gateway = new ReturnGateway(apiKeyGateway);
-        let response = await gateway.findById(5);
+        let response = await gateway.findById(5, 6);
         expect(response).toEqual({success: false});
       });
     });

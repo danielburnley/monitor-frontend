@@ -26,9 +26,9 @@ export default class ReturnGateway {
     }
   }
 
-  async findById(id) {
+  async findById(id, projectId) {
     let rawResponse = await fetch(
-      `${this.env.REACT_APP_HIF_API_URL}return/get?id=${id}`,
+      `${this.env.REACT_APP_HIF_API_URL}return/get?id=${projectId}&returnId=${id}`,
       {
         headers: {'Content-Type': 'application/json',
           'API_KEY': this.apiKeyGateway.getApiKey()},
@@ -110,7 +110,11 @@ export default class ReturnGateway {
 
     if (response.ok) {
       let response_json = await response.json();
-      return {valid: response_json.valid, invalidPaths: response_json.invalidPaths}
+      return {
+        valid: response_json.valid, 
+        invalidPaths: response_json.invalidPaths, 
+        prettyInvalidPaths: response_json.prettyInvalidPaths 
+      }
     }
   }
 }

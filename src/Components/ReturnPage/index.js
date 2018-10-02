@@ -25,7 +25,7 @@ export default class ReturnPage extends React.Component {
   };
 
   onFormSubmit = async formData => {
-    this.setState({status: "Updating", valid: true, invalidPaths: [], lastAction: "Submit"});
+    this.setState({lastAction: 'Submit', status: "Updating", valid: true, invalidPaths: [], prettyInvalidPaths: []});
 
     await this.props.validateReturn.execute(this, this.props.match.params.projectId, formData);
 
@@ -99,7 +99,8 @@ export default class ReturnPage extends React.Component {
   fetchData = async () => {
     if (this.returnId()) {
       await this.props.getReturn.execute(this, {
-        id: this.returnId()
+        id: this.returnId(),
+        projectId: this.projectId()
       });
     } else {
       await this.props.getBaseReturn.execute(this, {

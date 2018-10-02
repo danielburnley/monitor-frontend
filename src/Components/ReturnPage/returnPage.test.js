@@ -311,7 +311,7 @@ describe('ReturnPage', () => {
   describe('invalid form', () => {
     let validateReturnSpy, createReturnSpy, updateReturnSpy, submitReturnSpy;
     beforeEach(() => {
-      validateReturnSpy = {execute: jest.fn((presenter, formdata) => { presenter.invalidateFields([['catHouse',0,'catHouse']])})};
+      validateReturnSpy = {execute: jest.fn((presenter, formdata) => { presenter.invalidateFields([['Cat House','Cat House']])})};
       submitReturnSpy = {execute: jest.fn()};
       createReturnSpy = {execute: jest.fn((presenter, request) => {presenter.creationSuccessful(1);})};
       updateReturnSpy = {execute: jest.fn((presenter, request) => {presenter.updateSuccessful(1);})};
@@ -341,7 +341,7 @@ describe('ReturnPage', () => {
         expect(submitReturnSpy.execute).not.toHaveBeenCalled();
         expect(wrap.find("[data-test='validationError']").length).toEqual(1);
         expect(wrap.find("[data-test='saveSuccess']").length).toEqual(0);
-        expect(wrap.find("[data-test='validationError']").text()).toEqual("Error: This return could not be submitted because the following fields were missing: Cat House → Item 1 → Cat House");
+        expect(wrap.find("[data-test='validationError']").text()).toEqual("Error: This return could not be submitted because the following fields were missing: Cat House → Cat House");
       });
     });
 
@@ -371,7 +371,7 @@ describe('ReturnPage', () => {
         expect(validateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), projectId, {cathouse: {}});
         expect(wrap.find("[data-test='submitSuccess']").length).toEqual(0);
         expect(wrap.find("[data-test='validationWarning']").length).toEqual(1);
-        expect(wrap.find("[data-test='validationWarning']").text()).toEqual("Warning: You will not be able to submit this return until the following fields are filled in: Cat House → Item 1 → Cat House");
+        expect(wrap.find("[data-test='validationWarning']").text()).toEqual("Warning: You will not be able to submit this return until the following fields are filled in: Cat House → Cat House");
       });
     });
   });
