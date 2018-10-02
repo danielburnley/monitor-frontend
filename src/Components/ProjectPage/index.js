@@ -1,32 +1,31 @@
-import React from 'react'
-import ProjectForm from '../ProjectForm'
-import ProjectSummary from './ProjectSummary'
+import React from "react";
+import PropTypes from "prop-types";
 
-export default class Project extends React.Component {
+export default class ProjectPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {loading: true};
+    this.state = { loading: true };
   }
 
   presentProject = async projectData => {
     await this.setState({
       loading: false,
       formData: projectData.data,
-      formSchema: projectData.schema,
+      formSchema: projectData.schema
     });
   };
 
-  presentProjectNotFound = async () => {
+  presentProjectNotFound = async () => {};
 
+  fetchData = () => {
+    this.props.getProject.execute(this, {
+      id: this.props.match.params.id
+    });
   };
 
-  fetchData = async () => {
-    await this.props.getProject.execute(this, {id: this.props.match.params.id});
-  };
-
-  async componentDidMount() {
-    document.title = "Project - Homes England Monitor"
-    await this.fetchData();
+  componentDidMount() {
+    document.title = "Project - Homes England Monitor";
+    this.fetchData();
   }
 
   createReturn = async e => {
@@ -41,13 +40,10 @@ export default class Project extends React.Component {
 
     return (
       <div>
-        <ProjectSummary
-          data={this.state.formData}
-          schema={this.state.formSchema}
-        />
-        <button data-test="new-return-button" className="btn btn-primary" onClick={this.createReturn}>
-          Create a new return
-        </button>
+        {this.props.children({
+          formData: this.state.formData,
+          formSchema: this.state.formSchema
+        })}
       </div>
     );
   }
@@ -56,7 +52,26 @@ export default class Project extends React.Component {
     return (
       <div className="container-fluid">
         <div className="col-md-10 col-md-offset-1">{this.renderForm()}</div>
+        <div className="col-md-10 col-md-offset-1">
+          <button
+            data-test="new-return-button"
+            className="btn btn-primary"
+            onClick={this.createReturn}
+          >
+            Create a new return
+          </button>
+        </div>
       </div>
     );
   }
 }
+
+ProjectPage.propTypes = {
+  getProject: PropTypes.object.isRequired,
+  children: PropTypes.func.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string.isRequired
+    })
+  })
+};

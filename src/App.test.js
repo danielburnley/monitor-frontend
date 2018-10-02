@@ -120,7 +120,7 @@ describe("Viewing at a project", () => {
       await page.load();
 
       expect(page.find("GetToken").length).toEqual(0);
-      expect(page.find("Project").length).toEqual(1);
+      expect(page.find("ProjectPage").length).toEqual(1);
     });
 
     it("Renders the project summary with information from the API", async () => {
