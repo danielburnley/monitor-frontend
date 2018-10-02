@@ -47,6 +47,13 @@ export default class AppPage {
     await this.load();
   }
 
+  async viewBaseline() {
+    let button = this.page.find('[data-test="view-baseline-button"]');
+    button.simulate("click");
+
+    await this.load();
+  }
+
   getInputs() {
     return this.page.find("input").map(node => {
       if (node.getDOMNode().type === "checkbox") {

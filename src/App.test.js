@@ -144,6 +144,18 @@ describe("Viewing at a project", () => {
       );
     });
 
+    it("Renders the project baseline page", async () => {
+      api.getProject(projectSchema, projectData).successfully();
+
+      let page = new AppPage("/project/0?token=Cats");
+      await page.load();
+
+      api.getProject(projectSchema, projectData).successfully();
+      await page.viewBaseline();
+
+      expect(page.find('BaselineData').length).toEqual(1)
+    });
+
     it("Renders the return with information from the API when creating a new return", async () => {
       api.getProject(projectSchema, projectData).successfully();
       api.getBaseReturn(returnSchema, returnData).successfully();

@@ -51,16 +51,7 @@ export default class ProjectPage extends React.Component {
   render() {
     return (
       <div className="container-fluid">
-        <div className="col-md-10 col-md-offset-1">{this.renderForm()}</div>
-        <div className="col-md-10 col-md-offset-1">
-          <button
-            data-test="new-return-button"
-            className="btn btn-primary"
-            onClick={this.createReturn}
-          >
-            Create a new return
-          </button>
-        </div>
+        {this.renderForm()}
       </div>
     );
   }
