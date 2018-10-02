@@ -176,7 +176,7 @@ describe("Viewing at a project", () => {
 
     it("Renders the return with information from the API", async () => {
       api.getReturn(returnSchema, returnData).successfully();
-      let page = new AppPage("/project/0/return/0?token=Cats");
+      let page = new AppPage("/project/0/return/1?token=Cats");
       await page.load();
 
       let expectedInputValues = [

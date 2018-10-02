@@ -31,13 +31,13 @@ describe('GetReturn', () => {
 
       it('Calls the gateway with the correct ID', async () => {
         let presenterSpy = {presentReturn: jest.fn()};
-        await useCase.execute(presenterSpy, {id: 1});
-        expect(returnGatewaySpy.findById).toBeCalledWith(1);
+        await useCase.execute(presenterSpy, {id: 1, projectId: 2});
+        expect(returnGatewaySpy.findById).toBeCalledWith(1, 2);
       });
 
       it('Presents the return', async () => {
         let presenterSpy = {presentReturn: jest.fn()};
-        await useCase.execute(presenterSpy, {id: 1});
+        await useCase.execute(presenterSpy, {id: 1, projectId: 2});
         expect(presenterSpy.presentReturn).toBeCalledWith(foundReturn);
       });
     });
@@ -59,13 +59,13 @@ describe('GetReturn', () => {
 
       it('Calls the gateway with the correct ID', async () => {
         let presenterSpy = {presentReturn: jest.fn()};
-        await useCase.execute(presenterSpy, {id: 5});
-        expect(returnGatewaySpy.findById).toBeCalledWith(5);
+        await useCase.execute(presenterSpy, {id: 5, projectId: 6});
+        expect(returnGatewaySpy.findById).toBeCalledWith(5, 6);
       });
 
       it('Presents the return', async () => {
         let presenterSpy = {presentReturn: jest.fn()};
-        await useCase.execute(presenterSpy, {id: 5});
+        await useCase.execute(presenterSpy, {id: 5, projectId: 6});
         expect(presenterSpy.presentReturn).toBeCalledWith(foundReturn);
       });
     });
@@ -78,7 +78,7 @@ describe('GetReturn', () => {
       };
       let useCase = new GetReturn(returnGatewaySpy);
       let presenterSpy = {presentReturnNotFound: jest.fn()};
-      await useCase.execute(presenterSpy, {id: 5});
+      await useCase.execute(presenterSpy, {id: 5, projectId: 6});
       expect(presenterSpy.presentReturnNotFound).toBeCalled();
     });
   });
