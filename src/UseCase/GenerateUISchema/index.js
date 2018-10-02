@@ -49,6 +49,10 @@ export default class GenerateUISchema {
 
     if (value.items.horizontal) {
       ret["items"]["ui:field"] = "horizontal";
+    } else if (value.items.risk) {
+      ret["items"]["ui:field"] = "risk";
+    } else if (value.items.base) {
+      ret["items"]["ui:field"] = "base";
     }
 
     return ret;
@@ -67,6 +71,8 @@ export default class GenerateUISchema {
       return { "ui:widget": "hidden" };
     } else if (item.readonly) {
       return { "ui:disabled": true };
+    } else if (item.base) {
+      return { "ui:field": "base" };
     }
   }
 
@@ -84,6 +90,9 @@ export default class GenerateUISchema {
     }
     if (obj.variance) {
       return "variance";
+    }
+    if (obj.base) {
+      return "base";
     }
   }
 }

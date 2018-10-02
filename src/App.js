@@ -1,10 +1,12 @@
 import React from "react";
 import qs from "qs";
 
+import Homepage from "./Components/Homepage";
 import Footer from "./Components/Footer";
 import Header from "./Components/Header";
 import ProjectForm from "./Components/ProjectForm";
 import ProjectPage from "./Components/ProjectPage";
+import ProjectSummary from "./Components/ProjectPage/ProjectSummary";
 import ReturnPage from "./Components/ReturnPage";
 import GetToken from "./Components/GetToken";
 import Portal from "./Components/Portal";
@@ -25,14 +27,13 @@ import ValidateReturn from "./UseCase/ValidateReturn";
 
 import ProjectGateway from "./Gateway/ProjectGateway";
 import ReturnGateway from "./Gateway/ReturnGateway";
-import ApiKeyGateway from "./Gateway/ApiKeyGateway"
+import ApiKeyGateway from "./Gateway/ApiKeyGateway";
 import TokenGateway from "./Gateway/TokenGateway";
-
 
 import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-const returnGateway = new ReturnGateway(new ApiKeyGateway())
+const returnGateway = new ReturnGateway(new ApiKeyGateway());
 const validateReturnUseCase = new ValidateReturn(returnGateway);
 const createReturnUseCase = new CreateReturn(returnGateway);
 const generateDisabledUISchema = new GenerateDisabledUISchema();
@@ -64,8 +65,11 @@ const renderProjectPage = props => (
   <ProjectPage
     {...props}
     getProject={getProjectUseCase}
-    generateUISchema={generateDisabledUISchema}
-  />
+  >
+    {({ formData, formSchema }) => (
+      <ProjectSummary data={formData} schema={formSchema} />
+    )}
+  </ProjectPage>
 );
 
 const App = () => (
@@ -75,7 +79,9 @@ const App = () => (
 
       <div className="monitor-container">
         <Switch>
-          <Route exact path="/" component={Home} />
+          <Route exact path="/">
+            <Homepage />
+          </Route>
           <Route
             path="/project/:id"
             render={props => (
@@ -114,12 +120,6 @@ const App = () => (
       <Footer />
     </div>
   </Router>
-);
-
-const Home = () => (
-  <div>
-    <h2>Home</h2>
-  </div>
 );
 
 export default App;

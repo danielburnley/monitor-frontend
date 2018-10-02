@@ -25,6 +25,7 @@ describe("SubmitReturn", () => {
       beforeEach(async () => {
         useCase = getUseCase(true, 1);
         await useCase.execute(presenterSpy, {
+          projectId: 1,
           returnId: 1,
           data: { cats: "meow" },
           schema: { ducks: "quack"}
@@ -32,7 +33,7 @@ describe("SubmitReturn", () => {
       });
 
       it("Passes the data to the gateway", () => {
-        expect(submitGatewaySpy.submit).toBeCalledWith(1, { cats: "meow" });
+        expect(submitGatewaySpy.submit).toBeCalledWith(1, 1, { cats: "meow" });
       });
 
       it("Calls submission successful with the id on the presenter when the submission suceeded", () => {
@@ -56,6 +57,7 @@ describe("SubmitReturn", () => {
       beforeEach(async () => {
         useCase = getUseCase(true, 2);
         await useCase.execute(presenterSpy, {
+          projectId: 1415,
           returnId: 2,
           data: { dogs: "woof" },
           schema: { cow: "moo"}
@@ -63,7 +65,7 @@ describe("SubmitReturn", () => {
       });
 
       it("Passes the data to the gateway", async () => {
-        expect(submitGatewaySpy.submit).toBeCalledWith(2, { dogs: "woof" });
+        expect(submitGatewaySpy.submit).toBeCalledWith(1415, 2, { dogs: "woof" });
       });
 
       it("Calls submission successful with the id on the presenter when the submission suceeded", () => {

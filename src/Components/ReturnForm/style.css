@@ -9,12 +9,6 @@
   float: right;
 }
 
-.disabled {
-  color: #7c7878;
-  background-color: #eeeeee;
-  cursor: not-allowed;
-}
-
 input:disabled {
   background-color: transparent !important;
   border: 0px !important;
