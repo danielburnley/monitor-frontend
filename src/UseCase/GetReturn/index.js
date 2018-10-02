@@ -4,7 +4,7 @@ export default class GetReturn {
   }
 
   async execute(presenter, request) {
-    let {success, foundReturn} = await this.returnGateway.findById(request.id);
+    let {success, foundReturn} = await this.returnGateway.findById(request.id, request.projectId);
     if (success) {
       presenter.presentReturn(foundReturn);
     } else {

@@ -97,7 +97,8 @@ export default class ReturnPage extends React.Component {
   fetchData = async () => {
     if (this.returnId()) {
       await this.props.getReturn.execute(this, {
-        id: this.returnId()
+        id: this.returnId(),
+        projectId: this.projectId()
       });
     } else {
       await this.props.getBaseReturn.execute(this, {
