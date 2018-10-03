@@ -1,4 +1,5 @@
 import React from "react";
+import "./style.css";
 
 export default class ReturnList extends React.Component {
   constructor(props) {
@@ -8,16 +9,23 @@ export default class ReturnList extends React.Component {
   renderListItems() {
     const url = window.location.origin;
     const returns = this.props.formData.returns;
-    console.log(url);
     const listItems = returns.map(returns => (
-      <a
-        key={returns.id.toString()}
-        href={`${url}/project/${returns.project_id}`}
-        className="list-group-item"
-        data-test={`return-${returns.id}`}
-      >
-        Return {returns.id}
-      </a>
+      <div className="row" key={returns.id.toString()}>
+        <div className="col-md-10">
+          <a
+            href={`${url}/project/${returns.project_id}/return/${returns.id}`}
+            className="list-group-item"
+            data-test={`return-${returns.id}`}
+          >
+            Return {returns.id}
+          </a>
+        </div>
+        <div className="col-md-2 return-list">
+          <strong className="beta" data-test={`status-${returns.id}`}>
+            {returns.status}
+          </strong>
+        </div>
+      </div>
     ));
     return listItems;
   }
