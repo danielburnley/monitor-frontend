@@ -8,16 +8,13 @@ class ReturnListComponent {
       <ReturnList schema={{ title: schemaTitle }} formData={formData} />
     );
   }
-
   title = () => this.returnList.find("[data-test='schema-title']").text();
-  listItem1 = () => this.returnList.find("[data-test='return-1']").text();
-  listItem2 = () => this.returnList.find("[data-test='return-2']").text();
-  listItem3 = () => this.returnList.find("[data-test='return-3']").text();
-  listItem4 = () => this.returnList.find("[data-test='return-5']").text();
-  listItem5 = () => this.returnList.find("[data-test='return-5']").text();
-  listItem6 = () => this.returnList.find("[data-test='return-6']").text();
-  listItem7 = () => this.returnList.find("[data-test='return-7']").text();
-  urlTarget = () => this.returnList.find("[data-test='return-1']").prop("href");
+  listItem = number =>
+    this.returnList.find(`[data-test='return-${number}']`).text();
+  status = number =>
+    this.returnList.find(`[data-test='status-${number}']`).text();
+  urlTarget = number =>
+    this.returnList.find(`[data-test='return-${number}']`).prop("href");
 }
 
 describe("<ReturnList", () => {
@@ -39,17 +36,22 @@ describe("<ReturnList", () => {
       };
       let schemaTitle = "Returns";
       let returnList = new ReturnListComponent(formData, schemaTitle);
+      let url = window.location.origin;
 
       it("displays this schema title", () => {
         expect(returnList.title()).toEqual("Returns");
       });
 
       it("displays a list item for the return", () => {
-        expect(returnList.listItem1()).toEqual("Return 1");
+        expect(returnList.listItem(1)).toEqual("Return 1");
       });
 
       it("creates a link to the correct location", () => {
-        expect(returnList.urlTarget()).toEqual("http://localhost/project/1");
+        expect(returnList.urlTarget(1)).toEqual(`${url}/project/1/return/1`);
+      });
+
+      it("shows the current status of the return", () => {
+        expect(returnList.status(1)).toEqual("Draft");
       });
     });
 
@@ -70,13 +72,22 @@ describe("<ReturnList", () => {
       };
       let schemaTitle = "List of Returns";
       let returnList = new ReturnListComponent(formData, schemaTitle);
+      let url = window.location.origin;
 
       it("displays this schema title", () => {
         expect(returnList.title()).toEqual("List of Returns");
       });
 
       it("displays a list item for the return", () => {
-        expect(returnList.listItem7()).toEqual("Return 7");
+        expect(returnList.listItem(7)).toEqual("Return 7");
+      });
+
+      it("creates a link to the correct location", () => {
+        expect(returnList.urlTarget(7)).toEqual(`${url}/project/1/return/7`);
+      });
+
+      it("shows the current status of the return", () => {
+        expect(returnList.status(7)).toEqual("Saved");
       });
     });
   });
@@ -109,14 +120,25 @@ describe("<ReturnList", () => {
       };
       let schemaTitle = "Returns";
       let returnList = new ReturnListComponent(formData, schemaTitle);
+      let url = window.location.origin;
 
       it("displays this schema title", () => {
         expect(returnList.title()).toEqual("Returns");
       });
 
       it("displays multiple list items for the returns", () => {
-        expect(returnList.listItem1()).toEqual("Return 1");
-        expect(returnList.listItem2()).toEqual("Return 2");
+        expect(returnList.listItem(1)).toEqual("Return 1");
+        expect(returnList.listItem(2)).toEqual("Return 2");
+      });
+
+      it("creates a link to the correct location", () => {
+        expect(returnList.urlTarget(1)).toEqual(`${url}/project/1/return/1`);
+        expect(returnList.urlTarget(2)).toEqual(`${url}/project/1/return/2`);
+      });
+
+      it("shows the current status of the return", () => {
+        expect(returnList.status(1)).toEqual("Draft");
+        expect(returnList.status(2)).toEqual("Saved");
       });
     });
 
@@ -147,14 +169,25 @@ describe("<ReturnList", () => {
       };
       let schemaTitle = "Returns";
       let returnList = new ReturnListComponent(formData, schemaTitle);
+      let url = window.location.origin;
 
       it("displays this schema title", () => {
         expect(returnList.title()).toEqual("Returns");
       });
 
       it("displays multiple list items for the returns", () => {
-        expect(returnList.listItem7()).toEqual("Return 7");
-        expect(returnList.listItem6()).toEqual("Return 6");
+        expect(returnList.listItem(7)).toEqual("Return 7");
+        expect(returnList.listItem(6)).toEqual("Return 6");
+      });
+
+      it("creates a link to the correct location", () => {
+        expect(returnList.urlTarget(7)).toEqual(`${url}/project/1/return/7`);
+        expect(returnList.urlTarget(6)).toEqual(`${url}/project/1/return/6`);
+      });
+
+      it("shows the current status of the return", () => {
+        expect(returnList.status(7)).toEqual("Saved");
+        expect(returnList.status(6)).toEqual("Woof");
       });
     });
   });
