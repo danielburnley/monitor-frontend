@@ -23,8 +23,8 @@ describe("<ReturnList", () => {
       let formData = {
         returns: [
           {
-            id: "1",
-            project_id: "1",
+            id: 1,
+            project_id: 1,
             status: "Draft",
             updates: [
               {
@@ -59,8 +59,8 @@ describe("<ReturnList", () => {
       let formData = {
         returns: [
           {
-            id: "7",
-            project_id: "1",
+            id: 7,
+            project_id: 1,
             status: "Saved",
             updates: [
               {
@@ -97,8 +97,8 @@ describe("<ReturnList", () => {
       let formData = {
         returns: [
           {
-            id: "1",
-            project_id: "1",
+            id: 1,
+            project_id: 1,
             status: "Draft",
             updates: [
               {
@@ -107,8 +107,8 @@ describe("<ReturnList", () => {
             ]
           },
           {
-            id: "2",
-            project_id: "1",
+            id: 2,
+            project_id: 1,
             status: "Saved",
             update: [
               {
@@ -146,8 +146,8 @@ describe("<ReturnList", () => {
       let formData = {
         returns: [
           {
-            id: "7",
-            project_id: "1",
+            id: 7,
+            project_id: 1,
             status: "Saved",
             updates: [
               {
@@ -156,8 +156,8 @@ describe("<ReturnList", () => {
             ]
           },
           {
-            id: "6",
-            project_id: "1",
+            id: 6,
+            project_id: 1,
             status: "Woof",
             update: [
               {

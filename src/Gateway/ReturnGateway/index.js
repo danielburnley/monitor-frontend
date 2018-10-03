@@ -9,6 +9,22 @@ export default class ReturnGateway {
     this.env = runtimeEnv();
   }
 
+  async getReturns(projectId) {
+    let rawResponse = await fetch(
+      `${this.env.REACT_APP_HIF_API_URL}project/${projectId}/returns`,
+      {
+        headers: {'Content-Type': 'application/json',
+          'API_KEY': this.apiKeyGateway.getApiKey()},
+      },
+    );
+    if (!rawResponse.ok) return {success: false};
+
+    let response = await rawResponse.json();
+    let returns = response.returns;
+
+    return {success: true, returns: [{project_id: returns[0].project_id}]};
+  }
+
   async baseReturnFor(project_id) {
     let rawResponse = await fetch(
       `${this.env.REACT_APP_HIF_API_URL}project/${project_id}/return`,

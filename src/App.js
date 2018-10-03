@@ -9,6 +9,7 @@ import Header from "./Components/Header";
 import ProjectForm from "./Components/ProjectForm";
 import ProjectPage from "./Components/ProjectPage";
 import ProjectSummary from "./Components/ProjectPage/ProjectSummary";
+import ReturnList from "./Components/ReturnList";
 import ReturnPage from "./Components/ReturnPage";
 import GetToken from "./Components/GetToken";
 import Portal from "./Components/Portal";
@@ -132,6 +133,37 @@ const renderBaselinePage = props => (
   </ProjectPage>
 );
 
+const renderReturnsPage = props => (
+  <ReturnList
+    {...props}
+    schema={{ title: "Returns" }}
+    formData={{
+      returns: [
+        {
+          id: "1",
+          project_id: "1",
+          status: "Draft",
+          updates: [
+            {
+              changed: "Yes"
+            }
+          ]
+        },
+        {
+          id: "2",
+          project_id: "1",
+          status: "Saved",
+          updates: [
+            {
+              changed: "Some"
+            }
+          ]
+        }
+      ]
+    }}
+  />
+);
+
 const App = () => (
   <Router>
     <div className="app-container">
@@ -170,6 +202,11 @@ const App = () => (
                   exact
                   path="/project/:projectId/return/:returnId"
                   render={renderReturnPage}
+                />
+                <Route
+                  exact
+                  path="/project/:projectId/returns"
+                  render={renderReturnsPage}
                 />
               </Portal>
             )}
