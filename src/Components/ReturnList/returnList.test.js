@@ -76,21 +76,31 @@ describe("<ReturnList", () => {
     });
   });
 
-  xdescribe("Given two returns", () => {
+  describe("Given two returns", () => {
     describe("Example 1", () => {
       let formData = {
-        returns: {
-          id: "1",
-          project_id: "1",
-          status: "Draft",
-          updates: "Yes"
-        },
-        returns: {
-          id: "2",
-          project_id: "1",
-          status: "Saved",
-          update: "Some"
-        }
+        returns: [
+          {
+            id: "1",
+            project_id: "1",
+            status: "Draft",
+            updates: [
+              {
+                changes: "Yes"
+              }
+            ]
+          },
+          {
+            id: "2",
+            project_id: "1",
+            status: "Saved",
+            update: [
+              {
+                changes: "Some"
+              }
+            ]
+          }
+        ]
       };
       let schemaTitle = "Returns";
       let returnList = new ReturnListComponent(formData, schemaTitle);
@@ -99,8 +109,47 @@ describe("<ReturnList", () => {
         expect(returnList.title()).toEqual("Returns");
       });
 
-      it("displays a list item for the return", () => {
+      it("displays multiple list items for the returns", () => {
         expect(returnList.listItem1()).toEqual("Return 1");
+        expect(returnList.listItem2()).toEqual("Return 2");
+      });
+    });
+
+    describe("Example 2", () => {
+      let formData = {
+        returns: [
+          {
+            id: "7",
+            project_id: "1",
+            status: "Saved",
+            updates: [
+              {
+                changes: "Some"
+              }
+            ]
+          },
+          {
+            id: "6",
+            project_id: "1",
+            status: "Woof",
+            update: [
+              {
+                changes: "Meow"
+              }
+            ]
+          }
+        ]
+      };
+      let schemaTitle = "Returns";
+      let returnList = new ReturnListComponent(formData, schemaTitle);
+
+      it("displays this schema title", () => {
+        expect(returnList.title()).toEqual("Returns");
+      });
+
+      it("displays multiple list items for the returns", () => {
+        expect(returnList.listItem7()).toEqual("Return 7");
+        expect(returnList.listItem6()).toEqual("Return 6");
       });
     });
   });

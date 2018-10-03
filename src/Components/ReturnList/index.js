@@ -6,14 +6,17 @@ export default class ReturnList extends React.Component {
   }
 
   renderListItems() {
-    console.log(this.props.formData.returns[0])
-    return (
-      <div>
-        <a className="list-group-item" data-test={`return-${this.props.formData.returns[0].id}`}>
-          Return {this.props.formData.returns[0].id}
-        </a>
-      </div>
-    );
+    const returns = this.props.formData.returns;
+    const listItems = returns.map(returns => (
+      <a
+        key={returns.id.toString()}
+        className="list-group-item"
+        data-test={`return-${returns.id}`}
+      >
+        Return {returns.id}
+      </a>
+    ));
+    return listItems;
   }
 
   render() {
