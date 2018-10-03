@@ -6,10 +6,13 @@ export default class ReturnList extends React.Component {
   }
 
   renderListItems() {
+    const url = window.location.origin;
     const returns = this.props.formData.returns;
+    console.log(url);
     const listItems = returns.map(returns => (
       <a
         key={returns.id.toString()}
+        href={`${url}/project/${returns.project_id}`}
         className="list-group-item"
         data-test={`return-${returns.id}`}
       >

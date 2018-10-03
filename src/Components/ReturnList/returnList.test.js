@@ -17,6 +17,7 @@ class ReturnListComponent {
   listItem5 = () => this.returnList.find("[data-test='return-5']").text();
   listItem6 = () => this.returnList.find("[data-test='return-6']").text();
   listItem7 = () => this.returnList.find("[data-test='return-7']").text();
+  urlTarget = () => this.returnList.find("[data-test='return-1']").prop("href");
 }
 
 describe("<ReturnList", () => {
@@ -45,6 +46,10 @@ describe("<ReturnList", () => {
 
       it("displays a list item for the return", () => {
         expect(returnList.listItem1()).toEqual("Return 1");
+      });
+
+      it("creates a link to the correct location", () => {
+        expect(returnList.urlTarget()).toEqual("http://localhost/project/1");
       });
     });
 
