@@ -7,7 +7,7 @@ describe('Return Gateway', () => {
     nock.cleanAll();
   });
 
-  let apiKeyGateway;
+  let apiKeyGateway, locationGateway;
 
   describe('validation', () => {
     describe('Example 1', () => {
@@ -20,13 +20,14 @@ describe('Return Gateway', () => {
 
       beforeEach(async () => {
         process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
+        locationGateway = {getRoot: () => 'https://example.com'};
         apiKeyGateway = {getApiKey: () => 'superSecret'}
         validationRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
           .matchHeader('API_KEY', 'superSecret')
           .post('/return/validate',{type, project_id, data})
           .reply(200, {valid: true, invalidPaths: [], prettyInvalidPaths: []});
-        let gateway = new ReturnGateway(apiKeyGateway);
+        let gateway = new ReturnGateway(apiKeyGateway, locationGateway);
 
         response = await gateway.validate(project_id, data);
       });
@@ -50,13 +51,14 @@ describe('Return Gateway', () => {
 
       beforeEach(async () => {
         process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
+        locationGateway = {getRoot: () => 'https://example.com'};
         apiKeyGateway = {getApiKey: () => 'megaSecret'}
         validationRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
           .matchHeader('API_KEY', 'megaSecret')
           .post('/return/validate',{type, project_id, data})
           .reply(200, {valid: false, invalidPaths: ['cats']});
-        let gateway = new ReturnGateway(apiKeyGateway);
+        let gateway = new ReturnGateway(apiKeyGateway, locationGateway);
 
         response = await gateway.validate(project_id, data);
       });
@@ -65,7 +67,7 @@ describe('Return Gateway', () => {
         expect(validationRequest.isDone()).toBeTruthy();
       });
 
-      it('returns a list of paths that were invalid', ()=>{
+      it('returns a list of paths that were invalid', () => {
         expect(response).toEqual({invalidPaths: ['cats'], valid: false});
       });
     });
@@ -78,12 +80,13 @@ describe('Return Gateway', () => {
       describe('Example one', () => {
         beforeEach(async () => {
           process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
+          locationGateway = {getRoot: () => 'https://example.com'};
           apiKeyGateway = {getApiKey: () => 'catz'};
           returnRequest = nock('http://cat.meow')
             .matchHeader('Content-Type', 'application/json')
             .get('/return/get?id=0&returnId=1')
             .reply(200, {data: {some: 'data'}, schema: {some: 'schema'}, status: 'Draft'});
-          let gateway = new ReturnGateway(apiKeyGateway);
+          let gateway = new ReturnGateway(apiKeyGateway, locationGateway);
           response = await gateway.findById(1, 0);
         });
 
@@ -103,13 +106,14 @@ describe('Return Gateway', () => {
       describe('Example two', () => {
         beforeEach(async () => {
           process.env.REACT_APP_HIF_API_URL = 'http://dog.woof/';
+          locationGateway = {getRoot: () => 'https://example.com'};
           apiKeyGateway = {getApiKey: () => 'doggy'};
 
           let returnRequest = nock('http://dog.woof')
             .matchHeader('Content-Type', 'application/json')
             .get('/return/get?id=6&returnId=5')
             .reply(200, {data: {cats: 'meow'}, schema: {dogs: 'woof'}, status: 'Submitted'});
-          let gateway = new ReturnGateway(apiKeyGateway);
+          let gateway = new ReturnGateway(apiKeyGateway, locationGateway);
           response = await gateway.findById(5, 6);
         });
 
@@ -134,7 +138,7 @@ describe('Return Gateway', () => {
           .matchHeader('Content-Type', 'application/json')
             .get('/return/get?id=6&returnId=5')
           .reply(404);
-        let gateway = new ReturnGateway(apiKeyGateway);
+        let gateway = new ReturnGateway(apiKeyGateway, locationGateway);
         let response = await gateway.findById(5, 6);
         expect(response).toEqual({success: false});
       });
@@ -146,14 +150,16 @@ describe('Return Gateway', () => {
       let gateway;
 
       beforeEach(async () => {
+        locationGateway = {getRoot: () => 'https://frontend.space'};
+
         process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
-        gateway = new ReturnGateway(apiKeyGateway);
+        gateway = new ReturnGateway(apiKeyGateway, locationGateway);
       });
 
       it('Submits the data to the API', async () => {
         let submitReturnRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
-          .post('/return/submit', {project_id: 1, return_id: 1, data: {cats: 'meow'}})
+          .post('/return/submit', {project_id: 1, return_id: 1, data: {cats: 'meow'}, url: 'https://frontend.space/project/1/return/1'})
           .reply(200);
         await gateway.submit(1, 1, {cats: 'meow'});
 
@@ -163,7 +169,7 @@ describe('Return Gateway', () => {
       it('Returns successful & the return id', async () => {
         let submitReturnRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
-          .post('/return/submit', {project_id: 1, return_id: 1, data: {cats: 'meow'}})
+          .post('/return/submit', {project_id: 1, return_id: 1, data: {cats: 'meow'}, url: 'https://frontend.space/project/1/return/1'})
           .reply(200, {id: 1});
         let response = await gateway.submit(1, 1, {cats: 'meow'});
         expect(response).toEqual({success: true});
@@ -174,14 +180,15 @@ describe('Return Gateway', () => {
       let gateway;
 
       beforeEach(async () => {
+        locationGateway = {getRoot: () => 'https://cathost.net'};
         process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
-        gateway = new ReturnGateway(apiKeyGateway);
+        gateway = new ReturnGateway(apiKeyGateway, locationGateway);
       });
 
       it('Submits the data to the API', async () => {
         let submitReturnRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
-          .post('/return/submit', {project_id: 255, return_id: 2, data: {dogs: 'woof'}})
+          .post('/return/submit', {project_id: 255, return_id: 2, data: {dogs: 'woof'}, url: 'https://cathost.net/project/255/return/2'})
           .reply(200);
         await gateway.submit(255, 2, {dogs: 'woof'});
 
@@ -191,7 +198,7 @@ describe('Return Gateway', () => {
       it('Returns successful & the return id', async () => {
         let submitReturnRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
-          .post('/return/submit', {project_id: 255, return_id: 2, data: {dogs: 'woof'}})
+          .post('/return/submit', {project_id: 255, return_id: 2, data: {dogs: 'woof'}, url: 'https://cathost.net/project/255/return/2'})
           .reply(200, {id: 2});
         let response = await gateway.submit(255, 2, {dogs: 'woof'});
         expect(response).toEqual({success: true});
@@ -202,14 +209,15 @@ describe('Return Gateway', () => {
       let gateway;
 
       beforeEach(async () => {
+        locationGateway = {getRoot: () => 'https://cathost.net'};
         process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
-        gateway = new ReturnGateway(apiKeyGateway);
+        gateway = new ReturnGateway(apiKeyGateway, locationGateway);
       });
 
       it('Returns unsuccessful', async () => {
         let submitReturnRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
-          .post('/return/submit', {project_id: 255, return_id: 2, data: {dogs: 'woof'}})
+          .post('/return/submit', {project_id: 255, return_id: 2, data: {dogs: 'woof'}, url: 'https://cathost.net/project/255/return/2'})
           .reply(500);
         let response = await gateway.submit(255, 2, {dogs: 'woof'});
 
@@ -231,7 +239,7 @@ describe('Return Gateway', () => {
             .reply(200, {
               baseReturn: {data: {some: 'data'}, schema: {some: 'schema'}},
             });
-          let gateway = new ReturnGateway(apiKeyGateway);
+          let gateway = new ReturnGateway(apiKeyGateway, locationGateway);
           response = await gateway.baseReturnFor(1);
         });
 
@@ -256,7 +264,7 @@ describe('Return Gateway', () => {
             .reply(200, {
               baseReturn: {data: {cats: 'meow'}, schema: {dogs: 'woof'}},
             });
-          let gateway = new ReturnGateway(apiKeyGateway);
+          let gateway = new ReturnGateway(apiKeyGateway, locationGateway);
           response = await gateway.baseReturnFor(5);
         });
 
@@ -280,7 +288,7 @@ describe('Return Gateway', () => {
           .matchHeader('Content-Type', 'application/json')
           .get('/project/5/return')
           .reply(404);
-        let gateway = new ReturnGateway(apiKeyGateway);
+        let gateway = new ReturnGateway(apiKeyGateway, locationGateway);
         let response = await gateway.baseReturnFor(5);
         expect(response).toEqual({success: false});
       });
@@ -293,7 +301,7 @@ describe('Return Gateway', () => {
 
       beforeEach(async () => {
         process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
-        gateway = new ReturnGateway(apiKeyGateway);
+        gateway = new ReturnGateway(apiKeyGateway, locationGateway);
       });
 
       it('Submits the data to the API', async () => {
@@ -321,7 +329,7 @@ describe('Return Gateway', () => {
 
       beforeEach(async () => {
         process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
-        gateway = new ReturnGateway(apiKeyGateway);
+        gateway = new ReturnGateway(apiKeyGateway, locationGateway);
       });
 
       it('Submits the data to the API', async () => {
@@ -349,7 +357,7 @@ describe('Return Gateway', () => {
 
       beforeEach(async () => {
         process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
-        gateway = new ReturnGateway(apiKeyGateway);
+        gateway = new ReturnGateway(apiKeyGateway, locationGateway);
       });
 
       it('Returns unsuccessful', async () => {
@@ -370,7 +378,7 @@ describe('Return Gateway', () => {
 
       beforeEach(async () => {
         process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
-        gateway = new ReturnGateway(apiKeyGateway);
+        gateway = new ReturnGateway(apiKeyGateway, locationGateway);
       });
 
       it('Submits the data to the API', async () => {
@@ -398,7 +406,7 @@ describe('Return Gateway', () => {
 
       beforeEach(async () => {
         process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
-        gateway = new ReturnGateway(apiKeyGateway);
+        gateway = new ReturnGateway(apiKeyGateway, locationGateway);
       });
 
       it('Submits the data to the API', async () => {
@@ -426,7 +434,7 @@ describe('Return Gateway', () => {
 
       beforeEach(async () => {
         process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
-        gateway = new ReturnGateway(apiKeyGateway);
+        gateway = new ReturnGateway(apiKeyGateway, locationGateway);
       });
 
       it('Returns unsuccessful', async () => {
