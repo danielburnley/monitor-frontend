@@ -3,13 +3,17 @@ import fetch from 'isomorphic-fetch'
 import runtimeEnv from '@mars/heroku-js-runtime-env';
 
 export default class ProjectGateway {
+  constructor(apiKeyGateway) {
+    this.apiKeyGateway = apiKeyGateway;
+  }
+
   async findById(id) {
     let env = runtimeEnv()
     let rawResponse = await fetch(
       `${env.REACT_APP_HIF_API_URL}project/find?id=${id}`,
       {
         headers: {'Content-Type': 'application/json',
-          'API_KEY': window.apiKey},
+          'API_KEY': this.apiKeyGateway.getApiKey()},
       },
     );
     if (rawResponse.ok) {
