@@ -13,10 +13,10 @@ export default class HorizontalFields extends React.Component {
   };
 
   requiredProperty(key) {
-    if(!this.props.schema.required) {
-      return false
+    if (!this.props.schema.required) {
+      return false;
     }
-    return this.props.schema.required.indexOf(key) >= 0
+    return this.props.schema.required.indexOf(key) >= 0;
   }
 
   renderLabel(schemaKey, property) {
@@ -27,7 +27,7 @@ export default class HorizontalFields extends React.Component {
         </label>
       );
     }
-    
+
     return (
       <label htmlFor={schemaKey} data-test={`${schemaKey}-label`}>
         {property.title}
@@ -35,19 +35,41 @@ export default class HorizontalFields extends React.Component {
     );
   }
 
+  renderSelect = (propertyName, schema) => (
+    <select
+      onChange={e => this.onChange(propertyName, e.target.value)}
+      value={this.state[propertyName] || schema.default}
+      data-test={`${propertyName}-input`}
+    >
+      {schema.enum.map(optionValue => (
+        <option key={optionValue}>{optionValue}</option>
+      ))}
+    </select>
+  );
+
+  renderItem = (k, v) => {
+    if (v.type === "string" && v.enum) {
+      return this.renderSelect(k, v)
+    } else {
+      return (
+        <input
+          id={k}
+          disabled={v.readonly}
+          data-test={`${k}-input`}
+          value={this.state[k]}
+          onChange={e => this.onChange(k, e.target.value)}
+        />
+      );
+    }
+  };
+
   renderItems = () =>
     Object.entries(this.props.schema.properties).map(([k, v]) => {
       if (!v.hidden) {
         return (
           <div key={k} data-test="form-field" className="horizontal-item">
             {this.renderLabel(k, v)}
-            <input
-              id={k}
-              disabled={v.readonly}
-              data-test={`${k}-input`}
-              value={this.state[k]}
-              onChange={e => this.onChange(k, e.target.value)}
-            />
+            {this.renderItem(k, v)}
           </div>
         );
       }

@@ -206,7 +206,7 @@ describe("<HorizontalFields>", () => {
             meow: { type: "text", title: "Meow" },
             woof: { type: "text", title: "Woof" }
           },
-          required: ['meow']
+          required: ["meow"]
         };
         formData = { meow: "Cat noise" };
         onChangeSpy = jest.fn();
@@ -218,10 +218,12 @@ describe("<HorizontalFields>", () => {
           />
         );
 
-        expect(fields.find("[data-test='meow-label']").text()).toEqual("Meow *")
+        expect(fields.find("[data-test='meow-label']").text()).toEqual(
+          "Meow *"
+        );
       });
     });
-    
+
     describe("Example two", () => {
       it("Marks the field as required", () => {
         schema = {
@@ -230,7 +232,7 @@ describe("<HorizontalFields>", () => {
             cow: { type: "text", title: "Cow" },
             chicken: { type: "text", title: "Chicken" }
           },
-          required: ['chicken']
+          required: ["chicken"]
         };
         formData = { meow: "Cat noise" };
         onChangeSpy = jest.fn();
@@ -242,7 +244,150 @@ describe("<HorizontalFields>", () => {
           />
         );
 
-        expect(fields.find("[data-test='chicken-label']").text()).toEqual("Chicken *")
+        expect(fields.find("[data-test='chicken-label']").text()).toEqual(
+          "Chicken *"
+        );
+      });
+    });
+  });
+
+  fdescribe("Given a dropdown", () => {
+    describe("Example one", () => {
+      it("Makes the field a dropdown with all the options with the default", () => {
+        schema = {
+          title: "Cats",
+          properties: {
+            meow: { type: "string", enum: ["Cat", "Kitten"], default: "Cat" }
+          }
+        };
+        fields = mount(
+          <HorizontalFields schema={schema} formData={{}} onChange={() => {}} />
+        );
+
+        let dropdown = fields.find("[data-test='meow-input']");
+        let options = dropdown.children();
+
+        expect(dropdown.children().length).toEqual(2);
+        expect(options.at(0).text()).toEqual("Cat");
+        expect(options.at(1).text()).toEqual("Kitten");
+        expect(dropdown.props().value).toEqual("Cat");
+      });
+
+      it("Makes the field the value given in the form data when present", () => {
+        schema = {
+          title: "Cats",
+          properties: {
+            meow: { type: "string", enum: ["Cat", "Kitten"], default: "Cat" }
+          }
+        };
+        fields = mount(
+          <HorizontalFields
+            schema={schema}
+            formData={{ meow: "Kitten" }}
+            onChange={() => {}}
+          />
+        );
+
+        let dropdown = fields.find("[data-test='meow-input']");
+
+        expect(dropdown.props().value).toEqual("Kitten");
+      });
+
+      it("Updates the state when changing the dropdown", () => {
+        schema = {
+          title: "Cats",
+          properties: {
+            meow: { type: "string", enum: ["Cat", "Kitten"], default: "Cat" }
+          }
+        };
+        fields = mount(
+          <HorizontalFields
+            schema={schema}
+            formData={{ meow: "Kitten" }}
+            onChange={() => {}}
+          />
+        );
+
+        let dropdown = fields.find("[data-test='meow-input']");
+        dropdown.simulate("change", { target: { value: "Cat" } });
+
+        expect(fields.state().meow).toEqual("Cat");
+      });
+    });
+
+    describe("Example two", () => {
+      it("Makes the field a dropdown with all the options with the default", () => {
+        schema = {
+          title: "Dogs",
+          properties: {
+            woof: {
+              type: "string",
+              enum: ["Dog", "Pupper", "Puppy"],
+              default: "Pupper"
+            }
+          }
+        };
+        fields = mount(
+          <HorizontalFields schema={schema} formData={{}} onChange={() => {}} />
+        );
+
+        let dropdown = fields.find("[data-test='woof-input']");
+        let options = dropdown.children();
+
+        expect(dropdown.children().length).toEqual(3);
+        expect(options.at(0).text()).toEqual("Dog");
+        expect(options.at(1).text()).toEqual("Pupper");
+        expect(options.at(2).text()).toEqual("Puppy");
+        expect(dropdown.props().value).toEqual("Pupper");
+      });
+
+      it("Makes the field the value given in the form data when present", () => {
+        schema = {
+          title: "Dogs",
+          properties: {
+            woof: {
+              type: "string",
+              enum: ["Dog", "Pupper", "Puppy"],
+              default: "Pupper"
+            }
+          }
+        };
+        fields = mount(
+          <HorizontalFields
+            schema={schema}
+            formData={{ woof: "Puppy" }}
+            onChange={() => {}}
+          />
+        );
+
+        let dropdown = fields.find("[data-test='woof-input']");
+
+        expect(dropdown.props().value).toEqual("Puppy");
+      });
+
+      it("Updates the state when selecting something in the dropdown", () => {
+        schema = {
+          title: "Dogs",
+          properties: {
+            woof: {
+              type: "string",
+              enum: ["Dog", "Pupper", "Puppy"],
+              default: "Pupper"
+            }
+          }
+        };
+        fields = mount(
+          <HorizontalFields
+            schema={schema}
+            formData={{ woof: "Puppy" }}
+            onChange={() => {}}
+          />
+        );
+
+        let dropdown = fields.find("[data-test='woof-input']");
+        dropdown.simulate("change", { target: { value: "Puppy" } });
+
+        expect(fields.state().woof).toEqual("Puppy");
       });
     });
   });
