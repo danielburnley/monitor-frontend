@@ -22,7 +22,7 @@ export default class ReturnGateway {
     let response = await rawResponse.json();
     let returns = response.returns;
 
-    return {success: true, returns: [{project_id: returns[0].project_id}]};
+    return {success: true, returns: returns};
   }
 
   async baseReturnFor(project_id) {

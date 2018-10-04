@@ -266,7 +266,14 @@ describe("Return Gateway", () => {
 
         it("Returns a response from the api", () => {
           expect(response.success).toEqual(true)
+          expect(response.returns[0].id).toEqual(3)
           expect(response.returns[0].project_id).toEqual(1)
+          expect(response.returns[0].updates).toEqual([{ cats: "meow" }])
+          expect(response.returns[0].status).toEqual("Submitted")
+          expect(response.returns[1].id).toEqual(4)
+          expect(response.returns[1].project_id).toEqual(1)
+          expect(response.returns[1].updates).toEqual([{ dogs: "woof" }])
+          expect(response.returns[1].status).toEqual("Draft")
         });
       });
 
