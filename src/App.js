@@ -134,34 +134,13 @@ const renderBaselinePage = props => (
 );
 
 const renderReturnsPage = props => (
-  <ReturnList
-    {...props}
-    schema={{ title: "Returns" }}
-    formData={{
-      returns: [
-        {
-          id: "1",
-          project_id: "1",
-          status: "Draft",
-          updates: [
-            {
-              changed: "Yes"
-            }
-          ]
-        },
-        {
-          id: "2",
-          project_id: "1",
-          status: "Saved",
-          updates: [
-            {
-              changed: "Some"
-            }
-          ]
-        }
-      ]
-    }}
-  />
+  <ProjectPage {...props} getProject={getProjectUseCase}>
+    <div className="col-md-10 col-md-offset-1">
+      {({ formData, formSchema }) => (
+        <ReturnList formData={formData} schema={formSchema} />
+      )}
+    </div>
+  </ProjectPage>
 );
 
 const App = () => (

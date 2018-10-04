@@ -4,6 +4,8 @@ import "./style.css";
 export default class ReturnList extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = { formData: props.response };
   }
 
   renderLink(returns) {
@@ -13,8 +15,8 @@ export default class ReturnList extends React.Component {
         className="list-group-item"
         data-test={`url-${returns.id}`}
       >
-          <span data-test={`return-${returns.id}`}>Return {returns.id}</span>
-          <div className="pull-right">{this.renderStatus(returns)}</div>
+        <span data-test={`return-${returns.id}`}>Return {returns.id}</span>
+        <div className="pull-right">{this.renderStatus(returns)}</div>
       </a>
     );
   }
