@@ -1,4 +1,5 @@
 import React from "react";
+import Cookies from 'universal-cookie';
 import qs from "qs";
 
 import BaselineData from "./Components/BaselineData";
@@ -36,7 +37,7 @@ import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 const tokenGateway = new TokenGateway();
-const apiKeyGateway = new ApiKeyGateway();
+const apiKeyGateway = new ApiKeyGateway(new Cookies());
 const returnGateway = new ReturnGateway(apiKeyGateway, new LocationGateway(window.location));
 const validateReturnUseCase = new ValidateReturn(returnGateway);
 const createReturnUseCase = new CreateReturn(returnGateway);
