@@ -4,8 +4,6 @@ import "./style.css";
 export default class ReturnList extends React.Component {
   constructor(props) {
     super(props);
-
-    this.state = { formData: props.response };
   }
 
   renderLink(returns) {
@@ -50,7 +48,7 @@ export default class ReturnList extends React.Component {
   }
 
   renderListItems() {
-    const returns = this.props.formData.returns;
+    const returns = this.props.returns;
     return returns.map(returns => this.renderReturn(returns));
   }
 
@@ -58,7 +56,7 @@ export default class ReturnList extends React.Component {
     return (
       <div className="panel panel-default">
         <div className="panel-heading" data-test="schema-title">
-          Returns: {this.props.schema.title}
+          Returns
         </div>
         <div className="panel-body">
           <ul className="list-group">{this.renderListItems()}</ul>
