@@ -71,13 +71,13 @@ export default class ReturnForm extends React.Component {
   render() {
     return (
       <div>
+        {this.renderActions()}
         <ParentForm
           schema={this.props.schema}
           uiSchema={this.props.uiSchema}
           formData={this.state.formData}
           onChange={this.onFormChange}
           >
-          {this.renderActions()}
         </ParentForm>
       </div>
     );
