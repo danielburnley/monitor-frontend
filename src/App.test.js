@@ -58,6 +58,7 @@ describe("Authentication against routes", () => {
     process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
     api = new APISimulator("http://cat.meow");
     api.expendEmptyTokenForProject(0).unauthorised();
+    api.getProject({}, 0).unsuccessfully();
   });
 
   afterEach(() => {
@@ -86,12 +87,14 @@ describe("Authentication against routes", () => {
   });
 });
 
-describe("Viewing at a project", () => {
+describe("Viewing a project", () => {
   let api;
 
   beforeEach(() => {
     process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
     api = new APISimulator("http://cat.meow");
+    api.getProject({}, 0).unsuccessfully();
+    
   });
 
   afterEach(() => {
@@ -99,6 +102,8 @@ describe("Viewing at a project", () => {
   });
 
   it("Given invalid token GetToken is shown", async () => {
+    api.getProject({}, 0).unsuccessfully();
+
     api.expendToken("Hello", 0).unauthorised();
 
     let page = new AppPage("/project/0?token=Hello");

@@ -1,5 +1,5 @@
 import fetch from 'isomorphic-fetch';
-import Return from '../../Domain/Return';
+import ApiKey from '../../Domain/ApiKey';
 import runtimeEnv from '@mars/heroku-js-runtime-env';
 import Cookies from 'universal-cookie';
 
@@ -8,7 +8,11 @@ export default class ApiKeyGateway {
     this.cookies = cookies;
   }
 
+  setApiKey(apikey) {
+    this.cookies.set('apikey', apikey);
+  }
+
   getApiKey() {
-    return this.cookies.get('apikey');
+    return new ApiKey(this.cookies.get('apikey'));
   }
 }
