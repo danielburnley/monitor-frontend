@@ -12,8 +12,7 @@ export default class TokenGateway {
       `${this.env.REACT_APP_HIF_API_URL}token/request`,
       {
         method: 'POST',
-        headers: {'Content-Type': 'application/json',
-          'API_KEY': window.apiKey},
+        headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({email_address, project_id, url}),
       },
     );

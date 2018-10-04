@@ -35,17 +35,19 @@ import TokenGateway from "./Gateway/TokenGateway";
 import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-const returnGateway = new ReturnGateway(new ApiKeyGateway(), new LocationGateway(window.location));
+const tokenGateway = new TokenGateway();
+const apiKeyGateway = new ApiKeyGateway();
+const returnGateway = new ReturnGateway(apiKeyGateway, new LocationGateway(window.location));
 const validateReturnUseCase = new ValidateReturn(returnGateway);
 const createReturnUseCase = new CreateReturn(returnGateway);
 const generateDisabledUISchema = new GenerateDisabledUISchema();
 const generateReadOnlySchema = new GenerateReadOnlySchema();
 const generateUISchema = new GenerateUISchema();
 const getBaseReturnUseCase = new GetBaseReturn(returnGateway);
-const getProjectUseCase = new GetProject(new ProjectGateway());
+const getProjectUseCase = new GetProject(new ProjectGateway(apiKeyGateway));
 const getReturnUseCase = new GetReturn(returnGateway);
-const canAccessProjectUseCase = new CanAccessProject(new TokenGateway());
-const requestTokenUseCase = new RequestToken(new TokenGateway());
+const canAccessProjectUseCase = new CanAccessProject(tokenGateway);
+const requestTokenUseCase = new RequestToken(tokenGateway);
 const submitReturnUseCase = new SubmitReturn(returnGateway);
 const updateReturnUseCase = new UpdateReturn(returnGateway);
 
