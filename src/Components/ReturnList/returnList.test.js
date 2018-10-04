@@ -34,12 +34,12 @@ describe("<ReturnList", () => {
           }
         ]
       };
-      let schemaTitle = "Returns";
+      let schemaTitle = "Cat Housing";
       let returnList = new ReturnListComponent(formData, schemaTitle);
       let url = window.location.origin;
 
       it("displays this schema title", () => {
-        expect(returnList.title()).toEqual("Returns");
+        expect(returnList.title()).toEqual("Returns: Cat Housing");
       });
 
       it("displays a list item for the return", () => {
@@ -47,7 +47,7 @@ describe("<ReturnList", () => {
       });
 
       it("creates a link to the correct location", () => {
-        expect(returnList.urlTarget(1)).toEqual(`${url}/project/1/return/1`);
+        expect(returnList.urlTarget(1)).toEqual("/project/1/return/1");
       });
 
       it("shows the current status of the return", () => {
@@ -70,12 +70,12 @@ describe("<ReturnList", () => {
           }
         ]
       };
-      let schemaTitle = "List of Returns";
+      let schemaTitle = "Dog Kennels";
       let returnList = new ReturnListComponent(formData, schemaTitle);
       let url = window.location.origin;
 
       it("displays this schema title", () => {
-        expect(returnList.title()).toEqual("List of Returns");
+        expect(returnList.title()).toEqual("Returns: Dog Kennels");
       });
 
       it("displays a list item for the return", () => {
@@ -83,7 +83,7 @@ describe("<ReturnList", () => {
       });
 
       it("creates a link to the correct location", () => {
-        expect(returnList.urlTarget(7)).toEqual(`${url}/project/1/return/7`);
+        expect(returnList.urlTarget(7)).toEqual("/project/1/return/7");
       });
 
       it("shows the current status of the return", () => {
@@ -118,12 +118,12 @@ describe("<ReturnList", () => {
           }
         ]
       };
-      let schemaTitle = "Returns";
+      let schemaTitle = "Cat Housing";
       let returnList = new ReturnListComponent(formData, schemaTitle);
       let url = window.location.origin;
 
       it("displays this schema title", () => {
-        expect(returnList.title()).toEqual("Returns");
+        expect(returnList.title()).toEqual("Returns: Cat Housing");
       });
 
       it("displays multiple list items for the returns", () => {
@@ -132,8 +132,8 @@ describe("<ReturnList", () => {
       });
 
       it("creates a link to the correct location", () => {
-        expect(returnList.urlTarget(1)).toEqual(`${url}/project/1/return/1`);
-        expect(returnList.urlTarget(2)).toEqual(`${url}/project/1/return/2`);
+        expect(returnList.urlTarget(1)).toEqual("/project/1/return/1");
+        expect(returnList.urlTarget(2)).toEqual("/project/1/return/2");
       });
 
       it("shows the current status of the return", () => {
@@ -167,12 +167,12 @@ describe("<ReturnList", () => {
           }
         ]
       };
-      let schemaTitle = "Returns";
+      let schemaTitle = "Dog Kennels";
       let returnList = new ReturnListComponent(formData, schemaTitle);
       let url = window.location.origin;
 
       it("displays this schema title", () => {
-        expect(returnList.title()).toEqual("Returns");
+        expect(returnList.title()).toEqual("Returns: Dog Kennels");
       });
 
       it("displays multiple list items for the returns", () => {
@@ -181,8 +181,8 @@ describe("<ReturnList", () => {
       });
 
       it("creates a link to the correct location", () => {
-        expect(returnList.urlTarget(7)).toEqual(`${url}/project/1/return/7`);
-        expect(returnList.urlTarget(6)).toEqual(`${url}/project/1/return/6`);
+        expect(returnList.urlTarget(7)).toEqual("/project/1/return/7");
+        expect(returnList.urlTarget(6)).toEqual("/project/1/return/6");
       });
 
       it("shows the current status of the return", () => {

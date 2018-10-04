@@ -6,35 +6,59 @@ export default class ReturnList extends React.Component {
     super(props);
   }
 
-  renderListItems() {
-    const url = window.location.origin;
-    const returns = this.props.formData.returns;
-    const listItems = returns.map(returns => (
-      <div className="row" key={returns.id.toString()}>
-        <div className="col-md-10">
-          <a
-            href={`${url}/project/${returns.project_id}/return/${returns.id}`}
-            className="list-group-item"
-            data-test={`return-${returns.id}`}
-          >
-            Return {returns.id}
-          </a>
-        </div>
-        <div className="col-md-2 return-list">
-          <strong className="beta" data-test={`status-${returns.id}`}>
-            {returns.status}
-          </strong>
-        </div>
+  renderLink(returns) {
+    return (
+      <div className="col-md-10">
+        <a
+          href={`/project/${returns.project_id}/return/${returns.id}`}
+          className="list-group-item"
+          data-test={`return-${returns.id}`}
+        >
+          Return {returns.id}
+        </a>
       </div>
-    ));
-    return listItems;
+    );
+  }
+
+  renderStatus(returns) {
+    let status = returns.status;
+    if (status == "Draft") {
+      return (
+        <span className="badge" data-test={`status-${returns.id}`}>
+          {status}
+        </span>
+      );
+    } else {
+      return (
+        <span
+          className="badge badge-success"
+          data-test={`status-${returns.id}`}
+        >
+          {status}
+        </span>
+      );
+    }
+  }
+
+  renderReturn(returns) {
+    return (
+      <div className="row padding-bottom" key={returns.id.toString()}>
+        <div className="col-md-10">{this.renderLink(returns)}</div>
+        <div className="col-md-2 return-list">{this.renderStatus(returns)}</div>
+      </div>
+    );
+  }
+
+  renderListItems() {
+    const returns = this.props.formData.returns;
+    return returns.map(returns => this.renderReturn(returns));
   }
 
   render() {
     return (
       <div className="panel panel-default">
         <div className="panel-heading" data-test="schema-title">
-          {this.props.schema.title}
+          Returns: {this.props.schema.title}
         </div>
         <div className="panel-body">
           <ul className="list-group">{this.renderListItems()}</ul>

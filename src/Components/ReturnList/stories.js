@@ -5,7 +5,7 @@ import ReturnList from ".";
 storiesOf("ReturnList", module)
   .add("default", () => (
     <ReturnList
-      schema={{ title: "Returns" }}
+      schema={{ title: "Cat Housing" }}
       formData={{
         returns: [
           {
@@ -24,7 +24,7 @@ storiesOf("ReturnList", module)
   ))
   .add("multiple returns", () => (
     <ReturnList
-      schema={{ title: "Returns" }}
+      schema={{ title: "Dog Kennels" }}
       formData={{
         returns: [
           {
