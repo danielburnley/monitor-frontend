@@ -251,7 +251,7 @@ describe("<HorizontalFields>", () => {
     });
   });
 
-  fdescribe("Given a dropdown", () => {
+  describe("Given a dropdown", () => {
     describe("Example one", () => {
       it("Makes the field a dropdown with all the options with the default", () => {
         schema = {
@@ -389,6 +389,34 @@ describe("<HorizontalFields>", () => {
 
         expect(fields.state().woof).toEqual("Puppy");
       });
+    });
+  });
+
+  describe("Given a text input of format date", () => {
+    it("Renders the input as a date field", () => {
+      schema = {
+        title: "Cats",
+        properties: {
+          dog: { type: "string", title: "Dog" },
+          cow: { type: "string", title: "Cow", format: "date" }
+        }
+      };
+
+      formData = {};
+
+      fields = mount(
+        <HorizontalFields
+          schema={schema}
+          formData={formData}
+          onChange={() => {}}
+        />
+      );
+
+      let dogInput = fields.find('[data-test="dog-input"]');
+      let cowInput = fields.find('[data-test="cow-input"]');
+
+      expect(dogInput.props().type).toEqual("text");
+      expect(cowInput.props().type).toEqual("date");
     });
   });
 });

@@ -47,15 +47,24 @@ export default class HorizontalFields extends React.Component {
     </select>
   );
 
+  inputFieldType = schema => {
+    if (schema.format === "date") {
+      return "date";
+    }
+
+    return "text";
+  };
+
   renderItem = (k, v) => {
     if (v.type === "string" && v.enum) {
-      return this.renderSelect(k, v)
+      return this.renderSelect(k, v);
     } else {
       return (
         <input
           id={k}
           disabled={v.readonly}
           data-test={`${k}-input`}
+          type={this.inputFieldType(v)}
           value={this.state[k]}
           onChange={e => this.onChange(k, e.target.value)}
         />
