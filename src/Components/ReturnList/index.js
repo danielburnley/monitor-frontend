@@ -13,7 +13,7 @@ export default class ReturnList extends React.Component {
         className="list-group-item"
         data-test={`url-${returns.id}`}
       >
-          <div data-test={`return-${returns.id}`}>Return {returns.id}</div>
+          <span data-test={`return-${returns.id}`}>Return {returns.id}</span>
           <div className="pull-right">{this.renderStatus(returns)}</div>
       </a>
     );
