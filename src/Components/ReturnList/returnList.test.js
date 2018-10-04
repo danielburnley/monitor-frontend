@@ -14,7 +14,7 @@ class ReturnListComponent {
   status = number =>
     this.returnList.find(`[data-test='status-${number}']`).text();
   urlTarget = number =>
-    this.returnList.find(`[data-test='return-${number}']`).prop("href");
+    this.returnList.find(`[data-test='url-${number}']`).prop("href");
 }
 
 describe("<ReturnList", () => {

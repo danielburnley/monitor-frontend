@@ -24,7 +24,7 @@ storiesOf("ReturnList", module)
   ))
   .add("multiple returns", () => (
     <ReturnList
-      schema={{ title: "Dog Kennels" }}
+      schema={{ title: "Kittens Housing Association" }}
       formData={{
         returns: [
           {
@@ -40,7 +40,7 @@ storiesOf("ReturnList", module)
           {
             id: "2",
             project_id: "1",
-            status: "Saved",
+            status: "Submitted",
             updates: [
               {
                 changed: "Some"

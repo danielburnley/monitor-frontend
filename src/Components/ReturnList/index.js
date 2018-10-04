@@ -8,15 +8,14 @@ export default class ReturnList extends React.Component {
 
   renderLink(returns) {
     return (
-      <div className="col-md-10">
-        <a
-          href={`/project/${returns.project_id}/return/${returns.id}`}
-          className="list-group-item"
-          data-test={`return-${returns.id}`}
-        >
-          Return {returns.id}
-        </a>
-      </div>
+      <a
+        href={`/project/${returns.project_id}/return/${returns.id}`}
+        className="list-group-item"
+        data-test={`url-${returns.id}`}
+      >
+          <div data-test={`return-${returns.id}`}>Return {returns.id}</div>
+          <div className="pull-right">{this.renderStatus(returns)}</div>
+      </a>
     );
   }
 
@@ -42,9 +41,8 @@ export default class ReturnList extends React.Component {
 
   renderReturn(returns) {
     return (
-      <div className="row padding-bottom" key={returns.id.toString()}>
-        <div className="col-md-10">{this.renderLink(returns)}</div>
-        <div className="col-md-2 return-list">{this.renderStatus(returns)}</div>
+      <div className="row padding" key={returns.id.toString()}>
+        {this.renderLink(returns)}
       </div>
     );
   }
