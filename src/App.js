@@ -28,6 +28,7 @@ import ValidateReturn from "./UseCase/ValidateReturn";
 
 import ProjectGateway from "./Gateway/ProjectGateway";
 import ReturnGateway from "./Gateway/ReturnGateway";
+import LocationGateway from "./Gateway/LocationGateway";
 import ApiKeyGateway from "./Gateway/ApiKeyGateway";
 import TokenGateway from "./Gateway/TokenGateway";
 
@@ -36,7 +37,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 const tokenGateway = new TokenGateway();
 const apiKeyGateway = new ApiKeyGateway();
-const returnGateway = new ReturnGateway(apiKeyGateway);
+const returnGateway = new ReturnGateway(apiKeyGateway, new LocationGateway(window.location));
 const validateReturnUseCase = new ValidateReturn(returnGateway);
 const createReturnUseCase = new CreateReturn(returnGateway);
 const generateDisabledUISchema = new GenerateDisabledUISchema();

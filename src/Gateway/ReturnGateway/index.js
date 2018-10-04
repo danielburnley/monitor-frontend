@@ -3,7 +3,8 @@ import Return from '../../Domain/Return';
 import runtimeEnv from '@mars/heroku-js-runtime-env';
 
 export default class ReturnGateway {
-  constructor(apiKeyGateway) {
+  constructor(apiKeyGateway, locationGateway) {
+    this.locationGateway = locationGateway;
     this.apiKeyGateway = apiKeyGateway;
     this.env = runtimeEnv();
   }
@@ -86,7 +87,12 @@ export default class ReturnGateway {
         method: 'POST',
         headers: {'Content-Type': 'application/json',
           'API_KEY': this.apiKeyGateway.getApiKey()},
-        body: JSON.stringify({project_id, return_id, data}),
+        body: JSON.stringify({
+          project_id,
+          return_id,
+          data,
+          url: `${await this.locationGateway.getRoot()}/project/${project_id}/return/${return_id}`
+        }),
       },
     );
 
@@ -111,9 +117,9 @@ export default class ReturnGateway {
     if (response.ok) {
       let response_json = await response.json();
       return {
-        valid: response_json.valid, 
-        invalidPaths: response_json.invalidPaths, 
-        prettyInvalidPaths: response_json.prettyInvalidPaths 
+        valid: response_json.valid,
+        invalidPaths: response_json.invalidPaths,
+        prettyInvalidPaths: response_json.prettyInvalidPaths
       }
     }
   }

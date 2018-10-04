@@ -1,11 +1,12 @@
 import React from "react";
 import ReturnForm from "../ReturnForm";
 import ValidationMessage from "../ValidationMessage";
+import "./style.css";
 
 export default class ReturnPage extends React.Component {
   constructor() {
     super();
-    this.state = { loading: true, valid: true, invalidPaths: [], lastAction: "None" };
+    this.state = { loading: true, valid: true, invalidPaths: [], lastAction: "Create" };
   }
 
   projectId = () => {
@@ -16,8 +17,8 @@ export default class ReturnPage extends React.Component {
     return this.props.match.params.returnId;
   };
 
-  submissionSuccessful = () => {
-    let uiSchema = this.props.generateSubmittedSchema.execute(
+  submissionSuccessful = async () => {
+    let uiSchema = await this.props.generateSubmittedSchema.execute(
       this.state.formSchema
     );
     this.setState({ status: "Submitted", formUISchema: uiSchema });
@@ -34,15 +35,13 @@ export default class ReturnPage extends React.Component {
       data: formData
     });
 
-    if (this.state.valid)
-    {
+    if (this.state.valid) {
       await this.props.submitReturn.execute(this, {
         projectId: this.projectId(),
         returnId: this.returnId(),
         data: formData
       });
     }
-    this.setState({status: "Editing"});
   };
 
   onFormCreate = async formData => {
@@ -53,7 +52,7 @@ export default class ReturnPage extends React.Component {
   };
 
   onFormSave = async formData => {
-    this.setState({lastAction: 'Save', status: "Updating", valid: true, invalidPaths: []});
+    this.setState({status: "Updating", valid: true, invalidPaths: [], lastAction: "Save"});
     this.props.updateReturn.execute(this, {
       projectId: this.projectId(),
       returnId: this.returnId(),
@@ -61,7 +60,7 @@ export default class ReturnPage extends React.Component {
     });
 
     await this.props.validateReturn.execute(this, this.props.match.params.projectId, formData);
-    this.setState({status: "Editing"});
+    this.setState({status: "Updated"});
   };
 
   invalidateFields = async (pathList) => {
@@ -91,7 +90,10 @@ export default class ReturnPage extends React.Component {
     this.props.history.push(`/project/${this.projectId()}/return/${returnId}`);
   };
 
-  updateSuccessful = async () => {};
+  updateSuccessful = async () => {
+    this.setState({status: "Updated"});
+  };
+
   updateUnsuccessful = async () => {};
 
   fetchData = async () => {
@@ -112,9 +114,13 @@ export default class ReturnPage extends React.Component {
     await this.fetchData();
   }
 
+  onFormChange = (e) => {
+    this.setState({status: "Editing", lastAction: "Change"});
+  }
+
   renderForm() {
     if (this.state.loading) {
-      return <div />;
+      return <div/>;
     }
 
     return (
@@ -122,6 +128,7 @@ export default class ReturnPage extends React.Component {
         onSave={this.onFormSave}
         onSubmit={this.onFormSubmit}
         onCreate={this.onFormCreate}
+        onChange={this.onFormChange}
         data={this.state.formData}
         schema={this.state.formSchema}
         uiSchema={this.state.formUISchema}
@@ -135,6 +142,25 @@ export default class ReturnPage extends React.Component {
     e.preventDefault();
   };
 
+
+  renderSaveSuccessAlert() {
+    if (this.state.status === "Updated") {
+      return (
+        <div data-test="saveSuccess" role="alert" className="alert alert-success">
+          Draft saved!
+        </div>
+      )
+    }
+    if (this.state.status === "Submitted" && this.state.lastAction === "Submit") {
+      return (
+        <div data-test="submitSuccess" role="alert" className="submit-success">
+          <h3 className="checkmark">✔</h3>
+          <h3>Return submitted!</h3>
+          <h4 className="subheading">All members of this project have been sent an email with a link to view this return</h4>
+        </div>
+      )
+    }
+  }
 
   render() {
     return (
@@ -151,8 +177,15 @@ export default class ReturnPage extends React.Component {
         </div>
         <div className="row">
           <ValidationMessage valid={this.state.valid} invalidPaths={this.state.invalidPaths} type={this.state.lastAction}/>
-          <div data-test="return" className="return col-md-12">
-            {this.renderForm()}
+          {
+            this.renderSaveSuccessAlert()
+          }
+          <div className="row">
+            {(this.state.status !== "Submitted" || this.state.lastAction !== "Submit") &&
+              <div data-test="return" className="return col-md-12">
+                {this.renderForm()}
+              </div>
+            }
           </div>
         </div>
       </div>
