@@ -10,17 +10,17 @@ export default class VarianceField extends React.Component {
 
   setupInitialState = formData => {
     this.state = {
-      baseline: formData.baseline || "",
-      percentComplete: formData.percentComplete || 0,
+      baseline: formData.baseline,
+      percentComplete: formData.percentComplete,
       status: formData.status || "On schedule",
-      current: formData.current || "",
-      reason: formData.reason || "",
-      completedDate: formData.completedDate || ""
+      current: formData.current,
+      reason: formData.reason,
+      completedDate: formData.completedDate
     };
   };
 
   onFieldChange = (name, e) => {
-    this.setState({ [name]: e.target.value }, () => {
+    this.setState({ [name]: e.target.value || undefined }, () => {
       this.props.onChange(this.state);
     });
   };
@@ -28,14 +28,14 @@ export default class VarianceField extends React.Component {
   renderCurrentValue = () => (
     <div className="row">
       <div className="col-md-3 form-group">
-        <label htmlFor="current">Current value</label>
+        <label htmlFor="current">Current value*</label>
         <input
           className="form-control"
           data-test="variance-current"
           id="current"
           onChange={e => this.onFieldChange("current", e)}
-          type="text"
-          value={this.state.current}
+          type="date"
+          value={this.state.current || ""}
         />
       </div>
     </div>
@@ -44,7 +44,7 @@ export default class VarianceField extends React.Component {
   renderReason = () => (
     <div className="row">
       <div className="col-md-6 form-group">
-        <label htmlFor="reason">Reason for variance</label>
+        <label htmlFor="reason">Reason for variance*</label>
         <textarea
           className="form-control"
           data-test="variance-reason"
@@ -66,13 +66,13 @@ export default class VarianceField extends React.Component {
   renderCompletedDate = () => (
     <div className="row">
       <div className="col-md-3 form-group">
-        <label htmlFor="completed">Completed Date</label>
+        <label htmlFor="completed">Completed Date*</label>
         <input
           className="form-control"
           data-test="variance-completed"
           id="completed"
           onChange={e => this.onFieldChange("completedDate", e)}
-          type="text"
+          type="date"
           value={this.state.completedDate}
         />
       </div>
@@ -98,7 +98,7 @@ export default class VarianceField extends React.Component {
 
   renderStatus = () => (
     <div className="col-md-3 form-group">
-      <label htmlFor="status">Status</label>
+      <label htmlFor="status">Status*</label>
       <select
         data-test="variance-status"
         id="status"
@@ -115,14 +115,14 @@ export default class VarianceField extends React.Component {
 
   renderPercentComplete = () => (
     <div className="col-md-3 form-group">
-      <label htmlFor="percent-complete">Percent complete</label>
+      <label htmlFor="percent-complete">Percent complete*</label>
       <input
         className="form-control"
         data-test="variance-percentage"
         id="percent-complete"
         onChange={e => this.onFieldChange("percentComplete", e)}
         type="number"
-        value={this.state.percentComplete}
+        value={this.state.percentComplete || ""}
       />
     </div>
   );

@@ -35,10 +35,8 @@ describe("VarianceField", () => {
       });
 
       it("Renders the percentage complete field", () => {
-        let percentComplete = field
-          .find("[data-test='variance-percentage']")
-          .props().value;
-        expect(percentComplete).toEqual(0);
+        let percentComplete = field.find("[data-test='variance-percentage']");
+        expect(percentComplete.length).toEqual(1);
       });
 
       it("Does not show the updated value field", () => {
@@ -115,10 +113,8 @@ describe("VarianceField", () => {
       });
 
       it("Renders the percentage complete field", () => {
-        let percentComplete = field
-          .find("[data-test='variance-percentage']")
-          .props().value;
-        expect(percentComplete).toEqual(0);
+        let percentComplete = field.find("[data-test='variance-percentage']");
+        expect(percentComplete.length).toEqual(1);
       });
 
       it("Does not show the updated value field", () => {
@@ -381,7 +377,7 @@ describe("VarianceField", () => {
             percentComplete: 10,
             current: "2050-01-01",
             reason: "Super delays",
-            completedDate: ""
+            completedDate: undefined
           });
         });
       });
@@ -399,7 +395,7 @@ describe("VarianceField", () => {
               percentComplete: 15,
               current: "2050-01-01",
               reason: "Super delays",
-              completedDate: ""
+              completedDate: undefined
             });
           });
         });
@@ -416,7 +412,7 @@ describe("VarianceField", () => {
               percentComplete: 90,
               current: "2050-01-01",
               reason: "Super delays",
-              completedDate: ""
+              completedDate: undefined
             });
           });
         });
@@ -435,7 +431,7 @@ describe("VarianceField", () => {
               percentComplete: 10,
               current: "2040-01-01",
               reason: "Super delays",
-              completedDate: ""
+              completedDate: undefined
             });
           });
         });
@@ -452,7 +448,7 @@ describe("VarianceField", () => {
               percentComplete: 10,
               current: "2020-05-01",
               reason: "Super delays",
-              completedDate: ""
+              completedDate: undefined
             });
           });
         });
@@ -471,7 +467,7 @@ describe("VarianceField", () => {
               percentComplete: 10,
               current: "2050-01-01",
               reason: "Mega delays",
-              completedDate: ""
+              completedDate: undefined
             });
           });
         });
@@ -488,7 +484,7 @@ describe("VarianceField", () => {
               percentComplete: 10,
               current: "2050-01-01",
               reason: "Just the worst delays",
-              completedDate: ""
+              completedDate: undefined
             });
           });
         });
@@ -502,9 +498,7 @@ describe("VarianceField", () => {
         let formData = {
           baseline: "2020-12-31",
           status: "Completed",
-          percentComplete: 100,
-          current: "",
-          reason: ""
+          percentComplete: 100
         };
         field = shallow(
           <VarianceField
@@ -526,8 +520,8 @@ describe("VarianceField", () => {
               baseline: "2020-12-31",
               status: "Completed",
               percentComplete: 100,
-              current: "",
-              reason: "",
+              current: undefined,
+              reason: undefined,
               completedDate: "2020-01-01"
             });
           });
@@ -543,8 +537,8 @@ describe("VarianceField", () => {
               baseline: "2020-12-31",
               status: "Completed",
               percentComplete: 100,
-              current: "",
-              reason: "",
+              current: undefined,
+              reason: undefined,
               completedDate: "2025-01-01"
             });
           });
