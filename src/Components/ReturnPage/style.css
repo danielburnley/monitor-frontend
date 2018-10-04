@@ -1,0 +1,14 @@
+.submit-success {
+  height: 100%;
+  text-align: center;
+  font-size: 2em;
+}
+
+.checkmark {
+  color: green;
+  font-size: 2em;
+}
+
+.subheading {
+  font-weight: normal;
+}
