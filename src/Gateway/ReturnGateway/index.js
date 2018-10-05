@@ -14,7 +14,7 @@ export default class ReturnGateway {
       `${this.env.REACT_APP_HIF_API_URL}project/${projectId}/returns`,
       {
         headers: {'Content-Type': 'application/json',
-          'API_KEY': this.apiKeyGateway.getApiKey()},
+          'API_KEY': this.apiKeyGateway.getApiKey().apiKey},
       },
     );
     if (!rawResponse.ok) return {success: false};
