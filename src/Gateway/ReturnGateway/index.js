@@ -14,7 +14,7 @@ export default class ReturnGateway {
       `${this.env.REACT_APP_HIF_API_URL}project/${project_id}/return`,
       {
         headers: {'Content-Type': 'application/json',
-          'API_KEY': this.apiKeyGateway.getApiKey()},
+          'API_KEY': this.apiKeyGateway.getApiKey().apiKey},
       },
     );
 
@@ -32,7 +32,7 @@ export default class ReturnGateway {
       `${this.env.REACT_APP_HIF_API_URL}return/get?id=${projectId}&returnId=${id}`,
       {
         headers: {'Content-Type': 'application/json',
-          'API_KEY': this.apiKeyGateway.getApiKey()},
+          'API_KEY': this.apiKeyGateway.getApiKey().apiKey},
       },
     );
     if (rawResponse.ok) {
@@ -49,7 +49,7 @@ export default class ReturnGateway {
       {
         method: 'POST',
         headers: {'Content-Type': 'application/json',
-          'API_KEY': this.apiKeyGateway.getApiKey()},
+          'API_KEY': this.apiKeyGateway.getApiKey().apiKey},
         body: JSON.stringify({project_id, data}),
       },
     );
@@ -68,7 +68,7 @@ export default class ReturnGateway {
       {
         method: 'POST',
         headers: {'Content-Type': 'application/json',
-          'API_KEY': this.apiKeyGateway.getApiKey()},
+          'API_KEY': this.apiKeyGateway.getApiKey().apiKey},
         body: JSON.stringify({project_id, return_id, return_data}),
       },
     );
@@ -86,7 +86,7 @@ export default class ReturnGateway {
       {
         method: 'POST',
         headers: {'Content-Type': 'application/json',
-          'API_KEY': this.apiKeyGateway.getApiKey()},
+          'API_KEY': this.apiKeyGateway.getApiKey().apiKey},
         body: JSON.stringify({
           project_id,
           return_id,
@@ -109,7 +109,7 @@ export default class ReturnGateway {
       {
         method: 'POST',
         headers: {'Content-Type': 'application/json',
-          'API_KEY': this.apiKeyGateway.getApiKey()},
+          'API_KEY': this.apiKeyGateway.getApiKey().apiKey},
         body: JSON.stringify({type: 'hif', project_id, data}),
       },
     );

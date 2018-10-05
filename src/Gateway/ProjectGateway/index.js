@@ -13,7 +13,7 @@ export default class ProjectGateway {
       `${env.REACT_APP_HIF_API_URL}project/find?id=${id}`,
       {
         headers: {'Content-Type': 'application/json',
-          'API_KEY': this.apiKeyGateway.getApiKey()},
+          'API_KEY': this.apiKeyGateway.getApiKey().apiKey},
       },
     );
     if (rawResponse.ok) {

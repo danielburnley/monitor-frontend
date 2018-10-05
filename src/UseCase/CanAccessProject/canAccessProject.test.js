@@ -1,16 +1,12 @@
 import CanAccessProject from ".";
 
 describe("CanAccessProject", () => {
-  let tokenGatewaySpy = {
-    getApiKey: jest.fn(() => ({apiKey: 'Cats'}))
-  };
-  let apiKeyGatewaySpy = { getApiKey: jest.fn(() => ({apiKey: 'apikey'})), setApiKey: jest.fn()};
-
-
   describe('Given a valid saved api key', () => {
     describe('example 1', () => {
       let apiKeyGatewaySpy = { getApiKey: jest.fn(() => ({apiKey: 'apikey'})), setApiKey: jest.fn()};
-
+      let tokenGatewaySpy = {
+        getApiKey: jest.fn(() => ({apiKey: 'Cats'}))
+      };
       let projectGatewaySpy = { findById:  jest.fn(async () => ({ success: true })) };
       let useCase = new CanAccessProject(tokenGatewaySpy, apiKeyGatewaySpy, projectGatewaySpy);
       it('calls the api key gateway', async () => {
@@ -31,7 +27,9 @@ describe("CanAccessProject", () => {
     });
     describe('example 2', () => {
       let apiKeyGatewaySpy = { getApiKey: jest.fn(() => ({apiKey: 'key'})), setApiKey: jest.fn()};
-
+      let tokenGatewaySpy = {
+        getApiKey: jest.fn(() => ({apiKey: 'Cats'}))
+      };
       let projectGatewaySpy = { findById:  jest.fn(async () => ({ success: true })) };
       let useCase = new CanAccessProject(tokenGatewaySpy, apiKeyGatewaySpy, projectGatewaySpy);
       it('calls the api key gateway', async () => {
@@ -86,6 +84,7 @@ describe("CanAccessProject", () => {
     let tokenGatewaySpy = {
       getApiKey: jest.fn(() => (null))
     };
+    let apiKeyGatewaySpy = { getApiKey: jest.fn(() => ({apiKey: ''})), setApiKey: jest.fn()};
     let projectGatewaySpy = { findById:  jest.fn(async () => ({ success: false })) };
     let useCase = new CanAccessProject(tokenGatewaySpy, apiKeyGatewaySpy, projectGatewaySpy);
 

@@ -13,7 +13,7 @@ describe('Project Gateway', () => {
     describe('Example one', () => {
       beforeEach(async () => {
         process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
-        apiKeyGateway = {getApiKey: jest.fn(() => 'superSecret')};
+        apiKeyGateway = {getApiKey: jest.fn(() => ({apiKey: 'superSecret'}))};
         projectRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
           .matchHeader('API_KEY', 'superSecret')
@@ -42,7 +42,7 @@ describe('Project Gateway', () => {
       let projectRequest, response, apiKeyGateway;
       beforeEach(async () => {
         process.env.REACT_APP_HIF_API_URL = 'http://dog.woof/';
-        apiKeyGateway = {getApiKey: jest.fn(() => 'extraSecret')};
+        apiKeyGateway = {getApiKey: jest.fn(() => ({apiKey: 'extraSecret'}))};
         projectRequest = nock('http://dog.woof')
           .matchHeader('Content-Type', 'application/json')
           .matchHeader('API_KEY', 'extraSecret')
@@ -72,7 +72,7 @@ describe('Project Gateway', () => {
 
   describe('Given a project is not found', () => {
     it('Projects unsuccessful', async () => {
-      let apiKeyGateway = {getApiKey: () => 'extraSecret'};
+      let apiKeyGateway = {getApiKey: () => ({apiKey: 'extraSecret'})};
       process.env.REACT_APP_HIF_API_URL = 'http://dog.woof/';
       let projectRequest = nock('http://dog.woof')
         .matchHeader('Content-Type', 'application/json')

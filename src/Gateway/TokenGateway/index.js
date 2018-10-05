@@ -8,7 +8,7 @@ export default class TokenGateway {
   }
 
   async requestToken(email_address, project_id, url) {
-    let response = await fetch(
+    await fetch(
       `${this.env.REACT_APP_HIF_API_URL}token/request`,
       {
         method: 'POST',
