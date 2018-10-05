@@ -375,4 +375,50 @@ describe('ReturnPage', () => {
       });
     });
   });
+
+  describe('When editing a form', () => {
+    describe('Before creation', () => {
+      it('Does keeps the state as "Draft"', async () => {
+        let wrap = mount(<ReturnPage
+                validateReturn={() => {}}
+                match={{ params: { projectId: 1 } }}
+                generateUISchema={new GenerateUISchema()}
+                generateSubmittedSchema={new GenerateReadOnlySchema()}
+                history={[]}
+                createReturn={()=>{}}
+                submitReturn={()=>{}}
+                updateReturn={() => {}}
+                getReturn={new getReturnStub()}
+                getBaseReturn={new getBaseReturnStub()}
+              />);
+        await wait();
+
+        wrap.find('ReturnForm').props().onChange({})
+
+        expect(wrap.state().status).toEqual("Draft")
+      });
+    });
+
+    describe('After creation', () => {
+      it('Updates the state to editing', async () => {
+        let wrap = mount(<ReturnPage
+                validateReturn={() => {}}
+                match={{ params: { projectId: 1, returnId: 1 } }}
+                generateUISchema={new GenerateUISchema()}
+                generateSubmittedSchema={new GenerateReadOnlySchema()}
+                history={[]}
+                createReturn={()=>{}}
+                submitReturn={()=>{}}
+                updateReturn={() => {}}
+                getReturn={new getReturnStub()}
+                getBaseReturn={new getBaseReturnStub()}
+              />);
+        await wait();
+
+        wrap.find('ReturnForm').props().onChange({})
+
+        expect(wrap.state().status).toEqual("Editing")
+      });
+    });
+  });
 });
