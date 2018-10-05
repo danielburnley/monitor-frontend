@@ -1,4 +1,5 @@
 import React from "react";
+import Cookies from 'universal-cookie';
 import qs from "qs";
 
 import BaselineData from "./Components/BaselineData";
@@ -36,7 +37,8 @@ import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 const tokenGateway = new TokenGateway();
-const apiKeyGateway = new ApiKeyGateway();
+const apiKeyGateway = new ApiKeyGateway(new Cookies());
+const projectGateway = new ProjectGateway(apiKeyGateway);
 const returnGateway = new ReturnGateway(apiKeyGateway, new LocationGateway(window.location));
 const validateReturnUseCase = new ValidateReturn(returnGateway);
 const createReturnUseCase = new CreateReturn(returnGateway);
@@ -44,9 +46,9 @@ const generateDisabledUISchema = new GenerateDisabledUISchema();
 const generateReadOnlySchema = new GenerateReadOnlySchema();
 const generateUISchema = new GenerateUISchema();
 const getBaseReturnUseCase = new GetBaseReturn(returnGateway);
-const getProjectUseCase = new GetProject(new ProjectGateway(apiKeyGateway));
+const getProjectUseCase = new GetProject(projectGateway);
 const getReturnUseCase = new GetReturn(returnGateway);
-const canAccessProjectUseCase = new CanAccessProject(tokenGateway);
+const canAccessProjectUseCase = new CanAccessProject(tokenGateway, apiKeyGateway, projectGateway);
 const requestTokenUseCase = new RequestToken(tokenGateway);
 const submitReturnUseCase = new SubmitReturn(returnGateway);
 const updateReturnUseCase = new UpdateReturn(returnGateway);
@@ -146,9 +148,6 @@ const App = () => (
               <Portal
                 {...props}
                 projectId={props.match.params.id}
-                onApiKey={apiKey => {
-                  window.apiKey = apiKey;
-                }}
                 requestToken={requestTokenUseCase}
                 token={
                   qs.parse(props.location.search, { ignoreQueryPrefix: true })

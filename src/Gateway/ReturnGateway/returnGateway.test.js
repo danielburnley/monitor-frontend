@@ -21,7 +21,7 @@ describe('Return Gateway', () => {
       beforeEach(async () => {
         process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
         locationGateway = {getRoot: () => 'https://example.com'};
-        apiKeyGateway = {getApiKey: () => 'superSecret'}
+        apiKeyGateway = {getApiKey: () => ({apiKey: 'superSecret'})}
         validationRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
           .matchHeader('API_KEY', 'superSecret')
@@ -52,7 +52,7 @@ describe('Return Gateway', () => {
       beforeEach(async () => {
         process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
         locationGateway = {getRoot: () => 'https://example.com'};
-        apiKeyGateway = {getApiKey: () => 'megaSecret'}
+        apiKeyGateway = {getApiKey: () => ({apiKey: 'megaSecret'})}
         validationRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
           .matchHeader('API_KEY', 'megaSecret')
@@ -81,7 +81,7 @@ describe('Return Gateway', () => {
         beforeEach(async () => {
           process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
           locationGateway = {getRoot: () => 'https://example.com'};
-          apiKeyGateway = {getApiKey: () => 'catz'};
+          apiKeyGateway = {getApiKey: () => ({apiKey: 'catz'})};
           returnRequest = nock('http://cat.meow')
             .matchHeader('Content-Type', 'application/json')
             .get('/return/get?id=0&returnId=1')
@@ -107,7 +107,7 @@ describe('Return Gateway', () => {
         beforeEach(async () => {
           process.env.REACT_APP_HIF_API_URL = 'http://dog.woof/';
           locationGateway = {getRoot: () => 'https://example.com'};
-          apiKeyGateway = {getApiKey: () => 'doggy'};
+          apiKeyGateway = {getApiKey: () => ({apiKey: 'doggy'})};
 
           let returnRequest = nock('http://dog.woof')
             .matchHeader('Content-Type', 'application/json')
