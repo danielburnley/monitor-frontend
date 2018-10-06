@@ -53,15 +53,23 @@ export default class ReturnList extends React.Component {
   }
 
   render() {
-    return (
-      <div className="panel panel-default">
-        <div className="panel-heading" data-test="schema-title">
-          Returns
+    if (this.props.returns.length == 0) {
+      return <div />;
+    } else {
+      return (
+        <div className="row padding-top">
+          <div className="col-md-6">
+            <div className="panel panel-default">
+              <div className="panel-heading" data-test="schema-title">
+                Returns
+              </div>
+              <div className="panel-body">
+                <ul className="list-group">{this.renderListItems()}</ul>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="panel-body">
-          <ul className="list-group">{this.renderListItems()}</ul>
-        </div>
-      </div>
-    );
+      );
+    }
   }
 }
