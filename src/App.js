@@ -9,6 +9,8 @@ import Header from "./Components/Header";
 import ProjectForm from "./Components/ProjectForm";
 import ProjectPage from "./Components/ProjectPage";
 import ProjectSummary from "./Components/ProjectPage/ProjectSummary";
+import ReturnList from "./Components/ReturnList";
+import ReturnListProvider from "./Components/ReturnListProvider";
 import ReturnPage from "./Components/ReturnPage";
 import GetToken from "./Components/GetToken";
 import Portal from "./Components/Portal";
@@ -22,6 +24,7 @@ import GetBaseReturn from "./UseCase/GetBaseReturn";
 import CanAccessProject from "./UseCase/CanAccessProject";
 import GetProject from "./UseCase/GetProject";
 import GetReturn from "./UseCase/GetReturn";
+import GetReturns from "./UseCase/GetReturns"
 import SubmitReturn from "./UseCase/SubmitReturn";
 import UpdateReturn from "./UseCase/UpdateReturn";
 import RequestToken from "./UseCase/RequestToken";
@@ -49,6 +52,7 @@ const getBaseReturnUseCase = new GetBaseReturn(returnGateway);
 const getProjectUseCase = new GetProject(projectGateway);
 const getReturnUseCase = new GetReturn(returnGateway);
 const canAccessProjectUseCase = new CanAccessProject(tokenGateway, apiKeyGateway, projectGateway);
+const getReturnsUseCase = new GetReturns(returnGateway);
 const requestTokenUseCase = new RequestToken(tokenGateway);
 const submitReturnUseCase = new SubmitReturn(returnGateway);
 const updateReturnUseCase = new UpdateReturn(returnGateway);
@@ -112,6 +116,13 @@ const renderProjectPage = props => (
           <div className="col-md-2">
             <ViewBaselineButton {...props} />
           </div>
+        </div>
+        <div className="row">
+          <ReturnListProvider projectId={props.match.params.id} getReturns={getReturnsUseCase}>
+            {({ returns }) => (
+              <ReturnList {...props} returns={returns} />
+            )}
+          </ReturnListProvider>
         </div>
       </div>
     )}

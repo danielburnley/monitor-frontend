@@ -120,6 +120,7 @@ describe("Viewing a project", () => {
 
     it("will not show GetToken", async () => {
       api.getProject(projectSchema, projectData).successfully();
+      api.getReturns({returns: []}).successfully();
 
       let page = new AppPage("/project/0?token=Cats");
       await page.load();
@@ -130,6 +131,7 @@ describe("Viewing a project", () => {
 
     it("Renders the project summary with information from the API", async () => {
       api.getProject(projectSchema, projectData).successfully();
+      api.getReturns({returns: []}).successfully();
 
       let page = new AppPage("/project/0?token=Cats");
       await page.load();
@@ -149,8 +151,67 @@ describe("Viewing a project", () => {
       );
     });
 
+    it("Renders the return list within the project sumary page with information from the API", async () => {
+      let data = {
+        returns: [
+          {
+            id: 1,
+            project_id: 1,
+            status: "Draft",
+            updates: [
+              {
+                changed: "Yes"
+              }
+            ]
+          },
+          {
+            id: 2,
+            project_id: 1,
+            status: "Submitted",
+            updates: [
+              {
+                changed: "something"
+              }
+            ]
+          },
+          {
+            id: 3,
+            project_id: 1,
+            status: "Platypus",
+            updates: [
+              {
+                changed: "Duck!?"
+              }
+            ]
+          },
+          {
+            id: 4,
+            project_id: 1,
+            status: "Duck",
+            updates: [
+              {
+                changed: "Quack"
+              }
+            ]
+          }
+        ]
+      };
+      api.getProject(projectSchema, projectData).successfully();
+      api.getReturns(data).successfully();
+
+      let page = new AppPage("/project/0?token=Cats");
+      await page.load();
+
+      let returnList = page.find("ReturnList")
+
+      expect(returnList.length).toEqual(1);
+
+      expect(returnList.find("[data-test='return-1']").text()).toEqual("Return 1");
+    });
+
     it("Renders the project baseline page", async () => {
       api.getProject(projectSchema, projectData).successfully();
+      api.getReturns({returns: []}).successfully();
 
       let page = new AppPage("/project/0?token=Cats");
       await page.load();
@@ -164,6 +225,7 @@ describe("Viewing a project", () => {
     it("Renders the return with information from the API when creating a new return", async () => {
       api.getProject(projectSchema, projectData).successfully();
       api.getBaseReturn(returnSchema, returnData).successfully();
+      api.getReturns({returns: []}).successfully();
 
       let page = new AppPage("/project/0?token=Cats");
       await page.load();

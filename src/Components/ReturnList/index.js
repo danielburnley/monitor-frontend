@@ -13,8 +13,8 @@ export default class ReturnList extends React.Component {
         className="list-group-item"
         data-test={`url-${returns.id}`}
       >
-          <span data-test={`return-${returns.id}`}>Return {returns.id}</span>
-          <div className="pull-right">{this.renderStatus(returns)}</div>
+        <span data-test={`return-${returns.id}`}>Return {returns.id}</span>
+        <div className="pull-right">{this.renderStatus(returns)}</div>
       </a>
     );
   }
@@ -48,20 +48,28 @@ export default class ReturnList extends React.Component {
   }
 
   renderListItems() {
-    const returns = this.props.formData.returns;
+    const returns = this.props.returns;
     return returns.map(returns => this.renderReturn(returns));
   }
 
   render() {
-    return (
-      <div className="panel panel-default">
-        <div className="panel-heading" data-test="schema-title">
-          Returns: {this.props.schema.title}
+    if (this.props.returns.length == 0) {
+      return <div />;
+    } else {
+      return (
+        <div className="row padding-top">
+          <div className="col-md-6">
+            <div className="panel panel-default">
+              <div className="panel-heading" data-test="schema-title">
+                Returns
+              </div>
+              <div className="panel-body">
+                <ul className="list-group">{this.renderListItems()}</ul>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="panel-body">
-          <ul className="list-group">{this.renderListItems()}</ul>
-        </div>
-      </div>
-    );
+      );
+    }
   }
 }

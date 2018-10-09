@@ -3,10 +3,8 @@ import React from "react";
 import { shallow } from "enzyme";
 
 class ReturnListComponent {
-  constructor(formData, schemaTitle) {
-    this.returnList = shallow(
-      <ReturnList schema={{ title: schemaTitle }} formData={formData} />
-    );
+  constructor(returns) {
+    this.returnList = shallow(<ReturnList returns={returns} />);
   }
   title = () => this.returnList.find("[data-test='schema-title']").text();
   listItem = number =>
@@ -20,26 +18,22 @@ class ReturnListComponent {
 describe("<ReturnList", () => {
   describe("Given one return", () => {
     describe("Example 1", () => {
-      let formData = {
-        returns: [
-          {
-            id: "1",
-            project_id: "1",
-            status: "Draft",
-            updates: [
-              {
-                changes: "Yes"
-              }
-            ]
-          }
-        ]
-      };
-      let schemaTitle = "Cat Housing";
-      let returnList = new ReturnListComponent(formData, schemaTitle);
-      let url = window.location.origin;
+      let returns = [
+        {
+          id: 1,
+          project_id: 1,
+          status: "Draft",
+          updates: [
+            {
+              changes: "Yes"
+            }
+          ]
+        }
+      ];
+      let returnList = new ReturnListComponent(returns);
 
       it("displays this schema title", () => {
-        expect(returnList.title()).toEqual("Returns: Cat Housing");
+        expect(returnList.title()).toEqual("Returns");
       });
 
       it("displays a list item for the return", () => {
@@ -56,26 +50,22 @@ describe("<ReturnList", () => {
     });
 
     describe("Example 2", () => {
-      let formData = {
-        returns: [
-          {
-            id: "7",
-            project_id: "1",
-            status: "Saved",
-            updates: [
-              {
-                changes: "Some"
-              }
-            ]
-          }
-        ]
-      };
-      let schemaTitle = "Dog Kennels";
-      let returnList = new ReturnListComponent(formData, schemaTitle);
-      let url = window.location.origin;
+      let returns = [
+        {
+          id: 7,
+          project_id: 1,
+          status: "Saved",
+          updates: [
+            {
+              changes: "Some"
+            }
+          ]
+        }
+      ];
+      let returnList = new ReturnListComponent(returns);
 
       it("displays this schema title", () => {
-        expect(returnList.title()).toEqual("Returns: Dog Kennels");
+        expect(returnList.title()).toEqual("Returns");
       });
 
       it("displays a list item for the return", () => {
@@ -94,11 +84,10 @@ describe("<ReturnList", () => {
 
   describe("Given two returns", () => {
     describe("Example 1", () => {
-      let formData = {
-        returns: [
+      let returns = [
           {
-            id: "1",
-            project_id: "1",
+            id: 1,
+            project_id: 1,
             status: "Draft",
             updates: [
               {
@@ -107,8 +96,8 @@ describe("<ReturnList", () => {
             ]
           },
           {
-            id: "2",
-            project_id: "1",
+            id: 2,
+            project_id: 1,
             status: "Saved",
             update: [
               {
@@ -116,14 +105,11 @@ describe("<ReturnList", () => {
               }
             ]
           }
-        ]
-      };
-      let schemaTitle = "Cat Housing";
-      let returnList = new ReturnListComponent(formData, schemaTitle);
-      let url = window.location.origin;
+        ];
+      let returnList = new ReturnListComponent(returns);
 
       it("displays this schema title", () => {
-        expect(returnList.title()).toEqual("Returns: Cat Housing");
+        expect(returnList.title()).toEqual("Returns");
       });
 
       it("displays multiple list items for the returns", () => {
@@ -143,11 +129,10 @@ describe("<ReturnList", () => {
     });
 
     describe("Example 2", () => {
-      let formData = {
-        returns: [
+      let returns = [
           {
-            id: "7",
-            project_id: "1",
+            id: 7,
+            project_id: 1,
             status: "Saved",
             updates: [
               {
@@ -156,8 +141,8 @@ describe("<ReturnList", () => {
             ]
           },
           {
-            id: "6",
-            project_id: "1",
+            id: 6,
+            project_id: 1,
             status: "Woof",
             update: [
               {
@@ -165,14 +150,11 @@ describe("<ReturnList", () => {
               }
             ]
           }
-        ]
-      };
-      let schemaTitle = "Dog Kennels";
-      let returnList = new ReturnListComponent(formData, schemaTitle);
-      let url = window.location.origin;
+        ];
+      let returnList = new ReturnListComponent(returns);
 
       it("displays this schema title", () => {
-        expect(returnList.title()).toEqual("Returns: Dog Kennels");
+        expect(returnList.title()).toEqual("Returns");
       });
 
       it("displays multiple list items for the returns", () => {

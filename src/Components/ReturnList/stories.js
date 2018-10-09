@@ -6,7 +6,7 @@ storiesOf("ReturnList", module)
   .add("default", () => (
     <ReturnList
       schema={{ title: "Cat Housing" }}
-      formData={{
+      returns={{
         returns: [
           {
             id: "1",
@@ -25,7 +25,7 @@ storiesOf("ReturnList", module)
   .add("multiple returns", () => (
     <ReturnList
       schema={{ title: "Kittens Housing Association" }}
-      formData={{
+      returns={{
         returns: [
           {
             id: "1",
