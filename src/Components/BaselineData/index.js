@@ -1,4 +1,8 @@
 import React from "react";
+import 'core-js/es6/map';
+import 'core-js/es6/array';
+import 'core-js/fn/array/find';
+
 
 export default class BaselineData extends React.Component {
   renderObject = (key, value, propertySchema) => {
