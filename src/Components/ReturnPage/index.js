@@ -115,7 +115,9 @@ export default class ReturnPage extends React.Component {
   }
 
   onFormChange = (e) => {
-    this.setState({status: "Editing", lastAction: "Change"});
+    if(this.returnId()) {
+      this.setState({status: "Editing", lastAction: "Change"});
+    }
   }
 
   renderForm() {
