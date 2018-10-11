@@ -6,10 +6,9 @@ storiesOf("ReturnList", module)
   .add("default", () => (
     <ReturnList
       schema={{ title: "Cat Housing" }}
-      returns={{
-        returns: [
+      returns={ [
           {
-            id: "1",
+            id: "45",
             project_id: "1",
             status: "Draft",
             updates: [
@@ -17,18 +16,16 @@ storiesOf("ReturnList", module)
                 changed: "Yes"
               }
             ]
-          }
-        ]
-      }}
+          }]
+      }
     />
   ))
   .add("multiple returns", () => (
     <ReturnList
       schema={{ title: "Kittens Housing Association" }}
-      returns={{
-        returns: [
+      returns={[
           {
-            id: "1",
+            id: "3",
             project_id: "1",
             status: "Draft",
             updates: [
@@ -38,7 +35,7 @@ storiesOf("ReturnList", module)
             ]
           },
           {
-            id: "2",
+            id: "78",
             project_id: "1",
             status: "Submitted",
             updates: [
@@ -48,6 +45,6 @@ storiesOf("ReturnList", module)
             ]
           }
         ]
-      }}
+      }
     />
   ));

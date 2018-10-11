@@ -6,14 +6,14 @@ export default class ReturnList extends React.Component {
     super(props);
   }
 
-  renderLink(returns) {
+  renderLink(returns, index) {
     return (
       <a
         href={`/project/${returns.project_id}/return/${returns.id}`}
         className="list-group-item"
         data-test={`url-${returns.id}`}
       >
-        <span data-test={`return-${returns.id}`}>Return {returns.id}</span>
+        <span data-test={`return-${returns.id}`}>Return {index + 1}</span>
         <div className="pull-right">{this.renderStatus(returns)}</div>
       </a>
     );
@@ -39,17 +39,17 @@ export default class ReturnList extends React.Component {
     }
   }
 
-  renderReturn(returns) {
+  renderReturn(returns, index) {
     return (
       <div className="row padding" key={returns.id.toString()}>
-        {this.renderLink(returns)}
+        {this.renderLink(returns, index)}
       </div>
     );
   }
 
   renderListItems() {
     const returns = this.props.returns;
-    return returns.map(returns => this.renderReturn(returns));
+    return returns.map((returns, index) => this.renderReturn(returns, index));
   }
 
   render() {

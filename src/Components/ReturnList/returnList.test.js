@@ -20,7 +20,7 @@ describe("<ReturnList", () => {
     describe("Example 1", () => {
       let returns = [
         {
-          id: 1,
+          id: 7,
           project_id: 1,
           status: "Draft",
           updates: [
@@ -37,15 +37,15 @@ describe("<ReturnList", () => {
       });
 
       it("displays a list item for the return", () => {
-        expect(returnList.listItem(1)).toEqual("Return 1");
+        expect(returnList.listItem(7)).toEqual("Return 1");
       });
 
       it("creates a link to the correct location", () => {
-        expect(returnList.urlTarget(1)).toEqual("/project/1/return/1");
+        expect(returnList.urlTarget(7)).toEqual("/project/1/return/7");
       });
 
       it("shows the current status of the return", () => {
-        expect(returnList.status(1)).toEqual("Draft");
+        expect(returnList.status(7)).toEqual("Draft");
       });
     });
 
@@ -69,7 +69,7 @@ describe("<ReturnList", () => {
       });
 
       it("displays a list item for the return", () => {
-        expect(returnList.listItem(7)).toEqual("Return 7");
+        expect(returnList.listItem(7)).toEqual("Return 1");
       });
 
       it("creates a link to the correct location", () => {
@@ -158,8 +158,8 @@ describe("<ReturnList", () => {
       });
 
       it("displays multiple list items for the returns", () => {
-        expect(returnList.listItem(7)).toEqual("Return 7");
-        expect(returnList.listItem(6)).toEqual("Return 6");
+        expect(returnList.listItem(7)).toEqual("Return 1");
+        expect(returnList.listItem(6)).toEqual("Return 2");
       });
 
       it("creates a link to the correct location", () => {
