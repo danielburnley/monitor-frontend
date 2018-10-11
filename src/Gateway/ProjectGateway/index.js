@@ -9,9 +9,8 @@ export default class ProjectGateway {
   }
 
   async findById(id) {
-    let env = runtimeEnv();
     let rawResponse = await fetch(
-      `${env.REACT_APP_HIF_API_URL}project/find?id=${id}`,
+      `${this.env.REACT_APP_HIF_API_URL}project/find?id=${id}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -42,7 +41,25 @@ export default class ProjectGateway {
         project_id
       })
     });
+    if (response.ok) {
+      return { success: true };
+    } else {
+      return { success: false };
+    }
+  }
     
+  async update(id, project) {
+    let response = await fetch(
+      `${this.env.REACT_APP_HIF_API_URL}project/update`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          'API_KEY': this.apiKeyGateway.getApiKey().apiKey
+        },
+        body: JSON.stringify({ id, project })
+      }
+    );
     if (response.ok) {
       return { success: true };
     } else {
@@ -50,3 +67,4 @@ export default class ProjectGateway {
     }
   }
 }
+
