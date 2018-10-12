@@ -108,8 +108,8 @@ describe("Project Gateway", () => {
         let updateProjectRequest = nock("http://rabbits.jump")
           .matchHeader("Content-Type", "application/json")
           .post("/project/update", {
-            id: 2,
-            project: { rabbits: "hop" }
+            project_id: 2,
+            project_data: { rabbits: "hop" }
           })
           .reply(200);
         await gateway.update(2, { rabbits: "hop" });
@@ -121,8 +121,8 @@ describe("Project Gateway", () => {
         nock("http://rabbits.jump")
           .matchHeader("Content-Type", "application/json")
           .post("/project/update", {
-            id: 2,
-            project: { rabbits: "hop" }
+            project_id: 2,
+            project_data: { rabbits: "hop" }
           })
           .reply(200);
         let response = await gateway.update(2, { rabbits: "hop" });
@@ -145,8 +145,8 @@ describe("Project Gateway", () => {
         let updateProjectRequest = nock("http://rabbits.jump")
           .matchHeader("Content-Type", "application/json")
           .post("/project/update", {
-            id: 6,
-            project: { cows: "moo" }
+            project_id: 6,
+            project_data: { cows: "moo" }
           })
           .reply(200);
         await gateway.update(6, { cows: "moo" });
@@ -158,8 +158,8 @@ describe("Project Gateway", () => {
         nock("http://rabbits.jump")
           .matchHeader("Content-Type", "application/json")
           .post("/project/update", {
-            id: 19,
-            project: { frogs: "croak" }
+            project_id: 19,
+            project_data: { frogs: "croak" }
           })
           .reply(200);
         let response = await gateway.update(19, { frogs: "croak" });

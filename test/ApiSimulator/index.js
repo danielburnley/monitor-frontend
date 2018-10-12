@@ -5,6 +5,41 @@ class APISimulator {
     this.url = url;
   }
 
+  getBaseline(type, projectSchema) {
+    let response = {projectSchema};
+    let baselineRequest = nock(this.url)
+      .matchHeader("Content-Type", "application/json")
+      .get(`/baseline/${type}`);
+    return new APIResponse(baselineRequest, response);
+  }
+  createProject(data, id) {
+    let response = {id};
+    let projectRequest = nock(this.url)
+      .matchHeader("Content-Type", "application/json")
+      .post("/project/create", data);
+
+      return new APIResponse(projectRequest, response);
+  }
+
+  updateProject(project_data, project_id) {
+    let response = { };
+    let projectRequest = nock(this.url)
+      .matchHeader("Content-Type", "application/json")
+      .persist()
+      .post("/project/update", {project_id: ""+project_id, project_data});
+
+    return new APIResponse(projectRequest, response);
+  }
+
+  submitProject(project_id) {
+    let response = { };
+    let projectRequest = nock(this.url)
+      .matchHeader("Content-Type", "application/json")
+      .post("/project/submit", {project_id: ""+project_id});
+
+    return new APIResponse(projectRequest, response);
+  }
+
   getProject(schema, data) {
     let response = { schema, data };
     let projectRequest = nock(this.url)

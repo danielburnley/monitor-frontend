@@ -1,10 +1,9 @@
 import React from 'react';
 import ProjectPage from '.';
-import BaselineData from '../BaselineData'
 
 import { storiesOf } from '@storybook/react';
 
-storiesOf('ProjectPage', module)
+storiesOf('NewProjectPage', module)
   .add('Default', () => {
     let schema = {
       type: 'object',
@@ -28,19 +27,23 @@ storiesOf('ProjectPage', module)
     };
 
     let getProjectUseCase = {
-      execute: (presenter, _) => { presenter.presentProject({ data, schema }) }
+      execute: (presenter, id) => { presenter.presentProject({ data, schema }) }
+    }
+
+    let submitProjectUseCase = {
+      execute: (presenter, id) => { presenter.creationSuccess(id) }
+    }
+
+    let updateProjectUseCase = {
+      execute: (presenter, id) => { presenter.projectUpdated(id) }
     }
 
     return (
       <ProjectPage
         getProject={getProjectUseCase}
+        updateProject = {updateProjectUseCase}
+        submitProject = {submitProjectUseCase}
         match={{ params: { projectId: 1 } }}
-      >
-      {({ formData, formSchema }) => (
-        <div className="col-md-10 col-md-offset-1">
-          <BaselineData formData={formData} schema={formSchema} />
-        </div>
-      )}
-    </ProjectPage>
+      />
     )
   })

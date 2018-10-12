@@ -7,6 +7,7 @@ import Homepage from "./Components/Homepage";
 import Footer from "./Components/Footer";
 import Header from "./Components/Header";
 import ProjectForm from "./Components/ProjectForm";
+import NewProjectPage from "./Components/NewProjectPage";
 import ProjectPage from "./Components/ProjectPage";
 import ProjectSummary from "./Components/ProjectPage/ProjectSummary";
 import ReturnList from "./Components/ReturnList";
@@ -17,6 +18,8 @@ import Portal from "./Components/Portal";
 import NotFound from "./Components/NotFound";
 
 import CreateReturn from "./UseCase/CreateReturn";
+import SubmitProject from "./UseCase/SubmitProject";
+import UpdateProject from "./UseCase/UpdateProject";
 import GenerateDisabledUISchema from "./UseCase/GenerateDisabledUISchema";
 import GenerateReadOnlySchema from "./UseCase/GenerateReadOnlySchema";
 import GenerateUISchema from "./UseCase/GenerateUISchema";
@@ -45,6 +48,7 @@ const projectGateway = new ProjectGateway(apiKeyGateway);
 const returnGateway = new ReturnGateway(apiKeyGateway, new LocationGateway(window.location));
 const validateReturnUseCase = new ValidateReturn(returnGateway);
 const createReturnUseCase = new CreateReturn(returnGateway);
+const submitProjectUseCase = new SubmitProject(projectGateway);
 const generateDisabledUISchema = new GenerateDisabledUISchema();
 const generateReadOnlySchema = new GenerateReadOnlySchema();
 const generateUISchema = new GenerateUISchema();
@@ -56,6 +60,7 @@ const getReturnsUseCase = new GetReturns(returnGateway);
 const requestTokenUseCase = new RequestToken(tokenGateway);
 const submitReturnUseCase = new SubmitReturn(returnGateway);
 const updateReturnUseCase = new UpdateReturn(returnGateway);
+const updateProjectUseCase = new UpdateProject(projectGateway);
 
 const renderReturnPage = props => (
   <ReturnPage
@@ -143,6 +148,16 @@ const renderBaselinePage = props => (
   </ProjectPage>
 );
 
+const renderNewProjectPage = props => (
+  <NewProjectPage
+    {...props}
+    getProject={getProjectUseCase}
+    submitProject={submitProjectUseCase}
+    updateProject={updateProjectUseCase}
+    generateUISchema={generateDisabledUISchema}
+  />
+);
+
 const App = () => (
   <Router>
     <div className="app-container">
@@ -166,6 +181,11 @@ const App = () => (
                 }
                 canAccessProject={canAccessProjectUseCase}
               >
+                <Route
+                  exact
+                  path="/project/:id/new"
+                  render={renderNewProjectPage}
+                />
                 <Route exact path="/project/:id" render={renderProjectPage} />
                 <Route
                   exact

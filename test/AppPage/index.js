@@ -20,7 +20,7 @@ export default class AppPage {
     return this.find('div[data-test="summary"]');
   }
 
-  getFormInputs() {
+  getFormInputValues() {
     let displayedReturn = this.page.find('div[data-test="return"]')
     return displayedReturn.find("input[type='text']").map(node => {
       return node.getDOMNode().value;

@@ -47,8 +47,8 @@ export default class ProjectGateway {
       return { success: false };
     }
   }
-    
-  async update(id, project) {
+
+  async update(project_id, project_data) {
     let response = await fetch(
       `${this.env.REACT_APP_HIF_API_URL}project/update`,
       {
@@ -57,7 +57,7 @@ export default class ProjectGateway {
           "Content-Type": "application/json",
           'API_KEY': this.apiKeyGateway.getApiKey().apiKey
         },
-        body: JSON.stringify({ id, project })
+        body: JSON.stringify({ project_id, project_data })
       }
     );
     if (response.ok) {
@@ -67,4 +67,3 @@ export default class ProjectGateway {
     }
   }
 }
-

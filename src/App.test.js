@@ -26,6 +26,14 @@ let projectData = {
   }
 };
 
+let submittedProjectData = {
+  summary: {
+    noise: "cat",
+    description: "cat",
+    toes: "cat"
+  }
+}
+
 let returnSchema = {
   title: "Cat Return",
   type: "object",
@@ -94,7 +102,6 @@ describe("Viewing a project", () => {
     process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
     api = new APISimulator("http://cat.meow");
     api.getProject({}, 0).unsuccessfully();
-    
   });
 
   afterEach(() => {
@@ -238,7 +245,7 @@ describe("Viewing a project", () => {
         ""
       ];
 
-      expect(page.getFormInputs()).toEqual(expectedInputValues);
+      expect(page.getFormInputValues()).toEqual(expectedInputValues);
     });
 
     it("Renders the return with information from the API", async () => {
@@ -252,8 +259,46 @@ describe("Viewing a project", () => {
         "Beans",
         ""
       ];
-      expect(page.getFormInputs()).toEqual(expectedInputValues);
+      expect(page.getFormInputValues()).toEqual(expectedInputValues);
     });
+  });
+});
+
+describe('Submitting a draft project', () => {
+  let api;
+
+  beforeEach(() => {
+    process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
+    api = new APISimulator("http://cat.meow");
+    api.getProject(projectSchema, projectData).successfully();
+    api.getProject(projectSchema, projectData).successfully();
+    api.updateProject(submittedProjectData, 0).successfully();
+    api.submitProject(0).successfully();
+  });
+
+  afterEach(() => {
+    nock.cleanAll();
+  });
+
+  it('Allows you to edit, save and submit a draft project', async () => {
+    let page = new AppPage("/project/0/new");
+    await page.load();
+
+    //It seems to be submitting only the initial data
+    page.find("input[type='text']").map((textfield) => {
+      textfield.simulate('change', { target: { value: 'cat'}})
+    });
+
+    await page.load();
+
+    page.find('[data-test="update-project-button"]').simulate("click");
+    await page.load();
+    expect(page.find('[data-test="project-update-success"]').length).toEqual(1);
+
+
+    page.find('[data-test="submit-project-button"]').simulate("click");
+    await page.load();
+    expect(page.find('[data-test="project-create-success"]').length).toEqual(1);
   });
 });
 

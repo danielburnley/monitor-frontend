@@ -3,7 +3,7 @@ import ProjectSummary from '.';
 
 import { storiesOf } from '@storybook/react';
 
-storiesOf('ProjectSummary', module)
+storiesOf('NewProjectSummary', module)
   .add('Default', () => {
     let schema = {
       type: 'object',
