@@ -2,7 +2,6 @@
 // we need a mutex on the buttons later
 import React from 'react';
 import ParentForm from '../ParentForm';
-import ProjectSummary from './ProjectSummary';
 
 export default class NewProjectPage extends React.Component {
   constructor(props) {
