@@ -109,28 +109,49 @@ const BackToProjectOverviewButton = props => (
   </button>
 );
 
+const renderNewProjectPage = (props, formData, formSchema) => (
+  <NewProjectPage
+    {...props}
+    schema={formSchema}
+    data={formData}
+    getProject={getProjectUseCase}
+    submitProject={submitProjectUseCase}
+    updateProject={updateProjectUseCase}
+    generateUISchema={generateDisabledUISchema}
+  />
+);
+
+const renderSubmittedProjectPage = (props, formData, formSchema) => (
+  <div className="col-md-10 col-md-offset-1">
+    <ProjectSummary data={formData} schema={formSchema} />
+    <div className="row">
+      <div className="col-md-2">
+        <CreateReturnButton {...props} />
+      </div>
+      <div className="col-md-2">
+        <ViewBaselineButton {...props} />
+      </div>
+    </div>
+    <div className="row">
+      <ReturnListProvider projectId={props.match.params.id} getReturns={getReturnsUseCase}>
+        {({ returns }) => (
+          <ReturnList {...props} returns={returns} />
+        )}
+      </ReturnListProvider>
+    </div>
+  </div>
+);
+
 const renderProjectPage = props => (
   <ProjectPage {...props} getProject={getProjectUseCase}>
-    {({ formData, formSchema }) => (
-      <div className="col-md-10 col-md-offset-1">
-        <ProjectSummary data={formData} schema={formSchema} />
-        <div className="row">
-          <div className="col-md-2">
-            <CreateReturnButton {...props} />
-          </div>
-          <div className="col-md-2">
-            <ViewBaselineButton {...props} />
-          </div>
-        </div>
-        <div className="row">
-          <ReturnListProvider projectId={props.match.params.id} getReturns={getReturnsUseCase}>
-            {({ returns }) => (
-              <ReturnList {...props} returns={returns} />
-            )}
-          </ReturnListProvider>
-        </div>
-      </div>
-    )}
+    {({ projectStatus, formData, formSchema }) => {
+      if (projectStatus === "Draft") {
+        return renderNewProjectPage(props, formData, formSchema);
+      }
+      if (projectStatus === "Submitted") {
+        return renderSubmittedProjectPage(props, formData, formSchema);
+      }
+    }}
   </ProjectPage>
 );
 
@@ -146,16 +167,6 @@ const renderBaselinePage = props => (
       </div>
     )}
   </ProjectPage>
-);
-
-const renderNewProjectPage = props => (
-  <NewProjectPage
-    {...props}
-    getProject={getProjectUseCase}
-    submitProject={submitProjectUseCase}
-    updateProject={updateProjectUseCase}
-    generateUISchema={generateDisabledUISchema}
-  />
 );
 
 const App = () => (

@@ -18,7 +18,7 @@ export default class ReturnForm extends React.Component {
       return (
         <div className="col-md-offset-3 col-md-9 return-actions">
           <button
-            className="btn btn-primary return-btn"
+            className="btn btn-primary form-button"
             data-test="create-return-button"
             onClick={() => this.props.onCreate(this.state.formData)}>
             Create Draft Return
@@ -31,12 +31,12 @@ export default class ReturnForm extends React.Component {
       return (
         <div className="col-md-offset-3 col-md-9 return-actions">
           <button
-            className="btn return-btn disabled"
+            className="btn form-button disabled"
             data-test="disabled-save-return-button">
             Save Draft
           </button>
           <button
-            className="btn return-btn disabled"
+            className="btn form-button disabled"
             data-test="disabled-submit-return-button">
             Submit Return
           </button>
@@ -47,13 +47,13 @@ export default class ReturnForm extends React.Component {
     return (
       <div className="col-md-offset-3 col-md-9 return-actions">
         <button
-          className="btn btn-secondary return-btn"
+          className="btn btn-secondary form-button"
           data-test="save-return-button"
           onClick={() => this.props.onSave(this.state.formData)}>
           Save Draft
         </button>
         <button
-          className="btn btn-primary return-btn"
+          className="btn btn-primary form-button"
           data-test="submit-return-button"
           onClick={() => this.props.onSubmit(this.state.formData)}>
           Submit Return

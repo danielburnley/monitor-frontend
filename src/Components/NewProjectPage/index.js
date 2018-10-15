@@ -1,45 +1,26 @@
-//There's going to be the same race condition that we had with the return form here,
-// we need a mutex on the buttons later
 import React from 'react';
+import PropTypes from "prop-types";
 import ParentForm from '../ParentForm';
 
 export default class NewProjectPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {loading: true, formData: {}, submitted: false};
+    this.state = {formData: this.props.data, formSchema: this.props.schema, updating: false, submitted: false};
   }
-
-  presentProject = async projectData => {
-    await this.setState({
-      loading: false,
-      formData: projectData.data,
-      formSchema: projectData.schema,
-      saved: false
-    });
-  };
-
-  presentProjectNotFound = async () => {
-
-  };
-
-  fetchData = async () => {
-    await this.props.getProject.execute(this, {id: this.props.match.params.id});
-  };
 
   async componentDidMount() {
     document.title = "Project - Homes England Monitor"
-    await this.fetchData();
   }
 
   creationSuccess() {
-    this.setState({submitted: true});
+    this.setState({submitted: true, updating: false});
   }
 
   creationFailure() {
   }
 
   projectUpdated() {
-    this.setState({saved: true});
+    this.setState({saved: true, updating: false});
   }
 
   projectNotUpdated() {
@@ -47,22 +28,20 @@ export default class NewProjectPage extends React.Component {
   }
 
   submitProject = async e => {
+    this.setState({updating: true});
     await this.props.submitProject.execute(this, this.props.match.params.id);
 
     e.preventDefault();
   };
 
   updateProject = async e => {
+    this.setState({updating: true});
     await this.props.updateProject.execute(this, this.props.match.params.id, this.state.formData);
 
     e.preventDefault();
   };
 
   renderForm() {
-    if (this.state.loading) {
-      return <div />;
-    }
-
     return (
       <div>
         <ParentForm
@@ -77,16 +56,26 @@ export default class NewProjectPage extends React.Component {
   renderSuccessOrForm() {
     if (this.state.submitted) {
       return <div data-test="project-create-success">Project created!</div>;
+    } else if (this.state.updating) {
+      return (<div>
+          <button data-test="disabled-submit-project-button" className="btn form-button disabled" onClick={this.submitProject}>
+            Create this project
+          </button>
+          <button data-test="disabled-update-project-button" className="btn form-button disabled" onClick={this.updateProject}>
+            Save draft
+          </button>
+          <div className="col-md-10 col-md-offset-1">{this.renderForm()}</div>
+        </div>);
     } else {
       return <div>
-        <div className="col-md-10 col-md-offset-1">{this.renderForm()}</div>
-        <button data-test="submit-project-button" className="btn btn-primary" onClick={this.submitProject}>
+        { this.renderSaveSuccess() }
+        <button data-test="submit-project-button" className="btn form-button btn-primary" onClick={this.submitProject}>
           Create this project
         </button>
-        <button data-test="update-project-button" className="btn btn-primary" onClick={this.updateProject}>
+        <button data-test="update-project-button" className="btn form-button btn-primary" onClick={this.updateProject}>
           Save draft
         </button>
-        { this.renderSaveSuccess() }
+        <div className="col-md-10 col-md-offset-1">{this.renderForm()}</div>
     </div>;
     }
   }
@@ -105,3 +94,10 @@ export default class NewProjectPage extends React.Component {
     );
   }
 }
+
+NewProjectPage.propTypes = {
+  data: PropTypes.object.isRequired,
+  schema: PropTypes.object.isRequired,
+  submitProject: PropTypes.object.isRequired,
+  updateProject: PropTypes.object.isRequired
+};

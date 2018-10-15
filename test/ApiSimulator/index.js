@@ -40,8 +40,8 @@ class APISimulator {
     return new APIResponse(projectRequest, response);
   }
 
-  getProject(schema, data) {
-    let response = { schema, data };
+  getProject(schema, data, status) {
+    let response = { schema, data, status };
     let projectRequest = nock(this.url)
       .matchHeader("Content-Type", "application/json")
       .get("/project/find?id=0");

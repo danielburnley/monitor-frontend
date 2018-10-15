@@ -4,7 +4,7 @@ import ProjectPage from '.';
 import { storiesOf } from '@storybook/react';
 
 storiesOf('NewProjectPage', module)
-  .add('Default', () => {
+  .add('Immediate resolution', () => {
     let schema = {
       type: 'object',
       properties: {
@@ -26,10 +26,6 @@ storiesOf('NewProjectPage', module)
       },
     };
 
-    let getProjectUseCase = {
-      execute: (presenter, id) => { presenter.presentProject({ data, schema }) }
-    }
-
     let submitProjectUseCase = {
       execute: (presenter, id) => { presenter.creationSuccess(id) }
     }
@@ -40,7 +36,48 @@ storiesOf('NewProjectPage', module)
 
     return (
       <ProjectPage
-        getProject={getProjectUseCase}
+        schema={schema}
+        data={data}
+        updateProject = {updateProjectUseCase}
+        submitProject = {submitProjectUseCase}
+        match={{ params: { projectId: 1 } }}
+      />
+    )
+  })
+  .add('Non-resolving', () => {
+    let schema = {
+      type: 'object',
+      properties: {
+        summary: {
+          title: 'Project Summary',
+          type: 'object',
+          properties: {
+            name: { type: 'string', title: 'Project Name' },
+            owner: { type: 'string', title: 'Project Owner' },
+          },
+        },
+      },
+    };
+
+    let data = {
+      summary: {
+        name: 'A HIF Project',
+        owner: 'Dave'
+      },
+    };
+
+    let submitProjectUseCase = {
+      execute: (presenter, id) => { }
+    }
+
+    let updateProjectUseCase = {
+      execute: (presenter, id) => { }
+    }
+
+    return (
+      <ProjectPage
+        schema={schema}
+        data={data}
         updateProject = {updateProjectUseCase}
         submitProject = {submitProjectUseCase}
         match={{ params: { projectId: 1 } }}

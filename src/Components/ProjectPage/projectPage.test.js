@@ -27,13 +27,14 @@ describe("<ProjectPage>", () => {
       });
     });
 
-    describe("When the project is loaded", () => {
+    describe("When the project is loaded and is of status draft", () => {
       beforeEach(() => {
         getProjectSpy = {
           execute: (presenter, _) =>
             presenter.presentProject({
               data: { meow: true },
-              schema: { hello: "hi" }
+              schema: { hello: "hi" },
+              status: 'Draft'
             })
         };
         childrenSpy = jest.fn();
@@ -57,8 +58,13 @@ describe("<ProjectPage>", () => {
         expect(page.state().formSchema).toEqual({ hello: "hi" });
       });
 
-      it("Renders the children with the formData and schema populated from the state", () => {
+      it("Holds the projectStatus when the project is presented", () => {
+        expect(page.state().projectStatus).toEqual('Draft');
+      });
+
+      it("Renders null", () => {
         expect(childrenSpy).toHaveBeenCalledWith({
+          projectStatus: "Draft",
           formData: { meow: true },
           formSchema: { hello: "hi" }
         });
@@ -93,7 +99,8 @@ describe("<ProjectPage>", () => {
           execute: (presenter, _) =>
             presenter.presentProject({
               data: { woof: false },
-              schema: { goodbye: "see ya" }
+              schema: { goodbye: "see ya" },
+              status: "Submitted"
             })
         };
 
@@ -118,8 +125,13 @@ describe("<ProjectPage>", () => {
         expect(page.state().formSchema).toEqual({ goodbye: "see ya" });
       });
 
+      it("Holds the projectStatus when the project is presented", () => {
+        expect(page.state().projectStatus).toEqual('Submitted');
+      });
+
       it("Renders the children with the formData and schema populated from the state", () => {
         expect(childrenSpy).toHaveBeenCalledWith({
+          projectStatus: "Submitted",
           formData: { woof: false },
           formSchema: { goodbye: "see ya" }
         });

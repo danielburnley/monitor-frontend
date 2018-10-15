@@ -38,48 +38,57 @@ describe("NewProjectPage", () => {
     }
   };
 
-  describe("Gets the project", () => {
-    it("Example 1", async () => {
-      let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {presenter.creationSuccess(id);}) };
-      let getProjectSpy = { execute: jest.fn(async (presenter, id) => (presenter.presentProject({data, schema})))};
+  describe('disables buttons while project updating hasnt completed', () => {
+    it('example 1', async () => {
+      let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {}) };
       let updateProjectSpy = { execute: jest.fn(async (presenter, id) => (presenter.projectUpdated(id)))};
 
       let wrap = mount(<NewProjectPage
           match={{params: {id: 1}}}
           updateProject = {updateProjectSpy}
           submitProject = {submitProjectSpy}
-          getProject = {getProjectSpy}
+          data = {{}}
+          schema = {schema}
         />);
-      expect(getProjectSpy.execute).toBeCalledWith(expect.anything(), {id: 1});
-      expect(wrap.find('input[type="text"]').props().value).toEqual("Unedited");
+      wrap.find('[data-test="submit-project-button"]').simulate("click");
+      await wait();
+      expect(wrap.find('[data-test="disabled-submit-project-button"]').length).toEqual(1);
+      expect(wrap.find('[data-test="disabled-update-project-button"]').length).toEqual(1);
+      expect(wrap.find('[data-test="submit-project-button"]').length).toEqual(0);
+      expect(wrap.find('[data-test="update-project-button"]').length).toEqual(0);
     });
 
-    it("Example 2", async () => {
-      let submitProjectSpy = { execute: jest.fn((presenter, id) => {presenter.creationSuccess(id);}) };
-      let getProjectSpy = { execute: jest.fn(async (presenter, id) => (presenter.presentProject({data, schema})))};
-      let updateProjectSpy = { execute: jest.fn(async (presenter, id) => (presenter.projectUpdated(id)))};
+    it('example 2', async () => {
+      let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {}) };
+      let updateProjectSpy = { execute: jest.fn(async (presenter, id) => {})};
 
       let wrap = mount(<NewProjectPage
-          match={{params: {id: 6}}}
+          match={{params: {id: 1}}}
           updateProject = {updateProjectSpy}
           submitProject = {submitProjectSpy}
-          getProject = {getProjectSpy}
+          data = {{}}
+          schema = {schema}
         />);
-      expect(getProjectSpy.execute).toBeCalledWith(expect.anything(), {id: 6});
+      wrap.find('[data-test="update-project-button"]').simulate("click");
+      await wait();
+      expect(wrap.find('[data-test="disabled-submit-project-button"]').length).toEqual(1);
+      expect(wrap.find('[data-test="disabled-update-project-button"]').length).toEqual(1);
+      expect(wrap.find('[data-test="submit-project-button"]').length).toEqual(0);
+      expect(wrap.find('[data-test="update-project-button"]').length).toEqual(0);
     });
   });
 
   describe('calls the submit project use case', () => {
     it('example 1', async () => {
       let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {presenter.creationSuccess(id);}) };
-      let getProjectSpy = { execute: jest.fn(async (presenter, id) => (presenter.presentProject({data: {}, schema})))};
       let updateProjectSpy = { execute: jest.fn(async (presenter, id) => (presenter.projectUpdated(id)))};
 
       let wrap = mount(<NewProjectPage
           match={{params: {id: 1}}}
           updateProject = {updateProjectSpy}
           submitProject = {submitProjectSpy}
-          getProject = {getProjectSpy}
+          data = {{}}
+          schema = {schema}
         />);
       wrap.find('[data-test="submit-project-button"]').simulate("click");
       expect(submitProjectSpy.execute).toBeCalledWith(expect.anything(), 1);
@@ -87,14 +96,14 @@ describe("NewProjectPage", () => {
 
     it('example 2', async () => {
       let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {presenter.creationSuccess(id);}) };
-      let getProjectSpy = { execute: jest.fn(async (presenter, id) => (presenter.presentProject({data, schema})))};
       let updateProjectSpy = { execute: jest.fn(async (presenter, id) => (presenter.projectUpdated(id)))};
 
       let wrap = mount(<NewProjectPage
           match={{params: {id: 9}}}
           updateProject = {updateProjectSpy}
           submitProject = {submitProjectSpy}
-          getProject = {getProjectSpy}
+          data = {data}
+          schema = {schema}
         />);
 
       await wait();
@@ -107,14 +116,14 @@ describe("NewProjectPage", () => {
   describe('calls the update project use case', () => {
     it('example 1', async () => {
       let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {presenter.creationSuccess(id);}) };
-      let getProjectSpy = { execute: jest.fn(async (presenter, id) => (presenter.presentProject({data: {}, schema})))};
       let updateProjectSpy = { execute: jest.fn(async (presenter, id) => (presenter.projectUpdated(id)))};
 
       let wrap = mount(<NewProjectPage
           match={{params: {id: 9}}}
           updateProject = {updateProjectSpy}
           submitProject = {submitProjectSpy}
-          getProject = {getProjectSpy}
+          data = {{}}
+          schema = {schema}
         />);
 
       await wait();
@@ -124,14 +133,14 @@ describe("NewProjectPage", () => {
 
     it('example 2', async () => {
       let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {presenter.creationSuccess(id);}) };
-      let getProjectSpy = { execute: jest.fn(async (presenter, id) => (presenter.presentProject({data, schema})))};
       let updateProjectSpy = { execute: jest.fn(async (presenter, id) => (presenter.projectUpdated(id)))};
 
       let wrap = mount(<NewProjectPage
           match={{params: {id: 1}}}
           updateProject = {updateProjectSpy}
           submitProject = {submitProjectSpy}
-          getProject = {getProjectSpy}
+          data = {data}
+          schema = {schema}
         />);
 
       await wait();
@@ -147,14 +156,14 @@ describe("NewProjectPage", () => {
   describe('success message', () => {
     it('shows only the success message', async () => {
       let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {presenter.creationSuccess(id);}) };
-      let getProjectSpy = { execute: jest.fn(async (presenter, id) => (presenter.presentProject({data, schema})))};
       let updateProjectSpy = { execute: jest.fn(async (presenter, id) => (presenter.projectUpdated(id)))};
 
       let wrap = mount(<NewProjectPage
           match={{params: {id: 1}}}
           updateProject = {updateProjectSpy}
           submitProject = {submitProjectSpy}
-          getProject = {getProjectSpy}
+          data = {data}
+          schema = {schema}
         />);
 
       await wait();
@@ -168,13 +177,13 @@ describe("NewProjectPage", () => {
 
     it('doesnt show the success message', async () => {
       let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {presenter.creationSuccess(id);}) };
-      let getProjectSpy = { execute: jest.fn(async (presenter, id) => (presenter.presentProject({data, schema})))};
       let updateProjectSpy = { execute: jest.fn(async (presenter, id) => (presenter.projectUpdated(id)))};
 
       let wrap = mount(<NewProjectPage
           match={{params: {id: 1}}}
           submitProject = {submitProjectSpy}
-          getProject = {getProjectSpy}
+          data = {data}
+          schema = {schema}
           updateProject = {updateProjectSpy}
         />);
 
@@ -187,14 +196,14 @@ describe("NewProjectPage", () => {
   describe('draft saved message', () => {
     it('shows the draft saved message', async () => {
       let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {presenter.creationSuccess(id);}) };
-      let getProjectSpy = { execute: jest.fn(async (presenter, id) => (presenter.presentProject({data, schema})))};
       let updateProjectSpy = { execute: jest.fn(async (presenter, id) => (presenter.projectUpdated(id)))};
 
       let wrap = mount(<NewProjectPage
           match={{params: {id: 1}}}
           updateProject = {updateProjectSpy}
           submitProject = {submitProjectSpy}
-          getProject = {getProjectSpy}
+          data = {data}
+          schema = {schema}
         />);
 
       await wait();
@@ -205,14 +214,14 @@ describe("NewProjectPage", () => {
 
     it('doesnt show the draft saved message', async () => {
       let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {presenter.creationSuccess(id);}) };
-      let getProjectSpy = { execute: jest.fn(async (presenter, id) => (presenter.presentProject({data, schema})))};
       let updateProjectSpy = { execute: jest.fn(async (presenter, id) => (presenter.projectUpdated(id)))};
 
       let wrap = mount(<NewProjectPage
           match={{params: {id: 1}}}
           submitProject = {submitProjectSpy}
-          getProject = {getProjectSpy}
           updateProject = {updateProjectSpy}
+          data = {data}
+          schema = {schema}
         />);
 
       await wait();
@@ -222,14 +231,14 @@ describe("NewProjectPage", () => {
 
     it('clears the draft saved message after something is entered', async () => {
       let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {presenter.creationSuccess(id);}) };
-      let getProjectSpy = { execute: jest.fn(async (presenter, id) => (presenter.presentProject({data, schema})))};
       let updateProjectSpy = { execute: jest.fn(async (presenter, id) => (presenter.projectUpdated(id)))};
 
       let wrap = mount(<NewProjectPage
           match={{params: {id: 1}}}
           submitProject = {submitProjectSpy}
-          getProject = {getProjectSpy}
           updateProject = {updateProjectSpy}
+          data = {data}
+          schema = {schema}
         />);
 
       await wait();
@@ -243,14 +252,14 @@ describe("NewProjectPage", () => {
 
   it('clear the draft saved message after something is submitted', async () => {
     let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {presenter.creationSuccess(id);}) };
-    let getProjectSpy = { execute: jest.fn(async (presenter, id) => (presenter.presentProject({data, schema})))};
     let updateProjectSpy = { execute: jest.fn(async (presenter, id) => (presenter.projectUpdated(id)))};
 
     let wrap = mount(<NewProjectPage
         match={{params: {id: 1}}}
         submitProject = {submitProjectSpy}
-        getProject = {getProjectSpy}
         updateProject = {updateProjectSpy}
+        data = {data}
+        schema = {schema}
       />);
 
     await wait();

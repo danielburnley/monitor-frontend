@@ -47,3 +47,8 @@ html {
   background-color: #eeeeee;
   cursor: not-allowed;
 }
+
+.form-button {
+  margin: 10px;
+  float: right;
+}

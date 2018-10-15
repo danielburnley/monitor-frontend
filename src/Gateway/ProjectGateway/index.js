@@ -22,7 +22,8 @@ export default class ProjectGateway {
       let projectResponse = await rawResponse.json();
       let foundProject = new Project(
         projectResponse.data,
-        projectResponse.schema
+        projectResponse.schema,
+        projectResponse.status
       );
       return { success: true, foundProject };
     } else {
@@ -60,6 +61,7 @@ export default class ProjectGateway {
         body: JSON.stringify({ project_id, project_data })
       }
     );
+
     if (response.ok) {
       return { success: true };
     } else {

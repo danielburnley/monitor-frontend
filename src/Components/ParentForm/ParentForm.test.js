@@ -93,6 +93,7 @@ describe("<ParentForm>", () => {
     beforeEach(() => {
       parentForm = shallow(
         <ParentForm
+          onChange={jest.fn()}
           schema={{
             type: "object",
             properties: {
@@ -212,6 +213,7 @@ describe("<ParentForm>", () => {
       beforeEach(() => {
         parentForm = shallow(
           <ParentForm
+            onChange={jest.fn()}
             schema={{
               type: "object",
               properties: {
@@ -254,6 +256,7 @@ describe("<ParentForm>", () => {
       beforeEach(() => {
         parentForm = shallow(
           <ParentForm
+            onChange={jest.fn()}
             schema={{
               type: "object",
               properties: {
@@ -299,6 +302,7 @@ describe("<ParentForm>", () => {
         onChangeSpy = jest.fn();
         parentForm = shallow(
           <ParentForm
+            onChange={jest.fn()}
             schema={{
               type: "object",
               properties: {
@@ -434,6 +438,7 @@ describe("<ParentForm>", () => {
         onChangeSpy = jest.fn();
         parentForm = shallow(
           <ParentForm
+            onChange={jest.fn()}
             schema={{
               type: "object",
               properties: {
@@ -525,6 +530,7 @@ describe("<ParentForm>", () => {
     it("Displays the risk field component", () => {
       let parentForm = mount(
         <ParentForm
+          onChange={jest.fn()}
           schema={{
             type: "object",
             properties: {

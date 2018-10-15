@@ -11,7 +11,8 @@ export default class ProjectPage extends React.Component {
     await this.setState({
       loading: false,
       formData: projectData.data,
-      formSchema: projectData.schema
+      formSchema: projectData.schema,
+      projectStatus: projectData.status
     });
   };
 
@@ -41,6 +42,7 @@ export default class ProjectPage extends React.Component {
     return (
       <div>
         {this.props.children({
+          projectStatus: this.state.projectStatus,
           formData: this.state.formData,
           formSchema: this.state.formSchema
         })}

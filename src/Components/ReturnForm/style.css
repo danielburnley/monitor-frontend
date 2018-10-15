@@ -4,11 +4,6 @@
   background-color: white;
 }
 
-.return-btn {
-  margin: 10px;
-  float: right;
-}
-
 input:disabled {
   background-color: transparent !important;
   border: 0px !important;
