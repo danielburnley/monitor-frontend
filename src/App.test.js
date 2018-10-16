@@ -311,6 +311,27 @@ describe('Submitting a draft project', () => {
     await page.load();
     expect(page.find('[data-test="project-create-success"]').length).toEqual(1);
   });
+
+  xit('Presents you with validation when you attempt to save and submit an invalid draft project', async () => {
+    api.validateProject(0).unsuccessfully();
+
+    let page = new AppPage("/project/0");
+    await page.load();
+
+    page.find("input[type='text']").map((textfield) => {
+      textfield.simulate('change', { target: { value: 'cat'}})
+    });
+
+    await page.load();
+
+    page.find('[data-test="update-project-button"]').simulate("click");
+    await page.load();
+    expect(page.find('[data-test="validationWarning"]').length).toEqual(1);
+
+    page.find('[data-test="submit-project-button"]').simulate("click");
+    await page.load();
+    expect(page.find('[data-test="validationError"]').length).toEqual(1);
+  });
 });
 
 describe("Page not found", () => {

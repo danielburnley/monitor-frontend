@@ -32,16 +32,19 @@ export default class ProjectGateway {
   }
 
   async submit(project_id) {
-    let response = await fetch(`${this.env.REACT_APP_HIF_API_URL}project/submit`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        API_KEY: this.apiKeyGateway.getApiKey().apiKey
-      },
-      body: JSON.stringify({
-        project_id
-      })
-    });
+    let response = await fetch(
+      `${this.env.REACT_APP_HIF_API_URL}project/submit`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          API_KEY: this.apiKeyGateway.getApiKey().apiKey
+        },
+        body: JSON.stringify({
+          project_id
+        })
+      }
+    );
     if (response.ok) {
       return { success: true };
     } else {
@@ -56,7 +59,7 @@ export default class ProjectGateway {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          'API_KEY': this.apiKeyGateway.getApiKey().apiKey
+          API_KEY: this.apiKeyGateway.getApiKey().apiKey
         },
         body: JSON.stringify({ project_id, project_data })
       }
@@ -66,6 +69,29 @@ export default class ProjectGateway {
       return { success: true };
     } else {
       return { success: false };
+    }
+  }
+
+  async validate(type, data) {
+    let response = await fetch(
+      `${this.env.REACT_APP_HIF_API_URL}project/validate`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          API_KEY: this.apiKeyGateway.getApiKey().apiKey
+        },
+        body: JSON.stringify({ type, data })
+      }
+    );
+
+    if (response.ok) {
+      let response_json = await response.json();
+      return {
+        invalidPaths: response_json.invalidPaths,
+        prettyInvalidPaths: response_json.prettyInvalidPaths,
+        valid: response_json.valid
+      };
     }
   }
 }

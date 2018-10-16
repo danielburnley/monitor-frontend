@@ -1,6 +1,7 @@
 import nock from "nock";
 import ProjectGateway from ".";
 import Project from "../../Domain/Project";
+import { O_TRUNC } from "constants";
 
 describe("Project Gateway", () => {
   afterEach(() => {
@@ -228,6 +229,148 @@ describe("Project Gateway", () => {
           .reply(200);
         let response = await gateway.submit(28);
         expect(response).toEqual({ success: true });
+      });
+    });
+  });
+
+  describe("#Validate", () => {
+    let gateway, apiKeyGateway;
+
+    beforeEach(async () => {
+      apiKeyGateway = {
+        getApiKey: jest.fn(() => ({ apiKey: "superSecret" }))
+      };
+      gateway = new ProjectGateway(apiKeyGateway);
+    });
+
+    describe("Given valid data", () => {
+      describe("Example 1", () => {
+        let validateProjectRequest;
+
+        beforeEach(async () => {
+          process.env.REACT_APP_HIF_API_URL = "http://flowers.blossom/";
+
+          validateProjectRequest = nock("http://flowers.blossom")
+            .matchHeader("Content-Type", "application/json")
+            .post("/project/validate", {
+              type: "cat",
+              data: "Some data stuffs"
+            })
+            .reply(200, {
+              invalidPaths: [],
+              prettyInvalidPaths: [],
+              valid: true
+            });
+        });
+
+        it("Submits data to the API", async () => {
+          await gateway.validate("cat", "Some data stuffs");
+
+          expect(validateProjectRequest.isDone()).toBeTruthy();
+        });
+
+        it("returns an empty list if valid", async () => {
+          let response = await gateway.validate("cat", "Some data stuffs");
+
+          expect(response).toEqual({
+            invalidPaths: [],
+            prettyInvalidPaths: [],
+            valid: true
+          });
+        });
+      });
+
+      describe("Example 2", () => {
+        let validateProjectRequest, response;
+
+        beforeEach(async () => {
+          process.env.REACT_APP_HIF_API_URL = "http://cows.moo/";
+
+          validateProjectRequest = nock("http://cows.moo")
+            .matchHeader("Content-Type", "application/json")
+            .post("/project/validate", {
+              type: "bop",
+              data: "More data-y data"
+            })
+            .reply(200, {
+              valid: true,
+              invalidPaths: [],
+              prettyInvalidPaths: []
+            });
+          response = await gateway.validate("bop", "More data-y data");
+        });
+
+        it("Submits data to the API", async () => {
+          expect(validateProjectRequest.isDone()).toBeTruthy();
+        });
+
+        it("returns an empty list", async () => {
+          expect(response).toEqual({
+            invalidPaths: [],
+            prettyInvalidPaths: [],
+            valid: true
+          });
+        });
+      });
+    });
+
+    describe("Given invalid data", () => {
+      describe("Example 1", () => {
+        let response;
+
+        beforeEach(async () => {
+          process.env.REACT_APP_HIF_API_URL = "http://flowers.blossom/";
+
+          nock("http://flowers.blossom")
+            .matchHeader("Content-Type", "application/json")
+            .post("/project/validate", {
+              type: "cat",
+              data: "Some data stuffs"
+            })
+            .reply(200, {
+              invalidPaths: [ 'dogHouses', 'location'],
+              prettyInvalidPaths: ['Dog Houses', 'Location'],
+              valid: false
+            });
+            response = await gateway.validate("cat", "Some data stuffs");
+        });
+
+        it("returns details of missing fields", async () => {
+          expect(response).toEqual({
+            invalidPaths: [ 'dogHouses', 'location'],
+            prettyInvalidPaths: ['Dog Houses', 'Location'],
+            valid: false
+          })
+        })
+      });
+
+      describe("Example 2", () => {
+        let response;
+
+        beforeEach(async () => {
+          process.env.REACT_APP_HIF_API_URL = "http://cows.moo/";
+
+          nock("http://cows.moo")
+            .matchHeader("Content-Type", "application/json")
+            .post("/project/validate", {
+              type: "dog",
+              data: "woof woof"
+            })
+            .reply(200, {
+              invalidPaths: [ 'catHouses', 'timezone'],
+              prettyInvalidPaths: ['Cat Houses', 'Time Zone'],
+              valid: false
+            });
+            response = await gateway.validate("dog", "woof woof");
+        });
+
+        it("returns details of missing fields", async () => {
+          expect(response).toEqual({
+            invalidPaths: [ 'catHouses', 'timezone'],
+            prettyInvalidPaths: ['Cat Houses', 'Time Zone'],
+            valid: false
+          })
+        })
       });
     });
   });
