@@ -25,7 +25,9 @@ export default class NewProjectPage extends React.Component {
     this.setState({ submitted: true, updating: false });
   }
 
-  creationFailure() {}
+  creationFailure() {
+    this.setState({ submitted: false, updating: false });
+  }
 
   projectUpdated() {
     this.setState({ saved: true, updating: false });
@@ -44,29 +46,39 @@ export default class NewProjectPage extends React.Component {
   submitProject = async e => {
     this.setState({
       updating: true,
-      type: "Submit"
+      type: "Submit",
+      valid: true,
+      prettyInvalidPaths: [[]],
+      saved: false
     });
     await this.validateProject();
     if (this.state.valid) {
       await this.props.submitProject.execute(this, this.props.match.params.id);
+      this.creationSuccess();
+    } else {
+      this.creationFailure();
     }
-
     e.preventDefault();
   };
 
   updateProject = async e => {
-    this.setState({ updating: true });
+    this.setState({
+      updating: true,
+      valid: true,
+      type: "Update",
+      prettyInvalidPaths: [[]]
+    });
     this.validateProject();
     await this.props.updateProject.execute(
       this,
       this.props.match.params.id,
       this.state.formData
     );
-
+    this.projectUpdated;
     e.preventDefault();
   };
 
-  invalidateFields = async (prettyInvalidPaths) => {
+  invalidateFields = async prettyInvalidPaths => {
     await this.setState({
       prettyInvalidPaths: prettyInvalidPaths,
       valid: false
@@ -80,7 +92,10 @@ export default class NewProjectPage extends React.Component {
           formData={this.state.formData}
           schema={this.state.formSchema}
           onChange={e => {
-            this.setState({ formData: e.formData, saved: false });
+            this.setState({
+              formData: e.formData,
+              saved: false,
+            });
           }}
         />
       </div>
@@ -93,12 +108,6 @@ export default class NewProjectPage extends React.Component {
     } else if (this.state.updating) {
       return (
         <div>
-          <ValidationMessage
-            valid={false}
-            type={this.state.type}
-            invalidPaths={this.state.prettyInvalidPaths}
-          />
-
           <button
             data-test="disabled-submit-project-button"
             className="btn form-button disabled"
@@ -117,7 +126,7 @@ export default class NewProjectPage extends React.Component {
         </div>
       );
     } else {
-      return (
+      return (                
         <div>
           <ValidationMessage
             valid={this.state.valid}

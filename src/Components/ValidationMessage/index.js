@@ -18,7 +18,6 @@ export default class ValidationMessage extends React.Component {
     if (this.props.valid) {
       return null;
     }
-
     if (this.props.type==="Submit") {
       return (
         <div className="alert alert-danger" role="alert" data-test="validationError">

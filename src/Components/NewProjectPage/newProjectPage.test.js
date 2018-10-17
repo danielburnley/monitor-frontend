@@ -365,7 +365,7 @@ describe("NewProjectPage", () => {
     describe("Example 1", () => {
       it("shows yellow warning upon update", async () => {
         let submitProjectSpy = { execute: jest.fn(async () => {}) };
-        let updateProjectSpy = { execute: jest.fn(async () => {}) };
+        let updateProjectSpy = { execute: jest.fn(async (presenter, id) => presenter.projectUpdated(id)) };
         let validateProjectSpy = {
           execute: jest.fn(async presenter => {
             await presenter.invalidateFields([["less", "cats"]]);
@@ -399,7 +399,8 @@ describe("NewProjectPage", () => {
     describe("Example 2", () => {
       it("shows yellow warning upon update", async () => {
         let submitProjectSpy = { execute: jest.fn(async () => {}) };
-        let updateProjectSpy = { execute: jest.fn(async () => {}) };
+        let updateProjectSpy = { execute: jest.fn(async (presenter, id) => presenter.projectUpdated(id)) };
+        
         let validateProjectSpy = {
           execute: jest.fn(async presenter => {
             await presenter.invalidateFields([["no", "more", "cats"]]);
@@ -432,12 +433,15 @@ describe("NewProjectPage", () => {
   });
 
   describe("validation Error Message", () => {
-    it("shows red error upon submitting", async () => {
-      let submitProjectSpy = { execute: jest.fn(async () => {}) };
-      let updateProjectSpy = { execute: jest.fn(async () => {}) };
+    fit("shows red error upon submitting", async () => {
+      let submitProjectSpy = {
+          execute: jest.fn(async (presenter, id) => {
+          presenter.creationSuccess(id);
+        })};
+      let updateProjectSpy = { execute: jest.fn(async (presenter, id) => presenter.projectUpdated(id)) };
       let validateProjectSpy = {
-        execute: jest.fn(async presenter => {
-          await presenter.invalidateFields([[]]);
+        execute: jest.fn(async (presenter) => {
+          presenter.invalidateFields([['hello', 'errors']]);
         })
       };
 
@@ -455,6 +459,7 @@ describe("NewProjectPage", () => {
 
       await wait();
       await wrap.find('[data-test="submit-project-button"]').simulate("click");
+      await wait();
       await wrap.update();
       expect(wrap.find('[data-test="validationError"]').length).toEqual(1);
       expect(submitProjectSpy.execute).not.toBeCalled();
