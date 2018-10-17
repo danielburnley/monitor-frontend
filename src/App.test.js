@@ -69,6 +69,8 @@ let returnData = {
   }
 };
 
+let projectType = 'hif';
+
 describe("Authentication against routes", () => {
   let api;
 
@@ -300,20 +302,22 @@ describe('Submitting a draft project', () => {
       textfield.simulate('change', { target: { value: 'cat'}})
     });
 
+    api.validateProject(projectType, submittedProjectData).valid();
+
     await page.load();
 
     page.find('[data-test="update-project-button"]').simulate("click");
     await page.load();
     expect(page.find('[data-test="project-update-success"]').length).toEqual(1);
 
+    api.validateProject(projectType, submittedProjectData).valid();
 
     page.find('[data-test="submit-project-button"]').simulate("click");
     await page.load();
     expect(page.find('[data-test="project-create-success"]').length).toEqual(1);
   });
 
-  xit('Presents you with validation when you attempt to save and submit an invalid draft project', async () => {
-    api.validateProject(0).unsuccessfully();
+  it('Presents you with validation when you attempt to save and submit an invalid draft project', async () => {
 
     let page = new AppPage("/project/0");
     await page.load();
@@ -322,11 +326,16 @@ describe('Submitting a draft project', () => {
       textfield.simulate('change', { target: { value: 'cat'}})
     });
 
+    api.validateProject(projectType, submittedProjectData).invalid();
+
     await page.load();
 
     page.find('[data-test="update-project-button"]').simulate("click");
     await page.load();
     expect(page.find('[data-test="validationWarning"]').length).toEqual(1);
+
+    api.validateProject(projectType, submittedProjectData).invalid();
+
 
     page.find('[data-test="submit-project-button"]').simulate("click");
     await page.load();
