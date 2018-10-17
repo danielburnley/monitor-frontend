@@ -24,7 +24,8 @@ export default class ProjectGateway {
       let foundProject = new Project(
         projectResponse.data,
         projectResponse.schema,
-        projectResponse.status
+        projectResponse.status,
+        projectResponse.type
       );
       return { success: true, foundProject };
     } else {
