@@ -186,6 +186,7 @@ describe("NewProjectPage", () => {
 
       await wait();
       wrap.find('[data-test="update-project-button"]').simulate("click");
+      await wait();
       expect(updateProjectSpy.execute).toBeCalledWith(expect.anything(), 9, {});
     });
 
@@ -215,6 +216,7 @@ describe("NewProjectPage", () => {
       await updateFormField(wrap.find('input[type="text"]'), "cashews");
       await wrap.update();
       wrap.find('[data-test="update-project-button"]').simulate("click");
+      await wait();
       expect(updateProjectSpy.execute).toBeCalledWith(expect.anything(), 1, {
         cat: { catA: { catB: "cashews" } }
       });
@@ -392,6 +394,7 @@ describe("NewProjectPage", () => {
         await wrap
           .find('[data-test="update-project-button"]')
           .simulate("click");
+        await wait();
         await wrap.update();
         expect(wrap.find('[data-test="validationWarning"]').length).toEqual(1);
         expect(wrap.find('[data-test="validationWarning"]').text()).toContain(
@@ -427,6 +430,7 @@ describe("NewProjectPage", () => {
         await wrap
           .find('[data-test="update-project-button"]')
           .simulate("click");
+          await wait();
         await wrap.update();
         expect(wrap.find('[data-test="validationWarning"]').length).toEqual(1);
         expect(wrap.find('[data-test="validationWarning"]').text()).toContain(
@@ -565,6 +569,7 @@ describe("NewProjectPage", () => {
 
       await wait();
       await wrap.find('[data-test="update-project-button"]').simulate("click");
+      await wait();
       await wrap.update();
       expect(wrap.find('[data-test="project-update-success"]').length).toEqual(
         1
@@ -658,8 +663,10 @@ describe("NewProjectPage", () => {
 
     await wait();
     await wrap.find('[data-test="update-project-button"]').simulate("click");
+    await wait();
+    await wrap.update();
     await wrap.find('[data-test="submit-project-button"]').simulate("click");
-
+    await wait();
     await wrap.update();
     expect(wrap.find('[data-test="project-update-success"]').length).toEqual(0);
   });

@@ -26,7 +26,6 @@ export default class NewProjectPage extends React.Component {
   }
 
   creationFailure() {
-    this.setState({ submitted: false, updating: false });
   }
 
   projectUpdated() {
@@ -55,9 +54,8 @@ export default class NewProjectPage extends React.Component {
     await this.validateProject();
     if (this.state.valid) {
       await this.props.submitProject.execute(this, this.props.match.params.id);
-      this.creationSuccess();
     } else {
-      this.creationFailure();
+      this.setState({ submitted: false, updating: false });
     }
     e.preventDefault();
   };
@@ -69,13 +67,14 @@ export default class NewProjectPage extends React.Component {
       type: "Update",
       prettyInvalidPaths: [[]]
     });
-    this.validateProject();
+
+    await this.validateProject();
+
     await this.props.updateProject.execute(
       this,
       this.props.match.params.id,
       this.state.formData
     );
-    this.projectUpdated;
     e.preventDefault();
   };
 
