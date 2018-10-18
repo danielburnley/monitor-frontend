@@ -12,3 +12,8 @@
 .subheading {
   font-weight: normal;
 }
+
+.field-description {
+  font-style: italic;
+  color: #a9a9a9;
+}
