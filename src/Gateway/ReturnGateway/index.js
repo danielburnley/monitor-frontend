@@ -119,7 +119,7 @@ export default class ReturnGateway {
     }
   }
 
-  async validate(project_id, data, type = 'hif') {
+  async validate(project_id, data, type) {
     let response = await fetch(
       `${this.env.REACT_APP_HIF_API_URL}return/validate`,
       {

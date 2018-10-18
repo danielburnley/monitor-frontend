@@ -21,10 +21,11 @@ describe('ValidateReturn', () => {
         cats: 'meow'
       }
 
+      let type = 'hif';
       let project_id = 1;
       let useCase = getUseCase();
-      await useCase.execute(presenterSpy, project_id, data);
-      expect(validationGatewaySpy.validate).toBeCalledWith(project_id, data);
+      await useCase.execute(presenterSpy, project_id, data, type);
+      expect(validationGatewaySpy.validate).toBeCalledWith(project_id, data, type);
     });
 
     it('calls the presenter with the invalid paths', async () => {
@@ -46,10 +47,11 @@ describe('ValidateReturn', () => {
         dogs: 'woof'
       }
 
+      let type = 'ac';
       let project_id = 3;
       let useCase = getUseCase();
-      await useCase.execute(presenterSpy, project_id, data);
-      expect(validationGatewaySpy.validate).toBeCalledWith(project_id, data);
+      await useCase.execute(presenterSpy, project_id, data, type);
+      expect(validationGatewaySpy.validate).toBeCalledWith(project_id, data, type);
     });
 
     it('calls the presenter with the invalid paths', async () => {

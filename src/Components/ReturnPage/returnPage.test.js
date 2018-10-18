@@ -22,8 +22,13 @@ async function updateFormField(input, value) {
 }
 
 class getSubmittedReturnStub {
+  constructor(type='ac') {
+    this.type = type;
+  }
+
   async execute(presenter, request) {
     await presenter.presentReturn({
+      type: this.type,
       status: 'Submitted',
       data: {cathouse: {cathouse: 'cat'}},
       schema: {
@@ -46,8 +51,13 @@ class getSubmittedReturnStub {
 }
 
 class getReturnStub {
+  constructor(type='ac') {
+    this.type = type;
+  }
+
   async execute(presenter, request) {
     await presenter.presentReturn({
+      type: this.type,
       status: 'Draft',
       data: {cathouse: {cathouse: 'cat'}},
       schema: {
@@ -69,8 +79,12 @@ class getReturnStub {
   }
 }
 class getBaseReturnStub {
+  constructor(type='ac') {
+    this.type = type;
+  }
   async execute(presenter, request) {
     await presenter.presentReturn({
+      type: this.type,
       status: 'Draft',
       data: {},
       schema: {
@@ -197,29 +211,56 @@ describe('ReturnPage', () => {
         expect(wrap.find("[data-test='disabled-submit-return-button']").length).toEqual(1);
       });
 
-      it('shows a success message', async () => {
-        let projectId = 1;
-        let wrap = mount(<ReturnPage
-                validateReturn={validateReturnSpy}
-                match={{ params: { projectId: 1, returnId: 1 } }}
-                generateUISchema={new GenerateUISchema()}
-                generateSubmittedSchema={new GenerateReadOnlySchema()}
-                history={[]}
-                createReturn={createReturnSpy}
-                submitReturn={submitReturnSpy}
-                updateReturn={updateReturnSpy}
-                getReturn={new getReturnStub()}
-                getBaseReturn={new getBaseReturnStub()}
-              />);
+      describe('shows a success message', () => {
+        it('example 1', async () => {
+          let projectId = 1;
+          let wrap = mount(<ReturnPage
+                  validateReturn={validateReturnSpy}
+                  match={{ params: { projectId: 1, returnId: 1 } }}
+                  generateUISchema={new GenerateUISchema()}
+                  generateSubmittedSchema={new GenerateReadOnlySchema()}
+                  history={[]}
+                  createReturn={createReturnSpy}
+                  submitReturn={submitReturnSpy}
+                  updateReturn={updateReturnSpy}
+                  getReturn={new getReturnStub()}
+                  getBaseReturn={new getBaseReturnStub()}
+                />);
 
-        let input = wrap.find("[type='text'] input").first();
-        await updateFormField(input, "Meow");
-        await saveReturn(wrap);
-        await wait();
-        expect(validateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), projectId, {cathouse: {cathouse: "Meow"}});
-        expect(wrap.find("[data-test='validationError']").length).toEqual(0);
-        expect(wrap.find("[data-test='saveSuccess']").length).toEqual(1);
-        expect(wrap.find("[data-test='submitSuccess']").length).toEqual(0);
+          let input = wrap.find("[type='text'] input").first();
+          await updateFormField(input, "Meow");
+          await saveReturn(wrap);
+          await wait();
+          expect(validateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), projectId, {cathouse: {cathouse: "Meow"}}, 'ac');
+          expect(wrap.find("[data-test='validationError']").length).toEqual(0);
+          expect(wrap.find("[data-test='saveSuccess']").length).toEqual(1);
+          expect(wrap.find("[data-test='submitSuccess']").length).toEqual(0);
+        });
+
+        it('example 2', async () => {
+          let projectId = 1;
+          let wrap = mount(<ReturnPage
+                  validateReturn={validateReturnSpy}
+                  match={{ params: { projectId: 1, returnId: 1 } }}
+                  generateUISchema={new GenerateUISchema()}
+                  generateSubmittedSchema={new GenerateReadOnlySchema()}
+                  history={[]}
+                  createReturn={createReturnSpy}
+                  submitReturn={submitReturnSpy}
+                  updateReturn={updateReturnSpy}
+                  getReturn={new getReturnStub('hif')}
+                  getBaseReturn={new getBaseReturnStub('hif')}
+                />);
+
+          let input = wrap.find("[type='text'] input").first();
+          await updateFormField(input, "Meow");
+          await saveReturn(wrap);
+          await wait();
+          expect(validateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), projectId, {cathouse: {cathouse: "Meow"}}, 'hif');
+          expect(wrap.find("[data-test='validationError']").length).toEqual(0);
+          expect(wrap.find("[data-test='saveSuccess']").length).toEqual(1);
+          expect(wrap.find("[data-test='submitSuccess']").length).toEqual(0);
+        });
       });
 
       it('hides the success message after data entry resumes', async () => {
@@ -278,32 +319,62 @@ describe('ReturnPage', () => {
         expect(wrap.find("[data-test='disabled-submit-return-button']").length).toEqual(1);
       });
 
-      it('permits submission', async () => {
-        let projectId = 9;
-        let wrap = mount(<ReturnPage
-                validateReturn={validateReturnSpy}
-                match={{ params: { projectId: 9, returnId: 1 } }}
-                generateUISchema={new GenerateUISchema()}
-                generateSubmittedSchema={new GenerateReadOnlySchema()}
-                history={[]}
-                createReturn={createReturnSpy}
-                submitReturn={submitReturnSpy}
-                updateReturn={updateReturnSpy}
-                getReturn={new getReturnStub()}
-                getBaseReturn={new getBaseReturnStub()}
-              />);
+      describe('permits submission', () => {
+        it('example 1', async () => {
+          let projectId = 9;
+          let wrap = mount(<ReturnPage
+                  validateReturn={validateReturnSpy}
+                  match={{ params: { projectId: 9, returnId: 1 } }}
+                  generateUISchema={new GenerateUISchema()}
+                  generateSubmittedSchema={new GenerateReadOnlySchema()}
+                  history={[]}
+                  createReturn={createReturnSpy}
+                  submitReturn={submitReturnSpy}
+                  updateReturn={updateReturnSpy}
+                  getReturn={new getReturnStub()}
+                  getBaseReturn={new getBaseReturnStub()}
+                />);
 
-        let input = wrap.find("[type='text'] input").first();
-        await updateFormField(input, "cat");
-        await submitReturn(wrap);
-        await wait();
-        wrap.update();
-        expect(submitReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), { projectId: 9, returnId: 1, data: { cathouse: { cathouse: 'cat' } } });
-        expect(validateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), projectId, {cathouse: {cathouse: 'cat'}});
-        expect(wrap.find("[data-test='validationError']").length).toEqual(0);
-        expect(wrap.find("[data-test='submitSuccess']").length).toEqual(1);
-        expect(wrap.find("[data-test='return']").length).toEqual(0);
-        expect(wrap.find("[data-test='saveSuccess']").length).toEqual(0);
+          let input = wrap.find("[type='text'] input").first();
+          await updateFormField(input, "cat");
+          await submitReturn(wrap);
+          await wait();
+          wrap.update();
+          expect(submitReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), { projectId: 9, returnId: 1, data: { cathouse: { cathouse: 'cat' } } });
+          expect(validateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), projectId, {cathouse: {cathouse: 'cat'}}, 'ac');
+          expect(wrap.find("[data-test='validationError']").length).toEqual(0);
+          expect(wrap.find("[data-test='submitSuccess']").length).toEqual(1);
+          expect(wrap.find("[data-test='return']").length).toEqual(0);
+          expect(wrap.find("[data-test='saveSuccess']").length).toEqual(0);
+        });
+
+        it('example 1', async () => {
+          let projectId = 9;
+          let wrap = mount(<ReturnPage
+                  validateReturn={validateReturnSpy}
+                  match={{ params: { projectId: 9, returnId: 1 } }}
+                  generateUISchema={new GenerateUISchema()}
+                  generateSubmittedSchema={new GenerateReadOnlySchema()}
+                  history={[]}
+                  createReturn={createReturnSpy}
+                  submitReturn={submitReturnSpy}
+                  updateReturn={updateReturnSpy}
+                  getReturn={new getReturnStub('hif')}
+                  getBaseReturn={new getBaseReturnStub('hif')}
+                />);
+
+          let input = wrap.find("[type='text'] input").first();
+          await updateFormField(input, "cat");
+          await submitReturn(wrap);
+          await wait();
+          wrap.update();
+          expect(submitReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), { projectId: 9, returnId: 1, data: { cathouse: { cathouse: 'cat' } } });
+          expect(validateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), projectId, {cathouse: {cathouse: 'cat'}}, 'hif');
+          expect(wrap.find("[data-test='validationError']").length).toEqual(0);
+          expect(wrap.find("[data-test='submitSuccess']").length).toEqual(1);
+          expect(wrap.find("[data-test='return']").length).toEqual(0);
+          expect(wrap.find("[data-test='saveSuccess']").length).toEqual(0);
+        });
       });
     });
   });
@@ -337,7 +408,7 @@ describe('ReturnPage', () => {
         await updateFormField(input, "");
         await submitReturn(wrap);
         await wait();
-        expect(validateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), projectId, {cathouse: {}});
+        expect(validateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), projectId, {cathouse: {}}, 'ac');
         expect(submitReturnSpy.execute).not.toHaveBeenCalled();
         expect(wrap.find("[data-test='validationError']").length).toEqual(1);
         expect(wrap.find("[data-test='saveSuccess']").length).toEqual(0);
@@ -368,7 +439,7 @@ describe('ReturnPage', () => {
         await saveReturn(wrap);
         await wait();
         expect(updateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), {projectId, returnId, data: {cathouse: {}}});
-        expect(validateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), projectId, {cathouse: {}});
+        expect(validateReturnSpy.execute).toHaveBeenCalledWith(expect.anything(), projectId, {cathouse: {}}, 'ac');
         expect(wrap.find("[data-test='submitSuccess']").length).toEqual(0);
         expect(wrap.find("[data-test='validationWarning']").length).toEqual(1);
         expect(wrap.find("[data-test='validationWarning']").text()).toEqual("Warning: You will not be able to submit this return until the following fields are filled in: Cat House → Cat House");
