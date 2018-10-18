@@ -8,13 +8,19 @@ export default class ProjectPage extends React.Component {
   }
 
   presentProject = async projectData => {
+    let uiSchema ={}
+    if (projectData.status === "LA Draft") {
+      console.log('im here')
+      uiSchema = this.props.generateReadOnlySchema.execute(projectData.schema);
+    } 
     await this.setState({
       loading: false,
       formData: projectData.data,
       formSchema: projectData.schema,
+      formUiSchema: uiSchema,
       projectStatus: projectData.status
     });
-  };
+  };    
 
   presentProjectNotFound = async () => {};
 

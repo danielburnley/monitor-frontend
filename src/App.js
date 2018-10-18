@@ -147,7 +147,7 @@ const renderSubmittedProjectPage = (props, formData, formSchema) => (
 );
 
 const renderProjectPage = props => (
-  <ProjectPage {...props} getProject={getProjectUseCase}>
+  <ProjectPage {...props} getProject={getProjectUseCase} generateReadOnlySchema={generateReadOnlySchema}>
     {({ projectStatus, formData, formSchema }) => {
       if (projectStatus === "Draft") {
         return renderNewProjectPage(props, formData, formSchema);

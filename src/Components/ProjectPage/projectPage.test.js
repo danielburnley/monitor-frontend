@@ -1,9 +1,10 @@
 import React from "react";
 import ProjectPage from ".";
-import { shallow } from "enzyme";
+import { mount, shallow } from "enzyme";
+import GenerateReadOnlySchema from "../../UseCase/GenerateReadOnlySchema";
 
 describe("<ProjectPage>", () => {
-  let page, getProjectSpy, childrenSpy;
+  let page, getProjectSpy, childrenSpy, GenerateReadOnlySchemaSpy;
 
   describe("Example one", () => {
     describe("When loading the project", () => {
@@ -60,6 +61,10 @@ describe("<ProjectPage>", () => {
 
       it("Holds the projectStatus when the project is presented", () => {
         expect(page.state().projectStatus).toEqual('Draft');
+      });
+
+      it("Holds th uischema as an empty hash", () => {
+        expect(page.state().formUiSchema).toEqual({})
       });
 
       it("Renders null", () => {
@@ -136,6 +141,37 @@ describe("<ProjectPage>", () => {
           formSchema: { goodbye: "see ya" }
         });
       });
+    });
+  });
+
+  describe("When project is in LA Draft status", () => {
+    beforeEach(() => {
+      getProjectSpy = {
+        execute: (presenter, _) =>
+          presenter.presentProject({
+            data: { heya: 'Bye' },
+            schema: { readonly: true, title: 'Heya' },
+            status: "LA Draft"
+          })
+      };
+
+      GenerateReadOnlySchemaSpy = {
+        execute: (data) => (
+           { heya: {'ui:disabled' : true} }
+        )
+      }
+
+      childrenSpy = jest.fn();
+
+      page = shallow(
+        <ProjectPage match={{ params: { id: "2" } }} generateReadOnlySchema={GenerateReadOnlySchemaSpy} getProject={getProjectSpy}>
+          {childrenSpy}
+        </ProjectPage>
+      );
+    });
+
+    it("Holds the Ui Schema for read only objects", () => {
+      expect(page.state().formUiSchema).toEqual({heya: {'ui:disabled': true}})
     });
   });
 });
