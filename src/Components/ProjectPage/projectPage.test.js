@@ -1,10 +1,9 @@
 import React from "react";
 import ProjectPage from ".";
-import { mount, shallow } from "enzyme";
-import GenerateReadOnlySchema from "../../UseCase/GenerateReadOnlySchema";
+import { shallow } from "enzyme";
 
 describe("<ProjectPage>", () => {
-  let page, getProjectSpy, childrenSpy, GenerateReadOnlySchemaSpy;
+  let page, getProjectSpy, childrenSpy, GenerateReadOnlySchemaSpy, UISchema;
 
   describe("Example one", () => {
     describe("When loading the project", () => {
@@ -30,6 +29,8 @@ describe("<ProjectPage>", () => {
 
     describe("When the project is loaded and is of status draft", () => {
       beforeEach(() => {
+        UISchema = {};
+
         getProjectSpy = {
           execute: (presenter, _) =>
             presenter.presentProject({
@@ -71,7 +72,8 @@ describe("<ProjectPage>", () => {
         expect(childrenSpy).toHaveBeenCalledWith({
           projectStatus: "Draft",
           formData: { meow: true },
-          formSchema: { hello: "hi" }
+          formSchema: { hello: "hi" },
+          formUiSchema: UISchema
         });
       });
     });
@@ -80,6 +82,7 @@ describe("<ProjectPage>", () => {
   describe("Example two", () => {
     describe("When loading the project", () => {
       beforeEach(() => {
+        UISchema = {}
         getProjectSpy = { execute: jest.fn() };
         page = shallow(
           <ProjectPage match={{ params: { id: "2" } }} getProject={getProjectSpy}>
@@ -138,40 +141,92 @@ describe("<ProjectPage>", () => {
         expect(childrenSpy).toHaveBeenCalledWith({
           projectStatus: "Submitted",
           formData: { woof: false },
-          formSchema: { goodbye: "see ya" }
+          formSchema: { goodbye: "see ya" },
+          formUiSchema: {},
         });
       });
     });
   });
 
   describe("When project is in LA Draft status", () => {
-    beforeEach(() => {
-      getProjectSpy = {
-        execute: (presenter, _) =>
-          presenter.presentProject({
-            data: { heya: 'Bye' },
-            schema: { readonly: true, title: 'Heya' },
-            status: "LA Draft"
-          })
-      };
+    describe("Example 1", () => {
+      beforeEach(() => {
+        getProjectSpy = {
+          execute: (presenter, _) =>
+            presenter.presentProject({
+              data: { heya: 'Bye' },
+              schema: { readonly: true, title: 'Heya' },
+              status: "LA Draft"
+            })
+        };
+  
+        GenerateReadOnlySchemaSpy = {
+          execute: (data) => (
+             { heya: {'ui:disabled' : true} }
+          )
+        }
+  
+        childrenSpy = jest.fn();
+  
+        page = shallow(
+          <ProjectPage match={{ params: { id: "2" } }} generateReadOnlySchema={GenerateReadOnlySchemaSpy} getProject={getProjectSpy}>
+            {childrenSpy}
+          </ProjectPage>
+        );
+      });
+  
+      it("Holds the Ui Schema for read only objects", () => {
+        expect(page.state().formUiSchema).toEqual({heya: {'ui:disabled': true}})
+      });
 
-      GenerateReadOnlySchemaSpy = {
-        execute: (data) => (
-           { heya: {'ui:disabled' : true} }
-        )
-      }
-
-      childrenSpy = jest.fn();
-
-      page = shallow(
-        <ProjectPage match={{ params: { id: "2" } }} generateReadOnlySchema={GenerateReadOnlySchemaSpy} getProject={getProjectSpy}>
-          {childrenSpy}
-        </ProjectPage>
-      );
+      it("Renders the children with the Ui schema populated from the state", () => {
+        expect(childrenSpy).toHaveBeenCalledWith({
+          projectStatus: "LA Draft",
+          formData: { heya: 'Bye' },
+          formSchema: { readonly: true, title: 'Heya' },
+          formUiSchema: { heya: {'ui:disabled' : true} }
+        });
+      });
     });
 
-    it("Holds the Ui Schema for read only objects", () => {
-      expect(page.state().formUiSchema).toEqual({heya: {'ui:disabled': true}})
+    describe("Example 2", () => {
+      beforeEach(() => {
+        getProjectSpy = {
+          execute: (presenter, _) =>
+            presenter.presentProject({
+              data: { hi: 'Bye' },
+              schema: {hi: { readonly: true, title: 'Heya' }, bye: { title: 'Boo'}},
+              status: "LA Draft"
+            })
+        };
+
+  
+        GenerateReadOnlySchemaSpy = {
+          execute: (data) => (
+             { bye: {'ui:disabled' : true} }
+          )
+        }
+  
+        childrenSpy = jest.fn();
+  
+        page = shallow(
+          <ProjectPage match={{ params: { id: "2" } }} generateReadOnlySchema={GenerateReadOnlySchemaSpy} getProject={getProjectSpy}>
+            {childrenSpy}
+          </ProjectPage>
+        );
+      });
+      it("Holds the UI Schema for read only objects", () => {
+        expect(page.state().formUiSchema).toEqual({ bye: {'ui:disabled' : true} })
+      });
+
+      it("Renders the children with the Ui schema populated from the state", () => {
+        expect(childrenSpy).toHaveBeenCalledWith({
+          projectStatus: "LA Draft",
+          formData: { hi: 'Bye' },
+          formSchema: {hi: { readonly: true, title: 'Heya' }, bye: { title: 'Boo'}},
+          formUiSchema: { bye: {'ui:disabled' : true} }
+        });
+      });
     });
   });
 });
