@@ -302,7 +302,7 @@ describe('Submitting a draft project', () => {
       textfield.simulate('change', { target: { value: 'cat'}})
     });
 
-    api.validateProject(projectType, submittedProjectData).valid();
+    api.validateProject(0, projectType, submittedProjectData).valid();
 
     await page.load();
 
@@ -310,7 +310,7 @@ describe('Submitting a draft project', () => {
     await page.load();
     expect(page.find('[data-test="project-update-success"]').length).toEqual(1);
 
-    api.validateProject(projectType, submittedProjectData).valid();
+    api.validateProject(0, projectType, submittedProjectData).valid();
 
     page.find('[data-test="submit-project-button"]').simulate("click");
     await page.load();
@@ -326,7 +326,7 @@ describe('Submitting a draft project', () => {
       textfield.simulate('change', { target: { value: 'cat'}})
     });
 
-    api.validateProject(projectType, submittedProjectData).invalid();
+    api.validateProject(0, projectType, submittedProjectData).invalid();
 
     await page.load();
 
@@ -334,7 +334,7 @@ describe('Submitting a draft project', () => {
     await page.load();
     expect(page.find('[data-test="validationWarning"]').length).toEqual(1);
 
-    api.validateProject(projectType, submittedProjectData).invalid();
+    api.validateProject(0, projectType, submittedProjectData).invalid();
 
 
     page.find('[data-test="submit-project-button"]').simulate("click");

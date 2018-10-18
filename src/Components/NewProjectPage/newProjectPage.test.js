@@ -251,6 +251,7 @@ describe("NewProjectPage", () => {
       wrap.find('[data-test="update-project-button"]').simulate("click");
       expect(validateProjectSpy.execute).toBeCalledWith(
         expect.anything(),
+        1,
         "hif",
         { cat: { catA: { catB: "hi" } } }
       );
@@ -270,7 +271,7 @@ describe("NewProjectPage", () => {
       let wrap = mount(
         <NewProjectPage
           projectType={"ac"}
-          match={{ params: { id: 1 } }}
+          match={{ params: { id: 6 } }}
           updateProject={updateProjectSpy}
           submitProject={submitProjectSpy}
           validateProject={validateProjectSpy}
@@ -285,6 +286,7 @@ describe("NewProjectPage", () => {
       wrap.find('[data-test="update-project-button"]').simulate("click");
       expect(validateProjectSpy.execute).toBeCalledWith(
         expect.anything(),
+        6,
         "ac",
         { cat: { catA: { catB: "Meow" } } }
       );
@@ -321,6 +323,7 @@ describe("NewProjectPage", () => {
       wrap.find('[data-test="submit-project-button"]').simulate("click");
       expect(validateProjectSpy.execute).toBeCalledWith(
         expect.anything(),
+        1,
         "hif",
         { cat: { catA: { catB: "hi" } } }
       );
@@ -340,7 +343,7 @@ describe("NewProjectPage", () => {
       let wrap = mount(
         <NewProjectPage
           projectType={"ac"}
-          match={{params: {id: 1}}}
+          match={{params: {id: 2}}}
           updateProject={updateProjectSpy}
           submitProject={submitProjectSpy}
           validateProject={validateProjectSpy}
@@ -355,6 +358,7 @@ describe("NewProjectPage", () => {
       wrap.find('[data-test="submit-project-button"]').simulate("click");
       expect(validateProjectSpy.execute).toBeCalledWith(
         expect.anything(),
+        2,
         "ac",
         { cat: { catA: { catB: "bye" } } }
       );
@@ -433,7 +437,7 @@ describe("NewProjectPage", () => {
   });
 
   describe("validation Error Message", () => {
-    fit("shows red error upon submitting", async () => {
+    it("shows red error upon submitting", async () => {
       let submitProjectSpy = {
           execute: jest.fn(async (presenter, id) => {
           presenter.creationSuccess(id);

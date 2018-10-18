@@ -31,12 +31,12 @@ class APISimulator {
     return new APIResponse(projectRequest, response);
   }
 
-  validateProject(type, data) {
+  validateProject(project_id, type, data) {
     let response = { };
 
     let projectRequest = nock(this.url)
       .matchHeader("Content-Type", "application/json")
-      .post("/project/validate", {type, data});
+      .post("/project/validate", {project_id: ""+project_id, type, data});
 
     return new APIResponse(projectRequest, response);
   }

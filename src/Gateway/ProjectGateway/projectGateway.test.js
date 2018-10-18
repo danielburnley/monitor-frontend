@@ -253,6 +253,7 @@ describe("Project Gateway", () => {
           validateProjectRequest = nock("http://flowers.blossom")
             .matchHeader("Content-Type", "application/json")
             .post("/project/validate", {
+              project_id: 1,
               type: "cat",
               data: "Some data stuffs"
             })
@@ -264,13 +265,13 @@ describe("Project Gateway", () => {
         });
 
         it("Submits data to the API", async () => {
-          await gateway.validate("cat", "Some data stuffs");
+          await gateway.validate(1, "cat", "Some data stuffs");
 
           expect(validateProjectRequest.isDone()).toBeTruthy();
         });
 
         it("returns an empty list if valid", async () => {
-          let response = await gateway.validate("cat", "Some data stuffs");
+          let response = await gateway.validate(1, "cat", "Some data stuffs");
 
           expect(response).toEqual({
             invalidPaths: [],
@@ -289,6 +290,7 @@ describe("Project Gateway", () => {
           validateProjectRequest = nock("http://cows.moo")
             .matchHeader("Content-Type", "application/json")
             .post("/project/validate", {
+              project_id: 3,
               type: "bop",
               data: "More data-y data"
             })
@@ -297,7 +299,7 @@ describe("Project Gateway", () => {
               invalidPaths: [],
               prettyInvalidPaths: []
             });
-          response = await gateway.validate("bop", "More data-y data");
+          response = await gateway.validate(3, "bop", "More data-y data");
         });
 
         it("Submits data to the API", async () => {
@@ -324,6 +326,7 @@ describe("Project Gateway", () => {
           nock("http://flowers.blossom")
             .matchHeader("Content-Type", "application/json")
             .post("/project/validate", {
+              project_id: 5,
               type: "cat",
               data: "Some data stuffs"
             })
@@ -332,7 +335,7 @@ describe("Project Gateway", () => {
               prettyInvalidPaths: ['Dog Houses', 'Location'],
               valid: false
             });
-            response = await gateway.validate("cat", "Some data stuffs");
+            response = await gateway.validate(5, "cat", "Some data stuffs");
         });
 
         it("returns details of missing fields", async () => {
@@ -353,6 +356,7 @@ describe("Project Gateway", () => {
           nock("http://cows.moo")
             .matchHeader("Content-Type", "application/json")
             .post("/project/validate", {
+              project_id: 3,
               type: "dog",
               data: "woof woof"
             })
@@ -361,7 +365,7 @@ describe("Project Gateway", () => {
               prettyInvalidPaths: ['Cat Houses', 'Time Zone'],
               valid: false
             });
-            response = await gateway.validate("dog", "woof woof");
+            response = await gateway.validate(3, "dog", "woof woof");
         });
 
         it("returns details of missing fields", async () => {

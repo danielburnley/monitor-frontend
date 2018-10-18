@@ -72,7 +72,7 @@ export default class ProjectGateway {
     }
   }
 
-  async validate(type, data) {
+  async validate(project_id, type, data) {
     let response = await fetch(
       `${this.env.REACT_APP_HIF_API_URL}project/validate`,
       {
@@ -81,16 +81,16 @@ export default class ProjectGateway {
           "Content-Type": "application/json",
           API_KEY: this.apiKeyGateway.getApiKey().apiKey
         },
-        body: JSON.stringify({ type, data })
+        body: JSON.stringify({project_id, type, data })
       }
     );
 
     if (response.ok) {
       let response_json = await response.json();
       return {
-        invalidPaths: response_json.invalidPaths,
+        valid: response_json.valid,
         prettyInvalidPaths: response_json.prettyInvalidPaths,
-        valid: response_json.valid
+        invalidPaths: response_json.invalidPaths,
       };
     }
   }
