@@ -1,3 +1,8 @@
+#root__title {
+  font-size: 200%;
+  font-weight: bolder;
+}
+
 .return-actions {
   display: flex;
   justify-content: flex-end;
