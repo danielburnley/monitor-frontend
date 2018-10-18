@@ -31,9 +31,7 @@ class APISimulator {
     return new APIResponse(projectRequest, response);
   }
 
-  validateProject(project_id, type, data) {
-    let response = { };
-
+  validateProject(project_id, type, data, response) {
     let projectRequest = nock(this.url)
       .matchHeader("Content-Type", "application/json")
       .post("/project/validate", {project_id: ""+project_id, type, data});
@@ -115,22 +113,6 @@ class APIResponse {
 
   unauthorised() {
     this.request.reply(401);
-  }
-
-  valid() {
-    this.request.reply(200, {
-      valid: true,
-      invalidPaths: [],
-      prettyInvalidPaths: []
-    })
-  }
-
-  invalid() {
-    this.request.reply(200, {
-      valid: false,
-      invalidPaths: [['cats'], ['meow']],
-      prettyInvalidPaths: [['Cats'], ['Meow']]
-    })
   }
 }
 

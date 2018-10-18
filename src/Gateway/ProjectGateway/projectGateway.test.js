@@ -1,7 +1,6 @@
 import nock from "nock";
 import ProjectGateway from ".";
 import Project from "../../Domain/Project";
-import { O_TRUNC } from "constants";
 
 describe("Project Gateway", () => {
   afterEach(() => {

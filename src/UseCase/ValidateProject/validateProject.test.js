@@ -23,43 +23,27 @@ describe("ValidateProject", () => {
 
   describe("Example 1", () => {
     describe("Given valid data", async () => {
+      let data = {
+        cats: "meow"
+      };
+      let type = "animal";
+      let project_id = 5;
+      let valid = true;
+      let invalidPaths = [];
+      let prettyInvalidPaths = [];
       it("calls the validation gateway", async () => {
-        let data = {
-          cats: "meow"
-        };
-        let project_id = 3;
-        let type = "animal";
-        let valid = true;
-        let invalidPaths = [];
-        let prettyInvalidPaths = [];
         useCase = getUseCase(valid, invalidPaths, prettyInvalidPaths);
         await useCase.execute(presenterSpy, project_id, type, data);
         expect(validationGatewaySpy.validate).toBeCalledWith(project_id, type,  data);
       });
 
       it("returns undefined if valid is true", async () => {
-        let data = {
-          cats: "meow"
-        };
-        let type = "animal";
-        let project_id = 4;
-        let valid = true;
-        let invalidPaths = [];
-        let prettyInvalidPaths = [];
         useCase = getUseCase(valid, invalidPaths, prettyInvalidPaths);
         let response = await useCase.execute(presenterSpy, project_id, type, data);
         expect(response).toEqual(undefined);
       });
 
       it("does not call the presenter if valid is true", async () => {
-        let data = {
-          cats: "meow"
-        };
-        let type = "animal";
-        let project_id = 5;
-        let valid = true;
-        let invalidPaths = [];
-        let prettyInvalidPaths = [];
         useCase = getUseCase(valid, invalidPaths, prettyInvalidPaths);
         await useCase.execute(presenterSpy, project_id, type, data);
         expect(presenterSpy.invalidateFields).not.toHaveBeenCalled();
@@ -87,29 +71,21 @@ describe("ValidateProject", () => {
 
   describe("Example 2", () => {
     describe("Given valid data", () => {
+      let data = {
+        dogs: "woof"
+      };
+      let type = "canine";
+      let valid = true;
+      let project_id =2;
+      let invalidPaths = [];
+      let prettyInvalidPaths = [];
       it("calls the validation gateway", async () => {
-        let data = {
-          dogs: "woof"
-        };
-        let type = "canine";
-        let valid = true;
-        let project_id =2;
-        let invalidPaths = [];
-        let prettyInvalidPaths = [];
         useCase = getUseCase(valid, invalidPaths, prettyInvalidPaths);
         await useCase.execute(presenterSpy, project_id, type, data);
         expect(validationGatewaySpy.validate).toBeCalledWith(project_id, type, data);
       });
 
       it("returns undefined if valid is true", async () => {
-        let data = {
-          dogs: "woof"
-        };
-        let type = "canine";
-        let valid = true;
-        let project_id = 6;
-        let invalidPaths = [];
-        let prettyInvalidPaths = [];
         useCase = getUseCase(valid, invalidPaths, prettyInvalidPaths);
         let response = await useCase.execute(presenterSpy, project_id, type, data);
         expect(response).toEqual(undefined);

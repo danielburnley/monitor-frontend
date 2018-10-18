@@ -294,15 +294,21 @@ describe('Submitting a draft project', () => {
     nock.cleanAll();
   });
 
+  
   it('Allows you to edit, save and submit a draft project', async () => {
     let page = new AppPage("/project/0");
+    let response = {
+        valid: true,
+        invalidPaths: [],
+        prettyInvalidPaths: []
+      };
     await page.load();
 
     page.find("input[type='text']").map((textfield) => {
       textfield.simulate('change', { target: { value: 'cat'}})
     });
 
-    api.validateProject(0, projectType, submittedProjectData).valid();
+    api.validateProject(0, projectType, submittedProjectData, response).successfully();
 
     await page.load();
 
@@ -310,7 +316,7 @@ describe('Submitting a draft project', () => {
     await page.load();
     expect(page.find('[data-test="project-update-success"]').length).toEqual(1);
 
-    api.validateProject(0, projectType, submittedProjectData).valid();
+    api.validateProject(0, projectType, submittedProjectData, response).successfully();
 
     page.find('[data-test="submit-project-button"]').simulate("click");
     await page.load();
@@ -320,13 +326,18 @@ describe('Submitting a draft project', () => {
   it('Presents you with validation when you attempt to save and submit an invalid draft project', async () => {
 
     let page = new AppPage("/project/0");
+    let response = {
+      valid: false,
+      invalidPaths: [['cats'], ['meow']],
+      prettyInvalidPaths: [['Cats'], ['Meow']]
+    }
     await page.load();
 
     page.find("input[type='text']").map((textfield) => {
       textfield.simulate('change', { target: { value: 'cat'}})
     });
 
-    api.validateProject(0, projectType, submittedProjectData).invalid();
+    api.validateProject(0, projectType, submittedProjectData, response).successfully();
 
     await page.load();
 
@@ -334,7 +345,7 @@ describe('Submitting a draft project', () => {
     await page.load();
     expect(page.find('[data-test="validationWarning"]').length).toEqual(1);
 
-    api.validateProject(0, projectType, submittedProjectData).invalid();
+    api.validateProject(0, projectType, submittedProjectData, response).successfully();
 
 
     page.find('[data-test="submit-project-button"]').simulate("click");
