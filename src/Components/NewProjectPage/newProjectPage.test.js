@@ -244,6 +244,7 @@ describe("NewProjectPage", () => {
           validateProject={validateProjectSpy}
           data={data}
           schema={schema}
+          status={"LA Draft"}
         />
       );
 
@@ -279,6 +280,7 @@ describe("NewProjectPage", () => {
           validateProject={validateProjectSpy}
           data={data}
           schema={schema}
+          status={"LA Draft"}
         />
       );
 
@@ -316,6 +318,7 @@ describe("NewProjectPage", () => {
           validateProject={validateProjectSpy}
           data={data}
           schema={schema}
+          status={"LA Draft"}
         />
       );
 
@@ -351,6 +354,7 @@ describe("NewProjectPage", () => {
           validateProject={validateProjectSpy}
           data={data}
           schema={schema}
+          status={"LA Draft"}
         />
       );
 
@@ -369,15 +373,14 @@ describe("NewProjectPage", () => {
 
   describe("validation warning message", () => {
     describe("Example 1", () => {
-      it("shows yellow warning upon update", async () => {
-        let submitProjectSpy = { execute: jest.fn(async () => {}) };
+      let submitProjectSpy = { execute: jest.fn(async () => {}) };
         let updateProjectSpy = { execute: jest.fn(async (presenter, id) => presenter.projectUpdated(id)) };
         let validateProjectSpy = {
           execute: jest.fn(async presenter => {
             await presenter.invalidateFields([["less", "cats"]]);
           })
         };
-
+      it("shows yellow warning upon update if in LA Draft state", async () => {
         let wrap = mount(
           <NewProjectPage
             match={{ params: { id: 1 } }}
@@ -387,6 +390,8 @@ describe("NewProjectPage", () => {
             validateProject={validateProjectSpy}
             data={data}
             schema={schema}
+            status={"LA Draft"}
+            UiSchema={{}}
           />
         );
 
@@ -400,6 +405,32 @@ describe("NewProjectPage", () => {
         expect(wrap.find('[data-test="validationWarning"]').text()).toContain(
           "less → cats"
         );
+      });
+
+      it("doesnt show the warning message if in draft state", async () => {
+        validateProjectSpy = jest.fn();
+        let wrap = mount(
+          <NewProjectPage
+            match={{ params: { id: 1 } }}
+            projectType={"hey"}
+            updateProject={updateProjectSpy}
+            submitProject={submitProjectSpy}
+            validateProject={validateProjectSpy}
+            data={data}
+            schema={schema}
+            UiSchema={{}}
+            status={"Draft"}
+          />
+        );
+
+        await wait();
+        await wrap
+          .find('[data-test="update-project-button"]')
+          .simulate("click");
+        await wait();
+        await wrap.update();
+        expect(wrap.find('[data-test="validationWarning"]').length).toEqual(0);
+        expect(validateProjectSpy).not.toBeCalled();
       });
     });
 
@@ -423,6 +454,7 @@ describe("NewProjectPage", () => {
             validateProject={validateProjectSpy}
             data={data}
             schema={schema}
+            status={"LA Draft"}
           />
         );
 
@@ -436,6 +468,38 @@ describe("NewProjectPage", () => {
         expect(wrap.find('[data-test="validationWarning"]').text()).toContain(
           "no → more → cats"
         );
+      });
+
+      it("doesn't show a yellow warning when in Draft mode", async () => {
+        let submitProjectSpy = { execute: jest.fn(async () => {}) };
+        let updateProjectSpy = { execute: jest.fn(async (presenter, id) => presenter.projectUpdated(id)) };
+        
+        let validateProjectSpy = {
+          execute: jest.fn(async presenter => {
+            await presenter.invalidateFields([["no", "more", "cats"]]);
+          })
+        };
+
+        let wrap = mount(
+          <NewProjectPage
+            match={{ params: { id: 1 } }}
+            projectType={"hey"}
+            updateProject={updateProjectSpy}
+            submitProject={submitProjectSpy}
+            validateProject={validateProjectSpy}
+            data={data}
+            schema={schema}
+            status={"Draft"}
+          />
+        );
+
+        await wait();
+        await wrap
+          .find('[data-test="update-project-button"]')
+          .simulate("click");
+          await wait();
+        await wrap.update();
+        expect(wrap.find('[data-test="validationWarning"]').length).toEqual(0);
       });
     });
   });
@@ -462,6 +526,7 @@ describe("NewProjectPage", () => {
           validateProject={validateProjectSpy}
           data={data}
           schema={schema}
+          status={"LA Draft"}
         />
       );
 
@@ -471,6 +536,82 @@ describe("NewProjectPage", () => {
       await wrap.update();
       expect(wrap.find('[data-test="validationError"]').length).toEqual(1);
       expect(submitProjectSpy.execute).not.toBeCalled();
+    });
+
+    it("doesnt show a red error upon submitting if in draft mode", async () => {
+      let submitProjectSpy = {
+          execute: jest.fn(async (presenter, id) => {
+          presenter.creationSuccess(id);
+        })};
+      let updateProjectSpy = { execute: jest.fn(async (presenter, id) => presenter.projectUpdated(id)) };
+      let validateProjectSpy = {
+        execute: jest.fn(async (presenter) => {
+          presenter.invalidateFields([['hello', 'errors']]);
+        })
+      };
+
+      let wrap = mount(
+        <NewProjectPage
+          match={{ params: { id: 1 } }}
+          projectType={"hey"}
+          updateProject={updateProjectSpy}
+          submitProject={submitProjectSpy}
+          validateProject={validateProjectSpy}
+          data={data}
+          schema={schema}
+          status={"Draft"}
+        />
+      );
+
+      await wait();
+      await wrap.find('[data-test="submit-project-button"]').simulate("click");
+      await wait();
+      await wrap.update();
+      expect(wrap.find('[data-test="validationError"]').length).toEqual(0);
+      expect(submitProjectSpy.execute).toBeCalled();
+    });
+  });
+
+  describe("Initial draft success message", () => {
+    it("shows only the success message", async () => {
+      let submitProjectSpy = {
+        execute: jest.fn(async (presenter, id) => {
+          presenter.creationSuccess(id);
+        })
+      };
+      let updateProjectSpy = {
+        execute: jest.fn(async (presenter, id) => presenter.projectUpdated(id))
+      };
+      let validateProjectSpy = { execute: jest.fn(async presenter => {}) };
+
+      let wrap = mount(
+        <NewProjectPage
+          match={{ params: { id: 1 } }}
+          updateProject={updateProjectSpy}
+          submitProject={submitProjectSpy}
+          validateProject={validateProjectSpy}
+          data={data}
+          schema={schema}
+          status={"Draft"}
+        />
+      );
+
+      await wait();
+      await wrap.find('[data-test="submit-project-button"]').simulate("click");
+      await wait();
+      await wrap.update();
+      expect(wrap.find('[data-test="parent-form"]').length).toEqual(0);
+      expect(wrap.find('[data-test="project-initial-create-success"]').length).toEqual(
+        1
+      );
+      expect(wrap.find('[data-test="project-create-success"]').length).toEqual(0)
+      expect(wrap.find('[data-test="submit-project-button"]').length).toEqual(
+        0
+      );
+      expect(wrap.find('[data-test="update-project-button"]').length).toEqual(
+        0
+      );
+      expect(wrap.find('[data-test="validationError"]').length).toEqual(0);
     });
   });
 
@@ -494,6 +635,7 @@ describe("NewProjectPage", () => {
           validateProject={validateProjectSpy}
           data={data}
           schema={schema}
+          status={"LA Draft"}
         />
       );
 
