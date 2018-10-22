@@ -685,6 +685,28 @@ describe("GenerateUISchema", () => {
     });
   });
 
+  describe("With extended text fields", () => {
+    describe("In an object", () => {
+      it("Marks the field as a textarea", () => {
+        let schema = {
+          type: "object",
+          properties: {
+            a: {
+              type: "object",
+              properties: {
+                b: { type: "string", extendedText: true }
+              }
+            }
+          }
+        };
+        let response = useCase.execute(schema);
+        expect(response).toEqual({
+          a: { b: { "ui:widget": "textarea" } }
+        });
+      });
+    });
+  });
+
   describe("With hidden fields", () => {
     describe("In an object", () => {
       describe("Example one", () => {
@@ -777,7 +799,7 @@ describe("GenerateUISchema", () => {
       });
 
       describe("When readonly and hidden", () => {
-        it("Marks the field as hidden", () => {
+        it("Marks the field as hidden and readonly", () => {
           let schema = {
             type: "object",
             properties: {
@@ -791,7 +813,7 @@ describe("GenerateUISchema", () => {
           };
           let response = useCase.execute(schema);
           expect(response).toEqual({
-            a: { b: { "ui:widget": "hidden" } }
+            a: { b: { "ui:widget": "hidden", "ui:disabled": true } }
           });
         });
       });

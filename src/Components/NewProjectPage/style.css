@@ -1,0 +1,9 @@
+#root__title {
+  font-size: 2em;
+  font-weight: bolder;
+}
+
+.field-description {
+  font-style: italic;
+  color: #a9a9a9;
+}

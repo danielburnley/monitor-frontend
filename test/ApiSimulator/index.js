@@ -31,6 +31,14 @@ class APISimulator {
     return new APIResponse(projectRequest, response);
   }
 
+  validateProject(project_id, type, data, response) {
+    let projectRequest = nock(this.url)
+      .matchHeader("Content-Type", "application/json")
+      .post("/project/validate", {project_id: ""+project_id, type, data});
+
+    return new APIResponse(projectRequest, response);
+  }
+
   submitProject(project_id) {
     let response = { };
     let projectRequest = nock(this.url)

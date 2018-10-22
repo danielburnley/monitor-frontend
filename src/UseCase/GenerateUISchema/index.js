@@ -67,13 +67,29 @@ export default class GenerateUISchema {
   }
 
   generateSchemaForItem(item) {
-    if (item.hidden) {
-      return { "ui:widget": "hidden" };
-    } else if (item.readonly) {
-      return { "ui:disabled": true };
-    } else if (item.base) {
-      return { "ui:field": "base" };
+    let schema = {}
+
+    if(item.extendedText) {
+      schema["ui:widget"] = "textarea"
     }
+
+    if (item.hidden) {
+      schema["ui:widget"] = "hidden"
+    } 
+
+    if (item.readonly) {
+      schema["ui:disabled"] = true
+    } 
+
+    if (item.base) {
+      schema["ui:field"] = "base"
+    }
+
+    if(Object.keys(schema).length === 0) {
+      return undefined
+    }
+
+    return schema;
   }
 
   isAddableArray(arr) {

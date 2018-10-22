@@ -1,3 +1,8 @@
+#root__title {
+  font-size: 2em;
+  font-weight: bolder;
+}
+
 .return-actions {
   display: flex;
   justify-content: flex-end;
@@ -5,6 +10,17 @@
 }
 
 input:disabled {
+  background-color: transparent !important;
+  border: 0px !important;
+  box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  color: black;
+  cursor: default !important;
+  outline: none !important;
+}
+
+textarea:disabled {
   background-color: transparent !important;
   border: 0px !important;
   box-shadow: none !important;

@@ -32,6 +32,7 @@ import SubmitReturn from "./UseCase/SubmitReturn";
 import UpdateReturn from "./UseCase/UpdateReturn";
 import RequestToken from "./UseCase/RequestToken";
 import ValidateReturn from "./UseCase/ValidateReturn";
+import ValidateProject from "./UseCase/ValidateProject";
 
 import ProjectGateway from "./Gateway/ProjectGateway";
 import ReturnGateway from "./Gateway/ReturnGateway";
@@ -47,6 +48,7 @@ const apiKeyGateway = new ApiKeyGateway(new Cookies());
 const projectGateway = new ProjectGateway(apiKeyGateway);
 const returnGateway = new ReturnGateway(apiKeyGateway, new LocationGateway(window.location));
 const validateReturnUseCase = new ValidateReturn(returnGateway);
+const validateProjectUseCase = new ValidateProject(projectGateway);
 const createReturnUseCase = new CreateReturn(returnGateway);
 const submitProjectUseCase = new SubmitProject(projectGateway);
 const generateDisabledUISchema = new GenerateDisabledUISchema();
@@ -114,9 +116,11 @@ const renderNewProjectPage = (props, formData, formSchema) => (
     {...props}
     schema={formSchema}
     data={formData}
+    projectType={"hif"}
     getProject={getProjectUseCase}
     submitProject={submitProjectUseCase}
     updateProject={updateProjectUseCase}
+    validateProject={validateProjectUseCase}
     generateUISchema={generateDisabledUISchema}
   />
 );
