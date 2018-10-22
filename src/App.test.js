@@ -375,7 +375,7 @@ describe("Submitting an initial draft to then fully populate and submit", () => 
         type: "object",
         title: "Cats",
         properties: {
-          noise: { readonly: true, type: "string", title: "Noise" },
+          noise: { type: "string", title: "Noise" },
           description: { type: "string", title: "Description" },
           toes: { type: "string", title: "Toes" }
         }
@@ -410,6 +410,22 @@ describe("Submitting an initial draft to then fully populate and submit", () => 
   });
 
   it('Allows you to submit a project in LA Draft state', async () => {
+    draftProjectSchema = {
+      title: "Cat Return",
+      type: "object",
+      properties: {
+        summary: {
+          type: "object",
+          title: "Cats",
+          properties: {
+            noise: { laReadOnly: true, type: "string", title: "Noise" },
+            description: { type: "string", title: "Description" },
+            toes: { type: "string", title: "Toes" }
+          }
+        }
+      }
+    }
+
     let LAsubmittedProjectData = {
       summary: {
         noise: "This noise is locked down",

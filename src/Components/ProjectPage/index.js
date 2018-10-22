@@ -8,10 +8,11 @@ export default class ProjectPage extends React.Component {
   }
 
   presentProject = async projectData => {
-    let uiSchema ={}
-    if (projectData.status === "LA Draft") {
-      uiSchema = this.props.generateReadOnlySchema.execute(projectData.schema);
-    } 
+    let uiSchema = {}
+    if(projectData.status!=="Submitted") {
+      uiSchema = this.props.generateReadOnlySchema.execute(projectData.schema, 'laReadOnly');
+    }
+
     await this.setState({
       loading: false,
       formData: projectData.data,

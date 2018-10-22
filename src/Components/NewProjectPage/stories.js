@@ -151,9 +151,9 @@ storiesOf('NewProjectPage', module)
           title: 'Project Summary',
           type: 'object',
           properties: {
-            name: { type: 'string', title: 'Project Name', readonly: true},
+            name: { type: 'string', title: 'Project Name', laReadOnly: true},
             owner: { type: 'string', title: 'Project Owner' },
-            ocupation: { type: 'string', title: 'Occupation', readonly: true}
+            ocupation: { type: 'string', title: 'Occupation', laReadOnly : true}
           },
         },
       },

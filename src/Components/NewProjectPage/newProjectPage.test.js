@@ -380,7 +380,7 @@ describe("NewProjectPage", () => {
             await presenter.invalidateFields([["less", "cats"]]);
           })
         };
-      it("shows yellow warning upon update if in LA Draft state", async () => {
+      it("shows warning upon update if in LA Draft state", async () => {
         let wrap = mount(
           <NewProjectPage
             match={{ params: { id: 1 } }}
@@ -435,7 +435,7 @@ describe("NewProjectPage", () => {
     });
 
     describe("Example 2", () => {
-      it("shows yellow warning upon update", async () => {
+      it("shows warning upon update", async () => {
         let submitProjectSpy = { execute: jest.fn(async () => {}) };
         let updateProjectSpy = { execute: jest.fn(async (presenter, id) => presenter.projectUpdated(id)) };
         
@@ -470,7 +470,7 @@ describe("NewProjectPage", () => {
         );
       });
 
-      it("doesn't show a yellow warning when in Draft mode", async () => {
+      it("doesn't show warning when in Draft mode", async () => {
         let submitProjectSpy = { execute: jest.fn(async () => {}) };
         let updateProjectSpy = { execute: jest.fn(async (presenter, id) => presenter.projectUpdated(id)) };
         
@@ -505,7 +505,7 @@ describe("NewProjectPage", () => {
   });
 
   describe("validation Error Message", () => {
-    it("shows red error upon submitting", async () => {
+    it("shows error upon submitting", async () => {
       let submitProjectSpy = {
           execute: jest.fn(async (presenter, id) => {
           presenter.creationSuccess(id);
@@ -538,7 +538,7 @@ describe("NewProjectPage", () => {
       expect(submitProjectSpy.execute).not.toBeCalled();
     });
 
-    it("doesnt show a red error upon submitting if in draft mode", async () => {
+    it("doesnt show an error upon submitting if in draft mode", async () => {
       let submitProjectSpy = {
           execute: jest.fn(async (presenter, id) => {
           presenter.creationSuccess(id);
