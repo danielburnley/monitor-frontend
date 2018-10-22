@@ -156,9 +156,6 @@ export default class MilestoneField extends React.Component {
   render() {
     return (
       <div className="panel panel-default">
-        <div className="panel-heading" data-test="schema-title">
-          {this.props.schema.title}
-        </div>
         {this.renderBody()}
       </div>
     );

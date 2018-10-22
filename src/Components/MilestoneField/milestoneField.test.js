@@ -78,9 +78,6 @@ describe("<MilestoneField>", () => {
         schemaTitle
       );
 
-      it("displays the schema title", () => {
-        expect(milestone.title()).toEqual("Milestone Fields");
-      });
 
       it("displays the milestone description", () => {
         expect(milestone.description()).toEqual(
@@ -109,10 +106,6 @@ describe("<MilestoneField>", () => {
         onChangeSpy,
         schemaTitle
       );
-
-      it("displays the schema title", () => {
-        expect(milestone.title()).toEqual("Cats walking club");
-      });
 
       it("displays the milestone description", () => {
         expect(milestone.description()).toEqual("Cats have walked very far");
