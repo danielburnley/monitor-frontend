@@ -53,6 +53,8 @@ export default class GenerateUISchema {
       ret["items"]["ui:field"] = "risk";
     } else if (value.items.base) {
       ret["items"]["ui:field"] = "base";
+    } else if (value.items.milestone) {
+      ret["items"]["ui:field"] = "milestone"
     }
 
     return ret;
@@ -75,11 +77,11 @@ export default class GenerateUISchema {
 
     if (item.hidden) {
       schema["ui:widget"] = "hidden"
-    } 
+    }
 
     if (item.readonly) {
       schema["ui:disabled"] = true
-    } 
+    }
 
     if (item.base) {
       schema["ui:field"] = "base"
@@ -109,6 +111,9 @@ export default class GenerateUISchema {
     }
     if (obj.base) {
       return "base";
+    }
+    if (obj.milestone) {
+      return "milestone";
     }
   }
 }
