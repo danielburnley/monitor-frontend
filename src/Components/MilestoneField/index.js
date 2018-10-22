@@ -11,7 +11,8 @@ export default class MilestoneField extends React.Component {
       milestoneSummaryOfCriticalPath: this.props.formData
         .milestoneSummaryOfCriticalPath,
 
-      statusAgainstLastReturn: this.props.formData.statusAgainstLastReturn,
+      statusAgainstLastReturn:
+        this.props.formData.statusAgainstLastReturn || "On schedule",
       currentReturn: this.props.formData.currentReturn,
       reasonForVariance: this.props.formData.reasonForVariance,
       milestonePercentCompleted: this.props.formData.milestonePercentCompleted
@@ -26,22 +27,38 @@ export default class MilestoneField extends React.Component {
 
   renderMilestoneDescription() {
     return (
-      <div data-test="milestone-description">{this.state.description}</div>
+      <div>
+        <label htmlFor="milestoneDescription">Description</label>
+        <p data-test="milestone-description" id="milestoneDescription">
+          {this.state.description}
+        </p>
+      </div>
     );
   }
 
   renderMilestoneTargetDate() {
     return (
-      <div data-test="milestone-milestoneBaselineCompletion">
-        {this.state.milestoneBaselineCompletion}
+      <div>
+        <label htmlFor="milestoneBaselineCompletion">Completion Date</label>
+        <p
+          data-test="milestone-milestoneBaselineCompletion"
+          id="milestoneBaselineCompletion"
+        >
+          {this.state.milestoneBaselineCompletion}
+        </p>
       </div>
     );
   }
 
   renderMilestoneSummary() {
     return (
-      <div data-test="milestone-summary">
-        {this.state.milestoneSummaryOfCriticalPath}
+      <div>
+        <label htmlFor="milestoneSummary">
+          Summary of Baseline Critical Path
+        </label>
+        <p data-test="milestone-summary" id="milestoneSummary">
+          {this.state.milestoneSummaryOfCriticalPath}
+        </p>
       </div>
     );
   }
@@ -49,10 +66,15 @@ export default class MilestoneField extends React.Component {
   renderStatusAgainstLastReturn() {
     return (
       <div>
+        <label htmlFor="statusAgainstLastReturn">
+          Status against last return?
+        </label>
         <select
           onChange={e => this.onFieldChange("statusAgainstLastReturn", e)}
           data-test="milestone-status-against-last-return"
           value={this.state.statusAgainstLastReturn}
+          className="form-control"
+          id="statusAgainstLastReturn"
         >
           <option>Completed</option>
           <option>On schedule</option>
@@ -65,10 +87,13 @@ export default class MilestoneField extends React.Component {
   renderCurrentReturn() {
     return (
       <div>
+        <label htmlFor="currentReturn">Current Return</label>
         <input
+          className="form-control"
           onChange={e => this.onFieldChange("currentReturn", e)}
           data-test="milestone-current-return"
           value={this.state.currentReturn}
+          id="currentReturn"
         />
       </div>
     );
@@ -76,34 +101,54 @@ export default class MilestoneField extends React.Component {
 
   renderReasonForVariance() {
     return (
-      <input
-        onChange={e => this.onFieldChange("reasonForVariance", e)}
-        data-test="milestone-reason-for-variance"
-        value={this.state.reasonForVariance}
-      />
-    )
+      <div>
+        <label htmlFor="reasonForVariance">Reason for Variance</label>
+        <textarea
+          className="form-control"
+          onChange={e => this.onFieldChange("reasonForVariance", e)}
+          data-test="milestone-reason-for-variance"
+          value={this.state.reasonForVariance}
+          id="reasonForVariance"
+        />
+      </div>
+    );
   }
 
   renderMilestonePercentCompleted() {
     return (
-      <input
-        onChange={e => this.onFieldChange("milestonePercentCompleted", e)}
-        data-test="milestone-percent-completed"
-        value={this.state.milestonePercentCompleted}
-      />
-    )
+      <div>
+        <label htmlFor="milestonePercentCompleted">Percent Complete</label>
+        <input
+          className="form-control"
+          onChange={e => this.onFieldChange("milestonePercentCompleted", e)}
+          data-test="milestone-percent-completed"
+          value={this.state.milestonePercentCompleted}
+          id="milestonePercentCompleted"
+        />
+      </div>
+    );
   }
 
   renderBody() {
     return (
       <div className="panel-body">
-        {this.renderMilestoneDescription()}
-        {this.renderMilestoneTargetDate()}
-        {this.renderMilestoneSummary()}
-        {this.renderStatusAgainstLastReturn()}
-        {this.renderCurrentReturn()}
-        {this.renderReasonForVariance()}
-        {this.renderMilestonePercentCompleted()}
+        <div className="row">
+          <div className="col-md-6">
+            {this.renderMilestoneDescription()}
+            {this.renderMilestoneTargetDate()}
+          </div>
+          <div className="col-md-6">{this.renderMilestoneSummary()}</div>
+        </div>
+        <div className="row">
+          <div className="col-md-6">{this.renderStatusAgainstLastReturn()}</div>
+          <div className="col-md-6">
+            {this.renderMilestonePercentCompleted()}
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-md-6">{this.renderCurrentReturn()}</div>
+          <div className="col-md-6">{this.renderReasonForVariance()}</div>
+        </div>
       </div>
     );
   }
