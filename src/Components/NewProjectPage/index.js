@@ -89,6 +89,7 @@ export default class NewProjectPage extends React.Component {
   render() {
     return (
       <div className="container-fluid">
+        <h2>Baseline editor</h2>
         { this.renderSuccessOrForm() }
       </div>
     );
