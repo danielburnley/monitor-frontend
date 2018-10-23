@@ -9,7 +9,7 @@ export default class ProjectPage extends React.Component {
 
   presentProject = async projectData => {
     let uiSchema = {}
-    if(projectData.status!=="Submitted") {
+    if(projectData.status==="LA Draft") {
       uiSchema = this.props.generateReadOnlySchema.execute(projectData.schema, 'laReadOnly');
     }
 
