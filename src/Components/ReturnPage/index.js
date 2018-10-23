@@ -128,6 +128,8 @@ export default class ReturnPage extends React.Component {
 
     return (
       <ReturnForm
+        data-test="return-form"
+        documentGateway={this.props.documentGateway}
         onSave={this.onFormSave}
         onSubmit={this.onFormSubmit}
         onCreate={this.onFormCreate}

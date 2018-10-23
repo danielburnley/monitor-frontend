@@ -39,6 +39,7 @@ import ReturnGateway from "./Gateway/ReturnGateway";
 import LocationGateway from "./Gateway/LocationGateway";
 import ApiKeyGateway from "./Gateway/ApiKeyGateway";
 import TokenGateway from "./Gateway/TokenGateway";
+import DocumentGateway from "./Gateway/DocumentGateway";
 
 import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
@@ -47,6 +48,7 @@ const tokenGateway = new TokenGateway();
 const apiKeyGateway = new ApiKeyGateway(new Cookies());
 const projectGateway = new ProjectGateway(apiKeyGateway);
 const returnGateway = new ReturnGateway(apiKeyGateway, new LocationGateway(window.location));
+const documentGateway = new DocumentGateway(document)
 const validateReturnUseCase = new ValidateReturn(returnGateway);
 const validateProjectUseCase = new ValidateProject(projectGateway);
 const createReturnUseCase = new CreateReturn(returnGateway);
@@ -75,6 +77,7 @@ const renderReturnPage = props => (
     updateReturn={updateReturnUseCase}
     generateUISchema={generateUISchema}
     generateSubmittedSchema={generateDisabledUISchema}
+    documentGateway={documentGateway}
   />
 );
 
@@ -124,6 +127,7 @@ const renderNewProjectPage = (props, projectStatus, formData, formSchema, formUi
     updateProject={updateProjectUseCase}
     validateProject={validateProjectUseCase}
     generateUISchema={generateDisabledUISchema}
+    documentGateway={documentGateway}
   />
 );
 
