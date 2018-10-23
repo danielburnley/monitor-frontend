@@ -49,7 +49,11 @@ export default class NewProjectPage extends React.Component {
       valid: true,
       prettyInvalidPaths: [[]],
     });
-    await this.validateProject();
+
+    if (this.props.status==="LA Draft") {
+      await this.validateProject();
+    }
+    
     if (this.state.valid) {
       await this.props.submitProject.execute(this, this.props.match.params.id);
     } else {
@@ -66,7 +70,9 @@ export default class NewProjectPage extends React.Component {
       prettyInvalidPaths: [[]]
     });
 
-    await this.validateProject();
+    if (this.props.status==="LA Draft") {
+      await this.validateProject();
+    }
 
     await this.props.updateProject.execute(
       this,
@@ -89,6 +95,7 @@ export default class NewProjectPage extends React.Component {
         <ParentForm
           formData={this.state.formData}
           schema={this.state.formSchema}
+          uiSchema={this.props.uiSchema}
           onChange={e => {
             this.setState({
               formData: e.formData,
@@ -102,7 +109,7 @@ export default class NewProjectPage extends React.Component {
 
   renderSuccessOrForm() {
     if (this.state.status==="submitted") {
-      return <div data-test="project-create-success">Project created!</div>;
+      return(this.renderSubmitSuccess())
     } else if (this.state.status==="updating") {
       return (
         <div>
@@ -157,6 +164,14 @@ export default class NewProjectPage extends React.Component {
       return <div data-test="project-update-success">Project updated!</div>;
     }
   }
+  renderSubmitSuccess() {
+    if(this.props.status==="LA Draft") {
+      return <div data-test="project-create-success">Project created!</div>;
+    } else {
+      return <div data-test="project-initial-create-success">Draft Project Created!</div>
+    }
+  }
+
 
   render() {
     return <div className="container-fluid">{this.renderSuccessOrForm()}</div>;

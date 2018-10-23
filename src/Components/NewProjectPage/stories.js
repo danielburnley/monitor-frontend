@@ -135,6 +135,62 @@ storiesOf('NewProjectPage', module)
       <ProjectPage
         schema={schema}
         data={data}
+        status={"LA Draft"}
+        updateProject = {updateProjectUseCase}
+        submitProject = {submitProjectUseCase}
+        validateProject = {validateProjectUseCase}
+        match={{ params: { projectId: 1, type: 'hif' } }}
+      />
+    )
+  })
+  .add('Read only fields', () =>{
+    let schema = {
+      type: 'object',
+      properties: {
+        summary: {
+          title: 'Project Summary',
+          type: 'object',
+          properties: {
+            name: { type: 'string', title: 'Project Name', laReadOnly: true},
+            owner: { type: 'string', title: 'Project Owner' },
+            ocupation: { type: 'string', title: 'Occupation', laReadOnly : true}
+          },
+        },
+      },
+    };
+
+    let data = {
+      summary: {
+        name: 'A HIF Project',
+        owner: 'Dave',
+        ocupation: 'Doctor',
+      },
+    };
+
+    let uiSchema = {
+      summary: {name:{'ui:disabled': true}, ocupation: {'ui:disabled': true}}
+    }
+
+    let submitProjectUseCase = {
+      execute: (presenter, id) => { presenter.creationSuccess(id) }
+    }
+
+    let updateProjectUseCase = {
+      execute: (presenter, id) => { presenter.projectUpdated(id) }
+    }
+
+    let validateProjectUseCase = {
+      execute: (presenter) => {
+        presenter.invalidateFields([['no', 'more', 'cat'], ['less', 'cats']])
+      }
+    }
+
+    return (
+      <ProjectPage
+        schema={schema}
+        data={data}
+        status={"LA Draft"}
+        uiSchema={uiSchema}
         updateProject = {updateProjectUseCase}
         submitProject = {submitProjectUseCase}
         validateProject = {validateProjectUseCase}
