@@ -9,6 +9,7 @@ import GenerateSidebarItems from "../../UseCase/GenerateSidebarItems";
 import "./style.css";
 import RiskField from "../RiskField";
 import BaselineData from "../BaselineData";
+import PeriodFinancials from "../PeriodFinancials";
 
 export default class ParentForm extends React.Component {
   constructor(props) {
@@ -60,7 +61,10 @@ export default class ParentForm extends React.Component {
       <li
         key={property}
         role="presentation"
-        className={"nav-item " + (property === this.state.selected ? "active" : "inactive")}
+        className={
+          "nav-item " +
+          (property === this.state.selected ? "active" : "inactive")
+        }
       >
         <a role="button" id={property} onClick={this.viewSelectorOnChange}>
           {this.props.schema.properties[property].title}
@@ -93,8 +97,17 @@ export default class ParentForm extends React.Component {
   }
 
   renderSubform() {
-    const fields = { horizontal: HorizontalFields, variance: VarianceField, risk: RiskField, base: BaselineData };
-    if (this.selectedSchema().type === "array") {
+    const fields = {
+      horizontal: HorizontalFields,
+      variance: VarianceField,
+      risk: RiskField,
+      periods: PeriodFinancials,
+      base: BaselineData
+    };
+    if (
+      this.selectedSchema().type === "array" &&
+      !this.selectedSchema().periods
+    ) {
       return (
         <div className="col-md-10">
           <ArraySubform
@@ -118,7 +131,10 @@ export default class ParentForm extends React.Component {
       );
     } else {
       return (
-        <div data-test={`${this.state.selected}_subform`} className="col-md-10 subform">
+        <div
+          data-test={`${this.state.selected}_subform`}
+          className="col-md-10 subform"
+        >
           <Form
             onChange={({ formData }) => {
               this.subformOnChange(formData);

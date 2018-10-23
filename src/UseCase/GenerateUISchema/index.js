@@ -53,6 +53,8 @@ export default class GenerateUISchema {
       ret["items"]["ui:field"] = "risk";
     } else if (value.items.base) {
       ret["items"]["ui:field"] = "base";
+    } else if (value.periods) {
+      ret["ui:field"] = "periods";
     }
 
     return ret;
@@ -73,6 +75,8 @@ export default class GenerateUISchema {
       return { "ui:disabled": true };
     } else if (item.base) {
       return { "ui:field": "base" };
+    } else if (item.periods) {
+      return { "ui:field": "periods" }
     }
   }
 

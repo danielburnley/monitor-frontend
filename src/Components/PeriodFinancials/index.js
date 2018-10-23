@@ -1,30 +1,39 @@
 import React from "react";
+import "./style.css";
+
 
 export default class PeriodFinancials extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      formData: this.props.formData
+    };
   }
 
-  onChange = (name, value) => {
-    this.setState({ [name]: value }, () => this.props.onChange(this.state));
+  onChange = (name, index, value) => {
+    let newFormData = this.state.formData
+    newFormData[index][name] = value
+
+    this.setState({ formData: newFormData }, () => this.props.onChange(this.state.formData));
   };
 
   renderLine(key, item) {
     if (item.readonly) {
-      return this.renderReadOnlyLine(key, item);
+      return this.renderReadOnlyLine(key);
     } else {
-      return this.renderInputLine(key, item);
+      return this.renderInputLine(key);
     }
   }
 
-  renderInputLine(key, item) {
-    return this.props.data.map(column => {
+  renderInputLine(key) {
+    return this.props.formData.map((column, index) => {
       return (
-        <div className="col-sm-1" key={`input-for-${column.period}`}>
+        <div className="col-sm-1" key={`input-${index}-${key}`}>
           <input
-            data-test="age-input"
-            onChange={e => this.onChange(key, e.target.value)}
-            type="text"
+            data-test={`${key}-input`}
+            onChange={e => this.onChange(key, index, e.target.value)}
+            value={this.state.formData[index][key] || ""}
             className="form-control"
           />
         </div>
@@ -33,10 +42,10 @@ export default class PeriodFinancials extends React.Component {
   }
 
   renderReadOnlyLine(key) {
-    return this.props.data.map(columnData => {
+    return this.props.formData.map(columnData => {
       return (
         <div className="col-sm-1" key={`data-${columnData.period}-${key}`}>
-          <p data-test={`${key}-line-data`}>{columnData[key]}</p>
+          <p className="no-wrap" data-test={`${key}-line-data`}>{columnData[key]}</p>
         </div>
       );
     });
@@ -45,7 +54,7 @@ export default class PeriodFinancials extends React.Component {
   renderHeader(title) {
     return (
       <div className="col-sm-2">
-        <p data-test="line-title">
+        <p data-test="line-title" >
           <strong>{title}</strong>
         </p>
       </div>

@@ -562,4 +562,61 @@ describe("<ParentForm>", () => {
       expect(parentForm.find("RiskField").length).toEqual(1);
     });
   });
+
+  describe("Given a schema with a periods field", () => {
+    it("Displays the period field component", () => {
+      let parentForm = mount(
+        <ParentForm
+          onChange={jest.fn()}
+          formData={{
+            cat: [{ period: "12/13", length: "1 year" }, { period: "13/14" }]
+          }}
+          schema={{
+            type: "object",
+            properties: {
+              cat: {
+                type: "array",
+                title: "Lizards",
+                periods: true,
+                items: {
+                  type: "object",
+                  properties: {
+                    period: {
+                      type: "string",
+                      title: "Lizard Type",
+                      readonly: true
+                    },
+                    length: {
+                      type: "string",
+                      title: "How Long",
+                      readonly: true
+                    }
+                  }
+                }
+              },
+              dog: {
+                type: "object",
+                properties: {
+                  name: {
+                    type: "string"
+                  }
+                }
+              }
+            }
+          }}
+          uiSchema={{
+            cat: {
+              "ui:field": "periods",
+              "ui:options": {
+                addable: false,
+                orderable: false,
+                removable: false
+              }
+            }
+          }}
+        />
+      );
+      expect(parentForm.find("PeriodFinancials").length).toEqual(1);
+    });
+  });
 });
