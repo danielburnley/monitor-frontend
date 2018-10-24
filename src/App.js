@@ -36,14 +36,14 @@ import ValidateProject from "./UseCase/ValidateProject";
 import ProjectGateway from "./Gateway/ProjectGateway";
 import ReturnGateway from "./Gateway/ReturnGateway";
 import LocationGateway from "./Gateway/LocationGateway";
-import ApiKeyGateway from "./Gateway/ApiKeyGateway";
+import CookieApiKey from "./Gateway/CookieApiKey";
 import TokenGateway from "./Gateway/TokenGateway";
 
 import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 const tokenGateway = new TokenGateway();
-const apiKeyGateway = new ApiKeyGateway();
+const apiKeyGateway = new CookieApiKey();
 const projectGateway = new ProjectGateway(apiKeyGateway);
 const returnGateway = new ReturnGateway(apiKeyGateway, new LocationGateway(window.location));
 const validateReturnUseCase = new ValidateReturn(returnGateway);
