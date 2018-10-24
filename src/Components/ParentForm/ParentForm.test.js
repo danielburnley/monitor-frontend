@@ -688,7 +688,7 @@ describe("<ParentForm>", () => {
           }}
         />
       );
-      expect(parentForm.find("PeriodFinancials").length).toEqual(1);
+      expect(parentForm.find("PeriodsField").length).toEqual(1);
     });
   });
 });

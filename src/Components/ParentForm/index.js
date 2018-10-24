@@ -10,7 +10,7 @@ import GenerateSidebarItems from "../../UseCase/GenerateSidebarItems";
 import "./style.css";
 import RiskField from "../RiskField";
 import BaselineData from "../BaselineData";
-import PeriodFinancials from "../PeriodFinancials";
+import PeriodsField from "../PeriodsField";
 
 export default class ParentForm extends React.Component {
   constructor(props) {
@@ -122,7 +122,7 @@ export default class ParentForm extends React.Component {
       horizontal: HorizontalFields,
       variance: VarianceField,
       risk: RiskField,
-      periods: PeriodFinancials,
+      periods: PeriodsField,
       base: BaselineData,
       milestone: MilestoneField 
     };
