@@ -412,7 +412,7 @@ describe("GenerateUISchema", () => {
       });
 
       describe("Example two", () => {
-        it("Sets the UI field to risk", () => {
+        it("Sets the UI field to periods", () => {
           let schema = {
             type: "object",
             properties: {
