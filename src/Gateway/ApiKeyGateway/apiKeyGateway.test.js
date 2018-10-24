@@ -1,6 +1,5 @@
-import nock from 'nock';
 import ApiKeyGateway from '.';
-import Cookies from 'universal-cookie';
+import Cookies from 'js-cookie';
 
 describe('Api Key Gateway', () => {
   let cookies = new Cookies();
