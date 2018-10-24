@@ -3,11 +3,14 @@ import ProjectPage from ".";
 import { shallow } from "enzyme";
 
 describe("<ProjectPage>", () => {
-  let page, getProjectSpy, childrenSpy, GenerateReadOnlySchemaSpy, UISchema;
+  let page, getProjectSpy, childrenSpy, generateLADraftSchemaSpy, UISchema;
 
   describe("Example one", () => {
-    let GenerateReadOnlySchemaSpy = {
+    let generateLADraftSchemaSpy = {
       execute: (data, flag) => ({})
+    };
+    let generateUiSchemaSpy = {
+      execute: (data) => ({})
     };
 
     describe("When loading the project", () => {
@@ -53,7 +56,8 @@ describe("<ProjectPage>", () => {
           <ProjectPage
             match={{ params: { id: "2" } }}
             getProject={getProjectSpy}
-            generateReadOnlySchema={GenerateReadOnlySchemaSpy}
+            generateLADraftSchema={generateLADraftSchemaSpy}
+            generateUISchema={generateUiSchemaSpy}
           >
             {childrenSpy}
           </ProjectPage>
@@ -97,18 +101,24 @@ describe("<ProjectPage>", () => {
   });
 
   describe("Example two", () => {
-    let GenerateReadOnlySchemaSpy = {
-      execute: (data, flag) => ({})
+    let generateUiSchemaSpy;
+    let generateLADraftSchemaSpy = {
+      execute: (data, flag) => {}
     };
+
+
     describe("When loading the project", () => {
       beforeEach(() => {
         UISchema = {};
         getProjectSpy = { execute: jest.fn() };
+        generateUiSchemaSpy = { execute: jest.fn() };
+
         page = shallow(
           <ProjectPage
             match={{ params: { id: "2" } }}
             getProject={getProjectSpy}
-            generateReadOnlySchema={GenerateReadOnlySchemaSpy}
+            generateLADraftSchema={generateLADraftSchemaSpy}
+            generateUISchema={generateUiSchemaSpy}
           >
             {() => {}}
           </ProjectPage>
@@ -139,11 +149,16 @@ describe("<ProjectPage>", () => {
 
         childrenSpy = jest.fn();
 
+        generateUiSchemaSpy = {
+          execute: (data) => ({hi: "yes"})
+        };
+
         page = shallow(
           <ProjectPage
             match={{ params: { id: "2" } }}
             getProject={getProjectSpy}
-            generateReadOnlySchema={GenerateReadOnlySchemaSpy}
+            generateLADraftSchema={generateLADraftSchemaSpy}
+            generateUISchema={generateUiSchemaSpy}
           >
             {childrenSpy}
           </ProjectPage>
@@ -174,15 +189,18 @@ describe("<ProjectPage>", () => {
         expect(childrenSpy).toHaveBeenCalledWith({
           projectStatus: "Submitted",
           formData: { woof: false },
-          formUiSchema: {},
           formSchema: { goodbye: "see ya" },
-          projectType: 'ac'
+          projectType: 'ac',
+          formUiSchema: {hi: "yes"}
         });
       });
     });
   });
 
   describe("When project is in LA Draft status", () => {
+    let generateUiSchemaSpy = {
+      execute: (data) => {}
+    };
     describe("Example 1", () => {
       beforeEach(() => {
         getProjectSpy = {
@@ -194,16 +212,18 @@ describe("<ProjectPage>", () => {
             })
         };
 
-        GenerateReadOnlySchemaSpy = {
+        generateLADraftSchemaSpy = {
           execute: (data, flag) => ({ heya: { "ui:disabled": true } })
         };
+        
 
         childrenSpy = jest.fn();
 
         page = shallow(
           <ProjectPage
             match={{ params: { id: "2" } }}
-            generateReadOnlySchema={GenerateReadOnlySchemaSpy}
+            generateUISchema={generateUiSchemaSpy}
+            generateLADraftSchema={generateLADraftSchemaSpy}
             getProject={getProjectSpy}
           >
             {childrenSpy}
@@ -241,7 +261,7 @@ describe("<ProjectPage>", () => {
             })
         };
 
-        GenerateReadOnlySchemaSpy = {
+        generateLADraftSchemaSpy = {
           execute: (data, flag) => ({ bye: { "ui:disabled": true } })
         };
 
@@ -250,7 +270,8 @@ describe("<ProjectPage>", () => {
         page = shallow(
           <ProjectPage
             match={{ params: { id: "2" } }}
-            generateReadOnlySchema={GenerateReadOnlySchemaSpy}
+            generateUISchema={jest.fn()}
+            generateLADraftSchema={generateLADraftSchemaSpy}
             getProject={getProjectSpy}
           >
             {childrenSpy}

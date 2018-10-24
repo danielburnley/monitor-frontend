@@ -21,6 +21,7 @@ import SubmitProject from "./UseCase/SubmitProject";
 import UpdateProject from "./UseCase/UpdateProject";
 import GenerateDisabledUISchema from "./UseCase/GenerateDisabledUISchema";
 import GenerateReadOnlySchema from "./UseCase/GenerateReadOnlySchema";
+import GenerateLADraftSchema from "./UseCase/GenerateLADraftUISchema";
 import GenerateUISchema from "./UseCase/GenerateUISchema";
 import GetBaseReturn from "./UseCase/GetBaseReturn";
 import CanAccessProject from "./UseCase/CanAccessProject";
@@ -54,6 +55,7 @@ const submitProjectUseCase = new SubmitProject(projectGateway);
 const generateDisabledUISchema = new GenerateDisabledUISchema();
 const generateReadOnlySchema = new GenerateReadOnlySchema();
 const generateUISchema = new GenerateUISchema();
+const generateLADraftSchema = new GenerateLADraftSchema(generateUISchema, generateReadOnlySchema);
 const getBaseReturnUseCase = new GetBaseReturn(returnGateway);
 const getProjectUseCase = new GetProject(projectGateway);
 const getReturnUseCase = new GetReturn(returnGateway);
@@ -149,7 +151,7 @@ const renderSubmittedProjectPage = (props, formData, formSchema) => (
 );
 
 const renderProjectPage = props => (
-  <ProjectPage {...props} getProject={getProjectUseCase} generateReadOnlySchema={generateReadOnlySchema}>
+  <ProjectPage {...props} getProject={getProjectUseCase} generateUISchema={generateUISchema} generateLADraftSchema={generateLADraftSchema}>
     {({ projectStatus, formData, formSchema, projectType, formUiSchema }) => {
       if (projectStatus === "Draft" || projectStatus === "LA Draft") {
         return renderNewProjectPage(props, projectStatus, formData, formSchema, projectType, formUiSchema);
