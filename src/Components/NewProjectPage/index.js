@@ -131,7 +131,7 @@ export default class NewProjectPage extends React.Component {
         </div>
       );
     } else {
-      return (                
+      return (
         <div>
           <ValidationMessage
             valid={this.state.valid}
@@ -174,7 +174,12 @@ export default class NewProjectPage extends React.Component {
 
 
   render() {
-    return <div className="container-fluid">{this.renderSuccessOrForm()}</div>;
+    return (
+      <div className="container-fluid">
+        <h2>Baseline editor</h2>
+        { this.renderSuccessOrForm() }
+      </div>
+    );
   }
 }
 
