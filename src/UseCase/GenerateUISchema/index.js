@@ -55,6 +55,8 @@ export default class GenerateUISchema {
       ret["items"]["ui:field"] = "base";
     } else if (value.periods) {
       ret["ui:field"] = "periods";
+    } else if (value.items.milestone) {
+      ret["items"]["ui:field"] = "milestone"
     }
 
     return ret;
@@ -69,15 +71,33 @@ export default class GenerateUISchema {
   }
 
   generateSchemaForItem(item) {
-    if (item.hidden) {
-      return { "ui:widget": "hidden" };
-    } else if (item.readonly) {
-      return { "ui:disabled": true };
-    } else if (item.base) {
-      return { "ui:field": "base" };
-    } else if (item.periods) {
-      return { "ui:field": "periods" }
+    let schema = {}
+
+    if(item.extendedText) {
+      schema["ui:widget"] = "textarea"
     }
+
+    if (item.hidden) {
+      schema["ui:widget"] = "hidden"
+    }
+
+    if (item.readonly) {
+      schema["ui:disabled"] = true
+    }
+
+    if (item.base) {
+      schema["ui:field"] = "base"
+    }
+
+    if(item.periods) {
+      schema["ui:field"] = "periods"
+    }
+
+    if(Object.keys(schema).length === 0) {
+      return undefined
+    }
+
+    return schema;
   }
 
   isAddableArray(arr) {
@@ -97,6 +117,9 @@ export default class GenerateUISchema {
     }
     if (obj.base) {
       return "base";
+    }
+    if (obj.milestone) {
+      return "milestone";
     }
   }
 }

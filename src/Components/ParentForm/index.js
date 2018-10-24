@@ -5,6 +5,7 @@ import ArraySubform from "../ArraySubform";
 import Sidebar from "../Sidebar";
 import HorizontalFields from "../HorizontalFields";
 import VarianceField from "../VarianceField";
+import MilestoneField from "../MilestoneField";
 import GenerateSidebarItems from "../../UseCase/GenerateSidebarItems";
 import "./style.css";
 import RiskField from "../RiskField";
@@ -96,18 +97,37 @@ export default class ParentForm extends React.Component {
     return this.props.schema.properties[this.state.selected];
   }
 
+  selectedUiSchema() {
+    if (!this.props.uiSchema) {
+      return {};
+    }
+
+    if (this.nonPeriodArray()) {
+      return this.props.uiSchema[this.state.selected]
+        ? this.props.uiSchema[this.state.selected].items
+        : {};
+    } else {
+      return this.props.uiSchema[this.state.selected]
+        ? this.props.uiSchema[this.state.selected]
+        : {};
+    }
+  }
+
+  nonPeriodArray() {
+    return this.selectedSchema().type === "array" && !this.selectedSchema().periods
+  }
+
   renderSubform() {
     const fields = {
       horizontal: HorizontalFields,
       variance: VarianceField,
       risk: RiskField,
       periods: PeriodFinancials,
-      base: BaselineData
+      base: BaselineData,
+      milestone: MilestoneField 
     };
-    if (
-      this.selectedSchema().type === "array" &&
-      !this.selectedSchema().periods
-    ) {
+    
+    if (this.nonPeriodArray()) {
       return (
         <div className="col-md-10">
           <ArraySubform
@@ -121,32 +141,24 @@ export default class ParentForm extends React.Component {
             selectedFormSection={this.state.selectedFormSection}
             selectedIndex={this.state.selectedFormItemIndex}
             schema={this.props.schema.properties[this.state.selected]}
-            uiSchema={
-              this.props.uiSchema
-                ? this.props.uiSchema[this.state.selected].items
-                : {}
-            }
+            uiSchema={this.selectedUiSchema()}
           />
         </div>
       );
     } else {
       return (
         <div
-          data-test={`${this.state.selected}_subform`}
           className="col-md-10 subform"
         >
           <Form
+            data-test={`${this.state.selected}_subform`}
             onChange={({ formData }) => {
               this.subformOnChange(formData);
             }}
             formData={this.state.formData[this.state.selected]}
             fields={fields}
             schema={this.props.schema.properties[this.state.selected]}
-            uiSchema={
-              this.props.uiSchema
-                ? this.props.uiSchema[this.state.selected]
-                : {}
-            }
+            uiSchema={this.selectedUiSchema()}
           >
             <div />
           </Form>

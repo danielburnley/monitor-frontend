@@ -526,6 +526,77 @@ describe("<ParentForm>", () => {
     });
   });
 
+  describe("Given no uiSchema for the selected item", () => {
+    describe("With an array selected", () => {
+      it("Passes an empty uischema to the subform", () => {
+        let parentForm = shallow(
+          <ParentForm
+            onChange={jest.fn()}
+            schema={{
+              type: "object",
+              properties: {
+                cat: {
+                  title: "cat",
+                  type: "array",
+                  items: {
+                    type: "object",
+                    properties: {
+                      details: {
+                        type: "object",
+                        properties: {
+                          name: { type: "string" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }}
+            formData={{ cat: [{ details: { name: "Meow" } }] }}
+            uiSchema={{ dog: { items: { a: "b" } } }}
+            onChange={() => {}}
+          />
+        );
+
+        let subform = parentForm.find(ArraySubform);
+        expect(subform.props().uiSchema).toEqual({});
+      });
+    });
+
+    describe("With an object selected", () => {
+      it("Passes an empty uischema to the subform", () => {
+        let parentForm = shallow(
+          <ParentForm
+            onChange={jest.fn()}
+            schema={{
+              type: "object",
+              properties: {
+                cat: {
+                  title: "cat",
+                  type: "object",
+                  properties: {
+                    details: {
+                      type: "object",
+                      properties: {
+                        name: { type: "string" }
+                      }
+                    }
+                  }
+                }
+              }
+            }}
+            formData={{ cat: [{ details: { name: "Meow" } }] }}
+            uiSchema={{ dog: { items: { a: "b" } } }}
+            onChange={() => {}}
+          />
+        );
+
+        let subform = parentForm.find({'data-test': 'cat_subform'});
+        expect(subform.props().uiSchema).toEqual({});
+      });
+    });
+  });
+
   describe("Given a schema with a risk field", () => {
     it("Displays the risk field component", () => {
       let parentForm = mount(
@@ -606,6 +677,7 @@ describe("<ParentForm>", () => {
           }}
           uiSchema={{
             cat: {
+              items: {},
               "ui:field": "periods",
               "ui:options": {
                 addable: false,

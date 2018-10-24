@@ -8,13 +8,19 @@ export default class ProjectPage extends React.Component {
   }
 
   presentProject = async projectData => {
+    let uiSchema = {}
+    if(projectData.status==="LA Draft") {
+      uiSchema = this.props.generateReadOnlySchema.execute(projectData.schema, 'laReadOnly');
+    }
+
     await this.setState({
       loading: false,
       formData: projectData.data,
       formSchema: projectData.schema,
+      formUiSchema: uiSchema,
       projectStatus: projectData.status
     });
-  };
+  };    
 
   presentProjectNotFound = async () => {};
 
@@ -44,7 +50,8 @@ export default class ProjectPage extends React.Component {
         {this.props.children({
           projectStatus: this.state.projectStatus,
           formData: this.state.formData,
-          formSchema: this.state.formSchema
+          formSchema: this.state.formSchema,
+          formUiSchema: this.state.formUiSchema
         })}
       </div>
     );

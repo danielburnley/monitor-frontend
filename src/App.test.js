@@ -1,6 +1,7 @@
 import APISimulator from "../test/ApiSimulator";
 import AppPage from "../test/AppPage";
 import nock from "nock";
+import { watchFile } from "fs";
 
 let projectSchema = {
   title: "Cat Return",
@@ -284,8 +285,8 @@ describe('Submitting a draft project', () => {
   beforeEach(() => {
     process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
     api = new APISimulator("http://cat.meow");
-    api.getProject(projectSchema, draftProjectData, "Draft").successfully();
-    api.getProject(projectSchema, draftProjectData, "Draft").successfully();
+    api.getProject(projectSchema, draftProjectData, "LA Draft").successfully();
+    api.getProject(projectSchema, draftProjectData, "LA Draft").successfully();
     api.updateProject(submittedProjectData, 0).successfully();
     api.submitProject(0).successfully();
   });
@@ -293,7 +294,6 @@ describe('Submitting a draft project', () => {
   afterEach(() => {
     nock.cleanAll();
   });
-
   
   it('Allows you to edit, save and submit a draft project', async () => {
     let page = new AppPage("/project/0");
@@ -351,6 +351,108 @@ describe('Submitting a draft project', () => {
     page.find('[data-test="submit-project-button"]').simulate("click");
     await page.load();
     expect(page.find('[data-test="validationError"]').length).toEqual(1);
+  });
+});
+
+describe("Submitting an initial draft to then fully populate and submit", () => {
+  let api;
+  let emptyData = { };
+  let initiallySubmittedData = {
+    summary: {
+      noise: "This noise is locked down"
+    }
+  }
+  let validResponse = {
+    valid: true,
+    invalidPaths: [],
+    prettyInvalidPaths: []
+  }
+  let draftProjectSchema = {
+    title: "Cat Return",
+    type: "object",
+    properties: {
+      summary: {
+        type: "object",
+        title: "Cats",
+        properties: {
+          noise: { type: "string", title: "Noise" },
+          description: { type: "string", title: "Description" },
+          toes: { type: "string", title: "Toes" }
+        }
+      }
+    }
+  }
+
+  beforeEach(() => {
+    process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
+    api = new APISimulator("http://cat.meow");
+  });
+
+  afterEach(() => {
+    nock.cleanAll();
+  });
+  it('Allows you to initially submit a draft project', async () => {
+    api.getProject(projectSchema, emptyData, "Draft").successfully();
+    api.getProject(projectSchema, emptyData, "Draft").successfully();
+    api.updateProject(initiallySubmittedData, 0).successfully();
+    api.submitProject(0).successfully();
+    let page = new AppPage("/project/0");
+
+    await page.load();
+
+    page.find("input[type='text']").at(0).simulate('change', { target: { value: 'This noise is locked down'}})
+
+    await page.load();
+
+    page.find('[data-test="submit-project-button"]').simulate("click");
+    await page.load();
+    expect(page.find('[data-test="project-initial-create-success"]').length).toEqual(1);
+  });
+
+  it('Allows you to submit a project in LA Draft state', async () => {
+    draftProjectSchema = {
+      title: "Cat Return",
+      type: "object",
+      properties: {
+        summary: {
+          type: "object",
+          title: "Cats",
+          properties: {
+            noise: { laReadOnly: true, type: "string", title: "Noise" },
+            description: { type: "string", title: "Description" },
+            toes: { type: "string", title: "Toes" }
+          }
+        }
+      }
+    }
+
+    let LAsubmittedProjectData = {
+      summary: {
+        noise: "This noise is locked down",
+        description: "cat",
+        toes: "cat"
+      }
+    }
+
+    api.getProject(draftProjectSchema, initiallySubmittedData, "LA Draft").successfully();
+    api.getProject(draftProjectSchema, initiallySubmittedData, "LA Draft").successfully();
+    api.validateProject(0, "hif", LAsubmittedProjectData, validResponse).successfully();
+    api.updateProject(LAsubmittedProjectData,0).successfully();
+    api.submitProject(0).successfully();
+
+    let page = new AppPage("/project/0");
+
+    await page.load();
+
+    page.find("input[type='text']").at(1).simulate('change', { target: { value: 'cat'}})
+    page.find("input[type='text']").at(2).simulate('change', { target: { value: 'cat'}})
+
+    await page.load();
+
+
+    page.find('[data-test="submit-project-button"]').simulate("click");
+    await page.load();
+    expect(page.find('[data-test="project-create-success"]').length).toEqual(1);
   });
 });
 
