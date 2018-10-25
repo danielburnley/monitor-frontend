@@ -42,10 +42,11 @@ import TokenGateway from "./Gateway/TokenGateway";
 import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
+const locationGateway = new LocationGateway(window.location);
 const tokenGateway = new TokenGateway();
 const apiKeyGateway = new CookieApiKey();
-const projectGateway = new ProjectGateway(apiKeyGateway);
-const returnGateway = new ReturnGateway(apiKeyGateway, new LocationGateway(window.location));
+const projectGateway = new ProjectGateway(apiKeyGateway, locationGateway);
+const returnGateway = new ReturnGateway(apiKeyGateway, locationGateway);
 const validateReturnUseCase = new ValidateReturn(returnGateway);
 const validateProjectUseCase = new ValidateProject(projectGateway);
 const createReturnUseCase = new CreateReturn(returnGateway);

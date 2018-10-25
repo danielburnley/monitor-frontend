@@ -170,20 +170,25 @@ describe("Project Gateway", () => {
 
   describe("Submit", () => {
     describe("Example 1", () => {
-      let gateway, apiKeyGateway;
+      let gateway, apiKeyGateway, locationGateway;
 
       beforeEach(async () => {
         apiKeyGateway = {
           getApiKey: jest.fn(() => ({ apiKey: "superSecret" }))
         };
+
+        locationGateway = {
+          getRoot: jest.fn(async () => "https://ducks.quack")
+        }
+
         process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
-        gateway = new ProjectGateway(apiKeyGateway);
+        gateway = new ProjectGateway(apiKeyGateway, locationGateway);
       });
 
       it("Submits the data to the API", async () => {
         let submitProjectRequest = nock("http://cat.meow")
           .matchHeader("Content-Type", "application/json")
-          .post("/project/submit", { project_id: 1 })
+          .post("/project/submit", { url: 'https://ducks.quack/project/1', project_id: 1 })
           .reply(200);
         await gateway.submit(1);
 
@@ -193,7 +198,7 @@ describe("Project Gateway", () => {
       it("Returns successful", async () => {
         nock("http://cat.meow")
           .matchHeader("Content-Type", "application/json")
-          .post("/project/submit", { project_id: 3 })
+          .post("/project/submit", { url: 'https://ducks.quack/project/3', project_id: 3 })
           .reply(200);
         let response = await gateway.submit(3);
 
@@ -201,20 +206,25 @@ describe("Project Gateway", () => {
       });
     });
     describe("Example 2", () => {
-      let gateway, apiKeyGateway;
+      let gateway, apiKeyGateway, locationGateway;
 
       beforeEach(async () => {
         apiKeyGateway = {
           getApiKey: jest.fn(() => ({ apiKey: "superSecret" }))
         };
+
+        locationGateway = {
+          getRoot: jest.fn(async () => "https://dog.woof")
+        }
+
         process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
-        gateway = new ProjectGateway(apiKeyGateway);
+        gateway = new ProjectGateway(apiKeyGateway, locationGateway);
       });
 
       it("Submits the data to the API", async () => {
         let submitProjectRequest = nock("http://cat.meow")
           .matchHeader("Content-Type", "application/json")
-          .post("/project/submit", { project_id: 7 })
+          .post("/project/submit", { url: 'https://dog.woof/project/7', project_id: 7 })
           .reply(200);
         await gateway.submit(7);
 
@@ -224,7 +234,7 @@ describe("Project Gateway", () => {
       it("Returns successful", async () => {
         nock("http://cat.meow")
           .matchHeader("Content-Type", "application/json")
-          .post("/project/submit", { project_id: 28 })
+          .post("/project/submit", { url: 'https://dog.woof/project/28', project_id: 28 })
           .reply(200);
         let response = await gateway.submit(28);
         expect(response).toEqual({ success: true });

@@ -43,7 +43,7 @@ class APISimulator {
     let response = { };
     let projectRequest = nock(this.url)
       .matchHeader("Content-Type", "application/json")
-      .post("/project/submit", {project_id: ""+project_id});
+      .post("/project/submit", { url: `${window.location.origin}/project/${project_id}`, project_id: ""+project_id});
 
     return new APIResponse(projectRequest, response);
   }
