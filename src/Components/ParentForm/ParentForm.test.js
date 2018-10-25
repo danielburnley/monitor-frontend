@@ -635,47 +635,65 @@ describe("<ParentForm>", () => {
   });
 
   describe("Given a schema with a periods field", () => {
-    
     fit("Displays the period field component", () => {
       let uiSchema = {
-        one: { 
-          items: {},
-          "ui:field": "periods",
-          "ui:options": {
-            addable: false,
-            orderables: false,
-            removable: false
+        one: {
+          items: {
+            periods: {
+              items: {},
+              "ui:field": "periods",
+              "ui:options": {
+                addable: false,
+                orderables: false,
+                removable: false
+              }
+            }
           }
         }
-      }
+      };
 
       let schema = {
+        type: "object",
         properties: {
           one: {
             type: "array",
             items: {
               type: "object",
               properties: {
-                period: {
-                  type: "string",
-                  title: "Lizard Type",
-                  readonly: true
-                },
-                length: {
-                  type: "string",
-                  title: "How Long",
-                  readonly: true
+                periods: {
+                  type: "array",
+                  items: {
+                    type: "object",
+                    properties: {
+                      period: {
+                        type: "string",
+                        title: "Lizard Type",
+                        readonly: true
+                      },
+                      length: {
+                        type: "string",
+                        title: "How Long",
+                        readonly: true
+                      }
+                    }
+                  }
                 }
               }
             }
           }
         }
-      }
+      };
+
       let data = {
         one: [
-        { period: "scaley", length: "200" },
-        { period: "slivery", length: "567" }
-      ] }
+          {
+            periods: [
+              { period: "scaley", length: "200" },
+              { period: "slivery", length: "567" }
+            ]
+          }
+        ]
+      };
 
       let parentForm = mount(
         <ParentForm
@@ -687,6 +705,5 @@ describe("<ParentForm>", () => {
       );
       expect(parentForm.find("PeriodsField").length).toEqual(1);
     });
-
   });
 });
