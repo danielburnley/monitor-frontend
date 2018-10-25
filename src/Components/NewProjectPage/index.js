@@ -54,6 +54,12 @@ export default class NewProjectPage extends React.Component {
       await this.validateProject();
     }
     
+    await this.props.updateProject.execute(
+      this,
+      this.props.match.params.id,
+      this.state.formData
+    )
+
     if (this.state.valid) {
       await this.props.submitProject.execute(this, this.props.match.params.id);
     } else {
