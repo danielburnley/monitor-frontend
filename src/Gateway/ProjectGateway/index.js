@@ -3,8 +3,9 @@ import fetch from "isomorphic-fetch";
 import runtimeEnv from "@mars/heroku-js-runtime-env";
 
 export default class ProjectGateway {
-  constructor(apiKeyGateway) {
+  constructor(apiKeyGateway, locationGateway) {
     this.apiKeyGateway = apiKeyGateway;
+    this.locationGateway = locationGateway
     this.env = runtimeEnv();
   }
 
@@ -41,6 +42,7 @@ export default class ProjectGateway {
           API_KEY: this.apiKeyGateway.getApiKey().apiKey
         },
         body: JSON.stringify({
+          url: `${await this.locationGateway.getRoot()}/project/${project_id}`,
           project_id
         })
       }

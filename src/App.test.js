@@ -294,7 +294,7 @@ describe('Submitting a draft project', () => {
   afterEach(() => {
     nock.cleanAll();
   });
-  
+
   it('Allows you to edit, save and submit a draft project', async () => {
     let page = new AppPage("/project/0");
     let response = {
