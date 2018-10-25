@@ -102,7 +102,7 @@ export default class ParentForm extends React.Component {
       return {};
     }
 
-    if (this.nonPeriodArray()) {
+    if (this.selectedSchema().type === "array" ) {
       return this.props.uiSchema[this.state.selected]
         ? this.props.uiSchema[this.state.selected].items
         : {};
@@ -111,10 +111,6 @@ export default class ParentForm extends React.Component {
         ? this.props.uiSchema[this.state.selected]
         : {};
     }
-  }
-
-  nonPeriodArray() {
-    return this.selectedSchema().type === "array" && !this.selectedSchema().periods
   }
 
   renderSubform() {
@@ -127,14 +123,14 @@ export default class ParentForm extends React.Component {
       milestone: MilestoneField 
     };
     
-    if (this.nonPeriodArray()) {
+    if (this.selectedSchema().type === "array" ) {
       return (
         <div className="col-md-10">
           <ArraySubform
             data-test={`${this.state.selected}_subform`}
             key={`${this.state.selected}_subform`}
             onChange={formData => {
-              this.subformOnChange(formData);
+              this.subfosrmOnChange(formData);
             }}
             data={this.state.formData[this.state.selected]}
             fields={fields}

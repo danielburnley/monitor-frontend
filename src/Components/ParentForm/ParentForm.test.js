@@ -591,7 +591,7 @@ describe("<ParentForm>", () => {
           />
         );
 
-        let subform = parentForm.find({'data-test': 'cat_subform'});
+        let subform = parentForm.find({ "data-test": "cat_subform" });
         expect(subform.props().uiSchema).toEqual({});
       });
     });
@@ -635,60 +635,58 @@ describe("<ParentForm>", () => {
   });
 
   describe("Given a schema with a periods field", () => {
-    it("Displays the period field component", () => {
+    
+    fit("Displays the period field component", () => {
+      let uiSchema = {
+        one: { 
+          items: {},
+          "ui:field": "periods",
+          "ui:options": {
+            addable: false,
+            orderables: false,
+            removable: false
+          }
+        }
+      }
+
+      let schema = {
+        properties: {
+          one: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                period: {
+                  type: "string",
+                  title: "Lizard Type",
+                  readonly: true
+                },
+                length: {
+                  type: "string",
+                  title: "How Long",
+                  readonly: true
+                }
+              }
+            }
+          }
+        }
+      }
+      let data = {
+        one: [
+        { period: "scaley", length: "200" },
+        { period: "slivery", length: "567" }
+      ] }
+
       let parentForm = mount(
         <ParentForm
           onChange={jest.fn()}
-          formData={{
-            cat: [{ period: "12/13", length: "1 year" }, { period: "13/14" }]
-          }}
-          schema={{
-            type: "object",
-            properties: {
-              cat: {
-                type: "array",
-                title: "Lizards",
-                periods: true,
-                items: {
-                  type: "object",
-                  properties: {
-                    period: {
-                      type: "string",
-                      title: "Lizard Type",
-                      readonly: true
-                    },
-                    length: {
-                      type: "string",
-                      title: "How Long",
-                      readonly: true
-                    }
-                  }
-                }
-              },
-              dog: {
-                type: "object",
-                properties: {
-                  name: {
-                    type: "string"
-                  }
-                }
-              }
-            }
-          }}
-          uiSchema={{
-            cat: {
-              items: {},
-              "ui:field": "periods",
-              "ui:options": {
-                addable: false,
-                orderable: false,
-                removable: false
-              }
-            }
-          }}
+          formData={data}
+          schema={schema}
+          uiSchema={uiSchema}
         />
       );
       expect(parentForm.find("PeriodsField").length).toEqual(1);
     });
+
   });
 });
