@@ -130,7 +130,7 @@ export default class ParentForm extends React.Component {
             data-test={`${this.state.selected}_subform`}
             key={`${this.state.selected}_subform`}
             onChange={formData => {
-              this.subfosrmOnChange(formData);
+              this.subformOnChange(formData);
             }}
             data={this.state.formData[this.state.selected]}
             fields={fields}

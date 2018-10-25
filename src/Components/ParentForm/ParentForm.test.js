@@ -635,7 +635,7 @@ describe("<ParentForm>", () => {
   });
 
   describe("Given a schema with a periods field", () => {
-    fit("Displays the period field component", () => {
+    it("Displays the period field component", () => {
       let uiSchema = {
         one: {
           items: {

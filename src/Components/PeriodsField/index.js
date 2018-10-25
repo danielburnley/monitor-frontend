@@ -1,7 +1,6 @@
 import React from "react";
 import "./style.css";
 
-
 export default class PeriodsField extends React.Component {
   constructor(props) {
     super(props);
@@ -12,10 +11,12 @@ export default class PeriodsField extends React.Component {
   }
 
   onChange = (name, index, value) => {
-    let newFormData = this.state.formData
-    newFormData[index][name] = value
+    let newFormData = this.state.formData;
+    newFormData[index][name] = value;
 
-    this.setState({ formData: newFormData }, () => this.props.onChange(this.state.formData));
+    this.setState({ formData: newFormData }, () =>
+      this.props.onChange(this.state.formData)
+    );
   };
 
   renderLine(key, item) {
@@ -45,7 +46,9 @@ export default class PeriodsField extends React.Component {
     return this.props.formData.map(columnData => {
       return (
         <div className="col-sm-1" key={`data-${columnData.period}-${key}`}>
-          <p className="no-wrap" data-test={`${key}-line-data`}>{columnData[key]}</p>
+          <p className="no-wrap" data-test={`${key}-line-data`}>
+            {columnData[key]}
+          </p>
         </div>
       );
     });
@@ -54,7 +57,7 @@ export default class PeriodsField extends React.Component {
   renderHeader(title) {
     return (
       <div className="col-sm-2">
-        <p data-test="line-title" >
+        <p data-test="line-title">
           <strong>{title}</strong>
         </p>
       </div>
@@ -68,9 +71,8 @@ export default class PeriodsField extends React.Component {
           ([key, value]) => {
             return (
               <div key={`${key}`}>
-                <div className="row" />
-                {this.renderHeader(value.title)}
-                {this.renderLine(key, value)}
+                <div className="row">{this.renderHeader(value.title)}</div>
+                <div className="row">{this.renderLine(key, value)}</div>
               </div>
             );
           }
