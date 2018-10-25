@@ -5,20 +5,28 @@ export default class GenerateLADraftUISchema {
   }
 
   execute(schema) {
-    let uischemaOne = this.generateUISchema1.execute(schema);
-    let uischemaTwo = this.generateUISchema2.execute(schema, 'laReadOnly');
+    let uiSchema = this.generateUISchema1.execute(schema);
 
-    return this.mergeUISchema(schema, uischemaOne, uischemaTwo);
+  
+    if (state !== "LA Draft") {
+      return uiSchema
+    }
+
+    let readOnlyUISchema = this.generateReadOnlyUISchema.execute(schema, 'laReadOnly');
+
+    return this.mergeUISchema(schema, readOnlyUISchema, uiSchema);
   }
+
   
   mergeUISchema(schema, UIschema1, UIschema2) {
     let uiSchema = {};
-    if (UIschema1 === undefined) return UIschema2;
-    if (UIschema2 === undefined) return UIschema1;
+    if (!UIschema1) return UIschema2;
+    if (!UIschema2) return UIschema1;
+
 
     Object.entries(schema).map(([key, value]) => {
       if (value.type === "array") {
-        uiSchema[key] = this.generateUISchemaForArray(
+        uiSchema[key] = this.mergeUISchemaForArray(
           value,
           UIschema1[key],
           UIschema2[key]
@@ -36,9 +44,10 @@ export default class GenerateLADraftUISchema {
     return uiSchema;
   }
 
-  generateUISchemaForArray(schema, UIschema1, UIschema2) {
+  mergeUISchemaForArray(schema, UIschema1, UIschema2) {
     let uiSchema = {};
 
+    let parentUISchema = this.mergeObjects(UIschema1, UIschema2);
     let uiItemsProperties = this.mergeObjects(
       UIschema1["items"],
       UIschema2["items"]
@@ -49,8 +58,9 @@ export default class GenerateLADraftUISchema {
       UIschema2["items"]
     );
 
-    uiSchema = {
-      items: this.mergeObjects(uiChildProperties, uiItemsProperties)
+  
+    let itemsUISchema = {
+      items: this.mergeObjects(uiItemsProperties, uiChildProperties)
     };
 
     uiSchema["ui:options"] = {
@@ -62,7 +72,8 @@ export default class GenerateLADraftUISchema {
         UIschema1["ui:options"].removable || UIschema2["ui:options"].removable
     };
 
-    return uiSchema;
+
+    return this.mergeObjects(parentUISchema, itemsUISchema)
   }
 
   mergeObjects(one, two) {

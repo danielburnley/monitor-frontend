@@ -3,19 +3,16 @@ import ProjectPage from ".";
 import { shallow } from "enzyme";
 
 describe("<ProjectPage>", () => {
-  let page, getProjectSpy, childrenSpy, generateLADraftSchemaSpy, UISchema;
+  let page, getProjectSpy, childrenSpy, generateNewProjectUISchemaSpy, UISchema;
 
   describe("Example one", () => {
-    let generateLADraftSchemaSpy = {
-      execute: (data, flag) => ({})
-    };
-    let generateUiSchemaSpy = {
-      execute: (data) => ({})
-    };
 
     describe("When loading the project", () => {
       beforeEach(() => {
         getProjectSpy = { execute: jest.fn() };
+        generateNewProjectUISchemaSpy = {
+          execute: (data, flag) => ({})
+        }
         page = shallow(
           <ProjectPage
             match={{ params: { id: "1" } }}
@@ -40,6 +37,9 @@ describe("<ProjectPage>", () => {
     describe("When the project is loaded and is of status draft", () => {
       beforeEach(() => {
         UISchema = {};
+        generateNewProjectUISchemaSpy = {
+          execute: (data, flag) => ({})
+        }
 
         getProjectSpy = {
           execute: (presenter, _) =>
@@ -56,8 +56,7 @@ describe("<ProjectPage>", () => {
           <ProjectPage
             match={{ params: { id: "2" } }}
             getProject={getProjectSpy}
-            generateLADraftSchema={generateLADraftSchemaSpy}
-            generateUISchema={generateUiSchemaSpy}
+            generateUISchema={generateNewProjectUISchemaSpy}
           >
             {childrenSpy}
           </ProjectPage>
@@ -101,24 +100,23 @@ describe("<ProjectPage>", () => {
   });
 
   describe("Example two", () => {
-    let generateUiSchemaSpy;
-    let generateLADraftSchemaSpy = {
-      execute: (data, flag) => {}
-    };
+    
 
 
     describe("When loading the project", () => {
       beforeEach(() => {
         UISchema = {};
         getProjectSpy = { execute: jest.fn() };
-        generateUiSchemaSpy = { execute: jest.fn() };
+
+        generateNewProjectUISchemaSpy = {
+          execute: jest.fn()
+        };
 
         page = shallow(
           <ProjectPage
             match={{ params: { id: "2" } }}
             getProject={getProjectSpy}
-            generateLADraftSchema={generateLADraftSchemaSpy}
-            generateUISchema={generateUiSchemaSpy}
+            generateUISchema={generateNewProjectUISchemaSpy}
           >
             {() => {}}
           </ProjectPage>
@@ -149,7 +147,7 @@ describe("<ProjectPage>", () => {
 
         childrenSpy = jest.fn();
 
-        generateUiSchemaSpy = {
+        generateNewProjectUISchemaSpy = {
           execute: (data) => ({hi: "yes"})
         };
 
@@ -157,8 +155,7 @@ describe("<ProjectPage>", () => {
           <ProjectPage
             match={{ params: { id: "2" } }}
             getProject={getProjectSpy}
-            generateLADraftSchema={generateLADraftSchemaSpy}
-            generateUISchema={generateUiSchemaSpy}
+            generateUISchema={generateNewProjectUISchemaSpy}
           >
             {childrenSpy}
           </ProjectPage>
@@ -198,9 +195,7 @@ describe("<ProjectPage>", () => {
   });
 
   describe("When project is in LA Draft status", () => {
-    let generateUiSchemaSpy = {
-      execute: (data) => {}
-    };
+
     describe("Example 1", () => {
       beforeEach(() => {
         getProjectSpy = {
@@ -212,7 +207,7 @@ describe("<ProjectPage>", () => {
             })
         };
 
-        generateLADraftSchemaSpy = {
+        generateNewProjectUISchemaSpy = {
           execute: (data, flag) => ({ heya: { "ui:disabled": true } })
         };
         
@@ -222,8 +217,7 @@ describe("<ProjectPage>", () => {
         page = shallow(
           <ProjectPage
             match={{ params: { id: "2" } }}
-            generateUISchema={generateUiSchemaSpy}
-            generateLADraftSchema={generateLADraftSchemaSpy}
+            generateUISchema={generateNewProjectUISchemaSpy}
             getProject={getProjectSpy}
           >
             {childrenSpy}
@@ -261,7 +255,7 @@ describe("<ProjectPage>", () => {
             })
         };
 
-        generateLADraftSchemaSpy = {
+        generateNewProjectUISchemaSpy = {
           execute: (data, flag) => ({ bye: { "ui:disabled": true } })
         };
 
@@ -270,8 +264,7 @@ describe("<ProjectPage>", () => {
         page = shallow(
           <ProjectPage
             match={{ params: { id: "2" } }}
-            generateUISchema={jest.fn()}
-            generateLADraftSchema={generateLADraftSchemaSpy}
+            generateUISchema={generateNewProjectUISchemaSpy}
             getProject={getProjectSpy}
           >
             {childrenSpy}
