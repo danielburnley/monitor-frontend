@@ -1,4 +1,4 @@
-import GenerateLADraftUISchema from ".";
+import GenerateNewProjectUISchema from ".";
 
 describe("GenerateNewProjectSchema", () => {
   describe("Generating LA Draft UI Schema", () => {

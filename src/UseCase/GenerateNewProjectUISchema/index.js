@@ -1,11 +1,11 @@
-export default class GenerateLADraftUISchema {
+export default class GenerateNewProjectUISchema {
   constructor(generateUISchema, generateReadOnlySchema) {
-    this.generateUISchema1 = generateUISchema;
-    this.generateUISchema2 = generateReadOnlySchema;
+    this.generateUISchema = generateUISchema;
+    this.generateReadOnlyUISchema = generateReadOnlySchema;
   }
 
-  execute(schema) {
-    let uiSchema = this.generateUISchema1.execute(schema);
+  execute(schema, state) {
+    let uiSchema = this.generateUISchema.execute(schema);
 
   
     if (state !== "LA Draft") {
@@ -39,6 +39,9 @@ export default class GenerateLADraftUISchema {
         );
       } else {
         uiSchema[key] = this.mergeObjects(UIschema1[key], UIschema2[key]);
+        if (Object.keys(uiSchema[key]).length === 0) {
+          uiSchema[key] = undefined
+        }
       }
     });
     return uiSchema;
