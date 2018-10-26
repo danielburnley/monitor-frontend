@@ -5,19 +5,15 @@ export default class VarianceField extends React.Component {
   constructor(props) {
     super(props);
 
-    this.setupInitialState(props.formData);
-  }
-
-  setupInitialState = formData => {
     this.state = {
-      baseline: formData.baseline,
-      percentComplete: formData.percentComplete,
-      status: formData.status || "On schedule",
-      current: formData.current,
-      reason: formData.reason,
-      completedDate: formData.completedDate
+      baseline: props.formData.baseline,
+      percentComplete: props.formData.percentComplete,
+      status: props.formData.status || "On schedule",
+      current: props.formData.current,
+      reason: props.formData.reason,
+      completedDate: props.formData.completedDate
     };
-  };
+  }
 
   onFieldChange = (name, e) => {
     this.setState({ [name]: e.target.value || undefined }, () => {
@@ -91,7 +87,7 @@ export default class VarianceField extends React.Component {
     <div className="form-group">
       <label className="static-label">Baseline</label>
       <p data-test="form-control-static" data-test="target-date">
-        {this.props.formData.baseline}
+        {this.state.baseline}
       </p>
     </div>
   );
@@ -134,8 +130,8 @@ export default class VarianceField extends React.Component {
         {this.renderStatus()}
         {this.renderPercentComplete()}
       </div>
-      {this.state.status == "Delayed" && this.renderDelayed()}
-      {this.state.status == "Completed" && this.renderCompleted()}
+      {this.state.status === "Delayed" && this.renderDelayed()}
+      {this.state.status === "Completed" && this.renderCompleted()}
     </div>
   );
 
