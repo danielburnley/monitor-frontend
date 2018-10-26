@@ -111,14 +111,14 @@ const BackToProjectOverviewButton = props => (
   </button>
 );
 
-const renderNewProjectPage = (props, projectStatus, formData, formSchema, formUiSchema) => (
+const renderNewProjectPage = (props, projectStatus, formData, formSchema, projectType, formUiSchema) => (
   <NewProjectPage
     {...props}
     uiSchema={formUiSchema}
     status={projectStatus}
     schema={formSchema}
     data={formData}
-    projectType={"hif"}
+    projectType={projectType}
     getProject={getProjectUseCase}
     submitProject={submitProjectUseCase}
     updateProject={updateProjectUseCase}
@@ -150,9 +150,9 @@ const renderSubmittedProjectPage = (props, formData, formSchema) => (
 
 const renderProjectPage = props => (
   <ProjectPage {...props} getProject={getProjectUseCase} generateReadOnlySchema={generateReadOnlySchema}>
-    {({ projectStatus, formData, formSchema, formUiSchema }) => {
+    {({ projectStatus, formData, formSchema, projectType, formUiSchema }) => {
       if (projectStatus === "Draft" || projectStatus === "LA Draft") {
-        return renderNewProjectPage(props, projectStatus, formData, formSchema, formUiSchema);
+        return renderNewProjectPage(props, projectStatus, formData, formSchema, projectType, formUiSchema);
       }
       if (projectStatus === "Submitted") {
         return renderSubmittedProjectPage(props, formData, formSchema);

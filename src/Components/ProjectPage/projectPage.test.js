@@ -43,7 +43,8 @@ describe("<ProjectPage>", () => {
             presenter.presentProject({
               data: { meow: true },
               schema: { hello: "hi" },
-              status: "Draft"
+              status: 'Draft',
+              type: 'hif'
             })
         };
         childrenSpy = jest.fn();
@@ -79,12 +80,17 @@ describe("<ProjectPage>", () => {
         expect(page.state().formUiSchema).toEqual({});
       });
 
+      it("Holds the type when the project is presented", () => {
+        expect(page.state().projectType).toEqual('hif');
+      });
+
       it("Renders null", () => {
         expect(childrenSpy).toHaveBeenCalledWith({
           projectStatus: "Draft",
           formData: { meow: true },
           formSchema: { hello: "hi" },
-          formUiSchema: UISchema
+          formUiSchema: UISchema,
+          projectType: 'hif'
         });
       });
     });
@@ -126,7 +132,8 @@ describe("<ProjectPage>", () => {
             presenter.presentProject({
               data: { woof: false },
               schema: { goodbye: "see ya" },
-              status: "Submitted"
+              status: "Submitted",
+              type: 'ac'
             })
         };
 
@@ -159,12 +166,17 @@ describe("<ProjectPage>", () => {
         expect(page.state().projectStatus).toEqual("Submitted");
       });
 
+      it("Holds the projectType when the project is presented", () => {
+        expect(page.state().projectType).toEqual('ac');
+      });
+
       it("Renders the children with the formData and schema populated from the state", () => {
         expect(childrenSpy).toHaveBeenCalledWith({
           projectStatus: "Submitted",
           formData: { woof: false },
+          formUiSchema: {},
           formSchema: { goodbye: "see ya" },
-          formUiSchema: {}
+          projectType: 'ac'
         });
       });
     });

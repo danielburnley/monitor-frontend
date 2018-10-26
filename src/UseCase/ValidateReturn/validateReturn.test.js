@@ -32,7 +32,6 @@ describe('ValidateReturn', () => {
       let data = {
         cats: 'meow'
       }
-
       let useCase = getUseCase(false, ['cats']);
       let project_id = 1;
 

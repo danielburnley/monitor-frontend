@@ -20,7 +20,7 @@ describe("Project Gateway", () => {
             .matchHeader("Content-Type", "application/json")
             .matchHeader("API_KEY", "superSecret")
             .get("/project/find?id=1")
-            .reply(200, { data: { cow: "moo" }, schema: { duck: "quack" } });
+            .reply(200, { data: { cow: "moo" }, schema: { duck: "quack" }, type: 'ac', status: 'Draft'});
           let gateway = new ProjectGateway(apiKeyGateway);
           response = await gateway.findById(1);
         });
@@ -30,11 +30,10 @@ describe("Project Gateway", () => {
         });
 
         it("Projects the response from the api", () => {
-          let project = new Project({ cow: "moo" }, { duck: "quack" });
+          let project = new Project({ cow: "moo" }, { duck: "quack" }, 'Draft', 'ac');
           expect(response).toEqual({
             success: true,
-            foundProject: { data: project.data, schema: project.schema },
-            success: true
+            foundProject: { data: project.data, schema: project.schema, type: project.type, status: project.status}
           });
         });
 
@@ -54,7 +53,7 @@ describe("Project Gateway", () => {
             .matchHeader("Content-Type", "application/json")
             .matchHeader("API_KEY", "extraSecret")
             .get("/project/find?id=5")
-            .reply(200, { data: { dogs: "woof" }, schema: { cats: "meow" } });
+            .reply(200, { data: { dogs: "woof" }, schema: { cats: "meow" }, status: 'Submited', type: 'hif' });
           let gateway = new ProjectGateway(apiKeyGateway);
           response = await gateway.findById(5);
         });
@@ -64,10 +63,10 @@ describe("Project Gateway", () => {
         });
 
         it("Projects the response from the api", () => {
-          let project = new Project({ dogs: "woof" }, { cats: "meow" });
+          let project = new Project({ dogs: "woof" }, { cats: "meow" }, 'Submited', 'hif');
           expect(response).toEqual({
             success: true,
-            foundProject: { data: project.data, schema: project.schema }
+            foundProject: { data: project.data, schema: project.schema, type: project.type, status: project.status }
           });
         });
 
