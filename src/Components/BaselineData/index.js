@@ -42,21 +42,22 @@ export default class BaselineData extends React.Component {
     return Object.entries(obj).map(([key, value]) => {
       let propertySchema = this.findInSchema(schema, key);
       if (propertySchema) {
-        if (propertySchema.type == "object") {
+        if (propertySchema.type === "object") {
           return this.renderObject(key, value, propertySchema);
         } else {
-          if (propertySchema.type == "array") {
+          if (propertySchema.type === "array") {
             return this.renderArray(key, value, propertySchema);
           } else {
             return this.renderItem(key, value, propertySchema);
           }
         }
       }
+      return null;
     });
   };
 
   renderFormData = (obj, schema) => {
-    if (schema.type == "array") {
+    if (schema.type === "array") {
       return obj.map(item => {
         return this.renderFormData(item, schema.items);
       });
