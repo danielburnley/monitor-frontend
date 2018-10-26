@@ -98,9 +98,9 @@ describe("GenerateNewProjectSchema", () => {
               b: {
                 items: { "ui:field": "horizontal" },
                 "ui:options": {
-                  addable: false,
+                  addable: true,
                   orderable: false,
-                  removable: false
+                  removable: true
                 }
               }
             };
@@ -108,17 +108,9 @@ describe("GenerateNewProjectSchema", () => {
         };
         let generateReadOnlySchema = {
           execute: jest.fn((schema, flag) => {
-            return {
-              b: {
-                "ui:options": {
-                  addable: false,
-                  orderable: false,
-                  removable: false
-                }
-              }
-            };
-          })
-        };
+            return {}
+            })
+          };
         let generateNewProjectUISchema = new GenerateNewProjectUISchema(
           generateUISchema,
           generateReadOnlySchema
@@ -127,9 +119,9 @@ describe("GenerateNewProjectSchema", () => {
           expect(generateNewProjectUISchema.execute(schema, "LA Draft")).toEqual({
             b: {
               "ui:options": {
-                addable: false,
+                addable: true,
                 orderable: false,
-                removable: false
+                removable: true
               },
               items: { "ui:field": "horizontal" }
             }
@@ -162,9 +154,9 @@ describe("GenerateNewProjectSchema", () => {
             return {
               a: {
                 "ui:options": {
-                  addable: false,
+                  addable: true,
                   orderable: false,
-                  removable: false
+                  removable: true
                 },
                 items: {
                   "ui:field": "horizontal",
@@ -215,6 +207,7 @@ describe("GenerateNewProjectSchema", () => {
           });
         });
       });
+
     });
     describe("With a nested object", () => {
       describe("Example 1", () => {
