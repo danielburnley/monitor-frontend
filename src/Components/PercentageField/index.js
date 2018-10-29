@@ -5,7 +5,7 @@ export default class PercentageField extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: '0'
+      value: this.props.value
     }
   }
 
