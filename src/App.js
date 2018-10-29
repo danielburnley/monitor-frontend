@@ -128,7 +128,6 @@ const renderNewProjectPage = (props, projectStatus, formData, formSchema, projec
     submitProject={submitProjectUseCase}
     updateProject={updateProjectUseCase}
     validateProject={validateProjectUseCase}
-    generateUISchema={generateDisabledUISchema}
     documentGateway={documentGateway}
   />
 );
