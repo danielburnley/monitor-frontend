@@ -11,6 +11,7 @@ import "./style.css";
 import RiskField from "../RiskField";
 import BaselineData from "../BaselineData";
 import PeriodsField from "../PeriodsField";
+import CurrencyField from "../CurrencyField";
 
 export default class ParentForm extends React.Component {
   constructor(props) {
@@ -120,7 +121,8 @@ export default class ParentForm extends React.Component {
       risk: RiskField,
       periods: PeriodsField,
       base: BaselineData,
-      milestone: MilestoneField 
+      milestone: MilestoneField,
+      currency: CurrencyField
     };
     
     if (this.selectedSchema().type === "array" ) {

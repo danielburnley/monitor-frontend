@@ -890,4 +890,117 @@ describe("GenerateUISchema", () => {
       });
     });
   });
+
+  describe("With Currency Symobols", () => {
+      describe("In an object", () => {
+        describe("Example one", () => {
+          it("Marks the field as a currency field", () => {
+            let schema = {
+              type: "object",
+              properties: {
+                a: {
+                  type: "object",
+                  properties: {
+                    b: { type: "string", currency: true }
+                  }
+                }
+              }
+            };
+            let response = useCase.execute(schema);
+            expect(response).toEqual({
+              a: { b: { "ui:field": "currency" } }
+            });
+          });
+        });
+  
+        describe("Example two", () => {
+          it("Marks the field as hidden", () => {
+            let schema = {
+              type: "object",
+              properties: {
+                c: {
+                  type: "object",
+                  properties: {
+                    d: { type: "string", hidden: true }
+                  }
+                },
+                e: {
+                  type: "object",
+                  properties: {
+                    f: { type: "string", hidden: true }
+                  }
+                }
+              }
+            };
+            let response = useCase.execute(schema);
+            expect(response).toEqual({
+              c: { d: { "ui:widget": "hidden" } },
+              e: { f: { "ui:widget": "hidden" } }
+            });
+          });
+        });
+  
+        describe("With dependencies", () => {
+          it("Generates a ui schema from an object with dependencies", () => {
+            let schema = {
+              type: "object",
+              properties: {
+                a: {
+                  type: "object",
+                  properties: {
+                    cats: { readonly: true }
+                  },
+                  dependencies: {
+                    x: {
+                      oneOf: [
+                        {
+                          properties: {
+                            meow: {
+                              type: "object",
+                              properties: {
+                                cat: { currency: true, type: "string" }
+                              }
+                            },
+                            quack: { readonly: true }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            };
+  
+            let response = useCase.execute(schema);
+            expect(response).toEqual({
+              a: {
+                cats: { "ui:disabled": true },
+                meow: { cat: { "ui:field": "currency" } },
+                quack: { "ui:disabled": true }
+              }
+            });
+          });
+        });
+  
+        describe("When readonly and hidden", () => {
+          it("Marks the field as hidden and readonly", () => {
+            let schema = {
+              type: "object",
+              properties: {
+                a: {
+                  type: "object",
+                  properties: {
+                    b: { type: "string", readonly: true, currency: true }
+                  }
+                }
+              }
+            };
+            let response = useCase.execute(schema);
+            expect(response).toEqual({
+              a: { b: { "ui:field": "currency", "ui:disabled": true } }
+            });
+          });
+        });
+      });
+    });
 });

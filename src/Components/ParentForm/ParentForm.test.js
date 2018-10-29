@@ -706,4 +706,43 @@ describe("<ParentForm>", () => {
       expect(parentForm.find("PeriodsField").length).toEqual(1);
     });
   });
+
+  describe("Given a field with currency", () => {
+    it("Displays the risk field component", () => {
+      let parentForm = mount(
+        <ParentForm
+          onChange={jest.fn()}
+          schema={{
+            type: "object",
+            properties: {
+              cat: {
+                type: "object",
+                properties: {
+                  name: {
+                    type: "string"
+                  }
+                }
+              },
+              dog: {
+                type: "object",
+                properties: {
+                  name: {
+                    type: "string"
+                  }
+                }
+              }
+            }
+          }}
+          uiSchema={{
+            cat: {
+              name: {
+                "ui:field": "currency"
+              }
+            }
+          }}
+        />
+      );
+      expect(parentForm.find("CurrencyField").length).toEqual(1);
+    });
+  });
 });
