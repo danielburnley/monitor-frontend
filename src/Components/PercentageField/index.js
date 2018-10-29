@@ -35,12 +35,12 @@ export default class PercentageField extends React.Component {
 
   handleChange = (e) => {
     this.setState({value: this.validatePercentage(e.target.value)});
-    this.props.onChange(e.target.value);
+    this.props.onChange(e);
   }
 
   render() {
     return (
-      <div className="input-group">
+      <div className="input-group" data-test="percentage-field">
         <input className="form-control" type="text" value={this.state.value} onChange={this.handleChange} />
         <div className="input-group-addon">%</div>
       </div>

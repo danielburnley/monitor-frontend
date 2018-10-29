@@ -1,4 +1,5 @@
 import React from "react";
+import PercentageField from "../PercentageField";
 import PropTypes from "prop-types";
 
 export default class VarianceField extends React.Component {
@@ -116,7 +117,7 @@ export default class VarianceField extends React.Component {
   renderPercentComplete = () => (
     <div className="col-md-3 form-group">
       <label htmlFor="percent-complete">Percent complete*</label>
-      <input
+      <PercentageField
         className="form-control"
         data-test="variance-percentage"
         id="percent-complete"

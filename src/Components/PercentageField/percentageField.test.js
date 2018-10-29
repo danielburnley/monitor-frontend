@@ -39,7 +39,7 @@ describe("PercentageField", () => {
       await updateFormField(field.find("input"), "14159");
       await field.update();
 
-      expect(onChangeSpy).toHaveBeenCalledWith("14159");
+      expect(onChangeSpy).toHaveBeenCalledWith(expect.objectContaining({target: {value: "14159"}}));
     });
 
     it("Example 2", async () => {
@@ -48,7 +48,7 @@ describe("PercentageField", () => {
       await updateFormField(field.find("input"), "25565");
       await field.update();
 
-      expect(onChangeSpy).toHaveBeenCalledWith("25565");
+      expect(onChangeSpy).toHaveBeenCalledWith(expect.objectContaining({target: {value: "25565"}}));
     });
   });
 

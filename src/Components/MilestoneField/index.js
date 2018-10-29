@@ -1,4 +1,5 @@
 import React from "react";
+import PercentageField from "../PercentageField";
 
 export default class MilestoneField extends React.Component {
   constructor(props) {
@@ -118,7 +119,7 @@ export default class MilestoneField extends React.Component {
     return (
       <div>
         <label htmlFor="milestonePercentCompleted">Percent Complete</label>
-        <input
+        <PercentageField
           className="form-control"
           onChange={e => this.onFieldChange("milestonePercentCompleted", e)}
           data-test="milestone-percent-completed"
