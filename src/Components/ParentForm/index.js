@@ -6,6 +6,7 @@ import Sidebar from "../Sidebar";
 import HorizontalFields from "../HorizontalFields";
 import VarianceField from "../VarianceField";
 import MilestoneField from "../MilestoneField";
+import PercentageField from "../PercentageField";
 import GenerateSidebarItems from "../../UseCase/GenerateSidebarItems";
 import "./style.css";
 import RiskField from "../RiskField";
@@ -113,7 +114,7 @@ export default class ParentForm extends React.Component {
   }
 
   renderSubform() {
-    const fields = { horizontal: HorizontalFields, variance: VarianceField, risk: RiskField, base: BaselineData, milestone: MilestoneField };
+    const fields = { horizontal: HorizontalFields, variance: VarianceField, risk: RiskField, base: BaselineData, milestone: MilestoneField, percentage: PercentageField };
     if (this.selectedSchema().type === "array") {
       return (
         <div className="col-md-10">
