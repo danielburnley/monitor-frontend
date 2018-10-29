@@ -817,6 +817,49 @@ describe("GenerateUISchema", () => {
           });
         });
       });
+
+      describe("when percentage", () => {
+        it("in an item", () => {
+          let schema = {
+            type: "object",
+            properties: {
+              a: {
+                type: "object",
+                properties: {
+                  b: { type: "string", percentage: true }
+                }
+              }
+            }
+          };
+          let response = useCase.execute(schema);
+          expect(response).toEqual({
+            a: { b: { "ui:widget": "percentage" } }
+          });
+        });
+
+        it("in an array", () => {
+          let schema = {
+            type: "object",
+            properties: {
+              a: {
+                type: "array",
+                items: {
+                  type: "object",
+                  properties: {
+                    b: { type: "string", percentage: true }
+                  }
+                }
+              }
+            }
+          };
+          let response = useCase.execute(schema);
+          expect(response).toEqual({
+            a: {
+              "ui:options": {addable: false, orderable: false, removable: false},
+              items: {b: { "ui:widget": "percentage" } }}
+          });
+        });
+      });
     });
   });
 });

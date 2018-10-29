@@ -391,6 +391,7 @@ describe("Submitting an initial draft to then fully populate and submit", () => 
   afterEach(() => {
     nock.cleanAll();
   });
+
   it('Allows you to initially submit a draft project', async () => {
     api.getProject(projectSchema, emptyData, "Draft").successfully();
     api.getProject(projectSchema, emptyData, "Draft").successfully();
@@ -420,7 +421,8 @@ describe("Submitting an initial draft to then fully populate and submit", () => 
           properties: {
             noise: { laReadOnly: true, type: "string", title: "Noise" },
             description: { type: "string", title: "Description" },
-            toes: { type: "string", title: "Toes" }
+            toes: { type: "string", title: "Toes" },
+            fed: { type: "string", percentage: true }
           }
         }
       }
@@ -430,7 +432,8 @@ describe("Submitting an initial draft to then fully populate and submit", () => 
       summary: {
         noise: "This noise is locked down",
         description: "cat",
-        toes: "cat"
+        toes: "cat",
+        fed: "100"
       }
     }
 
@@ -444,8 +447,9 @@ describe("Submitting an initial draft to then fully populate and submit", () => 
 
     await page.load();
 
-    page.find("input[type='text']").at(1).simulate('change', { target: { value: 'cat'}})
-    page.find("input[type='text']").at(2).simulate('change', { target: { value: 'cat'}})
+    page.find("input[type='text']").at(1).simulate('change', { target: { value: 'cat'}});
+    page.find("input[type='text']").at(2).simulate('change', { target: { value: 'cat'}});
+    page.find("input[type='text']").at(3).simulate('change', { target: { value: '100'}});
 
     await page.load();
 
