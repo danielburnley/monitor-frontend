@@ -10,6 +10,7 @@ import GenerateSidebarItems from "../../UseCase/GenerateSidebarItems";
 import "./style.css";
 import RiskField from "../RiskField";
 import BaselineData from "../BaselineData";
+import PeriodsField from "../PeriodsField";
 
 export default class ParentForm extends React.Component {
   constructor(props) {
@@ -101,7 +102,7 @@ export default class ParentForm extends React.Component {
       return {};
     }
 
-    if (this.selectedSchema().type === "array") {
+    if (this.selectedSchema().type === "array" ) {
       return this.props.uiSchema[this.state.selected]
         ? this.props.uiSchema[this.state.selected].items
         : {};
@@ -113,8 +114,16 @@ export default class ParentForm extends React.Component {
   }
 
   renderSubform() {
-    const fields = { horizontal: HorizontalFields, variance: VarianceField, risk: RiskField, base: BaselineData, milestone: MilestoneField };
-    if (this.selectedSchema().type === "array") {
+    const fields = {
+      horizontal: HorizontalFields,
+      variance: VarianceField,
+      risk: RiskField,
+      periods: PeriodsField,
+      base: BaselineData,
+      milestone: MilestoneField 
+    };
+    
+    if (this.selectedSchema().type === "array" ) {
       return (
         <div className="col-md-10">
           <ArraySubform
