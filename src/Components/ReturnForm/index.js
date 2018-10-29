@@ -63,10 +63,9 @@ export default class ReturnForm extends React.Component {
   };
 
   onFormChange = ({formData}) => {
-    this.setState({formData});
-    if (this.props.onChange) {
-      this.props.onChange(this.state.formData);
-    }
+    this.setState({formData}, () => {if (this.props.onChange) {
+      this.props.onChange(this.state.formData);}
+    });
   }
   render() {
     return (

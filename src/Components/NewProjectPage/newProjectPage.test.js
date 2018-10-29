@@ -457,15 +457,11 @@ describe("NewProjectPage", () => {
     describe("Example 2", () => {
       it("shows warning upon update", async () => {
         let submitProjectSpy = { execute: jest.fn(async () => {}) };
-<<<<<<< HEAD
         let updateProjectSpy = {
           execute: jest.fn(async (presenter, id) =>
             presenter.projectUpdated(id)
           )
         };
-=======
-        let updateProjectSpy = { execute: jest.fn(async (presenter, id) => presenter.projectUpdated(id)) };
->>>>>>> Resolve React warning for ParentForm component
 
         let validateProjectSpy = {
           execute: jest.fn(async presenter => {
