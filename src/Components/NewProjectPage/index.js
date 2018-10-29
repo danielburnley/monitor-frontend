@@ -170,11 +170,22 @@ export default class NewProjectPage extends React.Component {
       return <div data-test="project-update-success">Project updated!</div>;
     }
   }
+
+  getProjectLink () {
+    let path = window.location.href
+    let endChar = path.indexOf('?') ? path.indexOf('?') : path.length;
+    console.log(path.substr(0, endChar))
+    return <a href={path.substr(0, endChar)}>{path.substr(0, endChar)}</a>
+  }
+
   renderSubmitSuccess() {
     if(this.props.status==="LA Draft") {
       return <div data-test="project-create-success">Project created!</div>;
+
     } else {
-      return <div data-test="project-initial-create-success">Draft Project Created!</div>
+      return <div data-test="project-initial-create-success">
+        Draft Project Created! Here is the link to the project {this.getProjectLink()}.
+      </div>
     }
   }
 
