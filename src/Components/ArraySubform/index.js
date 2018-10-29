@@ -9,13 +9,14 @@ export default class ArraySubform extends React.Component {
   };
 
   formData = () => {
-    return this.props.data[this.props.selectedIndex][
-      this.props.selectedFormSection
-    ];
+      return this.props.data[this.props.selectedIndex][
+        this.props.selectedFormSection
+      ];
   };
 
   uiSchema = () => {
-    return this.props.uiSchema[this.props.selectedFormSection];
+      return this.props.uiSchema[this.props.selectedFormSection];
+
   };
 
   onFormChange = ({ formData }) => {

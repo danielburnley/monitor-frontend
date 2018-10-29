@@ -1,5 +1,4 @@
 import React from "react";
-import Cookies from 'universal-cookie';
 import qs from "qs";
 
 import BaselineData from "./Components/BaselineData";
@@ -22,6 +21,7 @@ import SubmitProject from "./UseCase/SubmitProject";
 import UpdateProject from "./UseCase/UpdateProject";
 import GenerateDisabledUISchema from "./UseCase/GenerateDisabledUISchema";
 import GenerateReadOnlySchema from "./UseCase/GenerateReadOnlySchema";
+import GenerateNewProjectUISchema from "./UseCase/GenerateNewProjectUISchema";
 import GenerateUISchema from "./UseCase/GenerateUISchema";
 import GetBaseReturn from "./UseCase/GetBaseReturn";
 import CanAccessProject from "./UseCase/CanAccessProject";
@@ -37,17 +37,18 @@ import ValidateProject from "./UseCase/ValidateProject";
 import ProjectGateway from "./Gateway/ProjectGateway";
 import ReturnGateway from "./Gateway/ReturnGateway";
 import LocationGateway from "./Gateway/LocationGateway";
-import ApiKeyGateway from "./Gateway/ApiKeyGateway";
+import CookieApiKey from "./Gateway/CookieApiKey";
 import TokenGateway from "./Gateway/TokenGateway";
 import DocumentGateway from "./Gateway/DocumentGateway";
 
 import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
+const locationGateway = new LocationGateway(window.location);
 const tokenGateway = new TokenGateway();
-const apiKeyGateway = new ApiKeyGateway(new Cookies());
-const projectGateway = new ProjectGateway(apiKeyGateway);
-const returnGateway = new ReturnGateway(apiKeyGateway, new LocationGateway(window.location));
+const apiKeyGateway = new CookieApiKey();
+const projectGateway = new ProjectGateway(apiKeyGateway, locationGateway);
+const returnGateway = new ReturnGateway(apiKeyGateway, locationGateway);
 const documentGateway = new DocumentGateway(document)
 const validateReturnUseCase = new ValidateReturn(returnGateway);
 const validateProjectUseCase = new ValidateProject(projectGateway);
@@ -56,6 +57,7 @@ const submitProjectUseCase = new SubmitProject(projectGateway);
 const generateDisabledUISchema = new GenerateDisabledUISchema();
 const generateReadOnlySchema = new GenerateReadOnlySchema();
 const generateUISchema = new GenerateUISchema();
+const generateNewProjectUISchema = new GenerateNewProjectUISchema(generateUISchema, generateReadOnlySchema);
 const getBaseReturnUseCase = new GetBaseReturn(returnGateway);
 const getProjectUseCase = new GetProject(projectGateway);
 const getReturnUseCase = new GetReturn(returnGateway);
@@ -114,14 +116,14 @@ const BackToProjectOverviewButton = props => (
   </button>
 );
 
-const renderNewProjectPage = (props, projectStatus, formData, formSchema, formUiSchema) => (
+const renderNewProjectPage = (props, projectStatus, formData, formSchema, projectType, formUiSchema) => (
   <NewProjectPage
     {...props}
     uiSchema={formUiSchema}
     status={projectStatus}
     schema={formSchema}
     data={formData}
-    projectType={"hif"}
+    projectType={projectType}
     getProject={getProjectUseCase}
     submitProject={submitProjectUseCase}
     updateProject={updateProjectUseCase}
@@ -153,10 +155,10 @@ const renderSubmittedProjectPage = (props, formData, formSchema) => (
 );
 
 const renderProjectPage = props => (
-  <ProjectPage {...props} getProject={getProjectUseCase} generateReadOnlySchema={generateReadOnlySchema}>
-    {({ projectStatus, formData, formSchema, formUiSchema }) => {
+  <ProjectPage {...props} getProject={getProjectUseCase} generateUISchema={generateNewProjectUISchema} >
+    {({ projectStatus, formData, formSchema, projectType, formUiSchema }) => {
       if (projectStatus === "Draft" || projectStatus === "LA Draft") {
-        return renderNewProjectPage(props, projectStatus, formData, formSchema, formUiSchema);
+        return renderNewProjectPage(props, projectStatus, formData, formSchema, projectType, formUiSchema);
       }
       if (projectStatus === "Submitted") {
         return renderSubmittedProjectPage(props, formData, formSchema);
@@ -166,7 +168,7 @@ const renderProjectPage = props => (
 );
 
 const renderBaselinePage = props => (
-  <ProjectPage {...props} getProject={getProjectUseCase}>
+  <ProjectPage {...props} getProject={getProjectUseCase} generateUISchema={generateUISchema}>
     {({ formData, formSchema }) => (
       <div className="col-md-10 col-md-offset-1">
         <BackToProjectOverviewButton {...props} />

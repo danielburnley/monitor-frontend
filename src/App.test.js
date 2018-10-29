@@ -151,7 +151,7 @@ describe("Viewing a project", () => {
 
     describe("Project Status is submitted", () => {
       it("Renders the project summary with information from the API", async () => {
-        api.getProject(projectSchema, projectData, projectStatus).successfully();
+        api.getProject(projectSchema, projectData, projectStatus, projectType).successfully();
         api.getReturns({returns: []}).successfully();
 
         let page = new AppPage("/project/0?token=Cats");
@@ -217,7 +217,7 @@ describe("Viewing a project", () => {
             }
           ]
         };
-        api.getProject(projectSchema, projectData, projectStatus).successfully();
+        api.getProject(projectSchema, projectData, projectStatus, projectType).successfully();
         api.getReturns(data).successfully();
 
         let page = new AppPage("/project/0?token=Cats");
@@ -231,20 +231,20 @@ describe("Viewing a project", () => {
       });
 
       it("Renders the project baseline page", async () => {
-        api.getProject(projectSchema, projectData, projectStatus).successfully();
+        api.getProject(projectSchema, projectData, projectStatus, projectType).successfully();
         api.getReturns({returns: []}).successfully();
 
         let page = new AppPage("/project/0?token=Cats");
         await page.load();
 
-        api.getProject(projectSchema, projectData, projectStatus).successfully();
+        api.getProject(projectSchema, projectData, projectStatus, projectType).successfully();
         await page.viewBaseline();
 
         expect(page.find('BaselineData').length).toEqual(1)
       });
 
       it("Renders the return with information from the API when creating a new return", async () => {
-        api.getProject(projectSchema, projectData, projectStatus).successfully();
+        api.getProject(projectSchema, projectData, projectStatus, projectType).successfully();
         api.getBaseReturn(returnSchema, returnData).successfully();
         api.getReturns({returns: []}).successfully();
 
@@ -285,8 +285,8 @@ describe('Submitting a draft project', () => {
   beforeEach(() => {
     process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
     api = new APISimulator("http://cat.meow");
-    api.getProject(projectSchema, draftProjectData, "LA Draft").successfully();
-    api.getProject(projectSchema, draftProjectData, "LA Draft").successfully();
+    api.getProject(projectSchema, draftProjectData, "LA Draft", projectType).successfully();
+    api.getProject(projectSchema, draftProjectData, "LA Draft", projectType).successfully();
     api.updateProject(submittedProjectData, 0).successfully();
     api.submitProject(0).successfully();
   });
@@ -294,7 +294,7 @@ describe('Submitting a draft project', () => {
   afterEach(() => {
     nock.cleanAll();
   });
-  
+
   it('Allows you to edit, save and submit a draft project', async () => {
     let page = new AppPage("/project/0");
     let response = {
@@ -434,8 +434,8 @@ describe("Submitting an initial draft to then fully populate and submit", () => 
       }
     }
 
-    api.getProject(draftProjectSchema, initiallySubmittedData, "LA Draft").successfully();
-    api.getProject(draftProjectSchema, initiallySubmittedData, "LA Draft").successfully();
+    api.getProject(draftProjectSchema, initiallySubmittedData, "LA Draft", "hif").successfully();
+    api.getProject(draftProjectSchema, initiallySubmittedData, "LA Draft", "hif").successfully();
     api.validateProject(0, "hif", LAsubmittedProjectData, validResponse).successfully();
     api.updateProject(LAsubmittedProjectData,0).successfully();
     api.submitProject(0).successfully();

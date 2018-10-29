@@ -25,7 +25,7 @@ describe("Return Gateway", () => {
         validationRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
           .matchHeader('API_KEY', 'superSecret')
-          .post('/return/validate', {type, project_id, data})
+          .post('/return/validate',{type, project_id, data})
           .reply(200, {valid: true, invalidPaths: [], prettyInvalidPaths: []});
         let gateway = new ReturnGateway(apiKeyGateway, locationGateway);
 
@@ -50,7 +50,7 @@ describe("Return Gateway", () => {
       let data = {
         cats: "meow"
       };
-      let type = "ac";
+      let type = "hif";
       let project_id = 1;
 
       beforeEach(async () => {

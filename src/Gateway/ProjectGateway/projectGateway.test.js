@@ -20,7 +20,7 @@ describe("Project Gateway", () => {
             .matchHeader("Content-Type", "application/json")
             .matchHeader("API_KEY", "superSecret")
             .get("/project/find?id=1")
-            .reply(200, { data: { cow: "moo" }, schema: { duck: "quack" } });
+            .reply(200, { data: { cow: "moo" }, schema: { duck: "quack" }, type: 'ac', status: 'Draft'});
           let gateway = new ProjectGateway(apiKeyGateway);
           response = await gateway.findById(1);
         });
@@ -30,11 +30,10 @@ describe("Project Gateway", () => {
         });
 
         it("Projects the response from the api", () => {
-          let project = new Project({ cow: "moo" }, { duck: "quack" });
+          let project = new Project({ cow: "moo" }, { duck: "quack" }, 'Draft', 'ac');
           expect(response).toEqual({
             success: true,
-            foundProject: { data: project.data, schema: project.schema },
-            success: true
+            foundProject: { data: project.data, schema: project.schema, type: project.type, status: project.status}
           });
         });
 
@@ -54,7 +53,7 @@ describe("Project Gateway", () => {
             .matchHeader("Content-Type", "application/json")
             .matchHeader("API_KEY", "extraSecret")
             .get("/project/find?id=5")
-            .reply(200, { data: { dogs: "woof" }, schema: { cats: "meow" } });
+            .reply(200, { data: { dogs: "woof" }, schema: { cats: "meow" }, status: 'Submited', type: 'hif' });
           let gateway = new ProjectGateway(apiKeyGateway);
           response = await gateway.findById(5);
         });
@@ -64,10 +63,10 @@ describe("Project Gateway", () => {
         });
 
         it("Projects the response from the api", () => {
-          let project = new Project({ dogs: "woof" }, { cats: "meow" });
+          let project = new Project({ dogs: "woof" }, { cats: "meow" }, 'Submited', 'hif');
           expect(response).toEqual({
             success: true,
-            foundProject: { data: project.data, schema: project.schema }
+            foundProject: { data: project.data, schema: project.schema, type: project.type, status: project.status }
           });
         });
 
@@ -170,20 +169,25 @@ describe("Project Gateway", () => {
 
   describe("Submit", () => {
     describe("Example 1", () => {
-      let gateway, apiKeyGateway;
+      let gateway, apiKeyGateway, locationGateway;
 
       beforeEach(async () => {
         apiKeyGateway = {
           getApiKey: jest.fn(() => ({ apiKey: "superSecret" }))
         };
+
+        locationGateway = {
+          getRoot: jest.fn(async () => "https://ducks.quack")
+        }
+
         process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
-        gateway = new ProjectGateway(apiKeyGateway);
+        gateway = new ProjectGateway(apiKeyGateway, locationGateway);
       });
 
       it("Submits the data to the API", async () => {
         let submitProjectRequest = nock("http://cat.meow")
           .matchHeader("Content-Type", "application/json")
-          .post("/project/submit", { project_id: 1 })
+          .post("/project/submit", { url: 'https://ducks.quack/project/1', project_id: 1 })
           .reply(200);
         await gateway.submit(1);
 
@@ -193,7 +197,7 @@ describe("Project Gateway", () => {
       it("Returns successful", async () => {
         nock("http://cat.meow")
           .matchHeader("Content-Type", "application/json")
-          .post("/project/submit", { project_id: 3 })
+          .post("/project/submit", { url: 'https://ducks.quack/project/3', project_id: 3 })
           .reply(200);
         let response = await gateway.submit(3);
 
@@ -201,20 +205,25 @@ describe("Project Gateway", () => {
       });
     });
     describe("Example 2", () => {
-      let gateway, apiKeyGateway;
+      let gateway, apiKeyGateway, locationGateway;
 
       beforeEach(async () => {
         apiKeyGateway = {
           getApiKey: jest.fn(() => ({ apiKey: "superSecret" }))
         };
+
+        locationGateway = {
+          getRoot: jest.fn(async () => "https://dog.woof")
+        }
+
         process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
-        gateway = new ProjectGateway(apiKeyGateway);
+        gateway = new ProjectGateway(apiKeyGateway, locationGateway);
       });
 
       it("Submits the data to the API", async () => {
         let submitProjectRequest = nock("http://cat.meow")
           .matchHeader("Content-Type", "application/json")
-          .post("/project/submit", { project_id: 7 })
+          .post("/project/submit", { url: 'https://dog.woof/project/7', project_id: 7 })
           .reply(200);
         await gateway.submit(7);
 
@@ -224,7 +233,7 @@ describe("Project Gateway", () => {
       it("Returns successful", async () => {
         nock("http://cat.meow")
           .matchHeader("Content-Type", "application/json")
-          .post("/project/submit", { project_id: 28 })
+          .post("/project/submit", { url: 'https://dog.woof/project/28', project_id: 28 })
           .reply(200);
         let response = await gateway.submit(28);
         expect(response).toEqual({ success: true });

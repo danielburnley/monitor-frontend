@@ -24,8 +24,7 @@ export default class NewProjectPage extends React.Component {
     this.setState({ status: "submitted" });
   }
 
-  creationFailure() {
-  }
+  creationFailure() {}
 
   projectUpdated() {
     this.setState({ status: "saved" });
@@ -47,13 +46,19 @@ export default class NewProjectPage extends React.Component {
       status: "updating",
       action: "Submit",
       valid: true,
-      prettyInvalidPaths: [[]],
+      prettyInvalidPaths: [[]]
     });
 
-    if (this.props.status==="LA Draft") {
+    if (this.props.status === "LA Draft") {
       await this.validateProject();
     }
-    
+
+    await this.props.updateProject.execute(
+      this,
+      this.props.match.params.id,
+      this.state.formData
+    );
+
     if (this.state.valid) {
       await this.props.submitProject.execute(this, this.props.match.params.id);
     } else {
@@ -70,7 +75,7 @@ export default class NewProjectPage extends React.Component {
       prettyInvalidPaths: [[]]
     });
 
-    if (this.props.status==="LA Draft") {
+    if (this.props.status === "LA Draft") {
       await this.validateProject();
     }
 
@@ -110,9 +115,9 @@ export default class NewProjectPage extends React.Component {
   }
 
   renderSuccessOrForm() {
-    if (this.state.status==="submitted") {
-      return(this.renderSubmitSuccess())
-    } else if (this.state.status==="updating") {
+    if (this.state.status === "submitted") {
+      return this.renderSubmitSuccess();
+    } else if (this.state.status === "updating") {
       return (
         <div>
           <button
@@ -133,7 +138,7 @@ export default class NewProjectPage extends React.Component {
         </div>
       );
     } else {
-      return (                
+      return (
         <div>
           <ValidationMessage
             valid={this.state.valid}
@@ -141,42 +146,52 @@ export default class NewProjectPage extends React.Component {
             invalidPaths={this.state.prettyInvalidPaths}
           />
           {this.renderSaveSuccess()}
-          <button
-            data-test="submit-project-button"
-            className="btn form-button btn-primary"
-            onClick={this.submitProject}
-          >
-            Create this project
-          </button>
-          <button
-            data-test="update-project-button"
-            className="btn form-button btn-primary"
-            onClick={this.updateProject}
-          >
-            Save draft
-          </button>
-          <div className="col-md-10 col-md-offset-1">{this.renderForm()}</div>
+          <div className="row">
+            <button
+              data-test="submit-project-button"
+              className="btn form-button btn-primary"
+              onClick={this.submitProject}
+            >
+              Create this project
+            </button>
+            <button
+              data-test="update-project-button"
+              className="btn form-button btn-primary"
+              onClick={this.updateProject}
+            >
+              Save draft
+            </button>
+          </div>
+          <div className="row">{this.renderForm()}</div>
         </div>
       );
     }
   }
 
   renderSaveSuccess() {
-    if (this.state.status==="saved") {
+    if (this.state.status === "saved") {
       return <div data-test="project-update-success">Project updated!</div>;
     }
   }
   renderSubmitSuccess() {
-    if(this.props.status==="LA Draft") {
+    if (this.props.status === "LA Draft") {
       return <div data-test="project-create-success">Project created!</div>;
     } else {
-      return <div data-test="project-initial-create-success">Draft Project Created!</div>
+      return (
+        <div data-test="project-initial-create-success">
+          Draft Project Created!
+        </div>
+      );
     }
   }
 
-
   render() {
-    return <div className="container-fluid">{this.renderSuccessOrForm()}</div>;
+    return (
+      <div>
+        <h2>Baseline editor</h2>
+        {this.renderSuccessOrForm()}
+      </div>
+    );
   }
 }
 

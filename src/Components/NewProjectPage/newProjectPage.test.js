@@ -61,7 +61,7 @@ describe("NewProjectPage", () => {
     it("example 1", async () => {
       let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {}) };
       let updateProjectSpy = {
-        execute: jest.fn(async (presenter, id) => presenter.projectUpdated(id))
+        execute: jest.fn(async (presenter, id) => {})
       };
       let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
@@ -123,7 +123,7 @@ describe("NewProjectPage", () => {
     });
   });
 
-  describe("calls the submit project use case", () => {
+  describe("calls the submit and updates project use cases", () => {
     it("example 1", async () => {
       let submitProjectSpy = {
         execute: jest.fn(async (presenter, id) => {
@@ -147,7 +147,7 @@ describe("NewProjectPage", () => {
       );
       wrap.find('[data-test="submit-project-button"]').simulate("click");
       await wait();
-
+      expect(updateProjectSpy.execute).toBeCalledWith(expect.anything(), 1,{});
       expect(submitProjectSpy.execute).toBeCalledWith(expect.anything(), 1);
     });
 
@@ -176,6 +176,7 @@ describe("NewProjectPage", () => {
       await updateFormField(wrap.find('input[type="text"]'), "cashews");
       wrap.find('[data-test="submit-project-button"]').simulate("click");
       await wait();
+      expect(updateProjectSpy.execute).toBeCalledWith(expect.anything(),9, data);
       expect(submitProjectSpy.execute).toBeCalledWith(expect.anything(), 9);
     });
   });

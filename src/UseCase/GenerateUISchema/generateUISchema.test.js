@@ -374,6 +374,77 @@ describe("GenerateUISchema", () => {
     });
   });
 
+  describe("Periods", () => {
+    describe("Given an object which is marked as periods field", () => {
+      describe("Example one", () => {
+        it("Sets the UI field to periods", () => {
+          let schema = {
+            type: "object",
+            properties: {
+              a: {
+                type: "array",
+                periods: true,
+                items: {
+                  type: "object",
+                  properties: {
+                    period: {type: 'string'},
+                    money: {type: 'string'}
+                  }
+                }
+              }
+            }
+          };
+
+          let response = useCase.execute(schema);
+
+          expect(response).toEqual({
+            a: {
+              items: {},
+              "ui:field": "periods",
+              "ui:options": {
+                addable: false,
+                orderable: false,
+                removable: false
+              }
+            }
+          });
+        });
+      });
+
+      describe("Example two", () => {
+        it("Sets the UI field to periods", () => {
+          let schema = {
+            type: "object",
+            properties: {
+              b: {
+                type: "array",
+                periods: true,
+                items: {
+                  type: "object",
+                  properties: {}
+                }
+              }
+            }
+          };
+
+          let response = useCase.execute(schema);
+
+          expect(response).toEqual({
+            b: {
+              items: {},
+              "ui:field": "periods" ,
+              "ui:options": {
+                addable: false,
+                orderable: false,
+                removable: false
+              }
+            }
+          });
+        });
+      });
+    });
+  });
+
   describe("Horizontal", () => {
     describe("Given an array with horizontal items", () => {
       it("Sets the UI field to horizontal", () => {

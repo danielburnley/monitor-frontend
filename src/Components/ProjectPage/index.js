@@ -8,17 +8,15 @@ export default class ProjectPage extends React.Component {
   }
 
   presentProject = async projectData => {
-    let uiSchema = {}
-    if(projectData.status==="LA Draft") {
-      uiSchema = this.props.generateReadOnlySchema.execute(projectData.schema, 'laReadOnly');
-    }
+    let uiSchema = this.props.generateUISchema.execute(projectData.schema, projectData.status)
 
     await this.setState({
       loading: false,
       formData: projectData.data,
       formSchema: projectData.schema,
       formUiSchema: uiSchema,
-      projectStatus: projectData.status
+      projectStatus: projectData.status,
+      projectType: projectData.type
     });
   };    
 
@@ -51,7 +49,8 @@ export default class ProjectPage extends React.Component {
           projectStatus: this.state.projectStatus,
           formData: this.state.formData,
           formSchema: this.state.formSchema,
-          formUiSchema: this.state.formUiSchema
+          formUiSchema: this.state.formUiSchema,
+          projectType: this.state.projectType
         })}
       </div>
     );

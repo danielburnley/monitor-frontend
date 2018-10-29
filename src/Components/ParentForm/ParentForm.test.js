@@ -686,7 +686,7 @@ describe("<ParentForm>", () => {
           />
         );
 
-        let subform = parentForm.find({'data-test': 'cat_subform'});
+        let subform = parentForm.find({ "data-test": "cat_subform" });
         expect(subform.props().uiSchema).toEqual({});
       });
     });
@@ -726,6 +726,79 @@ describe("<ParentForm>", () => {
         />
       );
       expect(parentForm.find("RiskField").length).toEqual(1);
+    });
+  });
+
+  describe("Given a schema with a periods field", () => {
+    it("Displays the period field component", () => {
+      let uiSchema = {
+        one: {
+          items: {
+            periods: {
+              items: {},
+              "ui:field": "periods",
+              "ui:options": {
+                addable: false,
+                orderables: false,
+                removable: false
+              }
+            }
+          }
+        }
+      };
+
+      let schema = {
+        type: "object",
+        properties: {
+          one: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                periods: {
+                  type: "array",
+                  items: {
+                    type: "object",
+                    properties: {
+                      period: {
+                        type: "string",
+                        title: "Lizard Type",
+                        readonly: true
+                      },
+                      length: {
+                        type: "string",
+                        title: "How Long",
+                        readonly: true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      };
+
+      let data = {
+        one: [
+          {
+            periods: [
+              { period: "scaley", length: "200" },
+              { period: "slivery", length: "567" }
+            ]
+          }
+        ]
+      };
+
+      let parentForm = mount(
+        <ParentForm
+          onChange={jest.fn()}
+          formData={data}
+          schema={schema}
+          uiSchema={uiSchema}
+        />
+      );
+      expect(parentForm.find("PeriodsField").length).toEqual(1);
     });
   });
 });

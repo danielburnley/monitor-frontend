@@ -218,7 +218,6 @@ describe("GenerateReadOnlySchema", () => {
   });
   describe("other flags", () => {
     describe("Example one", () => {
-
       it("generates an empty ui schema for no readonly fields", () => {
         let useCase = new GenerateReadOnlySchema();
         let schema = {
@@ -227,7 +226,7 @@ describe("GenerateReadOnlySchema", () => {
             a: { type: "string" }
           }
         };
-        let response = useCase.execute(schema, 'blahblah');
+        let response = useCase.execute(schema, "blahblah");
         expect(response).toEqual({});
       });
       it("generates a ui schema for different flags", () => {
@@ -274,7 +273,7 @@ describe("GenerateReadOnlySchema", () => {
             h: { type: "string", blahblah: true }
           }
         };
-        let response = useCase.execute(schema, 'blahblah');
+        let response = useCase.execute(schema, "blahblah");
         expect(response).toEqual({
           a: {
             "ui:options": {
@@ -299,7 +298,6 @@ describe("GenerateReadOnlySchema", () => {
     });
 
     describe("Example two", () => {
-
       it("generates an empty ui schema for no readonly fields", () => {
         let useCase = new GenerateReadOnlySchema();
         let schema = {
@@ -308,7 +306,7 @@ describe("GenerateReadOnlySchema", () => {
             a: { type: "string" }
           }
         };
-        let response = useCase.execute(schema, 'ladraft');
+        let response = useCase.execute(schema, "ladraft");
         expect(response).toEqual({});
       });
       it("generates a ui schema for different flags", () => {
@@ -355,7 +353,7 @@ describe("GenerateReadOnlySchema", () => {
             h: { type: "string", ladraft: true }
           }
         };
-        let response = useCase.execute(schema, 'ladraft');
+        let response = useCase.execute(schema, "ladraft");
         expect(response).toEqual({
           a: {
             "ui:options": {
@@ -376,6 +374,61 @@ describe("GenerateReadOnlySchema", () => {
           d: { e: { f: { "ui:disabled": true } } },
           h: { "ui:disabled": true }
         });
+      });
+    });
+  });
+  describe("Marking arrays", () => {
+    describe("Example 1", () => {
+      it("only doesn't mark as inaddable if it doesn't contain readonly fields", () => {
+        let useCase = new GenerateReadOnlySchema();
+        let schema = {
+          type: "object",
+          properties: {
+            a: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  b: { type: "string" },
+                  c: { type: "string" }
+                }
+              }
+            }
+          }
+        };
+        let response = useCase.execute(schema);
+        expect(response).toEqual({});
+      });
+    });
+
+    describe("Example 2", () => {
+      it("only doesn't mark as inaddable if it doesn't contain readonly fields", () => {
+        let useCase = new GenerateReadOnlySchema();
+        let schema = {
+          type: "object",
+          properties: {
+            f: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  hi: { 
+                    type: "array",
+                    items: {
+                      type: "object",
+                      properties: {
+                        yo: { type: "string"}
+                      }
+                    }
+                 },
+                  bye: { type: "string" }
+                }
+              }
+            }
+          }
+        };
+        let response = useCase.execute(schema);
+        expect(response).toEqual({});
       });
     });
   });
