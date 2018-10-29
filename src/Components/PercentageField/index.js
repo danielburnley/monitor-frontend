@@ -10,11 +10,11 @@ export default class PercentageField extends React.Component {
   }
 
   clampPercentage(value) {
-    if (value<0) {
+    if (value < 0) {
       return '0';
     }
 
-    if (value>100) {
+    if (value > 100) {
       return '100';
     }
 
@@ -23,12 +23,13 @@ export default class PercentageField extends React.Component {
 
   handleChange = (e) => {
     this.setState({value: "" + this.clampPercentage(e.target.value)});
+    this.props.onChange(e.target.value);
   }
 
   render() {
     return (
       <div className="input-group">
-        <input className="form-control" type="text" value={this.state.value} onChange={this.handleChange}/>
+        <input className="form-control" type="text" value={this.state.value} onChange={this.handleChange} />
         <div className="input-group-addon">%</div>
       </div>
     );
