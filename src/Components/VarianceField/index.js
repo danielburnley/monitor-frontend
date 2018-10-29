@@ -86,7 +86,7 @@ export default class VarianceField extends React.Component {
   renderBaseline = () => (
     <div className="form-group">
       <label className="static-label">Baseline</label>
-      <p data-test="form-control-static" data-test="target-date">
+      <p className="form-control-static" data-test="target-date">
         {this.state.baseline}
       </p>
     </div>
