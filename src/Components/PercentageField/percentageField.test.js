@@ -62,12 +62,50 @@ describe("PercentageField", () => {
       expect(field.find("input").props().value).toEqual("100");
     });
 
-    it("Example 2",  async () => {
+    it("Example 2", async () => {
       let onChangeSpy = jest.fn();
       let field = mount(<PercentageField value="0" onChange={onChangeSpy} />);
       await updateFormField(field.find("input"), "118999");
 
       expect(field.find("input").props().value).toEqual("100");
+    });
+  });
+
+  describe("Cleans non-numeric characters", () => {
+    it("Example 1", async () => {
+      let onChangeSpy = jest.fn();
+      let field = mount(<PercentageField value="0" onChange={onChangeSpy} />);
+      await updateFormField(field.find("input"), "2,7");
+      await field.update();
+
+      expect(field.find("input").props().value).toEqual("27");
+    });
+
+    it("Example 2", async () => {
+      let onChangeSpy = jest.fn();
+      let field = mount(<PercentageField value="0" onChange={onChangeSpy} />);
+      await updateFormField(field.find("input"), "0x40");
+
+      expect(field.find("input").props().value).toEqual("40");
+    });
+  });
+
+  describe("Removes leading 0s", () => {
+    it("Example 1", async () => {
+      let onChangeSpy = jest.fn();
+      let field = mount(<PercentageField value="0" onChange={onChangeSpy} />);
+      await updateFormField(field.find("input"), "0000000");
+      await field.update();
+
+      expect(field.find("input").props().value).toEqual("0");
+    });
+
+    it("Example 2", async () => {
+      let onChangeSpy = jest.fn();
+      let field = mount(<PercentageField value="0" onChange={onChangeSpy} />);
+      await updateFormField(field.find("input"), "040");
+
+      expect(field.find("input").props().value).toEqual("40");
     });
   });
 

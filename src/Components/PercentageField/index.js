@@ -21,8 +21,20 @@ export default class PercentageField extends React.Component {
     return value;
   }
 
+  cleanNonnumeric(string) {
+    return string.replace(/[^0-9]/g, "");
+  }
+
+  cleanLeadingZeroes(string) {
+    return string.replace(/^0*(?!$)/, "");
+  }
+
+  validatePercentage(string) {
+    return this.cleanLeadingZeroes(this.cleanNonnumeric(this.clampPercentage(string)));
+  }
+
   handleChange = (e) => {
-    this.setState({value: "" + this.clampPercentage(e.target.value)});
+    this.setState({value: this.validatePercentage(e.target.value)});
     this.props.onChange(e.target.value);
   }
 
