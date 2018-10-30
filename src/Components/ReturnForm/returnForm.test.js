@@ -45,6 +45,23 @@ describe("<ReturnForm>", () => {
   };
   let initialData = { cats: { details: { noise: "Meow" } } };
 
+  it("Passes the documentGateway to the parentForm", () => {
+    let documentGatewayDummy = jest.fn();
+    let wrapper = shallow(
+      <ReturnForm
+        documentGateway={documentGatewayDummy}
+        data={initialData}
+        schema={formSchema}
+        onSubmit={() => {}}
+        status="Draft"
+      />
+    );
+
+    expect(
+      wrapper.find({ "data-test": "return-form" }).props().documentGateway
+    ).toEqual(documentGatewayDummy);
+  });
+
   it("Calls the onsubmit function with the form data when submitted", () => {
     let submitSpy = jest.fn();
     let wrapper = shallow(
@@ -110,21 +127,16 @@ describe("<ReturnForm>", () => {
       />
     );
     await wait();
-    await updateFormField(wrapper.find('input[type="text"]'),"Cats");
+    await updateFormField(wrapper.find('input[type="text"]'), "Cats");
     expect(changeSpy).toHaveBeenCalledWith({
       cats: { details: { noise: "Cats" } }
     });
   });
 
-
   it("Calls the onSave function with the updated formData when edited", async () => {
     let saveSpy = jest.fn();
     let wrapper = mount(
-      <ReturnForm
-        data={initialData}
-        schema={formSchema}
-        onSave={saveSpy}
-      />
+      <ReturnForm data={initialData} schema={formSchema} onSave={saveSpy} />
     );
     let input = wrapper.find('input[type="text"]');
     await updateFormField(input, "New Meow");
@@ -136,11 +148,7 @@ describe("<ReturnForm>", () => {
 
   it("Displays no buttons if the return is submitted", () => {
     let wrapper = mount(
-      <ReturnForm
-        data={initialData}
-        schema={formSchema}
-        status="Submitted"
-      />
+      <ReturnForm data={initialData} schema={formSchema} status="Submitted" />
     );
 
     let actions = wrapper.find("button");

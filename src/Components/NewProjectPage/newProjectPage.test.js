@@ -1,6 +1,6 @@
 import NewProjectPage from ".";
 import React from "react";
-import { mount } from "enzyme";
+import { mount, shallow } from "enzyme";
 
 async function wait() {
   await new Promise(resolve => setTimeout(resolve, 100));
@@ -37,6 +37,25 @@ describe("NewProjectPage", () => {
       }
     }
   };
+
+  it("Passes the document gateway to the parent form", () => {
+    let documentGatewayDummy = jest.fn();
+    let wrap = shallow(
+      <NewProjectPage
+        documentGateway={documentGatewayDummy}
+        match={{ params: { id: 1 } }}
+        updateProject={{}}
+        submitProject={{}}
+        validateProject={{}}
+        data={{}}
+        schema={schema}
+      />
+    );
+
+    expect(
+      wrap.find({ "data-test": "project-form" }).props().documentGateway
+    ).toEqual(documentGatewayDummy);
+  });
 
   describe("disables buttons while project updating hasnt completed", () => {
     it("example 1", async () => {
@@ -349,7 +368,7 @@ describe("NewProjectPage", () => {
       let wrap = mount(
         <NewProjectPage
           projectType={"ac"}
-          match={{params: {id: 2}}}
+          match={{ params: { id: 2 } }}
           updateProject={updateProjectSpy}
           submitProject={submitProjectSpy}
           validateProject={validateProjectSpy}
@@ -438,8 +457,12 @@ describe("NewProjectPage", () => {
     describe("Example 2", () => {
       it("shows warning upon update", async () => {
         let submitProjectSpy = { execute: jest.fn(async () => {}) };
-        let updateProjectSpy = { execute: jest.fn(async (presenter, id) => presenter.projectUpdated(id)) };
-        
+        let updateProjectSpy = {
+          execute: jest.fn(async (presenter, id) =>
+            presenter.projectUpdated(id)
+          )
+        };
+
         let validateProjectSpy = {
           execute: jest.fn(async presenter => {
             await presenter.invalidateFields([["no", "more", "cats"]]);
@@ -463,7 +486,7 @@ describe("NewProjectPage", () => {
         await wrap
           .find('[data-test="update-project-button"]')
           .simulate("click");
-          await wait();
+        await wait();
         await wrap.update();
         expect(wrap.find('[data-test="validationWarning"]').length).toEqual(1);
         expect(wrap.find('[data-test="validationWarning"]').text()).toContain(
@@ -508,13 +531,16 @@ describe("NewProjectPage", () => {
   describe("validation Error Message", () => {
     it("shows error upon submitting", async () => {
       let submitProjectSpy = {
-          execute: jest.fn(async (presenter, id) => {
+        execute: jest.fn(async (presenter, id) => {
           presenter.creationSuccess(id);
-        })};
-      let updateProjectSpy = { execute: jest.fn(async (presenter, id) => presenter.projectUpdated(id)) };
+        })
+      };
+      let updateProjectSpy = {
+        execute: jest.fn(async (presenter, id) => presenter.projectUpdated(id))
+      };
       let validateProjectSpy = {
-        execute: jest.fn(async (presenter) => {
-          presenter.invalidateFields([['hello', 'errors']]);
+        execute: jest.fn(async presenter => {
+          presenter.invalidateFields([["hello", "errors"]]);
         })
       };
 

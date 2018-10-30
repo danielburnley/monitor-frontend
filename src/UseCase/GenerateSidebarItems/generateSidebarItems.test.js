@@ -58,6 +58,26 @@ describe("GenerateSidebarItems", () => {
         });
       });
     });
+
+    describe("Given non object properties", () => {
+      it("Only generates items for arrays and objects", () => {
+        let schema = {
+          type: "object",
+          properties: {
+            cows: { type: "object", title: "Cows" },
+            ducks: { type: "string", title: "Ducks" },
+            birds: { type: "array", title: "Birds"}
+          }
+        };
+        let response = useCase.execute(schema);
+        expect(response).toEqual({
+          items: {
+            cows: { title: "Cows", subSection: 'cows' },
+            birds: { title: "Birds", subSection: 'birds' }
+          }
+        });
+      })
+    })
   });
 
   describe("Given a schema of type array", () => {

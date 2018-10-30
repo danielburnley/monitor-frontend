@@ -73,10 +73,12 @@ export default class ReturnForm extends React.Component {
       <div>
         {this.renderActions()}
         <ParentForm
+          data-test="return-form"
           schema={this.props.schema}
           uiSchema={this.props.uiSchema}
           formData={this.state.formData}
           onChange={this.onFormChange}
+          documentGateway={this.props.documentGateway}
           >
         </ParentForm>
       </div>

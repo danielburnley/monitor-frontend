@@ -98,6 +98,8 @@ export default class NewProjectPage extends React.Component {
     return (
       <div>
         <ParentForm
+          data-test="project-form"
+          documentGateway={this.props.documentGateway}
           formData={this.state.formData}
           schema={this.state.formSchema}
           uiSchema={this.props.uiSchema}

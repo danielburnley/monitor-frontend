@@ -84,10 +84,17 @@ export default class ParentForm extends React.Component {
       <Sidebar
         items={items}
         onItemClick={(section, index) => {
-          this.setState({
-            selectedFormSection: section,
-            selectedFormItemIndex: index
-          });
+          if (this.selectedSchema().type === "object") {
+            let documentObject = this.props.documentGateway.getDocument();
+            documentObject
+              .getElementById(`root_${section}__title`)
+              .scrollIntoView();
+          } else {
+            this.setState({
+              selectedFormSection: section,
+              selectedFormItemIndex: index
+            });
+          }
         }}
       />
     );
