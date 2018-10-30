@@ -176,7 +176,7 @@ describe("NewProjectPage", () => {
       await updateFormField(wrap.find('input[type="text"]'), "cashews");
       wrap.find('[data-test="submit-project-button"]').simulate("click");
       await wait();
-      expect(updateProjectSpy.execute).toBeCalledWith(expect.anything(),9, data);
+      expect(updateProjectSpy.execute).toBeCalledWith(expect.anything(),9, {"cat": {"catA": {"catB": "cashews"}}});
       expect(submitProjectSpy.execute).toBeCalledWith(expect.anything(), 9);
     });
   });
@@ -497,7 +497,7 @@ describe("NewProjectPage", () => {
       it("doesn't show warning when in Draft mode", async () => {
         let submitProjectSpy = { execute: jest.fn(async () => {}) };
         let updateProjectSpy = { execute: jest.fn(async (presenter, id) => presenter.projectUpdated(id)) };
-        
+
         let validateProjectSpy = {
           execute: jest.fn(async presenter => {
             await presenter.invalidateFields([["no", "more", "cats"]]);

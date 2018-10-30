@@ -27,7 +27,7 @@ export default class ReturnForm extends React.Component {
       );
     }
 
-    if (this.props.status == 'Updating') {
+    if (this.props.status === 'Updating') {
       return (
         <div className="col-md-offset-3 col-md-9 return-actions">
           <button
@@ -63,10 +63,9 @@ export default class ReturnForm extends React.Component {
   };
 
   onFormChange = ({formData}) => {
-    this.setState({formData});
-    if (this.props.onChange) {
-      this.props.onChange(this.state.formData);
-    }
+    this.setState({formData}, () => {if (this.props.onChange) {
+      this.props.onChange(this.state.formData);}
+    });
   }
   render() {
     return (

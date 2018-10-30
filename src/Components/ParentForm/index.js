@@ -42,8 +42,11 @@ export default class ParentForm extends React.Component {
   }
 
   subformOnChange = formData => {
-    this.state.formData[this.state.selected] = formData;
-    this.props.onChange({ formData: this.state.formData });
+    let newFormData = { ...this.state.formData };
+    newFormData[this.state.selected] = formData;
+    this.setState({ formData: newFormData }, () =>
+      this.props.onChange({ formData: this.state.formData })
+    );
   };
 
   viewSelectorOnChange = changeEvent => {
@@ -109,7 +112,7 @@ export default class ParentForm extends React.Component {
       return {};
     }
 
-    if (this.selectedSchema().type === "array" ) {
+    if (this.selectedSchema().type === "array") {
       return this.props.uiSchema[this.state.selected]
         ? this.props.uiSchema[this.state.selected].items
         : {};
@@ -127,10 +130,10 @@ export default class ParentForm extends React.Component {
       risk: RiskField,
       periods: PeriodsField,
       base: BaselineData,
-      milestone: MilestoneField 
+      milestone: MilestoneField
     };
-    
-    if (this.selectedSchema().type === "array" ) {
+
+    if (this.selectedSchema().type === "array") {
       return (
         <div className="col-md-10">
           <ArraySubform
@@ -150,9 +153,7 @@ export default class ParentForm extends React.Component {
       );
     } else {
       return (
-        <div
-          className="col-md-10 subform"
-        >
+        <div className="col-md-10 subform">
           <Form
             data-test={`${this.state.selected}_subform`}
             onChange={({ formData }) => {

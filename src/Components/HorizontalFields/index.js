@@ -82,6 +82,7 @@ export default class HorizontalFields extends React.Component {
           </div>
         );
       }
+      return null;
     });
 
   render() {

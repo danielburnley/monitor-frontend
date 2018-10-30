@@ -504,25 +504,44 @@ describe("<ParentForm>", () => {
       });
 
       describe("Updates the parent formdata when changing", () => {
-        it("Example one", () => {
-          parentForm
-            .find(ArraySubform)
-            .props()
-            .onChange({ newData: "meow" });
+        let wrap;
+
+        beforeEach(() => {
+          wrap = mount(
+            <ParentForm
+              onChange={onChangeSpy}
+              schema={{
+                type: "object",
+                properties: {
+                  cat: {
+                    type: "object",
+                    properties: {
+                      sound: {
+                        type: "string"
+                      }
+                    }
+                  }
+                }
+              }}
+            />
+          );
+        });
+
+        it("Example one", async () => {
+          let input = wrap.find("input").first();
+          await updateFormField(input, "meow");
 
           expect(onChangeSpy).toHaveBeenCalledWith({
-            formData: { cat: { newData: "meow" } }
+            formData: { cat: { sound: "meow" } }
           });
         });
 
-        it("Example two", () => {
-          parentForm
-            .find(ArraySubform)
-            .props()
-            .onChange({ woof: "bark" });
+        it("Example two", async () => {
+          let input = wrap.find("input").first();
+          await updateFormField(input, "bark");
 
           expect(onChangeSpy).toHaveBeenCalledWith({
-            formData: { cat: { woof: "bark" } }
+            formData: { cat: { sound: "bark" } }
           });
         });
       });
@@ -596,25 +615,44 @@ describe("<ParentForm>", () => {
       });
 
       describe("Updates the parent formdata when changing", () => {
-        it("Example one", () => {
-          parentForm
-            .find(ArraySubform)
-            .props()
-            .onChange({ newData: "meow" });
+        let wrap;
+
+        beforeEach(() => {
+          wrap = mount(
+            <ParentForm
+              onChange={onChangeSpy}
+              schema={{
+                type: "object",
+                properties: {
+                  dog: {
+                    type: "object",
+                    properties: {
+                      action: {
+                        type: "string"
+                      }
+                    }
+                  }
+                }
+              }}
+            />
+          );
+        });
+
+        it("Example one", async () => {
+          let input = wrap.find("input").first();
+          await updateFormField(input, "wag");
 
           expect(onChangeSpy).toHaveBeenCalledWith({
-            formData: { dog: { newData: "meow" } }
+            formData: { dog: { action: "wag" } }
           });
         });
 
-        it("Example two", () => {
-          parentForm
-            .find(ArraySubform)
-            .props()
-            .onChange({ woof: "bark" });
+        it("Example two", async () => {
+          let input = wrap.find("input").first();
+          await updateFormField(input, "chase");
 
           expect(onChangeSpy).toHaveBeenCalledWith({
-            formData: { dog: { woof: "bark" } }
+            formData: { dog: { action: "chase" } }
           });
         });
       });
