@@ -631,6 +631,7 @@ describe("NewProjectPage", () => {
       expect(wrap.find('[data-test="project-initial-create-success"]').length).toEqual(
         1
       );
+      expect(wrap.find('[data-test="share-project-link"]').length).toEqual(1)
       expect(wrap.find('[data-test="project-create-success"]').length).toEqual(0)
       expect(wrap.find('[data-test="submit-project-button"]').length).toEqual(
         0
@@ -674,6 +675,7 @@ describe("NewProjectPage", () => {
       expect(wrap.find('[data-test="project-create-success"]').length).toEqual(
         1
       );
+      expect(wrap.find('[data-test="share-project-link"]').length).toEqual(1)
       expect(wrap.find('[data-test="submit-project-button"]').length).toEqual(
         0
       );

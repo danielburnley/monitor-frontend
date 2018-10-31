@@ -2,6 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import ParentForm from "../ParentForm";
 import ValidationMessage from "../ValidationMessage";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import "./style.css";
 
 export default class NewProjectPage extends React.Component {
   constructor(props) {
@@ -173,16 +175,65 @@ export default class NewProjectPage extends React.Component {
       return <div data-test="project-update-success">Project updated!</div>;
     }
   }
-  renderSubmitSuccess() {
+
+  getProjectLink() {
+    return <a href={this.getProjectURL()}>{this.getProjectURL()}</a>;
+  }
+
+  getProjectURL() {
+    let path = window.location.href;
+    let endChar = path.includes("?") ? path.indexOf("?") : path.length;
+    return path.substr(0, endChar);
+  }
+
+  getEmailSubject() {
+    let type = this.props.projectType ? this.props.projectType : "";
+    return `Your ${type.toUpperCase()} Project`;
+  }
+
+  getEmailBody() {
+    return `Follow this link to view your project: ${this.getProjectURL()}`;
+  }
+
+  renderSubmitSucessMessage() {
     if (this.props.status === "LA Draft") {
-      return <div data-test="project-create-success">Project created!</div>;
-    } else {
+      return (
+        <div data-test="project-create-success">
+          Project created!
+          <p>
+            View your project or submit a return here {this.getProjectLink()}
+          </p>
+        </div>
+      );
+      } else { 
       return (
         <div data-test="project-initial-create-success">
           Draft Project Created!
+          <p>View your new project here {this.getProjectLink()}.</p>
         </div>
       );
     }
+  }
+
+  renderSubmitSuccess() {
+    return (<div data-test="share-project-link">
+      {this.renderSubmitSucessMessage()}
+      <CopyToClipboard text={this.getProjectURL()}>
+        <button className="btn-primary btn">
+          {" "}
+          Copy to Clipboard{" "}
+          <span className="glyphicon glyphicon-copy" aria-hidden="true" />
+        </button>
+      </CopyToClipboard>
+      <a
+        className="btn-primary btn margin-left"
+        href={`mailto:?body=${this.getEmailBody()}&subject=${this.getEmailSubject()}`}
+      >
+        Email this Project{" "}
+        <span className="glyphicon glyphicon-envelope" aria-hidden="true" />
+      </a>
+    </div>
+    );
   }
 
   render() {
