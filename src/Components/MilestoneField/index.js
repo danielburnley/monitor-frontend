@@ -93,6 +93,7 @@ export default class MilestoneField extends React.Component {
           onChange={e => this.onFieldChange("currentReturn", e)}
           data-test="milestone-current-return"
           value={this.state.currentReturn}
+          type="date"
           id="currentReturn"
         />
       </div>
