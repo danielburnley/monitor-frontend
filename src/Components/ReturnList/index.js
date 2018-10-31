@@ -2,10 +2,6 @@ import React from "react";
 import "./style.css";
 
 export default class ReturnList extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   renderLink(returns, index) {
     return (
       <a
@@ -21,7 +17,7 @@ export default class ReturnList extends React.Component {
 
   renderStatus(returns) {
     let status = returns.status;
-    if (status == "Draft") {
+    if (status === "Draft") {
       return (
         <span className="badge" data-test={`status-${returns.id}`}>
           {status}
@@ -53,7 +49,7 @@ export default class ReturnList extends React.Component {
   }
 
   render() {
-    if (this.props.returns.length == 0) {
+    if (this.props.returns.length === 0) {
       return <div />;
     } else {
       return (

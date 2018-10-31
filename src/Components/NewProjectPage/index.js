@@ -100,6 +100,8 @@ export default class NewProjectPage extends React.Component {
     return (
       <div>
         <ParentForm
+          data-test="project-form"
+          documentGateway={this.props.documentGateway}
           formData={this.state.formData}
           schema={this.state.formSchema}
           uiSchema={this.props.uiSchema}
@@ -146,21 +148,23 @@ export default class NewProjectPage extends React.Component {
             invalidPaths={this.state.prettyInvalidPaths}
           />
           {this.renderSaveSuccess()}
-          <button
-            data-test="submit-project-button"
-            className="btn form-button btn-primary"
-            onClick={this.submitProject}
-          >
-            Create this project
-          </button>
-          <button
-            data-test="update-project-button"
-            className="btn form-button btn-primary"
-            onClick={this.updateProject}
-          >
-            Save draft
-          </button>
-          <div className="col-md-10 col-md-offset-1">{this.renderForm()}</div>
+          <div className="row">
+            <button
+              data-test="submit-project-button"
+              className="btn form-button btn-primary"
+              onClick={this.submitProject}
+            >
+              Create this project
+            </button>
+            <button
+              data-test="update-project-button"
+              className="btn form-button btn-primary"
+              onClick={this.updateProject}
+            >
+              Save draft
+            </button>
+          </div>
+          <div className="row">{this.renderForm()}</div>
         </div>
       );
     }
@@ -201,7 +205,7 @@ export default class NewProjectPage extends React.Component {
           </p>
         </div>
       );
-    } else {
+      } else { 
       return (
         <div data-test="project-initial-create-success">
           Draft Project Created!
@@ -234,7 +238,7 @@ export default class NewProjectPage extends React.Component {
 
   render() {
     return (
-      <div className="container-fluid">
+      <div>
         <h2>Baseline editor</h2>
         {this.renderSuccessOrForm()}
       </div>
