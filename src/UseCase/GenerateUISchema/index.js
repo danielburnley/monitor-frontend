@@ -93,6 +93,10 @@ export default class GenerateUISchema {
       schema["ui:field"] = "periods"
     }
 
+    if(item.currency) {
+      schema["ui:field"] = "currency"
+    }
+
     if(Object.keys(schema).length === 0) {
       return undefined
     }
