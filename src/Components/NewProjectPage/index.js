@@ -2,6 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import ParentForm from "../ParentForm";
 import ValidationMessage from "../ValidationMessage";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import "./style.css";
 
 export default class NewProjectPage extends React.Component {
   constructor(props) {
@@ -24,8 +26,7 @@ export default class NewProjectPage extends React.Component {
     this.setState({ status: "submitted" });
   }
 
-  creationFailure() {
-  }
+  creationFailure() {}
 
   projectUpdated() {
     this.setState({ status: "saved" });
@@ -47,18 +48,18 @@ export default class NewProjectPage extends React.Component {
       status: "updating",
       action: "Submit",
       valid: true,
-      prettyInvalidPaths: [[]],
+      prettyInvalidPaths: [[]]
     });
 
-    if (this.props.status==="LA Draft") {
+    if (this.props.status === "LA Draft") {
       await this.validateProject();
     }
-    
+
     await this.props.updateProject.execute(
       this,
       this.props.match.params.id,
       this.state.formData
-    )
+    );
 
     if (this.state.valid) {
       await this.props.submitProject.execute(this, this.props.match.params.id);
@@ -76,7 +77,7 @@ export default class NewProjectPage extends React.Component {
       prettyInvalidPaths: [[]]
     });
 
-    if (this.props.status==="LA Draft") {
+    if (this.props.status === "LA Draft") {
       await this.validateProject();
     }
 
@@ -114,9 +115,9 @@ export default class NewProjectPage extends React.Component {
   }
 
   renderSuccessOrForm() {
-    if (this.state.status==="submitted") {
-      return(this.renderSubmitSuccess())
-    } else if (this.state.status==="updating") {
+    if (this.state.status === "submitted") {
+      return this.renderSubmitSuccess();
+    } else if (this.state.status === "updating") {
       return (
         <div>
           <button
@@ -166,35 +167,76 @@ export default class NewProjectPage extends React.Component {
   }
 
   renderSaveSuccess() {
-    if (this.state.status==="saved") {
+    if (this.state.status === "saved") {
       return <div data-test="project-update-success">Project updated!</div>;
     }
   }
 
-  getProjectLink () {
-    let path = window.location.href
-    let endChar = path.indexOf('?') ? path.indexOf('?') : path.length;
-    console.log(path.substr(0, endChar))
-    return <a href={path.substr(0, endChar)}>{path.substr(0, endChar)}</a>
+  getProjectLink() {
+    return <a href={this.getProjectURL()}>{this.getProjectURL()}</a>;
   }
 
-  renderSubmitSuccess() {
-    if(this.props.status==="LA Draft") {
-      return <div data-test="project-create-success">Project created!</div>;
+  getProjectURL() {
+    let path = window.location.href;
+    let endChar = path.includes("?") ? path.indexOf("?") : path.length;
+    return path.substr(0, endChar);
+  }
 
+  getEmailSubject() {
+    let type = this.props.projectType ? this.props.projectType : "";
+    return `Your ${type.toUpperCase()} Project`;
+  }
+
+  getEmailBody() {
+    return `Follow this link to view your project: ${this.getProjectURL()};`;
+  }
+
+  renderSubmitSucessMessage() {
+    if (this.props.status === "LA Draft") {
+      return (
+        <div data-test="project-create-success">
+          Project created!
+          <p>
+            View your project or submit a return here {this.getProjectLink()}
+          </p>
+        </div>
+      );
     } else {
-      return <div data-test="project-initial-create-success">
-        Draft Project Created! Here is the link to the project {this.getProjectLink()}.
-      </div>
+      return (
+        <div data-test="project-initial-create-success">
+          Draft Project Created!
+          <p>View your new project here {this.getProjectLink()}.</p>
+        </div>
+      );
     }
   }
 
+  renderSubmitSuccess() {
+    return (<div data-test="share-project-link">
+      {this.renderSubmitSucessMessage()}
+      <CopyToClipboard text={this.getProjectURL()}>
+        <button className="btn-primary btn">
+          {" "}
+          Copy to Clipboard{" "}
+          <span className="glyphicon glyphicon-copy" aria-hidden="true" />
+        </button>
+      </CopyToClipboard>
+      <a
+        className="btn-primary btn margin-left"
+        href={`mailto:?body=${this.getEmailBody()}&subject=${this.getEmailSubject()}`}
+      >
+        Email this Project{" "}
+        <span className="glyphicon glyphicon-envelope" aria-hidden="true" />
+      </a>
+    </div>
+    );
+  }
 
   render() {
     return (
       <div className="container-fluid">
         <h2>Baseline editor</h2>
-        { this.renderSuccessOrForm() }
+        {this.renderSuccessOrForm()}
       </div>
     );
   }
