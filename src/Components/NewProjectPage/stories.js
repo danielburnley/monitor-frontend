@@ -1,5 +1,6 @@
 import React from 'react';
 import ProjectPage from '.';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 import { storiesOf } from '@storybook/react';
 
@@ -196,5 +197,17 @@ storiesOf('NewProjectPage', module)
         validateProject = {validateProjectUseCase}
         match={{ params: { projectId: 1, type: 'hif' } }}
       />
+    )
+  })
+  .add('Email Button', () => {
+    return(
+      <div data-test="project-initial-create-success">
+        Draft Project Created! 
+        <p>Here is a link to the project <a>http://thisismyproject.com</a>.</p>
+      <CopyToClipboard text="http://thisismyproject.com" >
+          <button className="btn-primary btn"> Copy to Clipboard <span class="glyphicon glyphicon-copy" aria-hidden="true"></span></button>
+        </CopyToClipboard>
+        <a className="btn-primary btn" href={`mailto:.com?body=http://thisismyproject.com&subject=subject`}>Email this Project <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></a>
+      </div>
     )
   })

@@ -90,95 +90,63 @@ describe("<ParentForm>", () => {
   describe("When selecting an item in the sidebar", () => {
     let parentForm;
 
-    beforeEach(() => {
-      parentForm = shallow(
-        <ParentForm
-          onChange={jest.fn()}
-          schema={{
-            type: "object",
-            properties: {
-              cat: {
-                type: "object",
-                properties: {
-                  name: {
-                    type: "string"
-                  },
-                  noise: {
-                    type: "string"
+    describe("With an array type", () => {
+      beforeEach(() => {
+        parentForm = shallow(
+          <ParentForm
+            onChange={jest.fn()}
+            formData={{ cats: [{ name: "Mittens", noise: "Meow" }] }}
+            schema={{
+              type: "object",
+              properties: {
+                cats: {
+                  type: "array",
+                  items: {
+                    type: "object",
+                    properties: {
+                      name: {
+                        type: "string"
+                      },
+                      noise: {
+                        type: "string"
+                      }
+                    }
                   }
-                }
-              },
-              dog: {
-                type: "object",
-                properties: {
-                  name: {
-                    type: "string"
-                  },
-                  bark: {
-                    type: "string"
+                },
+                dogs: {
+                  type: "array",
+                  items: {
+                    type: "object",
+                    properties: {
+                      name: {
+                        type: "string"
+                      },
+                      bark: {
+                        type: "string"
+                      }
+                    }
                   }
                 }
               }
-            }
-          }}
-        />
-      );
-    });
-
-    describe("Example one", () => {
-      beforeEach(() => {
-        parentForm
-          .find("Sidebar")
-          .props()
-          .onItemClick("name", 1);
+            }}
+          />
+        );
       });
 
-      it("Sets the selected form section to the one chosen", () => {
-        expect(parentForm.state().selectedFormSection).toEqual("name");
-      });
-
-      it("Sets the selected form section to the index chosen", () => {
-        expect(parentForm.state().selectedFormItemIndex).toEqual(1);
-      });
-    });
-
-    describe("Example two", () => {
-      beforeEach(() => {
-        parentForm
-          .find("Sidebar")
-          .props()
-          .onItemClick("noise", 2);
-      });
-
-      it("Sets the selected form section to the one chosen", () => {
-        expect(parentForm.state().selectedFormSection).toEqual("noise");
-      });
-
-      it("Sets the selected form section to the index chosen", () => {
-        expect(parentForm.state().selectedFormItemIndex).toEqual(2);
-      });
-    });
-
-    describe("When using the navbar", () => {
       describe("Example one", () => {
         beforeEach(() => {
           parentForm
             .find("Sidebar")
             .props()
-            .onItemClick("noise", 2);
-
-          parentForm
-            .find("#cat")
-            .props()
-            .onClick({ target: { id: "cat" } });
+            .onItemClick("name", 1);
         });
 
-        it("Sets the state to the first property of the selected section", () => {
+        it("Sets the selected form section to the one chosen", () => {
           expect(parentForm.state().selectedFormSection).toEqual("name");
         });
 
-        it("Sets the selected index to 0", () => {
-          expect(parentForm.state().selectedFormItemIndex).toEqual(0);
+        it("Sets the selected form section to the index chosen", () => {
+          expect(parentForm.state().selectedFormItemIndex).toEqual(1);
         });
       });
 
@@ -188,20 +156,147 @@ describe("<ParentForm>", () => {
             .find("Sidebar")
             .props()
             .onItemClick("noise", 2);
+        });
 
+        it("Sets the selected form section to the one chosen", () => {
+          expect(parentForm.state().selectedFormSection).toEqual("noise");
+        });
+
+        it("Sets the selected form section to the index chosen", () => {
+          expect(parentForm.state().selectedFormItemIndex).toEqual(2);
+        });
+      });
+
+      describe("When using the navbar", () => {
+        describe("Example one", () => {
+          beforeEach(() => {
+            parentForm
+              .find("Sidebar")
+              .props()
+              .onItemClick("noise", 2);
+
+            parentForm
+              .find("#cats")
+              .props()
+              .onClick({ target: { id: "cats" } });
+          });
+
+          it("Sets the state to the first property of the selected section", () => {
+            expect(parentForm.state().selectedFormSection).toEqual("name");
+          });
+
+          it("Sets the selected index to 0", () => {
+            expect(parentForm.state().selectedFormItemIndex).toEqual(0);
+          });
+        });
+
+        describe("Example two", () => {
+          beforeEach(() => {
+            parentForm
+              .find("Sidebar")
+              .props()
+              .onItemClick("noise", 2);
+
+            parentForm
+              .find("#cats")
+              .props()
+              .onClick({ target: { id: "cats" } });
+          });
+
+          it("Sets the state to the first property of the selected section", () => {
+            expect(parentForm.state().selectedFormSection).toEqual("name");
+          });
+
+          it("Sets the selected index to 0", () => {
+            expect(parentForm.state().selectedFormItemIndex).toEqual(0);
+          });
+        });
+      });
+    });
+
+    describe("With an object type", () => {
+      let documentSpy, documentGatewaySpy, elementSpy;
+
+      beforeEach(() => {
+        elementSpy = { scrollIntoView: jest.fn() }
+        documentSpy = { getElementById: jest.fn(() => elementSpy) }
+        documentGatewaySpy = { getDocument: jest.fn(() => documentSpy) };
+        parentForm = shallow(
+          <ParentForm
+            onChange={jest.fn()}
+            formData={{ cats: [{ name: "Mittens", noise: "Meow" }] }}
+            documentGateway={documentGatewaySpy}
+            schema={{
+              type: "object",
+              properties: {
+                cat: {
+                  type: "object",
+                  properties: {
+                    name: {
+                      type: "string"
+                    },
+                    noise: {
+                      type: "string"
+                    }
+                  }
+                },
+                dog: {
+                  type: "object",
+                  properties: {
+                    name: {
+                      type: "string"
+                    },
+                    bark: {
+                      type: "string"
+                    }
+                  }
+                }
+              }
+            }}
+          />
+        );
+      });
+
+      describe("Example one", () => {
+        beforeEach(() => {
           parentForm
-            .find("#cat")
+            .find("Sidebar")
             .props()
-            .onClick({ target: { id: "cat" } });
+            .onItemClick("noise");
         });
 
-        it("Sets the state to the first property of the selected section", () => {
-          expect(parentForm.state().selectedFormSection).toEqual("name");
+        it("Gets the document from the document gateway", () => {
+          expect(documentGatewaySpy.getDocument).toHaveBeenCalled();
         });
 
-        it("Sets the selected index to 0", () => {
-          expect(parentForm.state().selectedFormItemIndex).toEqual(0);
+        it("Gets the element from the document by its ID", () => {
+          expect(documentSpy.getElementById).toHaveBeenCalledWith("root_noise__title")
+        })
+
+        it("Scrolls the element into view", () => {
+          expect(elementSpy.scrollIntoView).toHaveBeenCalled()
+        })
+      });
+
+      describe("Example Two", () => {
+        beforeEach(() => {
+          parentForm
+            .find("Sidebar")
+            .props()
+            .onItemClick("name");
         });
+
+        it("Gets the document from the document gateway", () => {
+          expect(documentGatewaySpy.getDocument).toHaveBeenCalled();
+        });
+
+        it("Gets the element from the document by its ID", () => {
+          expect(documentSpy.getElementById).toHaveBeenCalledWith("root_name__title")
+        })
+
+        it("Scrolls the element into view", () => {
+          expect(elementSpy.scrollIntoView).toHaveBeenCalled()
+        })
       });
     });
   });
@@ -409,25 +504,44 @@ describe("<ParentForm>", () => {
       });
 
       describe("Updates the parent formdata when changing", () => {
-        it("Example one", () => {
-          parentForm
-            .find(ArraySubform)
-            .props()
-            .onChange({ newData: "meow" });
+        let wrap;
+
+        beforeEach(() => {
+          wrap = mount(
+            <ParentForm
+              onChange={onChangeSpy}
+              schema={{
+                type: "object",
+                properties: {
+                  cat: {
+                    type: "object",
+                    properties: {
+                      sound: {
+                        type: "string"
+                      }
+                    }
+                  }
+                }
+              }}
+            />
+          );
+        });
+
+        it("Example one", async () => {
+          let input = wrap.find("input").first();
+          await updateFormField(input, "meow");
 
           expect(onChangeSpy).toHaveBeenCalledWith({
-            formData: { cat: { newData: "meow" } }
+            formData: { cat: { sound: "meow" } }
           });
         });
 
-        it("Example two", () => {
-          parentForm
-            .find(ArraySubform)
-            .props()
-            .onChange({ woof: "bark" });
+        it("Example two", async () => {
+          let input = wrap.find("input").first();
+          await updateFormField(input, "bark");
 
           expect(onChangeSpy).toHaveBeenCalledWith({
-            formData: { cat: { woof: "bark" } }
+            formData: { cat: { sound: "bark" } }
           });
         });
       });
@@ -501,25 +615,44 @@ describe("<ParentForm>", () => {
       });
 
       describe("Updates the parent formdata when changing", () => {
-        it("Example one", () => {
-          parentForm
-            .find(ArraySubform)
-            .props()
-            .onChange({ newData: "meow" });
+        let wrap;
+
+        beforeEach(() => {
+          wrap = mount(
+            <ParentForm
+              onChange={onChangeSpy}
+              schema={{
+                type: "object",
+                properties: {
+                  dog: {
+                    type: "object",
+                    properties: {
+                      action: {
+                        type: "string"
+                      }
+                    }
+                  }
+                }
+              }}
+            />
+          );
+        });
+
+        it("Example one", async () => {
+          let input = wrap.find("input").first();
+          await updateFormField(input, "wag");
 
           expect(onChangeSpy).toHaveBeenCalledWith({
-            formData: { dog: { newData: "meow" } }
+            formData: { dog: { action: "wag" } }
           });
         });
 
-        it("Example two", () => {
-          parentForm
-            .find(ArraySubform)
-            .props()
-            .onChange({ woof: "bark" });
+        it("Example two", async () => {
+          let input = wrap.find("input").first();
+          await updateFormField(input, "chase");
 
           expect(onChangeSpy).toHaveBeenCalledWith({
-            formData: { dog: { woof: "bark" } }
+            formData: { dog: { action: "chase" } }
           });
         });
       });

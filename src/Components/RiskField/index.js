@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 export default class RiskField extends React.Component {
   constructor(props) {
@@ -15,7 +14,7 @@ export default class RiskField extends React.Component {
         this.props.formData.riskCurrentReturnLikelihood || "1",
       riskAnyChange: this.props.formData.riskAnyChange || "No",
       riskCurrentReturnMitigationsInPlace:
-        this.props.formData.riskCurrentReturnMitigationsInPlace 
+        this.props.formData.riskCurrentReturnMitigationsInPlace
     };
   }
 

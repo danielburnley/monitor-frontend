@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import "./style.css";
 
 export default class Sidebar extends React.Component {
@@ -60,3 +61,8 @@ export default class Sidebar extends React.Component {
     );
   }
 }
+
+Sidebar.propTypes = {
+  items: PropTypes.object.isRequired,
+  onItemClick: PropTypes.func.isRequired
+};

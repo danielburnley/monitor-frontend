@@ -71,8 +71,10 @@ export default class PeriodsField extends React.Component {
           ([key, value]) => {
             return (
               <div key={`${key}`}>
-                <div className="row">{this.renderHeader(value.title)}</div>
-                <div className="row">{this.renderLine(key, value)}</div>
+                <div className="row">
+                  {this.renderHeader(value.title)}
+                  {this.renderLine(key, value)}
+                </div>
               </div>
             );
           }
