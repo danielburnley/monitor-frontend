@@ -188,7 +188,7 @@ export default class NewProjectPage extends React.Component {
   }
 
   getEmailBody() {
-    return `Follow this link to view your project: ${this.getProjectURL()};`;
+    return `Follow this link to view your project: ${this.getProjectURL()}`;
   }
 
   renderSubmitSucessMessage() {
