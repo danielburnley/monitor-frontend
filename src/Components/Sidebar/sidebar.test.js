@@ -17,7 +17,8 @@ describe("<Sidebar>", () => {
 
   describe("Given no data", () => {
     beforeEach(() => {
-      sidebar = mount(<Sidebar items={{}} />);
+      let itemClickSpy = jest.fn();
+      sidebar = mount(<Sidebar items={{}} onItemClick={itemClickSpy}/>);
     });
 
     it("Renders an empty sidebar given no data", () => {
@@ -139,7 +140,7 @@ describe("<Sidebar>", () => {
         .find('[data-test="sidebar-item-button"]');
       expect(button.props().onClick).toBeUndefined();
     });
-    
+
     it("sets the child title to the title given", () => {
       let link = sidebar.find('[data-test="sidebar-item-child-button"]');
       expect(link.text()).toEqual("noises");
