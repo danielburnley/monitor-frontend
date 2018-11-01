@@ -245,8 +245,10 @@ export default class NewProjectPage extends React.Component {
   renderMandatoryWarning() {
     if (this.state.status === "submitted" || this.state.status === "updating") {
       return null;
-    } else {
+    } else if (this.props.status === "LA Draft") {
       return <p>Fields marked with * are mandatory</p>;
+    } else {
+      return null;
     }
   }
 
