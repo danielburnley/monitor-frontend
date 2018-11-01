@@ -17,3 +17,7 @@
   font-style: italic;
   color: #a9a9a9;
 }
+
+.mandatory {
+  padding-left: 1em;
+}
