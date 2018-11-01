@@ -1,16 +1,25 @@
 import React from "react";
-import { shallow } from "enzyme";
+import { shallow, mount } from "enzyme";
 import MilestoneField from "../../src/Components/MilestoneField";
 
 export default class MilestoneComponent {
-  constructor(formData, onChange, schemaTitle) {
-    this.milestone = shallow(
+  constructor(formData, onChange, schemaTitle, percentagefield) {
+    this.milestone = mount(
       <MilestoneField
         schema={{ title: schemaTitle }}
         formData={formData}
         onChange={onChange}
+        registry={
+          {
+            fields: {
+              percentage: percentagefield
+            }
+          }
+        }
       />
     );
+
+    this.milestone.update()
   }
 
   title = () => this.milestone.find("[data-test='schema-title']").text();
@@ -60,4 +69,6 @@ export default class MilestoneComponent {
   findMilestonePercentCompleted = () =>
     this.milestone.find("[data-test='milestone-percent-completed']").props()
       .value;
+  find = (selector) =>
+    this.milestone.find(selector);
 }

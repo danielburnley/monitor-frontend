@@ -117,7 +117,7 @@ export default class VarianceField extends React.Component {
   renderPercentComplete = () => (
     <div className="col-md-3 form-group">
       <label htmlFor="percent-complete">Percent complete*</label>
-      <PercentageField
+      <this.props.registry.fields.percentage
         className="form-control"
         data-test="variance-percentage"
         id="percent-complete"
