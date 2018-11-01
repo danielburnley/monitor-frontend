@@ -29,7 +29,9 @@ export default class NewProjectPage extends React.Component {
   creationFailure() {}
 
   projectUpdated() {
-    this.setState({ status: "saved" });
+    if(this.state.status === "updating") {
+      this.setState({ status: "saved" });
+    }
   }
 
   projectNotUpdated() {}
@@ -45,7 +47,7 @@ export default class NewProjectPage extends React.Component {
 
   submitProject = async e => {
     this.setState({
-      status: "updating",
+      status: "submitting",
       action: "Submit",
       valid: true,
       prettyInvalidPaths: [[]]
@@ -70,13 +72,12 @@ export default class NewProjectPage extends React.Component {
   };
 
   updateProject = async e => {
-    this.setState({
+    await this.setState({
       status: "updating",
       valid: true,
       action: "Update",
       prettyInvalidPaths: [[]]
     });
-
     if (this.props.status === "LA Draft") {
       await this.validateProject();
     }
@@ -95,6 +96,10 @@ export default class NewProjectPage extends React.Component {
       valid: false
     });
   };
+
+  isLoading() {
+    return this.state.status === "updating" || this.state.status === "submitting"
+  }
 
   renderForm() {
     return (
@@ -119,7 +124,7 @@ export default class NewProjectPage extends React.Component {
   renderSuccessOrForm() {
     if (this.state.status === "submitted") {
       return this.renderSubmitSuccess();
-    } else if (this.state.status === "updating") {
+    } else if (this.isLoading()) {
       return (
         <div>
           <button

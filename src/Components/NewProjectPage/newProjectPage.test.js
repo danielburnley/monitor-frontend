@@ -59,9 +59,9 @@ describe("NewProjectPage", () => {
 
   describe("disables buttons while project updating hasnt completed", () => {
     it("example 1", async () => {
-      let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {}) };
+      let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {presenter.creationSuccess(id)}) };
       let updateProjectSpy = {
-        execute: jest.fn(async (presenter, id) => {})
+        execute: jest.fn(async (presenter, id) => {presenter.projectUpdated(id)})
       };
       let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
@@ -272,6 +272,7 @@ describe("NewProjectPage", () => {
       await updateFormField(wrap.find('input[type="text"]'), "hi");
       await wrap.update();
       wrap.find('[data-test="update-project-button"]').simulate("click");
+      await wait();
       expect(validateProjectSpy.execute).toBeCalledWith(
         expect.anything(),
         1,
@@ -308,6 +309,7 @@ describe("NewProjectPage", () => {
       await updateFormField(wrap.find('input[type="text"]'), "Meow");
       await wrap.update();
       wrap.find('[data-test="update-project-button"]').simulate("click");
+      await wait();
       expect(validateProjectSpy.execute).toBeCalledWith(
         expect.anything(),
         6,
@@ -801,8 +803,8 @@ describe("NewProjectPage", () => {
 
       await wait();
       await wrap.find('[data-test="update-project-button"]').simulate("click");
+      await wrap.update()
       await updateFormField(wrap.find('input[type="text"]'), "cashews");
-
       await wrap.update();
       expect(wrap.find('[data-test="project-update-success"]').length).toEqual(
         0
