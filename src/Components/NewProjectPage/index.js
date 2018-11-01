@@ -210,7 +210,7 @@ export default class NewProjectPage extends React.Component {
           </p>
         </div>
       );
-      } else { 
+    } else {
       return (
         <div data-test="project-initial-create-success">
           Draft Project Created!
@@ -221,30 +221,40 @@ export default class NewProjectPage extends React.Component {
   }
 
   renderSubmitSuccess() {
-    return (<div data-test="share-project-link">
-      {this.renderSubmitSucessMessage()}
-      <CopyToClipboard text={this.getProjectURL()}>
-        <button className="btn-primary btn">
-          {" "}
-          Copy to Clipboard{" "}
-          <span className="glyphicon glyphicon-copy" aria-hidden="true" />
-        </button>
-      </CopyToClipboard>
-      <a
-        className="btn-primary btn margin-left"
-        href={`mailto:?body=${this.getEmailBody()}&subject=${this.getEmailSubject()}`}
-      >
-        Email this Project{" "}
-        <span className="glyphicon glyphicon-envelope" aria-hidden="true" />
-      </a>
-    </div>
+    return (
+      <div data-test="share-project-link">
+        {this.renderSubmitSucessMessage()}
+        <CopyToClipboard text={this.getProjectURL()}>
+          <button className="btn-primary btn">
+            {" "}
+            Copy to Clipboard{" "}
+            <span className="glyphicon glyphicon-copy" aria-hidden="true" />
+          </button>
+        </CopyToClipboard>
+        <a
+          className="btn-primary btn margin-left"
+          href={`mailto:?body=${this.getEmailBody()}&subject=${this.getEmailSubject()}`}
+        >
+          Email this Project{" "}
+          <span className="glyphicon glyphicon-envelope" aria-hidden="true" />
+        </a>
+      </div>
     );
+  }
+
+  renderMandatoryWarning() {
+    if (this.state.status === "submitted" || this.state.status === "updating") {
+      return null;
+    } else {
+      return <p>Fields marked with * are mandatory</p>;
+    }
   }
 
   render() {
     return (
       <div>
         <h2>Baseline editor</h2>
+        {this.renderMandatoryWarning()}
         {this.renderSuccessOrForm()}
       </div>
     );
