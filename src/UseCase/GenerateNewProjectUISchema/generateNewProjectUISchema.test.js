@@ -5,9 +5,11 @@ describe("GenerateNewProjectSchema", () => {
     describe("With a single item", () => {
       describe("Example 1", () => {
         let schema = {
-          a: {
-            type: "string",
-            laReadOnly: true
+          properties: {
+            a: {
+              type: "string",
+              laReadOnly: true
+            }
           }
         };
         let generateUISchema = {
@@ -20,23 +22,27 @@ describe("GenerateNewProjectSchema", () => {
             return { a: { "ui:disabled": true } };
           })
         };
-  
+
         let generateNewProjectUISchema = new GenerateNewProjectUISchema(
           generateUISchema,
           generateReadOnlySchema
         );
         it("Will return the correct UI Schema", () => {
-          expect(generateNewProjectUISchema.execute(schema, "LA Draft")).toEqual({
+          expect(
+            generateNewProjectUISchema.execute(schema, "LA Draft")
+          ).toEqual({
             a: { "ui:disabled": true, generalprop: true }
           });
         });
       });
-  
+
       describe("Example 2", () => {
         let schema = {
-          b: {
-            type: "integer",
-            laReadOnly: true
+          properties: {
+            b: {
+              type: "integer",
+              laReadOnly: true
+            }
           }
         };
         let generateUISchema = {
@@ -49,13 +55,15 @@ describe("GenerateNewProjectSchema", () => {
             return { b: { "ui:disabled": true } };
           })
         };
-  
+
         let generateNewProjectUISchema = new GenerateNewProjectUISchema(
           generateUISchema,
           generateReadOnlySchema
         );
         it("Will return the correct UI Schema", () => {
-          expect(generateNewProjectUISchema.execute(schema, "LA Draft")).toEqual({
+          expect(
+            generateNewProjectUISchema.execute(schema, "LA Draft")
+          ).toEqual({
             b: { "ui:disabled": true, cats: false }
           });
         });
@@ -63,35 +71,42 @@ describe("GenerateNewProjectSchema", () => {
     });
     describe("With no UI properties", () => {
       it("returns an empty hash", () => {
-        let schema = {c: {type: "string"}}
+        let schema = { properties: { c: { type: "string" } } };
         let generateUISchema = {
           execute: jest.fn(schema => {
-            return {}
+            return {};
           })
-        }
+        };
         let generateReadOnlySchema = {
           execute: jest.fn(schema => {
-            return {}
+            return {};
           })
-        }
-        let generateNewProjectUISchema = new GenerateNewProjectUISchema(generateUISchema, generateReadOnlySchema)
-        expect(generateNewProjectUISchema.execute(schema, "LA Draft")).toEqual({})
+        };
+        let generateNewProjectUISchema = new GenerateNewProjectUISchema(
+          generateUISchema,
+          generateReadOnlySchema
+        );
+        expect(generateNewProjectUISchema.execute(schema, "LA Draft")).toEqual(
+          {}
+        );
       });
     });
     describe("With an array", () => {
       describe("Example 1", () => {
         let schema = {
-          b: {
-            type: "array",
-            items: {
-              type: "object",
-              properties: {
-                c: { type: "string" }
+          propperties: {
+            b: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  c: { type: "string" }
+                }
               }
             }
           }
         };
-  
+
         let generateUISchema = {
           execute: jest.fn(schema => {
             return {
@@ -108,15 +123,17 @@ describe("GenerateNewProjectSchema", () => {
         };
         let generateReadOnlySchema = {
           execute: jest.fn((schema, flag) => {
-            return {}
-            })
-          };
+            return {};
+          })
+        };
         let generateNewProjectUISchema = new GenerateNewProjectUISchema(
           generateUISchema,
           generateReadOnlySchema
         );
         it("Will return the correct UI Schema", () => {
-          expect(generateNewProjectUISchema.execute(schema, "LA Draft")).toEqual({
+          expect(
+            generateNewProjectUISchema.execute(schema, "LA Draft")
+          ).toEqual({
             b: {
               "ui:options": {
                 addable: true,
@@ -128,27 +145,29 @@ describe("GenerateNewProjectSchema", () => {
           });
         });
       });
-  
+
       describe("Example 2", () => {
         let schema = {
-          a: {
-            type: "array",
-            items: {
-              type: "object",
-              horizontal: true,
-              properties: {
-                b: {
-                  type: "object",
-                  properties: {
-                    d: { type: "string", laReadOnly: true }
-                  }
-                },
-                c: { type: "string", base: true }
+          properties: {
+            a: {
+              type: "array",
+              items: {
+                type: "object",
+                horizontal: true,
+                properties: {
+                  b: {
+                    type: "object",
+                    properties: {
+                      d: { type: "string", laReadOnly: true }
+                    }
+                  },
+                  c: { type: "string", base: true }
+                }
               }
             }
           }
         };
-  
+
         let generateUISchema = {
           execute: jest.fn(schema => {
             return {
@@ -189,7 +208,9 @@ describe("GenerateNewProjectSchema", () => {
           generateReadOnlySchema
         );
         it("Will return the correct UI Schema", () => {
-          expect(generateNewProjectUISchema.execute(schema, "LA Draft")).toEqual({
+          expect(
+            generateNewProjectUISchema.execute(schema, "LA Draft")
+          ).toEqual({
             a: {
               "ui:options": {
                 addable: false,
@@ -207,28 +228,29 @@ describe("GenerateNewProjectSchema", () => {
           });
         });
       });
-
     });
     describe("With a nested object", () => {
       describe("Example 1", () => {
         let schema = {
-          a: {
-            type: "object",
-            properties: {
-              b: {
-                type: "array",
-                items: {
-                  horizontal: true,
-                  type: "object",
-                  properties: {
-                    c: { type: "string", laReadOnly: true }
+          properties: {
+            a: {
+              type: "object",
+              properties: {
+                b: {
+                  type: "array",
+                  items: {
+                    horizontal: true,
+                    type: "object",
+                    properties: {
+                      c: { type: "string", laReadOnly: true }
+                    }
                   }
                 }
               }
             }
           }
         };
-  
+
         let generateUISchema = {
           execute: jest.fn(schema => {
             return {
@@ -266,7 +288,9 @@ describe("GenerateNewProjectSchema", () => {
           generateReadOnlySchema
         );
         it("Will return the correct UI Schemas", () => {
-          expect(generateNewProjectUISchema.execute(schema, "LA Draft")).toEqual({
+          expect(
+            generateNewProjectUISchema.execute(schema, "LA Draft")
+          ).toEqual({
             a: {
               b: {
                 "ui:options": {
@@ -284,36 +308,38 @@ describe("GenerateNewProjectSchema", () => {
     describe("An array with different UI properties in the items", () => {
       describe("Example 1", () => {
         let schema = {
-          e: {
-            type: "object",
-            properties: {
-              f: {
-                type: "array",
-                items: {
-                  horizontal: true,
-                  type: "object",
-                  properties: {
-                    c: { type: "string" },
-                    h: { type: "string" },
-                    j: { type: "string" }
+          properties: {
+            e: {
+              type: "object",
+              properties: {
+                f: {
+                  type: "array",
+                  items: {
+                    horizontal: true,
+                    type: "object",
+                    properties: {
+                      c: { type: "string" },
+                      h: { type: "string" },
+                      j: { type: "string" }
+                    }
                   }
+                },
+                g: {
+                  type: "string",
+                  laReadOnly: true
                 }
-              },
-              g: {
-                type: "string",
-                laReadOnly: true
               }
             }
           }
         };
-  
+
         let generateUISchema = {
           execute: jest.fn(schema => {
             return {
               e: {
                 f: {
                   items: { "ui:field": "horizontal", h: { "ui:widget": true } },
-                  "hey": "yes",
+                  hey: "yes",
                   "ui:options": {
                     addable: false,
                     orderable: false,
@@ -349,7 +375,9 @@ describe("GenerateNewProjectSchema", () => {
           generateReadOnlySchema
         );
         it("Will return the correct UI Schemas", () => {
-          expect(generateNewProjectUISchema.execute(schema, "LA Draft")).toEqual({
+          expect(
+            generateNewProjectUISchema.execute(schema, "LA Draft")
+          ).toEqual({
             e: {
               f: {
                 items: {
@@ -391,33 +419,44 @@ describe("GenerateNewProjectSchema", () => {
             return {};
           })
         };
-  
+
         let generateNewProjectUISchema = new GenerateNewProjectUISchema(
           generateUISchema,
           generateReadOnlySchema
         );
-  
+
         it("Returns a general UI schema", () => {
-          expect(generateNewProjectUISchema.execute(schema, "LA Draft")).toEqual({
+          expect(
+            generateNewProjectUISchema.execute(schema, "LA Draft")
+          ).toEqual({
             a: { b: { c: { "ui:widget": true } } }
           });
         });
       });
     });
   });
-  
+
   describe("Generating non LA UI Schema", () => {
     it("Gives back the response from generateUISchema", () => {
-      let schema = {}
+      let schema = {};
       let generateUISchema = {
         execute: jest.fn(schema => {
-          return { a: { generalprop: true, "somthingelse": "wooo" }, "morepropetie": "cats" };
+          return {
+            a: { generalprop: true, somthingelse: "wooo" },
+            morepropetie: "cats"
+          };
         })
       };
       let generateReadOnlySchema;
-      let generateNewProjectUISchema = new GenerateNewProjectUISchema(generateUISchema, generateReadOnlySchema) 
-  
-      expect(generateNewProjectUISchema.execute(schema, "Anything")).toEqual({ a: { generalprop: true, "somthingelse": "wooo" }, "morepropetie": "cats" })
-    })
+      let generateNewProjectUISchema = new GenerateNewProjectUISchema(
+        generateUISchema,
+        generateReadOnlySchema
+      );
+
+      expect(generateNewProjectUISchema.execute(schema, "Anything")).toEqual({
+        a: { generalprop: true, somthingelse: "wooo" },
+        morepropetie: "cats"
+      });
+    });
   });
 });
