@@ -1,4 +1,5 @@
 import React from "react";
+import './style.css';
 
 export default class CookieConsent extends React.Component {
   constructor(props) {
@@ -21,8 +22,7 @@ export default class CookieConsent extends React.Component {
     if (this.state.show) {
       return (
         <div id="cookie-notice" data-test="cookie-notice">
-          The Homes England Monitor uses cookies to make the site simpler.
-           <a href="https://blog.gov.uk/cookies/">Find out more about cookies</a>
+          The Homes England Monitor uses cookies to make the site simpler. <a href="https://blog.gov.uk/cookies/">Find out more about cookies</a>
         </div>
       );
     } else {
