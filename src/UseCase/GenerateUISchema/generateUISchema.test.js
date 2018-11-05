@@ -891,7 +891,7 @@ describe("GenerateUISchema", () => {
     });
   });
 
-  describe("With Currency Symobols", () => {
+  describe("With Currency Symbols", () => {
       describe("In an object", () => {
         describe("Example one", () => {
           it("Marks the field as a currency field", () => {
@@ -908,11 +908,11 @@ describe("GenerateUISchema", () => {
             };
             let response = useCase.execute(schema);
             expect(response).toEqual({
-              a: { b: { "ui:field": "currency" } }
+              a: { b: { "ui:widget": "currency" } }
             });
           });
         });
-  
+
         describe("Example two", () => {
           it("Marks the field as hidden", () => {
             let schema = {
@@ -939,7 +939,7 @@ describe("GenerateUISchema", () => {
             });
           });
         });
-  
+
         describe("With dependencies", () => {
           it("Generates a ui schema from an object with dependencies", () => {
             let schema = {
@@ -970,18 +970,18 @@ describe("GenerateUISchema", () => {
                 }
               }
             };
-  
+
             let response = useCase.execute(schema);
             expect(response).toEqual({
               a: {
                 cats: { "ui:disabled": true },
-                meow: { cat: { "ui:field": "currency" } },
+                meow: { cat: { "ui:widget": "currency" } },
                 quack: { "ui:disabled": true }
               }
             });
           });
         });
-  
+
         describe("When readonly and hidden", () => {
           it("Marks the field as hidden and readonly", () => {
             let schema = {
@@ -997,7 +997,7 @@ describe("GenerateUISchema", () => {
             };
             let response = useCase.execute(schema);
             expect(response).toEqual({
-              a: { b: { "ui:field": "currency", "ui:disabled": true } }
+              a: { b: { "ui:widget": "currency", "ui:disabled": true } }
             });
           });
         });

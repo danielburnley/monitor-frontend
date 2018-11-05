@@ -869,7 +869,7 @@ describe("<ParentForm>", () => {
           uiSchema={{
             cat: {
               name: {
-                "ui:field": "currency"
+                "ui:widget": "currency"
               }
             }
           }}

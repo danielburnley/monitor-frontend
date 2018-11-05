@@ -131,7 +131,10 @@ export default class ParentForm extends React.Component {
       risk: RiskField,
       periods: PeriodsField,
       base: BaselineData,
-      milestone: MilestoneField,
+      milestone: MilestoneField
+    };
+
+    const widgets = {
       currency: CurrencyField
     };
 
@@ -146,6 +149,7 @@ export default class ParentForm extends React.Component {
             }}
             data={this.state.formData[this.state.selected]}
             fields={fields}
+            widgets={widgets}
             selectedFormSection={this.state.selectedFormSection}
             selectedIndex={this.state.selectedFormItemIndex}
             schema={this.props.schema.properties[this.state.selected]}
@@ -162,6 +166,7 @@ export default class ParentForm extends React.Component {
               this.subformOnChange(formData);
             }}
             formData={this.state.formData[this.state.selected]}
+            widgets={widgets}
             fields={fields}
             schema={this.props.schema.properties[this.state.selected]}
             uiSchema={this.selectedUiSchema()}

@@ -6,15 +6,14 @@ export default class CurrencyField extends React.Component {
     super(props);
 
     this.state = {
-      data: this.props.formData,
+      value: this.props.value || '',
       currency: this.props.currency ? this.props.currency : "£"
     };
   }
 
   onFieldChange(e) {
-    this.setState({ data: e.target.value }, () => {
-      this.props.onChange(this.state.data);
-    });
+    this.setState({value: e.target.value});
+    this.props.onChange(e.target.value);
   }
 
   isInputDisabled() {
@@ -49,7 +48,7 @@ export default class CurrencyField extends React.Component {
           <input
             className="form-control"
             data-test="currency-input"
-            value={this.state.data}
+            value={this.state.value}
             onChange={e => this.onFieldChange(e)}
             disabled={this.isInputDisabled()}
             id="moneyLabel"

@@ -4,7 +4,7 @@ import { shallow } from "enzyme";
 
 describe("CurrencyField", () => {
   describe("Example 1", () => {
-    let schema, data, uiSchema, field, currencySymbol, onChangeSpy;
+    let schema, value, uiSchema, field, currencySymbol, onChangeSpy;
     beforeEach(() => {
       schema = {
         title: "Cats",
@@ -12,12 +12,12 @@ describe("CurrencyField", () => {
         currency: true
       };
       onChangeSpy = jest.fn();
-      data = "56";
+      value = "56";
       currencySymbol = "th";
 
       field = shallow(
         <CurrencyField
-          formData={data}
+          value={value}
           schema={schema}
           onChange={onChangeSpy}
           currency={currencySymbol}
@@ -61,20 +61,20 @@ describe("CurrencyField", () => {
   });
 
   describe("Example 2", () => {
-    let schema, data, uiSchema, field, currencySymbol, onChangeSpy;
+    let schema, value, uiSchema, field, currencySymbol, onChangeSpy;
     beforeEach(() => {
       schema = {
         title: "Dogs",
         type: "string",
-        current: true
+        currency: true
       };
       onChangeSpy = jest.fn();
-      data = "12.45";
+      value = "12.45";
       currencySymbol = "yen";
 
       field = shallow(
         <CurrencyField
-          formData={data}
+          value={value}
           schema={schema}
           currency={currencySymbol}
           onChange={onChangeSpy}
@@ -102,7 +102,7 @@ describe("CurrencyField", () => {
     });
 
     it("Defaults to GBP if no currency given", () => {
-      let GBPField = shallow(<CurrencyField schema={{}} formData={{}} />);
+      let GBPField = shallow(<CurrencyField schema={{}} value={{}} />);
       expect(GBPField.find("[data-test='currency-symbol']").text()).toEqual(
         "£"
       );
