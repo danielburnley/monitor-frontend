@@ -1,8 +1,8 @@
 import React from "react";
-import CurrencyField from ".";
+import CurrencyWidget from ".";
 import { shallow } from "enzyme";
 
-describe("CurrencyField", () => {
+describe("CurrencyWidget", () => {
   describe("Example 1", () => {
     let schema, value, uiSchema, field, currencySymbol, onChangeSpy;
     beforeEach(() => {
@@ -16,7 +16,7 @@ describe("CurrencyField", () => {
       currencySymbol = "th";
 
       field = shallow(
-        <CurrencyField
+        <CurrencyWidget
           value={value}
           schema={schema}
           onChange={onChangeSpy}
@@ -73,7 +73,7 @@ describe("CurrencyField", () => {
       currencySymbol = "yen";
 
       field = shallow(
-        <CurrencyField
+        <CurrencyWidget
           value={value}
           schema={schema}
           currency={currencySymbol}
@@ -102,7 +102,7 @@ describe("CurrencyField", () => {
     });
 
     it("Defaults to GBP if no currency given", () => {
-      let GBPField = shallow(<CurrencyField schema={{}} value={{}} />);
+      let GBPField = shallow(<CurrencyWidget schema={{}} value={{}} />);
       expect(GBPField.find("[data-test='currency-symbol']").text()).toEqual(
         "£"
       );
@@ -127,7 +127,7 @@ describe("CurrencyField", () => {
 
       uiSchema = { "ui:disabled": true };
 
-      field = shallow(<CurrencyField schema={schema} uiSchema={uiSchema} />);
+      field = shallow(<CurrencyWidget schema={schema} uiSchema={uiSchema} />);
     });
 
     it("disable the input box", () => {
@@ -146,7 +146,7 @@ describe("CurrencyField", () => {
 
       uiSchema = { "ui:widget": "hidden" };
 
-      field = shallow(<CurrencyField schema={schema} uiSchema={uiSchema} />);
+      field = shallow(<CurrencyWidget schema={schema} uiSchema={uiSchema} />);
     });
 
     it("disable the input box", () => {

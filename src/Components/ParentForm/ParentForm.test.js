@@ -875,7 +875,7 @@ describe("<ParentForm>", () => {
           }}
         />
       );
-      expect(parentForm.find("CurrencyField").length).toEqual(1);
+      expect(parentForm.find("CurrencyWidget").length).toEqual(1);
     });
   });
 });

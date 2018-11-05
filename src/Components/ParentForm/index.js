@@ -11,7 +11,7 @@ import "./style.css";
 import RiskField from "../RiskField";
 import BaselineData from "../BaselineData";
 import PeriodsField from "../PeriodsField";
-import CurrencyField from "../CurrencyField";
+import CurrencyWidget from "../CurrencyWidget";
 
 export default class ParentForm extends React.Component {
   constructor(props) {
@@ -135,7 +135,7 @@ export default class ParentForm extends React.Component {
     };
 
     const widgets = {
-      currency: CurrencyField
+      currency: CurrencyWidget
     };
 
     if (this.selectedSchema().type === "array") {

@@ -1,7 +1,7 @@
 import React from "react";
 import "./style.css"
 
-export default class CurrencyField extends React.Component {
+export default class CurrencyWidget extends React.Component {
   constructor(props) {
     super(props);
 
