@@ -97,6 +97,10 @@ export default class GenerateUISchema {
       schema["ui:widget"] = "currency"
     }
 
+    if(item.radio) {
+      schema["ui:widget"] = "radio"
+    }
+
     if(Object.keys(schema).length === 0) {
       return undefined
     }
