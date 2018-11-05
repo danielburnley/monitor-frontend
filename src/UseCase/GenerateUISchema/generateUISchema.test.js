@@ -1017,5 +1017,47 @@ describe("GenerateUISchema", () => {
         a: { "ui:widget": "radio" }
       });
     });
+
+    describe("With dependencies", () => {
+      it("Generates a ui schema from an object with dependencies", () => {
+        let schema = {
+          type: "object",
+          properties: {
+            a: {
+              type: "object",
+              properties: {
+                cats: { readonly: true }
+              },
+              dependencies: {
+                x: {
+                  oneOf: [
+                    {
+                      properties: {
+                        meow: {
+                          type: "object",
+                          properties: {
+                            cat: { radio: true, type: "string" }
+                          }
+                        },
+                        quack: { readonly: true }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        };
+
+        let response = useCase.execute(schema);
+        expect(response).toEqual({
+          a: {
+            cats: { "ui:disabled": true },
+            meow: { cat: { "ui:widget": "radio" } },
+            quack: { "ui:disabled": true }
+          }
+        });
+      });
+    });
   });
 });
