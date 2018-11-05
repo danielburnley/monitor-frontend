@@ -11,7 +11,7 @@ export default class MilestoneComponent {
         onChange={onChange}
         registry={
           {
-            fields: {
+            widgets: {
               percentage: percentagefield
             }
           }

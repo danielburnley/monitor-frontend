@@ -11,7 +11,7 @@ let projectSchema = {
       type: "object",
       title: "Cats",
       properties: {
-        noise: { type: "string", title: "Noise" },
+        noise: { type: "string", currency: true, title: "Noise" },
         description: { type: "string", title: "Description" },
         toes: { type: "string", title: "Toes" }
       }
@@ -304,7 +304,7 @@ describe('Submitting a draft project', () => {
       };
     await page.load();
 
-    page.find("input[type='text']").map((textfield) => {
+    page.find("input").map((textfield) => {
       textfield.simulate('change', { target: { value: 'cat'}})
     });
 
@@ -333,7 +333,7 @@ describe('Submitting a draft project', () => {
     }
     await page.load();
 
-    page.find("input[type='text']").map((textfield) => {
+    page.find("input").map((textfield) => {
       textfield.simulate('change', { target: { value: 'cat'}})
     });
 
@@ -401,7 +401,7 @@ describe("Submitting an initial draft to then fully populate and submit", () => 
 
     await page.load();
 
-    page.find("input[type='text']").at(0).simulate('change', { target: { value: 'This noise is locked down'}})
+    page.find("input").at(0).simulate('change', { target: { value: 'This noise is locked down'}})
 
     await page.load();
 
@@ -447,9 +447,9 @@ describe("Submitting an initial draft to then fully populate and submit", () => 
 
     await page.load();
 
-    page.find("input[type='text']").at(1).simulate('change', { target: { value: 'cat'}});
-    page.find("input[type='text']").at(2).simulate('change', { target: { value: 'cat'}});
-    page.find("input[type='text']").at(3).simulate('change', { target: { value: '100'}});
+    page.find("input").at(1).simulate('change', { target: { value: 'cat'}});
+    page.find("input").at(2).simulate('change', { target: { value: 'cat'}});
+    page.find("input").at(3).simulate('change', { target: { value: '100'}});
 
     await page.load();
 

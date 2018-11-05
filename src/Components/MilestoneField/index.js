@@ -93,6 +93,7 @@ export default class MilestoneField extends React.Component {
           onChange={e => this.onFieldChange("currentReturn", e)}
           data-test="milestone-current-return"
           value={this.state.currentReturn || ""}
+          type="date"
           id="currentReturn"
         />
       </div>
@@ -118,7 +119,7 @@ export default class MilestoneField extends React.Component {
     return (
       <div>
         <label htmlFor="milestonePercentCompleted">Percent Complete</label>
-        <this.props.registry.fields.percentage
+        <this.props.registry.widgets.percentage
           className="form-control"
           onChange={e => this.onFieldChange("milestonePercentCompleted", e)}
           data-test="milestone-percent-completed"

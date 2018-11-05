@@ -53,6 +53,8 @@ export default class GenerateUISchema {
       ret["items"]["ui:field"] = "risk";
     } else if (value.items.base) {
       ret["items"]["ui:field"] = "base";
+    } else if (value.periods) {
+      ret["ui:field"] = "periods";
     } else if (value.items.milestone) {
       ret["items"]["ui:field"] = "milestone"
     }
@@ -89,6 +91,18 @@ export default class GenerateUISchema {
 
     if (item.base) {
       schema["ui:field"] = "base"
+    }
+
+    if(item.periods) {
+      schema["ui:field"] = "periods"
+    }
+
+    if(item.currency) {
+      schema["ui:widget"] = "currency"
+    }
+
+    if(item.radio) {
+      schema["ui:widget"] = "radio"
     }
 
     if(Object.keys(schema).length === 0) {

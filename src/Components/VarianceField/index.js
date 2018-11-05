@@ -6,19 +6,15 @@ export default class VarianceField extends React.Component {
   constructor(props) {
     super(props);
 
-    this.setupInitialState(props.formData);
-  }
-
-  setupInitialState = formData => {
     this.state = {
-      baseline: formData.baseline,
-      percentComplete: formData.percentComplete,
-      status: formData.status || "On schedule",
-      current: formData.current,
-      reason: formData.reason,
-      completedDate: formData.completedDate
+      baseline: props.formData.baseline,
+      percentComplete: props.formData.percentComplete,
+      status: props.formData.status || "On schedule",
+      current: props.formData.current,
+      reason: props.formData.reason,
+      completedDate: props.formData.completedDate
     };
-  };
+  }
 
   onFieldChange = (name, e) => {
     this.setState({ [name]: e.target.value || undefined }, () => {
@@ -91,8 +87,8 @@ export default class VarianceField extends React.Component {
   renderBaseline = () => (
     <div className="form-group">
       <label className="static-label">Baseline</label>
-      <p data-test="form-control-static" data-test="target-date">
-        {this.props.formData.baseline}
+      <p className="form-control-static" data-test="target-date">
+        {this.state.baseline}
       </p>
     </div>
   );
@@ -117,7 +113,7 @@ export default class VarianceField extends React.Component {
   renderPercentComplete = () => (
     <div className="col-md-3 form-group">
       <label htmlFor="percent-complete">Percent complete*</label>
-      <this.props.registry.fields.percentage
+      <this.props.registry.widgets.percentage
         className="form-control"
         data-test="variance-percentage"
         id="percent-complete"
@@ -135,8 +131,8 @@ export default class VarianceField extends React.Component {
         {this.renderStatus()}
         {this.renderPercentComplete()}
       </div>
-      {this.state.status == "Delayed" && this.renderDelayed()}
-      {this.state.status == "Completed" && this.renderCompleted()}
+      {this.state.status === "Delayed" && this.renderDelayed()}
+      {this.state.status === "Completed" && this.renderCompleted()}
     </div>
   );
 

@@ -5,7 +5,7 @@ export default class PercentageField extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: this.props.value
+      value: this.props.value || ''
     }
   }
 
@@ -35,7 +35,7 @@ export default class PercentageField extends React.Component {
 
   handleChange = (e) => {
     this.setState({value: this.validatePercentage(e.target.value)});
-    this.props.onChange(e);
+    this.props.onChange(e.target.value);
   }
 
   render() {

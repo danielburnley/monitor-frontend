@@ -11,7 +11,7 @@ class PercentageFieldStub extends React.Component {
 describe("VarianceField", () => {
   let field;
   let registryStub = {
-    fields: {
+    widgets: {
       percentage: PercentageFieldStub
     }
   }

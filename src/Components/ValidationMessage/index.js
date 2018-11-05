@@ -2,10 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 
 export default class ValidationMessage extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   renderInvalidPaths = () => {
     return this.props.invalidPaths.map(path => {
       return (<span key={path}>

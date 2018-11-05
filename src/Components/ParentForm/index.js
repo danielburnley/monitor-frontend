@@ -11,6 +11,8 @@ import GenerateSidebarItems from "../../UseCase/GenerateSidebarItems";
 import "./style.css";
 import RiskField from "../RiskField";
 import BaselineData from "../BaselineData";
+import PeriodsField from "../PeriodsField";
+import CurrencyWidget from "../CurrencyWidget";
 
 export default class ParentForm extends React.Component {
   constructor(props) {
@@ -42,8 +44,11 @@ export default class ParentForm extends React.Component {
   }
 
   subformOnChange = formData => {
-    this.state.formData[this.state.selected] = formData;
-    this.props.onChange({ formData: this.state.formData });
+    let newFormData = { ...this.state.formData };
+    newFormData[this.state.selected] = formData;
+    this.setState({ formData: newFormData }, () =>
+      this.props.onChange({ formData: this.state.formData })
+    );
   };
 
   viewSelectorOnChange = changeEvent => {
@@ -84,10 +89,17 @@ export default class ParentForm extends React.Component {
       <Sidebar
         items={items}
         onItemClick={(section, index) => {
-          this.setState({
-            selectedFormSection: section,
-            selectedFormItemIndex: index
-          });
+          if (this.selectedSchema().type === "object") {
+            let documentObject = this.props.documentGateway.getDocument();
+            documentObject
+              .getElementById(`root_${section}__title`)
+              .scrollIntoView();
+          } else {
+            this.setState({
+              selectedFormSection: section,
+              selectedFormItemIndex: index
+            });
+          }
         }}
       />
     );
@@ -114,7 +126,20 @@ export default class ParentForm extends React.Component {
   }
 
   renderSubform() {
-    const fields = { horizontal: HorizontalFields, variance: VarianceField, risk: RiskField, base: BaselineData, milestone: MilestoneField, percentage: PercentageField };
+    const fields = {
+      horizontal: HorizontalFields,
+      variance: VarianceField,
+      risk: RiskField,
+      periods: PeriodsField,
+      base: BaselineData,
+      milestone: MilestoneField
+    };
+
+    const widgets = {
+      currency: CurrencyWidget,
+      percentage: PercentageField
+    };
+
     if (this.selectedSchema().type === "array") {
       return (
         <div className="col-md-10">
@@ -126,6 +151,7 @@ export default class ParentForm extends React.Component {
             }}
             data={this.state.formData[this.state.selected]}
             fields={fields}
+            widgets={widgets}
             selectedFormSection={this.state.selectedFormSection}
             selectedIndex={this.state.selectedFormItemIndex}
             schema={this.props.schema.properties[this.state.selected]}
@@ -135,15 +161,14 @@ export default class ParentForm extends React.Component {
       );
     } else {
       return (
-        <div
-          className="col-md-10 subform"
-        >
+        <div className="col-md-10 subform">
           <Form
             data-test={`${this.state.selected}_subform`}
             onChange={({ formData }) => {
               this.subformOnChange(formData);
             }}
             formData={this.state.formData[this.state.selected]}
+            widgets={widgets}
             fields={fields}
             schema={this.props.schema.properties[this.state.selected]}
             uiSchema={this.selectedUiSchema()}

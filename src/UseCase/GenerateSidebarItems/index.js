@@ -15,26 +15,34 @@ export default class GenerateSidebarItems {
     let items = {};
 
     data.forEach((_, i) => {
-      let children = this.generateItemsForProperties(
-        schema.items.properties,
-        i
-      );
-
       items[i] = {
         title: `${schema.items.title} ${i + 1}`,
-        children
+        children: this.genreateItemsForChildren(schema, i)
       };
     });
 
     return items;
   }
 
-  generateItemsForProperties(properties, index) {
-    let items = {};
-    Object.entries(properties).map(
+  genreateItemsForChildren(schema, index) {
+    let children = {};
+
+    Object.entries(schema.items.properties).map(
       ([key, value]) =>
-        (items[key] = { title: value.title, subSection: key, index: index})
+        (children[key] = { title: value.title, subSection: key, index })
     );
+
+    return children;
+  }
+
+  generateItemsForProperties(properties) {
+    let items = {};
+    Object.entries(properties).map(([key, value]) => {
+      if (value.type === "object" || value.type === "array") {
+        items[key] = { title: value.title, subSection: key };
+      }
+      return null
+    });
 
     return items;
   }

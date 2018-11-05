@@ -150,6 +150,26 @@ describe('ReturnPage', () => {
       updateReturnSpy = {execute: jest.fn((presenter, request) => {presenter.updateSuccessful(1);})};
     });
 
+    it("Passes the document gateway to the return form", async () => {
+      let documentGatewayDummy = jest.fn()
+      let wrap = shallow(<ReturnPage
+              validateReturn={validateReturnSpy}
+              match={{ params: { projectId: 1, returnId: 1 } }}
+              generateUISchema={new GenerateUISchema()}
+              generateSubmittedSchema={new GenerateReadOnlySchema()}
+              history={[]}
+              createReturn={createReturnSpy}
+              submitReturn={submitReturnSpy}
+              updateReturn={()=>{}}
+              getReturn={new getReturnStub()}
+              getBaseReturn={new getBaseReturnStub()}
+              documentGateway={documentGatewayDummy}
+            />);
+
+      await wait();
+      expect(wrap.find({'data-test': 'return-form'}).props().documentGateway).toEqual(documentGatewayDummy)
+    })
+
     describe('nothing has been submitted', () => {
       it('does not show any messages', async () => {
         let unresolvingUpdateReturnStub = {execute: jest.fn(() => {execute: async (presenter, request) => {await new Promise(resolve => setTimeout(resolve, 14159265358));}})};
