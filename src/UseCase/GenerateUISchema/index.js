@@ -94,7 +94,7 @@ export default class GenerateUISchema {
     }
 
     if(item.currency) {
-      schema["ui:field"] = "currency"
+      schema["ui:widget"] = "currency"
     }
 
     if(item.radio) {

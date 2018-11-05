@@ -869,13 +869,13 @@ describe("<ParentForm>", () => {
           uiSchema={{
             cat: {
               name: {
-                "ui:field": "currency"
+                "ui:widget": "currency"
               }
             }
           }}
         />
       );
-      expect(parentForm.find("CurrencyField").length).toEqual(1);
+      expect(parentForm.find("CurrencyWidget").length).toEqual(1);
     });
   });
 });

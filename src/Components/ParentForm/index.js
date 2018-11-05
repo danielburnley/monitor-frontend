@@ -11,7 +11,7 @@ import "./style.css";
 import RiskField from "../RiskField";
 import BaselineData from "../BaselineData";
 import PeriodsField from "../PeriodsField";
-import CurrencyField from "../CurrencyField";
+import CurrencyWidget from "../CurrencyWidget";
 
 export default class ParentForm extends React.Component {
   constructor(props) {
@@ -131,8 +131,11 @@ export default class ParentForm extends React.Component {
       risk: RiskField,
       periods: PeriodsField,
       base: BaselineData,
-      milestone: MilestoneField,
-      currency: CurrencyField
+      milestone: MilestoneField
+    };
+
+    const widgets = {
+      currency: CurrencyWidget
     };
 
     if (this.selectedSchema().type === "array") {
@@ -146,6 +149,7 @@ export default class ParentForm extends React.Component {
             }}
             data={this.state.formData[this.state.selected]}
             fields={fields}
+            widgets={widgets}
             selectedFormSection={this.state.selectedFormSection}
             selectedIndex={this.state.selectedFormItemIndex}
             schema={this.props.schema.properties[this.state.selected]}
@@ -162,6 +166,7 @@ export default class ParentForm extends React.Component {
               this.subformOnChange(formData);
             }}
             formData={this.state.formData[this.state.selected]}
+            widgets={widgets}
             fields={fields}
             schema={this.props.schema.properties[this.state.selected]}
             uiSchema={this.selectedUiSchema()}
