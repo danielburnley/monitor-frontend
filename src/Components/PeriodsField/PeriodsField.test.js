@@ -35,10 +35,10 @@ describe("Period Financials", () => {
       });
 
       it("Displays the data", () => {
-        expect(periods.lineData(0, "period")).toEqual("Fluffy");
-        expect(periods.lineData(1, "period")).toEqual("sparkles");
-        expect(periods.lineData(0, "age")).toEqual("12");
-        expect(periods.lineData(1, "age")).toEqual("5");
+        expect(periods.inputFieldValue(0, "period")).toEqual("Fluffy");
+        expect(periods.inputFieldValue(1, "period")).toEqual("sparkles");
+        expect(periods.inputFieldValue(0, "age")).toEqual("12");
+        expect(periods.inputFieldValue(1, "age")).toEqual("5");
       });
     });
     describe("Example 2", () => {
@@ -71,10 +71,10 @@ describe("Period Financials", () => {
       });
 
       it("Displays the data", () => {
-        expect(periods.lineData(0, "period")).toEqual("scaley")
-        expect(periods.lineData(1, "period")).toEqual("slivery")
-        expect(periods.lineData(0, "length")).toEqual("200")
-        expect(periods.lineData(1, "length")).toEqual("567")
+        expect(periods.inputFieldValue(0, "period")).toEqual("scaley")
+        expect(periods.inputFieldValue(1, "period")).toEqual("slivery")
+        expect(periods.inputFieldValue(0, "length")).toEqual("200")
+        expect(periods.inputFieldValue(1, "length")).toEqual("567")
       });
     });
   });
