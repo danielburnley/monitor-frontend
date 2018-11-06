@@ -169,7 +169,7 @@ export default class NewProjectPage extends React.Component {
               Save draft
             </button>
           </div>
-          <div className="row">{this.renderForm()}</div>
+          <div className="row no-edge">{this.renderForm()}</div>
         </div>
       );
     }

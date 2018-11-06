@@ -9,5 +9,9 @@
 }
 
 .margin-left {
-  margin-left: 10px
+  margin-left: 10px;
+}
+
+.no-edge {
+  margin: 0px;
 }
