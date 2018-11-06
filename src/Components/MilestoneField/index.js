@@ -92,7 +92,7 @@ export default class MilestoneField extends React.Component {
           className="form-control"
           onChange={e => this.onFieldChange("currentReturn", e)}
           data-test="milestone-current-return"
-          value={this.state.currentReturn}
+          value={this.state.currentReturn || ""}
           type="date"
           id="currentReturn"
         />
@@ -108,7 +108,7 @@ export default class MilestoneField extends React.Component {
           className="form-control"
           onChange={e => this.onFieldChange("reasonForVariance", e)}
           data-test="milestone-reason-for-variance"
-          value={this.state.reasonForVariance}
+          value={this.state.reasonForVariance }
           id="reasonForVariance"
         />
       </div>
@@ -119,7 +119,7 @@ export default class MilestoneField extends React.Component {
     return (
       <div>
         <label htmlFor="milestonePercentCompleted">Percent Complete</label>
-        <input
+        <this.props.registry.widgets.percentage
           className="form-control"
           onChange={e => this.onFieldChange("milestonePercentCompleted", e)}
           data-test="milestone-percent-completed"

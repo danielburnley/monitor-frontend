@@ -6,6 +6,7 @@ import Sidebar from "../Sidebar";
 import HorizontalFields from "../HorizontalFields";
 import VarianceField from "../VarianceField";
 import MilestoneField from "../MilestoneField";
+import PercentageField from "../PercentageField";
 import GenerateSidebarItems from "../../UseCase/GenerateSidebarItems";
 import "./style.css";
 import RiskField from "../RiskField";
@@ -135,7 +136,8 @@ export default class ParentForm extends React.Component {
     };
 
     const widgets = {
-      currency: CurrencyWidget
+      currency: CurrencyWidget,
+      percentage: PercentageField
     };
 
     if (this.selectedSchema().type === "array") {

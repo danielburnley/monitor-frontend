@@ -1,7 +1,15 @@
+import React from 'react';
 import MilestoneComponent from '../../../test/MilestoneField';
+
+class PercentageFieldStub extends React.Component {
+  render() {
+    return <input value={this.props.value || "0"} onChange={this.props.onChange}/>;
+  }
+}
 
 describe("<MilestoneField>", () => {
   let onChangeSpy = jest.fn();
+
   describe("Given baseline data", () => {
     describe("Example 1", () => {
       let formData = {
@@ -13,9 +21,9 @@ describe("<MilestoneField>", () => {
       let milestone = new MilestoneComponent(
         formData,
         onChangeSpy,
-        schemaTitle
+        schemaTitle,
+        PercentageFieldStub
       );
-
 
       it("displays the milestone description", () => {
         expect(milestone.description()).toEqual(
@@ -42,7 +50,8 @@ describe("<MilestoneField>", () => {
       let milestone = new MilestoneComponent(
         formData,
         onChangeSpy,
-        schemaTitle
+        schemaTitle,
+        PercentageFieldStub
       );
 
       it("displays the milestone description", () => {
@@ -68,7 +77,11 @@ describe("<MilestoneField>", () => {
         milestoneSummaryOfCriticalPath: "Contract begins!!!"
       };
       let schemaTitle = "Milestone Fields";
-      milestone = new MilestoneComponent(formData, onChangeSpy, schemaTitle);
+      milestone = new MilestoneComponent(
+        formData,
+        onChangeSpy,
+        schemaTitle,
+        PercentageFieldStub);
 
       it("Updates the values of the fields", () => {
         milestone.simulateStatusAgainstLastReturn("Completed");
@@ -98,7 +111,12 @@ describe("<MilestoneField>", () => {
         milestoneSummaryOfCriticalPath: "Give them pets and fish"
       };
       let schemaTitle = "Cats walking club";
-      milestone = new MilestoneComponent(formData, onChangeSpy, schemaTitle);
+      milestone = new MilestoneComponent(
+        formData,
+        onChangeSpy,
+        schemaTitle,
+        PercentageFieldStub
+      );
 
       it("Updates the values of the fields", () => {
         milestone.simulateStatusAgainstLastReturn("On schedule");
@@ -134,7 +152,12 @@ describe("<MilestoneField>", () => {
         milestonePercentCompleted: "65"
       };
       let schemaTitle = "Milestone Fields";
-      milestone = new MilestoneComponent(formData, onChangeSpy, schemaTitle);
+      milestone = new MilestoneComponent(
+        formData,
+        onChangeSpy,
+        schemaTitle,
+        PercentageFieldStub
+      );
 
       it("displays the status against last return", () => {
         expect(milestone.findStatusAgainstLastReturn()).toEqual("Completed");
@@ -167,7 +190,12 @@ describe("<MilestoneField>", () => {
         milestonePercentCompleted: "80"
       };
       let schemaTitle = "Cats walking club";
-      milestone = new MilestoneComponent(formData, onChangeSpy, schemaTitle);
+      milestone = new MilestoneComponent(
+        formData,
+        onChangeSpy,
+        schemaTitle,
+        PercentageFieldStub
+      );
 
       it("displays the status against last return", () => {
         expect(milestone.findStatusAgainstLastReturn()).toEqual("On schedule");
@@ -202,7 +230,12 @@ describe("<MilestoneField>", () => {
         milestonePercentCompleted: "65"
       };
       let schemaTitle = "Milestone Fields";
-      milestone = new MilestoneComponent(formData, onChangeSpy, schemaTitle);
+      milestone = new MilestoneComponent(
+        formData,
+        onChangeSpy,
+        schemaTitle,
+        PercentageFieldStub
+      );
 
       it("updates the value of the status against last return", () => {
         milestone.simulateStatusAgainstLastReturn("On schedule");
@@ -237,7 +270,12 @@ describe("<MilestoneField>", () => {
         milestonePercentCompleted: "80"
       };
       let schemaTitle = "Cats walking club";
-      milestone = new MilestoneComponent(formData, onChangeSpy, schemaTitle);
+      milestone = new MilestoneComponent(
+        formData,
+        onChangeSpy,
+        schemaTitle,
+        PercentageFieldStub
+      );
 
       it("updates the value of the status against last return", () => {
         milestone.simulateStatusAgainstLastReturn("Completed");

@@ -1,20 +1,32 @@
 import VarianceField from ".";
 import React from "react";
-import { shallow } from "enzyme";
+import { shallow, mount } from "enzyme";
+
+class PercentageFieldStub extends React.Component {
+  render() {
+    return <input value={this.props.value || "0"} onChange={this.props.onChange}/>;
+  }
+}
 
 describe("VarianceField", () => {
   let field;
+  let registryStub = {
+    widgets: {
+      percentage: PercentageFieldStub
+    }
+  }
 
   describe("Given only baseline data", () => {
     describe("Example one", () => {
       beforeEach(() => {
         let schema = { title: "Variance One" };
         let formData = { baseline: "2019-01-01" };
-        field = shallow(
+        field = mount(
           <VarianceField
             schema={schema}
             formData={formData}
             onChange={jest.fn()}
+            registry={registryStub}
           />
         );
       });
@@ -88,11 +100,12 @@ describe("VarianceField", () => {
       beforeEach(() => {
         let schema = { title: "Meow Meow Fuzzyface" };
         let formData = { baseline: "2020-12-31" };
-        field = shallow(
+        field = mount(
           <VarianceField
             schema={schema}
             formData={formData}
             onChange={jest.fn()}
+            registry={registryStub}
           />
         );
       });
@@ -173,6 +186,7 @@ describe("VarianceField", () => {
               schema={schema}
               formData={formData}
               onChange={jest.fn()}
+              registry={registryStub}
             />
           );
 
@@ -197,6 +211,7 @@ describe("VarianceField", () => {
               schema={schema}
               formData={formData}
               onChange={jest.fn()}
+              registry={registryStub}
             />
           );
 
@@ -225,6 +240,7 @@ describe("VarianceField", () => {
               schema={schema}
               formData={formData}
               onChange={jest.fn()}
+              registry={registryStub}
             />
           );
         });
@@ -264,6 +280,7 @@ describe("VarianceField", () => {
               schema={schema}
               formData={formData}
               onChange={jest.fn()}
+              registry={registryStub}
             />
           );
         });
@@ -304,6 +321,7 @@ describe("VarianceField", () => {
               schema={schema}
               formData={formData}
               onChange={jest.fn()}
+              registry={registryStub}
             />
           );
 
@@ -329,6 +347,7 @@ describe("VarianceField", () => {
               schema={schema}
               formData={formData}
               onChange={jest.fn()}
+              registry={registryStub}
             />
           );
 
@@ -361,6 +380,7 @@ describe("VarianceField", () => {
             schema={schema}
             formData={formData}
             onChange={onChangeSpy}
+            registry={registryStub}
           />
         );
       });
@@ -505,6 +525,7 @@ describe("VarianceField", () => {
             schema={schema}
             formData={formData}
             onChange={onChangeSpy}
+            registry={registryStub}
           />
         );
       });
