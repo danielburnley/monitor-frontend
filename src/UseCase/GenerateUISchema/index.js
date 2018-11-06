@@ -75,8 +75,12 @@ export default class GenerateUISchema {
   generateSchemaForItem(item) {
     let schema = {}
 
-    if(item.extendedText) {
+    if (item.extendedText) {
       schema["ui:widget"] = "textarea"
+    }
+
+    if (item.percentage) {
+      schema["ui:widget"] = "percentage"
     }
 
     if (item.hidden) {
@@ -96,7 +100,11 @@ export default class GenerateUISchema {
     }
 
     if(item.currency) {
-      schema["ui:field"] = "currency"
+      schema["ui:widget"] = "currency"
+    }
+
+    if(item.radio) {
+      schema["ui:widget"] = "radio"
     }
 
     if(Object.keys(schema).length === 0) {

@@ -1,6 +1,7 @@
 import APISimulator from "../test/ApiSimulator";
 import AppPage from "../test/AppPage";
 import nock from "nock";
+import Cookies from "js-cookie";
 import { watchFile } from "fs";
 
 let projectSchema = {
@@ -11,7 +12,7 @@ let projectSchema = {
       type: "object",
       title: "Cats",
       properties: {
-        noise: { type: "string", title: "Noise" },
+        noise: { type: "string", currency: true, title: "Noise" },
         description: { type: "string", title: "Description" },
         toes: { type: "string", title: "Toes" }
       }
@@ -304,7 +305,7 @@ describe('Submitting a draft project', () => {
       };
     await page.load();
 
-    page.find("input[type='text']").map((textfield) => {
+    page.find("input").map((textfield) => {
       textfield.simulate('change', { target: { value: 'cat'}})
     });
 
@@ -333,7 +334,7 @@ describe('Submitting a draft project', () => {
     }
     await page.load();
 
-    page.find("input[type='text']").map((textfield) => {
+    page.find("input").map((textfield) => {
       textfield.simulate('change', { target: { value: 'cat'}})
     });
 
@@ -391,6 +392,7 @@ describe("Submitting an initial draft to then fully populate and submit", () => 
   afterEach(() => {
     nock.cleanAll();
   });
+
   it('Allows you to initially submit a draft project', async () => {
     api.getProject(projectSchema, emptyData, "Draft").successfully();
     api.getProject(projectSchema, emptyData, "Draft").successfully();
@@ -400,7 +402,7 @@ describe("Submitting an initial draft to then fully populate and submit", () => 
 
     await page.load();
 
-    page.find("input[type='text']").at(0).simulate('change', { target: { value: 'This noise is locked down'}})
+    page.find("input").at(0).simulate('change', { target: { value: 'This noise is locked down'}})
 
     await page.load();
 
@@ -420,7 +422,8 @@ describe("Submitting an initial draft to then fully populate and submit", () => 
           properties: {
             noise: { laReadOnly: true, type: "string", title: "Noise" },
             description: { type: "string", title: "Description" },
-            toes: { type: "string", title: "Toes" }
+            toes: { type: "string", title: "Toes" },
+            fed: { type: "string", percentage: true }
           }
         }
       }
@@ -430,7 +433,8 @@ describe("Submitting an initial draft to then fully populate and submit", () => 
       summary: {
         noise: "This noise is locked down",
         description: "cat",
-        toes: "cat"
+        toes: "cat",
+        fed: "100"
       }
     }
 
@@ -444,8 +448,9 @@ describe("Submitting an initial draft to then fully populate and submit", () => 
 
     await page.load();
 
-    page.find("input[type='text']").at(1).simulate('change', { target: { value: 'cat'}})
-    page.find("input[type='text']").at(2).simulate('change', { target: { value: 'cat'}})
+    page.find("input").at(1).simulate('change', { target: { value: 'cat'}});
+    page.find("input").at(2).simulate('change', { target: { value: 'cat'}});
+    page.find("input").at(3).simulate('change', { target: { value: '100'}});
 
     await page.load();
 
@@ -458,10 +463,23 @@ describe("Submitting an initial draft to then fully populate and submit", () => 
 
 describe("Page not found", () => {
   it("Renders a 404 page", async () => {
-
     let page = new AppPage("/non-existent");
     await page.load();
 
     expect(page.find('div[id="not-found"]').text()).toMatch(/404 page not found/);
+  });
+});
+
+describe("Cookie consent", () => {
+  it("Renders a cookie notice once", async () => {
+    Cookies.remove('consent');
+    let page = new AppPage("/");
+    await page.load();
+
+    expect(page.find("div[data-test='cookie-notice']").length).toEqual(1);
+
+    page = new AppPage("/");
+    await page.load();
+    expect(page.find("div[data-test='cookie-notice']").length).toEqual(0);
   });
 });

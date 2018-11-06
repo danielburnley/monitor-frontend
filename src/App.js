@@ -13,6 +13,7 @@ import ReturnListProvider from "./Components/ReturnListProvider";
 import ReturnPage from "./Components/ReturnPage";
 import Portal from "./Components/Portal";
 import NotFound from "./Components/NotFound";
+import CookieConsent from "./Components/CookieConsent";
 
 import CreateReturn from "./UseCase/CreateReturn";
 import SubmitProject from "./UseCase/SubmitProject";
@@ -38,12 +39,16 @@ import LocationGateway from "./Gateway/LocationGateway";
 import CookieApiKey from "./Gateway/CookieApiKey";
 import TokenGateway from "./Gateway/TokenGateway";
 import DocumentGateway from "./Gateway/DocumentGateway";
+import CookieConsentGateway from "./Gateway/CookieConsent";
+import ShowCookieConsent from "./UseCase/ShowCookieConsent";
 
 import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 const locationGateway = new LocationGateway(window.location);
 const tokenGateway = new TokenGateway();
+const cookieConsentGateway = new CookieConsentGateway();
+const showCookieConsent = new ShowCookieConsent(cookieConsentGateway);
 const apiKeyGateway = new CookieApiKey();
 const projectGateway = new ProjectGateway(apiKeyGateway, locationGateway);
 const returnGateway = new ReturnGateway(apiKeyGateway, locationGateway);
@@ -181,6 +186,7 @@ const renderBaselinePage = props => (
 const App = () => (
   <Router>
     <div className="app-container">
+      <CookieConsent showCookieConsent={showCookieConsent}/>
       <Header />
 
       <div className="monitor-container">

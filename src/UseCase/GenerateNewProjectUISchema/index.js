@@ -7,14 +7,13 @@ export default class GenerateNewProjectUISchema {
   execute(schema, state) {
     let uiSchema = this.generateUISchema.execute(schema);
 
-
     if (state !== "LA Draft") {
       return uiSchema
     }
 
     let readOnlyUISchema = this.generateReadOnlyUISchema.execute(schema, 'laReadOnly');
 
-    return this.mergeUISchema(schema, readOnlyUISchema, uiSchema);
+    return this.mergeUISchema(schema.properties, readOnlyUISchema, uiSchema);
   }
 
   schemaExists(UIschema) {
@@ -53,6 +52,8 @@ export default class GenerateNewProjectUISchema {
 
   mergeUISchemaForArray(schema, UIschema1, UIschema2) {
     let uiSchema = {};
+    if (!(this.schemaExists(UIschema1))) return UIschema2;
+    if (!(this.schemaExists(UIschema2))) return UIschema1;
 
 
     let parentUISchema = this.mergeObjects(UIschema1, UIschema2);

@@ -35,12 +35,13 @@ export default class GenerateSidebarItems {
     return children;
   }
 
-  generateItemsForProperties(properties, index) {
+  generateItemsForProperties(properties) {
     let items = {};
     Object.entries(properties).map(([key, value]) => {
       if (value.type === "object" || value.type === "array") {
         items[key] = { title: value.title, subSection: key };
       }
+      return null
     });
 
     return items;

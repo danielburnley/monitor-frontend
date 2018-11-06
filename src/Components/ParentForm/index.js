@@ -6,13 +6,14 @@ import Sidebar from "../Sidebar";
 import HorizontalFields from "../HorizontalFields";
 import VarianceField from "../VarianceField";
 import MilestoneField from "../MilestoneField";
+import PercentageField from "../PercentageField";
 import GenerateSidebarItems from "../../UseCase/GenerateSidebarItems";
 import "./style.css";
 import RiskField from "../RiskField";
 import BaselineData from "../BaselineData";
 import PeriodsField from "../PeriodsField";
-import CurrencyField from "../CurrencyField";
 import QuarterlyBreakdown from "../QuarterlyBreakdown";
+import CurrencyWidget from "../CurrencyWidget";
 
 export default class ParentForm extends React.Component {
   constructor(props) {
@@ -133,8 +134,13 @@ export default class ParentForm extends React.Component {
       periods: PeriodsField,
       base: BaselineData,
       milestone: MilestoneField,
-      currency: CurrencyField,
-      quarterly: QuarterlyBreakdown
+      quarterly: QuarterlyBreakdown,
+      milestone: MilestoneField
+    };
+
+    const widgets = {
+      currency: CurrencyWidget,
+      percentage: PercentageField
     };
 
     if (this.selectedSchema().type === "array") {
@@ -148,6 +154,7 @@ export default class ParentForm extends React.Component {
             }}
             data={this.state.formData[this.state.selected]}
             fields={fields}
+            widgets={widgets}
             selectedFormSection={this.state.selectedFormSection}
             selectedIndex={this.state.selectedFormItemIndex}
             schema={this.props.schema.properties[this.state.selected]}
@@ -164,6 +171,7 @@ export default class ParentForm extends React.Component {
               this.subformOnChange(formData);
             }}
             formData={this.state.formData[this.state.selected]}
+            widgets={widgets}
             fields={fields}
             schema={this.props.schema.properties[this.state.selected]}
             uiSchema={this.selectedUiSchema()}

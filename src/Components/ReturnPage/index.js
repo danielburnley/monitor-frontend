@@ -167,6 +167,14 @@ export default class ReturnPage extends React.Component {
     }
   }
 
+  renderMandatoryWarning() {
+    if (this.state.status === "submitted" || this.state.status === "updating") {
+      return null;
+    } else {
+      return <p className="mandatory">Fields marked with * are mandatory</p>;
+    }
+  }
+
   render() {
     return (
       <div className="">
@@ -178,6 +186,11 @@ export default class ReturnPage extends React.Component {
             >
               Back to project overview
             </button>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-md-4">
+            {this.renderMandatoryWarning()}
           </div>
         </div>
         <div className="row">
