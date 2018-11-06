@@ -20,35 +20,16 @@ export default class PeriodsField extends React.Component {
   };
 
   renderLine(key, item) {
-    if (item.readonly) {
-      return this.renderReadOnlyLine(key);
-    } else {
-      return this.renderInputLine(key);
-    }
-  }
-
-  renderInputLine(key) {
     return this.props.formData.map((column, index) => {
       return (
-        <div className="col-sm-1" key={`input-${index}-${key}`}>
+        <div className="col-sm-1 flex-data less-padding" key={`input-${index}-${key}`}>
           <input
             data-test={`${key}-input`}
             onChange={e => this.onChange(key, index, e.target.value)}
-            value={this.state.formData[index][key] || ""}
+            value={column[key] || ""}
             className="form-control"
+            disabled={item.readonly}
           />
-        </div>
-      );
-    });
-  }
-
-  renderReadOnlyLine(key) {
-    return this.props.formData.map(columnData => {
-      return (
-        <div className="col-sm-1" key={`data-${columnData.period}-${key}`}>
-          <p className="no-wrap" data-test={`${key}-line-data`}>
-            {columnData[key]}
-          </p>
         </div>
       );
     });
@@ -56,7 +37,7 @@ export default class PeriodsField extends React.Component {
 
   renderHeader(title) {
     return (
-      <div className="col-sm-2">
+      <div className="col-sm-2 no-wrap less-padding flex-header">
         <p data-test="line-title">
           <strong>{title}</strong>
         </p>
@@ -71,7 +52,7 @@ export default class PeriodsField extends React.Component {
           ([key, value]) => {
             return (
               <div key={`${key}`}>
-                <div className="row">
+                <div className="row flex-row">
                   {this.renderHeader(value.title)}
                   {this.renderLine(key, value)}
                 </div>
