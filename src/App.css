@@ -44,7 +44,7 @@ html {
 
 .disabled {
   color: #7c7878 !important;
-  /* background-color: #eeeeee; */
+  background-color: #eeeeee;
   cursor: not-allowed;
 }
 
