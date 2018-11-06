@@ -12,6 +12,7 @@ import "./style.css";
 import RiskField from "../RiskField";
 import BaselineData from "../BaselineData";
 import PeriodsField from "../PeriodsField";
+import QuarterlyBreakdown from "../QuarterlyBreakdown";
 import CurrencyWidget from "../CurrencyWidget";
 
 export default class ParentForm extends React.Component {
@@ -132,6 +133,8 @@ export default class ParentForm extends React.Component {
       risk: RiskField,
       periods: PeriodsField,
       base: BaselineData,
+      milestone: MilestoneField,
+      quarterly: QuarterlyBreakdown,
       milestone: MilestoneField
     };
 
