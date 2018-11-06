@@ -14,5 +14,6 @@
 }
 
 .header {
-  font-weight: 500;
+  font-weight: 700;
+  white-space: nowrap;
 }
