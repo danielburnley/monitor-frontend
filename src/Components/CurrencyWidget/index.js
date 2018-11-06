@@ -32,12 +32,6 @@ export default class CurrencyWidget extends React.Component {
   render() {
     return (
       <div className="formGroup" hidden={this.isHidden()}>
-        <label
-          htmlFor="moneyLabel"
-          data-test="currency-label"
-        >
-          {this.props.schema.title}
-        </label>
         <div className="input-group">
           <span
             className={`input-group-addon ${this.isInputDisabled() ? "readonly-currency": ""}`}
