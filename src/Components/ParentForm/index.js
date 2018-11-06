@@ -134,8 +134,7 @@ export default class ParentForm extends React.Component {
       periods: PeriodsField,
       base: BaselineData,
       milestone: MilestoneField,
-      quarterly: QuarterlyBreakdown,
-      milestone: MilestoneField
+      quarterly: QuarterlyBreakdown
     };
 
     const widgets = {

@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 export default class PercentageField extends React.Component {
   constructor(props) {
