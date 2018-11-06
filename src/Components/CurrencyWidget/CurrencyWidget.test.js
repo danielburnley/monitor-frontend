@@ -24,11 +24,6 @@ describe("CurrencyWidget", () => {
         />
       );
     });
-    it("Renders the label", () => {
-      expect(field.find("[data-test='currency-label']").text()).toEqual("Cats");
-      expect(field.find("[data-test='currency-label']").length).toEqual(1);
-    });
-
     it("Renders an input field", () => {
       expect(field.find("[data-test='currency-input']").length).toEqual(1);
     });
@@ -80,10 +75,6 @@ describe("CurrencyWidget", () => {
           onChange={onChangeSpy}
         />
       );
-    });
-    it("Renders the label", () => {
-      expect(field.find("[data-test='currency-label']").text()).toEqual("Dogs");
-      expect(field.find("[data-test='currency-label']").length).toEqual(1);
     });
 
     it("Renders an input field", () => {
