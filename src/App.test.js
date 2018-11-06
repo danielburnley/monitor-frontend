@@ -1,6 +1,7 @@
 import APISimulator from "../test/ApiSimulator";
 import AppPage from "../test/AppPage";
 import nock from "nock";
+import Cookies from "js-cookie";
 import { watchFile } from "fs";
 
 let projectSchema = {
@@ -462,10 +463,23 @@ describe("Submitting an initial draft to then fully populate and submit", () => 
 
 describe("Page not found", () => {
   it("Renders a 404 page", async () => {
-
     let page = new AppPage("/non-existent");
     await page.load();
 
     expect(page.find('div[id="not-found"]').text()).toMatch(/404 page not found/);
+  });
+});
+
+describe("Cookie consent", () => {
+  it("Renders a cookie notice once", async () => {
+    Cookies.remove('consent');
+    let page = new AppPage("/");
+    await page.load();
+
+    expect(page.find("div[data-test='cookie-notice']").length).toEqual(1);
+
+    page = new AppPage("/");
+    await page.load();
+    expect(page.find("div[data-test='cookie-notice']").length).toEqual(0);
   });
 });
