@@ -1,5 +1,6 @@
 import React from "react";
 import AddButton from "../AddButton";
+import RemoveButton from "../RemoveButton";
 import "./style.css";
 
 export default class QuarterlyBreakdown extends React.Component {
@@ -92,12 +93,27 @@ export default class QuarterlyBreakdown extends React.Component {
     this.setState({ data: updatedArray });
   }
 
+  renderRemoveButton() {
+    if (!this.props.schema.addable) {
+      return null;
+    }
+    return <RemoveButton passedFunction={() => this.removeEvent()} />;
+  }
+
+  removeEvent() {
+    let updatedArray = this.state.data;
+    updatedArray.pop();
+
+    this.setState({ data: updatedArray });
+  }
+
   render() {
     return (
       <div>
         <div data-test="title" className="title">
           <h4>{this.props.schema.title}</h4>
         </div>
+        {this.renderRemoveButton()}
         <div className="row container">{this.renderData()}</div>
         {this.renderAddButton()}
       </div>
