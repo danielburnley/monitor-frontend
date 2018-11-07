@@ -14,10 +14,13 @@ async function updateFormField(input, value) {
 }
 
 describe("<ParentForm>", () => {
-  let onChangeSpy;
+  let onChangeSpy, elementSpy, documentSpy, documentGatewaySpy;
 
   beforeEach(() => {
     onChangeSpy = jest.fn();
+    elementSpy = { scrollIntoView: jest.fn() }
+    documentSpy = { getElementById: jest.fn(() => elementSpy) }
+    documentGatewaySpy = { getDocument: jest.fn(() => documentSpy) };
   });
 
   describe("Using the navbar", () => {
@@ -26,6 +29,7 @@ describe("<ParentForm>", () => {
     beforeEach(() => {
       wrap = mount(
         <ParentForm
+          documentGateway={documentGatewaySpy}
           onChange={onChangeSpy}
           schema={{
             type: "object",
@@ -94,6 +98,7 @@ describe("<ParentForm>", () => {
       beforeEach(() => {
         parentForm = shallow(
           <ParentForm
+            documentGateway={documentGatewaySpy}
             onChange={jest.fn()}
             formData={{ cats: [{ name: "Mittens", noise: "Meow" }] }}
             schema={{
@@ -141,6 +146,18 @@ describe("<ParentForm>", () => {
             .onItemClick("name", 1);
         });
 
+        it("Gets the document from the document gateway", () => {
+          expect(documentGatewaySpy.getDocument).toHaveBeenCalled();
+        });
+
+        it("Gets the element from the document by its ID", () => {
+          expect(documentSpy.getElementById).toHaveBeenCalledWith("subform");
+        });
+
+        it("Scrolls the element into view", () => {
+          expect(elementSpy.scrollIntoView).toHaveBeenCalled();
+        });
+
         it("Sets the selected form section to the one chosen", () => {
           expect(parentForm.state().selectedFormSection).toEqual("name");
         });
@@ -156,6 +173,18 @@ describe("<ParentForm>", () => {
             .find("Sidebar")
             .props()
             .onItemClick("noise", 2);
+        });
+
+        it("Gets the document from the document gateway", () => {
+          expect(documentGatewaySpy.getDocument).toHaveBeenCalled();
+        });
+
+        it("Gets the element from the document by its ID", () => {
+          expect(documentSpy.getElementById).toHaveBeenCalledWith("subform");
+        });
+
+        it("Scrolls the element into view", () => {
+          expect(elementSpy.scrollIntoView).toHaveBeenCalled();
         });
 
         it("Sets the selected form section to the one chosen", () => {
@@ -215,12 +244,7 @@ describe("<ParentForm>", () => {
     });
 
     describe("With an object type", () => {
-      let documentSpy, documentGatewaySpy, elementSpy;
-
       beforeEach(() => {
-        elementSpy = { scrollIntoView: jest.fn() }
-        documentSpy = { getElementById: jest.fn(() => elementSpy) }
-        documentGatewaySpy = { getDocument: jest.fn(() => documentSpy) };
         parentForm = shallow(
           <ParentForm
             onChange={jest.fn()}
@@ -270,12 +294,12 @@ describe("<ParentForm>", () => {
         });
 
         it("Gets the element from the document by its ID", () => {
-          expect(documentSpy.getElementById).toHaveBeenCalledWith("root_noise__title")
-        })
+          expect(documentSpy.getElementById).toHaveBeenCalledWith("root_noise__title");
+        });
 
         it("Scrolls the element into view", () => {
-          expect(elementSpy.scrollIntoView).toHaveBeenCalled()
-        })
+          expect(elementSpy.scrollIntoView).toHaveBeenCalled();
+        });
       });
 
       describe("Example Two", () => {
@@ -308,6 +332,7 @@ describe("<ParentForm>", () => {
       beforeEach(() => {
         parentForm = shallow(
           <ParentForm
+            documentGateway={documentGatewaySpy}
             onChange={jest.fn()}
             schema={{
               type: "object",
@@ -351,6 +376,7 @@ describe("<ParentForm>", () => {
       beforeEach(() => {
         parentForm = shallow(
           <ParentForm
+            documentGateway={documentGatewaySpy}
             onChange={jest.fn()}
             schema={{
               type: "object",
@@ -397,6 +423,7 @@ describe("<ParentForm>", () => {
         onChangeSpy = jest.fn();
         parentForm = shallow(
           <ParentForm
+            documentGateway={documentGatewaySpy}
             onChange={jest.fn()}
             schema={{
               type: "object",
@@ -509,6 +536,7 @@ describe("<ParentForm>", () => {
         beforeEach(() => {
           wrap = mount(
             <ParentForm
+              documentGateway={documentGatewaySpy}
               onChange={onChangeSpy}
               schema={{
                 type: "object",
@@ -552,6 +580,7 @@ describe("<ParentForm>", () => {
         onChangeSpy = jest.fn();
         parentForm = shallow(
           <ParentForm
+            documentGateway={documentGatewaySpy}
             onChange={jest.fn()}
             schema={{
               type: "object",
@@ -620,6 +649,7 @@ describe("<ParentForm>", () => {
         beforeEach(() => {
           wrap = mount(
             <ParentForm
+              documentGateway={documentGatewaySpy}
               onChange={onChangeSpy}
               schema={{
                 type: "object",
@@ -664,6 +694,7 @@ describe("<ParentForm>", () => {
       it("Passes an empty uischema to the subform", () => {
         let parentForm = shallow(
           <ParentForm
+            documentGateway={documentGatewaySpy}
             onChange={jest.fn()}
             schema={{
               type: "object",
@@ -700,6 +731,7 @@ describe("<ParentForm>", () => {
       it("Passes an empty uischema to the subform", () => {
         let parentForm = shallow(
           <ParentForm
+            documentGateway={documentGatewaySpy}
             onChange={jest.fn()}
             schema={{
               type: "object",
@@ -734,6 +766,7 @@ describe("<ParentForm>", () => {
     it("Displays the risk field component", () => {
       let parentForm = mount(
         <ParentForm
+          documentGateway={documentGatewaySpy}
           onChange={jest.fn()}
           schema={{
             type: "object",
@@ -830,6 +863,7 @@ describe("<ParentForm>", () => {
 
       let parentForm = mount(
         <ParentForm
+          documentGateway={documentGatewaySpy}
           onChange={jest.fn()}
           formData={data}
           schema={schema}
@@ -844,6 +878,7 @@ describe("<ParentForm>", () => {
     it("Displays the risk field component", () => {
       let parentForm = mount(
         <ParentForm
+          documentGateway={documentGatewaySpy}
           onChange={jest.fn()}
           schema={{
             type: "object",

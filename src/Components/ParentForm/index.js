@@ -8,12 +8,12 @@ import VarianceField from "../VarianceField";
 import MilestoneField from "../MilestoneField";
 import PercentageField from "../PercentageField";
 import GenerateSidebarItems from "../../UseCase/GenerateSidebarItems";
-import "./style.css";
 import RiskField from "../RiskField";
 import BaselineData from "../BaselineData";
 import PeriodsField from "../PeriodsField";
 import QuarterlyBreakdown from "../QuarterlyBreakdown";
 import CurrencyWidget from "../CurrencyWidget";
+import "./style.css";
 
 export default class ParentForm extends React.Component {
   constructor(props) {
@@ -90,17 +90,20 @@ export default class ParentForm extends React.Component {
       <Sidebar
         items={items}
         onItemClick={(section, index) => {
+          let jump_to_id;
           if (this.selectedSchema().type === "object") {
-            let documentObject = this.props.documentGateway.getDocument();
-            documentObject
-              .getElementById(`root_${section}__title`)
-              .scrollIntoView();
+            jump_to_id = `root_${section}__title`;
           } else {
+            jump_to_id = 'subform';
             this.setState({
               selectedFormSection: section,
               selectedFormItemIndex: index
             });
           }
+          let documentObject = this.props.documentGateway.getDocument();
+          documentObject
+            .getElementById(jump_to_id)
+            .scrollIntoView();
         }}
       />
     );
