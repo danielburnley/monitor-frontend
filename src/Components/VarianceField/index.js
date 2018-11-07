@@ -1,5 +1,4 @@
 import React from "react";
-import PercentageField from "../PercentageField";
 import PropTypes from "prop-types";
 
 export default class VarianceField extends React.Component {

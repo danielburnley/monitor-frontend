@@ -7,6 +7,6 @@ export default class CookieConsentGateway {
   }
 
   getConsent() {
-    return new CookiePreferences(Cookies.get('consent') == 'true');
+    return new CookiePreferences(Cookies.get('consent') === 'true');
   }
 }
