@@ -1,5 +1,6 @@
 import React from "react";
 import AddButton from "../AddButton";
+import RemoveButton from "../RemoveButton";
 import "./style.css";
 
 export default class PeriodsField extends React.Component {
@@ -65,13 +66,7 @@ export default class PeriodsField extends React.Component {
       return null;
     }
     return (
-      <button
-        data-test="remove-button"
-        className="btn btn-danger"
-        onClick={e => this.removeEvent(e)}
-      >
-        -
-      </button>
+      <RemoveButton passedFunction={() => this.removeEvent()} />
     );
   }
 
