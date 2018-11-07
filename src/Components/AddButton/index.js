@@ -7,13 +7,17 @@ export default class AddButton extends React.Component {
 
   render() {
     return (
-      <button
-        data-test="add-button"
-        className="btn btn-primary"
-        onClick={this.props.passedFunction}
-      >
-        +
-      </button>
+      <div className="row">
+        <div className="col-md-1 pull-right">
+          <button
+            data-test="add-button"
+            className="btn btn-primary"
+            onClick={this.props.passedFunction}
+          >
+            +
+          </button>
+        </div>
+      </div>
     );
   }
 }

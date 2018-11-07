@@ -7,13 +7,17 @@ export default class RemoveButton extends React.Component {
 
   render() {
     return (
-      <button
-        data-test="remove-button"
-        className="btn btn-danger"
-        onClick={this.props.passedFunction}
-      >
-        -
-      </button>
+      <div className="row">
+        <div className="col-md-1 pull-right">
+          <button
+            data-test="remove-button"
+            className="btn btn-danger"
+            onClick={this.props.passedFunction}
+          >
+            -
+          </button>
+        </div>
+      </div>
     );
   }
 }
