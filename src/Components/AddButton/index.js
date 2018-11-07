@@ -8,10 +8,10 @@ export default class AddButton extends React.Component {
   render() {
     return (
       <div className="row">
-        <div className="col-md-1 pull-right">
+        <div className="pull-right">
           <button
             data-test="add-button"
-            className="btn btn-primary"
+            className="btn btn-primary add-remove"
             onClick={this.props.passedFunction}
           >
             +

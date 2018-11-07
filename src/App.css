@@ -55,3 +55,10 @@ input[type="button"] .disabled {
   margin: 10px;
   float: right;
 }
+
+.add-remove {
+  padding-left: 3em;
+  padding-right: 3em;
+  margin-right: 1em;
+  font-weight: bold;
+}

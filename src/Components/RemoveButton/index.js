@@ -8,10 +8,10 @@ export default class RemoveButton extends React.Component {
   render() {
     return (
       <div className="row">
-        <div className="col-md-1 pull-right">
+        <div className="pull-right">
           <button
             data-test="remove-button"
-            className="btn btn-danger"
+            className="btn btn-danger add-remove"
             onClick={this.props.passedFunction}
           >
             -
