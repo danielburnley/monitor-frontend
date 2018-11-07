@@ -174,6 +174,7 @@ export default class ParentForm extends React.Component {
             fields={fields}
             schema={this.props.schema.properties[this.state.selected]}
             uiSchema={this.selectedUiSchema()}
+            noValidate={true}
           >
             <div />
           </Form>

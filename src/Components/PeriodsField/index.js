@@ -1,4 +1,6 @@
 import React from "react";
+import AddButton from "../AddButton";
+import RemoveButton from "../RemoveButton";
 import "./style.css";
 
 export default class PeriodsField extends React.Component {
@@ -22,7 +24,10 @@ export default class PeriodsField extends React.Component {
   renderLine(key, item) {
     return this.props.formData.map((column, index) => {
       return (
-        <div className="col-sm-1 flex-data less-padding" key={`input-${index}-${key}`}>
+        <div
+          className="col-sm-1 flex-data less-padding"
+          key={`input-${index}-${key}`}
+        >
           <input
             data-test={`${key}-input`}
             onChange={e => this.onChange(key, index, e.target.value)}
@@ -45,9 +50,45 @@ export default class PeriodsField extends React.Component {
     );
   }
 
+  renderAddButton(item) {
+    let inputKey = Object.keys(item)[1];
+    if (item[inputKey].readonly) {
+      return null;
+    }
+    return (
+      <AddButton passedFunction={() => this.addEvent()}/>
+    );
+  }
+
+  renderRemoveButton(item) {
+    let inputKey = Object.keys(item)[1];
+    if (item[inputKey].readonly) {
+      return null;
+    }
+    return (
+      <RemoveButton passedFunction={() => this.removeEvent()} />
+    );
+  }
+
+  addEvent() {
+    let newPeriod = { period: "" };
+    let updatedArray = this.state.formData;
+    updatedArray.push(newPeriod);
+
+    this.setState({ formData: updatedArray });
+  }
+
+  removeEvent() {
+    let updatedArray = this.state.formData;
+    updatedArray.pop();
+
+    this.setState({ formData: updatedArray });
+  }
+
   render() {
     return (
       <div>
+        {this.renderRemoveButton(this.props.schema.items.properties)}
         {Object.entries(this.props.schema.items.properties).map(
           ([key, value]) => {
             return (
@@ -60,6 +101,7 @@ export default class PeriodsField extends React.Component {
             );
           }
         )}
+        {this.renderAddButton(this.props.schema.items.properties)}
       </div>
     );
   }
