@@ -81,7 +81,7 @@ export default class PeriodsField extends React.Component {
   }
 
   addEvent() {
-    let newPeriod = { period: "Hello" };
+    let newPeriod = { period: "" };
     let updatedArray = this.state.formData;
     updatedArray.push(newPeriod);
 
