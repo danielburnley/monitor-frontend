@@ -64,6 +64,22 @@ export default class PeriodsField extends React.Component {
     );
   }
 
+  renderRemoveButton(item) {
+    let inputKey = Object.keys(item)[1];
+    if (item[inputKey].readonly) {
+      return null;
+    }
+    return (
+      <button
+        data-test="remove-button"
+        className="btn btn-danger"
+        onClick={e => this.removeEvent(e)}
+      >
+        -
+      </button>
+    );
+  }
+
   addEvent() {
     let newPeriod = { period: "Hello" };
     let updatedArray = this.state.formData;
@@ -72,9 +88,17 @@ export default class PeriodsField extends React.Component {
     this.setState({ formData: updatedArray });
   }
 
+  removeEvent() {
+    let updatedArray = this.state.formData;
+    updatedArray.pop();
+
+    this.setState({ formData: updatedArray });
+  }
+
   render() {
     return (
       <div>
+        {this.renderRemoveButton(this.props.schema.items.properties)}
         {Object.entries(this.props.schema.items.properties).map(
           ([key, value]) => {
             return (

@@ -52,4 +52,12 @@ export default class Periods {
   pressAdd() {
     this.page.find('[data-test="add-button"]').simulate('click');
   }
+
+  removeButton() {
+    return this.page.find('[data-test="remove-button"]').length;
+  }
+
+  pressRemove() {
+    this.page.find('[data-test="remove-button"]').simulate('click');
+  }
 }

@@ -3,31 +3,34 @@ import Periods from "../../../test/PeriodsField";
 describe("Period Financials", () => {
   describe("Read Only data", () => {
     describe("Example 1", () => {
-      let data = [
-        { period: "Fluffy", age: "12" },
-        { period: "sparkles", age: "5" }
-      ];
-      let schema = {
-        periods: true,
-        title: "cats",
-        type: "Array",
-        items: {
-          type: "object",
-          properties: {
-            period: {
-              type: "string",
-              title: "Cat Name",
-              readonly: true
-            },
-            age: {
-              type: "string",
-              title: "Cat Age",
-              readonly: true
+      let periods;
+      beforeEach(() => {
+        let data = [
+          { period: "Fluffy", age: "12" },
+          { period: "sparkles", age: "5" }
+        ];
+        let schema = {
+          periods: true,
+          title: "cats",
+          type: "Array",
+          items: {
+            type: "object",
+            properties: {
+              period: {
+                type: "string",
+                title: "Cat Name",
+                readonly: true
+              },
+              age: {
+                type: "string",
+                title: "Cat Age",
+                readonly: true
+              }
             }
           }
-        }
-      };
-      let periods = new Periods(data, schema);
+        };
+        periods = new Periods(data, schema);
+      });
 
       it("Displays the titles", () => {
         expect(periods.lineTitle(0)).toEqual("Cat Name");
@@ -44,31 +47,39 @@ describe("Period Financials", () => {
       it("Does not display an add button", () => {
         expect(periods.addButton()).toEqual(0);
       });
+
+      it("Does not display a remove button", () => {
+        expect(periods.removeButton()).toEqual(0);
+      });
     });
     describe("Example 2", () => {
-      let data = [
-        { quarter: "scaley", length: "200" },
-        { quarter: "slivery", length: "567" }
-      ];
-      let schema = {
-        type: "array",
-        items: {
-          type: "object",
-          properties: {
-            quarter: {
-              type: "string",
-              title: "Lizard Type",
-              readonly: true
-            },
-            length: {
-              type: "string",
-              title: "How Long",
-              readonly: true
+      let periods;
+      beforeEach(() => {
+        let data = [
+          { quarter: "scaley", length: "200" },
+          { quarter: "slivery", length: "567" }
+        ];
+        let schema = {
+          type: "array",
+          items: {
+            type: "object",
+            properties: {
+              quarter: {
+                type: "string",
+                title: "Lizard Type",
+                readonly: true
+              },
+              length: {
+                type: "string",
+                title: "How Long",
+                readonly: true
+              }
             }
           }
-        }
-      };
-      let periods = new Periods(data, schema);
+        };
+        periods = new Periods(data, schema);
+      });
+
       it("Displays the title", () => {
         expect(periods.lineTitle(0)).toEqual("Lizard Type");
         expect(periods.lineTitle(1)).toEqual("How Long");
@@ -84,30 +95,37 @@ describe("Period Financials", () => {
       it("Does not display an add button", () => {
         expect(periods.addButton()).toEqual(0);
       });
+
+      it("Does not display a remove button", () => {
+        expect(periods.removeButton()).toEqual(0);
+      });
     });
   });
 
   describe("Input rows", () => {
     describe("Example 1", () => {
-      let data = [{ period: "Fluffy" }, { period: "sparkles", age: "5" }];
-      let schema = {
-        type: "array",
-        items: {
-          type: "object",
-          properties: {
-            period: {
-              type: "string",
-              title: "Dog Name",
-              readonly: true
-            },
-            age: {
-              type: "string",
-              title: "Dog Age"
+      let periods;
+      beforeEach(() => {
+        let data = [{ period: "Fluffy" }, { period: "sparkles", age: "5" }];
+        let schema = {
+          type: "array",
+          items: {
+            type: "object",
+            properties: {
+              period: {
+                type: "string",
+                title: "Dog Name",
+                readonly: true
+              },
+              age: {
+                type: "string",
+                title: "Dog Age"
+              }
             }
           }
-        }
-      };
-      let periods = new Periods(data, schema);
+        };
+        periods = new Periods(data, schema);
+      });
 
       it("Displays the correct title", () => {
         expect(periods.lineTitle(1)).toEqual("Dog Age");
@@ -138,32 +156,44 @@ describe("Period Financials", () => {
         periods.pressAdd();
         expect(periods.inputFieldCount("age")).toEqual(3);
       });
+
+      it("Displays a remove button", () => {
+        expect(periods.removeButton()).toEqual(1);
+      });
+
+      it("Pressing remove decreases input fields", () => {
+        periods.pressRemove();
+        expect(periods.inputFieldCount("age")).toEqual(1);
+      });
     });
 
     describe("Example 2", () => {
-      let data = [
-        { quarter: "scaley" },
-        { quarter: "slivery" },
-        { quarter: "shiny", length: "2" }
-      ];
-      let schema = {
-        type: "array",
-        items: {
-          type: "object",
-          properties: {
-            quarter: {
-              type: "string",
-              title: "Lizard Type",
-              readonly: true
-            },
-            length: {
-              type: "string",
-              title: "How Long"
+      let periods;
+      beforeEach(() => {
+        let data = [
+          { quarter: "scaley" },
+          { quarter: "slivery" },
+          { quarter: "shiny", length: "2" }
+        ];
+        let schema = {
+          type: "array",
+          items: {
+            type: "object",
+            properties: {
+              quarter: {
+                type: "string",
+                title: "Lizard Type",
+                readonly: true
+              },
+              length: {
+                type: "string",
+                title: "How Long"
+              }
             }
           }
-        }
-      };
-      let periods = new Periods(data, schema);
+        };
+        periods = new Periods(data, schema);
+      });
 
       it("Displays the correct title", () => {
         expect(periods.lineTitle(1)).toEqual("How Long");
@@ -195,6 +225,16 @@ describe("Period Financials", () => {
         periods.pressAdd();
         periods.pressAdd();
         expect(periods.inputFieldCount("length")).toEqual(5);
+      });
+
+      it("Displays a remove button", () => {
+        expect(periods.removeButton()).toEqual(1);
+      });
+
+      it("Pressing remove decreases input fields", () => {
+        periods.pressRemove();
+        periods.pressRemove();
+        expect(periods.inputFieldCount("length")).toEqual(1);
       });
     });
   });
