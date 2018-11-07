@@ -18,6 +18,7 @@ storiesOf("Periods Field", module)
     ];
 
     let schema = {
+      type: "array",
       items: {
         properties: {
           period: {
@@ -47,12 +48,12 @@ storiesOf("Periods Field", module)
 
     let schema = {
       type: "array",
+      addable: true,
       items: {
         properties: {
           period: {
             type: "string",
-            title: "Period",
-            readonly: true
+            title: "Period"
           },
           currentReturnForecast: {
             type: "string",

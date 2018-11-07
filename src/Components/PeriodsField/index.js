@@ -50,9 +50,8 @@ export default class PeriodsField extends React.Component {
     );
   }
 
-  renderAddButton(item) {
-    let inputKey = Object.keys(item)[1];
-    if (item[inputKey].readonly) {
+  renderAddButton() {
+    if (!this.props.schema.addable) {
       return null;
     }
     return (
@@ -60,9 +59,8 @@ export default class PeriodsField extends React.Component {
     );
   }
 
-  renderRemoveButton(item) {
-    let inputKey = Object.keys(item)[1];
-    if (item[inputKey].readonly) {
+  renderRemoveButton() {
+    if (!this.props.schema.addable) {
       return null;
     }
     return (
@@ -88,7 +86,7 @@ export default class PeriodsField extends React.Component {
   render() {
     return (
       <div>
-        {this.renderRemoveButton(this.props.schema.items.properties)}
+        {this.renderRemoveButton()}
         {Object.entries(this.props.schema.items.properties).map(
           ([key, value]) => {
             return (
@@ -101,7 +99,7 @@ export default class PeriodsField extends React.Component {
             );
           }
         )}
-        {this.renderAddButton(this.props.schema.items.properties)}
+        {this.renderAddButton()}
       </div>
     );
   }
