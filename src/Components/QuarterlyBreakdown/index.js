@@ -1,5 +1,6 @@
 import React from "react";
 import "./style.css";
+import { runInThisContext } from "vm";
 
 export default class QuarterlyBreakdown extends React.Component {
   constructor(props) {
@@ -24,7 +25,7 @@ export default class QuarterlyBreakdown extends React.Component {
       ([key, v]) => {
         if (!v.hidden) {
           return (
-            <div className="col-md-2 " key={`${key}_col`}>
+            <div className="col-xs-2 column" key={`${key}_col`}>
               {this.renderHeader(v, key)}
               {this.renderPeriods(key, v)}
             </div>
@@ -52,15 +53,27 @@ export default class QuarterlyBreakdown extends React.Component {
   }
 
   renderInputField(key, value, index, v) {
-    return (
-      <input
+    if(this.props.schema.items.properties[key].currency) {
+      return (
+        <this.props.registry.widgets.currency
+          data-test={`${key}_${index}`}
+          className="form-control"
+          value={value[key]}
+          onChange={e => this.onFieldChange(index, key, e)}
+          disabled={v.readonly}
+        />
+      );
+    } else {
+      return (
+        <input
         data-test={`${key}_${index}`}
-        className="form-control input"
+        className="form-control"
         value={value[key]}
         onChange={e => this.onFieldChange(index, key, e)}
         disabled={v.readonly}
       />
-    );
+      );
+    }
   }
 
   render() {
@@ -69,7 +82,7 @@ export default class QuarterlyBreakdown extends React.Component {
         <div data-test="title" className="title">
           <h4>{this.props.schema.title}</h4>
         </div>
-        <div className="row">{this.renderData()}</div>
+        <div className="row container">{this.renderData()}</div>
       </div>
     );
   }
