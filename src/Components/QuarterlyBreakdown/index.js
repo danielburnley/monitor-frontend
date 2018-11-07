@@ -76,6 +76,7 @@ export default class QuarterlyBreakdown extends React.Component {
   }
 
   render() {
+    console.log(this.state.data)
     return (
       <div>
         <div data-test="title" className="title">

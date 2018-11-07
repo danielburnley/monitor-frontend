@@ -1,4 +1,5 @@
 import React from "react";
+import AddButton from "../AddButton";
 import "./style.css";
 
 export default class PeriodsField extends React.Component {
@@ -54,13 +55,7 @@ export default class PeriodsField extends React.Component {
       return null;
     }
     return (
-      <button
-        data-test="add-button"
-        className="btn btn-primary"
-        onClick={e => this.addEvent(e)}
-      >
-        +
-      </button>
+      <AddButton passedFunction={() => this.addEvent()}/>
     );
   }
 
