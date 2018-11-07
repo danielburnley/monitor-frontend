@@ -5,8 +5,16 @@
   margin-bottom: 4px;
 }
 
-.input {
-  height: 25px;
+.column {
+  padding-right: 7px;
+  padding-left: 7px;
+  max-width: 13%;
+  flex-grow: 1;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
 }
 
 .title {

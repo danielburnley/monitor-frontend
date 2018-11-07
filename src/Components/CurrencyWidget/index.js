@@ -19,12 +19,16 @@ export default class CurrencyWidget extends React.Component {
   isInputDisabled() {
     if (this.props.uiSchema) {
       return this.props.uiSchema["ui:disabled"];
+    } else {
+      return this.props.disabled
     }
   }
 
   isHidden() {
     if (this.props.uiSchema) {
       return this.props.uiSchema["ui:widget"] === "hidden";
+    } else {
+      return this.props.hidden
     }
   }
 
@@ -40,7 +44,7 @@ export default class CurrencyWidget extends React.Component {
             {this.state.currency}
           </span>
           <input
-            className="form-control"
+            className="form-control input"
             data-test="currency-input"
             value={this.state.value}
             onChange={e => this.onFieldChange(e)}

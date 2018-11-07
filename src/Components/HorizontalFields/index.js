@@ -58,10 +58,22 @@ export default class HorizontalFields extends React.Component {
   renderItem = (k, v) => {
     if (v.type === "string" && v.enum) {
       return this.renderSelect(k, v);
+    } else if (v.currency) {
+      return (
+        <this.props.registry.widgets.currency
+          id={k}
+          disabled={v.readonly}
+          data-test={`${k}-input`}
+          type={this.inputFieldType(v)}
+          value={this.state[k]}
+          onChange={e => this.onChange(k, e.target.value)}
+        />
+      );
     } else {
       return (
         <input
           id={k}
+          className="form-control"
           disabled={v.readonly}
           data-test={`${k}-input`}
           type={this.inputFieldType(v)}
