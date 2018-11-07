@@ -22,7 +22,10 @@ export default class PeriodsField extends React.Component {
   renderLine(key, item) {
     return this.props.formData.map((column, index) => {
       return (
-        <div className="col-sm-1 flex-data less-padding" key={`input-${index}-${key}`}>
+        <div
+          className="col-sm-1 flex-data less-padding"
+          key={`input-${index}-${key}`}
+        >
           <input
             data-test={`${key}-input`}
             onChange={e => this.onChange(key, index, e.target.value)}
@@ -45,6 +48,30 @@ export default class PeriodsField extends React.Component {
     );
   }
 
+  renderAddButton(item) {
+    let inputKey = Object.keys(item)[1];
+    if (item[inputKey].readonly) {
+      return null;
+    }
+    return (
+      <button
+        data-test="add-button"
+        className="btn btn-primary"
+        onClick={e => this.addEvent(e)}
+      >
+        +
+      </button>
+    );
+  }
+
+  addEvent() {
+    let newPeriod = { period: "Hello" };
+    let updatedArray = this.state.formData;
+    updatedArray.push(newPeriod);
+
+    this.setState({ formData: updatedArray });
+  }
+
   render() {
     return (
       <div>
@@ -60,6 +87,7 @@ export default class PeriodsField extends React.Component {
             );
           }
         )}
+        {this.renderAddButton(this.props.schema.items.properties)}
       </div>
     );
   }
