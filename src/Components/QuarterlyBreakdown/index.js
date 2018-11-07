@@ -1,4 +1,5 @@
 import React from "react";
+import AddButton from "../AddButton";
 import "./style.css";
 
 export default class QuarterlyBreakdown extends React.Component {
@@ -45,13 +46,15 @@ export default class QuarterlyBreakdown extends React.Component {
   renderPeriods(key, v) {
     return this.props.formData.map((value, index) => {
       return (
-        <div className="row" key={`row_${index}`}>{this.renderInputField(key, value, index, v)}</div>
+        <div className="row" key={`row_${index}`}>
+          {this.renderInputField(key, value, index, v)}
+        </div>
       );
     });
   }
 
   renderInputField(key, value, index, v) {
-    if(this.props.schema.items.properties[key].currency) {
+    if (this.props.schema.items.properties[key].currency) {
       return (
         <this.props.registry.widgets.currency
           data-test={`${key}_${index}`}
@@ -74,6 +77,21 @@ export default class QuarterlyBreakdown extends React.Component {
     }
   }
 
+  renderAddButton() {
+    if (!this.props.schema.addable) {
+      return null;
+    }
+    return <AddButton passedFunction={() => this.addEvent()} />;
+  }
+
+  addEvent() {
+    let newPeriod = {};
+    let updatedArray = this.state.data;
+    updatedArray.push(newPeriod);
+
+    this.setState({ data: updatedArray });
+  }
+
   render() {
     return (
       <div>
@@ -81,6 +99,7 @@ export default class QuarterlyBreakdown extends React.Component {
           <h4>{this.props.schema.title}</h4>
         </div>
         <div className="row container">{this.renderData()}</div>
+        {this.renderAddButton()}
       </div>
     );
   }

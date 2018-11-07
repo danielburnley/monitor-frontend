@@ -32,7 +32,7 @@ storiesOf('QuarterlyBreakdown', module)
       total: "4 new dogs"
     }
   ]
-  
+
   let schema = {
       type: "array",
       title: "Installments",
@@ -87,9 +87,10 @@ storiesOf('QuarterlyBreakdown', module)
       period: "2017"
     }
   ]
-  
+
   let schema = {
       type: "array",
+      addable: true,
       title: "Installments",
       items: {
         type: 'object',
@@ -152,7 +153,7 @@ storiesOf('QuarterlyBreakdown', module)
       total: "4 new dogs"
     }
   ]
-  
+
   let schema = {
       type: "array",
       title: "Installments",
@@ -218,7 +219,7 @@ storiesOf('QuarterlyBreakdown', module)
       total: "4 new dogs"
     }
   ]
-  
+
   let schema = {
       type: "array",
       title: "Installments",
