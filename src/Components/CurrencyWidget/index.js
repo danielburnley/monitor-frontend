@@ -19,12 +19,16 @@ export default class CurrencyWidget extends React.Component {
   isInputDisabled() {
     if (this.props.uiSchema) {
       return this.props.uiSchema["ui:disabled"];
+    } else {
+      return this.props.disabled
     }
   }
 
   isHidden() {
     if (this.props.uiSchema) {
       return this.props.uiSchema["ui:widget"] === "hidden";
+    } else {
+      return this.props.hidden
     }
   }
 
