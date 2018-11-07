@@ -109,6 +109,7 @@ describe("Period Financials", () => {
         let data = [{ period: "Fluffy" }, { period: "sparkles", age: "5" }];
         let schema = {
           type: "array",
+          addable: true,
           items: {
             type: "object",
             properties: {
@@ -177,6 +178,7 @@ describe("Period Financials", () => {
         ];
         let schema = {
           type: "array",
+          addable: true,
           items: {
             type: "object",
             properties: {
