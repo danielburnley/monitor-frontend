@@ -22,22 +22,35 @@ export default class PeriodsField extends React.Component {
   };
 
   renderLine(key, item) {
-    return this.props.formData.map((column, index) => {
-      return (
-        <div
-          className="col-sm-1 flex-data less-padding"
-          key={`input-${index}-${key}`}
-        >
-          <input
-            data-test={`${key}-input`}
-            onChange={e => this.onChange(key, index, e.target.value)}
-            value={column[key] || ""}
-            className="form-control"
-            disabled={item.readonly}
-          />
-        </div>
-      );
-    });
+    if (key === "remove") {
+      return this.props.formData.map((column, index) => {
+        return (
+          <div
+            className="col-sm-1 flex-data less-padding"
+            key={`input-${index}-${key}`}
+          >
+            {this.renderRemoveButton(index)}
+          </div>
+        );
+      });
+    } else {
+      return this.props.formData.map((column, index) => {
+        return (
+          <div
+            className="col-sm-1 flex-data less-padding"
+            key={`input-${index}-${key}`}
+          >
+            <input
+              data-test={`${key}-input`}
+              onChange={e => this.onChange(key, index, e.target.value)}
+              value={column[key] || ""}
+              className="form-control"
+              disabled={item.readonly}
+            />
+          </div>
+        );
+      });
+    }
   }
 
   renderHeader(title) {
@@ -54,18 +67,14 @@ export default class PeriodsField extends React.Component {
     if (!this.props.schema.addable) {
       return null;
     }
-    return (
-      <AddButton passedFunction={() => this.addEvent()}/>
-    );
+    return <AddButton passedFunction={() => this.addEvent()} />;
   }
 
-  renderRemoveButton() {
+  renderRemoveButton(index) {
     if (!this.props.schema.addable) {
       return null;
     }
-    return (
-      <RemoveButton passedFunction={() => this.removeEvent()} />
-    );
+    return <RemoveButton passedFunction={() => this.removeEvent(index)} />;
   }
 
   addEvent() {
@@ -76,17 +85,18 @@ export default class PeriodsField extends React.Component {
     this.setState({ formData: updatedArray });
   }
 
-  removeEvent() {
+  removeEvent(index) {
     let updatedArray = this.state.formData;
-    updatedArray.pop();
+    updatedArray.splice(index, 1);
 
     this.setState({ formData: updatedArray });
   }
 
   render() {
+    let updatedRows = this.props.schema.items.properties;
+    updatedRows.remove = { title: "Remove", type: "string" };
     return (
       <div>
-        {this.renderRemoveButton()}
         {Object.entries(this.props.schema.items.properties).map(
           ([key, value]) => {
             return (
