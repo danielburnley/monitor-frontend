@@ -169,7 +169,7 @@ export default class NewProjectPage extends React.Component {
               Save draft
             </button>
           </div>
-          <div className="row">{this.renderForm()}</div>
+          <div className="row no-edge">{this.renderForm()}</div>
         </div>
       );
     }
@@ -255,7 +255,9 @@ export default class NewProjectPage extends React.Component {
   render() {
     return (
       <div>
-        <h2>Baseline editor</h2>
+        <div class="row">
+          <h2>Baseline Editor</h2>
+        </div>
         {this.renderMandatoryWarning()}
         {this.renderSuccessOrForm()}
       </div>

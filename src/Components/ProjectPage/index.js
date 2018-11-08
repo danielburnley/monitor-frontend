@@ -18,7 +18,7 @@ export default class ProjectPage extends React.Component {
       projectStatus: projectData.status,
       projectType: projectData.type
     });
-  };    
+  };
 
   presentProjectNotFound = async () => {};
 
@@ -58,7 +58,7 @@ export default class ProjectPage extends React.Component {
 
   render() {
     return (
-      <div className="container-fluid">
+      <div>
         {this.renderForm()}
       </div>
     );
