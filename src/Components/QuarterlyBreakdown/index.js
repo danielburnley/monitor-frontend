@@ -22,7 +22,7 @@ export default class QuarterlyBreakdown extends React.Component {
 
   renderData() {
     let quarterlyObject = this.props.schema.items.properties;
-    quarterlyObject.remove = { title: "", type: "string" };
+    quarterlyObject.remove = { title: "Remove", type: "string" };
     return Object.entries(quarterlyObject).map(([key, v]) => {
       if (!v.hidden) {
         return (
@@ -46,20 +46,26 @@ export default class QuarterlyBreakdown extends React.Component {
 
   renderPeriods(key, v) {
     return this.props.formData.map((value, index) => {
-      if (key !== "remove") {
-        return (
-          <div className="row" key={`row_${index}`}>
-            {this.renderInputField(key, value, index, v)}
-          </div>
-        );
-      } else {
-        return (
-          <div className="row" key={`remove_${index}`}>
-            {this.renderRemoveButton(index)}
-          </div>
-        );
-      }
+      return (
+        <div className="row" key={`row_${index}`}>
+          {this.renderPeriodsInternal(key, value, index, v)}
+        </div>
+      );
     });
+  }
+
+  renderPeriodsInternal(key, value, index, v) {
+    if (key !== "remove") {
+      return (
+        <div className="row" key={`row_${index}`}>
+          {this.renderInputField(key, value, index, v)}
+        </div>
+      );
+    } else {
+      return (
+        <div key={`remove_${index}`}>{this.renderRemoveButton(index)}</div>
+      );
+    }
   }
 
   renderInputField(key, value, index, v) {
