@@ -10,10 +10,9 @@ export default class QuarterlyBreakdown extends React.Component {
     };
   }
 
-  onFieldChange(index, name, e) {
+  onFieldChange(index, name, value) {
     let newData = this.state.data;
-    newData[index][name] = e.target.value;
-
+    newData[index][name] = value
     this.setState({ data: newData }, () => {
       this.props.onChange(this.state.data);
     });
@@ -68,7 +67,7 @@ export default class QuarterlyBreakdown extends React.Component {
         data-test={`${key}_${index}`}
         className="form-control"
         value={value[key]}
-        onChange={e => this.onFieldChange(index, key, e)}
+        onChange={e => this.onFieldChange(index, key, e.target.value)}
         disabled={v.readonly}
       />
       );

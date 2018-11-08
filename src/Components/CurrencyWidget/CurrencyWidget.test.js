@@ -103,7 +103,7 @@ describe("CurrencyWidget", () => {
       field
         .find("[data-test='currency-input']")
         .simulate("change", { target: { value: "5.890" } });
-      expect(onChangeSpy).toHaveBeenCalledWith("5.890");
+      expect(onChangeSpy).toHaveBeenCalledWith( "5.890");
     });
   });
 
