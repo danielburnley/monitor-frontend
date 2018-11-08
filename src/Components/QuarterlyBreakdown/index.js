@@ -69,6 +69,7 @@ export default class QuarterlyBreakdown extends React.Component {
           data-test={`${key}_${index}`}
           className="form-control"
           value={value[key]}
+          key={this.state.data}
           onChange={e => this.onFieldChange(index, key, e)}
           disabled={v.readonly}
         />
