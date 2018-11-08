@@ -21,19 +21,19 @@ export default class QuarterlyBreakdown extends React.Component {
   }
 
   renderData() {
-    return Object.entries(this.props.schema.items.properties).map(
-      ([key, v]) => {
-        if (!v.hidden) {
-          return (
-            <div className="col-xs-2 column" key={`${key}_col`}>
-              {this.renderHeader(v, key)}
-              {this.renderPeriods(key, v)}
-            </div>
-          );
-        }
-        return null;
+    let quarterlyObject = this.props.schema.items.properties;
+    quarterlyObject.remove = { title: "", type: "string" };
+    return Object.entries(quarterlyObject).map(([key, v]) => {
+      if (!v.hidden) {
+        return (
+          <div className="col-xs-2 column" key={`${key}_col`}>
+            {this.renderHeader(v, key)}
+            {this.renderPeriods(key, v)}
+          </div>
+        );
       }
-    );
+      return null;
+    });
   }
 
   renderHeader(v, key) {
@@ -46,11 +46,19 @@ export default class QuarterlyBreakdown extends React.Component {
 
   renderPeriods(key, v) {
     return this.props.formData.map((value, index) => {
-      return (
-        <div className="row" key={`row_${index}`}>
-          {this.renderInputField(key, value, index, v)}
-        </div>
-      );
+      if (key !== "remove") {
+        return (
+          <div className="row" key={`row_${index}`}>
+            {this.renderInputField(key, value, index, v)}
+          </div>
+        );
+      } else {
+        return (
+          <div className="row" key={`remove_${index}`}>
+            {this.renderRemoveButton(index)}
+          </div>
+        );
+      }
     });
   }
 
@@ -93,16 +101,16 @@ export default class QuarterlyBreakdown extends React.Component {
     this.setState({ data: updatedArray });
   }
 
-  renderRemoveButton() {
+  renderRemoveButton(index) {
     if (!this.props.schema.addable) {
       return null;
     }
-    return <RemoveButton passedFunction={() => this.removeEvent()} />;
+    return <RemoveButton passedFunction={() => this.removeEvent(index)} />;
   }
 
-  removeEvent() {
+  removeEvent(index) {
     let updatedArray = this.state.data;
-    updatedArray.pop();
+    updatedArray.splice(index, 1);
 
     this.setState({ data: updatedArray });
   }
@@ -113,7 +121,6 @@ export default class QuarterlyBreakdown extends React.Component {
         <div data-test="title" className="title">
           <h4>{this.props.schema.title}</h4>
         </div>
-        {this.renderRemoveButton()}
         <div className="row container">{this.renderData()}</div>
         {this.renderAddButton()}
       </div>

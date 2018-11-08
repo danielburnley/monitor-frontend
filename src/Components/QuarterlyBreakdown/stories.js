@@ -102,23 +102,23 @@ storiesOf('QuarterlyBreakdown', module)
           },
           quarter1: {
             title: '1st Quarter',
-            type: 'string',
+            type: 'string'
           },
           quarter2: {
             title: '2nd Quarter',
-            type: 'string',
+            type: 'string'
           },
           quarter3: {
             title: '3rd Quarter',
-            type: 'string',
+            type: 'string'
           },
           quarter4: {
             title: '4th Quarter',
-            type: 'string',
+            type: 'string'
           },
           total: {
             title: 'Total',
-            type: 'string',
+            type: 'string'
           }
         }
     }
@@ -156,6 +156,7 @@ storiesOf('QuarterlyBreakdown', module)
 
   let schema = {
       type: "array",
+      addable: true,
       title: "Installments",
       items: {
         type: 'object',
