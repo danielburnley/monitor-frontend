@@ -9,8 +9,10 @@ describe("CurrencyWidget", () => {
       schema = {
         title: "Cats",
         type: "string",
-        currency: true
+        currency: true,
+        maximum: "128"
       };
+
       onChangeSpy = jest.fn();
       value = "56";
       currencySymbol = "th";
@@ -24,6 +26,7 @@ describe("CurrencyWidget", () => {
         />
       );
     });
+
     it("Renders an input field", () => {
       expect(field.find("[data-test='currency-input']").length).toEqual(1);
     });
@@ -31,6 +34,16 @@ describe("CurrencyWidget", () => {
     it("Prepopulates the input field with form data", () => {
       expect(field.find("[data-test='currency-input']").props().value).toEqual(
         "56"
+      );
+    });
+
+    it("Limits the value to the maximum", () => {
+      field
+        .find("[data-test='currency-input']")
+        .simulate("change", { target: { value: "129" } });
+
+      expect(field.find("[data-test='currency-input']").props().value).toEqual(
+        "128"
       );
     });
 
@@ -61,8 +74,10 @@ describe("CurrencyWidget", () => {
       schema = {
         title: "Dogs",
         type: "string",
+        maximum: "64",
         currency: true
       };
+
       onChangeSpy = jest.fn();
       value = "12.45";
       currencySymbol = "yen";
@@ -84,6 +99,16 @@ describe("CurrencyWidget", () => {
     it("Prepopulates the input field with form data", () => {
       expect(field.find("[data-test='currency-input']").props().value).toEqual(
         "12.45"
+      );
+    });
+
+    it("Limits the value to the maximum", () => {
+      field
+        .find("[data-test='currency-input']")
+        .simulate("change", { target: { value: "255" } });
+
+      expect(field.find("[data-test='currency-input']").props().value).toEqual(
+        "64"
       );
     });
 
