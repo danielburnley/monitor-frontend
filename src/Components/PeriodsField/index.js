@@ -67,14 +67,14 @@ export default class PeriodsField extends React.Component {
     if (!this.props.schema.addable) {
       return null;
     }
-    return <AddButton passedFunction={() => this.addEvent()} />;
+    return <AddButton onClick={() => this.addEvent()} />;
   }
 
   renderRemoveButton(index) {
     if (!this.props.schema.addable) {
       return null;
     }
-    return <RemoveButton passedFunction={() => this.removeEvent(index)} />;
+    return <RemoveButton onClick={() => this.removeEvent(index)} />;
   }
 
   addEvent() {
