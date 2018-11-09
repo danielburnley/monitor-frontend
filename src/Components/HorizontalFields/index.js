@@ -66,7 +66,7 @@ export default class HorizontalFields extends React.Component {
           data-test={`${k}-input`}
           type={this.inputFieldType(v)}
           value={this.state[k]}
-          onChange={e => this.onChange(k, e)}
+          onChange={e => this.onChange(k, e.target.value)}
         />
       );
     } else if (v.extendedText) {
