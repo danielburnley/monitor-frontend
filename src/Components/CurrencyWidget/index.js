@@ -7,7 +7,8 @@ export default class CurrencyWidget extends React.Component {
 
     this.state = {
       value: this.props.value || '',
-      currency: this.props.currency ? this.props.currency : "£"
+      currency: this.props.currency ? this.props.currency : "£",
+      key: this.props.key
     };
   }
 
