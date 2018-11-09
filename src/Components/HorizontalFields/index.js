@@ -69,6 +69,17 @@ export default class HorizontalFields extends React.Component {
           onChange={e => this.onChange(k, e)}
         />
       );
+    } else if (v.extendedText) {
+      return (
+        <textarea
+          id={k}
+          disabled={v.readonly}
+          data-test={`${k}-input`}
+          type={this.inputFieldType(v)}
+          value={this.state[k]}
+          onChange={e => this.onChange(k, e.target.value)}
+        />
+      );
     } else {
       return (
         <input

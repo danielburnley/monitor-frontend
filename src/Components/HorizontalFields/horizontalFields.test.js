@@ -1,9 +1,157 @@
 import HorizontalFields from ".";
 import React from "react";
+import WidgetStub from "../../../test/WidgetStub";
 import { mount } from "enzyme";
 
+class CurrencyStub extends WidgetStub { datatest = "currency-stub"; }
+class SecondCurrencyStub extends WidgetStub { datatest = "second-currency-stub"; }
+
 describe("<HorizontalFields>", () => {
-  let schema, fields, formData, onChangeSpy;
+  let schema, fields, formData, onChangeSpy, registrySpy;
+
+  describe("Given a currency widget", () => {
+    describe("Example 1", () => {
+      beforeEach(() => {
+        registrySpy = {
+          widgets: {
+            currency: CurrencyStub
+          }
+        }
+        schema = {
+          title: "Cats",
+          properties: {
+            nyan: { currency: true, type: "text", title: "Nyan" }
+          }
+        };
+        formData = { nyan: "Other cat noises" };
+        onChangeSpy = jest.fn();
+        fields = mount(
+          <HorizontalFields
+            registry={registrySpy}
+            schema={schema}
+            formData={formData}
+            onChange={onChangeSpy}
+          />
+        );
+      });
+
+      it("Renders the currency component from the registry", () => {
+        expect(fields.find("[data-test='currency-stub']").length).toEqual(1);
+      });
+
+      it("Calls the onChange method passed in with the form data", () => {
+        fields
+          .find("input[data-test='currency-stub']")
+          .simulate("change", { target: { value: "New Meow" } });
+
+        expect(onChangeSpy).toHaveBeenCalledWith({ nyan: "New Meow" });
+      });
+    });
+
+    describe("Example 2", () => {
+      beforeEach(() => {
+        registrySpy = {
+          widgets: {
+            currency: SecondCurrencyStub
+          }
+        }
+        schema = {
+          title: "Cats",
+          properties: {
+            meow: { currency: true, type: "text", title: "Many meows" }
+          }
+        };
+        formData = { meow: "Additional cat noises" };
+        onChangeSpy = jest.fn();
+        fields = mount(
+          <HorizontalFields
+            registry={registrySpy}
+            schema={schema}
+            formData={formData}
+            onChange={onChangeSpy}
+          />
+        );
+      });
+
+      it("Renders the currency component from the registry", () => {
+        expect(fields.find("[data-test='second-currency-stub']").length).toEqual(1);
+      });
+
+      it("Calls the onChange method passed in with the form data", () => {
+        fields
+          .find("input[data-test='second-currency-stub']")
+          .simulate("change", { target: { value: "Another Meow" } });
+
+        expect(onChangeSpy).toHaveBeenCalledWith({ meow: "Another Meow" });
+      });
+    });
+  });
+
+  describe("Given an extendedText widget", () => {
+    describe("Example 1", () => {
+      beforeEach(() => {
+        schema = {
+          title: "Cats",
+          properties: {
+            nyan: { extendedText: true, type: "text", title: "Nyan" }
+          }
+        };
+        formData = { nyan: "Other cat noises" };
+        onChangeSpy = jest.fn();
+        fields = mount(
+          <HorizontalFields
+            schema={schema}
+            formData={formData}
+            onChange={onChangeSpy}
+          />
+        );
+      });
+
+      it("Renders the currency component from the registry", () => {
+        expect(fields.find("textarea").length).toEqual(1);
+      });
+
+      it("Calls the onChange method passed in with the form data", () => {
+        fields
+          .find("textarea")
+          .simulate("change", { target: { value: "New Meow" } });
+
+        expect(onChangeSpy).toHaveBeenCalledWith({ nyan: "New Meow" });
+      });
+    });
+
+    describe("Example 2", () => {
+      beforeEach(() => {
+        schema = {
+          title: "Cats",
+          properties: {
+            meow: { extendedText: true, type: "text", title: "Many meows" }
+          }
+        };
+        formData = { meow: "Additional cat noises" };
+        onChangeSpy = jest.fn();
+        fields = mount(
+          <HorizontalFields
+            schema={schema}
+            formData={formData}
+            onChange={onChangeSpy}
+          />
+        );
+      });
+
+      it("Renders the currency component from the registry", () => {
+        expect(fields.find("textarea").length).toEqual(1);
+      });
+
+      it("Calls the onChange method passed in with the form data", () => {
+        fields
+          .find("textarea")
+          .simulate("change", { target: { value: "Another Meow" } });
+
+        expect(onChangeSpy).toHaveBeenCalledWith({ meow: "Another Meow" });
+      });
+    });
+  });
 
   describe("Given a single field", () => {
     describe("Example one", () => {
