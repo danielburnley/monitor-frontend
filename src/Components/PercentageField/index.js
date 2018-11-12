@@ -33,7 +33,13 @@ export default class PercentageField extends React.Component {
   }
 
   handleChange = (e) => {
-    this.setState({value: this.validatePercentage(e.target.value)});
+    let {target} = e;
+    let {selectionStart, selectionEnd} = target;
+    
+    this.setState({value: this.validatePercentage(target.value)}, () => {
+        target.selectionStart = selectionStart;
+        target.selectionEnd = selectionEnd;
+    });
     this.props.onChange(e.target.value);
   }
 

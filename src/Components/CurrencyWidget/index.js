@@ -30,9 +30,28 @@ export default class CurrencyWidget extends React.Component {
   formatNumber = (value) =>
     this.insertCommas(this.validateString(value));
 
+  countMatches = (str, re) =>
+    ((str || '').match(re) || []).length;
+
+  commaCountUntilPosition = (value, endIndex) =>
+    this.countMatches(value.substr(0, endIndex), /\,/g);
+
+  commaCountDifference = (newValue, oldValue, endIndex) =>
+    this.commaCountUntilPosition(newValue, endIndex) - this.commaCountUntilPosition(oldValue, endIndex);
+
   onFieldChange(e) {
+    let {target} = e;
+    let {selectionStart, selectionEnd} = target;
     let value = this.formatNumber(e.target.value);
-    this.setState({value});
+
+    // This functionality is untested because progressive text entry is not part
+    // of Enzyme, please implement a test if this changes
+    let cursorAdjustment = this.commaCountDifference(value, this.state.value, selectionStart);
+
+    this.setState({value}, () => {
+        target.selectionStart = selectionStart + cursorAdjustment;
+        target.selectionEnd = selectionEnd + cursorAdjustment;
+    });
     this.props.onChange(value);
   }
 
