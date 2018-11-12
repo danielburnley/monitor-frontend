@@ -448,7 +448,7 @@ describe("Submitting an initial draft to then fully populate and submit", () => 
 
     api.getProject(draftProjectSchema, initiallySubmittedData, "LA Draft", "hif").successfully();
     api.getProject(draftProjectSchema, initiallySubmittedData, "LA Draft", "hif").successfully();
-    api.validateProject(0, 'projectType', LAsubmittedProjectData, validResponse).successfully();
+    api.validateProject(0, projectType, LAsubmittedProjectData, validResponse).successfully();
     api.updateProject(LAsubmittedProjectData,0).successfully();
     api.submitProject(0).successfully();
 

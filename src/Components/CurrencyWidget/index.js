@@ -11,10 +11,14 @@ export default class CurrencyWidget extends React.Component {
     };
   }
 
-  formatNumber = (value) => {
-    value = value.replace(/[^0-9\.]/g, "");
-    return value.replace(/\B(?=(\d{3})+(?!\d))/g, (digits) => digits+",");
-  }
+  removeInvalidCharacters = (value) =>
+    value.replace(/[^0-9\.]/g, "");
+
+  insertCommas = (value) =>
+    value.replace(/\B(?=(\d{3})+(?!\d))/g,(digits) => digits+",");
+
+  formatNumber = (value) =>
+    this.insertCommas(this.removeInvalidCharacters(value));
 
   clampValue = (value) => {
     if (Number(value) > Number(this.props.schema.maximum)) {
