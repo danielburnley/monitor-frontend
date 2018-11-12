@@ -5,13 +5,18 @@ export default class CurrencyWidget extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: this.props.value || '',
+      value: this.formatNumber(''+this.props.value),
       currency: this.props.currency ? this.props.currency : "£",
       key: this.props.key
     };
   }
 
-  clampValue(value) {
+  formatNumber = (value) => {
+    value = value.replace(/[^0-9\.]/g, "");
+    return value.replace(/\B(?=(\d{3})+(?!\d))/g, (digits) => digits+",");
+  }
+
+  clampValue = (value) => {
     if (Number(value) > Number(this.props.schema.maximum)) {
       return this.props.schema.maximum;
     }
@@ -19,7 +24,7 @@ export default class CurrencyWidget extends React.Component {
   }
 
   onFieldChange(e) {
-    let value = this.clampValue(e.target.value)
+    let value = this.formatNumber(this.clampValue(e.target.value));
     this.setState({value});
     this.props.onChange(value);
   }
