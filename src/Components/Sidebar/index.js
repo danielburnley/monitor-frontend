@@ -17,8 +17,19 @@ export default class Sidebar extends React.Component {
     ));
   }
 
-  renderSidebarItem(item) {
-    if (item.children) {
+  renderSidebarItem(item, key) {
+    if(parseInt(key, 10) === this.props.selectedFormItemIndex) {
+      return (
+        <React.Fragment>
+          <span className="sidebar-parent selected" data-test="sidebar-item-button">
+            {item.title}
+          </span>
+          <ul data-test="sidebar-item-children">
+            {this.renderChildren(item.children)}
+          </ul>
+        </React.Fragment>
+      );
+    } else if (item.children) {
       return (
         <React.Fragment>
           <span className="sidebar-parent" data-test="sidebar-item-button">
@@ -42,10 +53,12 @@ export default class Sidebar extends React.Component {
     }
   }
 
+
+
   renderItems() {
     return Object.entries(this.props.items).map(([key, value]) => (
       <li data-test="sidebar-item" key={key}>
-        {this.renderSidebarItem(value)}
+        {this.renderSidebarItem(value, key)}
       </li>
     ));
   }
