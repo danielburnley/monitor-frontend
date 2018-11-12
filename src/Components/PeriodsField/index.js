@@ -23,33 +23,29 @@ export default class PeriodsField extends React.Component {
 
   renderLine(key, item) {
     if (key === "remove") {
-      return this.props.formData.map((column, index) => {
-        return (
-          <div
-            className="col-sm-1 flex-data less-padding"
-            key={`input-${index}-${key}`}
-          >
-            {this.renderRemoveButton(index)}
-          </div>
-        );
-      });
+      return this.props.formData.map((column, index) => (
+        <div
+          className="col-sm-1 flex-data less-padding"
+          key={`input-${index}-${key}`}
+        >
+          {this.renderRemoveButton(index)}
+        </div>
+      ));
     } else {
-      return this.props.formData.map((column, index) => {
-        return (
-          <div
-            className="col-sm-1 flex-data less-padding"
-            key={`input-${index}-${key}`}
-          >
-            <input
-              data-test={`${key}-input`}
-              onChange={e => this.onChange(key, index, e.target.value)}
-              value={column[key] || ""}
-              className="form-control"
-              disabled={item.readonly}
-            />
-          </div>
-        );
-      });
+      return this.props.formData.map((column, index) => (
+        <div
+          className="col-sm-1 flex-data less-padding"
+          key={`input-${index}-${key}`}
+        >
+          <input
+            data-test={`${key}-input`}
+            onChange={e => this.onChange(key, index, e.target.value)}
+            value={column[key] || ""}
+            className="form-control"
+            disabled={item.readonly}
+          />
+        </div>
+      ));
     }
   }
 
