@@ -15,7 +15,7 @@ export default class CurrencyWidget extends React.Component {
     value.replace(/[^0-9\.]/g, "");
 
   clampValue = (value) => {
-    if (Number(value) > Number(this.props.schema.maximum)) {
+    if (this.props.schema && Number(value) > Number(this.props.schema.maximum)) {
       return this.props.schema.maximum;
     }
     return value;

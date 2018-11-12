@@ -171,6 +171,40 @@ describe("CurrencyWidget", () => {
     });
   });
 
+  describe("Without a schema", () => {
+    let schema, value, uiSchema, field, currencySymbol, onChangeSpy;
+    beforeEach(() => {
+      schema = {
+        title: "Cats",
+        type: "string",
+        currency: true,
+        maximum: "128"
+      };
+
+      onChangeSpy = jest.fn();
+      value = "56";
+      currencySymbol = "btc";
+
+      field = shallow(
+        <CurrencyWidget
+          value={value}
+          onChange={onChangeSpy}
+          currency={currencySymbol}
+        />
+      );
+    });
+
+    it("Renders an input field", () => {
+      expect(field.find("[data-test='currency-input']").length).toEqual(1);
+    });
+
+    it("Prepopulates the input field with form data", () => {
+      expect(field.find("[data-test='currency-input']").props().value).toEqual(
+        "56"
+      );
+    });
+  });
+
   describe("Data entry with small numbers", () => {
     describe("Example 1", () => {
       let schema, value, uiSchema, field, currencySymbol, onChangeSpy;
@@ -216,7 +250,7 @@ describe("CurrencyWidget", () => {
         );
       });
 
-      it("Renders a currency sumbol", () => {
+      it("Renders a currency symbol", () => {
         expect(field.find("[data-test='currency-symbol']").length).toEqual(1);
         expect(field.find("[data-test='currency-symbol']").text()).toEqual("th");
       });
