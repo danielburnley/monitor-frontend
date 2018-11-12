@@ -255,7 +255,7 @@ export default class NewProjectPage extends React.Component {
   render() {
     return (
       <div>
-        <div className = "row">
+        <div className="row">
           <h2>Baseline Editor</h2>
         </div>
         {this.renderMandatoryWarning()}
