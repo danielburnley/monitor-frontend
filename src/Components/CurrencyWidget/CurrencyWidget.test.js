@@ -106,6 +106,71 @@ describe("CurrencyWidget", () => {
       });
     });
   });
+
+  describe("Value clamping on initialization", () => {
+    describe("Example 1", () => {
+      let schema, value, uiSchema, field, currencySymbol, onChangeSpy;
+      beforeEach(() => {
+        schema = {
+          title: "Cats",
+          type: "string",
+          currency: true,
+          maximum: "32"
+        };
+
+        onChangeSpy = jest.fn();
+        value = "64";
+        currencySymbol = "xmr";
+
+        field = shallow(
+          <CurrencyWidget
+            value={value}
+            schema={schema}
+            onChange={onChangeSpy}
+            currency={currencySymbol}
+          />
+        );
+      });
+
+      it("clamps the value on initialization", () => {
+        expect(field.find("[data-test='currency-input']").props().value).toEqual(
+          "32"
+        );
+      });
+    });
+
+    describe("Example 2", () => {
+      let schema, value, uiSchema, field, currencySymbol, onChangeSpy;
+      beforeEach(() => {
+        schema = {
+          title: "Cats",
+          type: "string",
+          currency: true,
+          maximum: "25565"
+        };
+
+        onChangeSpy = jest.fn();
+        value = "141592";
+        currencySymbol = "xmr";
+
+        field = shallow(
+          <CurrencyWidget
+            value={value}
+            schema={schema}
+            onChange={onChangeSpy}
+            currency={currencySymbol}
+          />
+        );
+      });
+
+      it("clamps the value on initialization", () => {
+        expect(field.find("[data-test='currency-input']").props().value).toEqual(
+          "25,565"
+        );
+      });
+    });
+  });
+
   describe("Data entry with small numbers", () => {
     describe("Example 1", () => {
       let schema, value, uiSchema, field, currencySymbol, onChangeSpy;
