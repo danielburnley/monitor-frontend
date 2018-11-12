@@ -4,17 +4,36 @@ import "./style.css"
 export default class CurrencyWidget extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      value: this.props.value || '',
+      value: this.formatNumber(''+this.props.value),
       currency: this.props.currency ? this.props.currency : "£",
       key: this.props.key
     };
   }
 
+  removeInvalidCharacters = (value) =>
+    value.replace(/[^0-9\.]/g, "");
+
+  clampValue = (value) => {
+    if (this.props.schema && Number(value) > Number(this.props.schema.maximum)) {
+      return this.props.schema.maximum;
+    }
+    return value;
+  }
+
+  validateString = (value) =>
+    this.clampValue(this.removeInvalidCharacters(value));
+
+  insertCommas = (value) =>
+    value.replace(/\B(?=(\d{3})+(?!\d))/g, (digits) => digits+",");
+
+  formatNumber = (value) =>
+    this.insertCommas(this.validateString(value));
+
   onFieldChange(e) {
-    this.setState({value: e.target.value});
-    this.props.onChange(e.target.value);
+    let value = this.formatNumber(e.target.value);
+    this.setState({value});
+    this.props.onChange(value);
   }
 
   isInputDisabled() {

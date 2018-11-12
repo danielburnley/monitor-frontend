@@ -22,7 +22,7 @@ let projectSchema = {
 
 let projectData = {
   summary: {
-    noise: "Meow",
+    noise: "13",
     description: "Fluffy balls of friendship",
     toes: "Beans"
   }
@@ -30,7 +30,7 @@ let projectData = {
 
 let draftProjectData = {
   summary: {
-    noise: "Meow",
+    noise: "16",
     description: "Fluffy balls of friendship",
     toes: "Beans"
   }
@@ -40,7 +40,7 @@ let projectStatus = 'Submitted';
 
 let submittedProjectData = {
   summary: {
-    noise: "cat",
+    noise: "16",
     description: "cat",
     toes: "cat"
   }
@@ -65,7 +65,7 @@ let returnSchema = {
 
 let returnData = {
   summary: {
-    noise: "Meow",
+    noise: "16",
     description: "Fluffy balls of friendship",
     toes: "Beans"
   }
@@ -161,7 +161,7 @@ describe("Viewing a project", () => {
         let summary = page.summary();
 
         expect(summary.find('div[data-test="summary_noise"]').text()).toEqual(
-          "Meow"
+          "13"
         );
 
         expect(
@@ -254,7 +254,7 @@ describe("Viewing a project", () => {
         await page.createNewReturn();
 
         let expectedInputValues = [
-          "Meow",
+          "16",
           "Fluffy balls of friendship",
           "Beans",
           ""
@@ -269,7 +269,7 @@ describe("Viewing a project", () => {
         await page.load();
 
         let expectedInputValues = [
-          "Meow",
+          "16",
           "Fluffy balls of friendship",
           "Beans",
           ""
@@ -309,6 +309,10 @@ describe('Submitting a draft project', () => {
       textfield.simulate('change', { target: { value: 'cat'}})
     });
 
+    page.find("[data-test='currency-input']").map((currencyfield) => {
+      currencyfield.simulate('change', { target: { value: '16' }})
+    });
+
     api.validateProject(0, projectType, submittedProjectData, response).successfully();
 
     await page.load();
@@ -338,6 +342,10 @@ describe('Submitting a draft project', () => {
       textfield.simulate('change', { target: { value: 'cat'}})
     });
 
+    page.find("[data-test='currency-input']").map((currencyfield) => {
+      currencyfield.simulate('change', { target: { value: '16' }})
+    });
+
     api.validateProject(0, projectType, submittedProjectData, response).successfully();
 
     await page.load();
@@ -360,7 +368,7 @@ describe("Submitting an initial draft to then fully populate and submit", () => 
   let emptyData = { };
   let initiallySubmittedData = {
     summary: {
-      noise: "This noise is locked down"
+      noise: "16"
     }
   }
   let validResponse = {
@@ -402,7 +410,7 @@ describe("Submitting an initial draft to then fully populate and submit", () => 
 
     await page.load();
 
-    page.find("input").at(0).simulate('change', { target: { value: 'This noise is locked down'}})
+    page.find("[data-test='currency-input']").simulate('change', { target: { value: '16'}})
 
     await page.load();
 
@@ -431,7 +439,7 @@ describe("Submitting an initial draft to then fully populate and submit", () => 
 
     let LAsubmittedProjectData = {
       summary: {
-        noise: "This noise is locked down",
+        noise: "16",
         description: "cat",
         toes: "cat",
         fed: "100"
@@ -440,7 +448,7 @@ describe("Submitting an initial draft to then fully populate and submit", () => 
 
     api.getProject(draftProjectSchema, initiallySubmittedData, "LA Draft", "hif").successfully();
     api.getProject(draftProjectSchema, initiallySubmittedData, "LA Draft", "hif").successfully();
-    api.validateProject(0, "hif", LAsubmittedProjectData, validResponse).successfully();
+    api.validateProject(0, projectType, LAsubmittedProjectData, validResponse).successfully();
     api.updateProject(LAsubmittedProjectData,0).successfully();
     api.submitProject(0).successfully();
 
