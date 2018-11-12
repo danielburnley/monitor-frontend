@@ -21,3 +21,11 @@
 .mandatory {
   padding-left: 1em;
 }
+
+.return {
+  padding-left :0em;
+}
+
+.no-edge {
+  margin: 0px;
+}
