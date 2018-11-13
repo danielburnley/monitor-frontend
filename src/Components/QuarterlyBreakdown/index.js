@@ -99,7 +99,7 @@ export default class QuarterlyBreakdown extends React.Component {
     if (!this.props.schema.addable) {
       return null;
     }
-    return <AddButton passedFunction={() => this.addEvent()} />;
+    return <AddButton onClick={() => this.addEvent()} />;
   }
 
   addEvent() {
@@ -112,17 +112,18 @@ export default class QuarterlyBreakdown extends React.Component {
 
   renderRemoveButton(index) {
     if (this.props.schema.addable) {
-      return <div className="remove"><RemoveButton passedFunction={() => this.removeEvent(index)} /></div>;
+      return <div className="remove"><RemoveButton onClick={() => this.removeEvent(index)} /></div>;
     }
     return null;
   }
 
   removeEvent(index) {
+    console.log(updatedArray)
     let updatedArray = this.state.data;
     updatedArray.splice(index, 1);
 
     this.setState({ data: updatedArray });
-    
+
     this.forceUpdate();
   }
 
