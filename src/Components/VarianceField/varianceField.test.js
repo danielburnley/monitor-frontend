@@ -1,18 +1,13 @@
+import WidgetStub from "../../../test/WidgetStub";
 import VarianceField from ".";
 import React from "react";
 import { shallow, mount } from "enzyme";
-
-class PercentageFieldStub extends React.Component {
-  render() {
-    return <input value={this.props.value || "0"} onChange={this.props.onChange}/>;
-  }
-}
 
 describe("VarianceField", () => {
   let field;
   let registryStub = {
     widgets: {
-      percentage: PercentageFieldStub
+      percentage: WidgetStub
     }
   }
 
@@ -375,7 +370,7 @@ describe("VarianceField", () => {
           current: "2050-01-01",
           reason: "Super delays"
         };
-        field = shallow(
+        field = mount(
           <VarianceField
             schema={schema}
             formData={formData}
@@ -406,7 +401,7 @@ describe("VarianceField", () => {
         describe("Example one", () => {
           it("Calls the onChange prop with the updated form data", () => {
             field
-              .find("[data-test='variance-percentage']")
+              .find("[data-test='widget-stub']")
               .simulate("change", { target: { value: 15 } });
 
             expect(onChangeSpy).toHaveBeenCalledWith({
@@ -423,7 +418,7 @@ describe("VarianceField", () => {
         describe("Example two", () => {
           it("Calls the onChange prop with the updated form data", () => {
             field
-              .find("[data-test='variance-percentage']")
+              .find("[data-test='widget-stub']")
               .simulate("change", { target: { value: 90 } });
 
             expect(onChangeSpy).toHaveBeenCalledWith({

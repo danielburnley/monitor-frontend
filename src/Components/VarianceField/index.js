@@ -15,8 +15,8 @@ export default class VarianceField extends React.Component {
     };
   }
 
-  onFieldChange = (name, e) => {
-    this.setState({ [name]: e.target.value || undefined }, () => {
+  onFieldChange = (name, newValue) => {
+    this.setState({ [name]: newValue || undefined }, () => {
       this.props.onChange(this.state);
     });
   };
@@ -29,7 +29,7 @@ export default class VarianceField extends React.Component {
           className="form-control"
           data-test="variance-current"
           id="current"
-          onChange={e => this.onFieldChange("current", e)}
+          onChange={e => this.onFieldChange("current", e.target.value)}
           type="date"
           value={this.state.current || ""}
         />
@@ -44,7 +44,7 @@ export default class VarianceField extends React.Component {
         <textarea
           className="form-control"
           data-test="variance-reason"
-          onChange={e => this.onFieldChange("reason", e)}
+          onChange={e => this.onFieldChange("reason", e.target.value)}
           type="text"
           value={this.state.reason}
         />
@@ -67,7 +67,7 @@ export default class VarianceField extends React.Component {
           className="form-control"
           data-test="variance-completed"
           id="completed"
-          onChange={e => this.onFieldChange("completedDate", e)}
+          onChange={e => this.onFieldChange("completedDate", e.target.value)}
           type="date"
           value={this.state.completedDate}
         />
@@ -100,7 +100,7 @@ export default class VarianceField extends React.Component {
         id="status"
         className="form-control"
         value={this.state.status}
-        onChange={e => this.onFieldChange("status", e)}
+        onChange={e => this.onFieldChange("status", e.target.value)}
       >
         <option>On schedule</option>
         <option>Delayed</option>
@@ -117,7 +117,6 @@ export default class VarianceField extends React.Component {
         data-test="variance-percentage"
         id="percent-complete"
         onChange={e => this.onFieldChange("percentComplete", e)}
-        type="number"
         value={this.state.percentComplete || ""}
       />
     </div>

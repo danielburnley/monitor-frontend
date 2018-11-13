@@ -19,8 +19,8 @@ export default class MilestoneField extends React.Component {
     };
   }
 
-  onFieldChange = (name, e) => {
-    this.setState({ [name]: e.target.value }, () => {
+  onFieldChange = (name, newValue) => {
+    this.setState({ [name]: newValue }, () => {
       this.props.onChange(this.state);
     });
   };
@@ -70,7 +70,7 @@ export default class MilestoneField extends React.Component {
           Status against last return?
         </label>
         <select
-          onChange={e => this.onFieldChange("statusAgainstLastReturn", e)}
+          onChange={e => this.onFieldChange("statusAgainstLastReturn", e.target.value)}
           data-test="milestone-status-against-last-return"
           value={this.state.statusAgainstLastReturn}
           className="form-control"
@@ -90,7 +90,7 @@ export default class MilestoneField extends React.Component {
         <label htmlFor="currentReturn">Current Return</label>
         <input
           className="form-control"
-          onChange={e => this.onFieldChange("currentReturn", e)}
+          onChange={e => this.onFieldChange("currentReturn", e.target.value)}
           data-test="milestone-current-return"
           value={this.state.currentReturn || ""}
           type="date"
@@ -106,7 +106,7 @@ export default class MilestoneField extends React.Component {
         <label htmlFor="reasonForVariance">Reason for Variance</label>
         <textarea
           className="form-control"
-          onChange={e => this.onFieldChange("reasonForVariance", e)}
+          onChange={e => this.onFieldChange("reasonForVariance", e.target.value)}
           data-test="milestone-reason-for-variance"
           value={this.state.reasonForVariance }
           id="reasonForVariance"
