@@ -22,7 +22,9 @@ export default class QuarterlyBreakdown extends React.Component {
 
   renderData() {
     let quarterlyObject = this.props.schema.items.properties;
-    quarterlyObject.remove = { title: "Remove", type: "string" };
+    if(this.props.schema.addable){
+      quarterlyObject.remove = { title: "Remove", type: "string" };
+    }
     return Object.entries(quarterlyObject).map(([key, v]) => {
       if (!v.hidden) {
         return (
@@ -109,10 +111,10 @@ export default class QuarterlyBreakdown extends React.Component {
   }
 
   renderRemoveButton(index) {
-    if (!this.props.schema.addable) {
-      return null;
+    if (this.props.schema.addable) {
+      return <RemoveButton passedFunction={() => this.removeEvent(index)} />;
     }
-    return <RemoveButton passedFunction={() => this.removeEvent(index)} />;
+    return null;
   }
 
   removeEvent(index) {
