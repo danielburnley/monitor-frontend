@@ -8,10 +8,11 @@
 .column {
   padding-right: 7px;
   padding-left: 7px;
-  max-width: 13%;
   flex-grow: 1;
 }
-
+.remove {
+  float: left;
+}
 .container {
   display: flex;
   flex-direction: row;
@@ -24,4 +25,21 @@
 .header {
   font-weight: 700;
   white-space: nowrap;
+}
+
+
+@media (min-width: 1200px) {
+  .container {
+    width: 920px;
+  }
+}
+@media (min-width: 992px) {
+  .container {
+    width: 744px;
+    padding-left: 0px;
+  }
+  .row {
+    margin-left: 0px;
+    margin-right: 0px;
+  }
 }
