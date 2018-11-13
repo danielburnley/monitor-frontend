@@ -122,6 +122,8 @@ export default class QuarterlyBreakdown extends React.Component {
     updatedArray.splice(index, 1);
 
     this.setState({ data: updatedArray });
+    
+    this.forceUpdate();
   }
 
   render() {
