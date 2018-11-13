@@ -90,7 +90,9 @@ export default class PeriodsField extends React.Component {
 
   render() {
     let updatedRows = this.props.schema.items.properties;
-    updatedRows.remove = { title: "Remove", type: "string" };
+    if (this.props.schema.addable) {
+      updatedRows.remove = { title: "Remove", type: "string" };
+    }
     return (
       <div>
         {Object.entries(this.props.schema.items.properties).map(
