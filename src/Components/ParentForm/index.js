@@ -102,7 +102,9 @@ export default class ParentForm extends React.Component {
             });
           }
           let documentObject = this.props.documentGateway.getDocument();
-          documentObject.getElementById(jump_to_id).scrollIntoView();
+          if (documentObject.getElementById(jump_to_id)) {
+            documentObject.getElementById(jump_to_id).scrollIntoView();
+          }
         }}
       />
     );
