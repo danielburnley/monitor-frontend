@@ -40,10 +40,10 @@ storiesOf("Periods Field", module)
     let periodData = [
       { period: "18/19" },
       { period: "19/20" },
-      { period: "18/19" },
-      { period: "19/20" },
-      { period: "18/19" },
-      { period: "19/20" }
+      { period: "20/21" },
+      { period: "21/22" },
+      { period: "23/24" },
+      { period: "24/25" }
     ];
 
     let schema = {

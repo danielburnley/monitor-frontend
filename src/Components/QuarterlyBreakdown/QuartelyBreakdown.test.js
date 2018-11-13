@@ -379,12 +379,6 @@ describe("Quarterly Breakdown", () => {
         expect(field.find('[data-test="add-button"]').length).toEqual(1);
       });
 
-      it("increases the number of elements when add is pushed", () => {
-        field.find('[data-test="add-button"]').simulate("click");
-        expect(field.find('[data-test="period_2"]').length).toEqual(1);
-        expect(field.find('[data-test="period_3"]').length).toEqual(0);
-      });
-
       it("renders a remove button", () => {
         expect(field.find('[data-test="remove-button"]').length).toEqual(2);
       });
@@ -452,13 +446,6 @@ describe("Quarterly Breakdown", () => {
 
       it("renders an add button", () => {
         expect(field.find('[data-test="add-button"]').length).toEqual(1);
-      });
-
-      it("increases the number of elements when add is pushed", () => {
-        field.find('[data-test="add-button"]').simulate("click");
-        field.find('[data-test="add-button"]').simulate("click");
-        expect(field.find('[data-test="period_3"]').length).toEqual(1);
-        expect(field.find('[data-test="period_4"]').length).toEqual(0);
       });
 
       it("renders a remove button", () => {

@@ -7,8 +7,8 @@ export default class RemoveButton extends React.Component {
         <div className="pull-right">
           <button
             data-test="remove-button"
-            className="btn btn-danger add-remove"
-            onClick={this.props.passedFunction}
+            className="btn btn-danger"
+            onClick={this.props.onClick}
           >
             -
           </button>

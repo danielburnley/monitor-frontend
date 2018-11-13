@@ -8,7 +8,7 @@ export default class AddButton extends React.Component {
           <button
             data-test="add-button"
             className="btn btn-primary add-remove"
-            onClick={this.props.passedFunction}
+            onClick={this.props.onClick}
           >
             +
           </button>

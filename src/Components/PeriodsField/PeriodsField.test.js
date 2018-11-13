@@ -49,7 +49,7 @@ describe("Period Financials", () => {
       });
 
       it("Does not display a remove button", () => {
-        expect(periods.removeButton()).toEqual(0);
+        expect(periods.numberOfRemoveButton()).toEqual(0);
       });
     });
     describe("Example 2", () => {
@@ -97,7 +97,7 @@ describe("Period Financials", () => {
       });
 
       it("Does not display a remove button", () => {
-        expect(periods.removeButton()).toEqual(0);
+        expect(periods.numberOfRemoveButton()).toEqual(0);
       });
     });
   });
@@ -159,12 +159,7 @@ describe("Period Financials", () => {
       });
 
       it("Displays a remove button", () => {
-        expect(periods.removeButton()).toEqual(1);
-      });
-
-      it("Pressing remove decreases input fields", () => {
-        periods.pressRemove();
-        expect(periods.inputFieldCount("age")).toEqual(1);
+        expect(periods.numberOfRemoveButton()).toEqual(2);
       });
     });
 
@@ -230,13 +225,7 @@ describe("Period Financials", () => {
       });
 
       it("Displays a remove button", () => {
-        expect(periods.removeButton()).toEqual(1);
-      });
-
-      it("Pressing remove decreases input fields", () => {
-        periods.pressRemove();
-        periods.pressRemove();
-        expect(periods.inputFieldCount("length")).toEqual(1);
+        expect(periods.numberOfRemoveButton()).toEqual(3);
       });
     });
   });
