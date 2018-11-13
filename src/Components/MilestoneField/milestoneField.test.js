@@ -1,11 +1,6 @@
+import WidgetStub from '../../../test/WidgetStub';
 import React from 'react';
 import MilestoneComponent from '../../../test/MilestoneField';
-
-class PercentageFieldStub extends React.Component {
-  render() {
-    return <input value={this.props.value || "0"} onChange={this.props.onChange}/>;
-  }
-}
 
 describe("<MilestoneField>", () => {
   let onChangeSpy = jest.fn();
@@ -22,7 +17,7 @@ describe("<MilestoneField>", () => {
         formData,
         onChangeSpy,
         schemaTitle,
-        PercentageFieldStub
+        WidgetStub
       );
 
       it("displays the milestone description", () => {
@@ -51,7 +46,7 @@ describe("<MilestoneField>", () => {
         formData,
         onChangeSpy,
         schemaTitle,
-        PercentageFieldStub
+        WidgetStub
       );
 
       it("displays the milestone description", () => {
@@ -81,7 +76,8 @@ describe("<MilestoneField>", () => {
         formData,
         onChangeSpy,
         schemaTitle,
-        PercentageFieldStub);
+        WidgetStub
+      );
 
       it("Updates the values of the fields", () => {
         milestone.simulateStatusAgainstLastReturn("Completed");
@@ -115,7 +111,7 @@ describe("<MilestoneField>", () => {
         formData,
         onChangeSpy,
         schemaTitle,
-        PercentageFieldStub
+        WidgetStub
       );
 
       it("Updates the values of the fields", () => {
@@ -156,7 +152,7 @@ describe("<MilestoneField>", () => {
         formData,
         onChangeSpy,
         schemaTitle,
-        PercentageFieldStub
+        WidgetStub
       );
 
       it("displays the status against last return", () => {
@@ -194,7 +190,7 @@ describe("<MilestoneField>", () => {
         formData,
         onChangeSpy,
         schemaTitle,
-        PercentageFieldStub
+        WidgetStub
       );
 
       it("displays the status against last return", () => {
@@ -234,7 +230,7 @@ describe("<MilestoneField>", () => {
         formData,
         onChangeSpy,
         schemaTitle,
-        PercentageFieldStub
+        WidgetStub
       );
 
       it("updates the value of the status against last return", () => {
@@ -274,7 +270,7 @@ describe("<MilestoneField>", () => {
         formData,
         onChangeSpy,
         schemaTitle,
-        PercentageFieldStub
+        WidgetStub
       );
 
       it("updates the value of the status against last return", () => {

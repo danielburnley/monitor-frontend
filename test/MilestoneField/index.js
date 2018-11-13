@@ -51,7 +51,7 @@ export default class MilestoneComponent {
 
   simulateMilestonePercentCompleted = inputValue =>
     this.milestone
-      .find("[data-test='milestone-percent-completed']")
+      .find("[data-test='widget-stub']")
       .simulate("change", { target: { value: inputValue } });
 
   findStatusAgainstLastReturn = () =>

@@ -29,9 +29,13 @@ describe("CurrencyWidget", () => {
       });
 
       it("Changes the value and inserts commas", () => {
+        let changeEvent = { target: { value: "19216401" }};
+
         field
           .find("[data-test='currency-input']")
-          .simulate("change", { target: { value: "19216401" } });
+          .simulate("change", changeEvent);
+
+        field.update();
 
         expect(field.find("[data-test='currency-input']").props().value).toEqual(
           "19,216,401"
