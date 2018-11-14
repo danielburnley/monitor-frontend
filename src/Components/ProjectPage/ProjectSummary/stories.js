@@ -12,8 +12,8 @@ storiesOf('ProjectSummary', module)
           title: 'Project Summary',
           type: 'object',
           properties: {
-            name: {type: 'string', title: 'Project Name'},
-            owner: {type: 'string', title: 'Project Owner'},
+            projectName: {type: 'string', title: 'Project Name'},
+            projectDescription: {type: 'string', title: 'Project Description'},
           },
         },
       },
@@ -21,8 +21,8 @@ storiesOf('ProjectSummary', module)
 
     let data = {
       summary: {
-        name: 'A HIF Project',
-        owner: 'Dave'
+        projectName: 'An AC Project',
+        projectDescription: 'Doing some constructing blah blah blah blah blah, lots more words describing all of my building needs.',
       },
     };
 

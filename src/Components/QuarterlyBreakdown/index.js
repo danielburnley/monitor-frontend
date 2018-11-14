@@ -112,7 +112,7 @@ export default class QuarterlyBreakdown extends React.Component {
 
   renderRemoveButton(index) {
     if (this.props.schema.addable) {
-      return <div className="remove"><RemoveButton onClick={() => this.removeEvent(index)} /></div>;
+      return <div className="remove"><RemoveButton passedFunction={() => this.removeEvent(index)} /></div>;
     }
     return null;
   }

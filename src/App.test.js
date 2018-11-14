@@ -12,8 +12,9 @@ let projectSchema = {
       type: "object",
       title: "Cats",
       properties: {
+        projectName: {type: 'string', title: "Name"},
         noise: { type: "string", currency: true, title: "Noise" },
-        description: { type: "string", title: "Description" },
+        projectDescription: { type: "string", title: "Description" },
         toes: { type: "string", title: "Toes" }
       }
     }
@@ -23,7 +24,8 @@ let projectSchema = {
 let projectData = {
   summary: {
     noise: "13",
-    description: "Fluffy balls of friendship",
+    projectName: "My NAme",
+    projectDescription: "Fluffy balls of friendship",
     toes: "Beans"
   }
 };
@@ -31,7 +33,7 @@ let projectData = {
 let draftProjectData = {
   summary: {
     noise: "16",
-    description: "Fluffy balls of friendship",
+    projectDescription: "Fluffy balls of friendship",
     toes: "Beans"
   }
 };
@@ -41,7 +43,8 @@ let projectStatus = 'Submitted';
 let submittedProjectData = {
   summary: {
     noise: "16",
-    description: "cat",
+    projectName: "cat",
+    projectDescription: "cat",
     toes: "cat"
   }
 }
@@ -55,7 +58,7 @@ let returnSchema = {
       title: "Cats",
       properties: {
         noise: { type: "string", title: "Noise" },
-        description: { type: "string", title: "Description" },
+        projectDescription: { type: "string", title: "Description" },
         toes: { type: "string", title: "Toes" },
         playtime: { type: "string", title: "Total playtime" }
       }
@@ -66,7 +69,7 @@ let returnSchema = {
 let returnData = {
   summary: {
     noise: "16",
-    description: "Fluffy balls of friendship",
+    projectDescription: "Fluffy balls of friendship",
     toes: "Beans"
   }
 };
@@ -160,17 +163,15 @@ describe("Viewing a project", () => {
 
         let summary = page.summary();
 
-        expect(summary.find('div[data-test="summary_noise"]').text()).toEqual(
-          "13"
+        expect(summary.find('[data-test="project_name"]').text()).toEqual(
+          "My NAme"
         );
 
         expect(
-          summary.find('div[data-test="summary_description"]').text()
+          summary.find('div[data-test="project_description"]').text()
         ).toEqual("Fluffy balls of friendship");
 
-        expect(summary.find('div[data-test="summary_toes"]').text()).toEqual(
-          "Beans"
-        );
+        expect(summary.find('div[data-test="summary_toes"]').length).toEqual(0)
       });
 
       it("Renders the return list within the project sumary page with information from the API", async () => {
@@ -385,7 +386,8 @@ describe("Submitting an initial draft to then fully populate and submit", () => 
         title: "Cats",
         properties: {
           noise: { type: "string", title: "Noise" },
-          description: { type: "string", title: "Description" },
+          projectName: {type: "string", title: "Name"},
+          projectDescription: { type: "string", title: "Description" },
           toes: { type: "string", title: "Toes" }
         }
       }
