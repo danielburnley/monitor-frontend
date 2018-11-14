@@ -11,7 +11,7 @@ describe("CurrencyWidget", () => {
           title: "Cats",
           type: "string",
           currency: true,
-          maximum: "8388608999999999"
+          currencyMaximum: "8388608999999999"
         };
 
         onChangeSpy = jest.fn();
@@ -66,7 +66,7 @@ describe("CurrencyWidget", () => {
           title: "Cats",
           type: "string",
           currency: true,
-          maximum: "3573599357999999"
+          currencyMaximum: "3573599357999999"
         };
 
         onChangeSpy = jest.fn();
@@ -119,7 +119,7 @@ describe("CurrencyWidget", () => {
           title: "Cats",
           type: "string",
           currency: true,
-          maximum: "32"
+          currencyMaximum: "32"
         };
 
         onChangeSpy = jest.fn();
@@ -150,7 +150,7 @@ describe("CurrencyWidget", () => {
           title: "Cats",
           type: "string",
           currency: true,
-          maximum: "25565"
+          currencyMaximum: "25565"
         };
 
         onChangeSpy = jest.fn();
@@ -182,7 +182,7 @@ describe("CurrencyWidget", () => {
         title: "Cats",
         type: "string",
         currency: true,
-        maximum: "128"
+        currencyMaximum: "128"
       };
 
       onChangeSpy = jest.fn();
@@ -217,7 +217,7 @@ describe("CurrencyWidget", () => {
           title: "Cats",
           type: "string",
           currency: true,
-          maximum: "128"
+          currencyMaximum: "128"
         };
 
         onChangeSpy = jest.fn();
@@ -244,7 +244,7 @@ describe("CurrencyWidget", () => {
         );
       });
 
-      it("Limits the value to the maximum", () => {
+      it("Limits the value to the currencyMaximum", () => {
         field
           .find("[data-test='currency-input']")
           .simulate("change", { target: { value: "129" } });
@@ -281,7 +281,7 @@ describe("CurrencyWidget", () => {
         schema = {
           title: "Dogs",
           type: "string",
-          maximum: "64",
+          currencyMaximum: "64",
           currency: true
         };
 
@@ -309,7 +309,7 @@ describe("CurrencyWidget", () => {
         );
       });
 
-      it("Limits the value to the maximum", () => {
+      it("Limits the value to the currencyMaximum", () => {
         field
           .find("[data-test='currency-input']")
           .simulate("change", { target: { value: "255" } });
