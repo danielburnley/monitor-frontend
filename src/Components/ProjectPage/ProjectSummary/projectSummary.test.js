@@ -47,10 +47,6 @@ describe('<ProjectSummary>', () => {
     it('Doesnt render other summary data in the schema', () => {
       expect(wrapper.find('div[data-test="summary_otherData"]').length).toEqual(0);
     });
-
-    it('Displays some helper text', () => {
-      expect(wrapper.find('div[data-test="helper_text"]').length).toEqual(1)
-    })
   });
 
   describe('Example two', () => {
@@ -96,9 +92,5 @@ describe('<ProjectSummary>', () => {
     it('Doesnt render other summary data in the schema', () => {
       expect(wrapper.find('div[data-test="summary_moreData"]').length).toEqual(0);
     });
-
-    it('Displays some helper text', () => {
-      expect(wrapper.find('div[data-test="helper_text"]').length).toEqual(1)
-    })
   });
 });

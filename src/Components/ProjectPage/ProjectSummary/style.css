@@ -4,6 +4,7 @@
 .text {
   margin-left: 30px;
 }
-.title {
+.name {
   margin: 20px;
+  white-space: nowrap;
 }
