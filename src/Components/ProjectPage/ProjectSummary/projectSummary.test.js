@@ -32,15 +32,8 @@ describe('<ProjectSummary>', () => {
       wrapper = mount(<ProjectSummary schema={schema} data={data} />);
     });
 
-    it('Renders a header and value from the schema and data', () => {
-      expect(wrapper.find('h2').text()).toEqual('Project Summary');
-    });
-
     it('Renders a sub heading with the name and header', () => {
-      expect(wrapper.find('h3[data-test="project_name_title"]').text()).toEqual(
-        'Project Name',
-      );
-      expect(wrapper.find('h4[data-test="project_name"]').text()).toEqual(
+      expect(wrapper.find('h3[data-test="project_name"]').text()).toEqual(
         'A HIF Project',
       );
     });
@@ -88,12 +81,8 @@ describe('<ProjectSummary>', () => {
       wrapper = mount(<ProjectSummary schema={schema} data={data} />);
     });
 
-    it('Renders a header and value from the schema and data', () => {
-      expect(wrapper.find('h2').text()).toEqual('Project Summary');
-    });
-
     it('Renders a sub heading with the title from the schema', () => {
-      expect(wrapper.find('h4[data-test="project_name"]').text()).toEqual(
+      expect(wrapper.find('h3[data-test="project_name"]').text()).toEqual(
         'An AC Project',
       );
     });

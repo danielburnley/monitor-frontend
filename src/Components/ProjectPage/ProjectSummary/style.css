@@ -1,4 +1,9 @@
 .summary-field {
-  margin: 30px 0;
+  margin: 60px 0;
 }
-
+.text {
+  margin-left: 30px;
+}
+.title {
+  margin: 20px;
+}
