@@ -12,7 +12,7 @@ export default class CurrencyWidget extends React.Component {
   }
 
   removeInvalidCharacters = (value) =>
-    value.replace(/[^0-9\.]/g, "");
+    value.replace(/[^0-9.]/g, "");
 
   clampValue = (value) => {
     if (this.props.schema && Number(value) > Number(this.props.schema.currencyMaximum)) {
@@ -34,7 +34,7 @@ export default class CurrencyWidget extends React.Component {
     ((str || '').match(re) || []).length;
 
   commaCountUntilPosition = (value, endIndex) =>
-    this.countMatches(value.substr(0, endIndex), /\,/g);
+    this.countMatches(value.substr(0, endIndex), /,/g);
 
   commaCountDifference = (newValue, oldValue, endIndex) =>
     this.commaCountUntilPosition(newValue, endIndex) - this.commaCountUntilPosition(oldValue, endIndex);
