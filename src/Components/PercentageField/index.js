@@ -1,4 +1,5 @@
 import React from "react";
+import "./style.css";
 
 export default class PercentageField extends React.Component {
   constructor(props) {
@@ -43,11 +44,19 @@ export default class PercentageField extends React.Component {
     this.props.onChange(e.target.value);
   }
 
+  isInputDisabled() {
+    if (this.props.uiSchema) {
+      return this.props.uiSchema["ui:disabled"];
+    } else {
+      return this.props.disabled
+    }
+  }
+
   render() {
     return (
       <div className="input-group" data-test="percentage-field">
-        <input className="form-control" type="text" value={this.state.value} onChange={this.handleChange} />
-        <div className="input-group-addon">%</div>
+        <input className="form-control" type="text" value={this.state.value} disabled={this.isInputDisabled()} onChange={this.handleChange} />
+        <div className={`input-group-addon ${this.isInputDisabled() ? "readonly-percentage": ""}`}>%</div>
       </div>
     );
   }
