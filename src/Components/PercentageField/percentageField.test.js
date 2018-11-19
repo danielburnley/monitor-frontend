@@ -148,4 +148,24 @@ describe("PercentageField", () => {
       expect(field.find("input").props().value).toEqual("64");
     });
   });
+
+  describe("Marks fields as readonly", () => {
+    let schema, uiSchema, field;
+    let onChangeSpy = jest.fn();
+    beforeEach(() => {
+      schema = {
+        title: "Rabbits",
+        type: "sting",
+        readonly: true
+      };
+
+      uiSchema = { "ui:disabled": true };
+
+      field = mount(<PercentageField value={"0"} onChange={onChangeSpy} schema={schema} uiSchema={uiSchema} />);
+    });
+
+    it("disable the input box", () => {
+      expect(field.find("[disabled=true]").length).toEqual(1);
+    });
+  });
 });
