@@ -119,7 +119,6 @@ export default class QuarterlyBreakdown extends React.Component {
   }
 
   removeEvent(index) {
-    console.log(updatedArray)
     let updatedArray = this.state.data;
     updatedArray.splice(index, 1);
 
