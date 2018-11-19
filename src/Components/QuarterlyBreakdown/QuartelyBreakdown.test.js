@@ -453,4 +453,104 @@ describe("Quarterly Breakdown", () => {
       });
     });
   });
+
+  describe("No data", () => {
+    describe("Example 1", () => {
+      let schema, data, field, onChangeSpy;
+      beforeEach(() => {
+        onChangeSpy = jest.fn();
+
+        schema = {
+          type: "array",
+          addable: true,
+          title: "Cats Data",
+          items: {
+            type: "object",
+            properties: {
+              period: { title: "Year", type: "string", readonly: true },
+              quarter3: { title: "3rd Quarter", type: "string" },
+              quarter1: { title: "1st Quarter", type: "string" },
+              quarter2: { title: "2nd Quarter", type: "string" },
+              quarter4: { title: "4th Quarter", type: "string" },
+              total: { title: "Total", type: "string" }
+            }
+          }
+        };
+
+        data = null;
+        field = mount(
+          <QuarterlyBreakdown
+            schema={schema}
+            formData={data}
+            onChange={onChangeSpy}
+          />
+        );
+      });
+
+      it("does not have an input field", () => {
+        expect(field.find('[data-test="period_0"]').length).toEqual(0);
+        expect(field.find('[data-test="quarter1_0"]').length).toEqual(0);
+        expect(field.find('[data-test="quarter2_0"]').length).toEqual(0);
+        expect(field.find('[data-test="quarter3_0"]').length).toEqual(0);
+        expect(field.find('[data-test="quarter4_0"]').length).toEqual(0);
+      });
+
+      it("renders an add button", () => {
+        expect(field.find('[data-test="add-button"]').length).toEqual(1);
+      });
+
+      it("does not render a remove button", () => {
+        expect(field.find('[data-test="remove-button"]').length).toEqual(0);
+      });
+    });
+
+    describe("Example 2", () => {
+      let schema, data, field, onChangeSpy;
+      beforeEach(() => {
+        onChangeSpy = jest.fn();
+
+        schema = {
+          type: "array",
+          addable: true,
+          title: "Cats Data",
+          items: {
+            type: "object",
+            properties: {
+              period: { title: "Year", type: "string", readonly: true },
+              quarter3: { title: "Quarter 1.0", type: "string" },
+              quarter1: { title: "Quarter 2.0", type: "string" },
+              quarter2: { title: "Quarter 3.0", type: "string" },
+              quarter4: { title: "Quarter 4.0", type: "string" },
+              total: { title: "Total", type: "string" }
+            }
+          }
+        };
+
+        data = null;
+        field = mount(
+          <QuarterlyBreakdown
+            schema={schema}
+            formData={data}
+            onChange={onChangeSpy}
+          />
+        );
+      });
+
+      it("does not have an input field", () => {
+        expect(field.find('[data-test="period_0"]').length).toEqual(0);
+        expect(field.find('[data-test="quarter1_0"]').length).toEqual(0);
+        expect(field.find('[data-test="quarter2_0"]').length).toEqual(0);
+        expect(field.find('[data-test="quarter3_0"]').length).toEqual(0);
+        expect(field.find('[data-test="quarter4_0"]').length).toEqual(0);
+      });
+
+      it("renders an add button", () => {
+        expect(field.find('[data-test="add-button"]').length).toEqual(1);
+      });
+
+      it("does not render a remove button", () => {
+        expect(field.find('[data-test="remove-button"]').length).toEqual(0);
+      });
+    });
+  });
 });

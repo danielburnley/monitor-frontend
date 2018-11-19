@@ -8,7 +8,7 @@ export default class QuarterlyBreakdown extends React.Component {
     super(props);
 
     this.state = {
-      data: this.props.formData
+      data: this.props.formData || []
     };
   }
 
@@ -47,7 +47,7 @@ export default class QuarterlyBreakdown extends React.Component {
   }
 
   renderPeriods(key, v) {
-    return this.props.formData.map((value, index) => {
+    return this.state.data.map((value, index) => {
       return (
         <div className="row" key={`row_${index}`}>
           {this.renderPeriodsInternal(key, value, index, v)}
@@ -71,12 +71,13 @@ export default class QuarterlyBreakdown extends React.Component {
   }
 
   renderInputField(key, value, index, v) {
+    let inputValue = value ? value[key] : ""
     if (this.props.schema.items.properties[key].currency) {
       return (
         <this.props.registry.widgets.currency
           data-test={`${key}_${index}`}
           className="form-control"
-          value={value[key]}
+          value={inputValue}
           key={this.state.data}
           onChange={e => this.onFieldChange(index, key, e)}
           disabled={v.readonly}
@@ -87,7 +88,7 @@ export default class QuarterlyBreakdown extends React.Component {
         <input
         data-test={`${key}_${index}`}
         className="form-control"
-        value={value[key]}
+        value={inputValue}
         onChange={e => this.onFieldChange(index, key, e.target.value)}
         disabled={v.readonly}
       />
