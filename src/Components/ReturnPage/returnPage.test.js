@@ -3,6 +3,7 @@ import GenerateUISchema from '../../UseCase/GenerateUISchema';
 import React from "react";
 import ReturnPage from ".";
 import { shallow, mount } from "enzyme";
+import UserRole from '../../Domain/UserRole';
 
 function submitReturn(form) {
   form.find('[data-test="submit-return-button"]').simulate("click");
@@ -123,7 +124,7 @@ describe('ReturnPage', () => {
       let wrap = mount(<ReturnPage
               validateReturn={validateReturnSpy}
               match={{ params: { projectId: 1, returnId: 1 } }}
-              generateUISchema={new GenerateUISchema()}
+              generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
               generateSubmittedSchema={new GenerateReadOnlySchema()}
               history={[]}
               createReturn={createReturnSpy}
@@ -155,7 +156,7 @@ describe('ReturnPage', () => {
       let wrap = shallow(<ReturnPage
               validateReturn={validateReturnSpy}
               match={{ params: { projectId: 1, returnId: 1 } }}
-              generateUISchema={new GenerateUISchema()}
+              generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
               generateSubmittedSchema={new GenerateReadOnlySchema()}
               history={[]}
               createReturn={createReturnSpy}
@@ -178,7 +179,7 @@ describe('ReturnPage', () => {
         let wrap = mount(<ReturnPage
                 validateReturn={validateReturnSpy}
                 match={{ params: { projectId: 1, returnId: 1 } }}
-                generateUISchema={new GenerateUISchema()}
+                generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
                 generateSubmittedSchema={new GenerateReadOnlySchema()}
                 history={[]}
                 createReturn={createReturnSpy}
@@ -209,7 +210,7 @@ describe('ReturnPage', () => {
         let wrap = mount(<ReturnPage
                 validateReturn={validateReturnSpy}
                 match={{ params: { projectId: 1, returnId: 1 } }}
-                generateUISchema={new GenerateUISchema()}
+                generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
                 generateSubmittedSchema={new GenerateReadOnlySchema()}
                 history={[]}
                 createReturn={createReturnSpy}
@@ -237,7 +238,7 @@ describe('ReturnPage', () => {
           let wrap = mount(<ReturnPage
                   validateReturn={validateReturnSpy}
                   match={{ params: { projectId: 1, returnId: 1 } }}
-                  generateUISchema={new GenerateUISchema()}
+                  generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
                   generateSubmittedSchema={new GenerateReadOnlySchema()}
                   history={[]}
                   createReturn={createReturnSpy}
@@ -262,7 +263,7 @@ describe('ReturnPage', () => {
           let wrap = mount(<ReturnPage
                   validateReturn={validateReturnSpy}
                   match={{ params: { projectId: 1, returnId: 1 } }}
-                  generateUISchema={new GenerateUISchema()}
+                  generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
                   generateSubmittedSchema={new GenerateReadOnlySchema()}
                   history={[]}
                   createReturn={createReturnSpy}
@@ -288,7 +289,7 @@ describe('ReturnPage', () => {
         let wrap = mount(<ReturnPage
                 validateReturn={validateReturnSpy}
                 match={{ params: { projectId: 1, returnId: 1 } }}
-                generateUISchema={new GenerateUISchema()}
+                generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
                 generateSubmittedSchema={new GenerateReadOnlySchema()}
                 history={[]}
                 createReturn={createReturnSpy}
@@ -317,7 +318,7 @@ describe('ReturnPage', () => {
         let wrap = mount(<ReturnPage
                 validateReturn={validateReturnSpy}
                 match={{ params: { projectId: 1, returnId: 1 } }}
-                generateUISchema={new GenerateUISchema()}
+                generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
                 generateSubmittedSchema={new GenerateReadOnlySchema()}
                 history={[]}
                 createReturn={createReturnSpy}
@@ -345,7 +346,7 @@ describe('ReturnPage', () => {
           let wrap = mount(<ReturnPage
                   validateReturn={validateReturnSpy}
                   match={{ params: { projectId: 9, returnId: 1 } }}
-                  generateUISchema={new GenerateUISchema()}
+                  generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
                   generateSubmittedSchema={new GenerateReadOnlySchema()}
                   history={[]}
                   createReturn={createReturnSpy}
@@ -373,7 +374,7 @@ describe('ReturnPage', () => {
           let wrap = mount(<ReturnPage
                   validateReturn={validateReturnSpy}
                   match={{ params: { projectId: 9, returnId: 1 } }}
-                  generateUISchema={new GenerateUISchema()}
+                  generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
                   generateSubmittedSchema={new GenerateReadOnlySchema()}
                   history={[]}
                   createReturn={createReturnSpy}
@@ -414,7 +415,7 @@ describe('ReturnPage', () => {
         let wrap = mount(<ReturnPage
                 validateReturn={validateReturnSpy}
                 match={{ params: { projectId: 1, returnId: 1 } }}
-                generateUISchema={new GenerateUISchema()}
+                generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
                 generateSubmittedSchema={new GenerateReadOnlySchema()}
                 history={[]}
                 createReturn={createReturnSpy}
@@ -444,7 +445,7 @@ describe('ReturnPage', () => {
         let wrap = mount(<ReturnPage
                 validateReturn={validateReturnSpy}
                 match={{ params: { projectId: 1, returnId: 1 } }}
-                generateUISchema={new GenerateUISchema()}
+                generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
                 generateSubmittedSchema={new GenerateReadOnlySchema()}
                 history={[]}
                 createReturn={createReturnSpy}
@@ -473,7 +474,7 @@ describe('ReturnPage', () => {
         let wrap = mount(<ReturnPage
                 validateReturn={() => {}}
                 match={{ params: { projectId: 1 } }}
-                generateUISchema={new GenerateUISchema()}
+                generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
                 generateSubmittedSchema={new GenerateReadOnlySchema()}
                 history={[]}
                 createReturn={()=>{}}
@@ -495,7 +496,7 @@ describe('ReturnPage', () => {
         let wrap = mount(<ReturnPage
                 validateReturn={() => {}}
                 match={{ params: { projectId: 1, returnId: 1 } }}
-                generateUISchema={new GenerateUISchema()}
+                generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
                 generateSubmittedSchema={new GenerateReadOnlySchema()}
                 history={[]}
                 createReturn={()=>{}}

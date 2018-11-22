@@ -44,12 +44,14 @@ import ShowCookieConsent from "./UseCase/ShowCookieConsent";
 
 import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import CookieUserRole from "./Gateway/CookieUserRole";
 
 const locationGateway = new LocationGateway(window.location);
 const tokenGateway = new TokenGateway();
 const cookieConsentGateway = new CookieConsentGateway();
 const showCookieConsent = new ShowCookieConsent(cookieConsentGateway);
 const apiKeyGateway = new CookieApiKey();
+const userRoleGateway = new CookieUserRole();
 const projectGateway = new ProjectGateway(apiKeyGateway, locationGateway);
 const returnGateway = new ReturnGateway(apiKeyGateway, locationGateway);
 const documentGateway = new DocumentGateway(document)
@@ -59,12 +61,12 @@ const createReturnUseCase = new CreateReturn(returnGateway);
 const submitProjectUseCase = new SubmitProject(projectGateway);
 const generateDisabledUISchema = new GenerateDisabledUISchema();
 const generateReadOnlySchema = new GenerateReadOnlySchema();
-const generateUISchema = new GenerateUISchema();
+const generateUISchema = new GenerateUISchema(userRoleGateway);
 const generateNewProjectUISchema = new GenerateNewProjectUISchema(generateUISchema, generateReadOnlySchema);
 const getBaseReturnUseCase = new GetBaseReturn(returnGateway);
 const getProjectUseCase = new GetProject(projectGateway);
 const getReturnUseCase = new GetReturn(returnGateway);
-const canAccessProjectUseCase = new CanAccessProject(tokenGateway, apiKeyGateway, projectGateway);
+const canAccessProjectUseCase = new CanAccessProject(tokenGateway, apiKeyGateway, userRoleGateway, projectGateway);
 const getReturnsUseCase = new GetReturns(returnGateway);
 const requestTokenUseCase = new RequestToken(tokenGateway);
 const submitReturnUseCase = new SubmitReturn(returnGateway);

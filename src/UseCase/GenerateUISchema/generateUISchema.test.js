@@ -1,12 +1,58 @@
 import GenerateUISchema from ".";
 
 describe("GenerateUISchema", () => {
-  let useCase = new GenerateUISchema();
+  let userRoleCookieGateway = {
+    getUserRole: jest.fn(() => ({userRole: "Local Authority"}))
+  };
 
+  let useCase = new GenerateUISchema(userRoleCookieGateway);
+
+  describe("Generates schemas depending on user role", () => {
+    it("Call the cookie user roles gateway", () => {
+      let useCase = new GenerateUISchema(userRoleCookieGateway);
+      useCase.execute({
+        type: "object",
+        properties: {
+          a: { type: "string", laReadOnly: true }
+        }
+      })
+      expect(userRoleCookieGateway.getUserRole).toHaveBeenCalled()
+    });
+
+    describe("Generates a schema with disabled fields", () => {
+      let useCase = new GenerateUISchema(userRoleCookieGateway);
+      let schema = {
+        type: "object",
+        properties: {
+          a: { type: "string", laReadOnly: true }
+        }
+      };
+
+      let response = useCase.execute(schema);
+      expect(response).toEqual({ a: { "ui:disabled": true } });
+    });
+
+    describe("Generates a schema without any disabled fields", () => {
+      let userRoleCookieGateway = {
+        getUserRole: jest.fn(() => ({userRole: "Homes England"}))
+      };
+      let useCase = new GenerateUISchema(userRoleCookieGateway);
+      let schema = {
+        type: "object",
+        properties: {
+          a: { type: "string", laReadOnly: true }
+        }
+      };
+
+      let response = useCase.execute(schema);
+      expect(response).toEqual({});
+    });
+
+  });
   describe("Readonly", () => {
     describe("Example one", () => {
       it("Generates a ui schema from a single field", () => {
-        let useCase = new GenerateUISchema();
+        let useCase = new GenerateUISchema(userRoleCookieGateway);
         let schema = {
           type: "object",
           properties: {
@@ -18,7 +64,7 @@ describe("GenerateUISchema", () => {
       });
 
       it("Generates an empty ui schema from a single non-readonly field", () => {
-        let useCase = new GenerateUISchema();
+        let useCase = new GenerateUISchema(userRoleCookieGateway);
         let schema = {
           type: "object",
           properties: {
@@ -30,7 +76,7 @@ describe("GenerateUISchema", () => {
       });
 
       it("Generates a ui schema from a readonly and non readonly field", () => {
-        let useCase = new GenerateUISchema();
+        let useCase = new GenerateUISchema(userRoleCookieGateway);
         let schema = {
           type: "object",
           properties: {
@@ -43,7 +89,7 @@ describe("GenerateUISchema", () => {
       });
 
       it("Generates a ui schema from a mixture of fields", () => {
-        let useCase = new GenerateUISchema();
+        let useCase = new GenerateUISchema(userRoleCookieGateway);
         let schema = {
           type: "object",
           properties: {
@@ -81,7 +127,7 @@ describe("GenerateUISchema", () => {
       });
 
       it("Generates a ui schema from a readonly and non readonly field", () => {
-        let useCase = new GenerateUISchema();
+        let useCase = new GenerateUISchema(userRoleCookieGateway);
         let schema = {
           type: "object",
           properties: {
@@ -94,7 +140,7 @@ describe("GenerateUISchema", () => {
       });
 
       it("Generates a ui schema from a multiple fields", () => {
-        let useCase = new GenerateUISchema();
+        let useCase = new GenerateUISchema(userRoleCookieGateway);
         let schema = {
           type: "object",
           properties: {
@@ -110,7 +156,7 @@ describe("GenerateUISchema", () => {
       });
 
       it("Generates a ui schema from a nested object", () => {
-        let useCase = new GenerateUISchema();
+        let useCase = new GenerateUISchema(userRoleCookieGateway);
         let schema = {
           type: "object",
           properties: {
@@ -129,7 +175,7 @@ describe("GenerateUISchema", () => {
       });
 
       it("Generates a ui schema from a nested nested object", () => {
-        let useCase = new GenerateUISchema();
+        let useCase = new GenerateUISchema(userRoleCookieGateway);
         let schema = {
           type: "object",
           properties: {
@@ -151,7 +197,7 @@ describe("GenerateUISchema", () => {
       });
 
       it("Generates a ui schema from an array of items", () => {
-        let useCase = new GenerateUISchema();
+        let useCase = new GenerateUISchema(userRoleCookieGateway);
         let schema = {
           type: "object",
           properties: {
@@ -183,7 +229,7 @@ describe("GenerateUISchema", () => {
 
     describe("Example two", () => {
       it("Generates a ui schema from a single field", () => {
-        let useCase = new GenerateUISchema();
+        let useCase = new GenerateUISchema(userRoleCookieGateway);
         let schema = {
           type: "object",
           properties: {
@@ -195,7 +241,7 @@ describe("GenerateUISchema", () => {
       });
 
       it("Generates a ui schema from a multiple fields", () => {
-        let useCase = new GenerateUISchema();
+        let useCase = new GenerateUISchema(userRoleCookieGateway);
         let schema = {
           type: "object",
           properties: {
@@ -234,7 +280,7 @@ describe("GenerateUISchema", () => {
   describe("Addable arrays", () => {
     describe("Given an array that is addable", () => {
       it("Marks them as addable", () => {
-        let useCase = new GenerateUISchema();
+        let useCase = new GenerateUISchema(userRoleCookieGateway);
         let schema = {
           type: "object",
           properties: {

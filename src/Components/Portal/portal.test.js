@@ -73,32 +73,6 @@ describe("Portal", () => {
     );
   });
 
-  it("calls the onApiKey callback", async () => {
-    CanAccessProjectSpy = {
-      execute: jest.fn(async () => {
-        return {
-          valid: true,
-          apiKey: "Dogs"
-        };
-      })
-    };
-    let OnApiKey = jest.fn();
-    let wrapper = mount(
-      <Portal
-        projectId="1"
-        onApiKey={OnApiKey}
-        token="Cats"
-        canAccessProject={CanAccessProjectSpy}
-        requestToken={RequestTokenSpy}
-      >
-        <div />
-      </Portal>
-    );
-    await wait();
-    wrapper.update();
-    expect(OnApiKey).toHaveBeenCalledWith("Dogs");
-  });
-
   it("shows getToken if use case returns false", async () => {
     CanAccessProjectSpy = {
       execute: jest.fn(async () => {
