@@ -26,6 +26,7 @@ import GetProject from "./UseCase/GetProject";
 import GetReturn from "./UseCase/GetReturn";
 import GetReturns from "./UseCase/GetReturns"
 import SubmitReturn from "./UseCase/SubmitReturn";
+import GetRole from "./UseCase/GetRole";
 import UpdateReturn from "./UseCase/UpdateReturn";
 import RequestToken from "./UseCase/RequestToken";
 import ValidateReturn from "./UseCase/ValidateReturn";
@@ -53,6 +54,7 @@ const userRoleGateway = new CookieUserRole();
 const projectGateway = new ProjectGateway(apiKeyGateway, locationGateway);
 const returnGateway = new ReturnGateway(apiKeyGateway, locationGateway);
 const documentGateway = new DocumentGateway(document)
+const getRole = new GetRole(userRoleGateway);
 const validateReturnUseCase = new ValidateReturn(returnGateway);
 const validateProjectUseCase = new ValidateProject(projectGateway);
 const createReturnUseCase = new CreateReturn(returnGateway);
@@ -130,6 +132,7 @@ const renderNewProjectPage = (props, projectStatus, formData, formSchema, projec
     updateProject={updateProjectUseCase}
     validateProject={validateProjectUseCase}
     documentGateway={documentGateway}
+    userRole={getRole}
   />
 );
 

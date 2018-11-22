@@ -8,13 +8,15 @@ import "./style.css";
 export default class NewProjectPage extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       formData: this.props.data,
       formSchema: this.props.schema,
       valid: true,
       status: "ready",
       prettyInvalidPaths: [[]],
-      action: ""
+      action: "",
+      userRole: this.props.userRole.execute().role
     };
   }
 
@@ -53,10 +55,6 @@ export default class NewProjectPage extends React.Component {
       prettyInvalidPaths: [[]]
     });
 
-    if (this.props.status === "LA Draft") {
-      await this.validateProject();
-    }
-
     await this.props.updateProject.execute(
       this,
       this.props.match.params.id,
@@ -78,9 +76,8 @@ export default class NewProjectPage extends React.Component {
       action: "Update",
       prettyInvalidPaths: [[]]
     });
-    if (this.props.status === "LA Draft") {
-      await this.validateProject();
-    }
+    
+    await this.validateProject();
 
     await this.props.updateProject.execute(
       this,
@@ -121,23 +118,45 @@ export default class NewProjectPage extends React.Component {
     );
   }
 
+  renderDisabledSubmitButton() {
+    if (this.state.userRole === "Homes England") {
+      return (
+          <button
+            data-test="disabled-submit-project-button"
+            className="btn form-button disabled"
+          >
+          Create this project
+        </button>
+      );
+    }
+    return null;
+  }
+
+  renderSubmitButton() {
+    if (this.state.userRole === "Homes England") {
+      return (
+          <button
+            data-test="submit-project-button"
+            className="btn form-button btn-primary"
+            onClick={this.submitProject}
+          >
+          Create this project
+        </button>
+      );
+    }
+    return null;
+  }
+
   renderSuccessOrForm() {
     if (this.state.status === "submitted") {
       return this.renderSubmitSuccess();
     } else if (this.isLoading()) {
       return (
         <div>
-          <button
-            data-test="disabled-submit-project-button"
-            className="btn form-button disabled"
-            onClick={this.submitProject}
-          >
-            Create this project
-          </button>
+          { this.renderDisabledSubmitButton() }
           <button
             data-test="disabled-update-project-button"
             className="btn form-button disabled"
-            onClick={this.updateProject}
           >
             Save draft
           </button>
@@ -152,15 +171,9 @@ export default class NewProjectPage extends React.Component {
             type={this.state.action}
             invalidPaths={this.state.prettyInvalidPaths}
           />
-          {this.renderSaveSuccess()}
+          { this.renderSaveSuccess() }
           <div className="row">
-            <button
-              data-test="submit-project-button"
-              className="btn form-button btn-primary"
-              onClick={this.submitProject}
-            >
-              Create this project
-            </button>
+            { this.renderSubmitButton() }
             <button
               data-test="update-project-button"
               className="btn form-button btn-primary"
@@ -201,23 +214,14 @@ export default class NewProjectPage extends React.Component {
   }
 
   renderSubmitSucessMessage() {
-    if (this.props.status === "LA Draft") {
-      return (
-        <div data-test="project-create-success">
-          Project created!
-          <p>
-            View your project or submit a return here {this.getProjectLink()}
-          </p>
-        </div>
-      );
-    } else {
-      return (
-        <div data-test="project-initial-create-success">
-          Draft Project Created!
-          <p>View your new project here {this.getProjectLink()}.</p>
-        </div>
-      );
-    }
+    return (
+      <div data-test="project-create-success">
+        Project created!
+        <p>
+          View your project or submit a return here {this.getProjectLink()}
+        </p>
+      </div>
+    );
   }
 
   renderSubmitSuccess() {

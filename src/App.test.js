@@ -75,6 +75,10 @@ let returnData = {
 
 let projectType = 'hif';
 
+describe('Saving a draft project as a local authority', () => {
+
+});
+
 describe("Authentication against routes", () => {
   let api;
 
@@ -142,6 +146,8 @@ describe("Viewing a project", () => {
     });
 
     it("will not show GetToken", async () => {
+      api.expendToken("Cats", 0).successfully();
+
       api.getProject(projectSchema, projectData).successfully();
       api.getReturns({returns: []}).successfully();
 
@@ -282,12 +288,12 @@ describe("Viewing a project", () => {
 
 describe('Submitting a draft project', () => {
   let api;
-
   beforeEach(() => {
     process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
     api = new APISimulator("http://cat.meow");
-    api.getProject(projectSchema, draftProjectData, "LA Draft", projectType).successfully();
-    api.getProject(projectSchema, draftProjectData, "LA Draft", projectType).successfully();
+    api.expendToken("Cats", 0).successfully();
+    api.getProject(projectSchema, draftProjectData, "Draft", projectType).successfully();
+    api.getProject(projectSchema, draftProjectData, "Draft", projectType).successfully();
     api.updateProject(submittedProjectData, 0).successfully();
     api.submitProject(0).successfully();
   });
@@ -299,10 +305,10 @@ describe('Submitting a draft project', () => {
   it('Allows you to edit, save and submit a draft project', async () => {
     let page = new AppPage("/project/0");
     let response = {
-        valid: true,
-        invalidPaths: [],
-        prettyInvalidPaths: []
-      };
+      valid: true,
+      invalidPaths: [],
+      prettyInvalidPaths: []
+    };
     await page.load();
 
     page.find("input").map((textfield) => {
@@ -329,7 +335,6 @@ describe('Submitting a draft project', () => {
   });
 
   it('Presents you with validation when you attempt to save and submit an invalid draft project', async () => {
-
     let page = new AppPage("/project/0");
     let response = {
       valid: false,
@@ -355,113 +360,6 @@ describe('Submitting a draft project', () => {
     expect(page.find('[data-test="validationWarning"]').length).toEqual(1);
 
     api.validateProject(0, projectType, submittedProjectData, response).successfully();
-
-
-    page.find('[data-test="submit-project-button"]').simulate("click");
-    await page.load();
-    expect(page.find('[data-test="validationError"]').length).toEqual(1);
-  });
-});
-
-describe("Submitting an initial draft to then fully populate and submit", () => {
-  let api;
-  let emptyData = { };
-  let initiallySubmittedData = {
-    summary: {
-      noise: "16"
-    }
-  }
-  let validResponse = {
-    valid: true,
-    invalidPaths: [],
-    prettyInvalidPaths: []
-  }
-  let draftProjectSchema = {
-    title: "Cat Return",
-    type: "object",
-    properties: {
-      summary: {
-        type: "object",
-        title: "Cats",
-        properties: {
-          noise: { type: "string", title: "Noise" },
-          projectName: {type: "string", title: "Name"},
-          projectDescription: { type: "string", title: "Description" },
-          toes: { type: "string", title: "Toes" }
-        }
-      }
-    }
-  }
-
-  beforeEach(() => {
-    process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
-    api = new APISimulator("http://cat.meow");
-  });
-
-  afterEach(() => {
-    nock.cleanAll();
-  });
-
-  it('Allows you to initially submit a draft project', async () => {
-    api.getProject(projectSchema, emptyData, "Draft").successfully();
-    api.getProject(projectSchema, emptyData, "Draft").successfully();
-    api.updateProject(initiallySubmittedData, 0).successfully();
-    api.submitProject(0).successfully();
-    let page = new AppPage("/project/0");
-
-    await page.load();
-
-    page.find("[data-test='currency-input']").simulate('change', { target: { value: '16'}})
-
-    await page.load();
-
-    page.find('[data-test="submit-project-button"]').simulate("click");
-    await page.load();
-    expect(page.find('[data-test="project-initial-create-success"]').length).toEqual(1);
-  });
-
-  it('Allows you to submit a project in LA Draft state', async () => {
-    draftProjectSchema = {
-      title: "Cat Return",
-      type: "object",
-      properties: {
-        summary: {
-          type: "object",
-          title: "Cats",
-          properties: {
-            noise: { laReadOnly: true, type: "string", title: "Noise" },
-            description: { type: "string", title: "Description" },
-            toes: { type: "string", title: "Toes" },
-            fed: { type: "string", percentage: true }
-          }
-        }
-      }
-    }
-
-    let LAsubmittedProjectData = {
-      summary: {
-        noise: "16",
-        description: "cat",
-        toes: "cat",
-        fed: "100"
-      }
-    }
-
-    api.getProject(draftProjectSchema, initiallySubmittedData, "LA Draft", "hif").successfully();
-    api.getProject(draftProjectSchema, initiallySubmittedData, "LA Draft", "hif").successfully();
-    api.validateProject(0, projectType, LAsubmittedProjectData, validResponse).successfully();
-    api.updateProject(LAsubmittedProjectData,0).successfully();
-    api.submitProject(0).successfully();
-
-    let page = new AppPage("/project/0");
-
-    await page.load();
-
-    page.find("input").at(1).simulate('change', { target: { value: 'cat'}});
-    page.find("input").at(2).simulate('change', { target: { value: 'cat'}});
-    page.find("input").at(3).simulate('change', { target: { value: '100'}});
-
-    await page.load();
 
 
     page.find('[data-test="submit-project-button"]').simulate("click");
