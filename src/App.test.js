@@ -2,7 +2,6 @@ import APISimulator from "../test/ApiSimulator";
 import AppPage from "../test/AppPage";
 import nock from "nock";
 import Cookies from "js-cookie";
-import { watchFile } from "fs";
 
 let projectSchema = {
   title: "Cat Return",

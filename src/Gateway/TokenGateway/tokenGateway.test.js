@@ -1,6 +1,5 @@
 import nock from 'nock';
 import TokenGateway from '.';
-import { access } from 'fs';
 
 describe('token gateway', () => {
   afterEach(() => {
@@ -26,7 +25,7 @@ describe('token gateway', () => {
         let accessInfoRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
           .post('/token/expend', {access_token: 'Cats', project_id: 1})
-          .reply(202, {apiKey: 'Dogs', userRole: 'HE'});
+          .reply(202, {apiKey: 'Dogs', role: 'HE'});
         let gateway = new TokenGateway();
         let access_info = await gateway.getAccess('Cats', 1);
         expect(accessInfoRequest.isDone()).toBeTruthy()
@@ -48,7 +47,7 @@ describe('token gateway', () => {
         let accessInfoRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
           .post('/token/expend', {access_token: 'Cats', project_id: 1})
-          .reply(202, {apiKey: 'Dogs', userRole: "6"});
+          .reply(202, {apiKey: 'Dogs', role: "6"});
         let gateway = new TokenGateway();
         let access_info = await gateway.getAccess('Cats', 1);
         expect(access_info.userRole.userRole).toEqual("6")

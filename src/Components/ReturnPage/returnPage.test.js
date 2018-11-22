@@ -1,9 +1,8 @@
-import GenerateReadOnlySchema from '../../UseCase/GenerateReadOnlySchema';
+import GenerateDisabledUISchema from '../../UseCase/GenerateDisabledUISchema';
 import GenerateUISchema from '../../UseCase/GenerateUISchema';
 import React from "react";
 import ReturnPage from ".";
 import { shallow, mount } from "enzyme";
-import UserRole from '../../Domain/UserRole';
 
 function submitReturn(form) {
   form.find('[data-test="submit-return-button"]').simulate("click");
@@ -125,7 +124,7 @@ describe('ReturnPage', () => {
               validateReturn={validateReturnSpy}
               match={{ params: { projectId: 1, returnId: 1 } }}
               generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
-              generateSubmittedSchema={new GenerateReadOnlySchema()}
+              generateSubmittedSchema={new GenerateDisabledUISchema()}
               history={[]}
               createReturn={createReturnSpy}
               submitReturn={submitReturnSpy}
@@ -157,7 +156,7 @@ describe('ReturnPage', () => {
               validateReturn={validateReturnSpy}
               match={{ params: { projectId: 1, returnId: 1 } }}
               generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
-              generateSubmittedSchema={new GenerateReadOnlySchema()}
+              generateSubmittedSchema={new GenerateDisabledUISchema()}
               history={[]}
               createReturn={createReturnSpy}
               submitReturn={submitReturnSpy}
@@ -180,7 +179,7 @@ describe('ReturnPage', () => {
                 validateReturn={validateReturnSpy}
                 match={{ params: { projectId: 1, returnId: 1 } }}
                 generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
-                generateSubmittedSchema={new GenerateReadOnlySchema()}
+                generateSubmittedSchema={new GenerateDisabledUISchema()}
                 history={[]}
                 createReturn={createReturnSpy}
                 submitReturn={submitReturnSpy}
@@ -211,7 +210,7 @@ describe('ReturnPage', () => {
                 validateReturn={validateReturnSpy}
                 match={{ params: { projectId: 1, returnId: 1 } }}
                 generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
-                generateSubmittedSchema={new GenerateReadOnlySchema()}
+                generateSubmittedSchema={new GenerateDisabledUISchema()}
                 history={[]}
                 createReturn={createReturnSpy}
                 submitReturn={submitReturnSpy}
@@ -239,7 +238,7 @@ describe('ReturnPage', () => {
                   validateReturn={validateReturnSpy}
                   match={{ params: { projectId: 1, returnId: 1 } }}
                   generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
-                  generateSubmittedSchema={new GenerateReadOnlySchema()}
+                  generateSubmittedSchema={new GenerateDisabledUISchema()}
                   history={[]}
                   createReturn={createReturnSpy}
                   submitReturn={submitReturnSpy}
@@ -264,7 +263,7 @@ describe('ReturnPage', () => {
                   validateReturn={validateReturnSpy}
                   match={{ params: { projectId: 1, returnId: 1 } }}
                   generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
-                  generateSubmittedSchema={new GenerateReadOnlySchema()}
+                  generateSubmittedSchema={new GenerateDisabledUISchema()}
                   history={[]}
                   createReturn={createReturnSpy}
                   submitReturn={submitReturnSpy}
@@ -290,7 +289,7 @@ describe('ReturnPage', () => {
                 validateReturn={validateReturnSpy}
                 match={{ params: { projectId: 1, returnId: 1 } }}
                 generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
-                generateSubmittedSchema={new GenerateReadOnlySchema()}
+                generateSubmittedSchema={new GenerateDisabledUISchema()}
                 history={[]}
                 createReturn={createReturnSpy}
                 submitReturn={submitReturnSpy}
@@ -319,7 +318,7 @@ describe('ReturnPage', () => {
                 validateReturn={validateReturnSpy}
                 match={{ params: { projectId: 1, returnId: 1 } }}
                 generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
-                generateSubmittedSchema={new GenerateReadOnlySchema()}
+                generateSubmittedSchema={new GenerateDisabledUISchema()}
                 history={[]}
                 createReturn={createReturnSpy}
                 submitReturn={submitReturnSpy}
@@ -347,7 +346,7 @@ describe('ReturnPage', () => {
                   validateReturn={validateReturnSpy}
                   match={{ params: { projectId: 9, returnId: 1 } }}
                   generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
-                  generateSubmittedSchema={new GenerateReadOnlySchema()}
+                  generateSubmittedSchema={new GenerateDisabledUISchema()}
                   history={[]}
                   createReturn={createReturnSpy}
                   submitReturn={submitReturnSpy}
@@ -375,7 +374,7 @@ describe('ReturnPage', () => {
                   validateReturn={validateReturnSpy}
                   match={{ params: { projectId: 9, returnId: 1 } }}
                   generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
-                  generateSubmittedSchema={new GenerateReadOnlySchema()}
+                  generateSubmittedSchema={new GenerateDisabledUISchema()}
                   history={[]}
                   createReturn={createReturnSpy}
                   submitReturn={submitReturnSpy}
@@ -416,7 +415,7 @@ describe('ReturnPage', () => {
                 validateReturn={validateReturnSpy}
                 match={{ params: { projectId: 1, returnId: 1 } }}
                 generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
-                generateSubmittedSchema={new GenerateReadOnlySchema()}
+                generateSubmittedSchema={new GenerateDisabledUISchema()}
                 history={[]}
                 createReturn={createReturnSpy}
                 submitReturn={submitReturnSpy}
@@ -446,7 +445,7 @@ describe('ReturnPage', () => {
                 validateReturn={validateReturnSpy}
                 match={{ params: { projectId: 1, returnId: 1 } }}
                 generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
-                generateSubmittedSchema={new GenerateReadOnlySchema()}
+                generateSubmittedSchema={new GenerateDisabledUISchema()}
                 history={[]}
                 createReturn={createReturnSpy}
                 submitReturn={submitReturnSpy}
@@ -475,7 +474,7 @@ describe('ReturnPage', () => {
                 validateReturn={() => {}}
                 match={{ params: { projectId: 1 } }}
                 generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
-                generateSubmittedSchema={new GenerateReadOnlySchema()}
+                generateSubmittedSchema={new GenerateDisabledUISchema()}
                 history={[]}
                 createReturn={()=>{}}
                 submitReturn={()=>{}}
@@ -497,7 +496,7 @@ describe('ReturnPage', () => {
                 validateReturn={() => {}}
                 match={{ params: { projectId: 1, returnId: 1 } }}
                 generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
-                generateSubmittedSchema={new GenerateReadOnlySchema()}
+                generateSubmittedSchema={new GenerateDisabledUISchema()}
                 history={[]}
                 createReturn={()=>{}}
                 submitReturn={()=>{}}
