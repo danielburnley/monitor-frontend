@@ -2,7 +2,7 @@ import GenerateUISchema from ".";
 
 describe("GenerateUISchema", () => {
   let userRoleCookieGateway = {
-    getUserRole: jest.fn(() => ({userRole: "Local Authority"}))
+    getUserRole: jest.fn(() => ({userRole: "Homes England"}))
   };
 
   let useCase = new GenerateUISchema(userRoleCookieGateway);
@@ -18,8 +18,12 @@ describe("GenerateUISchema", () => {
       })
       expect(userRoleCookieGateway.getUserRole).toHaveBeenCalled()
     });
+    
 
-    describe("Generates a schema with disabled fields", () => {
+    describe("Local Authority User Role", () => {
+      let userRoleCookieGateway = {
+        getUserRole: jest.fn(() => ({userRole: "Local Authority"}))
+      };
       let useCase = new GenerateUISchema(userRoleCookieGateway);
       let schema = {
         type: "object",
@@ -27,25 +31,43 @@ describe("GenerateUISchema", () => {
           a: { type: "string", laReadOnly: true }
         }
       };
-
-      let response = useCase.execute(schema);
-      expect(response).toEqual({ a: { "ui:disabled": true } });
+      it("Generates a schema with disabled fields", () => {
+        let response = useCase.execute(schema);
+        expect(response).toEqual({ a: { "ui:disabled": true } });
+      });
     });
 
-    describe("Generates a schema without any disabled fields", () => {
+    describe("Homes England user role", () => {
+      let useCase = new GenerateUISchema(userRoleCookieGateway);
+      let schema = {
+        type: "object",
+        properties: {
+          a: { type: "string", laReadOnly: true },
+          b: { type: "string", s151WriteOnly: true }
+        }
+      };
+      it("Generates the correct schema", () => {
+        let response = useCase.execute(schema);
+        expect(response).toEqual({b: {"ui:disabled": true}});
+      });
+    });
+
+    describe("S151 user role", () => {
       let userRoleCookieGateway = {
-        getUserRole: jest.fn(() => ({userRole: "Homes England"}))
+        getUserRole: jest.fn(() => ({userRole: "S151"}))
       };
       let useCase = new GenerateUISchema(userRoleCookieGateway);
       let schema = {
         type: "object",
         properties: {
-          a: { type: "string", laReadOnly: true }
+          a: { type: "string", s151WriteOnly: true },
+          b: { type: "string", laReadOnly: true }
         }
       };
-
-      let response = useCase.execute(schema);
-      expect(response).toEqual({});
+      it("Generate a schema with some disabled fields", () => {
+        let response = useCase.execute(schema);
+        expect(response).toEqual({b: {"ui:disabled": true}});
+      });
     });
 
   });

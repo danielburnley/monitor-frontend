@@ -94,7 +94,11 @@ export default class GenerateUISchema {
       schema["ui:disabled"] = true
     }
 
-    if(this.userRole === "Local Authority" && item.laReadOnly) {
+    if (this.userRole !== "Homes England" && item.laReadOnly) {
+      schema["ui:disabled"] = true
+    }
+
+    if (item.s151WriteOnly && this.userRole !== "S151") {
       schema["ui:disabled"] = true
     }
 
