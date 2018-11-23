@@ -11,8 +11,9 @@ async function updateFormField(input, value) {
   await wait();
 }
 
-function saveReturn(form) {
+async function saveReturn(form) {
   form.find('[data-test="save-return-button"]').simulate("click");
+  await wait();
 }
 
 function createReturn(form) {
@@ -45,6 +46,61 @@ describe("<ReturnForm>", () => {
   };
   let initialData = { cats: { details: { noise: "Meow" } } };
 
+  describe("Hiding submit button", () => {
+    describe("When role is Local Authority", () => {
+      let getRoleUseCaseSpy, documentGatewayDummy, wrapper
+      beforeEach(()=> {
+         getRoleUseCaseSpy = {execute: jest.fn(()=> ({role: "Local Authority"}))}
+         documentGatewayDummy = jest.fn();
+         wrapper = shallow(
+          <ReturnForm
+            documentGateway={documentGatewayDummy}
+            data={initialData}
+            schema={formSchema}
+            onSave={() => {}}
+            onSubmit={() => {}}
+            status="Draft"
+            getRole={getRoleUseCaseSpy}
+          />
+        );
+      })
+      it("calls the get role use case", () => {
+        wrapper.update()
+        expect(getRoleUseCaseSpy.execute).toBeCalled()
+      })
+      it("Hides the submit button", () => {
+        wrapper.update();
+
+        expect(wrapper.find('[data-test="disabled-submit-return-button"]').length).toEqual(0)
+        expect(wrapper.find('[data-test="submit-return-button"]').length).toEqual(0)
+
+        expect(wrapper.find('[data-test="disabled-save-return-button"]').length).toEqual(0)
+        expect(wrapper.find('[data-test="save-return-button"]').length).toEqual(1)
+      });
+
+      it("Hides the disabled submit button", () => {
+        wrapper = shallow(
+          <ReturnForm
+            documentGateway={documentGatewayDummy}
+            data={initialData}
+            schema={formSchema}
+            onSave={() => {}}
+            onSubmit={() => {}}
+            status="Updating"
+            getRole={getRoleUseCaseSpy}
+          />
+        );
+
+        wrapper.update();
+
+        expect(wrapper.find('[data-test="disabled-submit-return-button"]').length).toEqual(0)
+        expect(wrapper.find('[data-test="submit-return-button"]').length).toEqual(0)
+
+        expect(wrapper.find('[data-test="disabled-save-return-button"]').length).toEqual(1)
+        expect(wrapper.find('[data-test="save-return-button"]').length).toEqual(0)
+      });
+    })
+  })
   it("Passes the documentGateway to the parentForm", () => {
     let documentGatewayDummy = jest.fn();
     let wrapper = shallow(
