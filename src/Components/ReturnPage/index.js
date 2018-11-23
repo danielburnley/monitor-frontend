@@ -163,6 +163,7 @@ export default class ReturnPage extends React.Component {
         data={this.state.formData}
         schema={this.state.formSchema}
         uiSchema={this.state.formUISchema}
+        getRole={this.props.getRole}
         status={this.state.status}
       />
     );

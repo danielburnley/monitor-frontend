@@ -78,6 +78,7 @@ export default class ReturnForm extends React.Component {
           formData={this.state.formData}
           onChange={this.onFormChange}
           documentGateway={this.props.documentGateway}
+          getRole={this.props.getRole}
           >
         </ParentForm>
       </div>

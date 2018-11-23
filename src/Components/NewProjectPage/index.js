@@ -107,6 +107,7 @@ export default class NewProjectPage extends React.Component {
           formData={this.state.formData}
           schema={this.state.formSchema}
           uiSchema={this.props.uiSchema}
+          getRole={this.props.userRole}
           onChange={e => {
             this.setState({
               formData: e.formData,

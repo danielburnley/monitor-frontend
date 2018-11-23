@@ -22,6 +22,7 @@ export default class ParentForm extends React.Component {
     let first_property = this.getFirstProperty(props.schema);
 
     this.state = {
+      userRole: this.props.getRole.execute().role,
       uiSchema: this.props.uiSchema ? this.props.uiSchema : {},
       formData: this.props.formData ? this.props.formData : {},
       selected: first_property,
@@ -63,8 +64,11 @@ export default class ParentForm extends React.Component {
     });
   };
 
-  renderNavigationTabs() {
-    return Object.keys(this.props.schema.properties).map(property => (
+  renderTab = ([property, value]) => {
+    if (value.laHidden && this.state.userRole === "Local Authority") {
+      return null;
+    } else {
+      return (
       <li
         key={property}
         role="presentation"
@@ -72,12 +76,17 @@ export default class ParentForm extends React.Component {
           "nav-item " +
           (property === this.state.selected ? "active" : "inactive")
         }
+        data-test={`${property}_property`}
       >
-        <a role="button" id={property} onClick={this.viewSelectorOnChange}>
-          {this.props.schema.properties[property].title}
-        </a>
-      </li>
-    ));
+      <a role="button" id={property} onClick={this.viewSelectorOnChange}>
+        {value.title}
+      </a>
+    </li>)
+    }
+  }
+
+  renderNavigationTabs() {
+    return Object.entries(this.props.schema.properties).map(this.renderTab);
   }
 
   renderSidebar() {

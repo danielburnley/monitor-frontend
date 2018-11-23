@@ -54,6 +54,7 @@ describe("<ReturnForm>", () => {
         schema={formSchema}
         onSubmit={() => {}}
         status="Draft"
+        getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
       />
     );
 
@@ -70,6 +71,7 @@ describe("<ReturnForm>", () => {
         schema={formSchema}
         onSubmit={submitSpy}
         status="Draft"
+        getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
       />
     );
 
@@ -87,6 +89,7 @@ describe("<ReturnForm>", () => {
         schema={formSchema}
         onCreate={createSpy}
         status="New"
+        getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
       />
     );
 
@@ -104,6 +107,7 @@ describe("<ReturnForm>", () => {
         schema={formSchema}
         onSave={saveSpy}
         status="Draft"
+        getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
       />
     );
 
@@ -124,6 +128,7 @@ describe("<ReturnForm>", () => {
         onSave={saveSpy}
         onChange={changeSpy}
         status="Draft"
+        getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
       />
     );
     await wait();
@@ -136,7 +141,7 @@ describe("<ReturnForm>", () => {
   it("Calls the onSave function with the updated formData when edited", async () => {
     let saveSpy = jest.fn();
     let wrapper = mount(
-      <ReturnForm data={initialData} schema={formSchema} onSave={saveSpy} />
+      <ReturnForm data={initialData} schema={formSchema} onSave={saveSpy} getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}/>
     );
     let input = wrapper.find('input[type="text"]');
     await updateFormField(input, "New Meow");
@@ -148,7 +153,7 @@ describe("<ReturnForm>", () => {
 
   it("Displays no buttons if the return is submitted", () => {
     let wrapper = mount(
-      <ReturnForm data={initialData} schema={formSchema} status="Submitted" />
+      <ReturnForm data={initialData} schema={formSchema} status="Submitted" getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}/>
     );
 
     let actions = wrapper.find("button");
@@ -158,7 +163,7 @@ describe("<ReturnForm>", () => {
 
   it("Displays the create button if the return is new", () => {
     let wrapper = mount(
-      <ReturnForm data={initialData} schema={formSchema} status="New" />
+                <ReturnForm data={initialData} schema={formSchema} status="New" getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}} />
     );
 
     let actions = wrapper.find('[data-test="create-return-button"]');

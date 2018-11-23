@@ -131,6 +131,7 @@ describe('ReturnPage', () => {
               updateReturn={unresolvingUpdateReturnStub}
               getReturn={new getSubmittedReturnStub()}
               getBaseReturn={new getBaseReturnStub()}
+              getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
             />);
       await wait();
 
@@ -164,6 +165,7 @@ describe('ReturnPage', () => {
               getReturn={new getReturnStub()}
               getBaseReturn={new getBaseReturnStub()}
               documentGateway={documentGatewayDummy}
+              getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
             />);
 
       await wait();
@@ -186,6 +188,7 @@ describe('ReturnPage', () => {
                 updateReturn={unresolvingUpdateReturnStub}
                 getReturn={new getReturnStub()}
                 getBaseReturn={new getBaseReturnStub()}
+                getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
               />);
         await wait();
 
@@ -217,6 +220,7 @@ describe('ReturnPage', () => {
                 updateReturn={unresolvingUpdateReturnStub}
                 getReturn={new getReturnStub()}
                 getBaseReturn={new getBaseReturnStub()}
+                getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
               />);
 
         let input = wrap.find("[type='text'] input").first();
@@ -245,6 +249,7 @@ describe('ReturnPage', () => {
                   updateReturn={updateReturnSpy}
                   getReturn={new getReturnStub()}
                   getBaseReturn={new getBaseReturnStub()}
+                  getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
                 />);
 
           let input = wrap.find("[type='text'] input").first();
@@ -270,6 +275,7 @@ describe('ReturnPage', () => {
                   updateReturn={updateReturnSpy}
                   getReturn={new getReturnStub('hif')}
                   getBaseReturn={new getBaseReturnStub('hif')}
+                  getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
                 />);
 
           let input = wrap.find("[type='text'] input").first();
@@ -296,6 +302,7 @@ describe('ReturnPage', () => {
                 updateReturn={updateReturnSpy}
                 getReturn={new getReturnStub()}
                 getBaseReturn={new getBaseReturnStub()}
+                getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
               />);
 
         let input = wrap.find("input[type='text']").first();
@@ -325,6 +332,7 @@ describe('ReturnPage', () => {
                 updateReturn={unresolvingUpdateReturnStub}
                 getReturn={new getReturnStub()}
                 getBaseReturn={new getBaseReturnStub()}
+                getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
               />);
 
         let input = wrap.find("[type='text'] input").first();
@@ -353,6 +361,7 @@ describe('ReturnPage', () => {
                   updateReturn={updateReturnSpy}
                   getReturn={new getReturnStub()}
                   getBaseReturn={new getBaseReturnStub()}
+                  getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
                 />);
 
           let input = wrap.find("[type='text'] input").first();
@@ -381,6 +390,7 @@ describe('ReturnPage', () => {
                   updateReturn={updateReturnSpy}
                   getReturn={new getReturnStub('hif')}
                   getBaseReturn={new getBaseReturnStub('hif')}
+                  getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
                 />);
 
           let input = wrap.find("[type='text'] input").first();
@@ -422,6 +432,7 @@ describe('ReturnPage', () => {
                 updateReturn={updateReturnSpy}
                 getReturn={new getReturnStub()}
                 getBaseReturn={new getBaseReturnStub()}
+                getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
               />);
 
         let input = wrap.find("[type='text'] input").first();
@@ -452,6 +463,7 @@ describe('ReturnPage', () => {
                 updateReturn={updateReturnSpy}
                 getReturn={new getReturnStub()}
                 getBaseReturn={new getBaseReturnStub()}
+                getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
               />);
 
         let input = wrap.find("[type='text'] input").first();
@@ -481,6 +493,7 @@ describe('ReturnPage', () => {
                 updateReturn={() => {}}
                 getReturn={new getReturnStub()}
                 getBaseReturn={new getBaseReturnStub()}
+                getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
               />);
         await wait();
 
@@ -502,6 +515,7 @@ describe('ReturnPage', () => {
                 submitReturn={()=>{}}
                 updateReturn={() => {}}
                 getReturn={new getReturnStub()}
+                getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
                 getBaseReturn={new getBaseReturnStub()}
               />);
         await wait();

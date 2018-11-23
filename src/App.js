@@ -81,6 +81,7 @@ const renderReturnPage = props => (
     submitReturn={submitReturnUseCase}
     updateReturn={updateReturnUseCase}
     generateUISchema={generateUISchema}
+    getRole={getRole}
     generateSubmittedSchema={generateDisabledUISchema}
     documentGateway={documentGateway}
   />
