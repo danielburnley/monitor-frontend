@@ -445,6 +445,38 @@ describe("GenerateUISchema", () => {
     });
   });
 
+  describe("Numbered", () => {
+    it("Sets the UI field to numbered", () => {
+      let schema = {
+        type: "object",
+        properties: {
+          a: {
+            type: "array",
+            numbered: true,
+            items: {
+              type: "object",
+              properties: {}
+            }
+          }
+        }
+      };
+
+      let response = useCase.execute(schema);
+
+      expect(response).toEqual({
+        a: {
+          items: {},
+          "ui:field": "numbered",
+          "ui:options": {
+            addable: false,
+            orderable: false,
+            removable: false
+          }
+        }
+      });
+    });
+  });
+
   describe("Horizontal", () => {
     describe("Given an array with horizontal items", () => {
       it("Sets the UI field to horizontal", () => {
