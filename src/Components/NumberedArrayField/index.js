@@ -8,7 +8,7 @@ export default class NumberedArrayField extends React.Component {
 
   render = () => (
     <ol>
-      {this.props.items.map(this.renderItem)}
+      { this.props.items && this.props.items.map(this.renderItem)}
     </ol>
   )
 }
