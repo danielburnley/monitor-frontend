@@ -1,58 +1,38 @@
-//needs to take items, items is an array of prop objects
-// that need to be passed down
-
-import NumberedArrayField from ".";
 import React from "react";
-import WidgetStub from "../../../test/WidgetStub";
-import { mount, shallow } from "enzyme";
+import {mount} from "enzyme";
+import NumberedArrayField from ".";
 
-describe("<NumberedArrayField>", () => {
-  describe("It passes items props to children", () => {
-    describe("Single children", () => {
-      it("Example 1", () => {
-        let wrapper = mount(
-          <NumberedArrayField items={[
-              {children: <WidgetStub data-test="example-widget1"/>}
-            ]}/>
-        );
-        wrapper.update();
-        expect(wrapper.find("[data-test='example-widget1']").length).toEqual(1);
-      });
+describe("Numbered Array Field Financials", () => {
+  it("Doesn't render the submit button", async () => {
+    let wrapper = mount(<NumberedArrayField/>);
+    await wrapper.update();
+    expect(wrapper.find("button").length).toEqual(0);
+  });
 
-      it("Example 2", () => {
-        let wrapper = mount(
-          <NumberedArrayField items={[
-              {children: <WidgetStub data-test="example-widget2"/>}
-            ]}/>
-        );
-        wrapper.update();
-        expect(wrapper.find("[data-test='example-widget2']").length).toEqual(1);
-      });
+  describe("renders all data", () => {
+    it("Example 1", async () => {
+      let wrapper = mount(<NumberedArrayField
+          formData={ [{someData: "Hello"}] }
+          schema={ {items: {type: "object", properties: {someData: {type: "string"}}}} }
+        />
+      );
+      await wrapper.update();
+      expect(wrapper.find("Form").length).toEqual(1);
+      expect(wrapper.find("input#root_someData").length).toEqual(1)
+      expect(wrapper.find("input#root_someData").props().value).toEqual("Hello")
     });
 
-    describe("Multiple children", () => {
-      it("Example 1", () => {
-        let wrapper = mount(
-          <NumberedArrayField items={[
-              {children: <WidgetStub data-test="example-widget1"/>},
-              {children: <WidgetStub data-test="example-widget2"/>}
-            ]}/>
-        );
-        wrapper.update();
-        expect(wrapper.find("[data-test='example-widget1']").length).toEqual(1);
-        expect(wrapper.find("[data-test='example-widget2']").length).toEqual(1);
-      });
-
-      it("Example 2", () => {
-        let wrapper = mount(
-          <NumberedArrayField items={[
-              {children: <WidgetStub data-test="example-widget2"/>},
-              {children: <WidgetStub data-test="example-widget2"/>}
-            ]}/>
-        );
-        wrapper.update();
-        expect(wrapper.find("[data-test='example-widget2']").length).toEqual(2);
-      });
+    it("Example 2", async () => {
+      let wrapper = mount(<NumberedArrayField
+          formData={ [{otherData: "Hello"}, {otherData: "There"}] }
+          schema={ {items: {type: "object", properties: {otherData: {type: "string"}, moreData: {type: "string"}}}} }
+        />
+      );
+      await wrapper.update();
+      expect(wrapper.find("Form").length).toEqual(2);
+      expect(wrapper.find("input#root_otherData").length).toEqual(2)
+      expect(wrapper.find("input#root_otherData").at(0).props().value).toEqual("Hello")
+      expect(wrapper.find("input#root_otherData").at(1).props().value).toEqual("There")
     });
   });
 });

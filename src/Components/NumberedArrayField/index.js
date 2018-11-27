@@ -1,14 +1,24 @@
+import Form from "react-jsonschema-form";
 import React from "react";
-export default class NumberedArrayField extends React.Component {
-  renderItem = (item, index) => (
-    <li key={index}>
-      {item.children}
-    </li>
-  )
+import AddButton from "../AddButton";
+import RemoveButton from "../RemoveButton";
+import "./style.css";
 
-  render = () => (
-    <ol>
-      { this.props.items && this.props.items.map(this.renderItem)}
-    </ol>
-  )
+export default class NumberedArrayField extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      formData: this.props.formData
+    };
+  }
+
+  render() {
+    return <ol>{
+        this.props.formData &&
+        this.props.formData.map((data, index) => <li key={index}><Form formData={data} schema={this.props.schema.items}><br/></Form></li>)
+      }</ol>;
+    //Switch away from index to an id based on contents or something
+    //return <ol>{this.props.formData.map((object, index) => <li key = {index}><Form formData={object} schema={this.props.schema.items} uiSchema={this.props.uiSchema}><br/></Form></li>)}</ol>
+  }
 }

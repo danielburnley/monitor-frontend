@@ -1,0 +1,21 @@
+.no-wrap {
+  white-space: nowrap;
+}
+.less-padding {
+  padding-left: 6px;
+  padding-right: 6px;
+}
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+.flex-data {
+  flex-grow: 1;
+  flex-basis: auto;
+}
+
+.flex-header {
+  flex-grow: 2;
+  flex-basis: auto;
+}
