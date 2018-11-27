@@ -70,25 +70,49 @@ export default class QuarterlyBreakdown extends React.Component {
     }
   }
 
-  renderInputField(key, value, index, v) {
-    let inputValue = value ? value[key] : ""
-    if (this.props.schema.items.properties[key].currency) {
+  renderOptions = (options) => {
+    options.unshift("")
+    return (
+      options.map((value, index) => {
+      return <option key={index}>{value}</option>
+    }));
+  }
+
+  renderDropdown = (key, value, v, index) => {
+    return (
+      <select
+      data-test={`${key}_${index}`}
+      className="form-control"
+      value={value}
+      onChange={e => this.onFieldChange(index, key, e.target.value)}
+      disabled={v.readonly}
+      >
+        {this.renderOptions(v.enum)}
+      </select>
+    )
+  }
+
+  renderInputField(key, periodData, index, v) {
+    if (!periodData) return
+    if (v.currency) {
       return (
         <this.props.registry.widgets.currency
           data-test={`${key}_${index}`}
           className="form-control"
-          value={inputValue}
-          key={this.state.data}
+          value={periodData[key]}
+          key={`${key}_${index}`}
           onChange={e => this.onFieldChange(index, key, e)}
           disabled={v.readonly}
         />
       );
+    } else if (v.enum) { 
+      return this.renderDropdown(key, periodData[key], v, index)
     } else {
       return (
         <input
         data-test={`${key}_${index}`}
         className="form-control"
-        value={inputValue}
+        value={periodData[key]}
         onChange={e => this.onFieldChange(index, key, e.target.value)}
         disabled={v.readonly}
       />
