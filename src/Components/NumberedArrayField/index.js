@@ -18,12 +18,20 @@ export default class NumberedArrayField extends React.Component {
     formData.push({});
     this.setState({formData});
   }
+
+  removeItem = (index) => {
+    let formData = this.state.formData;
+    formData.splice(index, 1);
+    this.setState({formData});
+  }
+
   render() {
     return <div>
           <ol>{
-            this.props.formData &&
-            this.props.formData.map((data, index) => <li key={index}>
+            this.state.formData &&
+            this.state.formData.map((data, index) => <li key={index}>
               <Form formData={data} schema={this.props.schema.items}><br/></Form>
+              <RemoveButton onClick={() => this.removeItem(index)}/>
             </li>)
           }
         </ol>

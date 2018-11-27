@@ -51,12 +51,31 @@ describe("Numbered Array Field Financials", () => {
     expect(wrapper.find("input#root_otherData").length).toEqual(3);
   });
 
-  it("Removes items", async () => {
-    let wrapper = mount(<NumberedArrayField
-        formData={ [{otherData: "Hello"}, {otherData: "There"}] }
-        schema={ {items: {type: "object", properties: {otherData: {type: "string"}}} }}
-      />
-    );
-    await wrapper.update();
+  describe("Removes items", async () => {
+    it("Example 1", async () => {
+      let wrapper = mount(<NumberedArrayField
+          formData={ [{otherData: "Hello"}, {otherData: "There"}] }
+          schema={ {items: {type: "object", properties: {otherData: {type: "string"}}} }}
+        />
+      );
+      await wrapper.update();
+      expect(wrapper.find('[data-test="remove-button"]').length).toEqual(2);
+      wrapper.find('[data-test="remove-button"]').at(1).simulate('click');
+      expect(wrapper.find("input#root_otherData").length).toEqual(1);
+      expect(wrapper.find("input#root_otherData").props().value).toEqual("Hello")
+    });
+
+    it("Example 2", async () => {
+      let wrapper = mount(<NumberedArrayField
+          formData={ [{otherData: "Hello"}, {otherData: "There"}] }
+          schema={ {items: {type: "object", properties: {otherData: {type: "string"}}} }}
+        />
+      );
+      await wrapper.update();
+      expect(wrapper.find('[data-test="remove-button"]').length).toEqual(2);
+      wrapper.find('[data-test="remove-button"]').at(0).simulate('click');
+      expect(wrapper.find("input#root_otherData").length).toEqual(1);
+      expect(wrapper.find("input#root_otherData").props().value).toEqual("There")
+    });
   });
 });
