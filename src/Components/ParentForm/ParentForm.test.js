@@ -15,6 +15,8 @@ async function updateFormField(input, value) {
 
 describe("<ParentForm>", () => {
   let onChangeSpy, elementSpy, documentSpy, documentGatewaySpy;
+  let getRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"}))}
+  
 
   beforeEach(() => {
     onChangeSpy = jest.fn();
@@ -30,6 +32,7 @@ describe("<ParentForm>", () => {
       wrap = mount(
         <ParentForm
           documentGateway={documentGatewaySpy}
+          getRole={getRoleUseCaseSpy}
           onChange={onChangeSpy}
           schema={{
             type: "object",
@@ -89,6 +92,101 @@ describe("<ParentForm>", () => {
     it("displays no submit buttons", async () => {
       expect(wrap.find("button").length).toEqual(0);
     });
+
+    describe("Hidden tabs", () => {
+      describe("As Homes England", () => {
+        let getRoleUseCaseSpy;
+  
+        beforeEach(() => {
+          getRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"}))}
+          wrap = mount(
+            <ParentForm
+              documentGateway={documentGatewaySpy}
+              onChange={onChangeSpy}
+              getRole={getRoleUseCaseSpy}
+              schema={{
+                type: "object",
+                properties: {
+                  cat: {
+                    type: "object",
+                    laHidden: true,
+                    properties: {
+                      name: {
+                        type: "string"
+                      }
+                    }
+                  },
+                  dog: {
+                    type: "object",
+                    properties: {
+                      name: {
+                        type: "string"
+                      }
+                    }
+                  }
+                }
+              }}
+            />
+          );
+        });
+  
+        it("Does display a hidden tab if user is Homes England", () => {
+          wrap.update()
+          
+          expect(wrap.find('[data-test="cat_property"]').length).toEqual(1)
+          expect(wrap.find('[data-test="dog_property"]').length).toEqual(1)
+        });
+      });
+  
+      describe("As an LA", () => {
+        let getRoleUseCaseSpy;
+  
+        beforeEach(() => {
+          getRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"}))}
+          wrap = mount(
+            <ParentForm
+              documentGateway={documentGatewaySpy}
+              onChange={onChangeSpy}
+              getRole={getRoleUseCaseSpy}
+              schema={{
+                type: "object",
+                properties: {
+                  cat: {
+                    type: "object",
+                    laHidden: true,
+                    properties: {
+                      name: {
+                        type: "string"
+                      }
+                    }
+                  },
+                  dog: {
+                    type: "object",
+                    properties: {
+                      name: {
+                        type: "string"
+                      }
+                    }
+                  }
+                }
+              }}
+            />
+          );
+        });
+  
+        it("Calls the getRole usecase", () => {
+          wrap.update();
+          expect(getRoleUseCaseSpy.execute).toHaveBeenCalled()
+        });
+  
+        it("Doesn't display a hidden tab if user is an LA", () => {
+          wrap.update();
+  
+          expect(wrap.find('[data-test="cat_property"]').length).toEqual(0)
+          expect(wrap.find('[data-test="dog_property"]').length).toEqual(1)
+        });
+      });  
+    });
   });
 
   describe("When selecting an item in the sidebar", () => {
@@ -98,6 +196,7 @@ describe("<ParentForm>", () => {
       beforeEach(() => {
         parentForm = shallow(
           <ParentForm
+            getRole={getRoleUseCaseSpy}
             documentGateway={documentGatewaySpy}
             onChange={jest.fn()}
             formData={{ cats: [{ name: "Mittens", noise: "Meow" }] }}
@@ -248,6 +347,7 @@ describe("<ParentForm>", () => {
         parentForm = shallow(
           <ParentForm
             onChange={jest.fn()}
+            getRole={getRoleUseCaseSpy}
             formData={{ cats: [{ name: "Mittens", noise: "Meow" }] }}
             documentGateway={documentGatewaySpy}
             schema={{
@@ -333,6 +433,7 @@ describe("<ParentForm>", () => {
         parentForm = shallow(
           <ParentForm
             documentGateway={documentGatewaySpy}
+            getRole={getRoleUseCaseSpy}
             onChange={jest.fn()}
             schema={{
               type: "object",
@@ -377,6 +478,7 @@ describe("<ParentForm>", () => {
         parentForm = shallow(
           <ParentForm
             documentGateway={documentGatewaySpy}
+            getRole={getRoleUseCaseSpy}
             onChange={jest.fn()}
             schema={{
               type: "object",
@@ -424,6 +526,7 @@ describe("<ParentForm>", () => {
         parentForm = shallow(
           <ParentForm
             documentGateway={documentGatewaySpy}
+            getRole={getRoleUseCaseSpy}
             onChange={jest.fn()}
             schema={{
               type: "object",
@@ -537,6 +640,7 @@ describe("<ParentForm>", () => {
           wrap = mount(
             <ParentForm
               documentGateway={documentGatewaySpy}
+              getRole={getRoleUseCaseSpy}
               onChange={onChangeSpy}
               schema={{
                 type: "object",
@@ -581,6 +685,7 @@ describe("<ParentForm>", () => {
         parentForm = shallow(
           <ParentForm
             documentGateway={documentGatewaySpy}
+            getRole={getRoleUseCaseSpy}
             onChange={jest.fn()}
             schema={{
               type: "object",
@@ -650,6 +755,7 @@ describe("<ParentForm>", () => {
           wrap = mount(
             <ParentForm
               documentGateway={documentGatewaySpy}
+              getRole={getRoleUseCaseSpy}
               onChange={onChangeSpy}
               schema={{
                 type: "object",
@@ -695,6 +801,7 @@ describe("<ParentForm>", () => {
         let parentForm = shallow(
           <ParentForm
             documentGateway={documentGatewaySpy}
+            getRole={getRoleUseCaseSpy}
             onChange={jest.fn()}
             schema={{
               type: "object",
@@ -732,6 +839,7 @@ describe("<ParentForm>", () => {
         let parentForm = shallow(
           <ParentForm
             documentGateway={documentGatewaySpy}
+            getRole={getRoleUseCaseSpy}
             onChange={jest.fn()}
             schema={{
               type: "object",
@@ -767,6 +875,7 @@ describe("<ParentForm>", () => {
       let parentForm = mount(
         <ParentForm
           documentGateway={documentGatewaySpy}
+          getRole={getRoleUseCaseSpy}
           onChange={jest.fn()}
           schema={{
             type: "object",
@@ -864,6 +973,7 @@ describe("<ParentForm>", () => {
       let parentForm = mount(
         <ParentForm
           documentGateway={documentGatewaySpy}
+          getRole={getRoleUseCaseSpy}
           onChange={jest.fn()}
           formData={data}
           schema={schema}
@@ -879,6 +989,7 @@ describe("<ParentForm>", () => {
       let parentForm = mount(
         <ParentForm
           documentGateway={documentGatewaySpy}
+          getRole={getRoleUseCaseSpy}
           onChange={jest.fn()}
           schema={{
             type: "object",

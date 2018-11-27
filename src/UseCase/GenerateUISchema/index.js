@@ -1,4 +1,7 @@
 export default class GenerateUISchema {
+  constructor(userRoleCookieGateway) {
+    this.userRole = userRoleCookieGateway.getUserRole().userRole;
+  }
   execute(data) {
     return this.generateUISchema(data.properties);
   }
@@ -88,6 +91,14 @@ export default class GenerateUISchema {
     }
 
     if (item.readonly) {
+      schema["ui:disabled"] = true
+    }
+
+    if (this.userRole !== "Homes England" && item.laReadOnly) {
+      schema["ui:disabled"] = true
+    }
+
+    if (item.s151WriteOnly && this.userRole !== "S151") {
       schema["ui:disabled"] = true
     }
 

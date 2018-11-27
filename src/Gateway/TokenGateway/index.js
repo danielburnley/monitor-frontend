@@ -1,6 +1,7 @@
 import fetch from 'isomorphic-fetch';
 import ApiKey from '../../Domain/ApiKey';
 import runtimeEnv from '@mars/heroku-js-runtime-env'
+import UserRole from '../../Domain/UserRole';
 
 export default class TokenGateway {
   constructor() {
@@ -18,7 +19,7 @@ export default class TokenGateway {
     );
   }
 
-  async getApiKey(access_token, project_id) {
+  async getAccess(access_token, project_id) {
     let response = await fetch(
       `${this.env.REACT_APP_HIF_API_URL}token/expend`,
       {
@@ -29,7 +30,11 @@ export default class TokenGateway {
     );
 
     if (response.ok) {
-      return new ApiKey((await response.json()).apiKey)
+      let json_response = await response.json();
+      return {
+        apiKey: new ApiKey(json_response.apiKey),
+        userRole: new UserRole(json_response.role)
+      }
     } else {
       return null
     }
