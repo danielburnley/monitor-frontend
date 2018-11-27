@@ -5,6 +5,7 @@ import { mount } from "enzyme";
 
 class CurrencyStub extends WidgetStub { datatest = "currency-stub"; }
 class SecondCurrencyStub extends WidgetStub { datatest = "second-currency-stub"; }
+class PercentageStub extends WidgetStub { datatest = "percentage-stub" }
 
 describe("<HorizontalFields>", () => {
   let schema, fields, formData, onChangeSpy, registrySpy;
@@ -83,6 +84,84 @@ describe("<HorizontalFields>", () => {
           .simulate("change", { target: { value: "Another Meow" } });
 
         expect(onChangeSpy).toHaveBeenCalledWith({ meow: "Another Meow" });
+      });
+    });
+  });
+
+  describe("Given a percentage widget", () => {
+    describe("Example 1", () => {
+      beforeEach(() => {
+        registrySpy = {
+          widgets: {
+            percentage: PercentageStub
+          }
+        }
+        schema = {
+          title: "Monkeys",
+          properties: {
+            proportion: { percentage: true, type: "text", title: "How many monkeys" }
+          }
+        };
+        formData = { proportion: "87" };
+        onChangeSpy = jest.fn();
+        fields = mount(
+          <HorizontalFields
+            registry={registrySpy}
+            schema={schema}
+            formData={formData}
+            onChange={onChangeSpy}
+          />
+        );
+      });
+
+      it("Renders the percentage component from the registry", () => {
+        expect(fields.find('[data-test="percentage-stub"]').length).toEqual(1)
+      });
+
+      it("Calls the onChange method passed in with the form data", () => {
+        fields
+          .find("input[data-test='percentage-stub']")
+          .simulate("change", { target: { value: "56" } });
+
+        expect(onChangeSpy).toHaveBeenCalledWith({ proportion: "56" });
+      });
+    });
+
+    describe("Example 2", () => {
+      beforeEach(() => {
+        registrySpy = {
+          widgets: {
+            percentage: PercentageStub
+          }
+        }
+        schema = {
+          title: "Gorillas",
+          properties: {
+            monkeys: { percentage: true, type: "text", title: "Are Monkeys Gorillas?" }
+          }
+        };
+        formData = { monkeys: "yes" };
+        onChangeSpy = jest.fn();
+        fields = mount(
+          <HorizontalFields
+            registry={registrySpy}
+            schema={schema}
+            formData={formData}
+            onChange={onChangeSpy}
+          />
+        );
+      });
+
+      it("Renders the percentage component from the registry", () => {
+        expect(fields.find('[data-test="percentage-stub"]').length).toEqual(1)
+      });
+
+      it("Calls the onChange method passed in with the form data", () => {
+        fields
+          .find("input[data-test='percentage-stub']")
+          .simulate("change", { target: { value: "No" } });
+
+        expect(onChangeSpy).toHaveBeenCalledWith({ monkeys: "No" });
       });
     });
   });
