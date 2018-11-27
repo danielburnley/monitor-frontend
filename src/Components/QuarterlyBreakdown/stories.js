@@ -126,6 +126,73 @@ storiesOf('QuarterlyBreakdown', module)
   return (<QuarterlyBreakdown schema={schema} formData={data} onChange={data => console.log(data)} />)
 
 })
+.add('Input Fields- Enum', () => {
+  let data = [
+    {
+      period: "2015"
+    },
+    {
+      period: "2016"
+    },
+    {
+      period: "2017"
+    }
+  ]
+
+  let schema = {
+      type: "array",
+      addable: true,
+      title: "Installments",
+      items: {
+        type: 'object',
+        properties: {
+          period: {
+            title: 'Period',
+            type: 'string',
+            readonly: true
+          },
+          quarter1: {
+            title: '1st Quarter',
+            type: 'string',
+            enum: [
+              "Yes",
+              "No"
+            ]
+          },
+          quarter2: {
+            title: '2nd Quarter',
+            type: 'string',
+            enum: [
+              "Yes",
+              "No"
+            ]
+          },
+          quarter3: {
+            title: '3rd Quarter',
+            type: 'string',
+            enum: [
+              "Yes",
+              "No"
+            ]
+          },
+          quarter4: {
+            title: '4th Quarter',
+            type: 'string',
+            enum: [
+              "Yes",
+              "No"
+            ]
+          },
+          total: {
+            title: 'Total',
+            type: 'string'
+          }
+        }
+    }
+  }
+  return (<QuarterlyBreakdown schema={schema} formData={data} onChange={data => console.log(data)} />)
+
+})
 .add('InputFields - Prepopulated', () => {
   let data = [
     {
