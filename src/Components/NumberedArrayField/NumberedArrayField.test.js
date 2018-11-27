@@ -42,6 +42,7 @@ describe("Numbered Array Field Financials", () => {
 
   it("Adds items", async () => {
     let wrapper = mount(<NumberedArrayField
+        addable={true}
         formData={ [{otherData: "Hello"}, {otherData: "There"}] }
         schema={ {items: {type: "object", properties: {otherData: {type: "string"}}} }}
       />
@@ -54,6 +55,7 @@ describe("Numbered Array Field Financials", () => {
   describe("Removes items", async () => {
     it("Example 1", async () => {
       let wrapper = mount(<NumberedArrayField
+          addable={true}
           formData={ [{otherData: "Hello"}, {otherData: "There"}] }
           schema={ {items: {type: "object", properties: {otherData: {type: "string"}}} }}
         />
@@ -67,6 +69,7 @@ describe("Numbered Array Field Financials", () => {
 
     it("Example 2", async () => {
       let wrapper = mount(<NumberedArrayField
+          addable={true}
           formData={ [{otherData: "Hello"}, {otherData: "There"}] }
           schema={ {items: {type: "object", properties: {otherData: {type: "string"}}} }}
         />
@@ -77,5 +80,17 @@ describe("Numbered Array Field Financials", () => {
       expect(wrapper.find("input#root_otherData").length).toEqual(1);
       expect(wrapper.find("input#root_otherData").props().value).toEqual("There")
     });
+  });
+
+  it("Displays no buttons if not addable", async () => {
+    let wrapper = mount(<NumberedArrayField
+        formData={ [{otherData: "Hello"}, {otherData: "There"}] }
+        schema={ {items: {type: "object", properties: {otherData: {type: "string"}}} }}
+        addable={false}
+      />
+    );
+    await wrapper.update();
+    expect(wrapper.find('[data-test="add-button"]').length).toEqual(0);
+    expect(wrapper.find('[data-test="remove-button"]').length).toEqual(0);
   });
 });
