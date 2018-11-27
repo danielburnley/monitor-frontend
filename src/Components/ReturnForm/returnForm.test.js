@@ -219,7 +219,7 @@ describe("<ReturnForm>", () => {
 
   it("Displays the create button if the return is new", () => {
     let wrapper = mount(
-                <ReturnForm data={initialData} schema={formSchema} status="New" getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}} />
+      <ReturnForm data={initialData} schema={formSchema} status="New" getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}} />
     );
 
     let actions = wrapper.find('[data-test="create-return-button"]');

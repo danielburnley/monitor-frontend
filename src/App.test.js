@@ -75,10 +75,6 @@ let returnData = {
 
 let projectType = 'hif';
 
-describe('Saving a draft project as a local authority', () => {
-
-});
-
 describe("Authentication against routes", () => {
   let api;
 
