@@ -25,18 +25,37 @@ export default class NumberedArrayField extends React.Component {
     this.setState({formData});
   }
 
-  render() {
+  renderRemoveButton = (index) => {
+    if (this.props.addable) {
+      return <RemoveButton onClick={() => this.removeItem(index)}/>
+    }
+    return null;
+  }
+
+  renderAddButton = () => {
+    if (this.props.addable) {
+      return <AddButton onClick={this.addItem}/>
+    }
+    return null;
+  }
+
+  renderArrayItem = (data, index) => (
+    <li key={index}>
+      <Form formData={data} schema={this.props.schema.items}><br/></Form>
+      {this.renderRemoveButton(index)}
+    </li>
+  )
+
+  render = () => (
     //Switch away from index to an key based on contents or something
-    return <div>
-          <ol>{
+    <div>
+        <ol>
+          {
             this.state.formData &&
-            this.state.formData.map((data, index) => <li key={index}>
-              <Form formData={data} schema={this.props.schema.items}><br/></Form>
-              {this.props.addable ? <RemoveButton onClick={() => this.removeItem(index)}/> : null}
-            </li>)
+            this.state.formData.map(this.renderArrayItem)
           }
         </ol>
-      {this.props.addable ? <AddButton onClick={this.addItem}/> : null }
-    </div>;
-  }
+      {this.renderAddButton()}
+    </div>
+  )
 }
