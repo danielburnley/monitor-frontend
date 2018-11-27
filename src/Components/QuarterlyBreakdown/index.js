@@ -71,11 +71,11 @@ export default class QuarterlyBreakdown extends React.Component {
   }
 
   renderOptions = (options) => {
-    options.unshift("")
-    return (
+    return(
       options.map((value, index) => {
       return <option key={index}>{value}</option>
-    }));
+      })
+    )
   }
 
   renderDropdown = (key, value, v, index) => {
@@ -87,6 +87,7 @@ export default class QuarterlyBreakdown extends React.Component {
       onChange={e => this.onFieldChange(index, key, e.target.value)}
       disabled={v.readonly}
       >
+        <option></option>
         {this.renderOptions(v.enum)}
       </select>
     )
