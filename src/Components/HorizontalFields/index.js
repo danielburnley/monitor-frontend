@@ -41,6 +41,7 @@ export default class HorizontalFields extends React.Component {
       value={this.state[propertyName] || schema.default}
       data-test={`${propertyName}-input`}
     >
+      <option key="blank"></option>
       {schema.enum.map(optionValue => (
         <option key={optionValue}>{optionValue}</option>
       ))}
