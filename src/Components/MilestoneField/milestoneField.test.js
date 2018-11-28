@@ -1,4 +1,4 @@
-import WidgetStub from '../../../test/WidgetStub';
+import WidgetFake from '../../../test/WidgetFake';
 import React from 'react';
 import MilestoneComponent from '../../../test/MilestoneField';
 
@@ -17,7 +17,7 @@ describe("<MilestoneField>", () => {
         formData,
         onChangeSpy,
         schemaTitle,
-        WidgetStub
+        WidgetFake
       );
 
       it("displays the milestone description", () => {
@@ -46,7 +46,7 @@ describe("<MilestoneField>", () => {
         formData,
         onChangeSpy,
         schemaTitle,
-        WidgetStub
+        WidgetFake
       );
 
       it("displays the milestone description", () => {
@@ -76,7 +76,7 @@ describe("<MilestoneField>", () => {
         formData,
         onChangeSpy,
         schemaTitle,
-        WidgetStub
+        WidgetFake
       );
 
       it("Updates the values of the fields", () => {
@@ -111,7 +111,7 @@ describe("<MilestoneField>", () => {
         formData,
         onChangeSpy,
         schemaTitle,
-        WidgetStub
+        WidgetFake
       );
 
       it("Updates the values of the fields", () => {
@@ -152,7 +152,7 @@ describe("<MilestoneField>", () => {
         formData,
         onChangeSpy,
         schemaTitle,
-        WidgetStub
+        WidgetFake
       );
 
       it("displays the status against last return", () => {
@@ -190,7 +190,7 @@ describe("<MilestoneField>", () => {
         formData,
         onChangeSpy,
         schemaTitle,
-        WidgetStub
+        WidgetFake
       );
 
       it("displays the status against last return", () => {
@@ -230,7 +230,7 @@ describe("<MilestoneField>", () => {
         formData,
         onChangeSpy,
         schemaTitle,
-        WidgetStub
+        WidgetFake
       );
 
       it("updates the value of the status against last return", () => {
@@ -270,7 +270,7 @@ describe("<MilestoneField>", () => {
         formData,
         onChangeSpy,
         schemaTitle,
-        WidgetStub
+        WidgetFake
       );
 
       it("updates the value of the status against last return", () => {

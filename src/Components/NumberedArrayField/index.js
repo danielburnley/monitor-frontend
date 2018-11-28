@@ -49,9 +49,17 @@ export default class NumberedArrayField extends React.Component {
     }
   }
 
+  generateArrayItemKey = (index) => (
+    (index+1)*2654435761*this.state.formData.length&0xFFFFFFFF
+  )
+
   renderArrayItem = (data, index) => (
-    <li key={index*this.state.formData.length}>
-      <Form formData={data} schema={this.props.schema.items} onChange={(e) => this.onChildFormChange(index, e.formData)}><br/></Form>
+    <li key={this.generateArrayItemKey(index)}>
+      <this.props.registry.fields.SchemaField
+        formData={data}
+        schema={this.props.schema.items}
+        onChange={(e) => this.onChildFormChange(index, e)}
+      />
       {this.renderRemoveButton(index)}
     </li>
   )
