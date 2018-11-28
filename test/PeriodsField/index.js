@@ -53,8 +53,8 @@ export default class Periods {
     this.page.find('[data-test="add-button"]').simulate('click');
   }
 
-  numberOfRemoveButton() {
-    return this.page.find('[data-test="remove-button"]').length;
+  removeButton() {
+    return this.page.find('[data-test="remove-button-0"]').length;
   }
 
   pressRemove() {
