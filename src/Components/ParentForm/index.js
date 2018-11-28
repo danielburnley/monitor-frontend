@@ -99,6 +99,7 @@ export default class ParentForm extends React.Component {
       <Sidebar
         items={items}
         selectedFormItemIndex={this.state.selectedFormItemIndex}
+        selectedFormSection={this.state.selectedFormSection}
         onItemClick={(section, index) => {
           let jump_to_id;
           if (this.selectedSchema().type === "object") {

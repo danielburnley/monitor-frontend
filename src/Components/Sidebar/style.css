@@ -12,7 +12,12 @@
   cursor: pointer;
 }
 
-.selected {
+.selected-header {
   color: #005ea5;
   text-decoration: underline;
+}
+
+.selected-item {
+  color: #005ea5;
+  font-weight: bold;
 }
