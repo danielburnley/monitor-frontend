@@ -101,12 +101,12 @@ export default class QuarterlyBreakdown extends React.Component {
           data-test={`${key}_${index}`}
           className="form-control"
           value={periodData[key]}
-          key={`${key}_${index}`}
+          key={`${key}_${index}_${periodData[key]}`}
           onChange={e => this.onFieldChange(index, key, e)}
           disabled={v.readonly}
         />
       );
-    } else if (v.enum) { 
+    } else if (v.enum) {
       return this.renderDropdown(key, periodData[key], v, index)
     } else {
       return (
