@@ -26,14 +26,14 @@ export default class NumberedArrayField extends React.Component {
   }
 
   renderRemoveButton = (index) => {
-    if (this.props.addable) {
+    if (this.props.schema.addable) {
       return <RemoveButton onClick={() => this.removeItem(index)}/>
     }
     return null;
   }
 
   renderAddButton = () => {
-    if (this.props.addable) {
+    if (this.props.schema.addable) {
       return <AddButton onClick={this.addItem}/>
     }
     return null;

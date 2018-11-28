@@ -46,9 +46,8 @@ describe("Numbered Array Field Financials", () => {
 
   it("Adds items", async () => {
     let wrapper = mount(<NumberedArrayField
-        addable={true}
         formData={ [{otherData: "Hello"}, {otherData: "There"}] }
-        schema={ {items: {type: "object", properties: {otherData: {type: "string"}}} }}
+        schema={ {addable: true, items: {type: "object", properties: {otherData: {type: "string"}}} }}
       />
     );
     await wrapper.update();
@@ -59,9 +58,8 @@ describe("Numbered Array Field Financials", () => {
   describe("Removes items", async () => {
     it("Example 1", async () => {
       let wrapper = mount(<NumberedArrayField
-          addable={true}
           formData={ [{otherData: "Hello"}, {otherData: "There"}] }
-          schema={ {items: {type: "object", properties: {otherData: {type: "string"}}} }}
+          schema={ {addable: true, items: {type: "object", properties: {otherData: {type: "string"}}} }}
         />
       );
       await wrapper.update();
@@ -73,9 +71,8 @@ describe("Numbered Array Field Financials", () => {
 
     it("Example 2", async () => {
       let wrapper = mount(<NumberedArrayField
-          addable={true}
           formData={ [{otherData: "Hello"}, {otherData: "There"}] }
-          schema={ {items: {type: "object", properties: {otherData: {type: "string"}}} }}
+          schema={ {addable: true, items: {type: "object", properties: {otherData: {type: "string"}}} }}
         />
       );
       await wrapper.update();
@@ -89,8 +86,7 @@ describe("Numbered Array Field Financials", () => {
   it("Displays no buttons if not addable", async () => {
     let wrapper = mount(<NumberedArrayField
         formData={ [{otherData: "Hello"}, {otherData: "There"}] }
-        schema={ {items: {type: "object", properties: {otherData: {type: "string"}}} }}
-        addable={false}
+        schema={ {addable: false, items: {type: "object", properties: {otherData: {type: "string"}}} }}
       />
     );
     await wrapper.update();
@@ -104,8 +100,7 @@ describe("Numbered Array Field Financials", () => {
 
       let wrapper = mount(<NumberedArrayField
           formData={ [{otherData: "Hello"}, {otherData: "There"}] }
-          schema={ {items: {type: "object", properties: {otherData: {type: "string"}}} }}
-          addable={false}
+          schema={ {addable: false, items: {type: "object", properties: {otherData: {type: "string"}}} }}
           onChange={onChangeSpy}
         />
       );
@@ -121,15 +116,14 @@ describe("Numbered Array Field Financials", () => {
 
       let wrapper = mount(<NumberedArrayField
           formData={ [{someData: "General"}, {someData: "Specific"}] }
-          schema={ {items: {type: "object", properties: {someData: {type: "string"}}} }}
-          addable={false}
+          schema={ {addable: false, items: {type: "object", properties: {someData: {type: "string"}}} }}
           onChange={onChangeSpy}
         />
       );
       await wrapper.update();
       wrapper.find("input#root_someData").at(1).simulate('change', {target: {value: "Generalised"}});
       await wait();
-      
+
       expect(onChangeSpy).toHaveBeenCalledWith([{someData: "General"},{someData: "Generalised"}]);
     });
   });
