@@ -94,6 +94,7 @@ export default class QuarterlyBreakdown extends React.Component {
   }
 
   renderInputField(key, periodData, index, v) {
+    let numberOfRows = Object.keys(this.state.data).length
     if (!periodData) return
     if (v.currency) {
       return (
@@ -101,7 +102,7 @@ export default class QuarterlyBreakdown extends React.Component {
           data-test={`${key}_${index}`}
           className="form-control"
           value={periodData[key]}
-          key={`${key}_${index}_${periodData[key]}`}
+          key={`${key}_${index}_${numberOfRows}`}
           onChange={e => this.onFieldChange(index, key, e)}
           disabled={v.readonly}
         />
