@@ -494,9 +494,10 @@ describe("<HorizontalFields>", () => {
         let dropdown = fields.find("[data-test='meow-input']");
         let options = dropdown.children();
 
-        expect(dropdown.children().length).toEqual(2);
-        expect(options.at(0).text()).toEqual("Cat");
-        expect(options.at(1).text()).toEqual("Kitten");
+        expect(dropdown.children().length).toEqual(3);
+        expect(options.at(0).text()).toEqual("");
+        expect(options.at(1).text()).toEqual("Cat");
+        expect(options.at(2).text()).toEqual("Kitten");
         expect(dropdown.props().value).toEqual("Cat");
       });
 
@@ -561,10 +562,11 @@ describe("<HorizontalFields>", () => {
         let dropdown = fields.find("[data-test='woof-input']");
         let options = dropdown.children();
 
-        expect(dropdown.children().length).toEqual(3);
-        expect(options.at(0).text()).toEqual("Dog");
-        expect(options.at(1).text()).toEqual("Pupper");
-        expect(options.at(2).text()).toEqual("Puppy");
+        expect(dropdown.children().length).toEqual(4);
+        expect(options.at(0).text()).toEqual("");
+        expect(options.at(1).text()).toEqual("Dog");
+        expect(options.at(2).text()).toEqual("Pupper");
+        expect(options.at(3).text()).toEqual("Puppy");
         expect(dropdown.props().value).toEqual("Pupper");
       });
 
