@@ -115,6 +115,7 @@ export default class QuarterlyBreakdown extends React.Component {
         data-test={`${key}_${index}`}
         className="form-control"
         value={periodData[key]}
+        key={`${key}_${index}_${numberOfRows}`}
         onChange={e => this.onFieldChange(index, key, e.target.value)}
         disabled={v.readonly}
       />
@@ -139,7 +140,7 @@ export default class QuarterlyBreakdown extends React.Component {
 
   renderRemoveButton(index) {
     if (this.props.schema.addable) {
-      return <div className="remove"><RemoveButton onClick={() => this.removeEvent(index)} /></div>;
+      return <div className="remove"><RemoveButton onClick={() => this.removeEvent(index)} index={index}/></div>;
     }
     return null;
   }
