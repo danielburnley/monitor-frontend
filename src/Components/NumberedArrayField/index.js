@@ -39,15 +39,24 @@ export default class NumberedArrayField extends React.Component {
     return null;
   }
 
+  onChildFormChange = async (index, value) => {
+    let formData = this.state.formData;
+    formData[index] = value;
+
+    await this.setState({ formData });
+    if (this.props.onChange) {
+      this.props.onChange(formData)
+    }
+  }
+
   renderArrayItem = (data, index) => (
-    <li key={index}>
-      <Form formData={data} schema={this.props.schema.items}><br/></Form>
+    <li key={index*this.state.formData.length}>
+      <Form formData={data} schema={this.props.schema.items} onChange={(e) => this.onChildFormChange(index, e.formData)}><br/></Form>
       {this.renderRemoveButton(index)}
     </li>
   )
 
   render = () => (
-    //Switch away from index to an key based on contents or something
     <div>
         <ol>
           {
