@@ -6,8 +6,36 @@ export default class ReturnForm extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {formData: props.data};
+    this.state = {
+      formData: props.data,
+      userRole: this.props.getRole.execute().role
+    };
   }
+
+  renderSubmitButton = () => {
+    if (this.state.userRole === "Local Authority") {
+      return null;
+    }
+
+    return (<button
+      className="btn btn-primary form-button"
+      data-test="submit-return-button"
+      onClick={() => this.props.onSubmit(this.state.formData)}>
+      Submit Return
+    </button>);
+  };
+
+  renderDisabledSubmitButton = () => {
+    if (this.state.userRole === "Local Authority") {
+      return null;
+    }
+
+    return (<button
+      className="btn form-button disabled"
+      data-test="disabled-submit-return-button">
+      Submit Return
+    </button>);
+  };
 
   renderActions = () => {
     if (this.props.status === 'Submitted') {
@@ -35,15 +63,12 @@ export default class ReturnForm extends React.Component {
             data-test="disabled-save-return-button">
             Save Draft
           </button>
-          <button
-            className="btn form-button disabled"
-            data-test="disabled-submit-return-button">
-            Submit Return
-          </button>
+          {this.renderDisabledSubmitButton()}
         </div>
       );
     }
-
+    
+    
     return (
       <div className="col-md-offset-3 col-md-9 return-actions">
         <button
@@ -52,14 +77,9 @@ export default class ReturnForm extends React.Component {
           onClick={() => this.props.onSave(this.state.formData)}>
           Save Draft
         </button>
-        <button
-          className="btn btn-primary form-button"
-          data-test="submit-return-button"
-          onClick={() => this.props.onSubmit(this.state.formData)}>
-          Submit Return
-        </button>
+        {this.renderSubmitButton()}
       </div>
-    );
+    )
   };
 
   onFormChange = ({formData}) => {
@@ -78,6 +98,7 @@ export default class ReturnForm extends React.Component {
           formData={this.state.formData}
           onChange={this.onFormChange}
           documentGateway={this.props.documentGateway}
+          getRole={this.props.getRole}
           >
         </ParentForm>
       </div>

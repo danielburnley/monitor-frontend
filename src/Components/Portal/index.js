@@ -19,9 +19,6 @@ export default class Portal extends React.Component {
       return <div>Loading</div>
     } else {
       if (this.state.apiKey.valid) {
-        if (this.props.onApiKey) {
-          this.props.onApiKey(this.state.apiKey.apiKey)
-        }
         return this.props.children
       } else {
         return <GetToken projectId={this.props.projectId} targetUrl={window.location.href} requestToken={this.props.requestToken}/>

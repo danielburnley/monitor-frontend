@@ -11,8 +11,9 @@ async function updateFormField(input, value) {
   await wait();
 }
 
-function saveReturn(form) {
+async function saveReturn(form) {
   form.find('[data-test="save-return-button"]').simulate("click");
+  await wait();
 }
 
 function createReturn(form) {
@@ -45,6 +46,61 @@ describe("<ReturnForm>", () => {
   };
   let initialData = { cats: { details: { noise: "Meow" } } };
 
+  describe("Hiding submit button", () => {
+    describe("When role is Local Authority", () => {
+      let getRoleUseCaseSpy, documentGatewayDummy, wrapper
+      beforeEach(()=> {
+         getRoleUseCaseSpy = {execute: jest.fn(()=> ({role: "Local Authority"}))}
+         documentGatewayDummy = jest.fn();
+         wrapper = shallow(
+          <ReturnForm
+            documentGateway={documentGatewayDummy}
+            data={initialData}
+            schema={formSchema}
+            onSave={() => {}}
+            onSubmit={() => {}}
+            status="Draft"
+            getRole={getRoleUseCaseSpy}
+          />
+        );
+      })
+      it("calls the get role use case", () => {
+        wrapper.update()
+        expect(getRoleUseCaseSpy.execute).toBeCalled()
+      })
+      it("Hides the submit button", () => {
+        wrapper.update();
+
+        expect(wrapper.find('[data-test="disabled-submit-return-button"]').length).toEqual(0)
+        expect(wrapper.find('[data-test="submit-return-button"]').length).toEqual(0)
+
+        expect(wrapper.find('[data-test="disabled-save-return-button"]').length).toEqual(0)
+        expect(wrapper.find('[data-test="save-return-button"]').length).toEqual(1)
+      });
+
+      it("Hides the disabled submit button", () => {
+        wrapper = shallow(
+          <ReturnForm
+            documentGateway={documentGatewayDummy}
+            data={initialData}
+            schema={formSchema}
+            onSave={() => {}}
+            onSubmit={() => {}}
+            status="Updating"
+            getRole={getRoleUseCaseSpy}
+          />
+        );
+
+        wrapper.update();
+
+        expect(wrapper.find('[data-test="disabled-submit-return-button"]').length).toEqual(0)
+        expect(wrapper.find('[data-test="submit-return-button"]').length).toEqual(0)
+
+        expect(wrapper.find('[data-test="disabled-save-return-button"]').length).toEqual(1)
+        expect(wrapper.find('[data-test="save-return-button"]').length).toEqual(0)
+      });
+    })
+  })
   it("Passes the documentGateway to the parentForm", () => {
     let documentGatewayDummy = jest.fn();
     let wrapper = shallow(
@@ -54,6 +110,7 @@ describe("<ReturnForm>", () => {
         schema={formSchema}
         onSubmit={() => {}}
         status="Draft"
+        getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
       />
     );
 
@@ -70,6 +127,7 @@ describe("<ReturnForm>", () => {
         schema={formSchema}
         onSubmit={submitSpy}
         status="Draft"
+        getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
       />
     );
 
@@ -87,6 +145,7 @@ describe("<ReturnForm>", () => {
         schema={formSchema}
         onCreate={createSpy}
         status="New"
+        getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
       />
     );
 
@@ -104,6 +163,7 @@ describe("<ReturnForm>", () => {
         schema={formSchema}
         onSave={saveSpy}
         status="Draft"
+        getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
       />
     );
 
@@ -124,6 +184,7 @@ describe("<ReturnForm>", () => {
         onSave={saveSpy}
         onChange={changeSpy}
         status="Draft"
+        getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
       />
     );
     await wait();
@@ -136,7 +197,7 @@ describe("<ReturnForm>", () => {
   it("Calls the onSave function with the updated formData when edited", async () => {
     let saveSpy = jest.fn();
     let wrapper = mount(
-      <ReturnForm data={initialData} schema={formSchema} onSave={saveSpy} />
+      <ReturnForm data={initialData} schema={formSchema} onSave={saveSpy} getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}/>
     );
     let input = wrapper.find('input[type="text"]');
     await updateFormField(input, "New Meow");
@@ -148,7 +209,7 @@ describe("<ReturnForm>", () => {
 
   it("Displays no buttons if the return is submitted", () => {
     let wrapper = mount(
-      <ReturnForm data={initialData} schema={formSchema} status="Submitted" />
+      <ReturnForm data={initialData} schema={formSchema} status="Submitted" getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}/>
     );
 
     let actions = wrapper.find("button");
@@ -158,7 +219,7 @@ describe("<ReturnForm>", () => {
 
   it("Displays the create button if the return is new", () => {
     let wrapper = mount(
-      <ReturnForm data={initialData} schema={formSchema} status="New" />
+      <ReturnForm data={initialData} schema={formSchema} status="New" getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}} />
     );
 
     let actions = wrapper.find('[data-test="create-return-button"]');

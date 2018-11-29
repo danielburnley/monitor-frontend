@@ -1,5 +1,5 @@
-import GenerateReadOnlySchema from '../../UseCase/GenerateReadOnlySchema';
 import GenerateUISchema from '../../UseCase/GenerateUISchema';
+import GenerateDisabledSchema from '../../UseCase/GenerateDisabledUISchema';
 import React from 'react';
 import ReturnPage from '.';
 
@@ -36,7 +36,7 @@ storiesOf('ReturnPage', module)
       <ReturnPage
         match={{ params: { projectId: 1, returnId: 1 } }}
         generateUISchema={new GenerateUISchema()}
-        generateSubmittedSchema={new GenerateReadOnlySchema()}
+        generateSubmittedSchema={new GenerateDisabledSchema()}
         history={[]}
         createReturn={{execute: (presenter, request) => {presenter.creationSuccessful(1);}}}
         submitReturn={{execute: (presenter, request) => {presenter.submissionSuccessful(1);}}}
@@ -113,7 +113,6 @@ storiesOf('ReturnPage', module)
       <ReturnPage
         match={{ params: { projectId: 1, returnId: 1 } }}
         generateUISchema={new GenerateUISchema()}
-        generateSubmittedSchema={new GenerateReadOnlySchema()}
         history={[]}
         createReturn={{execute: async (presenter, request) => {presenter.creationSuccessful(1);}}}
         submitReturn={{execute: async (presenter, request) => {presenter.submissionSuccessful(1);}}}
@@ -191,7 +190,7 @@ storiesOf('ReturnPage', module)
         <ReturnPage
           match={{ params: { projectId: 1, returnId: 1 } }}
           generateUISchema={new GenerateUISchema()}
-          generateSubmittedSchema={new GenerateReadOnlySchema()}
+          generateSubmittedSchema={new GenerateDisabledSchema()}
           history={[]}
           validateReturn={{execute: (presenter, formData) => {presenter.invalidateFields([['cat','catHouse'],['dog','dogHouse']])}}}
           createReturn={{execute: (presenter, request) => {presenter.creationSuccessful(1);}}}

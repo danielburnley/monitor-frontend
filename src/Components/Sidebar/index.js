@@ -3,29 +3,47 @@ import PropTypes from "prop-types";
 import "./style.css";
 
 export default class Sidebar extends React.Component {
-  renderChildren(children) {
+
+  renderChildren(children, selectedIndex) {
     return Object.entries(children).map(([key, value]) => (
       <li key={key} data-test="sidebar-item-child">
         <a
-          className="sidebar-item"
+          className={this.selectedChildStyling(key, selectedIndex)}
           onClick={_ => this.props.onItemClick(value.subSection, value.index)}
           data-test="sidebar-item-child-button"
-        >
+          >
           {value.title}
         </a>
       </li>
     ));
   }
 
+  selectedChildStyling(key, selectedIndex) {
+    if (
+      this.props.selectedFormSection === key &&
+      selectedIndex === this.props.selectedFormItemIndex
+    ) {
+      return "selected-item";
+    } else {
+      return "sidebar-item";
+    }
+  }
+
   renderSidebarItem(item, key) {
-    if(parseInt(key, 10) === this.props.selectedFormItemIndex) {
+    if (parseInt(key, 10) === this.props.selectedFormItemIndex) {
       return (
         <React.Fragment>
-          <span className="sidebar-parent selected" data-test="sidebar-item-button">
+          <span
+            className="sidebar-parent selected-header"
+            data-test="sidebar-item-button"
+          >
             {item.title}
           </span>
           <ul data-test="sidebar-item-children">
-            {this.renderChildren(item.children)}
+            {this.renderChildren(
+              item.children,
+              this.props.selectedFormItemIndex
+            )}
           </ul>
         </React.Fragment>
       );
@@ -52,8 +70,6 @@ export default class Sidebar extends React.Component {
       );
     }
   }
-
-
 
   renderItems() {
     return Object.entries(this.props.items).map(([key, value]) => (

@@ -41,6 +41,7 @@ export default class HorizontalFields extends React.Component {
       value={this.state[propertyName] || schema.default}
       data-test={`${propertyName}-input`}
     >
+      <option key="blank"></option>
       {schema.enum.map(optionValue => (
         <option key={optionValue}>{optionValue}</option>
       ))}
@@ -69,6 +70,17 @@ export default class HorizontalFields extends React.Component {
           onChange={e => this.onChange(k, e)}
         />
       );
+    } else if (v.percentage) {
+      return (
+        <this.props.registry.widgets.percentage
+          id={k}
+          disabled={v.readonly}
+          data-test={`${k}-input`}
+          type={this.inputFieldType(v)}
+          value={this.state[k]}
+          onChange={e => this.onChange(k, e)}
+        />
+      )
     } else if (v.extendedText) {
       return (
         <textarea

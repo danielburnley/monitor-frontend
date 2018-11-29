@@ -69,8 +69,9 @@ describe("Numbered Array Field Financials", () => {
         />
       );
       await wrapper.update();
-      expect(wrapper.find('[data-test="remove-button"]').length).toEqual(2);
-      wrapper.find('[data-test="remove-button"]').at(1).simulate('click');
+      expect(wrapper.find('[data-test="remove-button-0"]').length).toEqual(1);
+      expect(wrapper.find('[data-test="remove-button-1"]').length).toEqual(1);
+      wrapper.find('[data-test="remove-button-1"]').simulate('click');
       expect(wrapper.find("input#root_otherData").length).toEqual(1);
       expect(wrapper.find("input#root_otherData").props().value).toEqual("Hello");
     });
@@ -83,8 +84,9 @@ describe("Numbered Array Field Financials", () => {
         />
       );
       await wrapper.update();
-      expect(wrapper.find('[data-test="remove-button"]').length).toEqual(2);
-      wrapper.find('[data-test="remove-button"]').at(0).simulate('click');
+      expect(wrapper.find('[data-test="remove-button-0"]').length).toEqual(1);
+      expect(wrapper.find('[data-test="remove-button-1"]').length).toEqual(1);
+      wrapper.find('[data-test="remove-button-0"]').simulate('click');
       expect(wrapper.find("input#root_otherData").length).toEqual(1);
       expect(wrapper.find("input#root_otherData").props().value).toEqual("There");
     });
@@ -99,7 +101,7 @@ describe("Numbered Array Field Financials", () => {
     );
     await wrapper.update();
     expect(wrapper.find('[data-test="add-button"]').length).toEqual(0);
-    expect(wrapper.find('[data-test="remove-button"]').length).toEqual(0);
+    expect(wrapper.find('[data-test="remove-button-0"]').length).toEqual(0);
   });
 
   describe("It calls onChange", () => {

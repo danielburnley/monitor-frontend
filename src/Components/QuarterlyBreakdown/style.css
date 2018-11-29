@@ -1,21 +1,24 @@
-.row {
+.line {
   margin-left: 5px;
   margin-right: 5px;
   margin-top: 8px;
   margin-bottom: 4px;
+  display: flex;
+  flex-direction: row;
 }
 
-.column {
+.data-column {
   padding-right: 7px;
   padding-left: 7px;
-  flex-grow: 1;
+  flex: 2 1 0;
 }
 .remove {
   float: left;
+  flex: 1 1 0;
 }
-.container {
-  display: flex;
-  flex-direction: row;
+
+.add {
+  margin-left: 20px;
 }
 
 .title {
@@ -25,21 +28,4 @@
 .header {
   font-weight: 700;
   white-space: nowrap;
-}
-
-
-@media (min-width: 1200px) {
-  .container {
-    width: 920px;
-  }
-}
-@media (min-width: 992px) {
-  .container {
-    width: 744px;
-    padding-left: 0px;
-  }
-  .row {
-    margin-left: 0px;
-    margin-right: 0px;
-  }
 }

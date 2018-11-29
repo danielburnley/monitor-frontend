@@ -1,4 +1,4 @@
-import GenerateReadOnlySchema from '../../UseCase/GenerateReadOnlySchema';
+import GenerateDisabledUISchema from '../../UseCase/GenerateDisabledUISchema';
 import GenerateUISchema from '../../UseCase/GenerateUISchema';
 import React from "react";
 import ReturnPage from ".";
@@ -123,14 +123,15 @@ describe('ReturnPage', () => {
       let wrap = mount(<ReturnPage
               validateReturn={validateReturnSpy}
               match={{ params: { projectId: 1, returnId: 1 } }}
-              generateUISchema={new GenerateUISchema()}
-              generateSubmittedSchema={new GenerateReadOnlySchema()}
+              generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
+              generateSubmittedSchema={new GenerateDisabledUISchema()}
               history={[]}
               createReturn={createReturnSpy}
               submitReturn={submitReturnSpy}
               updateReturn={unresolvingUpdateReturnStub}
               getReturn={new getSubmittedReturnStub()}
               getBaseReturn={new getBaseReturnStub()}
+              getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
             />);
       await wait();
 
@@ -155,8 +156,8 @@ describe('ReturnPage', () => {
       let wrap = shallow(<ReturnPage
               validateReturn={validateReturnSpy}
               match={{ params: { projectId: 1, returnId: 1 } }}
-              generateUISchema={new GenerateUISchema()}
-              generateSubmittedSchema={new GenerateReadOnlySchema()}
+              generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
+              generateSubmittedSchema={new GenerateDisabledUISchema()}
               history={[]}
               createReturn={createReturnSpy}
               submitReturn={submitReturnSpy}
@@ -164,6 +165,7 @@ describe('ReturnPage', () => {
               getReturn={new getReturnStub()}
               getBaseReturn={new getBaseReturnStub()}
               documentGateway={documentGatewayDummy}
+              getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
             />);
 
       await wait();
@@ -178,14 +180,15 @@ describe('ReturnPage', () => {
         let wrap = mount(<ReturnPage
                 validateReturn={validateReturnSpy}
                 match={{ params: { projectId: 1, returnId: 1 } }}
-                generateUISchema={new GenerateUISchema()}
-                generateSubmittedSchema={new GenerateReadOnlySchema()}
+                generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
+                generateSubmittedSchema={new GenerateDisabledUISchema()}
                 history={[]}
                 createReturn={createReturnSpy}
                 submitReturn={submitReturnSpy}
                 updateReturn={unresolvingUpdateReturnStub}
                 getReturn={new getReturnStub()}
                 getBaseReturn={new getBaseReturnStub()}
+                getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
               />);
         await wait();
 
@@ -209,14 +212,15 @@ describe('ReturnPage', () => {
         let wrap = mount(<ReturnPage
                 validateReturn={validateReturnSpy}
                 match={{ params: { projectId: 1, returnId: 1 } }}
-                generateUISchema={new GenerateUISchema()}
-                generateSubmittedSchema={new GenerateReadOnlySchema()}
+                generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
+                generateSubmittedSchema={new GenerateDisabledUISchema()}
                 history={[]}
                 createReturn={createReturnSpy}
                 submitReturn={submitReturnSpy}
                 updateReturn={unresolvingUpdateReturnStub}
                 getReturn={new getReturnStub()}
                 getBaseReturn={new getBaseReturnStub()}
+                getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
               />);
 
         let input = wrap.find("[type='text'] input").first();
@@ -237,14 +241,15 @@ describe('ReturnPage', () => {
           let wrap = mount(<ReturnPage
                   validateReturn={validateReturnSpy}
                   match={{ params: { projectId: 1, returnId: 1 } }}
-                  generateUISchema={new GenerateUISchema()}
-                  generateSubmittedSchema={new GenerateReadOnlySchema()}
+                  generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
+                  generateSubmittedSchema={new GenerateDisabledUISchema()}
                   history={[]}
                   createReturn={createReturnSpy}
                   submitReturn={submitReturnSpy}
                   updateReturn={updateReturnSpy}
                   getReturn={new getReturnStub()}
                   getBaseReturn={new getBaseReturnStub()}
+                  getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
                 />);
 
           let input = wrap.find("[type='text'] input").first();
@@ -262,14 +267,15 @@ describe('ReturnPage', () => {
           let wrap = mount(<ReturnPage
                   validateReturn={validateReturnSpy}
                   match={{ params: { projectId: 1, returnId: 1 } }}
-                  generateUISchema={new GenerateUISchema()}
-                  generateSubmittedSchema={new GenerateReadOnlySchema()}
+                  generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
+                  generateSubmittedSchema={new GenerateDisabledUISchema()}
                   history={[]}
                   createReturn={createReturnSpy}
                   submitReturn={submitReturnSpy}
                   updateReturn={updateReturnSpy}
                   getReturn={new getReturnStub('hif')}
                   getBaseReturn={new getBaseReturnStub('hif')}
+                  getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
                 />);
 
           let input = wrap.find("[type='text'] input").first();
@@ -288,14 +294,15 @@ describe('ReturnPage', () => {
         let wrap = mount(<ReturnPage
                 validateReturn={validateReturnSpy}
                 match={{ params: { projectId: 1, returnId: 1 } }}
-                generateUISchema={new GenerateUISchema()}
-                generateSubmittedSchema={new GenerateReadOnlySchema()}
+                generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
+                generateSubmittedSchema={new GenerateDisabledUISchema()}
                 history={[]}
                 createReturn={createReturnSpy}
                 submitReturn={submitReturnSpy}
                 updateReturn={updateReturnSpy}
                 getReturn={new getReturnStub()}
                 getBaseReturn={new getBaseReturnStub()}
+                getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
               />);
 
         let input = wrap.find("input[type='text']").first();
@@ -317,14 +324,15 @@ describe('ReturnPage', () => {
         let wrap = mount(<ReturnPage
                 validateReturn={validateReturnSpy}
                 match={{ params: { projectId: 1, returnId: 1 } }}
-                generateUISchema={new GenerateUISchema()}
-                generateSubmittedSchema={new GenerateReadOnlySchema()}
+                generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
+                generateSubmittedSchema={new GenerateDisabledUISchema()}
                 history={[]}
                 createReturn={createReturnSpy}
                 submitReturn={submitReturnSpy}
                 updateReturn={unresolvingUpdateReturnStub}
                 getReturn={new getReturnStub()}
                 getBaseReturn={new getBaseReturnStub()}
+                getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
               />);
 
         let input = wrap.find("[type='text'] input").first();
@@ -345,14 +353,15 @@ describe('ReturnPage', () => {
           let wrap = mount(<ReturnPage
                   validateReturn={validateReturnSpy}
                   match={{ params: { projectId: 9, returnId: 1 } }}
-                  generateUISchema={new GenerateUISchema()}
-                  generateSubmittedSchema={new GenerateReadOnlySchema()}
+                  generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
+                  generateSubmittedSchema={new GenerateDisabledUISchema()}
                   history={[]}
                   createReturn={createReturnSpy}
                   submitReturn={submitReturnSpy}
                   updateReturn={updateReturnSpy}
                   getReturn={new getReturnStub()}
                   getBaseReturn={new getBaseReturnStub()}
+                  getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
                 />);
 
           let input = wrap.find("[type='text'] input").first();
@@ -373,14 +382,15 @@ describe('ReturnPage', () => {
           let wrap = mount(<ReturnPage
                   validateReturn={validateReturnSpy}
                   match={{ params: { projectId: 9, returnId: 1 } }}
-                  generateUISchema={new GenerateUISchema()}
-                  generateSubmittedSchema={new GenerateReadOnlySchema()}
+                  generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
+                  generateSubmittedSchema={new GenerateDisabledUISchema()}
                   history={[]}
                   createReturn={createReturnSpy}
                   submitReturn={submitReturnSpy}
                   updateReturn={updateReturnSpy}
                   getReturn={new getReturnStub('hif')}
                   getBaseReturn={new getBaseReturnStub('hif')}
+                  getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
                 />);
 
           let input = wrap.find("[type='text'] input").first();
@@ -414,14 +424,15 @@ describe('ReturnPage', () => {
         let wrap = mount(<ReturnPage
                 validateReturn={validateReturnSpy}
                 match={{ params: { projectId: 1, returnId: 1 } }}
-                generateUISchema={new GenerateUISchema()}
-                generateSubmittedSchema={new GenerateReadOnlySchema()}
+                generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
+                generateSubmittedSchema={new GenerateDisabledUISchema()}
                 history={[]}
                 createReturn={createReturnSpy}
                 submitReturn={submitReturnSpy}
                 updateReturn={updateReturnSpy}
                 getReturn={new getReturnStub()}
                 getBaseReturn={new getBaseReturnStub()}
+                getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
               />);
 
         let input = wrap.find("[type='text'] input").first();
@@ -444,14 +455,15 @@ describe('ReturnPage', () => {
         let wrap = mount(<ReturnPage
                 validateReturn={validateReturnSpy}
                 match={{ params: { projectId: 1, returnId: 1 } }}
-                generateUISchema={new GenerateUISchema()}
-                generateSubmittedSchema={new GenerateReadOnlySchema()}
+                generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
+                generateSubmittedSchema={new GenerateDisabledUISchema()}
                 history={[]}
                 createReturn={createReturnSpy}
                 submitReturn={submitReturnSpy}
                 updateReturn={updateReturnSpy}
                 getReturn={new getReturnStub()}
                 getBaseReturn={new getBaseReturnStub()}
+                getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
               />);
 
         let input = wrap.find("[type='text'] input").first();
@@ -473,14 +485,15 @@ describe('ReturnPage', () => {
         let wrap = mount(<ReturnPage
                 validateReturn={() => {}}
                 match={{ params: { projectId: 1 } }}
-                generateUISchema={new GenerateUISchema()}
-                generateSubmittedSchema={new GenerateReadOnlySchema()}
+                generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
+                generateSubmittedSchema={new GenerateDisabledUISchema()}
                 history={[]}
                 createReturn={()=>{}}
                 submitReturn={()=>{}}
                 updateReturn={() => {}}
                 getReturn={new getReturnStub()}
                 getBaseReturn={new getBaseReturnStub()}
+                getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
               />);
         await wait();
 
@@ -495,13 +508,14 @@ describe('ReturnPage', () => {
         let wrap = mount(<ReturnPage
                 validateReturn={() => {}}
                 match={{ params: { projectId: 1, returnId: 1 } }}
-                generateUISchema={new GenerateUISchema()}
-                generateSubmittedSchema={new GenerateReadOnlySchema()}
+                generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
+                generateSubmittedSchema={new GenerateDisabledUISchema()}
                 history={[]}
                 createReturn={()=>{}}
                 submitReturn={()=>{}}
                 updateReturn={() => {}}
                 getReturn={new getReturnStub()}
+                getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
                 getBaseReturn={new getBaseReturnStub()}
               />);
         await wait();

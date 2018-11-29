@@ -19,8 +19,6 @@ import CreateReturn from "./UseCase/CreateReturn";
 import SubmitProject from "./UseCase/SubmitProject";
 import UpdateProject from "./UseCase/UpdateProject";
 import GenerateDisabledUISchema from "./UseCase/GenerateDisabledUISchema";
-import GenerateReadOnlySchema from "./UseCase/GenerateReadOnlySchema";
-import GenerateNewProjectUISchema from "./UseCase/GenerateNewProjectUISchema";
 import GenerateUISchema from "./UseCase/GenerateUISchema";
 import GetBaseReturn from "./UseCase/GetBaseReturn";
 import CanAccessProject from "./UseCase/CanAccessProject";
@@ -28,6 +26,7 @@ import GetProject from "./UseCase/GetProject";
 import GetReturn from "./UseCase/GetReturn";
 import GetReturns from "./UseCase/GetReturns"
 import SubmitReturn from "./UseCase/SubmitReturn";
+import GetRole from "./UseCase/GetRole";
 import UpdateReturn from "./UseCase/UpdateReturn";
 import RequestToken from "./UseCase/RequestToken";
 import ValidateReturn from "./UseCase/ValidateReturn";
@@ -44,27 +43,28 @@ import ShowCookieConsent from "./UseCase/ShowCookieConsent";
 
 import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import CookieUserRole from "./Gateway/CookieUserRole";
 
 const locationGateway = new LocationGateway(window.location);
 const tokenGateway = new TokenGateway();
 const cookieConsentGateway = new CookieConsentGateway();
 const showCookieConsent = new ShowCookieConsent(cookieConsentGateway);
 const apiKeyGateway = new CookieApiKey();
+const userRoleGateway = new CookieUserRole();
 const projectGateway = new ProjectGateway(apiKeyGateway, locationGateway);
 const returnGateway = new ReturnGateway(apiKeyGateway, locationGateway);
 const documentGateway = new DocumentGateway(document)
+const getRole = new GetRole(userRoleGateway);
 const validateReturnUseCase = new ValidateReturn(returnGateway);
 const validateProjectUseCase = new ValidateProject(projectGateway);
 const createReturnUseCase = new CreateReturn(returnGateway);
 const submitProjectUseCase = new SubmitProject(projectGateway);
 const generateDisabledUISchema = new GenerateDisabledUISchema();
-const generateReadOnlySchema = new GenerateReadOnlySchema();
-const generateUISchema = new GenerateUISchema();
-const generateNewProjectUISchema = new GenerateNewProjectUISchema(generateUISchema, generateReadOnlySchema);
+const generateUISchema = new GenerateUISchema(userRoleGateway);
 const getBaseReturnUseCase = new GetBaseReturn(returnGateway);
 const getProjectUseCase = new GetProject(projectGateway);
 const getReturnUseCase = new GetReturn(returnGateway);
-const canAccessProjectUseCase = new CanAccessProject(tokenGateway, apiKeyGateway, projectGateway);
+const canAccessProjectUseCase = new CanAccessProject(tokenGateway, apiKeyGateway, userRoleGateway, projectGateway);
 const getReturnsUseCase = new GetReturns(returnGateway);
 const requestTokenUseCase = new RequestToken(tokenGateway);
 const submitReturnUseCase = new SubmitReturn(returnGateway);
@@ -81,6 +81,7 @@ const renderReturnPage = props => (
     submitReturn={submitReturnUseCase}
     updateReturn={updateReturnUseCase}
     generateUISchema={generateUISchema}
+    getRole={getRole}
     generateSubmittedSchema={generateDisabledUISchema}
     documentGateway={documentGateway}
   />
@@ -132,6 +133,7 @@ const renderNewProjectPage = (props, projectStatus, formData, formSchema, projec
     updateProject={updateProjectUseCase}
     validateProject={validateProjectUseCase}
     documentGateway={documentGateway}
+    userRole={getRole}
   />
 );
 
@@ -157,7 +159,7 @@ const renderSubmittedProjectPage = (props, formData, formSchema) => (
 );
 
 const renderProjectPage = props => (
-  <ProjectPage {...props} getProject={getProjectUseCase} generateUISchema={generateNewProjectUISchema} >
+  <ProjectPage {...props} getProject={getProjectUseCase} generateUISchema={generateUISchema} >
     {({ projectStatus, formData, formSchema, projectType, formUiSchema }) => {
       if (projectStatus === "Draft" || projectStatus === "LA Draft") {
         return renderNewProjectPage(props, projectStatus, formData, formSchema, projectType, formUiSchema);

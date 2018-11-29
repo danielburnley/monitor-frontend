@@ -5,6 +5,7 @@ import { mount } from "enzyme";
 
 class CurrencyStub extends WidgetFake { datatest = "currency-stub"; }
 class SecondCurrencyStub extends WidgetFake { datatest = "second-currency-stub"; }
+class PercentageStub extends WidgetFake { datatest = "percentage-stub"; }
 
 describe("<HorizontalFields>", () => {
   let schema, fields, formData, onChangeSpy, registrySpy;
@@ -83,6 +84,84 @@ describe("<HorizontalFields>", () => {
           .simulate("change", { target: { value: "Another Meow" } });
 
         expect(onChangeSpy).toHaveBeenCalledWith({ meow: "Another Meow" });
+      });
+    });
+  });
+
+  describe("Given a percentage widget", () => {
+    describe("Example 1", () => {
+      beforeEach(() => {
+        registrySpy = {
+          widgets: {
+            percentage: PercentageStub
+          }
+        }
+        schema = {
+          title: "Monkeys",
+          properties: {
+            proportion: { percentage: true, type: "text", title: "How many monkeys" }
+          }
+        };
+        formData = { proportion: "87" };
+        onChangeSpy = jest.fn();
+        fields = mount(
+          <HorizontalFields
+            registry={registrySpy}
+            schema={schema}
+            formData={formData}
+            onChange={onChangeSpy}
+          />
+        );
+      });
+
+      it("Renders the percentage component from the registry", () => {
+        expect(fields.find('[data-test="percentage-stub"]').length).toEqual(1)
+      });
+
+      it("Calls the onChange method passed in with the form data", () => {
+        fields
+          .find("input[data-test='percentage-stub']")
+          .simulate("change", { target: { value: "56" } });
+
+        expect(onChangeSpy).toHaveBeenCalledWith({ proportion: "56" });
+      });
+    });
+
+    describe("Example 2", () => {
+      beforeEach(() => {
+        registrySpy = {
+          widgets: {
+            percentage: PercentageStub
+          }
+        }
+        schema = {
+          title: "Gorillas",
+          properties: {
+            monkeys: { percentage: true, type: "text", title: "Are Monkeys Gorillas?" }
+          }
+        };
+        formData = { monkeys: "yes" };
+        onChangeSpy = jest.fn();
+        fields = mount(
+          <HorizontalFields
+            registry={registrySpy}
+            schema={schema}
+            formData={formData}
+            onChange={onChangeSpy}
+          />
+        );
+      });
+
+      it("Renders the percentage component from the registry", () => {
+        expect(fields.find('[data-test="percentage-stub"]').length).toEqual(1)
+      });
+
+      it("Calls the onChange method passed in with the form data", () => {
+        fields
+          .find("input[data-test='percentage-stub']")
+          .simulate("change", { target: { value: "No" } });
+
+        expect(onChangeSpy).toHaveBeenCalledWith({ monkeys: "No" });
       });
     });
   });
@@ -415,9 +494,10 @@ describe("<HorizontalFields>", () => {
         let dropdown = fields.find("[data-test='meow-input']");
         let options = dropdown.children();
 
-        expect(dropdown.children().length).toEqual(2);
-        expect(options.at(0).text()).toEqual("Cat");
-        expect(options.at(1).text()).toEqual("Kitten");
+        expect(dropdown.children().length).toEqual(3);
+        expect(options.at(0).text()).toEqual("");
+        expect(options.at(1).text()).toEqual("Cat");
+        expect(options.at(2).text()).toEqual("Kitten");
         expect(dropdown.props().value).toEqual("Cat");
       });
 
@@ -482,10 +562,11 @@ describe("<HorizontalFields>", () => {
         let dropdown = fields.find("[data-test='woof-input']");
         let options = dropdown.children();
 
-        expect(dropdown.children().length).toEqual(3);
-        expect(options.at(0).text()).toEqual("Dog");
-        expect(options.at(1).text()).toEqual("Pupper");
-        expect(options.at(2).text()).toEqual("Puppy");
+        expect(dropdown.children().length).toEqual(4);
+        expect(options.at(0).text()).toEqual("");
+        expect(options.at(1).text()).toEqual("Dog");
+        expect(options.at(2).text()).toEqual("Pupper");
+        expect(options.at(3).text()).toEqual("Puppy");
         expect(dropdown.props().value).toEqual("Pupper");
       });
 
