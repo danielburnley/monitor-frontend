@@ -20,54 +20,44 @@ export default class QuarterlyBreakdown extends React.Component {
     });
   }
 
-  renderData() {
-    let quarterlyObject = this.props.schema.items.properties;
-    if(this.props.schema.addable){
-      quarterlyObject.remove = { title: "Remove", type: "string" };
-    }
-    return Object.entries(quarterlyObject).map(([key, v]) => {
-      if (!v.hidden) {
-        return (
-          <div className="col-xs-2 column" key={`${key}_col`}>
-            {this.renderHeader(v, key)}
-            {this.renderPeriods(key, v)}
-          </div>
-        );
-      }
-      return null;
-    });
-  }
-
-  renderHeader(v, key) {
-    return (
-      <div className="row header" key={`${key}`} data-test={`${key}_title`}>
-        {v.title}
-      </div>
-    );
-  }
-
-  renderPeriods(key, v) {
+  renderData = (quarterlyObject) => {
     return this.state.data.map((value, index) => {
       return (
-        <div className="row" key={`row_${index}`}>
-          {this.renderPeriodsInternal(key, value, index, v)}
+        <div className="line" key={`${index}`}>
+          {this.renderPeriod(quarterlyObject, value, index)}
         </div>
-      );
-    });
+      )
+    })
   }
 
-  renderPeriodsInternal(key, value, index, v) {
-    if (key !== "remove") {
-      return (
-        <div className="row" key={`row_${index}`}>
-          {this.renderInputField(key, value, index, v)}
+  renderPeriod = (quarterlyObject, value, index) => {
+    return Object.entries(quarterlyObject).map(([key, schema])=> {
+      if (key !== "remove") {
+        return ( 
+          <div className="data-column" key={`${index}_${key}`}>
+            {value && this.renderInputField(key, value, index, schema)}
+          </div>
+        )
+      } else {
+        return (
+          <div className="remove" key={`${index}_${key}`}>
+            {this.renderRemoveButton(index)}
+          </div>
+        )
+      }
+    })
+  }
+
+  renderHeaders = (quarterlyObject) => {
+    let column_class = "data-column"
+    return Object.entries(quarterlyObject).map(([key, value])=> {
+      if (key === "remove") column_class = "remove";
+      return ( 
+        <div className={`header ${column_class}`} key={`${key}`} data-test={`${key}_title`}>
+          {value.title}
         </div>
-      );
-    } else {
-      return (
-        <div key={`remove_${index}`}>{this.renderRemoveButton(index)}</div>
-      );
-    }
+      )
+    });
   }
 
   renderOptions = (options) => {
@@ -113,6 +103,7 @@ export default class QuarterlyBreakdown extends React.Component {
       return (
         <input
         data-test={`${key}_${index}`}
+        key={`${key}_${index}`}
         className="form-control"
         value={periodData[key]}
         key={`${key}_${index}_${numberOfRows}`}
@@ -127,7 +118,7 @@ export default class QuarterlyBreakdown extends React.Component {
     if (!this.props.schema.addable) {
       return null;
     }
-    return <AddButton onClick={() => this.addEvent()} />;
+    return <div className="data-column"><AddButton onClick={() => this.addEvent()} /></div>;
   }
 
   addEvent() {
@@ -155,14 +146,18 @@ export default class QuarterlyBreakdown extends React.Component {
   }
 
   render() {
-    return (
-      <div>
-        <div data-test="title" className="title">
-          <h4>{this.props.schema.title}</h4>
-        </div>
-        <div className="row container">{this.renderData()}</div>
-        {this.renderAddButton()}
+    let quarterlyObject = this.props.schema.items.properties;
+
+    if(this.props.schema.addable){
+      quarterlyObject.remove = { title: "Remove", type: "string" };
+    }
+    return <div>
+      <div data-test="title" className="title">
+        <h4>{this.props.schema.title}</h4>
       </div>
-    );
+      <div className="line">{this.renderHeaders(quarterlyObject)}</div>
+      <div>{this.renderData(quarterlyObject)}</div>
+      <div className="line">{this.renderAddButton()}</div>
+    </div>
   }
 }
