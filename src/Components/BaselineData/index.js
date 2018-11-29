@@ -97,6 +97,7 @@ export default class BaselineData extends React.Component {
   };
 
   render() {
+    console.log(this.props.schema)
     return (
       <div className="panel panel-default">
         <div className="panel-heading">

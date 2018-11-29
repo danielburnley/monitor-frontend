@@ -14,6 +14,7 @@ import ReturnPage from "./Components/ReturnPage";
 import Portal from "./Components/Portal";
 import NotFound from "./Components/NotFound";
 import CookieConsent from "./Components/CookieConsent";
+import PrintReturn from "./Components/PrintReturn";
 
 import CreateReturn from "./UseCase/CreateReturn";
 import SubmitProject from "./UseCase/SubmitProject";
@@ -185,6 +186,17 @@ const renderBaselinePage = props => (
   </ProjectPage>
 );
 
+const renderPrintPage = props => (
+   <PrintReturn {...props} getReturn={getReturnUseCase} >
+    {({schema, data}) => (
+      <div>
+        <BaselineData formData={data} schema={schema} />
+      </div>
+    )}
+   </PrintReturn>
+);
+
+
 const App = () => (
   <Router>
     <div className="app-container">
@@ -229,6 +241,11 @@ const App = () => (
                   exact
                   path="/project/:projectId/return/:returnId"
                   render={renderReturnPage}
+                />
+                <Route 
+                  exact
+                  path="/project/:projectId/return/:returnId/print"
+                  render={renderPrintPage}
                 />
               </Portal>
             )}

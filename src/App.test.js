@@ -364,6 +364,38 @@ describe('Submitting a draft project', () => {
   });
 });
 
+describe("Printing a return", () => {
+  let api;
+  beforeEach(() => {
+    process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
+    api = new APISimulator("http://cat.meow");
+  });
+
+  afterEach(()=> {
+    nock.cleanAll();
+  })
+
+  xit("Renders the return data", async () => {
+    let data = {
+      cat: "meow",
+      dog: "woof"
+    }
+    let schema = {
+      type: "object",
+      properties: {
+        cat: {type: "string"},
+        dog: {type: "string"}
+      }
+    }
+    api.getReturn(data, schema).successfully();
+
+    let page = new AppPage("/project/0/return/1/print");
+    await page.load();
+
+    expect(page.find('PrintReturn').length).toEqual(1)
+  });
+});
+
 describe("Page not found", () => {
   it("Renders a 404 page", async () => {
     let page = new AppPage("/non-existent");
