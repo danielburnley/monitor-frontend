@@ -50,7 +50,7 @@ export default class NumberedArrayField extends React.Component {
   }
 
   generateArrayItemKey = (index) => (
-    (index+1)*2654435761*this.state.formData.length&0xFFFFFFFF
+    `${index}-${this.state.formData.length}`
   )
 
   renderArrayItem = (data, index) => (
