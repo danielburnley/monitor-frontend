@@ -70,7 +70,7 @@ export default class PeriodsField extends React.Component {
     if (!this.props.schema.addable) {
       return null;
     }
-    return <RemoveButton onClick={() => this.removeEvent(index)} />;
+    return <RemoveButton onClick={() => this.removeEvent(index)} index={index} />;
   }
 
   addEvent() {

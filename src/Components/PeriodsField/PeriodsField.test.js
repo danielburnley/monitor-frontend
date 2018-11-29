@@ -49,7 +49,7 @@ describe("Period Financials", () => {
       });
 
       it("Does not display a remove button", () => {
-        expect(periods.numberOfRemoveButton()).toEqual(0);
+        expect(periods.removeButton()).toEqual(0);
       });
     });
     describe("Example 2", () => {
@@ -97,7 +97,7 @@ describe("Period Financials", () => {
       });
 
       it("Does not display a remove button", () => {
-        expect(periods.numberOfRemoveButton()).toEqual(0);
+        expect(periods.removeButton()).toEqual(0);
       });
     });
   });
@@ -159,7 +159,7 @@ describe("Period Financials", () => {
       });
 
       it("Displays a remove button", () => {
-        expect(periods.numberOfRemoveButton()).toEqual(2);
+        expect(periods.removeButton()).toEqual(1);
       });
     });
 
@@ -225,7 +225,7 @@ describe("Period Financials", () => {
       });
 
       it("Displays a remove button", () => {
-        expect(periods.numberOfRemoveButton()).toEqual(3);
+        expect(periods.removeButton()).toEqual(1);
       });
     });
   });

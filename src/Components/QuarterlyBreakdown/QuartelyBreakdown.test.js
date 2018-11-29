@@ -185,7 +185,7 @@ describe("Quarterly Breakdown", () => {
       });
 
       it("Does not render a remove button", () => {
-        expect(field.find('[data-test="remove-button"]').length).toEqual(0);
+        expect(field.find('[data-test="remove-button-0"]').length).toEqual(0);
       });
     });
 
@@ -309,7 +309,7 @@ describe("Quarterly Breakdown", () => {
       });
 
       it("Does not render a remove button", () => {
-        expect(field.find('[data-test="remove-button"]').length).toEqual(0);
+        expect(field.find('[data-test="remove-button-0"]').length).toEqual(0);
       });
     });
   });
@@ -380,7 +380,7 @@ describe("Quarterly Breakdown", () => {
       });
 
       it("renders a remove button", () => {
-        expect(field.find('[data-test="remove-button"]').length).toEqual(2);
+        expect(field.find('[data-test="remove-button-0"]').length).toEqual(1);
       });
     });
 
@@ -449,7 +449,7 @@ describe("Quarterly Breakdown", () => {
       });
 
       it("renders a remove button", () => {
-        expect(field.find('[data-test="remove-button"]').length).toEqual(2);
+        expect(field.find('[data-test="remove-button-0"]').length).toEqual(1);
       });
     });
   });
@@ -500,7 +500,7 @@ describe("Quarterly Breakdown", () => {
       });
 
       it("does not render a remove button", () => {
-        expect(field.find('[data-test="remove-button"]').length).toEqual(0);
+        expect(field.find('[data-test="remove-button-0"]').length).toEqual(0);
       });
     });
 
@@ -549,7 +549,7 @@ describe("Quarterly Breakdown", () => {
       });
 
       it("does not render a remove button", () => {
-        expect(field.find('[data-test="remove-button"]').length).toEqual(0);
+        expect(field.find('[data-test="remove-button-0"]').length).toEqual(0);
       });
     });
   });
@@ -558,67 +558,8 @@ describe("Quarterly Breakdown", () => {
     let schema, data, field, onChangeSpy;
     describe("Example 1", () => {
       beforeEach(() => {
-          onChangeSpy = jest.fn();
-  
-          schema = {
-            type: "array",
-            addable: true,
-            title: "Cats Data",
-            items: {
-              type: "object",
-              properties: {
-                period: { title: "Year", type: "string", readonly: true },
-                quarter3: { title: "3rd Quarter", enum: ["yes", "no"], type: "string" },
-                quarter1: { title: "1st Quarter", type: "string" },
-                quarter2: { title: "2nd Quarter", type: "string" },
-                quarter4: { title: "4th Quarter", type: "string" },
-                total: { title: "Total", type: "string" }
-              }
-            }
-          };
-  
-          data = [
-            {
-              period: "2018",
-              quarter3: "yes"
-            },
-            {
-              period: "2019"
-            }
-          ];
-          field = mount(
-            <QuarterlyBreakdown
-              schema={schema}
-              formData={data}
-              onChange={onChangeSpy}
-            />
-          );
-        });
-  
-        it("shows a select for any enum schema data", () => {
-          expect(field.find('select[data-test="quarter3_0"]').length).toEqual(1);
-        });
-  
-        it("prepopulates the input field with the form data", () => {
-          expect(field.find('select[data-test="quarter3_0"]').props().value).toEqual(
-            "yes"
-          );
-        });
-  
-        it("call the onChange method with the form data", () => {
-          field
-            .find('[data-test="quarter3_0"]')
-            .simulate("change", { target: { value: "No" } });
-          expect(onChangeSpy).toHaveBeenCalledWith([
-            { period: "2018", quarter3: "No" },
-            { period: "2019" }
-          ]);
-        });
-    });
-    describe("Example 2", () => {
-      beforeEach(() => {
         onChangeSpy = jest.fn();
-  
+
         schema = {
           type: "array",
           addable: true,
@@ -627,7 +568,11 @@ describe("Quarterly Breakdown", () => {
             type: "object",
             properties: {
               period: { title: "Year", type: "string", readonly: true },
-              quarter3: { title: "3rd Quarter", enum: ["Hi", "Bye"], type: "string" },
+              quarter3: {
+                title: "3rd Quarter",
+                enum: ["yes", "no"],
+                type: "string"
+              },
               quarter1: { title: "1st Quarter", type: "string" },
               quarter2: { title: "2nd Quarter", type: "string" },
               quarter4: { title: "4th Quarter", type: "string" },
@@ -635,7 +580,70 @@ describe("Quarterly Breakdown", () => {
             }
           }
         };
-  
+
+        data = [
+          {
+            period: "2018",
+            quarter3: "yes"
+          },
+          {
+            period: "2019"
+          }
+        ];
+        field = mount(
+          <QuarterlyBreakdown
+            schema={schema}
+            formData={data}
+            onChange={onChangeSpy}
+          />
+        );
+      });
+
+      it("shows a select for any enum schema data", () => {
+        expect(field.find('select[data-test="quarter3_0"]').length).toEqual(1);
+      });
+
+      it("prepopulates the input field with the form data", () => {
+        expect(
+          field.find('select[data-test="quarter3_0"]').props().value
+        ).toEqual("yes");
+      });
+
+      it("call the onChange method with the form data", () => {
+        field
+          .find('[data-test="quarter3_0"]')
+          .simulate("change", { target: { value: "No" } });
+        expect(onChangeSpy).toHaveBeenCalledWith([
+          { period: "2018", quarter3: "No" },
+          { period: "2019" }
+        ]);
+      });
+    });
+    describe("Example 2", () => {
+      beforeEach(() => {
+        onChangeSpy = jest.fn();
+
+        schema = {
+          type: "array",
+          addable: true,
+          title: "Cats Data",
+          items: {
+            type: "object",
+            properties: {
+              period: { title: "Year", type: "string", readonly: true },
+              quarter3: {
+                title: "3rd Quarter",
+                enum: ["Hi", "Bye"],
+                type: "string"
+              },
+              quarter1: { title: "1st Quarter", type: "string" },
+              quarter2: { title: "2nd Quarter", type: "string" },
+              quarter4: { title: "4th Quarter", type: "string" },
+              total: { title: "Total", type: "string" }
+            }
+          }
+        };
+
         data = [
           {
             period: "2020",
@@ -653,17 +661,17 @@ describe("Quarterly Breakdown", () => {
           />
         );
       });
-  
+
       it("shows a select for any enum schema data", () => {
         expect(field.find('select[data-test="quarter3_0"]').length).toEqual(1);
       });
-  
+
       it("prepopulates the input field with the form data", () => {
-        expect(field.find('select[data-test="quarter3_0"]').props().value).toEqual(
-          "Hi"
-        );
+        expect(
+          field.find('select[data-test="quarter3_0"]').props().value
+        ).toEqual("Hi");
       });
-  
+
       it("calls the onChange method with the form data", () => {
         field
           .find('[data-test="quarter3_0"]')
@@ -672,6 +680,158 @@ describe("Quarterly Breakdown", () => {
           { period: "2020", quarter3: "Bye" },
           { period: "2021" }
         ]);
+      });
+    });
+  });
+
+  describe("Number of Rows", () => {
+    describe("Example 1", () => {
+      let schema, data, field, onChangeSpy;
+      beforeEach(() => {
+        onChangeSpy = jest.fn();
+
+        schema = {
+          type: "array",
+          addable: true,
+          title: "Cats Data",
+          items: {
+            type: "object",
+            properties: {
+              period: { title: "Year", type: "string", readonly: true },
+              quarter1: { title: "1st Quarter", type: "string" },
+              quarter2: { title: "2nd Quarter", type: "string" },
+              quarter3: { title: "3rd Quarter", type: "string" },
+              quarter4: { title: "4th Quarter", type: "string" },
+              total: { title: "Total", type: "string" }
+            }
+          }
+        };
+
+        data = [
+          {
+            period: "2018",
+            quarter1: "2000",
+            quarter2: "3000",
+            quarter3: "4000",
+            quarter4: "5000",
+            total: "14000"
+          },
+          {
+            period: "2019",
+            quarter1: "1000",
+            quarter2: "2000",
+            quarter3: "3000",
+            quarter4: "4000",
+            total: "10000"
+          }
+        ];
+        field = mount(
+          <QuarterlyBreakdown
+            schema={schema}
+            formData={data}
+            onChange={onChangeSpy}
+          />
+        );
+      });
+
+      it("renders an add button", () => {
+        expect(field.find('[data-test="add-button"]').length).toEqual(1);
+      });
+
+      it("renders a remove button", () => {
+        expect(field.find('[data-test="remove-button-0"]').length).toEqual(1);
+      });
+
+      it("shows the number of rows in the key", () => {
+        expect(field.find('[data-test="quarter1_0"]').key()).toEqual(
+          "quarter1_0_2"
+        );
+      });
+
+      it("updates the number of rows in the key", () => {
+        field.find('[data-test="remove-button-0"]').simulate("click");
+        expect(field.find('[data-test="quarter1_0"]').key()).toEqual(
+          "quarter1_0_1"
+        );
+      });
+    });
+
+    describe("Example 2", () => {
+      let schema, data, field, onChangeSpy;
+      beforeEach(() => {
+        onChangeSpy = jest.fn();
+
+        schema = {
+          type: "array",
+          addable: true,
+          title: "Cats Data",
+          items: {
+            type: "object",
+            properties: {
+              period: { title: "Year", type: "string", readonly: true },
+              quarter1: { title: "1st Quarter", type: "string" },
+              quarter2: { title: "2nd Quarter", type: "string" },
+              quarter3: { title: "3rd Quarter", type: "string" },
+              quarter4: { title: "4th Quarter", type: "string" },
+              total: { title: "Total", type: "string" }
+            }
+          }
+        };
+
+        data = [
+          {
+            period: "1",
+            quarter1: "7",
+            quarter2: "9",
+            quarter3: "3",
+            quarter4: "5",
+            total: "120348"
+          },
+          {
+            period: "2",
+            quarter1: "3",
+            quarter2: "4",
+            quarter3: "5",
+            quarter4: "6",
+            total: "18"
+          },
+          {
+            period: "3",
+            quarter1: "654",
+            quarter2: "54235",
+            quarter3: "4325",
+            quarter4: "84568",
+            total: "348932748"
+          }
+        ];
+        field = mount(
+          <QuarterlyBreakdown
+            schema={schema}
+            formData={data}
+            onChange={onChangeSpy}
+          />
+        );
+      });
+
+      it("renders an add button", () => {
+        expect(field.find('[data-test="add-button"]').length).toEqual(1);
+      });
+
+      it("renders a remove button", () => {
+        expect(field.find('[data-test="remove-button-0"]').length).toEqual(1);
+      });
+
+      it("shows the number of rows in the key", () => {
+        expect(field.find('[data-test="quarter1_0"]').key()).toEqual(
+          "quarter1_0_3"
+        );
+      });
+
+      it("updates the number of rows in the key", () => {
+        field.find('[data-test="remove-button-0"]').simulate("click");
+        expect(field.find('[data-test="quarter1_0"]').key()).toEqual(
+          "quarter1_0_2"
+        );
       });
     });
   });
