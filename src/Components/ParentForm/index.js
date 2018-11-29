@@ -11,6 +11,7 @@ import GenerateSidebarItems from "../../UseCase/GenerateSidebarItems";
 import RiskField from "../RiskField";
 import BaselineData from "../BaselineData";
 import PeriodsField from "../PeriodsField";
+import NumberedArrayField from "../NumberedArrayField";
 import QuarterlyBreakdown from "../QuarterlyBreakdown";
 import CurrencyWidget from "../CurrencyWidget";
 import "./style.css";
@@ -148,6 +149,7 @@ export default class ParentForm extends React.Component {
       periods: PeriodsField,
       base: BaselineData,
       milestone: MilestoneField,
+      numbered: NumberedArrayField,
       quarterly: QuarterlyBreakdown
     };
 

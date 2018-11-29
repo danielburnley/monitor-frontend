@@ -1,4 +1,4 @@
-import WidgetStub from "../../../test/WidgetStub";
+import WidgetFake from "../../../test/WidgetFake";
 import VarianceField from ".";
 import React from "react";
 import { shallow, mount } from "enzyme";
@@ -7,7 +7,7 @@ describe("VarianceField", () => {
   let field;
   let registryStub = {
     widgets: {
-      percentage: WidgetStub
+      percentage: WidgetFake
     }
   }
 

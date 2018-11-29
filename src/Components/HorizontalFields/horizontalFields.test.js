@@ -1,11 +1,11 @@
 import HorizontalFields from ".";
 import React from "react";
-import WidgetStub from "../../../test/WidgetStub";
+import WidgetFake from "../../../test/WidgetFake";
 import { mount } from "enzyme";
 
-class CurrencyStub extends WidgetStub { datatest = "currency-stub"; }
-class SecondCurrencyStub extends WidgetStub { datatest = "second-currency-stub"; }
-class PercentageStub extends WidgetStub { datatest = "percentage-stub" }
+class CurrencyStub extends WidgetFake { datatest = "currency-stub"; }
+class SecondCurrencyStub extends WidgetFake { datatest = "second-currency-stub"; }
+class PercentageStub extends WidgetFake { datatest = "percentage-stub"; }
 
 describe("<HorizontalFields>", () => {
   let schema, fields, formData, onChangeSpy, registrySpy;
