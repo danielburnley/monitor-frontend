@@ -1,7 +1,6 @@
 import QuarterlyBreakdown from ".";
 import { mount } from "enzyme";
 import React from "react";
-import CurrencyWidget from "../CurrencyWidget";
 
 describe("Quarterly Breakdown", () => {
   describe("Readonly Data", () => {
