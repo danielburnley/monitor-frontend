@@ -28,7 +28,7 @@ export default class StaticData extends React.Component {
 
   renderArray = (key, value, propertySchema) => {
     return (
-      <div>
+      <div key={`${key}`}>
         <div className="heading">{propertySchema.title}</div>
         {value.map((item, index) => {
           return (
@@ -81,6 +81,7 @@ export default class StaticData extends React.Component {
   };
 
   findInSchema = (schema, key) => {
+    if (!schema.properties) return
     if (key in schema.properties) {
       return schema.properties[key];
     } else if (schema.dependencies) {

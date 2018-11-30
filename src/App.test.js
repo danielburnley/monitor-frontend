@@ -367,15 +367,15 @@ describe('Submitting a draft project', () => {
 describe("Printing a return", () => {
   let api;
   beforeEach(() => {
-    process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
-    api = new APISimulator("http://cat.meow");
+    process.env.REACT_APP_HIF_API_URL = "http://dog.woof/";
+    api = new APISimulator("http://dog.woof");
   });
 
   afterEach(()=> {
     nock.cleanAll();
   })
 
-  xit("Renders the return data", async () => {
+  it("Renders the return data", async () => {
     let data = {
       cat: "meow",
       dog: "woof"
@@ -387,12 +387,15 @@ describe("Printing a return", () => {
         dog: {type: "string"}
       }
     }
+    api.getProject(schema, data, "Submitted", "hif").successfully();
     api.getReturn(data, schema).successfully();
-
-    let page = new AppPage("/project/0/return/1/print");
+    
+    let page = new AppPage("/project/0/return/1/print?token=Cats");
     await page.load();
 
+
     expect(page.find('PrintReturn').length).toEqual(1)
+    expect(page.find('StaticData').length).toEqual(1)
   });
 });
 
