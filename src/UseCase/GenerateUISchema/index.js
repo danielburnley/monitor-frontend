@@ -1,12 +1,13 @@
 export default class GenerateUISchema {
   constructor(userRoleCookieGateway) {
-    this.userRole = userRoleCookieGateway.getUserRole().userRole;
+    this.userRoleGateway = userRoleCookieGateway;
   }
   execute(data) {
-    return this.generateUISchema(data.properties);
+    let userRole = this.userRoleGateway.getUserRole().userRole;
+    return this.generateUISchema(data.properties, userRole);
   }
 
-  generateUISchema(data) {
+  generateUISchema(data, role) {
     let ret = {};
 
     Object.entries(data).forEach(([key, value]) => {
@@ -15,7 +16,7 @@ export default class GenerateUISchema {
       } else if (value.type === "array") {
         ret[key] = this.generateSchemaForArray(value);
       } else {
-        let itemSchema = this.generateSchemaForItem(value);
+        let itemSchema = this.generateSchemaForItem(value, role);
         if (itemSchema) {
           ret[key] = itemSchema;
         }
@@ -77,7 +78,7 @@ export default class GenerateUISchema {
     return dependencies.oneOf.reduce(reducer, {});
   }
 
-  generateSchemaForItem(item) {
+  generateSchemaForItem(item, role) {
     let schema = {}
 
     if (item.extendedText) {
@@ -96,11 +97,11 @@ export default class GenerateUISchema {
       schema["ui:disabled"] = true
     }
 
-    if (this.userRole !== "Homes England" && item.laReadOnly) {
+    if (item.laReadOnly && role !== "Homes England") {
       schema["ui:disabled"] = true
     }
 
-    if (item.s151WriteOnly && this.userRole !== "S151") {
+    if (item.s151WriteOnly && role !== "S151") {
       schema["ui:disabled"] = true
     }
 
