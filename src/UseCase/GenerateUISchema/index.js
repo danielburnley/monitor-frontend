@@ -4,6 +4,7 @@ export default class GenerateUISchema {
   }
   execute(data) {
     let userRole = this.userRoleGateway.getUserRole().userRole;
+
     return this.generateUISchema(data.properties, userRole);
   }
 
@@ -12,9 +13,9 @@ export default class GenerateUISchema {
 
     Object.entries(data).forEach(([key, value]) => {
       if (value.type === "object") {
-        ret[key] = this.generateSchemaForObject(value);
+        ret[key] = this.generateSchemaForObject(value, role);
       } else if (value.type === "array") {
-        ret[key] = this.generateSchemaForArray(value);
+        ret[key] = this.generateSchemaForArray(value, role);
       } else {
         let itemSchema = this.generateSchemaForItem(value, role);
         if (itemSchema) {
@@ -25,8 +26,8 @@ export default class GenerateUISchema {
     return ret;
   }
 
-  generateSchemaForObject(value) {
-    let ret = this.generateUISchema(value.properties);
+  generateSchemaForObject(value, role) {
+    let ret = this.generateUISchema(value.properties, role);
     let uiField = this.getUIFieldForObject(value);
 
     if (uiField) {
@@ -34,14 +35,14 @@ export default class GenerateUISchema {
     }
 
     if (value.dependencies) {
-      let dependencySchema = this.generateSchemaForDependencies(value);
+      let dependencySchema = this.generateSchemaForDependencies(value, role);
       ret = this.mergeObjects(ret, dependencySchema);
     }
 
     return ret;
   }
 
-  generateSchemaForArray(value) {
+  generateSchemaForArray(value, role) {
     let ret = {};
     ret["ui:options"] = {
       addable: this.isAddableArray(value),
@@ -49,7 +50,7 @@ export default class GenerateUISchema {
       removable: this.isAddableArray(value)
     };
 
-    ret["items"] = this.generateUISchema(value.items.properties);
+    ret["items"] = this.generateUISchema(value.items.properties, role);
 
     if (value.items.horizontal) {
       ret["items"]["ui:field"] = "horizontal";
@@ -70,9 +71,9 @@ export default class GenerateUISchema {
     return ret;
   }
 
-  generateSchemaForDependencies(value) {
+  generateSchemaForDependencies(value, role) {
     let reducer = (acc, dependency) =>
-      this.mergeObjects(acc, this.generateSchemaForObject(dependency));
+      this.mergeObjects(acc, this.generateSchemaForObject(dependency, role));
 
     let dependencies = Object.values(value.dependencies)[0];
     return dependencies.oneOf.reduce(reducer, {});

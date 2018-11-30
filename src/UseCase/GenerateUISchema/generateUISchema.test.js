@@ -52,6 +52,34 @@ describe("GenerateUISchema", () => {
         let response = useCase.execute(schema);
         expect(response).toEqual({b: {"ui:disabled": true}});
       });
+
+      it("Generates a complex schema", () => {
+        schema = {
+          type: "object",
+          properties: {
+            a: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  b: { type: "string", laReadOnly: true }
+                }
+              }
+            }
+          }
+        }
+        let response = useCase.execute(schema);
+        expect(response).toEqual({
+          "a": {
+            "items": {},
+            "ui:options": {
+              "addable": false,
+              "orderable": false,
+              "removable": false
+            }
+          }
+        });
+      });
     });
 
     describe("S151 user role", () => {
@@ -71,7 +99,6 @@ describe("GenerateUISchema", () => {
         expect(response).toEqual({b: {"ui:disabled": true}});
       });
     });
-
   });
   describe("Readonly", () => {
     describe("Example one", () => {
