@@ -1,6 +1,6 @@
 import React from 'react';
 import PrintReturn from '.';
-import BaselineData from '../BaselineData';
+import StaticData from '../StaticData';
 
 import { storiesOf } from "@storybook/react";
 
@@ -36,7 +36,7 @@ storiesOf("Print Return", module).add("Default", () => {
     >
   
       {({data, schema}) => {
-        <BaselineData formData={data} schema={schema} />
+        <StaticData formData={data} schema={schema} />
       }}
     </PrintReturn>
   )

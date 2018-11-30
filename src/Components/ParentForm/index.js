@@ -9,7 +9,7 @@ import MilestoneField from "../MilestoneField";
 import PercentageField from "../PercentageField";
 import GenerateSidebarItems from "../../UseCase/GenerateSidebarItems";
 import RiskField from "../RiskField";
-import BaselineData from "../BaselineData";
+import StaticData from "../StaticData";
 import PeriodsField from "../PeriodsField";
 import NumberedArrayField from "../NumberedArrayField";
 import QuarterlyBreakdown from "../QuarterlyBreakdown";
@@ -147,7 +147,7 @@ export default class ParentForm extends React.Component {
       variance: VarianceField,
       risk: RiskField,
       periods: PeriodsField,
-      base: BaselineData,
+      base: StaticData,
       milestone: MilestoneField,
       numbered: NumberedArrayField,
       quarterly: QuarterlyBreakdown

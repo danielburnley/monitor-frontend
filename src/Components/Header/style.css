@@ -21,3 +21,9 @@
   height: 89%;
   padding: 5px 0 1px 30px;
 }
+
+@media print {
+  .monitor-header {
+    display: none;
+  }
+}

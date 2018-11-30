@@ -1,39 +1,53 @@
 import React from "react";
+import "./style.css";
 
-export default class BaselineData extends React.Component {
+export default class StaticData extends React.Component {
   renderObject = (key, value, propertySchema) => {
     return (
-      <div className="panel panel-default" key={key}>
-        <div className="panel-heading" data-test={`title-${key}`}>
+      <div className="section" key={key}>
+        <div className="heading" data-test={`title-${key}`}>
           {propertySchema.title}
         </div>
-        <div className="panel-body">
-          {this.renderFormData(value, propertySchema)}
+        <div className="body">{this.renderFormData(value, propertySchema)}</div>
+      </div>
+    );
+  };
+
+  renderArrayItem = (key, item, index, propertySchema) => {
+    return (
+      <div>
+        <div className="heading" data-test={`title-${key}`}>
+          {propertySchema.items.title} {index + 1}
+        </div>
+        <div className="body">
+          {this.renderFormData(item, propertySchema.items)}
         </div>
       </div>
     );
   };
 
   renderArray = (key, value, propertySchema) => {
-    return value.map((item, index) => {
-      return (
-        <div className="panel panel-default" key={`${key}_${index}`}>
-          <div className="panel-heading" data-test={`title-${key}`}>
-            {propertySchema.items.title} {index + 1}
-          </div>
-          <div className="panel-body">
-            {this.renderFormData(item, propertySchema.items)}
-          </div>
-        </div>
-      );
-    });
+    return (
+      <div>
+        <div className="heading">{propertySchema.title}</div>
+        {value.map((item, index) => {
+          return (
+            <div className="section" key={`${key}_${index}`}>
+              {this.renderArrayItem(key, item, index, propertySchema)}
+            </div>
+          );
+        })}
+      </div>
+    );
   };
 
   renderItem = (key, value, propertySchema) => {
     return (
       <div key={key}>
-        <h4 data-test={`title-${key}`}>{propertySchema.title}</h4>
-        <p data-test={key}>{value}</p>
+        <span className="print-title" data-test={`title-${key}`}>
+          {propertySchema.title}:{" "}
+        </span>
+        <span data-test={key}>{value}</span>
       </div>
     );
   };
@@ -97,13 +111,12 @@ export default class BaselineData extends React.Component {
   };
 
   render() {
-    console.log(this.props.schema)
     return (
-      <div className="panel panel-default">
-        <div className="panel-heading">
+      <div className="section">
+        <div className="heading">
           <h2 data-test="title">{this.props.schema.title}</h2>
         </div>
-        <div className="panel-body">
+        <div className="body">
           {this.renderFormData(this.props.formData, this.props.schema)}
         </div>
       </div>

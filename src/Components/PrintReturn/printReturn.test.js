@@ -21,7 +21,7 @@ describe("Print Return", () => {
 
       page = shallow(
         <PrintReturn
-          match={{ params: { id: "1", projectId: "4" } }}
+          match={{ params: { returnId: "1", projectId: "4" } }}
           getReturn={getReturnSpy}
         >
         {childrenSpy}
@@ -71,7 +71,7 @@ describe("Print Return", () => {
 
       page = shallow(
         <PrintReturn
-          match={{ params: { id: "2", projectId: "5" } }}
+          match={{ params: { returnId: "2", projectId: "5" } }}
           getReturn={getReturnSpy}
         >
         {childrenSpy}

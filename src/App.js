@@ -1,7 +1,7 @@
 import React from "react";
 import qs from "qs";
 
-import BaselineData from "./Components/BaselineData";
+import StaticData from "./Components/StaticData";
 import Homepage from "./Components/Homepage";
 import Footer from "./Components/Footer";
 import Header from "./Components/Header";
@@ -177,7 +177,7 @@ const renderBaselinePage = props => (
     {({ formData, formSchema }) => (
       <div className="col-md-10 col-md-offset-1">
         <BackToProjectOverviewButton {...props} />
-        <BaselineData formData={formData} schema={formSchema} />
+        <StaticData formData={formData} schema={formSchema} />
         <div className="col-md-2">
           <CreateReturnButton {...props} />
         </div>
@@ -190,7 +190,7 @@ const renderPrintPage = props => (
    <PrintReturn {...props} getReturn={getReturnUseCase} >
     {({schema, data}) => (
       <div>
-        <BaselineData formData={data} schema={schema} />
+        <StaticData formData={data} schema={schema} />
       </div>
     )}
    </PrintReturn>

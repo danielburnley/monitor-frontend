@@ -1,6 +1,6 @@
 import React from 'react';
 import ProjectPage from '.';
-import BaselineData from '../BaselineData'
+import StaticData from '../StaticData'
 
 import { storiesOf } from '@storybook/react';
 
@@ -40,7 +40,7 @@ storiesOf('ProjectPage', module)
       >
       {({ formData, formSchema }) => (
         <div className="col-md-10 col-md-offset-1">
-          <BaselineData formData={formData} schema={formSchema} />
+          <StaticData formData={formData} schema={formSchema} />
         </div>
       )}
     </ProjectPage>
