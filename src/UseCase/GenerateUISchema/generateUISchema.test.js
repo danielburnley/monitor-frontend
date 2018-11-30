@@ -8,17 +8,19 @@ describe("GenerateUISchema", () => {
   let useCase = new GenerateUISchema(userRoleCookieGateway);
 
   describe("Generates schemas depending on user role", () => {
-    it("Call the cookie user roles gateway", () => {
+    it("Call the cookie user roles gateway when executed", () => {
       let useCase = new GenerateUISchema(userRoleCookieGateway);
+      expect(userRoleCookieGateway.getUserRole).not.toHaveBeenCalled();
+
       useCase.execute({
         type: "object",
         properties: {
           a: { type: "string", laReadOnly: true }
         }
       })
-      expect(userRoleCookieGateway.getUserRole).toHaveBeenCalled()
+      expect(userRoleCookieGateway.getUserRole).toHaveBeenCalled();
     });
-    
+
 
     describe("Local Authority User Role", () => {
       let userRoleCookieGateway = {
