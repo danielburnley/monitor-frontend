@@ -1,10 +1,10 @@
 import React from "react";
-import BaselineData from ".";
+import StaticData from ".";
 import { shallow, mount } from "enzyme";
 
 class BaselinePage {
   constructor(schema, formData) {
-    this.page = mount(<BaselineData schema={schema} formData={formData} />);
+    this.page = mount(<StaticData schema={schema} formData={formData} />);
   }
 
   title() {
@@ -55,7 +55,7 @@ describe("Baseline Data", () => {
 
       it("Display the title for a single string", () => {
         expect(page.find("[data-test='title-firstItem']").text()).toEqual(
-          "One of many of your items"
+          "One of many of your items: "
         );
       });
 
@@ -122,7 +122,7 @@ describe("Baseline Data", () => {
 
       it("Display the title for a single string", () => {
         expect(page.find("[data-test='title-secondItem']").text()).toEqual(
-          "a string"
+          "a string: "
         );
       });
 
@@ -547,7 +547,7 @@ describe("Baseline Data", () => {
         let page = new BaselinePage(schema, formData);
 
         expect(page.find("[data-test='woof']").text()).toEqual("No");
-        expect(page.find("[data-test='title-woof']").text()).toEqual("Woof");
+        expect(page.find("[data-test='title-woof']").text()).toEqual("Woof: ");
       });
 
       it("Displays the data appropriately with two oneOfs", () => {
@@ -594,7 +594,7 @@ describe("Baseline Data", () => {
 
         expect(page.find("[data-test='ribbit']").text()).toEqual("Croak");
         expect(page.find("[data-test='title-ribbit']").text()).toEqual(
-          "Ribbit"
+          "Ribbit: "
         );
         expect(page.find("[data-test='woof']").length).toEqual(0);
       });
@@ -650,7 +650,7 @@ describe("Baseline Data", () => {
 
         expect(page.find("[data-test='caw']").text()).toEqual("Buckaw");
         expect(page.find("[data-test='title-caw']").text()).toEqual(
-          "Bird Noise"
+          "Bird Noise: "
         );
       });
     });
@@ -689,7 +689,7 @@ describe("Baseline Data", () => {
 
         expect(page.find("[data-test='shout']").text()).toEqual("shhhh");
         expect(page.find("[data-test='title-shout']").text()).toEqual(
-          "Yelling"
+          "Yelling: "
         );
       });
 
@@ -736,7 +736,7 @@ describe("Baseline Data", () => {
         let page = new BaselinePage(schema, formData);
 
         expect(page.find("[data-test='dog']").text()).toEqual("runs");
-        expect(page.find("[data-test='title-dog']").text()).toEqual("big");
+        expect(page.find("[data-test='title-dog']").text()).toEqual("big: ");
         expect(page.find("[data-test='kitten']").length).toEqual(0);
       });
     });

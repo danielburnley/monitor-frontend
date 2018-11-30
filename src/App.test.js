@@ -243,7 +243,7 @@ describe("Viewing a project", () => {
         api.getProject(projectSchema, projectData, projectStatus, projectType).successfully();
         await page.viewBaseline();
 
-        expect(page.find('BaselineData').length).toEqual(1)
+        expect(page.find('StaticData').length).toEqual(1)
       });
 
       it("Renders the return with information from the API when creating a new return", async () => {
@@ -361,6 +361,41 @@ describe('Submitting a draft project', () => {
     page.find('[data-test="submit-project-button"]').simulate("click");
     await page.load();
     expect(page.find('[data-test="project-create-success"]').length).toEqual(1);
+  });
+});
+
+describe("Printing a return", () => {
+  let api;
+  beforeEach(() => {
+    process.env.REACT_APP_HIF_API_URL = "http://dog.woof/";
+    api = new APISimulator("http://dog.woof");
+  });
+
+  afterEach(()=> {
+    nock.cleanAll();
+  })
+
+  it("Renders the return data", async () => {
+    let data = {
+      cat: "meow",
+      dog: "woof"
+    }
+    let schema = {
+      type: "object",
+      properties: {
+        cat: {type: "string"},
+        dog: {type: "string"}
+      }
+    }
+    api.getProject(schema, data, "Submitted", "hif").successfully();
+    api.getReturn(data, schema).successfully();
+    
+    let page = new AppPage("/project/0/return/1/print?token=Cats");
+    await page.load();
+
+
+    expect(page.find('PrintReturn').length).toEqual(1)
+    expect(page.find('StaticData').length).toEqual(1)
   });
 });
 

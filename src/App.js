@@ -1,7 +1,7 @@
 import React from "react";
 import qs from "qs";
 
-import BaselineData from "./Components/BaselineData";
+import StaticData from "./Components/StaticData";
 import Homepage from "./Components/Homepage";
 import Footer from "./Components/Footer";
 import Header from "./Components/Header";
@@ -14,6 +14,7 @@ import ReturnPage from "./Components/ReturnPage";
 import Portal from "./Components/Portal";
 import NotFound from "./Components/NotFound";
 import CookieConsent from "./Components/CookieConsent";
+import PrintReturn from "./Components/PrintReturn";
 
 import CreateReturn from "./UseCase/CreateReturn";
 import SubmitProject from "./UseCase/SubmitProject";
@@ -176,7 +177,7 @@ const renderBaselinePage = props => (
     {({ formData, formSchema }) => (
       <div className="col-md-10 col-md-offset-1">
         <BackToProjectOverviewButton {...props} />
-        <BaselineData formData={formData} schema={formSchema} />
+        <StaticData formData={formData} schema={formSchema} />
         <div className="col-md-2">
           <CreateReturnButton {...props} />
         </div>
@@ -184,6 +185,17 @@ const renderBaselinePage = props => (
     )}
   </ProjectPage>
 );
+
+const renderPrintPage = props => (
+   <PrintReturn {...props} getReturn={getReturnUseCase} >
+    {({schema, data}) => (
+      <div>
+        <StaticData formData={data} schema={schema} />
+      </div>
+    )}
+   </PrintReturn>
+);
+
 
 const App = () => (
   <Router>
@@ -229,6 +241,11 @@ const App = () => (
                   exact
                   path="/project/:projectId/return/:returnId"
                   render={renderReturnPage}
+                />
+                <Route 
+                  exact
+                  path="/project/:projectId/return/:returnId/print"
+                  render={renderPrintPage}
                 />
               </Portal>
             )}

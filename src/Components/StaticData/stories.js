@@ -1,5 +1,5 @@
 import React from "react";
-import BaselineData from ".";
+import StaticData from ".";
 
 import { storiesOf } from "@storybook/react";
 
@@ -50,5 +50,5 @@ storiesOf("Baseline Data", module).add("Default", () => {
     croak: "No",
     caw: "Buckaw"
   };
-  return <BaselineData schema={schema} formData={formData} />;
+  return <StaticData schema={schema} formData={formData} />;
 });

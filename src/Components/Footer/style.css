@@ -37,3 +37,9 @@ footer {
 footer a{
   color: inherit;
 }
+
+@media print {
+  footer {
+    display: none;
+  }
+}
