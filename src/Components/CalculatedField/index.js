@@ -24,6 +24,7 @@ export default class CalculatedField extends React.Component {
       schema = { this.props.schema }
       onChange = { this.onChange }
       uiSchema = { this.props.uiSchema }
+      registry = { this.props.registry }
       />
   )
 }

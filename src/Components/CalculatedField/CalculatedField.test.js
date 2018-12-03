@@ -216,7 +216,7 @@ describe("Calculated Field", () => {
     it("Example 1", async () => {
       let onChangeSpy = jest.fn();
       let wrapper = mount(<CalculatedField
-        registry={ {fields: {SchemaField: FieldFake}} }
+        registry={ {fields: {SchemaField: FieldFake, extraField: FieldFake} } }
         formData={ {someData: "data to calculate"} }
         onChange={onChangeSpy}
         uiSchema={{}}
@@ -234,7 +234,7 @@ describe("Calculated Field", () => {
       />);
 
       await wrapper.update();
-      expect(wrapper.find("FieldFake").props().uiSchema).toEqual({})
+      expect(wrapper.find("FieldFake").props().registry).toEqual({fields: {SchemaField: FieldFake, extraField: FieldFake} })
     });
 
     it("Example 2", async () => {
@@ -258,7 +258,7 @@ describe("Calculated Field", () => {
       />);
 
       await wrapper.update();
-      expect(wrapper.find("FieldFake").props().uiSchema).toEqual({"ui:field": "horizontal"})
+      expect(wrapper.find("FieldFake").props().registry).toEqual({fields: {SchemaField: FieldFake}})
     });
   });
 
