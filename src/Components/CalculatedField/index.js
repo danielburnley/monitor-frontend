@@ -1,5 +1,13 @@
 import React from 'react';
 
+function parseMoney(value) {
+  if (value) {
+    let cleanedString = value.replace(/[^0-9.]/g,"");
+    return new Number(cleanedString);
+  }
+  return 0;
+}
+
 export default class CalculatedField extends React.Component {
   constructor(props) {
     super(props)
