@@ -28,30 +28,6 @@ describe("CurrencyWidget", () => {
         );
       });
 
-      it("Changes the value and inserts commas", () => {
-        let changeEvent = { target: { value: "19216401" }};
-
-        field
-          .find("[data-test='currency-input']")
-          .simulate("change", changeEvent);
-
-        field.update();
-
-        expect(field.find("[data-test='currency-input']").props().value).toEqual(
-          "19,216,401"
-        );
-      });
-
-      it("Cleans invalid characters", () => {
-        field
-          .find("[data-test='currency-input']")
-          .simulate("change", { target: { value: "*19$216,401" } });
-
-        expect(field.find("[data-test='currency-input']").props().value).toEqual(
-          "19,216,401"
-        );
-      });
-
       it("Inserts commas for preset value", () => {
         expect(field.find("[data-test='currency-input']").props().value).toEqual(
           "8,000,000"
@@ -80,26 +56,6 @@ describe("CurrencyWidget", () => {
             onChange={onChangeSpy}
             currency={currencySymbol}
           />
-        );
-      });
-
-      it("Cleans invalid characters", () => {
-        field
-          .find("[data-test='currency-input']")
-          .simulate("change", { target: { value: "25WU255U255L255U" } });
-
-        expect(field.find("[data-test='currency-input']").props().value).toEqual(
-          "25,255,255,255"
-        );
-      });
-
-      it("Changes the value and inserts commas", () => {
-        field
-          .find("[data-test='currency-input']")
-          .simulate("change", { target: { value: "14159265358" } });
-
-        expect(field.find("[data-test='currency-input']").props().value).toEqual(
-          "14,159,265,358"
         );
       });
 
@@ -244,13 +200,10 @@ describe("CurrencyWidget", () => {
         );
       });
 
-      it("Limits the value to the currencyMaximum", () => {
-        field
-          .find("[data-test='currency-input']")
-          .simulate("change", { target: { value: "129" } });
-
+      it("Updates the input field with new form data", () => {
+        field.setProps({value: "64"});
         expect(field.find("[data-test='currency-input']").props().value).toEqual(
-          "128"
+          "64"
         );
       });
 
@@ -309,13 +262,10 @@ describe("CurrencyWidget", () => {
         );
       });
 
-      it("Limits the value to the currencyMaximum", () => {
-        field
-          .find("[data-test='currency-input']")
-          .simulate("change", { target: { value: "255" } });
-
+      it("Updates the input field with new form data", () => {
+        field.setProps({value: "3.14"});
         expect(field.find("[data-test='currency-input']").props().value).toEqual(
-          "64"
+          "3.14"
         );
       });
 
