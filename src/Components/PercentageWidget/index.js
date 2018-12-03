@@ -1,7 +1,7 @@
 import React from "react";
 import "./style.css";
 
-export default class PercentageField extends React.Component {
+export default class PercentageWidget extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

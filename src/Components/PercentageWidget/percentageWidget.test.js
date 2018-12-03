@@ -1,4 +1,4 @@
-import PercentageField from ".";
+import PercentageWidget from ".";
 import React from "react";
 import { mount } from "enzyme";
 
@@ -11,23 +11,23 @@ async function updateFormField(input, value) {
   await wait();
 }
 
-describe("PercentageField", () => {
+describe("PercentageWidget", () => {
   it("Renders a percentage symbol",  async () => {
     let onChangeSpy = jest.fn();
-    let field = mount(<PercentageField value="0" onChange={onChangeSpy}/>)
+    let field = mount(<PercentageWidget value="0" onChange={onChangeSpy}/>)
     expect(field.text()).toMatch(/%/);
   });
 
   describe("Takes value", () => {
     it("Example 1", async () => {
       let onChangeSpy = jest.fn();
-      let field = mount(<PercentageField value="67" onChange={onChangeSpy}/>);
+      let field = mount(<PercentageWidget value="67" onChange={onChangeSpy}/>);
       expect(field.find("input").props().value).toEqual("67");
     });
 
     it("Example 2", async () => {
       let onChangeSpy = jest.fn();
-      let field = mount(<PercentageField value="42" onChange={onChangeSpy}/>);
+      let field = mount(<PercentageWidget value="42" onChange={onChangeSpy}/>);
       expect(field.find("input").props().value).toEqual("42");
     });
   });
@@ -35,7 +35,7 @@ describe("PercentageField", () => {
   describe("Calls onChange", () => {
     it("Example 1", async () => {
       let onChangeSpy = jest.fn();
-      let field = mount(<PercentageField value="0" onChange={onChangeSpy} />);
+      let field = mount(<PercentageWidget value="0" onChange={onChangeSpy} />);
       await updateFormField(field.find("input"), "14159");
       await field.update();
 
@@ -44,7 +44,7 @@ describe("PercentageField", () => {
 
     it("Example 2", async () => {
       let onChangeSpy = jest.fn();
-      let field = mount(<PercentageField value="0" onChange={onChangeSpy} />);
+      let field = mount(<PercentageWidget value="0" onChange={onChangeSpy} />);
       await updateFormField(field.find("input"), "25565");
       await field.update();
 
@@ -55,7 +55,7 @@ describe("PercentageField", () => {
   describe("Clamps input to 100", () => {
     it("Example 1",  async () => {
       let onChangeSpy = jest.fn();
-      let field = mount(<PercentageField value="0" onChange={onChangeSpy} />);
+      let field = mount(<PercentageWidget value="0" onChange={onChangeSpy} />);
       await updateFormField(field.find("input"), "25565");
       await field.update();
 
@@ -64,7 +64,7 @@ describe("PercentageField", () => {
 
     it("Example 2", async () => {
       let onChangeSpy = jest.fn();
-      let field = mount(<PercentageField value="0" onChange={onChangeSpy} />);
+      let field = mount(<PercentageWidget value="0" onChange={onChangeSpy} />);
       await updateFormField(field.find("input"), "118999");
 
       expect(field.find("input").props().value).toEqual("100");
@@ -74,7 +74,7 @@ describe("PercentageField", () => {
   describe("Cleans non-numeric characters", () => {
     it("Example 1", async () => {
       let onChangeSpy = jest.fn();
-      let field = mount(<PercentageField value="0" onChange={onChangeSpy} />);
+      let field = mount(<PercentageWidget value="0" onChange={onChangeSpy} />);
       await updateFormField(field.find("input"), "2,7");
       await field.update();
 
@@ -83,7 +83,7 @@ describe("PercentageField", () => {
 
     it("Example 2", async () => {
       let onChangeSpy = jest.fn();
-      let field = mount(<PercentageField value="0" onChange={onChangeSpy} />);
+      let field = mount(<PercentageWidget value="0" onChange={onChangeSpy} />);
       await updateFormField(field.find("input"), "0x40");
 
       expect(field.find("input").props().value).toEqual("40");
@@ -93,7 +93,7 @@ describe("PercentageField", () => {
   describe("Removes leading 0s", () => {
     it("Example 1", async () => {
       let onChangeSpy = jest.fn();
-      let field = mount(<PercentageField value="0" onChange={onChangeSpy} />);
+      let field = mount(<PercentageWidget value="0" onChange={onChangeSpy} />);
       await updateFormField(field.find("input"), "0000000");
       await field.update();
 
@@ -102,7 +102,7 @@ describe("PercentageField", () => {
 
     it("Example 2", async () => {
       let onChangeSpy = jest.fn();
-      let field = mount(<PercentageField value="0" onChange={onChangeSpy} />);
+      let field = mount(<PercentageWidget value="0" onChange={onChangeSpy} />);
       await updateFormField(field.find("input"), "040");
 
       expect(field.find("input").props().value).toEqual("40");
@@ -112,7 +112,7 @@ describe("PercentageField", () => {
   describe("Clamps input to 0", () => {
     it("Example 1",  async () => {
       let onChangeSpy = jest.fn();
-      let field = mount(<PercentageField value="0" onChange={onChangeSpy} />);
+      let field = mount(<PercentageWidget value="0" onChange={onChangeSpy} />);
       let input = field.find("input");
       await updateFormField(field.find("input"), "-7");
 
@@ -121,7 +121,7 @@ describe("PercentageField", () => {
 
     it("Example 2",  async () => {
       let onChangeSpy = jest.fn();
-      let field = mount(<PercentageField value="0" onChange={onChangeSpy} />)
+      let field = mount(<PercentageWidget value="0" onChange={onChangeSpy} />)
       let input = field.find("input")
       await updateFormField(field.find("input"), "-63");
 
@@ -132,7 +132,7 @@ describe("PercentageField", () => {
   describe("Input that does not need to be clamped is left alone", () => {
     it("Example 1",  async () => {
       let onChangeSpy = jest.fn();
-      let field = mount(<PercentageField value="0" onChange={onChangeSpy} />)
+      let field = mount(<PercentageWidget value="0" onChange={onChangeSpy} />)
       let input = field.find("input")
       await updateFormField(field.find("input"), "32");
 
@@ -141,7 +141,7 @@ describe("PercentageField", () => {
 
     it("Example 2",  async () => {
       let onChangeSpy = jest.fn();
-      let field = mount(<PercentageField value="0" onChange={onChangeSpy} />)
+      let field = mount(<PercentageWidget value="0" onChange={onChangeSpy} />)
       let input = field.find("input")
       await updateFormField(field.find("input"), "64");
 
@@ -161,7 +161,7 @@ describe("PercentageField", () => {
 
       uiSchema = { "ui:disabled": true };
 
-      field = mount(<PercentageField value={"0"} onChange={onChangeSpy} schema={schema} uiSchema={uiSchema} />);
+      field = mount(<PercentageWidget value={"0"} onChange={onChangeSpy} schema={schema} uiSchema={uiSchema} />);
     });
 
     it("disable the input box", () => {

@@ -3,7 +3,7 @@ import { shallow, mount } from "enzyme";
 import MilestoneField from "../../src/Components/MilestoneField";
 
 export default class MilestoneComponent {
-  constructor(formData, onChange, schemaTitle, percentagefield) {
+  constructor(formData, onChange, schemaTitle, percentagewidget) {
     this.milestone = mount(
       <MilestoneField
         schema={{ title: schemaTitle }}
@@ -12,7 +12,7 @@ export default class MilestoneComponent {
         registry={
           {
             widgets: {
-              percentage: percentagefield
+              percentage: percentagewidget
             }
           }
         }

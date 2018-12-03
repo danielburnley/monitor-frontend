@@ -1,4 +1,5 @@
 import React from 'react';
+
 export default class CalculatedField extends React.Component {
   constructor(props) {
     super(props)
@@ -19,9 +20,10 @@ export default class CalculatedField extends React.Component {
 
   render = () => (
     <this.props.registry.fields.SchemaField
-      formData = {this.state.formData}
+      formData = { this.state.formData }
       schema = { this.props.schema }
       onChange = { this.onChange }
+      uiSchema = { this.props.uiSchema }
       />
   )
 }
