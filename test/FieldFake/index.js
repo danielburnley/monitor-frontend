@@ -12,7 +12,6 @@ export default class FieldFake extends React.Component {
   onChangeWidget = (property, value) => {
     let formData = this.state.formData;
     formData[property] = value;
-    console.log(formData);
     this.setState({formData});
     this.props.onChange(formData);
   }

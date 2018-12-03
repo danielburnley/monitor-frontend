@@ -269,7 +269,7 @@ describe("Calculated Field", () => {
         registry={ {fields: {SchemaField: FieldFake}} }
         formData={ {someData: "data to calculate"} }
         onChange={onChangeSpy}
-        uiSchema={{}}
+        uiSchema={{"otherui": "", "ui:field": "calculate"}}
         schema={
           {
             type: "object",
@@ -284,7 +284,7 @@ describe("Calculated Field", () => {
       />);
 
       await wrapper.update();
-      expect(wrapper.find("FieldFake").props().uiSchema).toEqual({})
+      expect(wrapper.find("FieldFake").props().uiSchema).toEqual({"otherui": "", "ui:field": ""})
     });
 
     it("Example 2", async () => {
@@ -293,7 +293,7 @@ describe("Calculated Field", () => {
         registry={ {fields: {SchemaField: FieldFake}} }
         formData={ {someData: "data to calculate"} }
         onChange={onChangeSpy}
-        uiSchema={{"ui:field": "horizontal"}}
+        uiSchema={{"some ui": "ui", "ui:field": "calculate"}}
         schema={
           {
             type: "object",
@@ -308,7 +308,7 @@ describe("Calculated Field", () => {
       />);
 
       await wrapper.update();
-      expect(wrapper.find("FieldFake").props().uiSchema).toEqual({"ui:field": "horizontal"})
+      expect(wrapper.find("FieldFake").props().uiSchema).toEqual({"some ui": "ui", "ui:field": ""})
     });
   });
 });
