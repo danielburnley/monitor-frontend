@@ -212,6 +212,56 @@ describe("Calculated Field", () => {
     });
   });
 
+  describe("SchemaField receives registry", () => {
+    it("Example 1", async () => {
+      let onChangeSpy = jest.fn();
+      let wrapper = mount(<CalculatedField
+        registry={ {fields: {SchemaField: FieldFake}} }
+        formData={ {someData: "data to calculate"} }
+        onChange={onChangeSpy}
+        uiSchema={{}}
+        schema={
+          {
+            type: "object",
+            calculation: "formData.fieldToCalculate = formData.someData;",
+            properties:
+            {
+              someData: {type: "string"},
+              fieldToCalculate: {type: "string"}
+            }
+          }
+        }
+      />);
+
+      await wrapper.update();
+      expect(wrapper.find("FieldFake").props().uiSchema).toEqual({})
+    });
+
+    it("Example 2", async () => {
+      let onChangeSpy = jest.fn();
+      let wrapper = mount(<CalculatedField
+        registry={ {fields: {SchemaField: FieldFake}} }
+        formData={ {someData: "data to calculate"} }
+        onChange={onChangeSpy}
+        uiSchema={{"ui:field": "horizontal"}}
+        schema={
+          {
+            type: "object",
+            calculation: "formData.fieldToCalculate = formData.someData;",
+            properties:
+            {
+              someData: {type: "string"},
+              fieldToCalculate: {type: "string"}
+            }
+          }
+        }
+      />);
+
+      await wrapper.update();
+      expect(wrapper.find("FieldFake").props().uiSchema).toEqual({"ui:field": "horizontal"})
+    });
+  });
+
   describe("SchemaField receives uiSchema", () => {
     it("Example 1", async () => {
       let onChangeSpy = jest.fn();
