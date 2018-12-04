@@ -7,7 +7,7 @@ async function wait() {
   await new Promise(resolve => setTimeout(resolve, 100));
 }
 
-describe("Numbered Array Field Financials", () => {
+describe("Numbered Array Field", () => {
   it("Doesn't render the submit button", async () => {
     let wrapper = mount(<NumberedArrayField
         registry={{fields: {SchemaField: FieldFake}}}

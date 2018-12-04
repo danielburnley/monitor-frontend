@@ -6,7 +6,7 @@ import Sidebar from "../Sidebar";
 import HorizontalFields from "../HorizontalFields";
 import VarianceField from "../VarianceField";
 import MilestoneField from "../MilestoneField";
-import PercentageField from "../PercentageField";
+import CalculatedField from "../CalculatedField";
 import GenerateSidebarItems from "../../UseCase/GenerateSidebarItems";
 import RiskField from "../RiskField";
 import StaticData from "../StaticData";
@@ -14,6 +14,7 @@ import PeriodsField from "../PeriodsField";
 import NumberedArrayField from "../NumberedArrayField";
 import QuarterlyBreakdown from "../QuarterlyBreakdown";
 import CurrencyWidget from "../CurrencyWidget";
+import PercentageWidget from "../PercentageWidget";
 import "./style.css";
 
 export default class ParentForm extends React.Component {
@@ -150,12 +151,13 @@ export default class ParentForm extends React.Component {
       base: StaticData,
       milestone: MilestoneField,
       numbered: NumberedArrayField,
-      quarterly: QuarterlyBreakdown
+      quarterly: QuarterlyBreakdown,
+      calculated: CalculatedField
     };
 
     const widgets = {
       currency: CurrencyWidget,
-      percentage: PercentageField
+      percentage: PercentageWidget
     };
 
     if (this.selectedSchema().type === "array") {

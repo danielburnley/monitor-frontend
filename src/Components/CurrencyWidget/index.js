@@ -2,14 +2,6 @@ import React from "react";
 import "./style.css"
 
 export default class CurrencyWidget extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: this.formatNumber(''+this.props.value),
-      currency: this.props.currency ? this.props.currency : "£"
-    };
-  }
-
   removeInvalidCharacters = (value) =>
     value.replace(/[^0-9.]/g, "");
 
@@ -45,7 +37,7 @@ export default class CurrencyWidget extends React.Component {
 
     // This functionality is untested because progressive text entry is not part
     // of Enzyme, please implement a test if this changes
-    let cursorAdjustment = this.commaCountDifference(value, this.state.value, selectionStart);
+    let cursorAdjustment = this.commaCountDifference(value, this.formatNumber(''+this.props.value), selectionStart);
 
     this.setState({value}, () => {
         target.selectionStart = selectionStart + cursorAdjustment;
@@ -58,7 +50,7 @@ export default class CurrencyWidget extends React.Component {
     if (this.props.uiSchema) {
       return this.props.uiSchema["ui:disabled"];
     } else {
-      return this.props.disabled
+      return this.props.disabled;
     }
   }
 
@@ -66,7 +58,7 @@ export default class CurrencyWidget extends React.Component {
     if (this.props.uiSchema) {
       return this.props.uiSchema["ui:widget"] === "hidden";
     } else {
-      return this.props.hidden
+      return this.props.hidden;
     }
   }
 
@@ -79,12 +71,12 @@ export default class CurrencyWidget extends React.Component {
             className={`input-group-addon ${this.isInputDisabled() ? "readonly-currency": ""}`}
             data-test="currency-symbol"
           >
-            {this.state.currency}
+            {this.props.currency ? this.props.currency : "£"}
           </span>
           <input
             className="form-control input"
             data-test="currency-input"
-            value={this.state.value}
+            value={this.formatNumber(''+this.props.value)}
             onChange={e => this.onFieldChange(e)}
             disabled={this.isInputDisabled()}
             id="moneyLabel"
