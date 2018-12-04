@@ -47,7 +47,8 @@ describe("<ProjectPage>", () => {
               data: { meow: true },
               schema: { hello: "hi" },
               status: 'Draft',
-              type: 'hif'
+              type: 'hif',
+              timestamp: "56789"
             })
         };
         childrenSpy = jest.fn();
@@ -79,6 +80,10 @@ describe("<ProjectPage>", () => {
         expect(page.state().projectStatus).toEqual("Draft");
       });
 
+      it("Holds the timestamp when the project is presented", () => {
+        expect(page.state().timestamp).toEqual("56789")
+      });
+
       it("Holds th uischema as an empty hash", () => {
         expect(page.state().formUiSchema).toEqual({});
       });
@@ -93,16 +98,14 @@ describe("<ProjectPage>", () => {
           formData: { meow: true },
           formSchema: { hello: "hi" },
           formUiSchema: UISchema,
-          projectType: 'hif'
+          projectType: 'hif',
+          timestamp: "56789"
         });
       });
     });
   });
 
   describe("Example two", () => {
-    
-
-
     describe("When loading the project", () => {
       beforeEach(() => {
         UISchema = {};
@@ -141,7 +144,8 @@ describe("<ProjectPage>", () => {
               data: { woof: false },
               schema: { goodbye: "see ya" },
               status: "Submitted",
-              type: 'ac'
+              type: 'ac',
+              timestamp: "0345"
             })
         };
 
@@ -182,20 +186,24 @@ describe("<ProjectPage>", () => {
         expect(page.state().projectType).toEqual('ac');
       });
 
+      it("Holds the timestamp when the project is presented", () => {
+        expect(page.state().timestamp).toEqual("0345")
+      });
+
       it("Renders the children with the formData and schema populated from the state", () => {
         expect(childrenSpy).toHaveBeenCalledWith({
           projectStatus: "Submitted",
           formData: { woof: false },
           formSchema: { goodbye: "see ya" },
           projectType: 'ac',
-          formUiSchema: {hi: "yes"}
+          formUiSchema: {hi: "yes"},
+          timestamp: "0345"
         });
       });
     });
   });
 
   describe("When project is in LA Draft status", () => {
-
     describe("Example 1", () => {
       beforeEach(() => {
         getProjectSpy = {
@@ -290,5 +298,4 @@ describe("<ProjectPage>", () => {
       });
     });
   });
-
 });

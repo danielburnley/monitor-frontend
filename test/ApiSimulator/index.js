@@ -21,12 +21,11 @@ class APISimulator {
       return new APIResponse(projectRequest, response);
   }
 
-  updateProject(project_data, project_id) {
-    let response = { };
+  updateProject(project_data, project_id, response = {errors: []}, timestamp = "0") {
     let projectRequest = nock(this.url)
       .matchHeader("Content-Type", "application/json")
       .persist()
-      .post("/project/update", {project_id: ""+project_id, project_data});
+      .post("/project/update", {project_id: ""+project_id, project_data, timestamp});
 
     return new APIResponse(projectRequest, response);
   }
@@ -48,8 +47,8 @@ class APISimulator {
     return new APIResponse(projectRequest, response);
   }
 
-  getProject(schema, data, status, type) {
-    let response = { schema, data, status, type };
+  getProject(schema, data, status, type, timestamp = 0) {
+    let response = { schema, data, status, type, timestamp };
     let projectRequest = nock(this.url)
       .matchHeader("Content-Type", "application/json")
       .get("/project/find?id=0");

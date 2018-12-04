@@ -1,12 +1,12 @@
 import React from "react";
-import ValidationMessage from ".";
+import ErrorMessage from ".";
 import { mount } from "enzyme";
 
-describe("<ValidationMessage>", () => {
+describe("<ErrorMessage>", () => {
   it("is valid", () => {
     it("example 1", () => {
       let wrap = mount(
-        <ValidationMessage
+        <ErrorMessage
           valid={false}
           type="Submit"
           invalidPaths={[["Cats", 0, "Cat House"], ["Dogs", "Dog House"]]}
@@ -19,7 +19,7 @@ describe("<ValidationMessage>", () => {
   describe("submission", () => {
     it("example 1", () => {
       let wrap = mount(
-        <ValidationMessage
+        <ErrorMessage
           valid={false}
           type="Submit"
           invalidPaths={[
@@ -34,7 +34,7 @@ describe("<ValidationMessage>", () => {
     });
     it("example 2", () => {
       let wrap = mount(
-        <ValidationMessage
+        <ErrorMessage
           valid={false}
           type="Submit"
           invalidPaths={[["Dogs", "Item 2", "Breed"], ["Cows", "Moo"]]}
@@ -49,7 +49,7 @@ describe("<ValidationMessage>", () => {
   describe("save draft", () => {
     it("example 1", () => {
       let wrap = mount(
-        <ValidationMessage
+        <ErrorMessage
           valid={false}
           type="Save"
           invalidPaths={[
@@ -62,9 +62,10 @@ describe("<ValidationMessage>", () => {
         "Warning: You will not be able to submit this return until the following fields are filled in: Cats → Item 1 → Cat HouseDogs → Dog House"
       );
     });
+
     it("example 2", () => {
       let wrap = mount(
-        <ValidationMessage
+        <ErrorMessage
           valid={false}
           type="Save"
           invalidPaths={[["Dogs", "Item 2", "Breed"], ["Cows", "Moo"]]}
@@ -79,7 +80,7 @@ describe("<ValidationMessage>", () => {
   describe("empty titles", () => {
     it("example 1", () => {
       let wrap = mount(
-        <ValidationMessage
+        <ErrorMessage
           valid={false}
           type="Save"
           invalidPaths={[["Cats", "", "Cat House"], ["Dogs", "Dog House"]]}
@@ -92,7 +93,7 @@ describe("<ValidationMessage>", () => {
 
     it("example 2", () => {
       let wrap = mount(
-        <ValidationMessage
+        <ErrorMessage
           valid={false}
           type="Save"
           invalidPaths={[["Dogs", "Breed"], ["Cows", "", "Moo"]]}
@@ -100,6 +101,22 @@ describe("<ValidationMessage>", () => {
       );
       expect(wrap.text()).toEqual(
         "Warning: You will not be able to submit this return until the following fields are filled in: Dogs → BreedCows → Moo"
+      );
+    });
+  });
+
+  describe("overwriting error", () => {
+    it("example 1", () => {
+      let wrap = mount(
+        <ErrorMessage
+          valid={true}
+          type="Save"
+          invalidPaths={[[]]}
+          errors={["incorrect_timestamp"]}
+        />
+      );
+      expect(wrap.text()).toEqual(
+        "Error: You can not save as newer data has already been saved to the system."
       );
     });
   });

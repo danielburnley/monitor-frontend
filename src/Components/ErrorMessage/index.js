@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-export default class ValidationMessage extends React.Component {
+export default class ErrorMessage extends React.Component {
   renderInvalidPaths = () => {
     const strippedPaths = this.stripEmptyPaths();
     return strippedPaths.map(path => {
@@ -53,12 +53,28 @@ export default class ValidationMessage extends React.Component {
     );
   };
 
+  renderOverWritingError = () => {
+    return (
+      <div
+        className="alert alert-danger"
+        role="alert"
+        data-test="overwriting-error"
+      >
+        <strong>Error:</strong> You can not save as newer data has already been saved to the system.<br />
+      </div>
+    );
+  }
+
   render() {
+    if (this.props.errors && this.props.errors.length > 0) {
+      return this.renderOverWritingError()
+    }
+
     return this.renderValidation();
   }
 }
 
-ValidationMessage.propTypes = {
+ErrorMessage.propTypes = {
   valid: PropTypes.bool.isRequired,
   type: PropTypes.string.isRequired,
   invalidPaths: PropTypes.arrayOf(PropTypes.array).isRequired

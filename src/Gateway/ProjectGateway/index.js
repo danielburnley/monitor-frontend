@@ -25,7 +25,8 @@ export default class ProjectGateway {
         projectResponse.data,
         projectResponse.schema,
         projectResponse.status,
-        projectResponse.type
+        projectResponse.type,
+        projectResponse.timestamp
       );
       return { success: true, foundProject };
     } else {
@@ -55,7 +56,7 @@ export default class ProjectGateway {
     }
   }
 
-  async update(project_id, project_data) {
+  async update(project_id, project_data, timestamp) {
     let response = await fetch(
       `${this.env.REACT_APP_HIF_API_URL}project/update`,
       {
@@ -64,12 +65,13 @@ export default class ProjectGateway {
           "Content-Type": "application/json",
           API_KEY: this.apiKeyGateway.getApiKey().apiKey
         },
-        body: JSON.stringify({ project_id, project_data })
+        body: JSON.stringify({ project_id, project_data, timestamp })
       }
     );
-
+    
     if (response.ok) {
-      return { success: true };
+      let rawResponse  = await response.json();
+      return { success: true, errors: rawResponse.errors };
     } else {
       return { success: false };
     }

@@ -16,7 +16,8 @@ export default class ProjectPage extends React.Component {
       formSchema: projectData.schema,
       formUiSchema: uiSchema,
       projectStatus: projectData.status,
-      projectType: projectData.type
+      projectType: projectData.type,
+      timestamp: projectData.timestamp
     });
   };
 
@@ -50,7 +51,8 @@ export default class ProjectPage extends React.Component {
           formData: this.state.formData,
           formSchema: this.state.formSchema,
           formUiSchema: this.state.formUiSchema,
-          projectType: this.state.projectType
+          projectType: this.state.projectType,
+          timestamp: this.state.timestamp
         })}
       </div>
     );

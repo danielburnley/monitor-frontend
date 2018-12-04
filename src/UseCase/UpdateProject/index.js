@@ -3,10 +3,10 @@ export default class UpdateProject {
     this.projectGateway = projectGateway
   }
 
-  async execute(presenter, id, projectData) {
-    let {success} = await this.projectGateway.update(id, projectData);
+  async execute(presenter, id, projectData, timestamp) {
+    let {success, errors} = await this.projectGateway.update(id, projectData, timestamp);
     if (success) {
-      presenter.projectUpdated();
+      presenter.projectUpdated(errors);
     } else {
       presenter.projectNotUpdated();
     }

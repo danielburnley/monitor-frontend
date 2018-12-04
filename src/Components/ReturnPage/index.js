@@ -1,6 +1,6 @@
 import React from "react";
 import ReturnForm from "../ReturnForm";
-import ValidationMessage from "../ValidationMessage";
+import ErrorMessage from "../ErrorMessage";
 import "./style.css";
 
 export default class ReturnPage extends React.Component {
@@ -228,7 +228,7 @@ export default class ReturnPage extends React.Component {
           <div className="col-md-4">{this.renderMandatoryWarning()}</div>
         </div>
         <div className="row">
-          <ValidationMessage
+          <ErrorMessage
             valid={this.state.valid}
             invalidPaths={this.state.invalidPaths}
             type={this.state.lastAction}
