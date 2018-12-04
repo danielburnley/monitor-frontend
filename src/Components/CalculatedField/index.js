@@ -8,6 +8,18 @@ function parseMoney(value) {
   return 0;
 }
 
+function accumulateMoney(array, property) {
+  return array.reduce((total, object) => parseMoney(object[property]) + total, 0)
+}
+
+function set(object, property, value) {
+  object[property] = value;
+}
+
+function get(object, ...properties) {
+  return properties.reduce((accumulator, property) => accumulator[property], object);
+};
+
 export default class CalculatedField extends React.Component {
   constructor(props) {
     super(props)
