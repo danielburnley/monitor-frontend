@@ -16,4 +16,11 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-      - run: npm test
+      - run:
+          command: npm run test:ci -- --coverageDirectory=.reports/coverage
+          environment:
+            JEST_JUNIT_OUTPUT: ".reports/junit/js-test-results.xml"
+      - store_test_results:
+          path: .reports/junit
+      - store_artifacts:
+          path: .reports
