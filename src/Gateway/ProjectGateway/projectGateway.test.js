@@ -112,7 +112,7 @@ describe("Project Gateway", () => {
             project_data: { rabbits: "hop" },
             timestamp: "123456"
           })
-          .reply(200, { errors: [] });
+          .reply(200, { errors: [], timestamp: "2" });
         await gateway.update(2, { rabbits: "hop" }, "123456");
 
         expect(updateProjectRequest.isDone()).toBeTruthy();
@@ -126,10 +126,10 @@ describe("Project Gateway", () => {
             project_data: { rabbits: "hop" },
             timestamp: "123456"
           })
-          .reply(200, { errors: ["some_errors"] });
+          .reply(200, { errors: ["some_errors"], timestamp: "567" });
         let response = await gateway.update(2, { rabbits: "hop" }, "123456");
 
-        expect(response).toEqual({ success: true, errors: ["some_errors"] });
+        expect(response).toEqual({ success: true, errors: ["some_errors"], new_timestamp: "567" });
       });
     });
     describe("Example two", () => {
@@ -150,7 +150,7 @@ describe("Project Gateway", () => {
             project_id: 6,
             project_data: { cows: "moo" }
           })
-          .reply(200, {errors: []});
+          .reply(200, {errors: [], timestamp: "0"});
         await gateway.update(6, { cows: "moo" });
 
         expect(updateProjectRequest.isDone()).toBeTruthy();
@@ -164,9 +164,9 @@ describe("Project Gateway", () => {
             project_data: { frogs: "croak" },
             timestamp: "2343"
           })
-          .reply(200, { errors: ["more_errors"]});
+          .reply(200, { errors: ["more_errors"], timestamp: "789"});
         let response = await gateway.update(19, { frogs: "croak" }, "2343");
-        expect(response).toEqual({ success: true, errors: ["more_errors"] });
+        expect(response).toEqual({ success: true, errors: ["more_errors"], new_timestamp: "789" });
       });
     });
   });

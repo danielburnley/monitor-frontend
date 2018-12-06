@@ -71,7 +71,7 @@ export default class ProjectGateway {
     
     if (response.ok) {
       let rawResponse  = await response.json();
-      return { success: true, errors: rawResponse.errors };
+      return { success: true, errors: rawResponse.errors, new_timestamp: rawResponse.timestamp};
     } else {
       return { success: false };
     }

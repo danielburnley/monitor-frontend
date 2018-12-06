@@ -428,7 +428,7 @@ describe("NewProjectPage", () => {
         })
       };
       let updateProjectSpy = {
-        execute: jest.fn(async (presenter, id) => presenter.projectUpdated([]))
+        execute: jest.fn(async (presenter, id) => presenter.projectUpdated([], "45"))
       };
       let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
       let validateProjectSpy = { execute: jest.fn(async () => {}) };
@@ -450,6 +450,7 @@ describe("NewProjectPage", () => {
       wrap.find('[data-test="update-project-button"]').simulate("click");
       await wait();
       expect(updateProjectSpy.execute).toBeCalledWith(expect.anything(), 9, {}, "12345");
+      expect(wrap.state().timestamp).toEqual("45")
     });
 
     it("example 2", async () => {
@@ -459,7 +460,7 @@ describe("NewProjectPage", () => {
         })
       };
       let updateProjectSpy = {
-        execute: jest.fn(async (presenter, id) => presenter.projectUpdated([]))
+        execute: jest.fn(async (presenter, id) => presenter.projectUpdated([], "65"))
       };
       let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
       let validateProjectSpy = { execute: jest.fn(async () => {}) };
@@ -484,6 +485,7 @@ describe("NewProjectPage", () => {
       await wait();
       expect(updateProjectSpy.execute).toBeCalledWith(expect.anything(), 1, {
         cat: { catA: { catB: "cashews" }  } }, "now");
+      expect(wrap.state().timestamp).toEqual("65")
     });
   });
 
