@@ -25,3 +25,7 @@ test: docker-down docker-build
 .PHONY: coverage
 coverage: docker-down docker-build
 	docker-compose run --rm web npm run coverage
+
+.PHONY: lint
+lint: docker-down docker-build
+	docker-compose run --rm web npx eslint src
