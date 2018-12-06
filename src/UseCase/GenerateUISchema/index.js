@@ -62,12 +62,16 @@ export default class GenerateUISchema {
       ret["ui:field"] = "periods";
     } else if (value.items.milestone) {
       ret["items"]["ui:field"] = "milestone"
-    } else if (value.items.calculation) {
-      ret["items"]["ui:field"] = "calculated"
-    } else if (value.quarterly) {
+    }  else if (value.quarterly) {
       ret["ui:field"] = "quarterly"
-    } else if (value.numbered) {
+    }
+    
+    if (value.numbered) {
       ret["ui:field"] = "numbered"
+    }
+
+    if (value.items.calculation) {
+      ret["items"]["ui:field"] = "calculated"
     }
 
     return ret;

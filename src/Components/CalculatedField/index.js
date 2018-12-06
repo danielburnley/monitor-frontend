@@ -12,6 +12,10 @@ function accumulateMoney(array, property) {
   return array.reduce((total, object) => parseMoney(object[property]) + total, 0)
 }
 
+function sum(data, ...keys) {
+  return keys.reduce((total, key) => parseMoney(data[key]) + total, 0)
+}
+
 function set(object, property, value) {
   object[property] = value;
 }
