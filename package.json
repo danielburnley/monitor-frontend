@@ -25,9 +25,28 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
+    "coverage": "react-scripts test --env=jsdom --coverage",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 9009 -s public",
     "build-storybook": "build-storybook -s public"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+        "**/*.{js,jsx}",
+        "!**/node_modules/**",
+        "!**/stories.js",
+        "!**/coverage/**",
+        "!**/src/index.js",
+        "!**/src/registerServiceWorker.js"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 88,
+        "functions": 90,
+        "statements": 90,
+        "lines": 90
+      }
+    }
   },
   "devDependencies": {
     "@storybook/addon-actions": "^3.4.11",
