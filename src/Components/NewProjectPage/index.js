@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import ParentForm from "../ParentForm";
-import ValidationMessage from "../ValidationMessage";
+import ErrorMessage from "../ErrorMessage";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import "./style.css";
 
@@ -30,9 +30,16 @@ export default class NewProjectPage extends React.Component {
 
   creationFailure() {}
 
-  projectUpdated() {
-    if(this.state.status === "updating") {
-      this.setState({ status: "saved" });
+  projectUpdated(errors) {
+    if(errors && errors.length > 0) {
+      this.setState({
+        errors: errors,
+        status: "ready"
+      })
+    } else if(this.state.status === "updating") {
+      this.setState({
+        status: "saved"
+      });
     }
   }
 
@@ -58,7 +65,8 @@ export default class NewProjectPage extends React.Component {
     await this.props.updateProject.execute(
       this,
       this.props.match.params.id,
-      this.state.formData
+      this.state.formData,
+      this.props.timestamp
     );
 
     if (this.state.valid) {
@@ -82,7 +90,8 @@ export default class NewProjectPage extends React.Component {
     await this.props.updateProject.execute(
       this,
       this.props.match.params.id,
-      this.state.formData
+      this.state.formData,
+      this.props.timestamp
     );
     e.preventDefault();
   };
@@ -167,10 +176,11 @@ export default class NewProjectPage extends React.Component {
     } else {
       return (
         <div>
-          <ValidationMessage
+          <ErrorMessage
             valid={this.state.valid}
             type={this.state.action}
             invalidPaths={this.state.prettyInvalidPaths}
+            errors={this.state.errors}
           />
           { this.renderSaveSuccess() }
           <div className="row">

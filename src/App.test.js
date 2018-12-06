@@ -288,9 +288,9 @@ describe('Submitting a draft project', () => {
     process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
     api = new APISimulator("http://cat.meow");
     api.expendToken("Cats", 0).successfully();
-    api.getProject(projectSchema, draftProjectData, "Draft", projectType).successfully();
-    api.getProject(projectSchema, draftProjectData, "Draft", projectType).successfully();
-    api.updateProject(submittedProjectData, 0).successfully();
+    api.getProject(projectSchema, draftProjectData, "Draft", projectType, "5").successfully();
+    api.getProject(projectSchema, draftProjectData, "Draft", projectType, "8").successfully();
+    api.updateProject(submittedProjectData, 0, {errors: []}, "8").successfully();
     api.submitProject(0).successfully();
   });
 
@@ -361,6 +361,28 @@ describe('Submitting a draft project', () => {
     page.find('[data-test="submit-project-button"]').simulate("click");
     await page.load();
     expect(page.find('[data-test="project-create-success"]').length).toEqual(1);
+  });
+
+  it('Present you with an error when you attempt to save over data which has been previously saved', async () => {
+    let page = new AppPage("/project/0");
+    let response = {
+      valid: true,
+      invalidPaths: [],
+      prettyInvalidPaths: []
+    };
+
+    api.validateProject(0, projectType, returnData, response).successfully();
+    
+    api.updateProject(returnData, 0, {successful: false, errors: ["incomplete_timestamp"]}, "8").successfully();
+
+    await page.load();
+
+
+    page.find('[data-test="update-project-button"]').simulate("click");
+
+    await page.load();
+
+    expect(page.find('[data-test="overwriting-error"]').length).toEqual(1);
   });
 });
 

@@ -121,7 +121,7 @@ const BackToProjectOverviewButton = props => (
   </button>
 );
 
-const renderNewProjectPage = (props, projectStatus, formData, formSchema, projectType, formUiSchema) => (
+const renderNewProjectPage = (props, projectStatus, formData, formSchema, projectType, formUiSchema, timestamp) => (
   <NewProjectPage
     {...props}
     uiSchema={formUiSchema}
@@ -135,6 +135,7 @@ const renderNewProjectPage = (props, projectStatus, formData, formSchema, projec
     validateProject={validateProjectUseCase}
     documentGateway={documentGateway}
     userRole={getRole}
+    timestamp={timestamp}
   />
 );
 
@@ -161,9 +162,9 @@ const renderSubmittedProjectPage = (props, formData, formSchema) => (
 
 const renderProjectPage = props => (
   <ProjectPage {...props} getProject={getProjectUseCase} generateUISchema={generateUISchema} >
-    {({ projectStatus, formData, formSchema, projectType, formUiSchema }) => {
+    {({ projectStatus, formData, formSchema, projectType, formUiSchema, timestamp }) => {
       if (projectStatus === "Draft" || projectStatus === "LA Draft") {
-        return renderNewProjectPage(props, projectStatus, formData, formSchema, projectType, formUiSchema);
+        return renderNewProjectPage(props, projectStatus, formData, formSchema, projectType, formUiSchema, timestamp);
       }
       if (projectStatus === "Submitted") {
         return renderSubmittedProjectPage(props, formData, formSchema);

@@ -6,6 +6,7 @@ describe("Project Gateway", () => {
   afterEach(() => {
     nock.cleanAll();
   });
+
   describe("#FindByID", () => {
     describe("Given a Project is found", () => {
       let projectRequest, response, apiKeyGateway;
@@ -20,7 +21,7 @@ describe("Project Gateway", () => {
             .matchHeader("Content-Type", "application/json")
             .matchHeader("API_KEY", "superSecret")
             .get("/project/find?id=1")
-            .reply(200, { data: { cow: "moo" }, schema: { duck: "quack" }, type: 'ac', status: 'Draft'});
+            .reply(200, { data: { cow: "moo" }, schema: { duck: "quack" }, type: 'ac', status: 'Draft', timestamp: "12345"});
           let gateway = new ProjectGateway(apiKeyGateway);
           response = await gateway.findById(1);
         });
@@ -30,10 +31,10 @@ describe("Project Gateway", () => {
         });
 
         it("Projects the response from the api", () => {
-          let project = new Project({ cow: "moo" }, { duck: "quack" }, 'Draft', 'ac');
+          let project = new Project({ cow: "moo" }, { duck: "quack" }, 'Draft', 'ac', "12345");
           expect(response).toEqual({
             success: true,
-            foundProject: { data: project.data, schema: project.schema, type: project.type, status: project.status}
+            foundProject: { data: project.data, schema: project.schema, type: project.type, status: project.status, timestamp: project.timestamp}
           });
         });
 
@@ -53,7 +54,7 @@ describe("Project Gateway", () => {
             .matchHeader("Content-Type", "application/json")
             .matchHeader("API_KEY", "extraSecret")
             .get("/project/find?id=5")
-            .reply(200, { data: { dogs: "woof" }, schema: { cats: "meow" }, status: 'Submited', type: 'hif' });
+            .reply(200, { data: { dogs: "woof" }, schema: { cats: "meow" }, status: 'Submited', type: 'hif', timestamp: "2344" });
           let gateway = new ProjectGateway(apiKeyGateway);
           response = await gateway.findById(5);
         });
@@ -63,10 +64,10 @@ describe("Project Gateway", () => {
         });
 
         it("Projects the response from the api", () => {
-          let project = new Project({ dogs: "woof" }, { cats: "meow" }, 'Submited', 'hif');
+          let project = new Project({ dogs: "woof" }, { cats: "meow" }, 'Submited', 'hif', "2344");
           expect(response).toEqual({
             success: true,
-            foundProject: { data: project.data, schema: project.schema, type: project.type, status: project.status }
+            foundProject: { data: project.data, schema: project.schema, type: project.type, status: project.status, timestamp: project.timestamp }
           });
         });
 
@@ -108,10 +109,11 @@ describe("Project Gateway", () => {
           .matchHeader("Content-Type", "application/json")
           .post("/project/update", {
             project_id: 2,
-            project_data: { rabbits: "hop" }
+            project_data: { rabbits: "hop" },
+            timestamp: "123456"
           })
-          .reply(200);
-        await gateway.update(2, { rabbits: "hop" });
+          .reply(200, { errors: [] });
+        await gateway.update(2, { rabbits: "hop" }, "123456");
 
         expect(updateProjectRequest.isDone()).toBeTruthy();
       });
@@ -121,12 +123,13 @@ describe("Project Gateway", () => {
           .matchHeader("Content-Type", "application/json")
           .post("/project/update", {
             project_id: 2,
-            project_data: { rabbits: "hop" }
+            project_data: { rabbits: "hop" },
+            timestamp: "123456"
           })
-          .reply(200);
-        let response = await gateway.update(2, { rabbits: "hop" });
+          .reply(200, { errors: ["some_errors"] });
+        let response = await gateway.update(2, { rabbits: "hop" }, "123456");
 
-        expect(response).toEqual({ success: true });
+        expect(response).toEqual({ success: true, errors: ["some_errors"] });
       });
     });
     describe("Example two", () => {
@@ -147,7 +150,7 @@ describe("Project Gateway", () => {
             project_id: 6,
             project_data: { cows: "moo" }
           })
-          .reply(200);
+          .reply(200, {errors: []});
         await gateway.update(6, { cows: "moo" });
 
         expect(updateProjectRequest.isDone()).toBeTruthy();
@@ -158,11 +161,12 @@ describe("Project Gateway", () => {
           .matchHeader("Content-Type", "application/json")
           .post("/project/update", {
             project_id: 19,
-            project_data: { frogs: "croak" }
+            project_data: { frogs: "croak" },
+            timestamp: "2343"
           })
-          .reply(200);
-        let response = await gateway.update(19, { frogs: "croak" });
-        expect(response).toEqual({ success: true });
+          .reply(200, { errors: ["more_errors"]});
+        let response = await gateway.update(19, { frogs: "croak" }, "2343");
+        expect(response).toEqual({ success: true, errors: ["more_errors"] });
       });
     });
   });
