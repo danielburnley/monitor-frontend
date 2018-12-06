@@ -28,4 +28,4 @@ coverage: docker-down docker-build
 
 .PHONY: lint
 lint: docker-down docker-build
-	docker-compose run --rm web npx eslint src
+	docker-compose run --rm web run lint
