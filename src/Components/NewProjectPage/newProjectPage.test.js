@@ -49,7 +49,7 @@ describe("NewProjectPage", () => {
         validateProject={ { execute: () => null } }
         data={{}}
         schema={schema}
-        userRole={userRoleUseCaseSpy}
+        getRole={userRoleUseCaseSpy}
       />
     )
     expect(userRoleUseCaseSpy.execute).toBeCalled()
@@ -67,7 +67,7 @@ describe("NewProjectPage", () => {
         validateProject={ { execute: () => null } }
         data={{}}
         schema={schema}
-        userRole={userRoleUseCaseSpy}
+        getRole={userRoleUseCaseSpy}
       />
     );
 
@@ -89,7 +89,7 @@ describe("NewProjectPage", () => {
   
         let wrap = mount(
           <NewProjectPage
-            userRole={userRoleUseCaseSpy}
+            getRole={userRoleUseCaseSpy}
             match={{ params: { id: 1 } }}
             updateProject={updateProjectSpy}
             submitProject={submitProjectSpy}
@@ -121,7 +121,7 @@ describe("NewProjectPage", () => {
   
         let wrap = mount(
           <NewProjectPage
-            userRole={userRoleUseCaseSpy}
+            getRole={userRoleUseCaseSpy}
             match={{ params: { id: 1 } }}
             updateProject={updateProjectSpy}
             submitProject={submitProjectSpy}
@@ -159,7 +159,7 @@ describe("NewProjectPage", () => {
   
         let wrap = mount(
           <NewProjectPage
-            userRole={userRoleUseCaseSpy}
+            getRole={userRoleUseCaseSpy}
             match={{ params: { id: 1 } }}
             updateProject={updateProjectSpy}
             submitProject={submitProjectSpy}
@@ -191,7 +191,7 @@ describe("NewProjectPage", () => {
   
         let wrap = mount(
           <NewProjectPage
-            userRole={userRoleUseCaseSpy}
+            getRole={userRoleUseCaseSpy}
             match={{ params: { id: 1 } }}
             updateProject={updateProjectSpy}
             submitProject={submitProjectSpy}
@@ -231,7 +231,7 @@ describe("NewProjectPage", () => {
   
         let wrap = mount(
           <NewProjectPage
-            userRole={userRoleUseCaseSpy}
+            getRole={userRoleUseCaseSpy}
             match={{ params: { id: 1 } }}
             updateProject={updateProjectSpy}
             submitProject={submitProjectSpy}
@@ -262,7 +262,7 @@ describe("NewProjectPage", () => {
   
         let wrap = mount(
           <NewProjectPage
-            userRole={userRoleUseCaseSpy}
+            getRole={userRoleUseCaseSpy}
             match={{ params: { id: 1 } }}
             updateProject={updateProjectSpy}
             submitProject={submitProjectSpy}
@@ -299,7 +299,7 @@ describe("NewProjectPage", () => {
   
         let wrap = mount(
           <NewProjectPage
-            userRole={userRoleUseCaseSpy}
+            getRole={userRoleUseCaseSpy}
             match={{ params: { id: 1 } }}
             updateProject={updateProjectSpy}
             submitProject={submitProjectSpy}
@@ -330,7 +330,7 @@ describe("NewProjectPage", () => {
   
         let wrap = mount(
           <NewProjectPage
-            userRole={userRoleUseCaseSpy}
+            getRole={userRoleUseCaseSpy}
             match={{ params: { id: 1 } }}
             updateProject={updateProjectSpy}
             submitProject={submitProjectSpy}
@@ -377,7 +377,7 @@ describe("NewProjectPage", () => {
           validateProject={validateProjectSpy}
           data={{}}
           schema={schema}
-          userRole={userRoleUseCaseSpy}
+          getRole={userRoleUseCaseSpy}
           timestamp={"1234"}
         />
       );
@@ -407,7 +407,7 @@ describe("NewProjectPage", () => {
           validateProject={validateProjectSpy}
           data={data}
           schema={schema}
-          userRole={userRoleUseCaseSpy}
+          getRole={userRoleUseCaseSpy}
           timestamp={"789"}
         />
       );
@@ -428,7 +428,7 @@ describe("NewProjectPage", () => {
         })
       };
       let updateProjectSpy = {
-        execute: jest.fn(async (presenter, id) => presenter.projectUpdated([]))
+        execute: jest.fn(async (presenter, id) => presenter.projectUpdated([], "45"))
       };
       let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
       let validateProjectSpy = { execute: jest.fn(async () => {}) };
@@ -441,7 +441,7 @@ describe("NewProjectPage", () => {
           validateProject={validateProjectSpy}
           data={{}}
           schema={schema}
-          userRole={userRoleUseCaseSpy}
+          getRole={userRoleUseCaseSpy}
           timestamp={"12345"}
         />
       );
@@ -450,6 +450,7 @@ describe("NewProjectPage", () => {
       wrap.find('[data-test="update-project-button"]').simulate("click");
       await wait();
       expect(updateProjectSpy.execute).toBeCalledWith(expect.anything(), 9, {}, "12345");
+      expect(wrap.state().timestamp).toEqual("45")
     });
 
     it("example 2", async () => {
@@ -459,7 +460,7 @@ describe("NewProjectPage", () => {
         })
       };
       let updateProjectSpy = {
-        execute: jest.fn(async (presenter, id) => presenter.projectUpdated([]))
+        execute: jest.fn(async (presenter, id) => presenter.projectUpdated([], "65"))
       };
       let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
       let validateProjectSpy = { execute: jest.fn(async () => {}) };
@@ -472,7 +473,7 @@ describe("NewProjectPage", () => {
           validateProject={validateProjectSpy}
           data={data}
           schema={schema}
-          userRole={userRoleUseCaseSpy}
+          getRole={userRoleUseCaseSpy}
           timestamp={"now"}
         />
       );
@@ -484,6 +485,7 @@ describe("NewProjectPage", () => {
       await wait();
       expect(updateProjectSpy.execute).toBeCalledWith(expect.anything(), 1, {
         cat: { catA: { catB: "cashews" }  } }, "now");
+      expect(wrap.state().timestamp).toEqual("65")
     });
   });
 
@@ -509,7 +511,7 @@ describe("NewProjectPage", () => {
           validateProject={validateProjectSpy}
           data={data}
           schema={schema}
-          userRole={userRoleUseCaseSpy}
+          getRole={userRoleUseCaseSpy}
           status={"LA Draft"}
         />
       );
@@ -548,7 +550,7 @@ describe("NewProjectPage", () => {
           validateProject={validateProjectSpy}
           data={data}
           schema={schema}
-          userRole={userRoleUseCaseSpy}
+          getRole={userRoleUseCaseSpy}
           status={"LA Draft"}
         />
       );
@@ -589,7 +591,7 @@ describe("NewProjectPage", () => {
             data={data}
             schema={schema}
             status={"LA Draft"}
-            userRole={userRoleUseCaseSpy}
+            getRole={userRoleUseCaseSpy}
             UiSchema={{}}
           />
         );
@@ -633,7 +635,7 @@ describe("NewProjectPage", () => {
             validateProject={validateProjectSpy}
             data={data}
             schema={schema}
-            userRole={userRoleUseCaseSpy}
+            getRole={userRoleUseCaseSpy}
             status={"Draft"}
           />
         );
@@ -673,7 +675,7 @@ describe("NewProjectPage", () => {
           validateProject={validateProjectSpy}
           data={data}
           schema={schema}
-          userRole={userRoleUseCaseSpy}
+          getRole={userRoleUseCaseSpy}
           status={"Draft"}
         />
       );
@@ -717,7 +719,7 @@ describe("NewProjectPage", () => {
           validateProject={validateProjectSpy}
           data={data}
           schema={schema}
-          userRole={userRoleUseCaseSpy}
+          getRole={userRoleUseCaseSpy}
           status={"LA Draft"}
         />
       );
@@ -759,7 +761,7 @@ describe("NewProjectPage", () => {
           validateProject={validateProjectSpy}
           data={data}
           schema={schema}
-          userRole={userRoleUseCaseSpy}
+          getRole={userRoleUseCaseSpy}
           updateProject={updateProjectSpy}
         />
       );
@@ -792,7 +794,7 @@ describe("NewProjectPage", () => {
           submitProject={submitProjectSpy}
           validateProject={validateProjectSpy}
           data={data}
-          userRole={userRoleUseCaseSpy}
+          getRole={userRoleUseCaseSpy}
           schema={schema}
         />
       );
@@ -827,7 +829,7 @@ describe("NewProjectPage", () => {
           validateProject={validateProjectSpy}
           data={data}
           schema={schema}
-          userRole={userRoleUseCaseSpy}
+          getRole={userRoleUseCaseSpy}
         />
       );
 
@@ -857,7 +859,7 @@ describe("NewProjectPage", () => {
           updateProject={updateProjectSpy}
           validateProject={validateProjectSpy}
           data={data}
-          userRole={userRoleUseCaseSpy}
+          getRole={userRoleUseCaseSpy}
           schema={schema}
         />
       );
@@ -896,7 +898,7 @@ describe("NewProjectPage", () => {
           data={data}
           schema={schema}
           status={"LA Draft"}
-          userRole={userRoleUseCaseSpy}
+          getRole={userRoleUseCaseSpy}
           UiSchema={{}}
         />
       );
@@ -930,7 +932,7 @@ describe("NewProjectPage", () => {
         updateProject={updateProjectSpy}
         validateProject={validateProjectSpy}
         data={data}
-        userRole={userRoleUseCaseSpy}
+        getRole={userRoleUseCaseSpy}
         schema={schema}
       />
     );

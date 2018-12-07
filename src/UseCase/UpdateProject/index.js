@@ -4,9 +4,9 @@ export default class UpdateProject {
   }
 
   async execute(presenter, id, projectData, timestamp) {
-    let {success, errors} = await this.projectGateway.update(id, projectData, timestamp);
+    let {success, errors, new_timestamp} = await this.projectGateway.update(id, projectData, timestamp);
     if (success) {
-      presenter.projectUpdated(errors);
+      presenter.projectUpdated(errors, new_timestamp);
     } else {
       presenter.projectNotUpdated();
     }

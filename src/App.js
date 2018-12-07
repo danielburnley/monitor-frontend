@@ -134,7 +134,7 @@ const renderNewProjectPage = (props, projectStatus, formData, formSchema, projec
     updateProject={updateProjectUseCase}
     validateProject={validateProjectUseCase}
     documentGateway={documentGateway}
-    userRole={getRole}
+    getRole={getRole}
     timestamp={timestamp}
   />
 );

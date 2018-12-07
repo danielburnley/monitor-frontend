@@ -2,9 +2,9 @@ import UpdateProject from ".";
 
 describe("UpdateProject", () => {
   let projectGateway, presenterSpy;
-  function getUseCase(success = true, errors = []) {
+  function getUseCase(success = true, errors = [], new_timestamp = 0) {
     presenterSpy = { projectUpdated: jest.fn(), projectNotUpdated: jest.fn() }
-    projectGateway = { update: jest.fn(async () => ({success, errors})) };
+    projectGateway = { update: jest.fn(async () => ({success, errors, new_timestamp})) };
     return new UpdateProject(projectGateway);
   }
   describe('calls the project gateway', () => {
@@ -20,17 +20,17 @@ describe("UpdateProject", () => {
     });
   });
 
-  describe('calls creation success on success with any errors', () => {
+  describe('calls creation success on success with any errors and timestamp', () => {
     it('example 1', async () => {
-      let usecase = getUseCase(true, ["error"]);
+      let usecase = getUseCase(true, ["error"], "456");
       await usecase.execute(presenterSpy, 1);
-      expect(presenterSpy.projectUpdated).toHaveBeenCalledWith(["error"]);
+      expect(presenterSpy.projectUpdated).toHaveBeenCalledWith(["error"], "456");
       expect(presenterSpy.projectNotUpdated).not.toHaveBeenCalled();
     });
     it('example 2', async () => {
-      let usecase = getUseCase(true, 'another error');
+      let usecase = getUseCase(true, 'another error', "234");
       await usecase.execute(presenterSpy, 25565);
-      expect(presenterSpy.projectUpdated).toHaveBeenCalledWith('another error');
+      expect(presenterSpy.projectUpdated).toHaveBeenCalledWith('another error', "234");
       expect(presenterSpy.projectNotUpdated).not.toHaveBeenCalled();
     });
   });
