@@ -1,0 +1,6 @@
+---
+applications:
+- name: monitor-frontend-staging
+  memory: 512M
+  buildpacks:
+    - https://github.com/madetech/create-react-app-buildpack
