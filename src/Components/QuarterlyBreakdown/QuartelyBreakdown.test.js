@@ -487,20 +487,20 @@ describe("Quarterly Breakdown", () => {
         );
       });
 
-      it("does not have an input field", () => {
-        expect(field.find('[data-test="period_0"]').length).toEqual(0);
-        expect(field.find('[data-test="quarter1_0"]').length).toEqual(0);
-        expect(field.find('[data-test="quarter2_0"]').length).toEqual(0);
-        expect(field.find('[data-test="quarter3_0"]').length).toEqual(0);
-        expect(field.find('[data-test="quarter4_0"]').length).toEqual(0);
+      it("has one input field", () => {
+        expect(field.find('[data-test="period_0"]').length).toEqual(1);
+        expect(field.find('[data-test="quarter1_0"]').length).toEqual(1);
+        expect(field.find('[data-test="quarter2_0"]').length).toEqual(1);
+        expect(field.find('[data-test="quarter3_0"]').length).toEqual(1);
+        expect(field.find('[data-test="quarter4_0"]').length).toEqual(1);
       });
 
       it("renders an add button", () => {
         expect(field.find('[data-test="add-button"]').length).toEqual(1);
       });
 
-      it("does not render a remove button", () => {
-        expect(field.find('[data-test="remove-button-0"]').length).toEqual(0);
+      it("does render a remove button", () => {
+        expect(field.find('[data-test="remove-button-0"]').length).toEqual(1);
       });
     });
 
@@ -536,20 +536,20 @@ describe("Quarterly Breakdown", () => {
         );
       });
 
-      it("does not have an input field", () => {
-        expect(field.find('[data-test="period_0"]').length).toEqual(0);
-        expect(field.find('[data-test="quarter1_0"]').length).toEqual(0);
-        expect(field.find('[data-test="quarter2_0"]').length).toEqual(0);
-        expect(field.find('[data-test="quarter3_0"]').length).toEqual(0);
-        expect(field.find('[data-test="quarter4_0"]').length).toEqual(0);
+      it("has one input field", () => {
+        expect(field.find('[data-test="period_0"]').length).toEqual(1);
+        expect(field.find('[data-test="quarter1_0"]').length).toEqual(1);
+        expect(field.find('[data-test="quarter2_0"]').length).toEqual(1);
+        expect(field.find('[data-test="quarter3_0"]').length).toEqual(1);
+        expect(field.find('[data-test="quarter4_0"]').length).toEqual(1);
       });
 
       it("renders an add button", () => {
         expect(field.find('[data-test="add-button"]').length).toEqual(1);
       });
 
-      it("does not render a remove button", () => {
-        expect(field.find('[data-test="remove-button-0"]').length).toEqual(0);
+      it("does render a remove button", () => {
+        expect(field.find('[data-test="remove-button-0"]').length).toEqual(1);
       });
     });
   });
