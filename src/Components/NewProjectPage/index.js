@@ -16,7 +16,7 @@ export default class NewProjectPage extends React.Component {
       status: "ready",
       prettyInvalidPaths: [[]],
       action: "",
-      userRole: this.props.userRole.execute().role,
+      userRole: this.props.getRole.execute().role,
       timestamp: this.props.timestamp
     };
   }
@@ -123,7 +123,7 @@ export default class NewProjectPage extends React.Component {
           formData={this.state.formData}
           schema={this.state.formSchema}
           uiSchema={this.props.uiSchema}
-          getRole={this.props.userRole}
+          getRole={this.props.getRole}
           onChange={e => {
             this.setState({
               formData: e.formData,
