@@ -487,7 +487,7 @@ describe("Quarterly Breakdown", () => {
         );
       });
 
-      it("does has one input field", () => {
+      it("has one input field", () => {
         expect(field.find('[data-test="period_0"]').length).toEqual(1);
         expect(field.find('[data-test="quarter1_0"]').length).toEqual(1);
         expect(field.find('[data-test="quarter2_0"]').length).toEqual(1);
