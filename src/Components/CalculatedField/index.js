@@ -1,15 +1,18 @@
-import React from 'react';
+import React from "react";
 
 function parseMoney(value) {
   if (value) {
-    let cleanedString = value.replace(/[^0-9.]/g,"");
+    let cleanedString = value.replace(/[^0-9.]/g, "");
     return new Number(cleanedString);
   }
   return 0;
 }
 
 function accumulateMoney(array, property) {
-  return array.reduce((total, object) => parseMoney(object[property]) + total, 0)
+  return array.reduce(
+    (total, object) => parseMoney(object[property]) + total,
+    0
+  );
 }
 
 function sum(data, ...keys) {
@@ -28,41 +31,51 @@ function set(object, property, value) {
 }
 
 function get(object, ...properties) {
-  return properties.reduce((accumulator, property) => accumulator[property], object);
-};
+  return properties.reduce(
+    (accumulator, property) => accumulator[property],
+    object
+  );
+}
+
+function calculateVariance(object, value1, value2) {
+  let result =
+    (parseMoney(get(object, value1)) / parseMoney(get(object, value2))) * 100;
+
+  return Math.round(result * 100) / 100;
+}
 
 export default class CalculatedField extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       formData: this.props.formData
-    }
+    };
 
     let formData = this.state.formData;
     eval(this.props.schema.calculation);
     this.state.formData = formData;
   }
 
-  onChange = (formData) => {
+  onChange = formData => {
     eval(this.props.schema.calculation);
-    this.setState({formData});
+    this.setState({ formData });
     this.props.onChange(formData);
-  }
+  };
 
-  removeCalculationBeforeRender = (uiSchema) => {
+  removeCalculationBeforeRender = uiSchema => {
     if (uiSchema) {
       uiSchema["ui:field"] = "";
     }
     return uiSchema;
-  }
+  };
 
   render = () => (
     <this.props.registry.fields.SchemaField
-      formData = { this.state.formData }
-      schema = { this.props.schema }
-      onChange = { this.onChange }
-      uiSchema = { this.removeCalculationBeforeRender(this.props.uiSchema) }
-      registry = { this.props.registry }
-      />
-  )
+      formData={this.state.formData}
+      schema={this.props.schema}
+      onChange={this.onChange}
+      uiSchema={this.removeCalculationBeforeRender(this.props.uiSchema)}
+      registry={this.props.registry}
+    />
+  );
 }
