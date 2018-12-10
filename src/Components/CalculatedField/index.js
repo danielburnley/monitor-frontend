@@ -21,6 +21,8 @@ function get(object, ...properties) {
 };
 
 function combineArrays(array1, array2) {
+  if (!array1) return array2;
+  if (!array2) return array1;
   return array1.concat(array2)
 };
 
