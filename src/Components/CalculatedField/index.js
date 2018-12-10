@@ -37,9 +37,9 @@ function get(object, ...properties) {
   );
 }
 
-function calculateVariance(object, value1, value2) {
+function calculateVariance(value1, value2) {
   let result =
-    (parseMoney(get(object, value1)) / parseMoney(get(object, value2))) * 100;
+    (value1 / value2) * 100;
 
   return Math.round(result * 100) / 100;
 }
