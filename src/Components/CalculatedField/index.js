@@ -20,6 +20,10 @@ function get(object, ...properties) {
   return properties.reduce((accumulator, property) => accumulator[property], object);
 };
 
+function combineArrays(array1, array2) {
+  return array1.concat(array2)
+};
+
 export default class CalculatedField extends React.Component {
   constructor(props) {
     super(props)
