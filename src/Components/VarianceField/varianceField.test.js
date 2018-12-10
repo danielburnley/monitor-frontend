@@ -46,6 +46,16 @@ describe("VarianceField", () => {
         expect(percentComplete.length).toEqual(1);
       });
 
+      it("Renders the baseline variance field", () => {
+        let baselineVariance = field.find("[data-test='baseline-variance']");
+        expect(baselineVariance.length).toEqual(1);
+      });
+
+      it("Renders the return variance field", () => {
+        let baselineVariance = field.find("[data-test='return-variance']");
+        expect(baselineVariance.length).toEqual(1);
+      });
+
       it("Does not show the updated value field", () => {
         let updatedValue = field.find("[data-test='variance-current']");
         expect(updatedValue.length).toEqual(0);
@@ -123,6 +133,16 @@ describe("VarianceField", () => {
       it("Renders the percentage complete field", () => {
         let percentComplete = field.find("[data-test='variance-percentage']");
         expect(percentComplete.length).toEqual(1);
+      });
+
+      it("Renders the baseline variance field", () => {
+        let baselineVariance = field.find("[data-test='baseline-variance']");
+        expect(baselineVariance.length).toEqual(1);
+      });
+
+      it("Renders the return variance field", () => {
+        let baselineVariance = field.find("[data-test='return-variance']");
+        expect(baselineVariance.length).toEqual(1);
       });
 
       it("Does not show the updated value field", () => {
