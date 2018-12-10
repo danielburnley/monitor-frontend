@@ -15,9 +15,11 @@ export default class QuarterlyBreakdown extends React.Component {
   onFieldChange(index, name, value) {
     let newData = this.state.data;
     newData[index][name] = value
-    this.setState({ data: newData }, () => {
-      this.props.onChange(this.state.data);
-    });
+
+    this.props.onChange(newData);
+
+    this.setState({ data: this.state.data })
+
   }
 
   renderData = (quarterlyObject) => {
@@ -64,56 +66,19 @@ export default class QuarterlyBreakdown extends React.Component {
     });
   }
 
-  renderOptions = (options) => {
-    return(
-      options.map((value, index) => {
-      return <option key={index}>{value}</option>
-      })
-    )
-  }
-
-  renderDropdown = (key, value, v, index) => {
-    return (
-      <select
-      data-test={`${key}_${index}`}
-      className="form-control"
-      value={value}
-      onChange={e => this.onFieldChange(index, key, e.target.value)}
-      disabled={v.readonly}
-      >
-        <option></option>
-        {this.renderOptions(v.enum)}
-      </select>
-    )
-  }
-
   renderInputField(key, periodData, index, v) {
-    let numberOfRows = Object.keys(this.state.data).length
-    if (v.currency) {
+    let schema_title_striped = JSON.parse(JSON.stringify(v))
+    schema_title_striped.title = ""
       return (
-        <this.props.registry.widgets.currency
+        <this.props.registry.fields.SchemaField
+          schema = {schema_title_striped}
           data-test={`${key}_${index}`}
-          className="form-control"
-          value={periodData}
-          key={`${key}_${index}_${numberOfRows}`}
+          formData = {periodData}
+          uiSchema={this.props.uiSchema && this.props.uiSchema.items[key]}
           onChange={e => this.onFieldChange(index, key, e)}
-          disabled={v.readonly}
+          registry = {this.props.registry}
         />
       );
-    } else if (v.enum) {
-      return this.renderDropdown(key, periodData, v, index)
-    } else {
-      return (
-        <input
-        data-test={`${key}_${index}`}
-        className="form-control"
-        value={periodData}
-        key={`${key}_${index}_${numberOfRows}`}
-        onChange={e => this.onFieldChange(index, key, e.target.value)}
-        disabled={v.readonly}
-      />
-      );
-    }
   }
 
   renderAddButton() {
@@ -149,7 +114,6 @@ export default class QuarterlyBreakdown extends React.Component {
 
   render() {
     let quarterlyObject = this.props.schema.items.properties;
-
     if(this.props.schema.addable){
       quarterlyObject.remove = { title: "Remove", type: "string" };
     }
@@ -158,7 +122,7 @@ export default class QuarterlyBreakdown extends React.Component {
         <h4>{this.props.schema.title}</h4>
       </div>
       <div className="line">{this.renderHeaders(quarterlyObject)}</div>
-      <div>{this.renderData(quarterlyObject)}</div>
+        <div>{this.renderData(quarterlyObject)}</div>
       <div className="line">{this.renderAddButton()}</div>
     </div>
   }

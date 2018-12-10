@@ -1,12 +1,24 @@
 import QuarterlyBreakdown from ".";
 import { mount } from "enzyme";
 import React from "react";
+import FieldFake from "../../../test/FieldFake";
+
+async function wait() {
+  await new Promise(resolve => setTimeout(resolve, 100));
+}
 
 describe("Quarterly Breakdown", () => {
-  describe("Readonly Data", () => {
     describe("Example 1", () => {
-      let field, schema, data;
+      let field, schema, data, onChangeSpy, uiSchema;
       beforeEach(() => {
+        onChangeSpy = jest.fn();
+
+        uiSchema = {
+          items : {
+            period: {"ui":"weirdUiProp"}
+          }
+        }
+
         schema = {
           type: "array",
           title: "Cats Data",
@@ -16,8 +28,7 @@ describe("Quarterly Breakdown", () => {
               period: { title: "Year", type: "string", readonly: true },
               quarter1: {
                 title: "1st Quarter",
-                type: "string",
-                readonly: true
+                type: "string"
               },
               quarter2: {
                 title: "2nd Quarter",
@@ -42,159 +53,194 @@ describe("Quarterly Breakdown", () => {
           {
             period: "2018",
             quarter1: "Fluffy",
-            quarter2: "Sparkles",
-            quarter3: "Precious",
-            quarter4: "Meowingtons",
-            total: "4 new cats"
+            quarter2: "Sparkles"
           },
           {
             period: "2019",
             quarter1: "Spot",
-            quarter2: "Princess",
-            quarter3: "James",
             quarter4: "Purrrfect",
             total: "4 new cats"
           }
         ];
-        field = mount(<QuarterlyBreakdown schema={schema} formData={data} />);
+        field = mount(<QuarterlyBreakdown
+          schema={schema}
+          formData={data}
+          onChange={onChangeSpy}
+          registry={{fields: {SchemaField: FieldFake, extraField: FieldFake}}}
+          uiSchema={uiSchema}
+          />);
       });
 
-      it("Displays the title", () => {
-        expect(field.find('[data-test="title"]').text()).toEqual("Cats Data");
-        expect(field.find('[data-test="title"]').length).toEqual(1);
+      describe("Rendering Schema Field", () => {
+        it("Renders a schema field for each data point", () => {
+          expect(field.find("FieldFake").length).toEqual(12)
+        });
+
+        it("passes the registry to schema field", () => {
+          expect(field.find("FieldFake").at(0).props().registry).toEqual({fields: {SchemaField: FieldFake, extraField: FieldFake} })
+        });
+
+        it("passes the uischema", () => {
+          expect(field.find("FieldFake").at(0).props().uiSchema).toEqual({"ui":"weirdUiProp"})
+        });
       });
 
-      it("Displays the period title", () => {
-        expect(field.find('[data-test="period_title"]').length).toEqual(1);
-      });
-      it("Displays the 1st quarter title", () => {
-        expect(field.find('[data-test="quarter1_title"]').text()).toEqual(
-          "1st Quarter"
-        );
-        expect(field.find('[data-test="quarter1_title"]').length).toEqual(1);
-      });
-      it("Displays the second title", () => {
-        expect(field.find('[data-test="quarter2_title"]').text()).toEqual(
-          "2nd Quarter"
-        );
-        expect(field.find('[data-test="quarter2_title"]').length).toEqual(1);
-      });
-      it("Displays the third title", () => {
-        expect(field.find('[data-test="quarter3_title"]').text()).toEqual(
-          "3rd Quarter"
-        );
-        expect(field.find('[data-test="quarter3_title"]').length).toEqual(1);
-      });
-      it("Displays the fourth title", () => {
-        expect(field.find('[data-test="quarter4_title"]').text()).toEqual(
-          "4th Quarter"
-        );
-        expect(field.find('[data-test="quarter4_title"]').length).toEqual(1);
-      });
-      it("Displays the total title", () => {
-        expect(field.find('[data-test="total_title"]').text()).toEqual("Total");
-        expect(field.find('[data-test="total_title"]').length).toEqual(1);
+      describe("onChange", () => {
+        it("call the onChange method with the form data", async () => {
+          field
+            .find('#root_quarter1_0')
+            .simulate("change", { target: { value: "Bye" } });
+          expect(onChangeSpy).toHaveBeenCalledWith(
+            [
+              {
+                period: "2018",
+                quarter1: "Bye",
+                quarter2: "Sparkles"
+              },
+              {
+                period: "2019",
+                quarter1: "Spot",
+                quarter4: "Purrrfect",
+                total: "4 new cats"
+              }
+            ]
+          );
+          await field.update();
+          expect(field.find("input#root_quarter1_0").props().value).toEqual("Bye");
+        });
+      })
+
+      describe("Rendering data", () => {
+        it("Displays the first period", () => {
+          expect(field.find('#root_period_0').length).toEqual(1);
+          expect(field.find('#root_period_0').props().value).toEqual(
+            "2018"
+          );
+        });
+  
+        it("Displays the first quarter1", () => {
+          expect(field.find('#root_quarter1_0').length).toEqual(1);
+          expect(field.find('#root_quarter1_0').props().value).toEqual(
+            "Fluffy"
+          );
+        });
+  
+        it("Displays the first quarter2", () => {
+          expect(field.find('#root_quarter2_0').length).toEqual(1);
+          expect(field.find('#root_quarter2_0').props().value).toEqual(
+            "Sparkles"
+          );
+        });
+  
+        it("Displays the first quarter3", () => {
+          expect(field.find('#root_quarter3_0').length).toEqual(1);
+        });
+  
+        it("Displays the first quarter4", () => {
+          expect(field.find('#root_quarter4_0').length).toEqual(1);
+        });
+  
+        it("Displays the first period total", () => {
+          expect(field.find('#root_total_0').length).toEqual(1);
+        });
+  
+        it("displays the second period", () => {
+          expect(field.find('#root_period_1').length).toEqual(1);
+          expect(field.find('#root_period_1').props().value).toEqual(
+            "2019"
+          );
+        });
+  
+        it("Displays the second quarter1", () => {
+          expect(field.find('#root_quarter1_1').length).toEqual(1);
+          expect(field.find('#root_quarter1_1').props().value).toEqual(
+            "Spot"
+          );
+        });
+  
+        it("Displays the second quarter2", () => {
+          expect(field.find('#root_quarter2_1').length).toEqual(1);
+        });
+  
+        it("Displays the second quarter3", () => {
+          expect(field.find('#root_quarter3_1').length).toEqual(1);
+        });
+  
+        it("Displays the second quarter4", () => {
+          expect(field.find('#root_quarter4_1').length).toEqual(1);
+          expect(field.find('#root_quarter4_1').props().value).toEqual(
+            "Purrrfect"
+          );
+        });
+  
+        it("Displays the second period total", () => {
+          expect(field.find('#root_total_1').length).toEqual(1);
+          expect(field.find('#root_total_1').props().value).toEqual(
+            "4 new cats"
+          );
+        });
       });
 
-      it("Displays the first period", () => {
-        expect(field.find('[data-test="period_0"]').length).toEqual(1);
-        expect(field.find('[data-test="period_0"]').props().value).toEqual(
-          "2018"
-        );
+      describe("Randering titles", () => {
+        it("Displays the title", () => {
+          expect(field.find("[data-test='title']").text()).toEqual("Cats Data");
+          expect(field.find("[data-test='title']").length).toEqual(1);
+        });
+  
+        it("Displays the period title", () => {
+          expect(field.find("[data-test='period_title']").length).toEqual(1);
+        });
+  
+        it("Displays the 1st quarter title", () => {
+          expect(field.find("[data-test='quarter1_title']").text()).toEqual(
+            "1st Quarter"
+          );
+          expect(field.find("[data-test='quarter1_title']").length).toEqual(1);
+        });
+  
+        it("Displays the second title", () => {
+          expect(field.find("[data-test='quarter2_title']").text()).toEqual(
+            "2nd Quarter"
+          );
+          expect(field.find("[data-test='quarter2_title']").length).toEqual(1);
+        });
+        it("Displays the third title", () => {
+          expect(field.find("[data-test='quarter3_title']").text()).toEqual(
+            "3rd Quarter"
+          );
+          expect(field.find("[data-test='quarter3_title']").length).toEqual(1);
+        });
+        it("Displays the fourth title", () => {
+          expect(field.find("[data-test='quarter4_title']").text()).toEqual(
+            "4th Quarter"
+          );
+          expect(field.find("[data-test='quarter4_title']").length).toEqual(1);
+        });
+        it("Displays the total title", () => {
+          expect(field.find("[data-test='total_title']").text()).toEqual("Total");
+          expect(field.find("[data-test='total_title']").length).toEqual(1);
+        });
+      });
+      describe("When not addable", () => {
+        it("Does not render an add button when not addable", () => {
+          expect(field.find("[data-test='add-button']").length).toEqual(0);
+        });
+  
+        it("Does not render a remove button when not addable", () => {
+          expect(field.find("[data-test='remove-button-0']").length).toEqual(0);
+        });
       });
 
-      it("Displays the first quarter1", () => {
-        expect(field.find('[data-test="quarter1_0"]').length).toEqual(1);
-        expect(field.find('[data-test="quarter1_0"]').props().value).toEqual(
-          "Fluffy"
-        );
-      });
-
-      it("Displays the first quarter2", () => {
-        expect(field.find('[data-test="quarter2_0"]').length).toEqual(1);
-        expect(field.find('[data-test="quarter2_0"]').props().value).toEqual(
-          "Sparkles"
-        );
-      });
-
-      it("Displays the first quarter3", () => {
-        expect(field.find('[data-test="quarter3_0"]').length).toEqual(1);
-        expect(field.find('[data-test="quarter3_0"]').props().value).toEqual(
-          "Precious"
-        );
-      });
-
-      it("Displays the first quarter4", () => {
-        expect(field.find('[data-test="quarter4_0"]').length).toEqual(1);
-        expect(field.find('[data-test="quarter4_0"]').props().value).toEqual(
-          "Meowingtons"
-        );
-      });
-
-      it("Displays the first period total", () => {
-        expect(field.find('[data-test="total_0"]').length).toEqual(1);
-        expect(field.find('[data-test="total_0"]').props().value).toEqual(
-          "4 new cats"
-        );
-      });
-
-      it("displays the second period", () => {
-        expect(field.find('[data-test="period_1"]').length).toEqual(1);
-        expect(field.find('[data-test="period_1"]').props().value).toEqual(
-          "2019"
-        );
-      });
-
-      it("Displays the second quarter1", () => {
-        expect(field.find('[data-test="quarter1_1"]').length).toEqual(1);
-        expect(field.find('[data-test="quarter1_1"]').props().value).toEqual(
-          "Spot"
-        );
-      });
-
-      it("Displays the second quarter2", () => {
-        expect(field.find('[data-test="quarter2_1"]').length).toEqual(1);
-        expect(field.find('[data-test="quarter2_1"]').props().value).toEqual(
-          "Princess"
-        );
-      });
-
-      it("Displays the second quarter3", () => {
-        expect(field.find('[data-test="quarter3_1"]').length).toEqual(1);
-        expect(field.find('[data-test="quarter3_1"]').props().value).toEqual(
-          "James"
-        );
-      });
-
-      it("Displays the second quarter4", () => {
-        expect(field.find('[data-test="quarter4_1"]').length).toEqual(1);
-        expect(field.find('[data-test="quarter4_1"]').props().value).toEqual(
-          "Purrrfect"
-        );
-      });
-
-      it("Displays the second period total", () => {
-        expect(field.find('[data-test="total_1"]').length).toEqual(1);
-        expect(field.find('[data-test="total_1"]').props().value).toEqual(
-          "4 new cats"
-        );
-      });
-
-      it("Does not render an add button", () => {
-        expect(field.find('[data-test="add-button"]').length).toEqual(0);
-      });
-
-      it("Does not render a remove button", () => {
-        expect(field.find('[data-test="remove-button-0"]').length).toEqual(0);
-      });
     });
 
     describe("Example 2", () => {
-      let schema, data, field;
+      let schema, data, field, onChangeSpy, uiSchema;
       beforeEach(() => {
+        onChangeSpy = jest.fn(() => {})
         schema = {
           type: "array",
           title: "Dogs Data",
+          addable: true,
           items: {
             type: "object",
             properties: {
@@ -206,8 +252,7 @@ describe("Quarterly Breakdown", () => {
               },
               quarter2: {
                 title: "Quarter 2.0",
-                type: "string",
-                readonly: true
+                type: "string"
               },
               quarter3: {
                 title: "Quarter 3.0",
@@ -223,6 +268,11 @@ describe("Quarterly Breakdown", () => {
             }
           }
         };
+        uiSchema = {
+          items: {
+            quarter1: {"anotherprop": "forui"}
+          }
+        }
         data = [
           {
             period: "2015",
@@ -241,218 +291,134 @@ describe("Quarterly Breakdown", () => {
             total: "3 new dogs"
           }
         ];
-        field = mount(<QuarterlyBreakdown schema={schema} formData={data} />);
+        field = mount(<QuarterlyBreakdown
+          schema={schema}
+          formData={data}
+          registry={{fields: {SchemaField: FieldFake, extraField: FieldFake}}}
+          onChange={onChangeSpy}
+          uiSchema={uiSchema}
+          />);
       });
 
-      it("Displays the title", () => {
-        expect(field.find('[data-test="title"]').text()).toEqual("Dogs Data");
-        expect(field.find('[data-test="title"]').length).toEqual(1);
+      describe("Rendering the schema field", () => {
+        it("Renders a schema field for each data point", () => {
+          expect(field.find("FieldFake").length).toEqual(12)
+        });
+  
+        it("passes the registry to schema field", () => {
+          expect(field.find("FieldFake").at(0).props().registry).toEqual({fields: {SchemaField: FieldFake, extraField: FieldFake} })
+        });
+
+        it("passes the uischema", () => {
+          expect(field.find("FieldFake").at(1).props().uiSchema).toEqual({"anotherprop": "forui"})
+        });
       });
 
-      it("Displays the headers", () => {
-        expect(field.find('[data-test="period_title"]').text()).toEqual(
-          "Period"
-        );
-        expect(field.find('[data-test="quarter1_title"]').text()).toEqual(
-          "Quarter 1.0"
-        );
-        expect(field.find('[data-test="quarter2_title"]').text()).toEqual(
-          "Quarter 2.0"
-        );
-        expect(field.find('[data-test="quarter3_title"]').text()).toEqual(
-          "Quarter 3.0"
-        );
-        expect(field.find('[data-test="quarter4_title"]').text()).toEqual(
-          "Quarter 4.0"
-        );
-        expect(field.find('[data-test="total_title"]').text()).toEqual(
-          "Year Total"
-        );
+      describe("Rendering titles", () => {
+        it("Displays the title", () => {
+          expect(field.find("[data-test='title']").text()).toEqual("Dogs Data");
+          expect(field.find("[data-test='title']").length).toEqual(1);
+        });
+  
+        it("Displays the headers", () => {
+          expect(field.find("[data-test='period_title']").text()).toEqual(
+            "Period"
+          );
+          expect(field.find("[data-test='quarter1_title']").text()).toEqual(
+            "Quarter 1.0"
+          );
+          expect(field.find("[data-test='quarter2_title']").text()).toEqual(
+            "Quarter 2.0"
+          );
+          expect(field.find("[data-test='quarter3_title']").text()).toEqual(
+            "Quarter 3.0"
+          );
+          expect(field.find("[data-test='quarter4_title']").text()).toEqual(
+            "Quarter 4.0"
+          );
+          expect(field.find("[data-test='total_title']").text()).toEqual(
+            "Year Total"
+          );
+        });
       });
 
-      it("Displays the first period", () => {
-        expect(field.find('[data-test="period_0"]').length).toEqual(1);
-        expect(field.find('[data-test="period_0"]').props().value).toEqual(
-          "2015"
-        );
+      describe("Rendering data", () => {
+        it("Displays the first period", () => {
+          expect(field.find('#root_period_0').length).toEqual(1);
+          expect(field.find('#root_period_0').props().value).toEqual(
+            "2015"
+          );
+        });
+  
+        it("displays the data from the first period", () => {
+          expect(field.find('#root_period_0').length).toEqual(1);
+          expect(field.find('#root_period_0').props().value).toEqual(
+            "2015"
+          );
+          expect(field.find('#root_quarter1_0').length).toEqual(1);
+          expect(field.find('#root_quarter1_0').props().value).toEqual(
+            "Bernard"
+          );
+          expect(field.find('#root_quarter2_0').length).toEqual(1);
+          expect(field.find('#root_quarter2_0').props().value).toEqual(
+            "Barks"
+          );
+          expect(field.find('#root_quarter3_0').length).toEqual(1);
+          expect(field.find('#root_quarter3_0').props().value).toEqual(
+            "Woof"
+          );
+          expect(field.find('#root_quarter4_0').length).toEqual(1);
+          expect(field.find('#root_quarter4_0').props().value).toEqual(
+            "Spot"
+          );
+          expect(field.find('#root_total_0').length).toEqual(1);
+          expect(field.find('#root_total_0').props().value).toEqual(
+            "2 new dogs"
+          );
+        });
       });
 
-      it("displays the data from the first period", () => {
-        expect(field.find('[data-test="period_0"]').length).toEqual(1);
-        expect(field.find('[data-test="period_0"]').props().value).toEqual(
-          "2015"
-        );
-        expect(field.find('[data-test="quarter1_0"]').length).toEqual(1);
-        expect(field.find('[data-test="quarter1_0"]').props().value).toEqual(
-          "Bernard"
-        );
-        expect(field.find('[data-test="quarter2_0"]').length).toEqual(1);
-        expect(field.find('[data-test="quarter2_0"]').props().value).toEqual(
-          "Barks"
-        );
-        expect(field.find('[data-test="quarter3_0"]').length).toEqual(1);
-        expect(field.find('[data-test="quarter3_0"]').props().value).toEqual(
-          "Woof"
-        );
-        expect(field.find('[data-test="quarter4_0"]').length).toEqual(1);
-        expect(field.find('[data-test="quarter4_0"]').props().value).toEqual(
-          "Spot"
-        );
-        expect(field.find('[data-test="total_0"]').length).toEqual(1);
-        expect(field.find('[data-test="total_0"]').props().value).toEqual(
-          "2 new dogs"
-        );
+      describe("When marked as addable", () => {
+        it("Does renders an add button", () => {
+          expect(field.find("[data-test='add-button']").length).toEqual(1);
+        });
+  
+        it("Does renders a remove button", () => {
+          expect(field.find("[data-test='remove-button-0']").length).toEqual(1);
+        });
       });
 
-      it("Does not render an add button", () => {
-        expect(field.find('[data-test="add-button"]').length).toEqual(0);
+      describe("onChange", () => {
+        it("calls the onchange with the new form data", async () => {
+          field
+            .find('#root_quarter1_0')
+            .simulate("change", { target: { value: "Cats" } });
+          expect(onChangeSpy).toHaveBeenCalledWith(
+            [
+              {
+                period: "2015",
+                quarter1: "Cats",
+                quarter2: "Barks",
+                quarter3: "Woof",
+                quarter4: "Spot",
+                total: "2 new dogs"
+              },
+              {
+                period: "2016",
+                quarter1: "Wag",
+                quarter2: "floppy",
+                quarter3: "Wolf",
+                quarter4: "Scout",
+                total: "3 new dogs"
+              }
+            ]
+          );
+          await field.update();
+          expect(field.find("input#root_quarter1_0").props().value).toEqual("Cats");          
+        })
       });
 
-      it("Does not render a remove button", () => {
-        expect(field.find('[data-test="remove-button-0"]').length).toEqual(0);
-      });
     });
-  });
-
-  describe("Input Fields", () => {
-    describe("Example 1", () => {
-      let schema, data, field, onChangeSpy;
-      beforeEach(() => {
-        onChangeSpy = jest.fn();
-
-        schema = {
-          type: "array",
-          addable: true,
-          title: "Cats Data",
-          items: {
-            type: "object",
-            properties: {
-              period: { title: "Year", type: "string", readonly: true },
-              quarter3: { title: "3rd Quarter", type: "string" },
-              quarter1: { title: "1st Quarter", type: "string" },
-              quarter2: { title: "2nd Quarter", type: "string" },
-              quarter4: { title: "4th Quarter", type: "string" },
-              total: { title: "Total", type: "string" }
-            }
-          }
-        };
-
-        data = [
-          {
-            period: "2018",
-            quarter2: "HI"
-          },
-          {
-            period: "2019"
-          }
-        ];
-        field = mount(
-          <QuarterlyBreakdown
-            schema={schema}
-            formData={data}
-            onChange={onChangeSpy}
-          />
-        );
-      });
-
-      it("shows has an input field for non readonly data", () => {
-        expect(field.find('[data-test="quarter1_0"]').length).toEqual(1);
-      });
-
-      it("prepopulates the input field with the form data", () => {
-        expect(field.find('[data-test="quarter2_0"]').props().value).toEqual(
-          "HI"
-        );
-      });
-
-      it("call the onChange method with the form data", () => {
-        field
-          .find('[data-test="quarter1_0"]')
-          .simulate("change", { target: { value: "Bye" } });
-        expect(onChangeSpy).toHaveBeenCalledWith([
-          { period: "2018", quarter1: "Bye", quarter2: "HI" },
-          { period: "2019" }
-        ]);
-      });
-
-      it("renders an add button", () => {
-        expect(field.find('[data-test="add-button"]').length).toEqual(1);
-      });
-
-      it("renders a remove button", () => {
-        expect(field.find('[data-test="remove-button-0"]').length).toEqual(1);
-      });
-    });
-
-    describe("Example 2", () => {
-      let schema, data, field, onChangeSpy;
-      beforeEach(() => {
-        onChangeSpy = jest.fn();
-
-        schema = {
-          type: "array",
-          addable: true,
-          title: "Cats Data",
-          items: {
-            type: "object",
-            properties: {
-              period: { title: "Year", type: "string", readonly: true },
-              quarter3: { title: "Quarter 1.0", type: "string" },
-              quarter1: { title: "Quarter 2.0", type: "string" },
-              quarter2: { title: "Quarter 3.0", type: "string" },
-              quarter4: { title: "Quarter 4.0", type: "string" },
-              total: { title: "Total", type: "string" }
-            }
-          }
-        };
-
-        data = [
-          {
-            period: "2015"
-          },
-          {
-            period: "2016",
-            quarter2: "Cats"
-          }
-        ];
-        field = mount(
-          <QuarterlyBreakdown
-            schema={schema}
-            formData={data}
-            onChange={onChangeSpy}
-          />
-        );
-      });
-
-      it("shows has an input field for non readonly data", () => {
-        expect(field.find('[data-test="quarter1_0"]').length).toEqual(1);
-      });
-
-      it("prepopulates the input field with the form data", () => {
-        expect(field.find('[data-test="quarter2_1"]').props().value).toEqual(
-          "Cats"
-        );
-      });
-
-      it("call the onChange method with the form data", () => {
-        field
-          .find('[data-test="quarter3_0"]')
-          .simulate("change", { target: { value: "Meow" } });
-        expect(onChangeSpy).toHaveBeenCalledWith([
-          { period: "2015", quarter3: "Meow" },
-          { period: "2016", quarter2: "Cats" }
-        ]);
-      });
-
-      it("renders an add button", () => {
-        expect(field.find('[data-test="add-button"]').length).toEqual(1);
-      });
-
-      it("renders a remove button", () => {
-        expect(field.find('[data-test="remove-button-0"]').length).toEqual(1);
-      });
-    });
-  });
 
   describe("No data", () => {
     describe("Example 1", () => {
@@ -482,25 +448,26 @@ describe("Quarterly Breakdown", () => {
           <QuarterlyBreakdown
             schema={schema}
             formData={data}
+            registry={{fields: {SchemaField: FieldFake}}}
             onChange={onChangeSpy}
           />
         );
       });
 
       it("has one input field", () => {
-        expect(field.find('[data-test="period_0"]').length).toEqual(1);
-        expect(field.find('[data-test="quarter1_0"]').length).toEqual(1);
-        expect(field.find('[data-test="quarter2_0"]').length).toEqual(1);
-        expect(field.find('[data-test="quarter3_0"]').length).toEqual(1);
-        expect(field.find('[data-test="quarter4_0"]').length).toEqual(1);
+        expect(field.find('#root_period_0').length).toEqual(1);
+        expect(field.find('#root_quarter1_0').length).toEqual(1);
+        expect(field.find('#root_quarter2_0').length).toEqual(1);
+        expect(field.find('#root_quarter3_0').length).toEqual(1);
+        expect(field.find('#root_quarter4_0').length).toEqual(1);
       });
 
       it("renders an add button", () => {
-        expect(field.find('[data-test="add-button"]').length).toEqual(1);
+        expect(field.find("[data-test='add-button']").length).toEqual(1);
       });
 
       it("does render a remove button", () => {
-        expect(field.find('[data-test="remove-button-0"]').length).toEqual(1);
+        expect(field.find("[data-test='remove-button-0']").length).toEqual(1);
       });
     });
 
@@ -532,306 +499,25 @@ describe("Quarterly Breakdown", () => {
             schema={schema}
             formData={data}
             onChange={onChangeSpy}
+            registry={{fields: {SchemaField: FieldFake}}}
           />
         );
       });
 
       it("has one input field", () => {
-        expect(field.find('[data-test="period_0"]').length).toEqual(1);
-        expect(field.find('[data-test="quarter1_0"]').length).toEqual(1);
-        expect(field.find('[data-test="quarter2_0"]').length).toEqual(1);
-        expect(field.find('[data-test="quarter3_0"]').length).toEqual(1);
-        expect(field.find('[data-test="quarter4_0"]').length).toEqual(1);
+        expect(field.find('#root_period_0').length).toEqual(1);
+        expect(field.find('#root_quarter1_0').length).toEqual(1);
+        expect(field.find('#root_quarter2_0').length).toEqual(1);
+        expect(field.find('#root_quarter3_0').length).toEqual(1);
+        expect(field.find('#root_quarter4_0').length).toEqual(1);
       });
 
       it("renders an add button", () => {
-        expect(field.find('[data-test="add-button"]').length).toEqual(1);
+        expect(field.find("[data-test='add-button']").length).toEqual(1);
       });
 
       it("does render a remove button", () => {
-        expect(field.find('[data-test="remove-button-0"]').length).toEqual(1);
-      });
-    });
-  });
-
-  describe("dropdowns", () => {
-    let schema, data, field, onChangeSpy;
-    describe("Example 1", () => {
-      beforeEach(() => {
-        onChangeSpy = jest.fn();
-
-        schema = {
-          type: "array",
-          addable: true,
-          title: "Cats Data",
-          items: {
-            type: "object",
-            properties: {
-              period: { title: "Year", type: "string", readonly: true },
-              quarter3: {
-                title: "3rd Quarter",
-                enum: ["yes", "no"],
-                type: "string"
-              },
-              quarter1: { title: "1st Quarter", type: "string" },
-              quarter2: { title: "2nd Quarter", type: "string" },
-              quarter4: { title: "4th Quarter", type: "string" },
-              total: { title: "Total", type: "string" }
-            }
-          }
-        };
-
-        data = [
-          {
-            period: "2018",
-            quarter3: "yes"
-          },
-          {
-            period: "2019"
-          }
-        ];
-        field = mount(
-          <QuarterlyBreakdown
-            schema={schema}
-            formData={data}
-            onChange={onChangeSpy}
-          />
-        );
-      });
-
-      it("shows a select for any enum schema data", () => {
-        expect(field.find('select[data-test="quarter3_0"]').length).toEqual(1);
-      });
-
-      it("prepopulates the input field with the form data", () => {
-        expect(
-          field.find('select[data-test="quarter3_0"]').props().value
-        ).toEqual("yes");
-      });
-
-      it("call the onChange method with the form data", () => {
-        field
-          .find('[data-test="quarter3_0"]')
-          .simulate("change", { target: { value: "No" } });
-        expect(onChangeSpy).toHaveBeenCalledWith([
-          { period: "2018", quarter3: "No" },
-          { period: "2019" }
-        ]);
-      });
-    });
-    describe("Example 2", () => {
-      beforeEach(() => {
-        onChangeSpy = jest.fn();
-
-        schema = {
-          type: "array",
-          addable: true,
-          title: "Cats Data",
-          items: {
-            type: "object",
-            properties: {
-              period: { title: "Year", type: "string", readonly: true },
-              quarter3: {
-                title: "3rd Quarter",
-                enum: ["Hi", "Bye"],
-                type: "string"
-              },
-              quarter1: { title: "1st Quarter", type: "string" },
-              quarter2: { title: "2nd Quarter", type: "string" },
-              quarter4: { title: "4th Quarter", type: "string" },
-              total: { title: "Total", type: "string" }
-            }
-          }
-        };
-
-        data = [
-          {
-            period: "2020",
-            quarter3: "Hi"
-          },
-          {
-            period: "2021"
-          }
-        ];
-        field = mount(
-          <QuarterlyBreakdown
-            schema={schema}
-            formData={data}
-            onChange={onChangeSpy}
-          />
-        );
-      });
-
-      it("shows a select for any enum schema data", () => {
-        expect(field.find('select[data-test="quarter3_0"]').length).toEqual(1);
-      });
-
-      it("prepopulates the input field with the form data", () => {
-        expect(
-          field.find('select[data-test="quarter3_0"]').props().value
-        ).toEqual("Hi");
-      });
-
-      it("calls the onChange method with the form data", () => {
-        field
-          .find('[data-test="quarter3_0"]')
-          .simulate("change", { target: { value: "Bye" } });
-        expect(onChangeSpy).toHaveBeenCalledWith([
-          { period: "2020", quarter3: "Bye" },
-          { period: "2021" }
-        ]);
-      });
-    });
-  });
-
-  describe("Number of Rows", () => {
-    describe("Example 1", () => {
-      let schema, data, field, onChangeSpy;
-      beforeEach(() => {
-        onChangeSpy = jest.fn();
-
-        schema = {
-          type: "array",
-          addable: true,
-          title: "Cats Data",
-          items: {
-            type: "object",
-            properties: {
-              period: { title: "Year", type: "string", readonly: true },
-              quarter1: { title: "1st Quarter", type: "string" },
-              quarter2: { title: "2nd Quarter", type: "string" },
-              quarter3: { title: "3rd Quarter", type: "string" },
-              quarter4: { title: "4th Quarter", type: "string" },
-              total: { title: "Total", type: "string" }
-            }
-          }
-        };
-
-        data = [
-          {
-            period: "2018",
-            quarter1: "2000",
-            quarter2: "3000",
-            quarter3: "4000",
-            quarter4: "5000",
-            total: "14000"
-          },
-          {
-            period: "2019",
-            quarter1: "1000",
-            quarter2: "2000",
-            quarter3: "3000",
-            quarter4: "4000",
-            total: "10000"
-          }
-        ];
-        field = mount(
-          <QuarterlyBreakdown
-            schema={schema}
-            formData={data}
-            onChange={onChangeSpy}
-          />
-        );
-      });
-
-      it("renders an add button", () => {
-        expect(field.find('[data-test="add-button"]').length).toEqual(1);
-      });
-
-      it("renders a remove button", () => {
-        expect(field.find('[data-test="remove-button-0"]').length).toEqual(1);
-      });
-
-      it("shows the number of rows in the key", () => {
-        expect(field.find('[data-test="quarter1_0"]').key()).toEqual(
-          "quarter1_0_2"
-        );
-      });
-
-      it("updates the number of rows in the key", () => {
-        field.find('[data-test="remove-button-0"]').simulate("click");
-        expect(field.find('[data-test="quarter1_0"]').key()).toEqual(
-          "quarter1_0_1"
-        );
-      });
-    });
-
-    describe("Example 2", () => {
-      let schema, data, field, onChangeSpy;
-      beforeEach(() => {
-        onChangeSpy = jest.fn();
-
-        schema = {
-          type: "array",
-          addable: true,
-          title: "Cats Data",
-          items: {
-            type: "object",
-            properties: {
-              period: { title: "Year", type: "string", readonly: true },
-              quarter1: { title: "1st Quarter", type: "string" },
-              quarter2: { title: "2nd Quarter", type: "string" },
-              quarter3: { title: "3rd Quarter", type: "string" },
-              quarter4: { title: "4th Quarter", type: "string" },
-              total: { title: "Total", type: "string" }
-            }
-          }
-        };
-
-        data = [
-          {
-            period: "1",
-            quarter1: "7",
-            quarter2: "9",
-            quarter3: "3",
-            quarter4: "5",
-            total: "120348"
-          },
-          {
-            period: "2",
-            quarter1: "3",
-            quarter2: "4",
-            quarter3: "5",
-            quarter4: "6",
-            total: "18"
-          },
-          {
-            period: "3",
-            quarter1: "654",
-            quarter2: "54235",
-            quarter3: "4325",
-            quarter4: "84568",
-            total: "348932748"
-          }
-        ];
-        field = mount(
-          <QuarterlyBreakdown
-            schema={schema}
-            formData={data}
-            onChange={onChangeSpy}
-          />
-        );
-      });
-
-      it("renders an add button", () => {
-        expect(field.find('[data-test="add-button"]').length).toEqual(1);
-      });
-
-      it("renders a remove button", () => {
-        expect(field.find('[data-test="remove-button-0"]').length).toEqual(1);
-      });
-
-      it("shows the number of rows in the key", () => {
-        expect(field.find('[data-test="quarter1_0"]').key()).toEqual(
-          "quarter1_0_3"
-        );
-      });
-
-      it("updates the number of rows in the key", () => {
-        field.find('[data-test="remove-button-0"]').simulate("click");
-        expect(field.find('[data-test="quarter1_0"]').key()).toEqual(
-          "quarter1_0_2"
-        );
+        expect(field.find("[data-test='remove-button-0']").length).toEqual(1);
       });
     });
   });

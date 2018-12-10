@@ -11,16 +11,30 @@ export default class FieldFake extends React.Component {
 
   onChangeWidget = (property, value) => {
     let formData = this.state.formData;
-    formData[property] = value;
+    if (property) {
+      formData[property] = value;
+    } else {
+      formData = value
+    }
     this.setState({formData});
     this.props.onChange(formData);
   }
 
-  render = () => (
-    <div>
-      {Object.keys(this.props.schema.properties).map((property) => (
-        <input key={property} id={`root_${property}`} onChange={(e) => this.onChangeWidget(property, e.target.value)} value={this.state.formData[property]}/>
-      ))}
-    </div>
-  )
+  render = () => {
+    if (this.props.schema.type === "object") {
+    return (
+      <div>
+        {Object.keys(this.props.schema.properties).map((property) => (
+          <input key={property} id={`root_${property}`} onChange={(e) => this.onChangeWidget(property, e.target.value)} value={this.state.formData[property]}/>
+        ))}
+      </div>
+    )
+    } else {
+      return (
+        <div>
+          <input key={this.props["data-test"]} id={`root_${this.props["data-test"]}`} onChange={(e) => this.onChangeWidget(null, e.target.value)} value={this.state.formData}/>          
+        </div>
+      )
+    }
+  }
 }
