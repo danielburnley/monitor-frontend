@@ -5,106 +5,32 @@ export default class HorizontalFields extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { ...props.formData };
+    this.state = {
+      data: this.props.formData || []
+    };
   }
 
-  onChange = (name, value) => {
-    this.setState({ [name]: value }, () => this.props.onChange(this.state));
-  };
+  onFieldChange = (name, value) => {
+    let newData = this.state.data;
+    newData[name] = value;
 
-  requiredProperty(key) {
-    if (!this.props.schema.required) {
-      return false;
-    }
-    return this.props.schema.required.indexOf(key) >= 0;
-  }
+    this.props.onChange(newData);
 
-  renderLabel(schemaKey, property) {
-    if (this.requiredProperty(schemaKey)) {
-      return (
-        <label htmlFor={schemaKey} data-test={`${schemaKey}-label`}>
-          {property.title} *
-        </label>
-      );
-    }
-
-    return (
-      <label htmlFor={schemaKey} data-test={`${schemaKey}-label`}>
-        {property.title}
-      </label>
-    );
-  }
-
-  renderSelect = (propertyName, schema) => (
-    <select
-      onChange={e => this.onChange(propertyName, e.target.value)}
-      value={this.state[propertyName] || schema.default}
-      data-test={`${propertyName}-input`}
-    >
-      <option key="blank"></option>
-      {schema.enum.map(optionValue => (
-        <option key={optionValue}>{optionValue}</option>
-      ))}
-    </select>
-  );
-
-  inputFieldType = schema => {
-    if (schema.format === "date") {
-      return "date";
-    }
-
-    return "text";
+    this.setState({ data: newData });
   };
 
   renderItem = (k, v) => {
-    if (v.type === "string" && v.enum) {
-      return this.renderSelect(k, v);
-    } else if (v.currency) {
-      return (
-        <this.props.registry.widgets.currency
-          id={k}
-          disabled={v.readonly}
-          data-test={`${k}-input`}
-          type={this.inputFieldType(v)}
-          value={this.state[k]}
-          onChange={e => this.onChange(k, e)}
-        />
-      );
-    } else if (v.percentage) {
-      return (
-        <this.props.registry.widgets.percentage
-          id={k}
-          disabled={v.readonly}
-          data-test={`${k}-input`}
-          type={this.inputFieldType(v)}
-          value={this.state[k]}
-          onChange={e => this.onChange(k, e)}
-        />
-      )
-    } else if (v.extendedText) {
-      return (
-        <textarea
-          id={k}
-          disabled={v.readonly}
-          data-test={`${k}-input`}
-          type={this.inputFieldType(v)}
-          value={this.state[k]}
-          onChange={e => this.onChange(k, e.target.value)}
-        />
-      );
-    } else {
-      return (
-        <input
-          id={k}
-          className="form-control"
-          disabled={v.readonly}
-          data-test={`${k}-input`}
-          type={this.inputFieldType(v)}
-          value={this.state[k]}
-          onChange={e => this.onChange(k, e.target.value)}
-        />
-      );
-    }
+    return (
+      <this.props.registry.fields.SchemaField
+        id={k}
+        schema={v}
+        uiSchema={this.props.uiSchema && this.props.uiSchema[k]}
+        data-test={`${k}-input`}
+        formData={this.state.data[k]}
+        registry={this.props.registry}
+        onChange={e => this.onFieldChange(k, e)}
+      />
+    );
   };
 
   renderItems = () =>
@@ -112,7 +38,6 @@ export default class HorizontalFields extends React.Component {
       if (!v.hidden) {
         return (
           <div key={k} data-test="form-field" className="horizontal-item">
-            {this.renderLabel(k, v)}
             {this.renderItem(k, v)}
           </div>
         );
