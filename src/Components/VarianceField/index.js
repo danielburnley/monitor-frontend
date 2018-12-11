@@ -5,6 +5,15 @@ export default class VarianceField extends React.Component {
   constructor(props) {
     super(props);
 
+    const baselineVarianceOptions =
+      props.formData.varianceBaselineFullPlanningPermissionSubmitted ||
+      props.formData.varianceBaselineFullPlanningPermissionGranted ||
+      props.formData.landAssemblyVarianceAgainstBaseReturn;
+    const returnVarianceOptions =
+      props.formData.varianceLastReturnFullPlanningPermissionSubmitted ||
+      props.formData.varianceLastReturnFullPlanningPermissionGranted ||
+      props.formData.landAssemblyVarianceAgainstLastReturn;
+
     this.state = {
       baseline: props.formData.baseline,
       percentComplete: props.formData.percentComplete,
@@ -12,8 +21,8 @@ export default class VarianceField extends React.Component {
       current: props.formData.current,
       reason: props.formData.reason,
       completedDate: props.formData.completedDate,
-      baselineVariance: props.formData.varianceBaselineFullPlanningPermissionSubmitted || props.formData.varianceBaselineFullPlanningPermissionGranted,
-      returnVariance: props.formData.varianceLastReturnFullPlanningPermissionSubmitted || props.formData.varianceLastReturnFullPlanningPermissionGranted
+      baselineVariance: baselineVarianceOptions,
+      returnVariance: returnVarianceOptions
     };
   }
 
@@ -25,25 +34,17 @@ export default class VarianceField extends React.Component {
 
   renderBaselineVariance = () => (
     <div className="col-md-3 form-group">
-      <label>
-        Baseline Variance (weeks)
-      </label>
-      <p data-test="baseline-variance">
-        {this.state.baselineVariance || 0}
-      </p>
+      <label>Baseline Variance (weeks)</label>
+      <p data-test="baseline-variance">{this.state.baselineVariance || 0}</p>
     </div>
-  )
+  );
 
   renderReturnVariance = () => (
     <div className="col-md-3 form-group">
-      <label>
-        Return Variance (weeks)
-      </label>
-      <p data-test="return-variance">
-        {this.state.returnVariance || 0}
-      </p>
+      <label>Return Variance (weeks)</label>
+      <p data-test="return-variance">{this.state.returnVariance || 0}</p>
     </div>
-  )
+  );
 
   renderCurrentValue = () => (
     <div className="row">
@@ -181,7 +182,6 @@ VarianceField.propTypes = {
     reason: PropTypes.string,
     completedDate: PropTypes.string,
     varianceBaselineFullPlanningPermissionSubmitted: PropTypes.string
-
   }).isRequired,
   onChange: PropTypes.func.isRequired,
   schema: PropTypes.object.isRequired
