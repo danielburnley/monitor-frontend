@@ -2,24 +2,7 @@ import React from "react";
 import "./style.css";
 
 export default class PercentageWidget extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: this.props.value || ''
-    }
-  }
 
-  clampPercentage(value) {
-    if (value < 0) {
-      return '0';
-    }
-
-    if (value > 100) {
-      return '100';
-    }
-
-    return value;
-  }
 
   cleanNonnumeric(string) {
     return string.replace(/[^0-9]/g, "");
@@ -30,18 +13,19 @@ export default class PercentageWidget extends React.Component {
   }
 
   validatePercentage(string) {
-    return this.cleanLeadingZeroes(this.cleanNonnumeric(this.clampPercentage(string)));
+    return this.cleanLeadingZeroes(this.cleanNonnumeric(string));
   }
 
   handleChange = (e) => {
     let {target} = e;
     let {selectionStart, selectionEnd} = target;
+    let value = this.validatePercentage(target.value)
     
-    this.setState({value: this.validatePercentage(target.value)}, () => {
+    this.setState({value} , () => {
         target.selectionStart = selectionStart;
         target.selectionEnd = selectionEnd;
     });
-    this.props.onChange(e.target.value);
+    this.props.onChange(value);
   }
 
   isInputDisabled() {
@@ -55,7 +39,13 @@ export default class PercentageWidget extends React.Component {
   render() {
     return (
       <div className="input-group" data-test="percentage-field">
-        <input className="form-control" type="text" value={this.state.value} disabled={this.isInputDisabled()} onChange={this.handleChange} />
+        <input
+          className="form-control"
+          type="text"
+          value={this.props.value || undefined}
+          disabled={this.isInputDisabled()}
+          onChange={this.handleChange} 
+        />
         <div className={`input-group-addon ${this.isInputDisabled() ? "readonly-percentage": ""}`}>%</div>
       </div>
     );
