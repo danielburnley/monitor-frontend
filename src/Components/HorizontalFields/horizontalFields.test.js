@@ -1,18 +1,7 @@
 import HorizontalFields from ".";
 import React from "react";
-import WidgetFake from "../../../test/WidgetFake";
 import FieldFake from "../../../test/FieldFake";
 import { mount } from "enzyme";
-
-class CurrencyStub extends WidgetFake {
-  datatest = "currency-stub";
-}
-class SecondCurrencyStub extends WidgetFake {
-  datatest = "second-currency-stub";
-}
-class PercentageStub extends WidgetFake {
-  datatest = "percentage-stub";
-}
 
 describe("<HorizontalFields>", () => {
   let schema, fields, formData, onChangeSpy, registrySpy, uiSchema;
@@ -203,7 +192,7 @@ describe("<HorizontalFields>", () => {
       beforeEach(() => {
         registrySpy = {
           r: {
-            percentage: PercentageStub
+            percentage: "percentageStub"
           }
         };
         schema = {
