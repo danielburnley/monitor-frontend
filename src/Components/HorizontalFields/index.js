@@ -6,7 +6,7 @@ export default class HorizontalFields extends React.Component {
     super(props);
 
     this.state = {
-      data: this.props.formData || []
+      data: this.props.formData || {}
     };
   }
 
