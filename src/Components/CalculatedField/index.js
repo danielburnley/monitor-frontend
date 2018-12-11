@@ -16,14 +16,21 @@ function accumulateMoney(array, property) {
 }
 
 function sum(data, ...keys) {
-  keys = keys.flat()
-  return keys.reduce((total, key) => parseMoney(data[key]) + total, 0)
+  keys = keys.flat();
+  return keys.reduce((total, key) => parseMoney(data[key]) + total, 0);
 }
 
 function periodTotal(object, totalProperty, property, ...keys) {
   return object[property].forEach((value, index) => {
-    return object[property][index][totalProperty] = sum(value, keys)
+    return (object[property][index][totalProperty] = sum(value, keys));
   });
+}
+
+function weeksPassed(originalDate, newDate) {
+  let originalDateDatified = new Date(originalDate);
+  let newDateDatified = new Date(newDate);
+
+  return Math.round((newDateDatified - originalDateDatified) / (7 * 24 * 60 * 60 * 1000));
 }
 
 function set(object, property, value) {
@@ -38,8 +45,7 @@ function get(object, ...properties) {
 }
 
 function calculateVariance(value1, value2) {
-  let result =
-    (value1 / value2) * 100;
+  let result = (value1 / value2) * 100;
 
   return Math.round(result * 100) / 100;
 }

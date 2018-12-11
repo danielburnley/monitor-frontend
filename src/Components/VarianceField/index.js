@@ -11,7 +11,9 @@ export default class VarianceField extends React.Component {
       status: props.formData.status || "On schedule",
       current: props.formData.current,
       reason: props.formData.reason,
-      completedDate: props.formData.completedDate
+      completedDate: props.formData.completedDate,
+      baselineVariance: props.formData.varianceBaselineFullPlanningPermissionSubmitted || props.formData.varianceBaselineFullPlanningPermissionGranted,
+      returnVariance: props.formData.varianceLastReturnFullPlanningPermissionSubmitted || props.formData.varianceLastReturnFullPlanningPermissionGranted
     };
   }
 
@@ -20,6 +22,28 @@ export default class VarianceField extends React.Component {
       this.props.onChange(this.state);
     });
   };
+
+  renderBaselineVariance = () => (
+    <div className="col-md-3 form-group">
+      <label>
+        Baseline Variance (weeks)
+      </label>
+      <p data-test="baseline-variance">
+        {this.state.baselineVariance || 0}
+      </p>
+    </div>
+  )
+
+  renderReturnVariance = () => (
+    <div className="col-md-3 form-group">
+      <label>
+        Return Variance (weeks)
+      </label>
+      <p data-test="return-variance">
+        {this.state.returnVariance || 0}
+      </p>
+    </div>
+  )
 
   renderCurrentValue = () => (
     <div className="row">
@@ -84,7 +108,7 @@ export default class VarianceField extends React.Component {
   );
 
   renderBaseline = () => (
-    <div className="form-group">
+    <div className="col-md-3 form-group">
       <label className="static-label">Baseline</label>
       <p className="form-control-static" data-test="target-date">
         {this.state.baseline}
@@ -124,7 +148,11 @@ export default class VarianceField extends React.Component {
 
   renderBody = () => (
     <div className="panel-body">
-      {this.renderBaseline()}
+      <div className="row">
+        {this.renderBaseline()}
+        {this.renderBaselineVariance()}
+        {this.renderReturnVariance()}
+      </div>
       <div className="row">
         {this.renderStatus()}
         {this.renderPercentComplete()}
@@ -151,7 +179,9 @@ VarianceField.propTypes = {
     status: PropTypes.oneOf(["Delayed", "On schedule", "Completed"]),
     current: PropTypes.string,
     reason: PropTypes.string,
-    completedDate: PropTypes.string
+    completedDate: PropTypes.string,
+    varianceBaselineFullPlanningPermissionSubmitted: PropTypes.string
+
   }).isRequired,
   onChange: PropTypes.func.isRequired,
   schema: PropTypes.object.isRequired
