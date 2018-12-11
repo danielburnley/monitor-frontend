@@ -6,7 +6,7 @@ import { mount } from "enzyme";
 describe("<HorizontalFields>", () => {
   let schema, fields, formData, onChangeSpy, registrySpy, uiSchema;
 
-  describe("Given a currency widget", () => {
+  describe("Given a SchemaField", () => {
     describe("Example 1", () => {
       beforeEach(() => {
         registrySpy = {
@@ -61,7 +61,7 @@ describe("<HorizontalFields>", () => {
         ).toEqual({ testing: "1234" });
       });
 
-      it("Renders the currency component from the registry", () => {
+      it("Renders the data as the value", () => {
         expect(fields.find("#root_nyan-input").length).toEqual(1);
         expect(fields.find("#root_nyan-input").props().value).toEqual(
           "Other cat noises"
@@ -131,7 +131,7 @@ describe("<HorizontalFields>", () => {
         ).toEqual({ testing: "1234" });
       });
 
-      it("Renders the currency component from the registry", () => {
+      it("Renders the data as the value", () => {
         expect(fields.find("#root_meow-input").length).toEqual(1);
       });
 
@@ -141,224 +141,6 @@ describe("<HorizontalFields>", () => {
           .simulate("change", { target: { value: "Another Meow" } });
 
         expect(onChangeSpy).toHaveBeenCalledWith({ meow: "Another Meow" });
-      });
-    });
-  });
-
-  describe("Given a percentage widget", () => {
-    describe("Example 1", () => {
-      beforeEach(() => {
-        registrySpy = {
-          fields: { SchemaField: FieldFake, extraField: FieldFake }
-        };
-        schema = {
-          title: "Monkeys",
-          properties: {
-            proportion: {
-              percentage: true,
-              type: "text",
-              title: "How many monkeys"
-            }
-          }
-        };
-        formData = { proportion: "87" };
-        onChangeSpy = jest.fn();
-        fields = mount(
-          <HorizontalFields
-            registry={{
-              fields: { SchemaField: FieldFake, extraField: FieldFake }
-            }}
-            schema={schema}
-            formData={formData}
-            onChange={onChangeSpy}
-          />
-        );
-      });
-
-      it("Renders the percentage component from the registry", () => {
-        expect(fields.find("#root_proportion-input").length).toEqual(1);
-      });
-
-      it("Calls the onChange method passed in with the form data", () => {
-        fields
-          .find("#root_proportion-input")
-          .simulate("change", { target: { value: "56" } });
-
-        expect(onChangeSpy).toHaveBeenCalled();
-      });
-    });
-
-    describe("Example 2", () => {
-      beforeEach(() => {
-        registrySpy = {
-          r: {
-            percentage: "percentageStub"
-          }
-        };
-        schema = {
-          title: "Gorillas",
-          properties: {
-            monkeys: {
-              percentage: true,
-              type: "text",
-              title: "Are Monkeys Gorillas?"
-            }
-          }
-        };
-        formData = { monkeys: "yes" };
-        onChangeSpy = jest.fn();
-        fields = mount(
-          <HorizontalFields
-            registry={{
-              fields: { SchemaField: FieldFake, extraField: FieldFake }
-            }}
-            schema={schema}
-            formData={formData}
-            onChange={onChangeSpy}
-          />
-        );
-      });
-
-      it("Renders the percentage component from the registry", () => {
-        expect(fields.find("#root_monkeys-input").length).toEqual(1);
-      });
-
-      it("Calls the onChange method passed in with the form data", () => {
-        fields
-          .find("#root_monkeys-input")
-          .simulate("change", { target: { value: "No" } });
-
-        expect(onChangeSpy).toHaveBeenCalledWith({ monkeys: "No" });
-      });
-    });
-  });
-
-  describe("Given an extendedText widget", () => {
-    describe("Example 1", () => {
-      beforeEach(() => {
-        schema = {
-          title: "Cats",
-          properties: {
-            nyan: { extendedText: true, type: "text", title: "Nyan" }
-          }
-        };
-        registrySpy = {
-          fields: { SchemaField: FieldFake, extraField: FieldFake }
-        };
-        uiSchema = {
-          nyan: { testing: "1234" }
-        };
-        formData = { nyan: "Other cat noises" };
-        onChangeSpy = jest.fn();
-        fields = mount(
-          <HorizontalFields
-            registry={registrySpy}
-            schema={schema}
-            uiSchema={uiSchema}
-            formData={formData}
-            onChange={onChangeSpy}
-          />
-        );
-      });
-
-      it("Renders the currency component from the registry", () => {
-        expect(fields.find("#root_nyan-input").length).toEqual(1);
-      });
-
-      it("Calls the onChange method passed in with the form data", () => {
-        fields
-          .find("#root_nyan-input")
-          .simulate("change", { target: { value: "New Meow" } });
-
-        expect(onChangeSpy).toHaveBeenCalledWith({ nyan: "New Meow" });
-      });
-
-      it("passes the uischema", () => {
-        expect(
-          fields
-            .find("FieldFake")
-            .at(0)
-            .props().uiSchema
-        ).toEqual({ testing: "1234" });
-      });
-
-      it("Renders the currency component from the registry", () => {
-        expect(fields.find("#root_nyan-input").length).toEqual(1);
-        expect(fields.find("#root_nyan-input").props().value).toEqual(
-          "Other cat noises"
-        );
-      });
-
-      it("Calls the onChange method passed in with the form data", () => {
-        fields
-          .find("#root_nyan-input")
-          .simulate("change", { target: { value: "New Meow" } });
-
-        expect(onChangeSpy).toHaveBeenCalledWith({ nyan: "New Meow" });
-      });
-    });
-
-    describe("Example 2", () => {
-      beforeEach(() => {
-        schema = {
-          title: "Cats",
-          properties: {
-            meow: { extendedText: true, type: "text", title: "Many meows" }
-          }
-        };
-        registrySpy = {
-          fields: { SchemaField: FieldFake, extraField: FieldFake }
-        };
-        uiSchema = {
-          meow: { testing: "1234" }
-        };
-        formData = { meow: "Additional cat noises" };
-        onChangeSpy = jest.fn();
-        fields = mount(
-          <HorizontalFields
-            registry={registrySpy}
-            schema={schema}
-            uiSchema={uiSchema}
-            formData={formData}
-            onChange={onChangeSpy}
-          />
-        );
-      });
-
-      it("Renders the currency component from the registry", () => {
-        expect(fields.find("#root_meow-input").length).toEqual(1);
-      });
-
-      it("Calls the onChange method passed in with the form data", () => {
-        fields
-          .find("#root_meow-input")
-          .simulate("change", { target: { value: "Another Meow" } });
-
-        expect(onChangeSpy).toHaveBeenCalledWith({ meow: "Another Meow" });
-      });
-
-      it("passes the uischema", () => {
-        expect(
-          fields
-            .find("FieldFake")
-            .at(0)
-            .props().uiSchema
-        ).toEqual({ testing: "1234" });
-      });
-
-      it("Renders the currency component from the registry", () => {
-        expect(fields.find("#root_meow-input").length).toEqual(1);
-        expect(fields.find("#root_meow-input").props().value).toEqual(
-          "Additional cat noises"
-        );
-      });
-
-      it("Calls the onChange method passed in with the form data", () => {
-        fields
-          .find("#root_meow-input")
-          .simulate("change", { target: { value: "New Meow" } });
-
-        expect(onChangeSpy).toHaveBeenCalledWith({ meow: "New Meow" });
       });
     });
   });
@@ -390,10 +172,6 @@ describe("<HorizontalFields>", () => {
       });
 
       it("Displays a single field", () => {
-        expect(fields.find("#root_meow-input").length).toEqual(1);
-      });
-
-      it("Displays an input field", () => {
         expect(fields.find("#root_meow-input").length).toEqual(1);
       });
 
