@@ -59,6 +59,7 @@ export default class NumberedArrayField extends React.Component {
         formData={data}
         schema={this.props.schema.items}
         onChange={(e) => this.onChildFormChange(index, e)}
+        uiSchema={this.props.uiSchema && this.props.uiSchema.items}
       />
       {this.renderRemoveButton(index)}
     </li>
@@ -66,7 +67,7 @@ export default class NumberedArrayField extends React.Component {
 
   render = () => (
     <div>
-        <ol>
+        <ol> 
           {
             this.state.formData &&
             this.state.formData.map(this.renderArrayItem)
