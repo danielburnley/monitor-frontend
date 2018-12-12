@@ -16,12 +16,20 @@ export default class GenerateSidebarItems {
     
     data.forEach((_, i) => {
       items[i] = {
-        title: `${schema.items.title} ${i + 1}`,
+        title: this.generateTitle(schema.items.title, i),
         children: this.genreateItemsForChildren(schema, i)
       };
     });
 
     return items;
+  }
+
+  generateTitle(title, index) {
+    if(title) {
+      return `${title} ${index + 1}`
+    } else {
+      return ""
+    }
   }
 
   genreateItemsForChildren(schema, index) {
