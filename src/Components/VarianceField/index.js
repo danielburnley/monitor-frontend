@@ -22,7 +22,8 @@ export default class VarianceField extends React.Component {
       reason: props.formData.reason,
       completedDate: props.formData.completedDate,
       baselineVariance: baselineVarianceOptions,
-      returnVariance: returnVarianceOptions
+      returnVariance: returnVarianceOptions,
+      previousReturn: props.formData.previousReturn
     };
   }
 
@@ -49,7 +50,7 @@ export default class VarianceField extends React.Component {
   renderCurrentValue = () => (
     <div className="row">
       <div className="col-md-3 form-group">
-        <label htmlFor="current">Current value*</label>
+        <label htmlFor="current">Current Ret</label>
         <input
           className="form-control"
           data-test="variance-current"
