@@ -36,20 +36,25 @@ export default class PeriodsField extends React.Component {
     if (key === "remove") {
       return this.renderRemoveButton(index)
     } else {
-      let schema_title_striped = JSON.parse(JSON.stringify(this.props.schema.items.properties[key]))
-      schema_title_striped.title = ""
+      
       return (
         <this.props.registry.fields.SchemaField
           data-test={`${key}-input`}
           onChange={e => this.onChange(key, index, e)}
           formData={column[key] || ""}
           className="form-control"
-          schema={schema_title_striped}
+          schema={this.removeTitles(this.props.schema.items.properties[key])}
           registry={this.props.registry}
           uiSchema={this.props.uiSchema && this.props.uiSchema.items[key]}
         />
       )
     }
+  }
+
+  removeTitles = (schema) => {
+     let schema_title_striped = JSON.parse(JSON.stringify(schema))
+     schema_title_striped.title = ""
+     return schema_title_striped
   }
 
   renderHeader(title) {
