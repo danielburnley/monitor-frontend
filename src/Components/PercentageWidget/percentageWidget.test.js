@@ -52,25 +52,6 @@ describe("PercentageWidget", () => {
     });
   });
 
-  describe("Clamps input to 100", () => {
-    it("Example 1",  async () => {
-      let onChangeSpy = jest.fn();
-      let field = mount(<PercentageWidget value="0" onChange={onChangeSpy} />);
-      await updateFormField(field.find("input"), "25565");
-      await field.update();
-
-      expect(field.find("input").props().value).toEqual("100");
-    });
-
-    it("Example 2", async () => {
-      let onChangeSpy = jest.fn();
-      let field = mount(<PercentageWidget value="0" onChange={onChangeSpy} />);
-      await updateFormField(field.find("input"), "118999");
-
-      expect(field.find("input").props().value).toEqual("100");
-    });
-  });
-
   describe("Cleans non-numeric characters", () => {
     it("Example 1", async () => {
       let onChangeSpy = jest.fn();
@@ -78,15 +59,16 @@ describe("PercentageWidget", () => {
       await updateFormField(field.find("input"), "2,7");
       await field.update();
 
-      expect(field.find("input").props().value).toEqual("27");
+      expect(onChangeSpy).toHaveBeenCalledWith("27");
     });
 
     it("Example 2", async () => {
       let onChangeSpy = jest.fn();
       let field = mount(<PercentageWidget value="0" onChange={onChangeSpy} />);
       await updateFormField(field.find("input"), "0x40");
+      await field.update();
 
-      expect(field.find("input").props().value).toEqual("40");
+      expect(onChangeSpy).toHaveBeenCalledWith("40");
     });
   });
 
@@ -97,7 +79,7 @@ describe("PercentageWidget", () => {
       await updateFormField(field.find("input"), "0000000");
       await field.update();
 
-      expect(field.find("input").props().value).toEqual("0");
+      expect(onChangeSpy).toHaveBeenCalledWith("0");
     });
 
     it("Example 2", async () => {
@@ -105,47 +87,7 @@ describe("PercentageWidget", () => {
       let field = mount(<PercentageWidget value="0" onChange={onChangeSpy} />);
       await updateFormField(field.find("input"), "040");
 
-      expect(field.find("input").props().value).toEqual("40");
-    });
-  });
-
-  describe("Clamps input to 0", () => {
-    it("Example 1",  async () => {
-      let onChangeSpy = jest.fn();
-      let field = mount(<PercentageWidget value="0" onChange={onChangeSpy} />);
-      let input = field.find("input");
-      await updateFormField(field.find("input"), "-7");
-
-      expect(field.find("input").props().value).toEqual("0");
-    });
-
-    it("Example 2",  async () => {
-      let onChangeSpy = jest.fn();
-      let field = mount(<PercentageWidget value="0" onChange={onChangeSpy} />)
-      let input = field.find("input")
-      await updateFormField(field.find("input"), "-63");
-
-      expect(field.find("input").props().value).toEqual("0");
-    });
-  });
-
-  describe("Input that does not need to be clamped is left alone", () => {
-    it("Example 1",  async () => {
-      let onChangeSpy = jest.fn();
-      let field = mount(<PercentageWidget value="0" onChange={onChangeSpy} />)
-      let input = field.find("input")
-      await updateFormField(field.find("input"), "32");
-
-      expect(field.find("input").props().value).toEqual("32");
-    });
-
-    it("Example 2",  async () => {
-      let onChangeSpy = jest.fn();
-      let field = mount(<PercentageWidget value="0" onChange={onChangeSpy} />)
-      let input = field.find("input")
-      await updateFormField(field.find("input"), "64");
-
-      expect(field.find("input").props().value).toEqual("64");
+      expect(onChangeSpy).toHaveBeenCalledWith("40");
     });
   });
 
