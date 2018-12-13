@@ -18,7 +18,7 @@ export default class QuarterlyBreakdown extends React.Component {
 
     this.props.onChange(newData);
 
-    this.setState({ data: this.state.data })
+    this.setState({ data: newData })
 
   }
 
@@ -57,6 +57,7 @@ export default class QuarterlyBreakdown extends React.Component {
   renderHeaders = (quarterlyObject) => {
     let column_class = "data-column"
     return Object.entries(quarterlyObject).map(([key, value])=> {
+      if (value.hidden) return;
       if (key === "remove") column_class = "remove";
       return ( 
         <div className={`header ${column_class}`} key={`${key}`} data-test={`${key}_title`}>
