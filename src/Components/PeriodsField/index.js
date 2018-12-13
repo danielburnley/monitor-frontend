@@ -15,38 +15,46 @@ export default class PeriodsField extends React.Component {
   onChange = (name, index, value) => {
     let newFormData = this.state.formData;
     newFormData[index][name] = value;
-
-    this.setState({ formData: newFormData }, () =>
-      this.props.onChange(this.state.formData)
-    );
+    
+    this.props.onChange(newFormData)
+    
+    this.setState({ formData: newFormData })
   };
 
   renderLine(key, item) {
+    return this.props.formData.map((column, index) => (
+      <div
+        className="col-sm-1 flex-data less-padding"
+        key={`input-${index}-${key}`}
+      >
+        {this.renderItem(key, index, column)}
+      </div>
+    ));
+  }
+  
+  renderItem = (key, index, column) => {
     if (key === "remove") {
-      return this.props.formData.map((column, index) => (
-        <div
-          className="col-sm-1 flex-data less-padding"
-          key={`input-${index}-${key}`}
-        >
-          {this.renderRemoveButton(index)}
-        </div>
-      ));
+      return this.renderRemoveButton(index)
     } else {
-      return this.props.formData.map((column, index) => (
-        <div
-          className="col-sm-1 flex-data less-padding"
-          key={`input-${index}-${key}`}
-        >
-          <input
-            data-test={`${key}-input`}
-            onChange={e => this.onChange(key, index, e.target.value)}
-            value={column[key] || ""}
-            className="form-control"
-            disabled={item.readonly}
-          />
-        </div>
-      ));
+      
+      return (
+        <this.props.registry.fields.SchemaField
+          data-test={`${key}-input`}
+          onChange={e => this.onChange(key, index, e)}
+          formData={column[key] || ""}
+          className="form-control"
+          schema={this.removeTitles(this.props.schema.items.properties[key])}
+          registry={this.props.registry}
+          uiSchema={this.props.uiSchema && this.props.uiSchema.items[key]}
+        />
+      )
     }
+  }
+
+  removeTitles = (schema) => {
+     let schema_title_striped = JSON.parse(JSON.stringify(schema))
+     schema_title_striped.title = ""
+     return schema_title_striped
   }
 
   renderHeader(title) {
@@ -93,6 +101,7 @@ export default class PeriodsField extends React.Component {
     if (this.props.schema.addable) {
       updatedRows.remove = { title: "Remove", type: "string" };
     }
+
     return (
       <div>
         {Object.entries(this.props.schema.items.properties).map(

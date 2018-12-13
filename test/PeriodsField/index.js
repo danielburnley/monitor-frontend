@@ -1,15 +1,18 @@
 import React from "react";
 import PeriodsField from "../../src/Components/PeriodsField";
+import FieldFake from "../FieldFake";
 import { mount } from "enzyme";
 
 export default class Periods {
-  constructor(data, schema) {
+  constructor(data, schema, uiSchema) {
     this.onChangeSpy = jest.fn();
     this.page = mount(
       <PeriodsField
-        formData={data}
-        schema={schema}
-        onChange={this.onChangeSpy}
+      formData={data}
+      schema={schema}
+      onChange={this.onChangeSpy}
+      uiSchema={uiSchema}
+      registry={{fields: {SchemaField: FieldFake, anotherField: FieldFake}}}
       />
     );
   }
@@ -23,26 +26,35 @@ export default class Periods {
 
   lineData(index, title) {
     return this.page
-      .find(`[data-test="${title}-line-data"]`)
+      .find(`#root_${title}-line-data`)
       .at(index)
       .text();
   }
 
   inputFieldCount(title) {
-    return this.page.find(`[data-test="${title}-input"]`).length;
+    return this.page.find(`#root_${title}-input`).length;
   }
+
   changeInputField(index, title, data) {
     return this.page
-      .find(`[data-test="${title}-input"]`)
+      .find(`#root_${title}-input`)
       .at(index)
       .simulate("change", { target: { value: data } });
   }
 
   inputFieldValue(index, title) {
     return this.page
-      .find(`[data-test="${title}-input"]`)
+      .find(`#root_${title}-input`)
       .at(index)
       .props().value;
+  }
+
+  schemaField() {
+    return this.page.find("FieldFake")
+  }
+
+  schemaFieldProperty(index = 0, property) {
+    return this.schemaField().at(index).props()[property]
   }
 
   addButton() {

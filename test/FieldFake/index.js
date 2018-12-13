@@ -3,7 +3,6 @@ import React from 'react';
 export default class FieldFake extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       formData: this.props.formData
     }
@@ -22,17 +21,22 @@ export default class FieldFake extends React.Component {
 
   render = () => {
     if (this.props.schema.type === "object") {
-    return (
-      <div>
-        {Object.keys(this.props.schema.properties).map((property) => (
-          <input key={property} id={`root_${property}`} onChange={(e) => this.onChangeWidget(property, e.target.value)} value={this.state.formData[property]}/>
-        ))}
-      </div>
-    )
+      return (
+        <div>
+          {Object.keys(this.props.schema.properties).map((property) => (
+            <input key={property} id={`root_${property}`} onChange={(e) => this.onChangeWidget(property, e.target.value)} value={this.state.formData[property]}/>
+          ))}
+        </div>
+      )
     } else {
       return (
         <div>
-          <input key={this.props["data-test"]} id={`root_${this.props["data-test"]}`} onChange={(e) => this.onChangeWidget(null, e.target.value)} value={this.state.formData}/>          
+          <input
+            key={this.props["data-test"]}
+            id={`root_${this.props["data-test"]}`}
+            onChange={(e) => this.onChangeWidget(null, e.target.value)}
+            value={this.state.formData}
+          />
         </div>
       )
     }
