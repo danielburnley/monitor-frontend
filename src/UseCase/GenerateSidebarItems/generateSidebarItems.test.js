@@ -274,5 +274,34 @@ describe("GenerateSidebarItems", () => {
         });
       });
     });
+
+    describe("With no title", () => {
+      it("Generates a single sidebar item with an empty string for a ittle", () => {
+        let schema = {
+          type: "array",
+          items: {
+            title: "",
+            type: "object",
+            properties: {
+              noise: {
+                title: "Noise"
+              }
+            }
+          }
+        };
+        let data = [{}];
+        let response = useCase.execute(schema, data);
+        expect(response).toEqual({
+          items: {
+            0: {
+              title: "",
+              children: {
+                noise: { title: "Noise", index : 0, subSection: 'noise' }
+              }
+            }
+          }
+        });
+      });
+    });
   });
 });
