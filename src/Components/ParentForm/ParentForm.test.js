@@ -137,6 +137,50 @@ describe("<ParentForm>", () => {
           expect(wrap.find('[data-test="dog_property"]').length).toEqual(1)
         });
       });
+
+      describe("As Superuser", () => {
+        let getRoleUseCaseSpy;
+  
+        beforeEach(() => {
+          getRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Superuser"}))}
+          wrap = mount(
+            <ParentForm
+              documentGateway={documentGatewaySpy}
+              onChange={onChangeSpy}
+              getRole={getRoleUseCaseSpy}
+              schema={{
+                type: "object",
+                properties: {
+                  cat: {
+                    type: "object",
+                    laHidden: true,
+                    properties: {
+                      name: {
+                        type: "string"
+                      }
+                    }
+                  },
+                  dog: {
+                    type: "object",
+                    properties: {
+                      name: {
+                        type: "string"
+                      }
+                    }
+                  }
+                }
+              }}
+            />
+          );
+        });
+  
+        it("Does display a hidden tab if user is Homes England", () => {
+          wrap.update()
+          
+          expect(wrap.find('[data-test="cat_property"]').length).toEqual(1)
+          expect(wrap.find('[data-test="dog_property"]').length).toEqual(1)
+        });
+      });
   
       describe("As an LA", () => {
         let getRoleUseCaseSpy;

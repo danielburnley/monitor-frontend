@@ -136,7 +136,7 @@ export default class NewProjectPage extends React.Component {
   }
 
   renderDisabledSubmitButton() {
-    if (this.state.userRole === "Homes England") {
+    if (this.state.userRole === "Homes England" || this.state.userRole === "Superuser") {
       return (
           <button
             data-test="disabled-submit-project-button"
@@ -150,7 +150,7 @@ export default class NewProjectPage extends React.Component {
   }
 
   renderSubmitButton() {
-    if (this.state.userRole === "Homes England") {
+    if (this.state.userRole === "Homes England" || this.state.userRole === "Superuser") {
       return (
           <button
             data-test="submit-project-button"
