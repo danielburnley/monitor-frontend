@@ -27,10 +27,22 @@ function periodTotal(object, totalProperty, property, ...keys) {
 }
 
 function weeksPassed(originalDate, newDate) {
+  let seconds = secondsPassed(originalDate, newDate)
+  return Math.round(seconds/(7 * 60 * 60 * 24));
+}
+
+function daysPassed(originalDate, newDate) {
+  let seconds = secondsPassed(originalDate, newDate)
+  return Math.round(seconds/(60 * 60 * 24));
+}
+
+function secondsPassed(originalDate, newDate) {
   let originalDateDatified = new Date(originalDate);
   let newDateDatified = new Date(newDate);
 
-  return Math.round((newDateDatified - originalDateDatified) / (7 * 24 * 60 * 60 * 1000));
+  if(newDateDatified == 'Invalid Date' || originalDateDatified == 'Inavlid Date') return ""
+
+  return (newDateDatified - originalDateDatified) / 1000
 }
 
 function set(object, property, value) {
