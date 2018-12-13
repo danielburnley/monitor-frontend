@@ -147,6 +147,76 @@ describe("NewProjectPage", () => {
       });
     });
 
+    describe("In Super USerdraft mode", () => {
+      let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Superuser"})) };
+
+      fit("example 1", async () => {
+        let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {presenter.creationSuccess(id)}) };
+        let updateProjectSpy = {
+          execute: jest.fn(async (presenter, id) => {presenter.projectUpdated([])})
+        };
+        let validateProjectSpy = { execute: jest.fn(async () => {}) };
+  
+        let wrap = mount(
+          <NewProjectPage
+            getRole={userRoleUseCaseSpy}
+            match={{ params: { id: 1 } }}
+            updateProject={updateProjectSpy}
+            submitProject={submitProjectSpy}
+            validateProject={validateProjectSpy}
+            data={{}}
+            schema={schema}
+          />
+        );
+        wrap.find('[data-test="submit-project-button"]').simulate("click");
+        await wait();
+        expect(
+          wrap.find('[data-test="disabled-submit-project-button"]').length
+        ).toEqual(1);
+        expect(
+          wrap.find('[data-test="disabled-update-project-button"]').length
+        ).toEqual(1);
+        expect(wrap.find('[data-test="submit-project-button"]').length).toEqual(
+          0
+        );
+        expect(wrap.find('[data-test="update-project-button"]').length).toEqual(
+          0
+        );
+      });
+  
+      it("example 2", async () => {
+        let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {}) };
+        let updateProjectSpy = { execute: jest.fn(async (presenter, id) => {}) };
+        let validateProjectSpy = { execute: jest.fn(async () => {}) };
+  
+        let wrap = mount(
+          <NewProjectPage
+            getRole={userRoleUseCaseSpy}
+            match={{ params: { id: 1 } }}
+            updateProject={updateProjectSpy}
+            submitProject={submitProjectSpy}
+            validateProject={validateProjectSpy}
+            data={{}}
+            schema={schema}
+          />
+        );
+        wrap.find('[data-test="update-project-button"]').simulate("click");
+        await wait();
+        expect(
+          wrap.find('[data-test="disabled-submit-project-button"]').length
+        ).toEqual(1);
+        expect(
+          wrap.find('[data-test="disabled-update-project-button"]').length
+        ).toEqual(1);
+        expect(wrap.find('[data-test="submit-project-button"]').length).toEqual(
+          0
+        );
+        expect(wrap.find('[data-test="update-project-button"]').length).toEqual(
+          0
+        );
+      });
+    });
+
     describe("In LA draft mode", () => {
       let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
 

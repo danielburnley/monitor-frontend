@@ -82,6 +82,52 @@ describe("GenerateUISchema", () => {
       });
     });
 
+    describe("Super User role", () => {
+      let userRoleCookieGateway = {
+        getUserRole: jest.fn(() => ({userRole: "Superuser"}))
+      };
+      let useCase = new GenerateUISchema(userRoleCookieGateway);
+      let schema = {
+        type: "object",
+        properties: {
+          a: { type: "string", laReadOnly: true },
+          b: { type: "string", s151WriteOnly: true }
+        }
+      };
+      it("Generates the correct schema", () => {
+        let response = useCase.execute(schema);
+        expect(response).toEqual({});
+      });
+
+      it("Generates a complex schema", () => {
+        schema = {
+          type: "object",
+          properties: {
+            a: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  b: { type: "string", laReadOnly: true }
+                }
+              }
+            }
+          }
+        }
+        let response = useCase.execute(schema);
+        expect(response).toEqual({
+          "a": {
+            "items": {},
+            "ui:options": {
+              "addable": false,
+              "orderable": false,
+              "removable": false
+            }
+          }
+        });
+      });
+    });
+
     describe("S151 user role", () => {
       let userRoleCookieGateway = {
         getUserRole: jest.fn(() => ({userRole: "S151"}))
