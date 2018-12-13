@@ -22,7 +22,8 @@ export default class VarianceField extends React.Component {
       reason: props.formData.reason,
       completedDate: props.formData.completedDate,
       baselineVariance: baselineVarianceOptions,
-      returnVariance: returnVarianceOptions
+      returnVariance: returnVarianceOptions,
+      previousReturn: props.formData.previousReturn
     };
   }
 
@@ -39,28 +40,47 @@ export default class VarianceField extends React.Component {
     </div>
   );
 
-  renderReturnVariance = () => (
+  renderReturnVariance() {
+    if (this.state.previousReturn !== undefined) {
+      return (
+        <div className="col-md-3 form-group">
+          <label>Return Variance (weeks)</label>
+          <p data-test="return-variance">{this.state.returnVariance || 0}</p>
+        </div>
+      );
+    } else {
+      return;
+    }
+  }
+
+  renderCurrentValue = () => (
     <div className="col-md-3 form-group">
-      <label>Return Variance (weeks)</label>
-      <p data-test="return-variance">{this.state.returnVariance || 0}</p>
+      <label htmlFor="current">Current Return *</label>
+      <input
+        className="form-control"
+        data-test="variance-current"
+        id="current"
+        onChange={e => this.onFieldChange("current", e.target.value)}
+        type="date"
+        value={this.state.current || ""}
+      />
     </div>
   );
 
-  renderCurrentValue = () => (
-    <div className="row">
-      <div className="col-md-3 form-group">
-        <label htmlFor="current">Current value*</label>
-        <input
-          className="form-control"
-          data-test="variance-current"
-          id="current"
-          onChange={e => this.onFieldChange("current", e.target.value)}
-          type="date"
-          value={this.state.current || ""}
-        />
-      </div>
-    </div>
-  );
+  renderPreviousValue() {
+    if (this.state.previousReturn !== undefined) {
+      return (
+        <div className="col-md-3 form-group">
+          <label htmlFor="previous">Previous Return *</label>
+          <p data-test="variance-previous" id="previous">
+            {this.state.previousReturn}
+          </p>
+        </div>
+      );
+    } else {
+      return;
+    }
+  }
 
   renderReason = () => (
     <div className="row">
@@ -79,7 +99,10 @@ export default class VarianceField extends React.Component {
 
   renderDelayed = () => (
     <div>
-      {this.renderCurrentValue()}
+      <div className="row">
+        {this.renderPreviousValue()}
+        {this.renderCurrentValue()}
+      </div>
       {this.renderReason()}
     </div>
   );

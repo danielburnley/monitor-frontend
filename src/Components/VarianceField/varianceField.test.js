@@ -53,7 +53,7 @@ describe("VarianceField", () => {
 
       it("Renders the return variance field", () => {
         let baselineVariance = field.find("[data-test='return-variance']");
-        expect(baselineVariance.length).toEqual(1);
+        expect(baselineVariance.length).toEqual(0);
       });
 
       it("Does not show the updated value field", () => {
@@ -142,7 +142,7 @@ describe("VarianceField", () => {
 
       it("Renders the return variance field", () => {
         let baselineVariance = field.find("[data-test='return-variance']");
-        expect(baselineVariance.length).toEqual(1);
+        expect(baselineVariance.length).toEqual(0);
       });
 
       it("Does not show the updated value field", () => {
