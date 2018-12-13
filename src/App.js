@@ -29,6 +29,7 @@ import GetReturns from "./UseCase/GetReturns"
 import SubmitReturn from "./UseCase/SubmitReturn";
 import GetRole from "./UseCase/GetRole";
 import UpdateReturn from "./UseCase/UpdateReturn";
+import UnsubmitProject from "./UseCase/UnsubmitProject";
 import RequestToken from "./UseCase/RequestToken";
 import ValidateReturn from "./UseCase/ValidateReturn";
 import ValidateProject from "./UseCase/ValidateProject";
@@ -69,6 +70,7 @@ const canAccessProjectUseCase = new CanAccessProject(tokenGateway, apiKeyGateway
 const getReturnsUseCase = new GetReturns(returnGateway);
 const requestTokenUseCase = new RequestToken(tokenGateway);
 const submitReturnUseCase = new SubmitReturn(returnGateway);
+const unsubmitProject = new UnsubmitProject(projectGateway)
 const updateReturnUseCase = new UpdateReturn(returnGateway);
 const updateProjectUseCase = new UpdateProject(projectGateway);
 
@@ -141,7 +143,7 @@ const renderNewProjectPage = (props, projectStatus, formData, formSchema, projec
 
 const renderSubmittedProjectPage = (props, formData, formSchema) => (
   <div className="col-md-10 col-md-offset-1">
-    <ProjectSummary data={formData} schema={formSchema} />
+    <ProjectSummary data={formData} schema={formSchema}  unsubmitProject={unsubmitProject} projectId={props.match.params.id}/>
     <div className="row">
       <div className="col-md-2">
         <CreateReturnButton {...props} />
@@ -161,7 +163,7 @@ const renderSubmittedProjectPage = (props, formData, formSchema) => (
 );
 
 const renderProjectPage = props => (
-  <ProjectPage {...props} getProject={getProjectUseCase} generateUISchema={generateUISchema} >
+    <ProjectPage {...props} getProject={getProjectUseCase} generateUISchema={generateUISchema} >
     {({ projectStatus, formData, formSchema, projectType, formUiSchema, timestamp }) => {
       if (projectStatus === "Draft" || projectStatus === "LA Draft") {
         return renderNewProjectPage(props, projectStatus, formData, formSchema, projectType, formUiSchema, timestamp);
