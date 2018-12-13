@@ -45,6 +45,11 @@ describe("Quarterly Breakdown", () => {
                 type: "string",
                 readonly: true
               },
+              quareter5: {
+                title: "5th Quarter",
+                type: "string",
+                hidden: true
+              },
               total: { title: "Total", type: "string", readonly: true }
             }
           }
@@ -73,7 +78,7 @@ describe("Quarterly Breakdown", () => {
 
       describe("Rendering Schema Field", () => {
         it("Renders a schema field for each data point", () => {
-          expect(field.find("FieldFake").length).toEqual(12)
+          expect(field.find("FieldFake").length).toEqual(14)
         });
 
         it("passes the registry to schema field", () => {
@@ -181,7 +186,7 @@ describe("Quarterly Breakdown", () => {
         });
       });
 
-      describe("Randering titles", () => {
+      describe("Rendering titles", () => {
         it("Displays the title", () => {
           expect(field.find("[data-test='title']").text()).toEqual("Cats Data");
           expect(field.find("[data-test='title']").length).toEqual(1);
@@ -216,6 +221,11 @@ describe("Quarterly Breakdown", () => {
           );
           expect(field.find("[data-test='quarter4_title']").length).toEqual(1);
         });
+
+        it("Doesn't display the fifth title", () => {
+          expect(field.find("[data-test='quarter5_title']").length).toEqual(0);
+        });
+
         it("Displays the total title", () => {
           expect(field.find("[data-test='total_title']").text()).toEqual("Total");
           expect(field.find("[data-test='total_title']").length).toEqual(1);
