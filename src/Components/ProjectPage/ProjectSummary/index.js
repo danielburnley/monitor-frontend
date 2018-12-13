@@ -17,12 +17,16 @@ export default class ProjectSummary extends React.Component {
   }
 
   onUnsubmit = (e) => {
-    this.props.unsubmitProject.execute(this, this.props.projectId)
+    if(!process.env.REACT_APP_BACK_TO_BASELINE) return null;
+    if(window.confirm("Warning: this will delete all returns that you have created. \n Please confirm you wish to continue.")) {
+      this.props.unsubmitProject.execute(this, this.props.projectId)
+    }
   }
 
   unsubmitSuccess = (e) => {
     window.location.reload()
   }
+  
   unsubmitFailure = () => {}
 
   render() {

@@ -147,10 +147,10 @@ describe("NewProjectPage", () => {
       });
     });
 
-    describe("In Super USerdraft mode", () => {
+    describe("In Superuser draft mode", () => {
       let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Superuser"})) };
 
-      fit("example 1", async () => {
+      it("example 1", async () => {
         let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {presenter.creationSuccess(id)}) };
         let updateProjectSpy = {
           execute: jest.fn(async (presenter, id) => {presenter.projectUpdated([])})
