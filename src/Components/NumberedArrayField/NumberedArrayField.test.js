@@ -139,4 +139,25 @@ describe("Numbered Array Field", () => {
       expect(onChangeSpy).toHaveBeenCalledWith([{someData: "General"},{someData: "Generalised"}]);
     });
   });
+
+  describe("Items with a ui schema", () => {
+    let onChangeSpy, wrapper 
+
+    beforeEach(()=> {
+      onChangeSpy = jest.fn();
+      wrapper = mount(<NumberedArrayField
+        registry={{fields: {SchemaField: FieldFake}}}
+        formData={ [{otherData: "Hello"}, {otherData: "There"}] }
+        schema={ {addable: false, items: {type: "object", properties: {otherData: {type: "string"}}} }}
+        uiSchema={{items: {"some ui things": "lots of them"}}}
+        onChange={onChangeSpy}
+      />
+      );
+
+      it("PAsses it onto the schema field", () => {
+        expect(wrapper.find("FieldFake").props().uiSchema).toEqual({"some ui things": "lots of them"})
+      })
+    })
+    
+  });
 });
