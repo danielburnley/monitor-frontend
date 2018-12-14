@@ -21,6 +21,7 @@ function sum(data, ...keys) {
 }
 
 function periodTotal(object, totalProperty, property, ...keys) {
+  if(!object[property]) return;
   return object[property].forEach((value, index) => {
     return (object[property][index][totalProperty] = sum(value, keys));
   });
