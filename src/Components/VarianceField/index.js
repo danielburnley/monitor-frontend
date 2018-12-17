@@ -71,7 +71,7 @@ export default class VarianceField extends React.Component {
     if (this.state.previousReturn !== undefined) {
       return (
         <div className="col-md-3 form-group">
-          <label htmlFor="previous">Previous Return *</label>
+          <label htmlFor="previous">Previous Return</label>
           <p data-test="variance-previous" id="previous">
             {this.state.previousReturn}
           </p>
@@ -107,8 +107,27 @@ export default class VarianceField extends React.Component {
     </div>
   );
 
-  renderCompletedDate = () => (
-    <div className="row">
+  renderReference = () => {
+    if (this.props.name === "planningSubmitted" || this.props.name === "submitted") {
+      return (
+        <div className="col-md-3 form-group">
+          <label htmlFor="reference">Reference*</label>
+          <input
+            className="form-control"
+            data-test="variance-reference"
+            id="reference"
+            onChange={e =>
+              this.onFieldChange("onCompletedReference", e.target.value)
+            }
+            value={this.state.onCompletedReference}
+          />
+        </div>
+      );
+    }
+  };
+
+  renderCompletedDate = () => {
+    return (
       <div className="col-md-3 form-group">
         <label htmlFor="completed">Completed Date*</label>
         <input
@@ -120,10 +139,15 @@ export default class VarianceField extends React.Component {
           value={this.state.completedDate}
         />
       </div>
+    );
+  };
+
+  renderCompleted = () => (
+    <div className="row">
+      {this.renderCompletedDate()}
+      {this.renderReference()}
     </div>
   );
-
-  renderCompleted = () => <div>{this.renderCompletedDate()}</div>;
 
   renderTitle = () => (
     <div className="panel-heading" data-test="field-title">
