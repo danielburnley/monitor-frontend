@@ -9,7 +9,7 @@ describe("VarianceField", () => {
     widgets: {
       percentage: WidgetFake
     }
-  }
+  };
 
   describe("Given only baseline data", () => {
     describe("Example one", () => {
@@ -323,54 +323,67 @@ describe("VarianceField", () => {
 
     describe("When completed", () => {
       describe("Example one", () => {
+        let schema = { title: "Meow Meow Fuzzyface" };
+        let name = "planningSubmitted";
+        let formData = {
+          baseline: "2020-12-31",
+          status: "Completed",
+          percentComplete: 100,
+          completedDate: "2021-01-01"
+        };
+        let field = shallow(
+          <VarianceField
+            name={name}
+            schema={schema}
+            formData={formData}
+            onChange={jest.fn()}
+            registry={registryStub}
+          />
+        );
+
+        let completedDate = field
+          .find("[data-test='variance-completed']")
+          .props().value;
         it("Fills in the completed date correctly", () => {
-          let schema = { title: "Meow Meow Fuzzyface" };
-          let formData = {
-            baseline: "2020-12-31",
-            status: "Completed",
-            percentComplete: 100,
-            completedDate: "2021-01-01"
-          };
-          let field = shallow(
-            <VarianceField
-              schema={schema}
-              formData={formData}
-              onChange={jest.fn()}
-              registry={registryStub}
-            />
-          );
-
-          let completedDate = field
-            .find("[data-test='variance-completed']")
-            .props().value;
-
           expect(completedDate).toEqual("2021-01-01");
+        });
+
+        it("Renders the reference field", () => {
+          let reference = field.find("[data-test='variance-reference']");
+          expect(reference.length).toEqual(1);
         });
       });
 
       describe("Example two", () => {
-        it("Fills in the completed date correctly", () => {
-          let schema = { title: "Meow Meow Fuzzyface" };
-          let formData = {
-            baseline: "2020-12-31",
-            status: "Completed",
-            percentComplete: 100,
-            completedDate: "2025-01-01"
-          };
-          let field = shallow(
-            <VarianceField
-              schema={schema}
-              formData={formData}
-              onChange={jest.fn()}
-              registry={registryStub}
-            />
-          );
+        let schema = { title: "Meow Meow Fuzzyface" };
+        let name = "granted";
+        let formData = {
+          baseline: "2020-12-31",
+          status: "Completed",
+          percentComplete: 100,
+          completedDate: "2025-01-01"
+        };
+        let field = shallow(
+          <VarianceField
+            name={name}
+            schema={schema}
+            formData={formData}
+            onChange={jest.fn()}
+            registry={registryStub}
+          />
+        );
 
+        it("Fills in the completed date correctly", () => {
           let completedDate = field
             .find("[data-test='variance-completed']")
             .props().value;
 
           expect(completedDate).toEqual("2025-01-01");
+        });
+
+        it("Does no render the reference field", () => {
+          let reference = field.find("[data-test='variance-reference']");
+          expect(reference.length).toEqual(0);
         });
       });
     });
