@@ -34,6 +34,26 @@ export default class MilestoneComponent {
 
   summary = () => this.milestone.find("[data-test='milestone-summary']").text();
 
+  milestoneCompletedDate = () => 
+    this.milestone
+    .find("[data-test='milestone-completed-date']")
+    .length;
+
+  currentReturn = () => 
+    this.milestone
+    .find("[data-test='milestone-current-return']")
+    .length;
+
+  reasonForVariance = () => 
+    this.milestone
+    .find("[data-test='milestone-reason-for-variance']")
+    .length;
+
+  milestonePercentCompleted = () => 
+    this.milestone
+    .find("[data-test='widget-stub']")
+    .length;
+
   simulateStatusAgainstLastReturn = inputValue =>
     this.milestone
       .find("[data-test='milestone-status-against-last-return']")
@@ -58,6 +78,11 @@ export default class MilestoneComponent {
     this.milestone
       .find("[data-test='milestone-status-against-last-return']")
       .props().value;
+
+  findMilestoneCompletedDate = () => 
+    this.milestone
+      .find("[data-test='milestone-completed-date']")
+      .props().value
 
   findCurrentReturn = () =>
     this.milestone.find("[data-test='milestone-current-return']").props().value;
