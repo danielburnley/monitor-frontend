@@ -48,7 +48,7 @@ describe("VarianceField", () => {
 
       it("Renders the baseline variance field", () => {
         let baselineVariance = field.find("[data-test='baseline-variance']");
-        expect(baselineVariance.length).toEqual(1);
+        expect(baselineVariance.length).toEqual(0);
       });
 
       it("Renders the return variance field", () => {
@@ -137,7 +137,7 @@ describe("VarianceField", () => {
 
       it("Renders the baseline variance field", () => {
         let baselineVariance = field.find("[data-test='baseline-variance']");
-        expect(baselineVariance.length).toEqual(1);
+        expect(baselineVariance.length).toEqual(0);
       });
 
       it("Renders the return variance field", () => {
@@ -266,6 +266,11 @@ describe("VarianceField", () => {
           expect(status).toEqual("Delayed");
         });
 
+        it("Renders the baseline variance field", () => {
+          let baselineVariance = field.find("[data-test='baseline-variance']");
+          expect(baselineVariance.length).toEqual(1);
+        });
+
         it("Fills in the updated value", () => {
           let updatedValue = field
             .find("[data-test='variance-current']")
@@ -304,6 +309,11 @@ describe("VarianceField", () => {
           let status = field.find("[data-test='variance-status']").props()
             .value;
           expect(status).toEqual("Delayed");
+        });
+
+        it("Renders the baseline variance field", () => {
+          let baselineVariance = field.find("[data-test='baseline-variance']");
+          expect(baselineVariance.length).toEqual(1);
         });
 
         it("Fills in the updated value", () => {
