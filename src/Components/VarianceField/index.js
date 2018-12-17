@@ -108,7 +108,7 @@ export default class VarianceField extends React.Component {
   );
 
   renderReference = () => {
-    if (this.props.name === "planningSubmitted" || this.props.name == "submitted") {
+    if (this.props.name === "planningSubmitted" || this.props.name === "submitted") {
       return (
         <div className="col-md-3 form-group">
           <label htmlFor="reference">Reference*</label>
