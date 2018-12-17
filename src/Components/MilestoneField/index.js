@@ -79,7 +79,10 @@ export default class MilestoneField extends React.Component {
         >
           <option>Completed</option>
           <option>On schedule</option>
-          <option>Delayed</option>
+          <option>Delayed - minimal impact</option>
+          <option>Delayed - moderate impact</option>
+          <option>Delayed - critcal</option>
+
         </select>
       </div>
     );
@@ -88,7 +91,7 @@ export default class MilestoneField extends React.Component {
   renderCurrentReturn() {
     return (
       <div>
-        <label htmlFor="currentReturn">Current Return</label>
+        <label htmlFor="currentReturn">Current Return Date</label>
         <input
           className="form-control"
           onChange={e => this.onFieldChange("currentReturn", e.target.value)}
@@ -117,13 +120,18 @@ export default class MilestoneField extends React.Component {
     );
   }
 
+  isDelayed = (status) => {
+    return status && status.substring(0, 7) === "Delayed"
+  }
+
   renderDate = () => {
     if(this.state.statusAgainstLastReturn === "Completed") return this.renderCompletedDate();
-    return this.renderCurrentReturn();
+    if(this.isDelayed(this.state.statusAgainstLastReturn)) return this.renderCurrentReturn();
+    return;
   }
 
   renderReasonForVariance() {
-    if(this.state.statusAgainstLastReturn==="Delayed") {
+    if(this.isDelayed(this.state.statusAgainstLastReturn)) {
       return (
         <div>
           <label htmlFor="reasonForVariance">Reason for Variance</label>

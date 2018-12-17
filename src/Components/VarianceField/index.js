@@ -55,7 +55,7 @@ export default class VarianceField extends React.Component {
 
   renderCurrentValue = () => (
     <div className="col-md-3 form-group">
-      <label htmlFor="current">Current Return *</label>
+      <label htmlFor="current">Current Date *</label>
       <input
         className="form-control"
         data-test="variance-current"
