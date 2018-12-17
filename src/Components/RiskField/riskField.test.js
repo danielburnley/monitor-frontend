@@ -3,25 +3,25 @@ import React from "react";
 import { shallow } from "enzyme";
 
 class RiskComponent {
-  constructor(formData, onChange, schemaTitle) {
+  constructor(formData, onChange, schema = {title: null, properties: {}}) {
     this.risk = shallow(
       <RiskField
-        schema={{ title: schemaTitle }}
+        schema={schema}
         formData={formData}
         onChange={onChange}
       />
     );
   }
-  description = () => this.risk.find("[data-test='risk-description']").text();
+  description = (title) => this.risk.find(`[data-test='risk-description${title}']`).text();
 
-  impact = () => this.risk.find("[data-test='risk-impact']").text();
+  impact = (title) => this.risk.find(`[data-test='risk-impact${title}']`).text();
 
-  likelihood = () => this.risk.find("[data-test='risk-likelihood']").text();
+  likelihood = (title) => this.risk.find(`[data-test='risk-likelihood${title}']`).text();
 
   title = () => this.risk.find("[data-test='schema-title']").text();
 
-  mitigationsInPlace = () =>
-    this.risk.find("[data-test='risk-mitigation-in-place']").text();
+  mitigationsInPlace = (title) =>
+    this.risk.find(`[data-test='risk-mitigation-in-place${title}']`).text();
 
   simulateCurrentLikelihood = inputValue =>
     this.risk
@@ -59,27 +59,51 @@ describe("<RiskField>", () => {
         riskBaselineLikelihood: "2",
         riskBaselineMitigationsInPlace: "This cat is mitigating the risk"
       };
-      let schemaTitle = "Risk Fields"
-      let risk = new RiskComponent(formData, onChangeSpy, schemaTitle);
+      let schema = {title: "Risk Fields", properties: {
+        riskBaselineRisk: { title: "baseline"},
+        riskBaselineImpact: { title: "impact"},
+        riskBaselineLikelihood: { title: "likelihood"},
+        riskBaselineMitigationsInPlace: { title: "mitigation"}
+        }
+      }
+      let risk = new RiskComponent(formData, onChangeSpy, schema);
       
       it("displays the schema title", () => {
         expect(risk.title()).toEqual("Risk Fields");
       });
 
+      it("displays the risk title", () => {
+        expect(risk.description("-title")).toEqual("baseline");
+      });
+
       it("displays the risk description", () => {
-        expect(risk.description()).toEqual("This is a very risky risk.");
+        expect(risk.description("")).toEqual("This is a very risky risk.");
+      });
+
+      it("displays the impact title", () => {
+        expect(risk.impact("-title")).toEqual("impact:");
       });
 
       it("displays the impact", () => {
-        expect(risk.impact()).toEqual("1");
+        expect(risk.impact("")).toEqual("1");
+      });
+
+      it("displays the likelihood title", () => {
+        expect(risk.likelihood("-title")).toEqual("likelihood:");
       });
 
       it("displays the likelihood", () => {
-        expect(risk.likelihood()).toEqual("2");
+        expect(risk.likelihood("")).toEqual("2");
+      });
+
+      it("displays the mitigiation in place title", () => {
+        expect(risk.mitigationsInPlace("-title")).toEqual(
+          "mitigation"
+        );
       });
 
       it("displays the mitigiation in place", () => {
-        expect(risk.mitigationsInPlace()).toEqual(
+        expect(risk.mitigationsInPlace("")).toEqual(
           "This cat is mitigating the risk"
         );
       });
@@ -93,29 +117,53 @@ describe("<RiskField>", () => {
         riskBaselineMitigationsInPlace:
           "This dog is trying to mitigate the risk"
       };
-      let schemaTitle = "More Risky Field Data"
-      let risk = new RiskComponent(formData, onChangeSpy, schemaTitle);
+      let schema = {title: "More Risky Field Data", properties: {
+        riskBaselineRisk: { title: "basedown"},
+        riskBaselineImpact: { title: "impale"},
+        riskBaselineLikelihood: { title: "likeymelikey"},
+        riskBaselineMitigationsInPlace: { title: "mightdo"}
+        }
+      }
+      let risk = new RiskComponent(formData, onChangeSpy, schema);
 
       it("displays the schema title", () => {
         expect(risk.title()).toEqual("More Risky Field Data");
       });
 
+      it("displays the risk description title", () => {
+        expect(risk.description("-title")).toEqual("basedown");
+      });
+
       it("displays the risk description", () => {
-        expect(risk.description()).toEqual(
+        expect(risk.description("")).toEqual(
           "This is a much less risky risk. The cat might get stuck up the tree."
         );
       });
 
+      it("displays the impact title", () => {
+        expect(risk.impact("-title")).toEqual("impale:");
+      });
+
       it("displays the impact", () => {
-        expect(risk.impact()).toEqual("4");
+        expect(risk.impact("")).toEqual("4");
+      });
+
+      it("displays the likelihood title", () => {
+        expect(risk.likelihood("-title")).toEqual("likeymelikey:");
       });
 
       it("displays the likelihood", () => {
-        expect(risk.likelihood()).toEqual("5");
+        expect(risk.likelihood("")).toEqual("5");
+      });
+
+      it("displays the mitigiation in place title", () => {
+        expect(risk.mitigationsInPlace("-title")).toEqual(
+          "mightdo"
+        );
       });
 
       it("displays the mitigiation in place", () => {
-        expect(risk.mitigationsInPlace()).toEqual(
+        expect(risk.mitigationsInPlace("")).toEqual(
           "This dog is trying to mitigate the risk"
         );
       });
