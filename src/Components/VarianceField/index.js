@@ -33,12 +33,20 @@ export default class VarianceField extends React.Component {
     });
   };
 
-  renderBaselineVariance = () => (
-    <div className="col-md-3 form-group">
-      <label>Baseline Variance (weeks)</label>
-      <p data-test="baseline-variance">{this.state.baselineVariance || 0}</p>
-    </div>
-  );
+  renderBaselineVariance = () => {
+    if (this.state.status === "Delayed") {
+      return (
+        <div className="col-md-3 form-group">
+          <label>Baseline Variance (weeks)</label>
+          <p data-test="baseline-variance">
+            {this.state.baselineVariance || 0}
+          </p>
+        </div>
+      );
+    } else {
+      return;
+    }
+  };
 
   renderReturnVariance() {
     if (this.state.previousReturn !== undefined) {
