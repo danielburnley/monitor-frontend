@@ -65,7 +65,7 @@ export default class GenerateUISchema {
     }  else if (value.quarterly) {
       ret["ui:field"] = "quarterly"
     }
-    
+
     if (value.numbered) {
       ret["ui:field"] = "numbered"
     }
