@@ -34,6 +34,18 @@ describe("Validated Field", () => {
       expect(wrapper.find("input#root_allData").length).toEqual(1);
       expect(wrapper.find("input#root_allData").props().value).toEqual("Cat");
     });
+
+    it("No data", async () => {
+      let wrapper = mount(<ValidatedField
+        registry={{fields: {SchemaField: FieldFake}}}
+        onChange = {() => {}}
+        schema={ {type: "object", calculation: "", properties: {someData: {type: "string"}}} }
+      />);
+      await wrapper.update();
+      expect(wrapper.find("FieldFake").length).toEqual(1);
+      expect(wrapper.find("input#root_someData").length).toEqual(1);
+      expect(wrapper.find("input#root_someData").props().value).toEqual("");
+    });
   });
 
   describe("Calls onChange", () => {

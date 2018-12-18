@@ -17,10 +17,11 @@ export default class ValidatedField extends React.Component {
   };
 
   getHasError = () => {
-    if (!this.props.formData._valid)
+    if (this.props.formData && !this.props.formData._valid)
     {
       return "has-error"
     }
+    
     return "";
   }
 
