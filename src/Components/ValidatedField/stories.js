@@ -1,11 +1,11 @@
 import React from "react";
 import { storiesOf } from "@storybook/react";
-import ValidationField from ".";
+import ValidatedField from ".";
 import FieldFake from "../../../test/FieldFake";
 
-storiesOf("ValidationField", module)
+storiesOf("ValidatedField", module)
   .add("Valid", () => (
-    <ValidationField
+    <ValidatedField
       registry={{fields: {SchemaField: FieldFake}}}
       formData={ {multiplier: "2", multiplicand: "4", _valid: true} }
       onChange={() => {}}
@@ -21,7 +21,7 @@ storiesOf("ValidationField", module)
     />
 ))
   .add("Invalid", () => (
-    <ValidationField
+    <ValidatedField
       registry={{fields: {SchemaField: FieldFake}}}
       formData={ {multiplier: "2", multiplicand: "4", _valid: false} }
       onChange={() => {}}

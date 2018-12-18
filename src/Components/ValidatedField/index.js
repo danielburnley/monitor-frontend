@@ -1,6 +1,6 @@
 import React from "react";
 
-export default class ValidationField extends React.Component {
+export default class ValidatedField extends React.Component {
   constructor(props) {
     super(props);
   }

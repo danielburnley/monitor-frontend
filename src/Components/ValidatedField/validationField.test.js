@@ -1,6 +1,6 @@
 import React from "react";
 import {mount} from "enzyme";
-import ValidationField from ".";
+import ValidatedField from ".";
 import FieldFake from "../../../test/FieldFake";
 
 async function wait() {
@@ -10,7 +10,7 @@ async function wait() {
 describe("Validated Field", () => {
   describe("Renders inner fields", () => {
     it("Example 1", async () => {
-      let wrapper = mount(<ValidationField
+      let wrapper = mount(<ValidatedField
         registry={{fields: {SchemaField: FieldFake}}}
         formData={ {someData: "Hello"} }
         onChange = {() => {}}
@@ -23,7 +23,7 @@ describe("Validated Field", () => {
     });
 
     it("Example 2", async () => {
-      let wrapper = mount(<ValidationField
+      let wrapper = mount(<ValidatedField
         registry={{fields: {SchemaField: FieldFake}}}
         formData={ {allData: "Cat"} }
         onChange = {() => {}}
@@ -39,7 +39,7 @@ describe("Validated Field", () => {
   describe("Calls onChange", () => {
     it("Example 1", async () => {
       let onChangeSpy = jest.fn();
-      let wrapper = mount(<ValidationField
+      let wrapper = mount(<ValidatedField
         registry={ {fields: {SchemaField: FieldFake}} }
         formData={ {someData: "data to calculate"} }
         onChange={onChangeSpy}
@@ -62,7 +62,7 @@ describe("Validated Field", () => {
 
     it("Example 2", async () => {
       let onChangeSpy = jest.fn();
-      let wrapper = mount(<ValidationField
+      let wrapper = mount(<ValidatedField
         registry={ {fields: {SchemaField: FieldFake}} }
         formData={ {moreData: "data"} }
         onChange={onChangeSpy}
@@ -85,7 +85,7 @@ describe("Validated Field", () => {
   describe("SchemaField receives registry", () => {
     it("Example 1", async () => {
       let onChangeSpy = jest.fn();
-      let wrapper = mount(<ValidationField
+      let wrapper = mount(<ValidatedField
         registry={ {fields: {SchemaField: FieldFake, extraField: FieldFake} } }
         formData={ {someData: "data to calculate"} }
         onChange={onChangeSpy}
@@ -108,7 +108,7 @@ describe("Validated Field", () => {
 
     it("Example 2", async () => {
       let onChangeSpy = jest.fn();
-      let wrapper = mount(<ValidationField
+      let wrapper = mount(<ValidatedField
         registry={ {fields: {SchemaField: FieldFake}} }
         formData={ {someData: "data to calculate"} }
         onChange={onChangeSpy}
@@ -131,7 +131,7 @@ describe("Validated Field", () => {
   });
 
   it("Valid", async () => {
-    let wrapper = mount(<ValidationField
+    let wrapper = mount(<ValidatedField
       registry={{fields: {SchemaField: FieldFake}}}
       formData={ {allData: "Cat", _valid: true} }
       onChange = {() => {}}
@@ -142,7 +142,7 @@ describe("Validated Field", () => {
   });
 
   it("Invalid", async () => {
-    let wrapper = mount(<ValidationField
+    let wrapper = mount(<ValidatedField
       registry={{fields: {SchemaField: FieldFake}}}
       formData={ {allData: "Cat", _valid: false} }
       onChange = {() => {}}

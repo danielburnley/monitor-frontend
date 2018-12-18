@@ -7,6 +7,7 @@ import HorizontalFields from "../HorizontalFields";
 import VarianceField from "../VarianceField";
 import MilestoneField from "../MilestoneField";
 import CalculatedField from "../CalculatedField";
+import ValidatedField from "../ValidatedField";
 import GenerateSidebarItems from "../../UseCase/GenerateSidebarItems";
 import RiskField from "../RiskField";
 import StaticData from "../StaticData";
@@ -152,7 +153,8 @@ export default class ParentForm extends React.Component {
       milestone: MilestoneField,
       numbered: NumberedArrayField,
       quarterly: QuarterlyBreakdown,
-      calculated: CalculatedField
+      calculated: CalculatedField,
+      validated: ValidatedField
     };
 
     const widgets = {

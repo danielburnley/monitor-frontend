@@ -16,7 +16,7 @@ async function updateFormField(input, value) {
 describe("<ParentForm>", () => {
   let onChangeSpy, elementSpy, documentSpy, documentGatewaySpy;
   let getRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"}))}
-  
+
 
   beforeEach(() => {
     onChangeSpy = jest.fn();
@@ -96,7 +96,7 @@ describe("<ParentForm>", () => {
     describe("Hidden tabs", () => {
       describe("As Homes England", () => {
         let getRoleUseCaseSpy;
-  
+
         beforeEach(() => {
           getRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"}))}
           wrap = mount(
@@ -129,10 +129,10 @@ describe("<ParentForm>", () => {
             />
           );
         });
-  
+
         it("Does display a hidden tab if user is Homes England", () => {
           wrap.update()
-          
+
           expect(wrap.find('[data-test="cat_property"]').length).toEqual(1)
           expect(wrap.find('[data-test="dog_property"]').length).toEqual(1)
         });
@@ -140,7 +140,7 @@ describe("<ParentForm>", () => {
 
       describe("As Superuser", () => {
         let getRoleUseCaseSpy;
-  
+
         beforeEach(() => {
           getRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Superuser"}))}
           wrap = mount(
@@ -173,18 +173,18 @@ describe("<ParentForm>", () => {
             />
           );
         });
-  
+
         it("Does display a hidden tab if user is Homes England", () => {
           wrap.update()
-          
+
           expect(wrap.find('[data-test="cat_property"]').length).toEqual(1)
           expect(wrap.find('[data-test="dog_property"]').length).toEqual(1)
         });
       });
-  
+
       describe("As an LA", () => {
         let getRoleUseCaseSpy;
-  
+
         beforeEach(() => {
           getRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"}))}
           wrap = mount(
@@ -217,19 +217,19 @@ describe("<ParentForm>", () => {
             />
           );
         });
-  
+
         it("Calls the getRole usecase", () => {
           wrap.update();
           expect(getRoleUseCaseSpy.execute).toHaveBeenCalled()
         });
-  
+
         it("Doesn't display a hidden tab if user is an LA", () => {
           wrap.update();
-  
+
           expect(wrap.find('[data-test="cat_property"]').length).toEqual(0)
           expect(wrap.find('[data-test="dog_property"]').length).toEqual(1)
         });
-      });  
+      });
     });
   });
 
@@ -1028,8 +1028,83 @@ describe("<ParentForm>", () => {
     });
   });
 
+  describe("Given a schema with a validated field", () => {
+    it("Displays the validated field component", () => {
+      let uiSchema = {
+        one: {
+          items: {
+            periods: {
+              items: {},
+              "ui:field": "validated",
+              "ui:options": {
+                addable: false,
+                orderables: false,
+                removable: false
+              }
+            }
+          }
+        }
+      };
+
+      let schema = {
+        type: "object",
+        properties: {
+          one: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                periods: {
+                  type: "array",
+                  items: {
+                    type: "object",
+                    properties: {
+                      period: {
+                        type: "string",
+                        title: "Lizard Type",
+                        readonly: true
+                      },
+                      length: {
+                        type: "string",
+                        title: "How Long",
+                        readonly: true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      };
+
+      let data = {
+        one: [
+          {
+            periods: [
+              { period: "scaley", length: "200" },
+              { period: "slivery", length: "567" }
+            ]
+          }
+        ]
+      };
+
+      let parentForm = mount(
+        <ParentForm
+          documentGateway={documentGatewaySpy}
+          getRole={getRoleUseCaseSpy}
+          onChange={jest.fn()}
+          formData={data}
+          schema={schema}
+          uiSchema={uiSchema}
+        />
+      );
+      expect(parentForm.find("ValidatedField").length).toEqual(1);
+    });
+  });
+
   describe("Given a field with currency", () => {
-    it("Displays the risk field component", () => {
+    it("Displays the currency component", () => {
       let parentForm = mount(
         <ParentForm
           documentGateway={documentGatewaySpy}
