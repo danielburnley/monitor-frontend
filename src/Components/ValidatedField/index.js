@@ -21,7 +21,7 @@ export default class ValidatedField extends React.Component {
     {
       return "has-error"
     }
-    
+
     return "";
   }
 

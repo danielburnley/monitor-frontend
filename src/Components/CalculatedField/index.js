@@ -20,9 +20,10 @@ function sum(data, ...keys) {
   return keys.reduce((total, key) => parseMoney(data[key]) + total, 0);
 }
 
-function periodTotal(object, totalProperty, property, ...keys) {
+function periodTotal(object, totalPath, property, ...keys) {
   return object[property].forEach((value, index) => {
-    return (object[property][index][totalProperty] = sum(value, keys));
+    setCreate(object[property][index], totalPath, ""+sum(value, keys));
+    return (sum(value, keys));
   });
 }
 
@@ -43,6 +44,23 @@ function secondsPassed(originalDate, newDate) {
   if(newDateDatified == 'Invalid Date' || originalDateDatified == 'Inavlid Date') return ""
 
   return (newDateDatified - originalDateDatified) / 1000
+}
+
+function setCreate(object, path, value) {
+  let jsonToSet = path.slice(0,path.length-1).reduce(
+    (accumulator, property) => {
+      if (accumulator[property]) {
+        return accumulator[property];
+      } else {
+        accumulator[property] = {}
+        return accumulator[property];
+      }
+    },
+    object
+  );
+
+  jsonToSet[path[path.length-1]] = value;
+  return object;
 }
 
 function set(object, property, value) {
