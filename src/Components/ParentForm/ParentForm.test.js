@@ -1143,4 +1143,45 @@ describe("<ParentForm>", () => {
       expect(parentForm.find("CurrencyWidget").length).toEqual(1);
     });
   });
+
+  describe("Given a field with uploadFile", () => {
+    it("Displays the file upload component", () => {
+      let parentForm = mount(
+        <ParentForm
+          documentGateway={documentGatewaySpy}
+          getRole={getRoleUseCaseSpy}
+          onChange={jest.fn()}
+          schema={{
+            type: "object",
+            properties: {
+              cat: {
+                type: "object",
+                properties: {
+                  name: {
+                    type: "string"
+                  }
+                }
+              },
+              dog: {
+                type: "object",
+                properties: {
+                  name: {
+                    type: "string"
+                  }
+                }
+              }
+            }
+          }}
+          uiSchema={{
+            cat: {
+              name: {
+                "ui:field": "uploadFile"
+              }
+            }
+          }}
+        />
+      );
+      expect(parentForm.find("UploadFileField").length).toEqual(1);
+    });
+  });
 });
