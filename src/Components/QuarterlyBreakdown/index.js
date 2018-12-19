@@ -6,15 +6,26 @@ import "./style.css";
 export default class QuarterlyBreakdown extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       data: this.props.formData || []
     };
+
+    this.ids = {};
+  }
+
+  updateUntouchedColumns = (changedKey) => {
+    Object.entries(this.props.schema.items.properties).forEach(([key])=> {
+      if (key !== changedKey) {
+        this.ids[key] = Math.random();
+      }
+    });
   }
 
   onFieldChange(index, name, value) {
     let newData = this.state.data;
     newData[index][name] = value
+
+    this.updateUntouchedColumns(name);
 
     this.props.onChange(newData);
 
@@ -23,7 +34,7 @@ export default class QuarterlyBreakdown extends React.Component {
   }
 
   renderData = (quarterlyObject) => {
-    let data = this.state.data
+    let data = this.state.data;
     if(this.state.data.length === 0) {
       data.push({})
     }
@@ -39,8 +50,8 @@ export default class QuarterlyBreakdown extends React.Component {
   renderPeriod = (quarterlyObject, value, index) => {
     return Object.entries(quarterlyObject).map(([key, schema])=> {
       if (key !== "remove") {
-        return ( 
-          <div className="data-column" key={`${index}_${key}`}>
+        return (
+          <div className="data-column" key={`${index}_${key}_${this.ids[key]}`}>
             {this.renderInputField(key, value[key], index, schema)}
           </div>
         )
@@ -59,8 +70,8 @@ export default class QuarterlyBreakdown extends React.Component {
     return Object.entries(quarterlyObject).map(([key, value])=> {
       if (value.hidden) return;
       if (key === "remove") column_class = "remove";
-      return ( 
-        <div className={`header ${column_class}`} key={`${key}`} data-test={`${key}_title`}>
+      return (
+        <div className={`header ${column_class}`} key={`${key}_${this.ids[key]}`} data-test={`${key}_title`}>
           {value.title}
         </div>
       )
@@ -115,7 +126,7 @@ export default class QuarterlyBreakdown extends React.Component {
 
   render() {
     let quarterlyObject = this.props.schema.items.properties;
-    if(this.props.schema.addable){
+    if(this.props.schema.addable) {
       quarterlyObject.remove = { title: "Remove", type: "string" };
     }
     return <div>

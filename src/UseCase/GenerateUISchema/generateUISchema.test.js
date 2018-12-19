@@ -721,6 +721,107 @@ describe("GenerateUISchema", () => {
     });
   });
 
+  describe("validated", () => {
+    describe("Given an array", () => {
+      describe("with validated items", () => {
+        it("Sets the UI field to validated", () => {
+          let schema = {
+            type: "object",
+            properties: {
+              a: {
+                type: "array",
+                items: {
+                  type: "object",
+                  validated: true,
+                  properties: {}
+                }
+              }
+            }
+          };
+
+          let response = useCase.execute(schema);
+
+          expect(response).toEqual({
+            a: {
+              items: { "ui:field": "validated" },
+              "ui:options": {
+                addable: false,
+                orderable: false,
+                removable: false
+              }
+            }
+          });
+        });
+      });
+    });
+
+    describe("Given an object", () => {
+      describe("That is validated", () => {
+        describe("With no properties", () => {
+          it("Sets the UI field to calculated", () => {
+            let schema = {
+              type: "object",
+              properties: {
+                a: {
+                  type: "object",
+                  validated: true,
+                  properties: {}
+                }
+              }
+            };
+
+            let response = useCase.execute(schema);
+            expect(response).toEqual({
+              a: { "ui:field": "validated" }
+            });
+          });
+        });
+
+        describe("With child properties", () => {
+          describe("That are not readonly", () => {
+            it("Sets the UI field to validated", () => {
+              let schema = {
+                type: "object",
+                properties: {
+                  a: {
+                    type: "object",
+                    validated: true,
+                    properties: { b: { type: "string" } }
+                  }
+                }
+              };
+
+              let response = useCase.execute(schema);
+              expect(response).toEqual({
+                a: { "ui:field": "validated" }
+              });
+            });
+          });
+
+          describe("That are readonly", () => {
+            it("Sets the UI field to calculated and the child properties to readonly", () => {
+              let schema = {
+                type: "object",
+                properties: {
+                  a: {
+                    type: "object",
+                    validated: true,
+                    properties: { b: { readonly: true, type: "string" } }
+                  }
+                }
+              };
+
+              let response = useCase.execute(schema);
+              expect(response).toEqual({
+                a: { "ui:field": "validated", b: { "ui:disabled": true } }
+              });
+            });
+          });
+        });
+      });
+    });
+  });
+
   describe("Horizontal", () => {
     describe("Given an array with horizontal items", () => {
       it("Sets the UI field to horizontal", () => {

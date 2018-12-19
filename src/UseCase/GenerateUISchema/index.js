@@ -62,16 +62,19 @@ export default class GenerateUISchema {
       ret["ui:field"] = "periods";
     } else if (value.items.milestone) {
       ret["items"]["ui:field"] = "milestone"
-    }  else if (value.quarterly) {
-      ret["ui:field"] = "quarterly"
+    } else if (value.quarterly) {
+      ret["ui:field"] = "quarterly";
     }
-    
+
     if (value.numbered) {
-      ret["ui:field"] = "numbered"
+      ret["ui:field"] = "numbered";
     }
 
     if (value.items.calculation) {
-      ret["items"]["ui:field"] = "calculated"
+      ret["items"]["ui:field"] = "calculated";
+    }
+    if (value.items.validated) {
+      ret["items"]["ui:field"] = "validated";
     }
 
     return ret;
@@ -129,7 +132,7 @@ export default class GenerateUISchema {
     }
 
     if(Object.keys(schema).length === 0) {
-      return undefined
+      return undefined;
     }
 
     return schema;
@@ -151,14 +154,21 @@ export default class GenerateUISchema {
     if (obj.horizontal) {
       return "horizontal";
     }
+
     if (obj.variance) {
       return "variance";
     }
+
     if (obj.base) {
       return "base";
     }
+
     if (obj.milestone) {
       return "milestone";
+    }
+
+    if (obj.validated) {
+      return "validated";
     }
   }
 }

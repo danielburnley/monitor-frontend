@@ -24,7 +24,13 @@ export default class FieldFake extends React.Component {
       return (
         <div>
           {Object.keys(this.props.schema.properties).map((property) => (
-            <input key={property} id={`root_${property}`} onChange={(e) => this.onChangeWidget(property, e.target.value)} value={this.state.formData[property]}/>
+            <input
+              className="form-control"
+              key={property}
+              id={`root_${property}`}
+              onChange={(e) => this.onChangeWidget(property, e.target.value)}
+              value={this.state.formData ? this.state.formData[property] : ""}
+            />
           ))}
         </div>
       )
@@ -32,6 +38,7 @@ export default class FieldFake extends React.Component {
       return (
         <div>
           <input
+            className="form-control"
             key={this.props["data-test"]}
             id={`root_${this.props["data-test"]}`}
             onChange={(e) => this.onChangeWidget(null, e.target.value)}

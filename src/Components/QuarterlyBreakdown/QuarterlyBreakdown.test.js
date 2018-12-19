@@ -91,7 +91,7 @@ describe("Quarterly Breakdown", () => {
       });
 
       describe("onChange", () => {
-        it("call the onChange method with the form data", async () => {
+        it("calls the onChange method with the form data", async () => {
           field
             .find('#root_quarter1_0')
             .simulate("change", { target: { value: "Bye" } });
@@ -113,6 +113,29 @@ describe("Quarterly Breakdown", () => {
           await field.update();
           expect(field.find("input#root_quarter1_0").props().value).toEqual("Bye");
         });
+
+        it("Regenerates keys for all other columns", async () => {
+          await field.setState({data: [
+            {
+              period: "2018",
+              quarter1: "Fluffy",
+              quarter2: "Sparkles"
+            },
+            {
+              period: "2019",
+              quarter1: "Spot",
+              quarter4: "Purrrfect",
+              total: "4096 new cats"
+            }
+          ]});
+
+          field
+            .find('#root_quarter1_0')
+            .simulate("change", { target: { value: "Bye" } });
+
+          await field.update();
+          expect(field.find("input#root_total_1").props().value).toEqual("4096 new cats");
+        });
       })
 
       describe("Rendering data", () => {
@@ -122,62 +145,62 @@ describe("Quarterly Breakdown", () => {
             "2018"
           );
         });
-  
+
         it("Displays the first quarter1", () => {
           expect(field.find('#root_quarter1_0').length).toEqual(1);
           expect(field.find('#root_quarter1_0').props().value).toEqual(
             "Fluffy"
           );
         });
-  
+
         it("Displays the first quarter2", () => {
           expect(field.find('#root_quarter2_0').length).toEqual(1);
           expect(field.find('#root_quarter2_0').props().value).toEqual(
             "Sparkles"
           );
         });
-  
+
         it("Displays the first quarter3", () => {
           expect(field.find('#root_quarter3_0').length).toEqual(1);
         });
-  
+
         it("Displays the first quarter4", () => {
           expect(field.find('#root_quarter4_0').length).toEqual(1);
         });
-  
+
         it("Displays the first period total", () => {
           expect(field.find('#root_total_0').length).toEqual(1);
         });
-  
+
         it("displays the second period", () => {
           expect(field.find('#root_period_1').length).toEqual(1);
           expect(field.find('#root_period_1').props().value).toEqual(
             "2019"
           );
         });
-  
+
         it("Displays the second quarter1", () => {
           expect(field.find('#root_quarter1_1').length).toEqual(1);
           expect(field.find('#root_quarter1_1').props().value).toEqual(
             "Spot"
           );
         });
-  
+
         it("Displays the second quarter2", () => {
           expect(field.find('#root_quarter2_1').length).toEqual(1);
         });
-  
+
         it("Displays the second quarter3", () => {
           expect(field.find('#root_quarter3_1').length).toEqual(1);
         });
-  
+
         it("Displays the second quarter4", () => {
           expect(field.find('#root_quarter4_1').length).toEqual(1);
           expect(field.find('#root_quarter4_1').props().value).toEqual(
             "Purrrfect"
           );
         });
-  
+
         it("Displays the second period total", () => {
           expect(field.find('#root_total_1').length).toEqual(1);
           expect(field.find('#root_total_1').props().value).toEqual(
@@ -191,18 +214,18 @@ describe("Quarterly Breakdown", () => {
           expect(field.find("[data-test='title']").text()).toEqual("Cats Data");
           expect(field.find("[data-test='title']").length).toEqual(1);
         });
-  
+
         it("Displays the period title", () => {
           expect(field.find("[data-test='period_title']").length).toEqual(1);
         });
-  
+
         it("Displays the 1st quarter title", () => {
           expect(field.find("[data-test='quarter1_title']").text()).toEqual(
             "1st Quarter"
           );
           expect(field.find("[data-test='quarter1_title']").length).toEqual(1);
         });
-  
+
         it("Displays the second title", () => {
           expect(field.find("[data-test='quarter2_title']").text()).toEqual(
             "2nd Quarter"
@@ -235,7 +258,7 @@ describe("Quarterly Breakdown", () => {
         it("Does not render an add button when not addable", () => {
           expect(field.find("[data-test='add-button']").length).toEqual(0);
         });
-  
+
         it("Does not render a remove button when not addable", () => {
           expect(field.find("[data-test='remove-button-0']").length).toEqual(0);
         });
@@ -314,7 +337,7 @@ describe("Quarterly Breakdown", () => {
         it("Renders a schema field for each data point", () => {
           expect(field.find("FieldFake").length).toEqual(12)
         });
-  
+
         it("passes the registry to schema field", () => {
           expect(field.find("FieldFake").at(0).props().registry).toEqual({fields: {SchemaField: FieldFake, extraField: FieldFake} })
         });
@@ -329,7 +352,7 @@ describe("Quarterly Breakdown", () => {
           expect(field.find("[data-test='title']").text()).toEqual("Dogs Data");
           expect(field.find("[data-test='title']").length).toEqual(1);
         });
-  
+
         it("Displays the headers", () => {
           expect(field.find("[data-test='period_title']").text()).toEqual(
             "Period"
@@ -359,7 +382,7 @@ describe("Quarterly Breakdown", () => {
             "2015"
           );
         });
-  
+
         it("displays the data from the first period", () => {
           expect(field.find('#root_period_0').length).toEqual(1);
           expect(field.find('#root_period_0').props().value).toEqual(
@@ -392,7 +415,7 @@ describe("Quarterly Breakdown", () => {
         it("Does renders an add button", () => {
           expect(field.find("[data-test='add-button']").length).toEqual(1);
         });
-  
+
         it("Does renders a remove button", () => {
           expect(field.find("[data-test='remove-button-0']").length).toEqual(1);
         });
@@ -424,8 +447,36 @@ describe("Quarterly Breakdown", () => {
             ]
           );
           await field.update();
-          expect(field.find("input#root_quarter1_0").props().value).toEqual("Cats");          
-        })
+          expect(field.find("input#root_quarter1_0").props().value).toEqual("Cats");
+        });
+
+        it("Regenerates keys for all other columns", async () => {
+          await field.setState({data: [
+            {
+              period: "2012",
+              quarter1: "Bernard",
+              quarter2: "Barks",
+              quarter3: "Woof",
+              quarter4: "Spot",
+              total: "2 new dogs"
+            },
+            {
+              period: "2016",
+              quarter1: "Wag",
+              quarter2: "floppy",
+              quarter3: "Domesticated Fox",
+              quarter4: "Scout",
+              total: "3 new dogs"
+            }
+          ]});
+
+          field
+            .find('#root_quarter3_1')
+            .simulate("change", { target: { value: "Hello" } });
+
+          await field.update();
+          expect(field.find("input#root_period_0").props().value).toEqual("2012");
+        });
       });
 
     });

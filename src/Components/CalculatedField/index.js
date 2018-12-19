@@ -20,10 +20,11 @@ function sum(data, ...keys) {
   return keys.reduce((total, key) => parseMoney(data[key]) + total, 0);
 }
 
-function periodTotal(object, totalProperty, property, ...keys) {
+function periodTotal(object, totalPath, property, ...keys) {
   if(!object[property]) return;
   return object[property].forEach((value, index) => {
-    return (object[property][index][totalProperty] = sum(value, keys));
+    setCreate(object[property][index], totalPath, ""+sum(value, keys));
+    return (sum(value, keys));
   });
 }
 
@@ -46,13 +47,43 @@ function secondsPassed(originalDate, newDate) {
   return (newDateDatified - originalDateDatified) / 1000
 }
 
+function validateArrayPropertyIsLessThan(array, path, value) {
+  array.forEach((object) => {
+    setCreate(object, [...path.slice(0, path.length-1), '_valid'], get(object, ...path) <= value);
+  });
+}
+
+function setCreate(object, path, value) {
+  let jsonToSet = path.slice(0,path.length-1).reduce(
+    (accumulator, property) => {
+      if (accumulator[property]) {
+        return accumulator[property];
+      } else {
+        accumulator[property] = {}
+        return accumulator[property];
+      }
+    },
+    object
+  );
+
+  jsonToSet[path[path.length-1]] = value;
+  return object;
+}
+
 function set(object, property, value) {
   object[property] = value;
 }
 
 function get(object, ...properties) {
   return properties.reduce(
-    (accumulator, property) => accumulator[property],
+    (accumulator, property) => {
+      if (accumulator && accumulator[property])
+      {
+        return accumulator[property];
+      } else {
+        return null;
+      }
+    },
     object
   );
 }
