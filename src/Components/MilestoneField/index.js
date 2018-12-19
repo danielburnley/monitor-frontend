@@ -15,15 +15,24 @@ export default class MilestoneField extends React.Component {
         this.props.formData.statusAgainstLastReturn || "On schedule",
       milestoneCompletedDate: this.props.formData.milestoneCompletedDate,
       currentReturn: this.props.formData.currentReturn,
+      milestoneLastReturnDate: this.props.formData.milestoneLastReturnDate,
+      milestoneVarianceAgainstBaseline: null,
+      milestoneVarianceAgainstLastReturn: null,
       reasonForVariance: this.props.formData.reasonForVariance,
       milestonePercentCompleted: this.props.formData.milestonePercentCompleted
     };
   }
 
   onFieldChange = (name, newValue) => {
-    this.setState({ [name]: newValue }, () => {
+    this.setState({ [name]: newValue });
+    this.setState({
+      [name]: newValue,
+      milestoneVarianceAgainstBaseline: this.calculateVarianceAgainstBaseline(),
+      milestoneVarianceAgainstLastReturn: this.calculateVarianceAgainstLastReturn()
+    }, () => {
       this.props.onChange(this.state);
-    });
+    })
+
   };
 
   renderMilestoneDescription() {
@@ -35,6 +44,25 @@ export default class MilestoneField extends React.Component {
         </p>
       </div>
     );
+  }
+
+
+  calculateVarianceAgainstLastReturn = () => {
+    return this.calculateVarianceWeeks(this.state.milestoneLastReturnDate, this.state.currentReturn)
+  }
+  
+  calculateVarianceAgainstBaseline = () => {
+    return this.calculateVarianceWeeks(this.state.milestoneBaselineCompletion, this.state.currentReturn)
+  }
+
+  calculateVarianceWeeks = (originalDate, newDate) => {
+      if (!originalDate || originalDate === "") return null;
+      if (!newDate || newDate === "") return null;
+      let originalDateDatified = new Date(originalDate);
+      let newDateDatified = new Date(newDate);
+
+      if(newDateDatified == 'Invalid Date' || originalDateDatified == 'Inavlid Date') return ""
+      return Math.round((newDateDatified - originalDateDatified)/(7 * 60 * 60 * 24 * 1000));
   }
 
   renderMilestoneTargetDate() {
@@ -130,6 +158,43 @@ export default class MilestoneField extends React.Component {
     return;
   }
 
+  renderLastReturnVariance = () => {
+    if(!this.state.milestoneLastReturnDate) return null;
+    return (
+      <div className="col-sm-6">
+        <span>Last Return: </span>
+        <span
+          data-test="milestone-lastReturnVariance"
+        >
+          {this.state.milestoneVarianceAgainstLastReturn}
+        </span>
+      </div>
+    )
+  }
+
+  renderVariances = () => {
+    if(this.isDelayed(this.state.statusAgainstLastReturn)) {
+      return (
+        <div>
+          <b>Variance (Weeks)</b>
+          <div className="row">
+            <div className="col-sm-6">
+              <span>Baseline: </span>
+              <span
+                data-test="milestone-baselineVariance"
+              >
+                {this.state.milestoneVarianceAgainstBaseline}
+              </span>
+            </div>
+            {this.renderLastReturnVariance()}
+          </div>
+        </div>
+      );
+    } else {
+      return;
+    }
+  }
+
   renderReasonForVariance() {
     if(this.isDelayed(this.state.statusAgainstLastReturn)) {
       return (
@@ -173,12 +238,15 @@ export default class MilestoneField extends React.Component {
             {this.renderMilestoneDescription()}
             {this.renderMilestoneTargetDate()}
           </div>
-          <div className="col-md-6">{this.renderMilestoneSummary()}</div>
+          <div className="col-md-6">
+          {this.renderMilestoneSummary()}
+            {this.renderMilestonePercentCompleted()}
+            </div>
         </div>
         <div className="row">
           <div className="col-md-6">{this.renderStatusAgainstLastReturn()}</div>
           <div className="col-md-6">
-            {this.renderMilestonePercentCompleted()}
+          {this.renderVariances()}
           </div>
         </div>
         <div className="row">

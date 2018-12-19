@@ -10,6 +10,7 @@ describe("<MilestoneField>", () => {
       let formData = {
         description: "Here is a stone that marks a mile.",
         milestoneBaselineCompletion: "31/03/2018",
+        milestoneLastReturnDate: null,
         milestoneSummaryOfCriticalPath: "Contract begins!!!"
       };
       let schemaTitle = "Milestone Fields";
@@ -68,8 +69,9 @@ describe("<MilestoneField>", () => {
       let milestone;
       let formData = {
         description: "Here is a stone that marks a mile.",
-        milestoneBaselineCompletion: "31/03/2018",
-        milestoneSummaryOfCriticalPath: "Contract begins!!!"
+        milestoneBaselineCompletion: "03/31/2018",
+        milestoneSummaryOfCriticalPath: "Contract begins!!!",
+        milestoneLastReturnDate: null
       };
       let schemaTitle = "Milestone Fields";
       milestone = new MilestoneComponent(
@@ -79,9 +81,9 @@ describe("<MilestoneField>", () => {
         WidgetFake
       );
 
-      it("Updates the values of the fields", () => {
+      it("Updates the values of the fields and calculates variances", () => {
         milestone.simulateStatusAgainstLastReturn("Delayed - moderate impact");
-        milestone.simulateCurrentReturn("21/09/2019");
+        milestone.simulateCurrentReturn("04/07/2018");
         milestone.simulateReasonForVariance(
           "A variance has occured, causing variance"
         );
@@ -89,12 +91,15 @@ describe("<MilestoneField>", () => {
 
         expect(onChangeSpy).toHaveBeenCalledWith({
           description: "Here is a stone that marks a mile.",
-          milestoneBaselineCompletion: "31/03/2018",
+          milestoneBaselineCompletion: "03/31/2018",
           milestoneSummaryOfCriticalPath: "Contract begins!!!",
           statusAgainstLastReturn: "Delayed - moderate impact",
-          currentReturn: "21/09/2019",
+          currentReturn: "04/07/2018",
           reasonForVariance: "A variance has occured, causing variance",
-          milestonePercentCompleted: "65"
+          milestonePercentCompleted: "65",
+          milestoneLastReturnDate: null,
+          milestoneVarianceAgainstBaseline: 1,
+          milestoneVarianceAgainstLastReturn: null
         });
       });
     });
@@ -104,7 +109,8 @@ describe("<MilestoneField>", () => {
       let formData = {
         description: "Cats have walked very far",
         milestoneBaselineCompletion: "10/10/2019",
-        milestoneSummaryOfCriticalPath: "Give them pets and fish"
+        milestoneSummaryOfCriticalPath: "Give them pets and fish",
+        milestoneLastReturnDate: "10/17/2019"
       };
       let schemaTitle = "Cats walking club";
       milestone = new MilestoneComponent(
@@ -114,18 +120,22 @@ describe("<MilestoneField>", () => {
         WidgetFake
       );
 
-      it("Updates the values of the fields", () => {
+      it("Updates the values of the fields and calculates variances", () => {
         milestone.simulateStatusAgainstLastReturn("Delayed - minimal impact");
-        milestone.simulateCurrentReturn("25/12/2018");
+        milestone.simulateCurrentReturn("10/24/2019");
         milestone.simulateMilestonePercentCompleted("80");
 
         expect(onChangeSpy).toHaveBeenCalledWith({
           description: "Cats have walked very far",
           milestoneBaselineCompletion: "10/10/2019",
+          milestoneCompletedDate: undefined,
+          milestoneLastReturnDate: "10/17/2019",
           milestoneSummaryOfCriticalPath: "Give them pets and fish",
           statusAgainstLastReturn: "Delayed - minimal impact",
-          currentReturn: "25/12/2018",
-          milestonePercentCompleted: "80"
+          currentReturn: "10/24/2019",
+          milestonePercentCompleted: "80",
+          milestoneVarianceAgainstBaseline: 2,
+          milestoneVarianceAgainstLastReturn: 1
         });
       });
     });
@@ -299,8 +309,9 @@ describe("<MilestoneField>", () => {
     beforeEach(() => {
       let formData = {
         description: "Here is a stone that marks a mile.",
-        milestoneBaselineCompletion: "31/03/2018",
-        milestoneSummaryOfCriticalPath: "Contract begins!!!"
+        milestoneBaselineCompletion: "03/31/2018",
+        milestoneSummaryOfCriticalPath: "Contract begins!!!",
+        milestoneLastReturnDate: "04/31/2019"
       };
       let schemaTitle =  "Milestone Fields";
       milestone = new MilestoneComponent(
@@ -327,6 +338,14 @@ describe("<MilestoneField>", () => {
       it("doesn't display the reason for variance", () => {
         expect(milestone.reasonForVariance()).toEqual(0)
       });
+
+      it("doesn't display the baseline variance", () => {
+        expect(milestone.baselineVariance()).toEqual(0)
+      });
+
+      it("doesn't display the last return variance", () => {
+        expect(milestone.lastReturnVariance()).toEqual(0)
+      });
     });
 
     describe("If Delayed - moderate impact", () => {
@@ -340,6 +359,14 @@ describe("<MilestoneField>", () => {
 
       it("shows the current return date", () => {
         expect(milestone.currentReturn()).toEqual(1);
+      });
+
+      it("does display the baseline variance", () => {
+        expect(milestone.baselineVariance()).toEqual(1)
+      });
+
+      it("does display the last return variance", () => {
+        expect(milestone.lastReturnVariance()).toEqual(1)
       });
     });
 
@@ -355,6 +382,14 @@ describe("<MilestoneField>", () => {
       it("shows the current return date", () => {
         expect(milestone.currentReturn()).toEqual(1);
       });
+
+      it("does display the baseline variance", () => {
+        expect(milestone.baselineVariance()).toEqual(1)
+      });
+
+      it("does display the last return variance", () => {
+        expect(milestone.lastReturnVariance()).toEqual(1)
+      });
     });
 
     describe("If Delayed - critical", () => {
@@ -368,6 +403,14 @@ describe("<MilestoneField>", () => {
 
       it("shows the current return date", () => {
         expect(milestone.currentReturn()).toEqual(1);
+      });
+
+      it("does display the baseline variance", () => {
+        expect(milestone.baselineVariance()).toEqual(1)
+      });
+
+      it("does display the last return variance", () => {
+        expect(milestone.lastReturnVariance()).toEqual(1)
       });
     });
 
@@ -386,6 +429,36 @@ describe("<MilestoneField>", () => {
 
       it("doesn't display the current return date", () => {
         expect(milestone.currentReturn()).toEqual(0);
+      });
+
+      it("doesn't display the baseline variance", () => {
+        expect(milestone.baselineVariance()).toEqual(0)
+      });
+
+      it("doesn't display the last return variance", () => {
+        expect(milestone.lastReturnVariance()).toEqual(0)
+      });
+    });
+
+    describe("No last return", () => {
+      beforeEach(() => {
+        let formData = {
+          description: "Here is a stone that marks a mile.",
+          milestoneBaselineCompletion: "03/31/2018",
+          milestoneSummaryOfCriticalPath: "Contract begins!!!"
+        };
+        let schemaTitle =  "Milestone Fields";
+        milestone = new MilestoneComponent(
+          formData,
+          onChangeSpy,
+          schemaTitle,
+          WidgetFake
+        );
+        milestone.simulateStatusAgainstLastReturn("Delayed - moderate impact")
+      });
+
+      it("doesn't display the last return variance", () => {
+        expect(milestone.lastReturnVariance()).toEqual(0)
       });
     });
   });

@@ -46,18 +46,18 @@ describe("VarianceField", () => {
         expect(percentComplete.length).toEqual(1);
       });
 
-      it("Renders the baseline variance field", () => {
+      it("Does not show the baseline variance field", () => {
         let baselineVariance = field.find("[data-test='baseline-variance']");
         expect(baselineVariance.length).toEqual(0);
       });
 
-      it("Renders the return variance field", () => {
-        let baselineVariance = field.find("[data-test='return-variance']");
-        expect(baselineVariance.length).toEqual(0);
+      it("Does not show the return variance field", () => {
+        let returnVariance = field.find("[data-test='return-variance']");
+        expect(returnVariance.length).toEqual(0);
       });
 
       it("Does not show the updated value field", () => {
-        let updatedValue = field.find("[data-test='variance-current']");
+        let updatedValue = field.find("[data-test='current-date']");
         expect(updatedValue.length).toEqual(0);
       });
 
@@ -78,7 +78,7 @@ describe("VarianceField", () => {
         });
 
         it("Shows the updated value field", () => {
-          let updatedValue = field.find("[data-test='variance-current']");
+          let updatedValue = field.find("[data-test='current-date']");
           expect(updatedValue.length).toEqual(1);
         });
 
@@ -98,6 +98,12 @@ describe("VarianceField", () => {
           let completedDate = field.find("[data-test='variance-completed']");
           expect(completedDate.length).toEqual(1);
         });
+
+        it("Does not show the return variance field", () => {
+          let returnVariance = field.find("[data-test='return-variance']");
+          expect(returnVariance.length).toEqual(0);
+        });
+        
       });
     });
 
@@ -135,18 +141,18 @@ describe("VarianceField", () => {
         expect(percentComplete.length).toEqual(1);
       });
 
-      it("Renders the baseline variance field", () => {
+      it("Does not show the baseline variance field", () => {
         let baselineVariance = field.find("[data-test='baseline-variance']");
         expect(baselineVariance.length).toEqual(0);
       });
 
-      it("Renders the return variance field", () => {
-        let baselineVariance = field.find("[data-test='return-variance']");
-        expect(baselineVariance.length).toEqual(0);
+      it("Does not show the return variance field", () => {
+        let returnVariance = field.find("[data-test='return-variance']");
+        expect(returnVariance.length).toEqual(0);
       });
 
       it("Does not show the updated value field", () => {
-        let updatedValue = field.find("[data-test='variance-current']");
+        let updatedValue = field.find("[data-test='current-date']");
         expect(updatedValue.length).toEqual(0);
       });
 
@@ -162,7 +168,7 @@ describe("VarianceField", () => {
         });
 
         it("Shows the updated value field", () => {
-          let updatedValue = field.find("[data-test='variance-current']");
+          let updatedValue = field.find("[data-test='current-date']");
           expect(updatedValue.length).toEqual(1);
         });
 
@@ -181,6 +187,11 @@ describe("VarianceField", () => {
         it("Shows the completed date field", () => {
           let completedDate = field.find("[data-test='variance-completed']");
           expect(completedDate.length).toEqual(1);
+        });
+
+        it("Does not show the return variance field", () => {
+          let returnVariance = field.find("[data-test='return-variance']");
+          expect(returnVariance.length).toEqual(0);
         });
       });
     });
@@ -244,10 +255,11 @@ describe("VarianceField", () => {
         beforeEach(() => {
           let schema = { title: "Meow Meow Fuzzyface" };
           let formData = {
-            baseline: "2020-12-31",
+            baseline: "02/01/2020",
             status: "Delayed",
             percentComplete: 10,
-            current: "2022-12-31",
+            current: "02/25/2020",
+            previousReturn: "02/08/2020",
             reason: "There were delays"
           };
           field = shallow(
@@ -271,11 +283,26 @@ describe("VarianceField", () => {
           expect(baselineVariance.length).toEqual(1);
         });
 
+        it("Calculates the baseline variance correctly field", () => {
+          let baselineVariance = field.find("[data-test='baseline-variance']");
+          expect(baselineVariance.text()).toEqual("3");
+        });
+
+        it("Renders the return variance field", () => {
+          let returnVariance = field.find("[data-test='return-variance']");
+          expect(returnVariance.length).toEqual(1);
+        });
+
+        it("Calculates the return variance correctly field", () => {
+          let returnVariance = field.find("[data-test='return-variance']");
+          expect(returnVariance.text()).toEqual("2");
+        });
+
         it("Fills in the updated value", () => {
           let updatedValue = field
-            .find("[data-test='variance-current']")
+            .find("[data-test='current-date']")
             .props().value;
-          expect(updatedValue).toEqual("2022-12-31");
+          expect(updatedValue).toEqual("02/25/2020");
         });
 
         it("Fills in the reason for variance", () => {
@@ -289,11 +316,12 @@ describe("VarianceField", () => {
         beforeEach(() => {
           let schema = { title: "Meow Meow Fuzzyface" };
           let formData = {
-            baseline: "2020-12-31",
+            baseline: "02/02/2020",
             status: "Delayed",
             percentComplete: 10,
-            current: "2050-01-01",
-            reason: "Super delays"
+            current: "02/25/2020",
+            reason: "Super delays",
+            previousReturn: "02/16/2020"
           };
           field = shallow(
             <VarianceField
@@ -316,11 +344,26 @@ describe("VarianceField", () => {
           expect(baselineVariance.length).toEqual(1);
         });
 
+        it("Calculates the baseline variance correctly field", () => {
+          let baselineVariance = field.find("[data-test='baseline-variance']");
+          expect(baselineVariance.text()).toEqual("3");
+        });
+
+        it("Renders the return variance field", () => {
+          let returnVariance = field.find("[data-test='return-variance']");
+          expect(returnVariance.length).toEqual(1);
+        });
+
+        it("Calculates the return variance correctly field", () => {
+          let returnVariance = field.find("[data-test='return-variance']");
+          expect(returnVariance.text()).toEqual("1");
+        });
+
         it("Fills in the updated value", () => {
           let updatedValue = field
-            .find("[data-test='variance-current']")
+            .find("[data-test='current-date']")
             .props().value;
-          expect(updatedValue).toEqual("2050-01-01");
+          expect(updatedValue).toEqual("02/25/2020");
         });
 
         it("Fills in the reason for variance", () => {
@@ -480,7 +523,7 @@ describe("VarianceField", () => {
         describe("Example one", () => {
           it("Calls the onChange prop with the updated form data", () => {
             field
-              .find("[data-test='variance-current']")
+              .find("[data-test='current-date']")
               .simulate("change", { target: { value: "2040-01-01" } });
 
             expect(onChangeSpy).toHaveBeenCalledWith({
@@ -497,7 +540,7 @@ describe("VarianceField", () => {
         describe("Example two", () => {
           it("Calls the onChange prop with the updated form data", () => {
             field
-              .find("[data-test='variance-current']")
+              .find("[data-test='current-date']")
               .simulate("change", { target: { value: "2020-05-01" } });
 
             expect(onChangeSpy).toHaveBeenCalledWith({
