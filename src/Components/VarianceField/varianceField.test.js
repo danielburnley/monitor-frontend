@@ -439,6 +439,39 @@ describe("VarianceField", () => {
           expect(reference.length).toEqual(0);
         });
       });
+
+      describe("procurementStatusAgainstLastReturn", () => {
+        let schema = { title: "Meow Meow Fuzzyface" };
+        let name = "procurementStatusAgainstLastReturn";
+        let formData = {
+          baseline: "2020-12-31",
+          status: "Completed",
+          percentComplete: 100,
+          completedDate: "2025-01-01"
+        };
+        let field = shallow(
+          <VarianceField
+            name={name}
+            schema={schema}
+            formData={formData}
+            onChange={jest.fn()}
+            registry={registryStub}
+          />
+        );
+
+        it("Fills in the completed date correctly", () => {
+          let completedDate = field
+            .find("[data-test='variance-completed']")
+            .props().value;
+
+          expect(completedDate).toEqual("2025-01-01");
+        });
+
+        it("Does render the contractor name field", () => {
+          let name = field.find("[data-test='variance-name']");
+          expect(name.length).toEqual(1);
+        });
+      });
     });
   });
 
