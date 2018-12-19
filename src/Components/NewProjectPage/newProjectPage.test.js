@@ -147,7 +147,7 @@ describe("NewProjectPage", () => {
       });
     });
 
-    describe("In Super USerdraft mode", () => {
+    describe("In Superuser draft mode", () => {
       let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Superuser"})) };
 
       it("example 1", async () => {

@@ -56,6 +56,29 @@ export default class ProjectGateway {
     }
   }
 
+
+  async unsubmit(project_id) {
+    if(!process.env.REACT_APP_BACK_TO_BASELINE) return
+    let response = await fetch(
+      `${this.env.REACT_APP_HIF_API_URL}project/unsubmit`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          API_KEY: this.apiKeyGateway.getApiKey().apiKey
+        },
+        body: JSON.stringify({
+          project_id
+        })
+      }
+    );
+    if (response.ok) {
+      return { success: true };
+    } else {
+      return { success: false };
+    }
+  }
+
   async update(project_id, project_data, timestamp) {
     let response = await fetch(
       `${this.env.REACT_APP_HIF_API_URL}project/update`,
