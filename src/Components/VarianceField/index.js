@@ -159,7 +159,7 @@ export default class VarianceField extends React.Component {
 
   renderTitle = () => (
     <div className="panel-heading" data-test="field-title">
-      {this.props.schema.title}
+      <b>{this.props.schema.title}</b>
     </div>
   );
 
