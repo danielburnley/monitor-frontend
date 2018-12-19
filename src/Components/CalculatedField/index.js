@@ -46,6 +46,12 @@ function secondsPassed(originalDate, newDate) {
   return (newDateDatified - originalDateDatified) / 1000
 }
 
+function validateArrayPropertyIsLessThan(array, path, value) {
+  array.forEach((object) => {
+    setCreate(object, [...path.slice(0, path.length-1), '_valid'], get(object, ...path) <= value);
+  });
+}
+
 function setCreate(object, path, value) {
   let jsonToSet = path.slice(0,path.length-1).reduce(
     (accumulator, property) => {
@@ -69,7 +75,14 @@ function set(object, property, value) {
 
 function get(object, ...properties) {
   return properties.reduce(
-    (accumulator, property) => accumulator[property],
+    (accumulator, property) => {
+      if (accumulator && accumulator[property])
+      {
+        return accumulator[property];
+      } else {
+        return null;
+      }
+    },
     object
   );
 }
