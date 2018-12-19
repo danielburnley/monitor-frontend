@@ -34,6 +34,16 @@ export default class MilestoneComponent {
 
   summary = () => this.milestone.find("[data-test='milestone-summary']").text();
 
+  varianceAgainstLastReturndata = () => 
+    this.milestone
+    .find("[data-test='milestone-lastReturnVariance']")
+    .text();
+
+  varianceAgainstBaselinedata= () => 
+    this.milestone
+    .find("[data-test='milestone-baselineVariance']")
+    .text();
+
   milestoneCompletedDate = () => 
     this.milestone
     .find("[data-test='milestone-completed-date']")
@@ -47,6 +57,16 @@ export default class MilestoneComponent {
   reasonForVariance = () => 
     this.milestone
     .find("[data-test='milestone-reason-for-variance']")
+    .length;
+  
+  baselineVariance = () => 
+    this.milestone
+    .find("[data-test='milestone-baselineVariance']")
+    .length;
+
+  lastReturnVariance = () => 
+    this.milestone
+    .find("[data-test='milestone-lastReturnVariance']")
     .length;
 
   milestonePercentCompleted = () => 
