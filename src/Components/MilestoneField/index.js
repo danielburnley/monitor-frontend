@@ -48,16 +48,16 @@ export default class MilestoneField extends React.Component {
 
 
   calculateVarianceAgainstLastReturn = () => {
-    if (!this.state.milestoneLastReturnDate || this.state.milestoneLastReturnDate === "") return null;
     return this.calculateVarianceWeeks(this.state.milestoneLastReturnDate, this.state.currentReturn)
   }
   
   calculateVarianceAgainstBaseline = () => {
-    if (!this.state.milestoneBaselineCompletion || this.state.milestoneBaselineCompletion === "") return null;
     return this.calculateVarianceWeeks(this.state.milestoneBaselineCompletion, this.state.currentReturn)
   }
 
   calculateVarianceWeeks = (originalDate, newDate) => {
+      if (!originalDate || originalDate === "") return null;
+      if (!newDate || newDate === "") return null;
       let originalDateDatified = new Date(originalDate);
       let newDateDatified = new Date(newDate);
 

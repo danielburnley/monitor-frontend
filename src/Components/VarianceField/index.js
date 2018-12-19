@@ -8,11 +8,13 @@ export default class VarianceField extends React.Component {
     const baselineVarianceOptions =
       props.formData.varianceBaselineFullPlanningPermissionSubmitted ||
       props.formData.varianceBaselineFullPlanningPermissionGranted ||
-      props.formData.landAssemblyVarianceAgainstBaseReturn;
+      props.formData.landAssemblyVarianceAgainstBaseReturn||
+      props.formData.varianceAgainstBaseline;
     const returnVarianceOptions =
       props.formData.varianceLastReturnFullPlanningPermissionSubmitted ||
       props.formData.varianceLastReturnFullPlanningPermissionGranted ||
-      props.formData.landAssemblyVarianceAgainstLastReturn;
+      props.formData.landAssemblyVarianceAgainstLastReturn||
+      props.formData.varianceAgainstLastReturn;      
 
     this.state = {
       baseline: props.formData.baseline,
@@ -23,12 +25,13 @@ export default class VarianceField extends React.Component {
       completedDate: props.formData.completedDate,
       baselineVariance: baselineVarianceOptions,
       returnVariance: returnVarianceOptions,
-      previousReturn: props.formData.previousReturn
+      previousReturn: props.formData.previousReturn,
+      onCompletedReference: props.formData.onCompletedReference
     };
   }
 
   onFieldChange = (name, newValue) => {
-    this.setState({ [name]: newValue || undefined }, () => {
+    this.setState({ [name]: newValue }, () => {
       this.props.onChange(this.state);
     });
   };
@@ -36,10 +39,10 @@ export default class VarianceField extends React.Component {
   renderBaselineVariance = () => {
     if (this.state.status === "Delayed") {
       return (
-        <div className="col-md-3 form-group">
+        <div className="col-md-4 form-group">
           <label>Baseline Variance (weeks)</label>
           <p data-test="baseline-variance">
-            {this.state.baselineVariance || 0}
+            {this.calculateVariance(this.state.baseline, this.state.current)}
           </p>
         </div>
       );
@@ -49,39 +52,12 @@ export default class VarianceField extends React.Component {
   };
 
   renderReturnVariance() {
-    if (this.state.previousReturn !== undefined) {
+    if (this.state.previousReturn && this.state.status === "Delayed") {
       return (
-        <div className="col-md-3 form-group">
-          <label>Return Variance (weeks)</label>
-          <p data-test="return-variance">{this.state.returnVariance || 0}</p>
-        </div>
-      );
-    } else {
-      return;
-    }
-  }
-
-  renderCurrentValue = () => (
-    <div className="col-md-3 form-group">
-      <label htmlFor="current">Current Date *</label>
-      <input
-        className="form-control"
-        data-test="variance-current"
-        id="current"
-        onChange={e => this.onFieldChange("current", e.target.value)}
-        type="date"
-        value={this.state.current || ""}
-      />
-    </div>
-  );
-
-  renderPreviousValue() {
-    if (this.state.previousReturn !== undefined) {
-      return (
-        <div className="col-md-3 form-group">
-          <label htmlFor="previous">Previous Return</label>
-          <p data-test="variance-previous" id="previous">
-            {this.state.previousReturn}
+        <div className="col-md-4 form-group">
+          <label>Last Return Variance (weeks)</label>
+          <p data-test="return-variance">
+            {this.calculateVariance(this.state.previousReturn, this.state.current)}
           </p>
         </div>
       );
@@ -90,29 +66,48 @@ export default class VarianceField extends React.Component {
     }
   }
 
+  calculateVariance = (originalDate, newDate) => {
+    if (!originalDate || originalDate === "") return null;
+    if (!newDate || newDate === "") return null;
+    let originalDateDatified = new Date(originalDate);
+    let newDateDatified = new Date(newDate);
+
+    if(newDateDatified == 'Invalid Date' || originalDateDatified == 'Inavlid Date') return ""
+    return Math.round((newDateDatified - originalDateDatified)/(7 * 60 * 60 * 24 * 1000));
+  }
+
+  renderCurrentValue = () => (
+    <div className="col-md-3 form-group">
+      <label htmlFor="current">Current Date *</label>
+      <input
+        className="form-control"
+        data-test="current-date"
+        id="current"
+        onChange={e => this.onFieldChange("current", e.target.value)}
+        type="date"
+        value={this.state.current || ""}
+      />
+    </div>
+  );
+
   renderReason = () => (
-    <div className="row">
-      <div className="col-md-6 form-group">
-        <label htmlFor="reason">Reason for variance*</label>
-        <textarea
-          className="form-control"
-          data-test="variance-reason"
-          onChange={e => this.onFieldChange("reason", e.target.value)}
-          type="text"
-          value={this.state.reason}
-        />
-      </div>
+    <div className="col-md-9 form-group">
+      <label htmlFor="reason">Reason for variance*</label>
+      <textarea
+        className="form-control"
+        data-test="variance-reason"
+        onChange={e => this.onFieldChange("reason", e.target.value)}
+        type="text"
+        value={this.state.reason}
+      />
     </div>
   );
 
   renderDelayed = () => (
-    <div>
       <div className="row">
-        {this.renderPreviousValue()}
-        {this.renderCurrentValue()}
+         {this.renderCurrentValue()}
+         {this.renderReason()}
       </div>
-      {this.renderReason()}
-    </div>
   );
 
   renderReference = () => {
@@ -164,7 +159,7 @@ export default class VarianceField extends React.Component {
   );
 
   renderBaseline = () => (
-    <div className="col-md-3 form-group">
+    <div className="col-md-4 form-group">
       <label className="static-label">Baseline</label>
       <p className="form-control-static" data-test="target-date">
         {this.state.baseline}
