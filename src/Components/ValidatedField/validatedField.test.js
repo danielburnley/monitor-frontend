@@ -142,25 +142,55 @@ describe("Validated Field", () => {
     });
   });
 
-  it("Valid", async () => {
-    let wrapper = mount(<ValidatedField
-      registry={{fields: {SchemaField: FieldFake}}}
-      formData={ {allData: "Cat", _valid: true} }
-      onChange = {() => {}}
-      schema={ {type: "object", calculation: "", properties: {allData: {type: "string"}}} }
-    />);
-    await wrapper.update();
-    expect(wrapper.find(".has-error").length).toEqual(0);
+  describe("Valid", () => {
+    it('Example 1', async () => {
+      let wrapper = mount(<ValidatedField
+        registry={{fields: {SchemaField: FieldFake}}}
+        formData={ {allData: "Cat", _valid: true} }
+        onChange = {() => {}}
+        schema={ {type: "object", invalidText: "Big mistake", properties: {allData: {type: "string"}}} }
+      />);
+      await wrapper.update();
+      expect(wrapper.find(".has-error").length).toEqual(0);
+      expect(wrapper.find("Big mistake").length).toEqual(0);
+    });
+
+    it('Example 2', async () => {
+      let wrapper = mount(<ValidatedField
+        registry={{fields: {SchemaField: FieldFake}}}
+        formData={ {allData: "Cat", _valid: true} }
+        onChange = {() => {}}
+        schema={ {type: "object", invalidText: "Small mistake", properties: {allData: {type: "string"}}} }
+      />);
+      await wrapper.update();
+      expect(wrapper.find(".has-error").length).toEqual(0);
+      expect(wrapper.find("Small mistake").length).toEqual(0);
+    });
   });
 
-  it("Invalid", async () => {
-    let wrapper = mount(<ValidatedField
-      registry={{fields: {SchemaField: FieldFake}}}
-      formData={ {allData: "Cat", _valid: false} }
-      onChange = {() => {}}
-      schema={ {type: "object", calculation: "", properties: {allData: {type: "string"}}} }
-    />);
-    await wrapper.update();
-    expect(wrapper.find(".has-error").length).toEqual(1);
+  describe("Invalid", () => {
+    it('Example 1', async () => {
+      let wrapper = mount(<ValidatedField
+        registry={{fields: {SchemaField: FieldFake}}}
+        formData={ {allData: "Cat", _valid: false} }
+        onChange = {() => {}}
+        schema={ {type: "object", invalidText: "Big mistake", properties: {allData: {type: "string"}}} }
+      />);
+      await wrapper.update();
+      expect(wrapper.find(".has-error").length).toEqual(1);
+      expect(wrapper.find(".help-block").props().children).toEqual("Big mistake");
+    });
+
+    it('Example 2', async () => {
+      let wrapper = mount(<ValidatedField
+        registry={{fields: {SchemaField: FieldFake}}}
+        formData={ {allData: "Cat", _valid: false} }
+        onChange = {() => {}}
+        schema={ {type: "object", invalidText: "Small mistake", properties: {allData: {type: "string"}}} }
+      />);
+      await wrapper.update();
+      expect(wrapper.find(".has-error").length).toEqual(1);
+      expect(wrapper.find(".help-block").props().children).toEqual("Small mistake");
+    });
   });
 });

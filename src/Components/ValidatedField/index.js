@@ -21,6 +21,12 @@ export default class ValidatedField extends React.Component {
     return "";
   }
 
+  getErrorText = () => {
+    if (this.props.formData && !this.props.formData._valid) {
+      return <span className="help-block">{this.props.schema.invalidText}</span>;
+    }
+  }
+
   render = () => (
     <div className={`form-group ${ this.getHasError() }`}>
       <this.props.registry.fields.SchemaField
@@ -30,6 +36,7 @@ export default class ValidatedField extends React.Component {
         uiSchema={this.removeCalculationBeforeRender(this.props.uiSchema)}
         registry={this.props.registry}
       />
+    {this.getErrorText()}
     </div>
   );
 }
