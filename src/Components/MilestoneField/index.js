@@ -13,6 +13,7 @@ export default class MilestoneField extends React.Component {
 
       statusAgainstLastReturn:
         this.props.formData.statusAgainstLastReturn || "On schedule",
+      milestoneCompletedDate: this.props.formData.milestoneCompletedDate,
       currentReturn: this.props.formData.currentReturn,
       reasonForVariance: this.props.formData.reasonForVariance,
       milestonePercentCompleted: this.props.formData.milestonePercentCompleted
@@ -39,7 +40,7 @@ export default class MilestoneField extends React.Component {
   renderMilestoneTargetDate() {
     return (
       <div>
-        <label htmlFor="milestoneBaselineCompletion">Completion Date</label>
+        <label htmlFor="milestoneBaselineCompletion">Baseline Completion Date</label>
         <p
           data-test="milestone-milestoneBaselineCompletion"
           id="milestoneBaselineCompletion"
@@ -78,7 +79,10 @@ export default class MilestoneField extends React.Component {
         >
           <option>Completed</option>
           <option>On schedule</option>
-          <option>Delayed</option>
+          <option>Delayed - minimal impact</option>
+          <option>Delayed - moderate impact</option>
+          <option>Delayed - critcal</option>
+
         </select>
       </div>
     );
@@ -87,7 +91,7 @@ export default class MilestoneField extends React.Component {
   renderCurrentReturn() {
     return (
       <div>
-        <label htmlFor="currentReturn">Current Return</label>
+        <label htmlFor="currentReturn">Current Return Date</label>
         <input
           className="form-control"
           onChange={e => this.onFieldChange("currentReturn", e.target.value)}
@@ -100,19 +104,50 @@ export default class MilestoneField extends React.Component {
     );
   }
 
-  renderReasonForVariance() {
+  renderCompletedDate = () => {
     return (
       <div>
-        <label htmlFor="reasonForVariance">Reason for Variance</label>
-        <textarea
+        <label htmlFor="milestoneBaselineCompletedDate">Completion Date</label>
+        <input
           className="form-control"
-          onChange={e => this.onFieldChange("reasonForVariance", e.target.value)}
-          data-test="milestone-reason-for-variance"
-          value={this.state.reasonForVariance }
-          id="reasonForVariance"
+          onChange={e => this.onFieldChange("milestoneCompletedDate", e.target.value)}
+          data-test="milestone-completed-date"
+          value={this.state.milestoneCompletedDate || ""}
+          type="date"
+          id="milestoneCompletedDate"
         />
       </div>
     );
+  }
+
+  isDelayed = (status) => {
+    return status && status.substring(0, 7) === "Delayed"
+  }
+
+  renderDate = () => {
+    if(this.state.statusAgainstLastReturn === "Completed") return this.renderCompletedDate();
+    if(this.isDelayed(this.state.statusAgainstLastReturn)) return this.renderCurrentReturn();
+    return;
+  }
+
+  renderReasonForVariance() {
+    if(this.isDelayed(this.state.statusAgainstLastReturn)) {
+      return (
+        <div>
+          <label htmlFor="reasonForVariance">Reason for Variance</label>
+          <textarea
+            className="form-control"
+            onChange={e => this.onFieldChange("reasonForVariance", e.target.value)}
+            data-test="milestone-reason-for-variance"
+            value={this.state.reasonForVariance }
+            id="reasonForVariance"
+          />
+        </div>
+      );
+    }
+    else {
+      return;
+    }
   }
 
   renderMilestonePercentCompleted() {
@@ -147,7 +182,7 @@ export default class MilestoneField extends React.Component {
           </div>
         </div>
         <div className="row">
-          <div className="col-md-6">{this.renderCurrentReturn()}</div>
+          <div className="col-md-6">{this.renderDate()}</div>
           <div className="col-md-6">{this.renderReasonForVariance()}</div>
         </div>
       </div>

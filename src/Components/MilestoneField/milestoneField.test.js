@@ -80,7 +80,7 @@ describe("<MilestoneField>", () => {
       );
 
       it("Updates the values of the fields", () => {
-        milestone.simulateStatusAgainstLastReturn("Completed");
+        milestone.simulateStatusAgainstLastReturn("Delayed - moderate impact");
         milestone.simulateCurrentReturn("21/09/2019");
         milestone.simulateReasonForVariance(
           "A variance has occured, causing variance"
@@ -91,7 +91,7 @@ describe("<MilestoneField>", () => {
           description: "Here is a stone that marks a mile.",
           milestoneBaselineCompletion: "31/03/2018",
           milestoneSummaryOfCriticalPath: "Contract begins!!!",
-          statusAgainstLastReturn: "Completed",
+          statusAgainstLastReturn: "Delayed - moderate impact",
           currentReturn: "21/09/2019",
           reasonForVariance: "A variance has occured, causing variance",
           milestonePercentCompleted: "65"
@@ -115,20 +115,16 @@ describe("<MilestoneField>", () => {
       );
 
       it("Updates the values of the fields", () => {
-        milestone.simulateStatusAgainstLastReturn("On schedule");
+        milestone.simulateStatusAgainstLastReturn("Delayed - minimal impact");
         milestone.simulateCurrentReturn("25/12/2018");
-        milestone.simulateReasonForVariance(
-          "The cats are fast and are moving quickly."
-        );
         milestone.simulateMilestonePercentCompleted("80");
 
         expect(onChangeSpy).toHaveBeenCalledWith({
           description: "Cats have walked very far",
           milestoneBaselineCompletion: "10/10/2019",
           milestoneSummaryOfCriticalPath: "Give them pets and fish",
-          statusAgainstLastReturn: "On schedule",
+          statusAgainstLastReturn: "Delayed - minimal impact",
           currentReturn: "25/12/2018",
-          reasonForVariance: "The cats are fast and are moving quickly.",
           milestonePercentCompleted: "80"
         });
       });
@@ -142,7 +138,7 @@ describe("<MilestoneField>", () => {
         description: "Here is a stone that marks a mile.",
         milestoneBaselineCompletion: "31/03/2018",
         milestoneSummaryOfCriticalPath: "Contract begins!!!",
-        statusAgainstLastReturn: "Completed",
+        statusAgainstLastReturn: "Delayed - moderate impact",
         currentReturn: "21/09/2019",
         reasonForVariance: "A variance has occured, causing variance",
         milestonePercentCompleted: "65"
@@ -156,7 +152,7 @@ describe("<MilestoneField>", () => {
       );
 
       it("displays the status against last return", () => {
-        expect(milestone.findStatusAgainstLastReturn()).toEqual("Completed");
+        expect(milestone.findStatusAgainstLastReturn()).toEqual("Delayed - moderate impact");
       });
 
       it("displays the current return", () => {
@@ -180,7 +176,7 @@ describe("<MilestoneField>", () => {
         description: "Cats have walked very far",
         milestoneBaselineCompletion: "10/10/2019",
         milestoneSummaryOfCriticalPath: "Give them pets and fish",
-        statusAgainstLastReturn: "On schedule",
+        statusAgainstLastReturn: "Delayed - critcal",
         currentReturn: "25/12/2018",
         reasonForVariance: "The cats are fast and are moving quickly.",
         milestonePercentCompleted: "80"
@@ -194,7 +190,7 @@ describe("<MilestoneField>", () => {
       );
 
       it("displays the status against last return", () => {
-        expect(milestone.findStatusAgainstLastReturn()).toEqual("On schedule");
+        expect(milestone.findStatusAgainstLastReturn()).toEqual("Delayed - critcal");
       });
 
       it("displays the current return", () => {
@@ -239,11 +235,13 @@ describe("<MilestoneField>", () => {
       });
 
       it("updates the value of the current return", () => {
+        milestone.simulateStatusAgainstLastReturn("Delayed - minimal impact");
         milestone.simulateCurrentReturn("31/10/2019");
         expect(milestone.findCurrentReturn()).toEqual("31/10/2019");
       });
 
       it("updates the value of reason for variance", () => {
+        milestone.simulateStatusAgainstLastReturn("Delayed - minimal impact");
         milestone.simulateReasonForVariance("New variance!");
         expect(milestone.findReasonForVariance()).toEqual("New variance!");
       });
@@ -274,8 +272,8 @@ describe("<MilestoneField>", () => {
       );
 
       it("updates the value of the status against last return", () => {
-        milestone.simulateStatusAgainstLastReturn("Completed");
-        expect(milestone.findStatusAgainstLastReturn()).toEqual("Completed");
+        milestone.simulateStatusAgainstLastReturn("Delayed - minimal impact");
+        expect(milestone.findStatusAgainstLastReturn()).toEqual("Delayed - minimal impact");
       });
 
       it("updates the value of the current return", () => {
@@ -291,6 +289,103 @@ describe("<MilestoneField>", () => {
       it("updates the value of milestone percent completed", () => {
         milestone.simulateMilestonePercentCompleted("99");
         expect(milestone.findMilestonePercentCompleted()).toEqual("99");
+      });
+    });
+  });
+
+  describe("dependencies", () => {
+    let milestone;
+    
+    beforeEach(() => {
+      let formData = {
+        description: "Here is a stone that marks a mile.",
+        milestoneBaselineCompletion: "31/03/2018",
+        milestoneSummaryOfCriticalPath: "Contract begins!!!"
+      };
+      let schemaTitle =  "Milestone Fields";
+      milestone = new MilestoneComponent(
+        formData,
+        onChangeSpy,
+        schemaTitle,
+        WidgetFake
+      );
+    });
+
+    describe("If completed", () => {
+      beforeEach(() => {
+        milestone.simulateStatusAgainstLastReturn("Completed")
+      });
+
+      it("shows completed date", () => {
+        expect(milestone.milestoneCompletedDate()).toEqual(1)
+      });
+
+      it("doesn't display the current return date", () => {
+        expect(milestone.currentReturn()).toEqual(0);
+      });
+
+      it("doesn't display the reason for variance", () => {
+        expect(milestone.reasonForVariance()).toEqual(0)
+      });
+    });
+
+    describe("If Delayed - moderate impact", () => {
+      beforeEach(() => {
+        milestone.simulateStatusAgainstLastReturn("Delayed - moderate impact")
+      });
+
+      it("shows the reason for variance", () => {
+        expect(milestone.reasonForVariance()).toEqual(1)
+      });
+
+      it("shows the current return date", () => {
+        expect(milestone.currentReturn()).toEqual(1);
+      });
+    });
+
+    describe("If Delayed - minimal impact", () => {
+      beforeEach(() => {
+        milestone.simulateStatusAgainstLastReturn("Delayed - moderate impact")
+      });
+
+      it("shows the reason for variance", () => {
+        expect(milestone.reasonForVariance()).toEqual(1)
+      });
+
+      it("shows the current return date", () => {
+        expect(milestone.currentReturn()).toEqual(1);
+      });
+    });
+
+    describe("If Delayed - critical", () => {
+      beforeEach(() => {
+        milestone.simulateStatusAgainstLastReturn("Delayed - moderate impact")
+      });
+
+      it("shows the reason for variance", () => {
+        expect(milestone.reasonForVariance()).toEqual(1)
+      });
+
+      it("shows the current return date", () => {
+        expect(milestone.currentReturn()).toEqual(1);
+      });
+    });
+
+    describe("If on schedule", () => {
+      beforeEach(() => {
+        milestone.simulateStatusAgainstLastReturn("On schedule")
+      });
+
+      it("doesn't display the reason for variance", () => {
+        expect(milestone.reasonForVariance()).toEqual(0)
+      });
+
+      it("doesn't display the date completed", () => {
+        expect(milestone.milestoneCompletedDate()).toEqual(0)
+      });
+
+      it("doesn't display the current return date", () => {
+        expect(milestone.currentReturn()).toEqual(0);
       });
     });
   });
