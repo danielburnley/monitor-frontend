@@ -20,7 +20,7 @@ export default class QuarterlyBreakdown extends React.Component {
       }
     });
   }
-  
+
   onFieldChange(index, name, value) {
     let newData = this.state.data;
     newData[index][name] = value

@@ -36,7 +36,7 @@ export default class ValidatedField extends React.Component {
         uiSchema={this.removeCalculationBeforeRender(this.props.uiSchema)}
         registry={this.props.registry}
       />
-    {this.getErrorText()}
+      {this.getErrorText()}
     </div>
   );
 }
