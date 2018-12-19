@@ -1,10 +1,6 @@
 import React from "react";
 
 export default class ValidatedField extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   onChange = formData => {
     this.props.onChange(formData);
   };
