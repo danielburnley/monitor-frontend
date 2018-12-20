@@ -68,7 +68,7 @@ export default class UploadFileField extends React.Component {
   renderSavedFiles = () => {
     if(this.state.files.length === 0 ) return null;
     return (<div>
-      <em>Click on the link(s) below to download the file(s).</em>
+      <em>Click on the link(s) below to download the file(s). Once downloaded please save with an appropriate file name and extension.</em>
       {this.renderFileLinks()}
     </div>)
   }
