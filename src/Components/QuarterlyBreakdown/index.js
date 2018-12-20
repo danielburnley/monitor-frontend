@@ -91,7 +91,7 @@ export default class QuarterlyBreakdown extends React.Component {
   renderHeaders = (quarterlyObject) => {
     let column_class = "data-column"
     return Object.entries(quarterlyObject).map(([key, value])=> {
-      if (value.hidden) return;
+      if (value.hidden) return null;
       if (key === "remove") column_class = "remove";
       return (
         <div className={`header ${column_class}`} key={`${key}_${this.ids[key]}`} data-test={`${key}_title`}>
