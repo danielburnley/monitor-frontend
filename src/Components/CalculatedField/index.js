@@ -129,7 +129,6 @@ export default class CalculatedField extends React.Component {
   };
 
   render = () => {
-    console.log(this.state.formData)
     return (
       <this.props.registry.fields.SchemaField
         formData={this.state.formData}
