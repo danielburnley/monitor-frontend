@@ -61,7 +61,7 @@ export default class MilestoneField extends React.Component {
       let originalDateDatified = new Date(originalDate);
       let newDateDatified = new Date(newDate);
 
-      if(newDateDatified == 'Invalid Date' || originalDateDatified == 'Inavlid Date') return ""
+      if(newDateDatified === 'Invalid Date' || originalDateDatified === 'Inavlid Date') return ""
       return Math.round((newDateDatified - originalDateDatified)/(7 * 60 * 60 * 24 * 1000));
   }
 

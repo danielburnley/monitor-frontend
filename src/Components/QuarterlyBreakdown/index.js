@@ -27,11 +27,11 @@ export default class QuarterlyBreakdown extends React.Component {
 
     this.updateUntouchedColumns(name);
 
-    
+
     this.setState({
       data: newData
     })
-    
+
     this.props.onChange(newData);
   }
 
@@ -79,7 +79,7 @@ export default class QuarterlyBreakdown extends React.Component {
   }
 
   renderVariance = (key, periodData, index, propertySchema) => {
-    if(propertySchema.varianceField == "varianceTitle") {
+    if(propertySchema.varianceField === "varianceTitle") {
       return <p data-test="variance-title" className="variance">Variance</p>
     } else if (propertySchema.varianceField) {
       return <p data-test="quarter1-variance" className="variance">£ {this.state.data[index][propertySchema.varianceField]}</p>
