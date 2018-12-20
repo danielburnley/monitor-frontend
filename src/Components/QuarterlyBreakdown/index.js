@@ -39,17 +39,28 @@ export default class QuarterlyBreakdown extends React.Component {
       data.push({})
     }
     return data.map((value, index) => {
-      return (
-        <div className="line" key={`${index}`}>
+      return ( <div key={`${index}`}>
+        <div className="line">
           {this.renderPeriod(quarterlyObject, value, index)}
         </div>
+        <div className=" line variance-line">
+          {this.renderPeriod(quarterlyObject, value, index, true)}
+        </div>
+      </div>
       )
     })
   }
 
-  renderPeriod = (quarterlyObject, value, index) => {
+  renderPeriod = (quarterlyObject, value, index, isVariance) => {
     return Object.entries(quarterlyObject).map(([key, schema])=> {
-      if (key !== "remove") {
+      if(schema.hidden) return null;
+      if (isVariance) {
+        return(
+          <div className="data-column" key={`${index}_${key}_${this.ids[key]}_variance`}>
+            {this.renderVariance(key, value[key], index, schema)}
+          </div>
+        );
+      } else if (key !== "remove") {
         return (
           <div className="data-column" key={`${index}_${key}_${this.ids[key]}`}>
             {this.renderInputField(key, value[key], index, schema)}
@@ -63,6 +74,16 @@ export default class QuarterlyBreakdown extends React.Component {
         )
       }
     })
+  }
+
+  renderVariance = (key, periodData, index, propertySchema) => {
+    if(propertySchema.varianceField == "varianceTitle") {
+      return <p data-test="variance-title" className="variance">Variance</p>
+    } else if (propertySchema.varianceField) {
+      return <p data-test="quarter1-variance" className="variance">£ {this.state.data[index][propertySchema.varianceField]}</p>
+    } else {
+      return;
+    }
   }
 
   renderHeaders = (quarterlyObject) => {
