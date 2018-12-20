@@ -1,4 +1,3 @@
-import Form from "react-jsonschema-form";
 import React from "react";
 import AddButton from "../AddButton";
 import RemoveButton from "../RemoveButton";
@@ -13,31 +12,33 @@ export default class NumberedArrayField extends React.Component {
     };
   }
 
-  addItem = (e) => {
+  addItem = e => {
     let formData = this.state.formData;
     formData.push({});
-    this.setState({formData});
-  }
+    this.setState({ formData });
+  };
 
-  removeItem = (index) => {
+  removeItem = index => {
     let formData = this.state.formData;
     formData.splice(index, 1);
-    this.setState({formData});
-  }
+    this.setState({ formData });
+  };
 
-  renderRemoveButton = (index) => {
+  renderRemoveButton = index => {
     if (this.props.schema.addable) {
-      return <RemoveButton index={index} onClick={() => this.removeItem(index)}/>
+      return (
+        <RemoveButton index={index} onClick={() => this.removeItem(index)} />
+      );
     }
     return null;
-  }
+  };
 
   renderAddButton = () => {
     if (this.props.schema.addable) {
-      return <AddButton onClick={this.addItem}/>
+      return <AddButton onClick={this.addItem} />;
     }
     return null;
-  }
+  };
 
   onChildFormChange = async (index, value) => {
     let formData = this.state.formData;
@@ -45,35 +46,30 @@ export default class NumberedArrayField extends React.Component {
 
     await this.setState({ formData });
     if (this.props.onChange) {
-      this.props.onChange(formData)
+      this.props.onChange(formData);
     }
-  }
+  };
 
-  generateArrayItemKey = (index) => (
-    `${index}-${this.state.formData.length}`
-  )
+  generateArrayItemKey = index => `${index}-${this.state.formData.length}`;
 
   renderArrayItem = (data, index) => (
     <li key={this.generateArrayItemKey(index)}>
       <this.props.registry.fields.SchemaField
         formData={data}
         schema={this.props.schema.items}
-        onChange={(e) => this.onChildFormChange(index, e)}
+        onChange={e => this.onChildFormChange(index, e)}
         uiSchema={this.props.uiSchema && this.props.uiSchema.items}
       />
       {this.renderRemoveButton(index)}
     </li>
-  )
+  );
 
   render = () => (
     <div>
-        <ol> 
-          {
-            this.state.formData &&
-            this.state.formData.map(this.renderArrayItem)
-          }
-        </ol>
+      <ol>
+        {this.state.formData && this.state.formData.map(this.renderArrayItem)}
+      </ol>
       {this.renderAddButton()}
     </div>
-  )
+  );
 }
