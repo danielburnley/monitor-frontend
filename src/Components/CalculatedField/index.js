@@ -91,6 +91,12 @@ function get(object, ...properties) {
   }, object);
 }
 
+function percentageDifference(valueAgainst, valueNew) {
+  if (!valueAgainst) return;
+  let difference = valueNew - valueAgainst
+  return calculateVariance(difference, valueAgainst)
+}
+
 function calculateVariance(value1, value2) {
   let result = (value1 / value2) * 100;
 
