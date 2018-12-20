@@ -1480,4 +1480,26 @@ describe("GenerateUISchema", () => {
       });
     });
   });
+
+  describe("File Uploads", () => {
+    describe("Example one", () => {
+      it("Marks the field as a file upload", () => {
+        let schema = {
+          type: "object",
+          properties: {
+            a: {
+              type: "object",
+              properties: {
+                b: { type: "string", uploadFile: true }
+              }
+            }
+          }
+        };
+        let response = useCase.execute(schema);
+        expect(response).toEqual({
+          a: { b: { "ui:field": "uploadFile" } }
+        });
+      });
+    });
+  });
 });

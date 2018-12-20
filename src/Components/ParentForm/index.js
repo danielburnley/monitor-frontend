@@ -17,6 +17,7 @@ import QuarterlyBreakdown from "../QuarterlyBreakdown";
 import CurrencyWidget from "../CurrencyWidget";
 import PercentageWidget from "../PercentageWidget";
 import "./style.css";
+import UploadFileField from "../UploadFileField";
 
 export default class ParentForm extends React.Component {
   constructor(props) {
@@ -154,7 +155,8 @@ export default class ParentForm extends React.Component {
       numbered: NumberedArrayField,
       quarterly: QuarterlyBreakdown,
       calculated: CalculatedField,
-      validated: ValidatedField
+      validated: ValidatedField,
+      uploadFile: UploadFileField
     };
 
     const widgets = {

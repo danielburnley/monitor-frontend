@@ -103,6 +103,10 @@ export default class GenerateUISchema {
       schema["ui:widget"] = "hidden"
     }
 
+    if (item.uploadFile) {
+      schema["ui:field"] = "uploadFile"
+    }
+
     if (item.readonly) {
       schema["ui:disabled"] = true
     }
