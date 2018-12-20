@@ -27,10 +27,12 @@ export default class QuarterlyBreakdown extends React.Component {
 
     this.updateUntouchedColumns(name);
 
+    
+    this.setState({
+      data: newData
+    })
+    
     this.props.onChange(newData);
-
-    this.setState({ data: newData })
-
   }
 
   renderData = (quarterlyObject) => {
