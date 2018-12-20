@@ -42,7 +42,7 @@ export default class PercentageWidget extends React.Component {
         <input
           className="form-control"
           type="text"
-          value={this.props.value || undefined}
+          value={this.props.value}
           disabled={this.isInputDisabled()}
           onChange={this.handleChange} 
         />

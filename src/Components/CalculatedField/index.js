@@ -102,7 +102,9 @@ function get(object, ...properties) {
 function calculateVariance(value1, value2) {
   let result = (value1 / value2) * 100;
 
-  return Math.round(result * 100) / 100;
+  let variance =  Math.round(result * 100) / 100;
+  if(isNaN(variance)) return 0;
+  return variance
 }
 
 function combineArrays(array1, array2) {
