@@ -28,11 +28,11 @@ function periodTotal(object, totalPath, property, ...keys) {
   });
 }
 
-function setArrayVariance(array1, propertyInArray1, array2, propertyInArray2, varianceField) {
-  if(!array2 || !array1) return null;
-  array2.map((value, index) => {
-    if(!value[propertyInArray2]) return value[varianceField] = "";
-    value[varianceField] = parseMoney(value[propertyInArray2]) - parseMoney(array1[index][propertyInArray1])
+function setArrayVariance(originalArray, originalArrayProperty, newArray, newArrayProperty, varianceField) {
+  if(!newArray || !originalArray) return null;
+  newArray.map((value, index) => {
+    if(!value[newArrayProperty]) return value[varianceField] = "";
+    value[varianceField] = parseMoney(value[newArrayProperty]) - parseMoney(originalArray[index][originalArrayProperty])
   })
 }
 
