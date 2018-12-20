@@ -1,7 +1,7 @@
 import React from 'react';
 
 function dataURItoBlob(dataURI) {
-  let byteString, fileType 
+  let byteString, fileType
 
   if(dataURI.split(',')[0].indexOf('base64') !== -1 ) {
       byteString = atob(dataURI.split(',')[1])
@@ -11,7 +11,7 @@ function dataURItoBlob(dataURI) {
 
   fileType = dataURI.split(',')[0].split(':')[1].split(';')[0]
 
-  let content = new Array();
+  let content = [];
   for (var i = 0; i < byteString.length; i++) {
       content[i] = byteString.charCodeAt(i)
   }
@@ -40,7 +40,7 @@ export default class UploadFileField extends React.Component {
 
   onChange = (file) => {
     let newFiles = this.state.files
-    if (this.props.schema.uploadFile === "multiple") { 
+    if (this.props.schema.uploadFile === "multiple") {
       newFiles.push(file);
     } else {
       newFiles = [file]
@@ -72,13 +72,13 @@ export default class UploadFileField extends React.Component {
       {this.renderFileLinks()}
     </div>)
   }
-  
+
   renderFileLinks = () => {
     return this.state.files.map((file, index) => {
       return <div key={`${index}`}>{this.renderFileDownloadLink(file, index)}</div>
     })
   }
-  
+
   renderFileDownloadLink = (file, index) => {
     let fileInfo = unlinkNameFromDataURL(file)
     let link = URL.createObjectURL(dataURItoBlob(fileInfo.dataURL));
