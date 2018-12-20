@@ -28,6 +28,14 @@ function periodTotal(object, totalPath, property, ...keys) {
   });
 }
 
+function setArrayVariance(originalArray, originalArrayProperty, newArray, newArrayProperty, varianceField) {
+  if(!newArray || !originalArray) return null;
+  newArray.map((value, index) => {
+    if(!value[newArrayProperty]) return value[varianceField] = "";
+    value[varianceField] = parseMoney(value[newArrayProperty]) - parseMoney(originalArray[index][originalArrayProperty])
+  })
+}
+
 function weeksPassed(originalDate, newDate) {
   let seconds = secondsPassed(originalDate, newDate);
   return Math.round(seconds / (7 * 60 * 60 * 24));

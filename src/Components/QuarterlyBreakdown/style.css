@@ -33,3 +33,13 @@
   font-weight: 700;
   white-space: nowrap;
 }
+
+.variance {
+  color: grey;
+  font-style: italic;
+  margin-left: 10px;
+}
+
+.variance-line {
+  margin-bottom: 25px;
+}
