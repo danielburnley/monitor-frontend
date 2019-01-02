@@ -5,7 +5,8 @@ import {
   get,
   percentageDifference,
   calculateVariance,
-  combineArrays
+  combineArrays,
+  sum
 } from ".";
 
 describe("parseMoney()", () => {
@@ -111,5 +112,19 @@ describe("combineArrays()", () => {
 
   it("Example 2", () => {
     expect(combineArrays([1,4,1,5],[9,2,6,5])).toEqual([1, 4, 1, 5, 9, 2, 6, 5]);
+  });
+});
+
+describe("sum()", () => {
+  it("Example 1", () => {
+    expect(
+        sum({ augend: "15", addend: "14" }, "augend", "addend")
+    ).toEqual(29);
+  });
+
+  it("Example 2", () => {
+    expect(
+        sum({ termA: "15", termB: "14", termC: "1" }, "termA", "termB", "termC")
+    ).toEqual(30);
   });
 });
