@@ -1,4 +1,4 @@
-import {parseMoney, accumulateMoney, set, get} from ".";
+import {parseMoney, accumulateMoney, set, get, percentageDifference} from ".";
 describe("parseMoney()", () => {
   it("Returns 0 when given no value", () => {
     expect(parseMoney()).toEqual(0);
@@ -72,5 +72,15 @@ describe("get()", () => {
       };
       expect(get(formData, 'a')).toEqual("data");
     });
+  });
+});
+
+describe("percentageDifference()", () => {
+  it("Example 1", () => {
+    expect(percentageDifference(0.75, 0.80)).toEqual(6.67);
+  });
+
+  it("Example 2", () => {
+    expect(percentageDifference(0.75, 1)).toEqual(33.33);
   });
 });
