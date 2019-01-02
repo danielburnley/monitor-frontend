@@ -10,7 +10,8 @@ import {
   weeksPassed,
   daysPassed,
   secondsPassed,
-  setCreate
+  setCreate,
+  validateArrayPropertyIsLessThan
 } from ".";
 
 describe("parseMoney()", () => {
@@ -174,5 +175,35 @@ describe("setCreate()", () => {
     let formData = {};
     setCreate(formData, ["info"], "Hi");
     expect(formData).toEqual({info: "Hi"});
+  });
+});
+
+describe("validateArrayPropertyIsLessThan()", () => {
+  describe("Valid", () => {
+    it("Example 1", () => {
+      let formData = [{main: "12"}];
+      validateArrayPropertyIsLessThan(formData, ["main"], 20);
+      expect(formData).toEqual([{"_valid": true, "main": "12"}]);
+    });
+
+    it("Example 2", () => {
+      let formData = [{main: "13"}];
+      validateArrayPropertyIsLessThan(formData, ["main"], 20);
+      expect(formData).toEqual([{"_valid": true, "main": "13"}]);
+    });
+  });
+
+  describe("Invalid", () => {
+    it("Example 1", () => {
+      let formData = [{main: "22"}];
+      validateArrayPropertyIsLessThan(formData, ["main"], 19);
+      expect(formData).toEqual([{"_valid": false, "main": "22"}]);
+    });
+
+    it("Example 2", () => {
+      let formData = [{main: "24"}];
+      validateArrayPropertyIsLessThan(formData, ["main"], 19);
+      expect(formData).toEqual([{"_valid": false, "main": "24"}]);
+    });
   });
 });
