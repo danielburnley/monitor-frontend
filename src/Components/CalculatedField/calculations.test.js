@@ -1,4 +1,13 @@
-import {parseMoney, accumulateMoney, set, get, percentageDifference, calculateVariance} from ".";
+import {
+  parseMoney,
+  accumulateMoney,
+  set,
+  get,
+  percentageDifference,
+  calculateVariance,
+  combineArrays
+} from ".";
+
 describe("parseMoney()", () => {
   it("Returns 0 when given no value", () => {
     expect(parseMoney()).toEqual(0);
@@ -92,5 +101,15 @@ describe("calculateVariance()", () => {
 
   it("Example 2", () => {
     expect(calculateVariance(0.50, 0.75)).toEqual(66.67);
+  });
+});
+
+describe("combineArrays()", () => {
+  it("Example 1", () => {
+    expect(combineArrays([1,2,3], [4,5,6])).toEqual([1,2,3,4,5,6]);
+  });
+
+  it("Example 2", () => {
+    expect(combineArrays([1,4,1,5],[9,2,6,5])).toEqual([1, 4, 1, 5, 9, 2, 6, 5]);
   });
 });
