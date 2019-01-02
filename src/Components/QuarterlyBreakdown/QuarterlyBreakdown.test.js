@@ -77,8 +77,8 @@ describe("Quarterly Breakdown", () => {
       });
 
       describe("Rendering Schema Field", () => {
-        it("Renders a schema field for each data point", () => {
-          expect(field.find("FieldFake").length).toEqual(14)
+        it("Renders a schema field for each data point that isnt hidden", () => {
+          expect(field.find("FieldFake").length).toEqual(12)
         });
 
         it("passes the registry to schema field", () => {
@@ -579,6 +579,146 @@ describe("Quarterly Breakdown", () => {
 
       it("does render a remove button", () => {
         expect(field.find("[data-test='remove-button-0']").length).toEqual(1);
+      });
+    });
+  });
+
+  describe("With variance values",() => {
+    describe("Example 1", () => {
+      let field
+      beforeEach(() => {
+        let onChangeSpy = jest.fn();
+        let schema = {
+          type: "array",
+          quarterly: true,
+          items: {
+            type: "object",
+            properties: {
+              period: {
+                title: "Period",
+                varianceField: "varianceTitle"
+              },
+              quarter1: {
+                varianceField: "quarter1Var",
+                title: "Quarter 1"
+              },
+              quarter1Var: {
+                hidden: "true",
+                type: "string"
+              },
+              quarter2: {
+                title: "Quarter 1"
+              }
+            }
+          }        
+        }
+        let data = [
+          {
+            quarter1: "4",
+            quarter2: "7",
+            quarter1Var: "6"
+          },
+          {
+            quarter1: "10",
+            quarter2: "78",
+            quarter1Var: "455"
+          }
+        ]
+  
+        field = mount(<QuarterlyBreakdown
+          schema={schema}
+          formData={data}
+          registry={{fields: {SchemaField: FieldFake, extraField: FieldFake}}}
+          onChange={onChangeSpy}
+          />);
+      });
+  
+      it("Display the variance fields", () => {
+        expect(field.find('[data-test="quarter1-variance"]').length).toEqual(2);
+      });
+  
+      it("only displays variance fields if they have one marked", () => {
+        expect(field.find('[data-test="quarter2-variance"]').length).toEqual(0);
+      });
+  
+      it("Displays the variance value", () => {
+        expect(field.find('[data-test="quarter1-variance"]').at(0).text()).toEqual("£ 6");
+        expect(field.find('[data-test="quarter1-variance"]').at(1).text()).toEqual("£ 455");
+      });
+  
+      it("Display the variance title", () => {
+        expect(field.find('[data-test="variance-title"]').length).toEqual(2);
+        expect(field.find('[data-test="variance-title"]').at(0).text()).toEqual("Variance");
+        expect(field.find('[data-test="variance-title"]').at(1).text()).toEqual("Variance");
+      });
+    });
+
+    describe("Example 2", () => {
+      let field
+      beforeEach(() => {
+        let onChangeSpy = jest.fn();
+        let schema = {
+          type: "array",
+          quarterly: true,
+          items: {
+            type: "object",
+            properties: {
+              period: {
+                title: "Period",
+                varianceField: "varianceTitle"
+              },
+              quarter1: {
+                title: "Quarter 1"
+              },
+              quarter2: {
+                varianceField: "quarter2Var",
+                title: "Quarter 1"
+              },
+              quarter2Var: {
+                hidden: "true",
+                type: "string"
+              }
+            }
+          }        
+        }
+        let data = [
+          {
+            quarter1: "1",
+            quarter2: "7",
+            quarter2Var: "12"
+          },
+          {
+            quarter1: "90",
+            quarter2: "8676",
+            quarter2Var: "3562"
+          }
+        ]
+  
+        field = mount(<QuarterlyBreakdown
+          schema={schema}
+          formData={data}
+          registry={{fields: {SchemaField: FieldFake, extraField: FieldFake}}}
+          onChange={onChangeSpy}
+          />);
+      });
+  
+      it("Display the variance fields", () => {
+        expect(field.find('[data-test="quarter1-variance"]').length).toEqual(2);
+      });
+  
+      it("only displays variance fields if they have one marked", () => {
+        expect(field.find('[data-test="quarter2-variance"]').length).toEqual(0);
+      });
+  
+      it("Displays the variance value", () => {
+        expect(field.find('[data-test="quarter1-variance"]').at(0).text()).toEqual("£ 12");
+        expect(field.find('[data-test="quarter1-variance"]').at(1).text()).toEqual("£ 3562");
+      });
+  
+      it("Display the variance title", () => {
+        expect(field.find('[data-test="variance-title"]').length).toEqual(2);
+        expect(field.find('[data-test="variance-title"]').at(0).text()).toEqual("Variance");
+        expect(field.find('[data-test="variance-title"]').at(1).text()).toEqual("Variance");
       });
     });
   });

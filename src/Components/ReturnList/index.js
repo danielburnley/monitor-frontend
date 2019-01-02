@@ -2,6 +2,15 @@ import React from "react";
 import "./style.css";
 
 export default class ReturnList extends React.Component {
+  displayDate(returns) {
+    let unix = returns.timestamp;
+    let timestamp = new Date(unix * 1000);
+    let date = timestamp.getDate();
+    let month = timestamp.getMonth() + 1;
+    let year = timestamp.getFullYear();
+    return `${date}/${month}/${year}`;
+  }
+
   renderLink(returns, index) {
     return (
       <a
@@ -11,6 +20,9 @@ export default class ReturnList extends React.Component {
       >
         <span data-test={`return-${returns.id}`}>Return {index + 1}</span>
         <div className="pull-right">{this.renderStatus(returns)}</div>
+        <span className="pull-right date">
+          {this.renderSubmission(returns)}
+        </span>
       </a>
     );
   }
@@ -32,6 +44,15 @@ export default class ReturnList extends React.Component {
           {status}
         </span>
       );
+    }
+  }
+
+  renderSubmission(returns) {
+    let fullDate = this.displayDate(returns);
+    if (fullDate === "1/1/1970") {
+      return null;
+    } else {
+      return <span data-test={`timestamp-${returns.id}`}>{fullDate}</span>;
     }
   }
 

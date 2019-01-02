@@ -9,12 +9,14 @@ export default class VarianceField extends React.Component {
       props.formData.varianceBaselineFullPlanningPermissionSubmitted ||
       props.formData.varianceBaselineFullPlanningPermissionGranted ||
       props.formData.landAssemblyVarianceAgainstBaseReturn||
+      props.formData.procurementVarianceAgainstBaseline ||
       props.formData.varianceAgainstBaseline;
     const returnVarianceOptions =
       props.formData.varianceLastReturnFullPlanningPermissionSubmitted ||
       props.formData.varianceLastReturnFullPlanningPermissionGranted ||
-      props.formData.landAssemblyVarianceAgainstLastReturn||
-      props.formData.varianceAgainstLastReturn;      
+      props.formData.landAssemblyVarianceAgainstLastReturn ||
+      props.formData.procurementVarianceAgainstLastReturn ||
+      props.formData.varianceAgainstLastReturn;     
 
     this.state = {
       baseline: props.formData.baseline,
@@ -26,7 +28,8 @@ export default class VarianceField extends React.Component {
       baselineVariance: baselineVarianceOptions,
       returnVariance: returnVarianceOptions,
       previousReturn: props.formData.previousReturn,
-      onCompletedReference: props.formData.onCompletedReference
+      onCompletedReference: props.formData.onCompletedReference,
+      onCompletedNameOfContractor: props.formData.onCompletedNameOfContractor
     };
   }
 
@@ -129,6 +132,25 @@ export default class VarianceField extends React.Component {
     }
   };
 
+  renderContractorName = () => {
+    if (this.props.name === "procurementStatusAgainstLastReturn") {
+      return (
+        <div className="col-md-3 form-group">
+          <label htmlFor="name">Name Of Contractor*</label>
+          <input
+            className="form-control"
+            data-test="variance-name"
+            id="name"
+            onChange={e =>
+              this.onFieldChange("onCompletedNameOfContractor", e.target.value)
+            }
+            value={this.state.onCompletedNameOfContractor}
+          />
+        </div>
+      );
+    }
+  };
+
   renderCompletedDate = () => {
     return (
       <div className="col-md-3 form-group">
@@ -149,6 +171,7 @@ export default class VarianceField extends React.Component {
     <div className="row">
       {this.renderCompletedDate()}
       {this.renderReference()}
+      {this.renderContractorName()}
     </div>
   );
 

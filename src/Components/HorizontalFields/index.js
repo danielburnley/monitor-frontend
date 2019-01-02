@@ -14,9 +14,9 @@ export default class HorizontalFields extends React.Component {
     let newData = this.state.data;
     newData[name] = value;
 
-    this.props.onChange(newData);
-
     this.setState({ data: newData });
+    
+    this.props.onChange(newData);
   };
 
   renderItem = (k, v) => {
