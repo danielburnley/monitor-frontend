@@ -155,12 +155,24 @@ describe("daysPassed()", () => {
 });
 
 describe("secondsPassed()", () => {
-  it("Example 1", () => {
-    expect(secondsPassed("2000/08/25","2000/08/26")).toEqual(86400);
+  describe("Valid date", () => {
+    it("Example 1", () => {
+      expect(secondsPassed("2000/08/25","2000/08/26")).toEqual(86400);
+    });
+
+    it("Example 2", () => {
+      expect(secondsPassed("2000/08/24","2000/08/26")).toEqual(172800);
+    });
   });
 
-  it("Example 2", () => {
-    expect(secondsPassed("2000/08/24","2000/08/26")).toEqual(172800);
+  describe("Invalid date", () => {
+    it("Example 1", () => {
+      expect(secondsPassed("??", "??")).toEqual("");
+    });
+
+    it("Example 2", () => {
+      expect(secondsPassed("!!", "!!")).toEqual("");
+    });
   });
 });
 
