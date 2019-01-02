@@ -1,4 +1,4 @@
-import {parseMoney, accumulateMoney, set, get, percentageDifference} from ".";
+import {parseMoney, accumulateMoney, set, get, percentageDifference, calculateVariance} from ".";
 describe("parseMoney()", () => {
   it("Returns 0 when given no value", () => {
     expect(parseMoney()).toEqual(0);
@@ -82,5 +82,15 @@ describe("percentageDifference()", () => {
 
   it("Example 2", () => {
     expect(percentageDifference(0.75, 1)).toEqual(33.33);
+  });
+});
+
+describe("calculateVariance()", () => {
+  it("Example 1", () => {
+    expect(calculateVariance(0.15, 0.50)).toEqual(30);
+  });
+
+  it("Example 2", () => {
+    expect(calculateVariance(0.50, 0.75)).toEqual(66.67);
   });
 });
