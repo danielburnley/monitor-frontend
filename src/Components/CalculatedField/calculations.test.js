@@ -12,7 +12,8 @@ import {
   secondsPassed,
   setCreate,
   validateArrayPropertyIsLessThan,
-  periodTotal
+  periodTotal,
+  setArrayVariance
 } from ".";
 
 describe("parseMoney()", () => {
@@ -260,6 +261,44 @@ describe("periodTotal()", () => {
       let formData = {};
       periodTotal(formData, ["value"], "per", "Q3", "Q4");
       expect(formData).toEqual({});
+    });
+  });
+});
+
+describe("setArrayVariance()", () => {
+  describe("With data", () => {
+    it("Example 1", () => {
+      let originalArray = [{originalArrayProperty: "10"}, {originalArrayProperty: "20"}];
+      let newArray = [{newArrayProperty: "20"}, {newArrayProperty: "40"}];
+      setArrayVariance(originalArray, "originalArrayProperty", newArray, "newArrayProperty", "varianceField")
+      expect(newArray).toEqual(
+        [
+          {"newArrayProperty": "20", "varianceField": 10},
+          {"newArrayProperty": "40", "varianceField": 20}
+        ]
+      );
+    });
+
+    it("Example 2", () => {
+      let originalArray = [{originalArrayProperty: "35"}, {originalArrayProperty: "64"}];
+      let newArray = [{newArrayProperty: "25"}, {newArrayProperty: "25"}];
+      setArrayVariance(originalArray, "originalArrayProperty", newArray, "newArrayProperty", "varianceField")
+      expect(newArray).toEqual(
+        [
+          {"newArrayProperty": "25", "varianceField": -10},
+          {"newArrayProperty": "25", "varianceField": -39}
+        ]
+      );
+    });
+  });
+
+  describe("Without data", () => {
+    it("Example 1", () => {
+      setArrayVariance([]);
+    });
+
+    it("Example 2", () => {
+      setArrayVariance(undefined, []);
     });
   });
 });

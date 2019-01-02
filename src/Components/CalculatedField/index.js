@@ -38,7 +38,7 @@ export function periodTotal(object, totalPath, property, ...keys) {
 }
 
 export function setArrayVariance(originalArray, originalArrayProperty, newArray, newArrayProperty, varianceField) {
-  if(!newArray || !originalArray) return null;
+  if(!newArray || !originalArray) return;
   newArray.map((value, index) => {
     if(!value[newArrayProperty]) return value[varianceField] = "";
     value[varianceField] = parseMoney(value[newArrayProperty]) - parseMoney(originalArray[index][originalArrayProperty])
