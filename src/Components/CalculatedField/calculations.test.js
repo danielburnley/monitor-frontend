@@ -1,4 +1,4 @@
-import {parseMoney, accumulateMoney} from ".";
+import {parseMoney, accumulateMoney, set} from ".";
 describe("parseMoney()", () => {
   it("Returns 0 when given no value", () => {
     expect(parseMoney()).toEqual(0);
@@ -23,4 +23,17 @@ describe("accumulateMoney()", () => {
       ).toEqual(14);
     });
   })
+});
+describe("set()", () => {
+  it("Example 1", () => {
+    let formData = {};
+    set(formData, "result", "Done")
+    expect(formData).toEqual({result: "Done"});
+  });
+
+  it("Example 2", () => {
+    let formData = {parent: {}};
+    set(formData["parent"], "output", "Done")
+    expect(formData).toEqual({parent: {output: "Done"}});
+  });
 });
