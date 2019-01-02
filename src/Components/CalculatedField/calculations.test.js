@@ -6,7 +6,10 @@ import {
   percentageDifference,
   calculateVariance,
   combineArrays,
-  sum
+  sum,
+  weeksPassed,
+  daysPassed,
+  secondsPassed
 } from ".";
 
 describe("parseMoney()", () => {
@@ -111,7 +114,7 @@ describe("combineArrays()", () => {
   });
 
   it("Example 2", () => {
-    expect(combineArrays([1,4,1,5],[9,2,6,5])).toEqual([1, 4, 1, 5, 9, 2, 6, 5]);
+    expect(combineArrays([1,4,1,5], [9,2,6,5])).toEqual([1, 4, 1, 5, 9, 2, 6, 5]);
   });
 });
 
@@ -126,5 +129,35 @@ describe("sum()", () => {
     expect(
         sum({ termA: "15", termB: "14", termC: "1" }, "termA", "termB", "termC")
     ).toEqual(30);
+  });
+});
+
+describe("weeksPassed()", () => {
+  it("Example 1", () => {
+    expect(weeksPassed("2000/08/25", "2000/09/2")).toEqual(1);
+  });
+
+  it("Example 2", () => {
+    expect(weeksPassed("2000/08/25", "2000/09/10")).toEqual(2);
+  });
+});
+
+describe("daysPassed()", () => {
+  it("Example 1", () => {
+    expect(daysPassed("2000/08/25", "2000/09/2")).toEqual(8);
+  });
+
+  it("Example 2", () => {
+    expect(daysPassed("2000/08/25", "2000/09/10")).toEqual(16);
+  });
+});
+
+describe("secondsPassed()", () => {
+  it("Example 1", () => {
+    expect(secondsPassed("2000/08/25","2000/08/26")).toEqual(86400);
+  });
+
+  it("Example 2", () => {
+    expect(secondsPassed("2000/08/24","2000/08/26")).toEqual(172800);
   });
 });
