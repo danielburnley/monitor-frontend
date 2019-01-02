@@ -9,7 +9,8 @@ import {
   sum,
   weeksPassed,
   daysPassed,
-  secondsPassed
+  secondsPassed,
+  setCreate
 } from ".";
 
 describe("parseMoney()", () => {
@@ -159,5 +160,19 @@ describe("secondsPassed()", () => {
 
   it("Example 2", () => {
     expect(secondsPassed("2000/08/24","2000/08/26")).toEqual(172800);
+  });
+});
+
+describe("setCreate()", () => {
+  it("Example 1", () => {
+    let formData = {};
+    setCreate(formData, ["my","data"], "Hello");
+    expect(formData).toEqual({my: {data: "Hello"}});
+  });
+
+  it("Example 2", () => {
+    let formData = {};
+    setCreate(formData, ["info"], "Hi");
+    expect(formData).toEqual({info: "Hi"});
   });
 });
