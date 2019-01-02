@@ -1,4 +1,4 @@
-import {parseMoney, accumulateMoney, set} from ".";
+import {parseMoney, accumulateMoney, set, get} from ".";
 describe("parseMoney()", () => {
   it("Returns 0 when given no value", () => {
     expect(parseMoney()).toEqual(0);
@@ -24,6 +24,7 @@ describe("accumulateMoney()", () => {
     });
   })
 });
+
 describe("set()", () => {
   it("Example 1", () => {
     let formData = {};
@@ -35,5 +36,41 @@ describe("set()", () => {
     let formData = {parent: {}};
     set(formData["parent"], "output", "Done")
     expect(formData).toEqual({parent: {output: "Done"}});
+  });
+});
+
+describe("get()", () => {
+  describe("With a non-existent key", () => {
+    it("Example 1", () => {
+      let formData = {
+        a: {
+          b: "value"
+        }
+      };
+      expect(get(formData, 'a','c')).toEqual(undefined);
+    });
+
+    it("Example 2", () => {
+      let formData = {};
+      expect(get(formData, 'e')).toEqual(undefined);
+    });
+  });
+
+  describe("With an existing key", () => {
+    it("Example 1", () => {
+      let formData = {
+        a: {
+          b: "value"
+        }
+      };
+      expect(get(formData, 'a','b')).toEqual("value");
+    });
+
+    it("Example 2", () => {
+      let formData = {
+        a: "data"
+      };
+      expect(get(formData, 'a')).toEqual("data");
+    });
   });
 });
