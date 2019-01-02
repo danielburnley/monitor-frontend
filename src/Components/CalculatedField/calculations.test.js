@@ -113,12 +113,24 @@ describe("calculateVariance()", () => {
 });
 
 describe("combineArrays()", () => {
-  it("Example 1", () => {
-    expect(combineArrays([1,2,3], [4,5,6])).toEqual([1,2,3,4,5,6]);
+  describe("With missing data", () => {
+    it("Example 1", () => {
+      expect(combineArrays([1,2,3])).toEqual([1,2,3]);
+    });
+
+    it("Example 2", () => {
+      expect(combineArrays(undefined, [9,2,6,5])).toEqual([9, 2, 6, 5]);
+    });
   });
 
-  it("Example 2", () => {
-    expect(combineArrays([1,4,1,5], [9,2,6,5])).toEqual([1, 4, 1, 5, 9, 2, 6, 5]);
+  describe("With data", () => {
+    it("Example 1", () => {
+      expect(combineArrays([1,2,3], [4,5,6])).toEqual([1,2,3,4,5,6]);
+    });
+
+    it("Example 2", () => {
+      expect(combineArrays([1,4,1,5], [9,2,6,5])).toEqual([1, 4, 1, 5, 9, 2, 6, 5]);
+    });
   });
 });
 
