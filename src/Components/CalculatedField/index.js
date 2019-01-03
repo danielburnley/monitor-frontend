@@ -1,13 +1,5 @@
+import "../../Polyfills/Array/flat";
 import React from "react";
-
-//Proposed functionality for future ES version, remove if implemented
-Object.defineProperty(Array.prototype, 'flat', {
-    value: function(depth = 1) {
-      return this.reduce(function (flat, toFlatten) {
-        return flat.concat((Array.isArray(toFlatten) && (depth-1)) ? toFlatten.flat(depth-1) : toFlatten);
-      }, []);
-    }
-});
 
 export function parseMoney(value) {
   if (value) {

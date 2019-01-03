@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import ParentForm from "../ParentForm";
 import ErrorMessage from "../ErrorMessage";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import "../../Polyfills/String/includes";
 import "./style.css";
 
 export default class NewProjectPage extends React.Component {
@@ -91,7 +92,7 @@ export default class NewProjectPage extends React.Component {
       action: "Update",
       prettyInvalidPaths: [[]]
     });
-    
+
     await this.validateProject();
 
     await this.props.updateProject.execute(
