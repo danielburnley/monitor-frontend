@@ -2,7 +2,6 @@
 if (!String.prototype.includes) {
   Object.defineProperty(String.prototype, 'includes', {
     value: function(search, start) {
-      'use strict';
       if (typeof start !== 'number') {
         start = 0;
       }
