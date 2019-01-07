@@ -8,7 +8,8 @@ export default class FormField extends React.Component {
   renderInput() {
     if (this.props.type === 'text') {
       return (
-        <input
+        <div data-test="input-text">
+          <input
           type="text"
           id={this.props.fieldName}
           name={this.props.fieldName}
@@ -16,31 +17,37 @@ export default class FormField extends React.Component {
           value={this.props.initialValue}
           disabled={this.props.baseline}
         />
+        </div>
       );
     } else if (this.props.type === 'yes/no') {
       return (
-        <select
-          id={this.props.fieldName}
-          name={this.props.fieldName}
-          onChange={this.onFieldChange}
-          value={this.props.initialValue}
-          disabled={this.props.baseline}>
-          <option value="Yes">Yes</option>
-          <option value="No">No</option>
-        </select>
+        <div data-test="input-yes-no">
+          <select
+            id={this.props.fieldName}
+            name={this.props.fieldName}
+            onChange={this.onFieldChange}
+            value={this.props.initialValue}
+            disabled={this.props.baseline}>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+        </div>
+
       );
     } else if (this.props.type === 'status') {
       return (
-        <select
-          id={this.props.fieldName}
-          name={this.props.fieldName}
-          onChange={this.onFieldChange}
-          value={this.props.initialValue}
-          disabled={this.props.baseline}>
-          <option value="Completed">Completed</option>
-          <option value="On Schedule">On Schedule</option>
-          <option value="Delayed">Delayed</option>
-        </select>
+        <div data-test="input-status">
+          <select
+            id={this.props.fieldName}
+            name={this.props.fieldName}
+            onChange={this.onFieldChange}
+            value={this.props.initialValue}
+            disabled={this.props.baseline}>
+            <option value="Completed">Completed</option>
+            <option value="On Schedule">On Schedule</option>
+            <option value="Delayed">Delayed</option>
+          </select>
+        </div>
       );
     }
   }
@@ -49,7 +56,7 @@ export default class FormField extends React.Component {
     return (
       <div className="form-field">
         <div>
-          <label htmlFor={this.props.fieldName}>{this.props.fieldLabel}</label>
+          <label htmlFor={this.props.fieldName} data-test="label">{this.props.fieldLabel}</label>
         </div>
         <div>{this.renderInput()}</div>
       </div>
