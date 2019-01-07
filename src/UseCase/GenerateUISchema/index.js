@@ -95,6 +95,10 @@ export default class GenerateUISchema {
       schema["ui:widget"] = "textarea"
     }
 
+    if (item.format === "date") {
+      schema["ui:widget"] = "britishDate"
+    }
+
     if (item.percentage) {
       schema["ui:widget"] = "percentage"
     }

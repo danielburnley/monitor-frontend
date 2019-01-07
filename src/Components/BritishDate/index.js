@@ -1,0 +1,110 @@
+import React from "react";
+import "./style.css";
+
+export default class BritishDate extends React.Component {
+  parseDate = (isoDate) => {
+    if (isoDate) {
+      let [year, month, day] = isoDate.split("-");
+      if (year === "0000")
+      {
+        year = "";
+      }
+      if (month === "00")
+      {
+        month = "";
+      }
+      if (day === "00")
+      {
+        day = "";
+      }
+      return {year, month, day};
+    }
+    return {year: "", month: "", day: ""};
+  }
+
+  composeDate = (dateObject) => (
+    `${dateObject.year}-${dateObject.month}-${dateObject.day}`
+  )
+
+  removeLeadingZeroes = (string) => {
+    if (string) {
+      return string.replace(/^0+/m, '')
+    }
+    return "";
+  }
+
+
+  formatDay = (newDay, currentDay) => {
+    if (newDay !== undefined && this.removeLeadingZeroes(newDay) <= 31) {
+      return this.removeLeadingZeroes(newDay).padStart(2, "0");
+    }
+
+    return currentDay.padStart(2, "0");
+  }
+
+  formatMonth = (newMonth, currentMonth) => {
+    if (newMonth !== undefined && this.removeLeadingZeroes(newMonth) <= 12) {
+      return this.removeLeadingZeroes(newMonth).padStart(2, "0");
+    }
+
+    return currentMonth.padStart(2, "0");
+  }
+
+  formatYear = (newYear, currentYear) => {
+    if (newYear !== undefined && this.removeLeadingZeroes(newYear) <= 3000) {
+      return this.removeLeadingZeroes(newYear).padStart(4, "0");
+    }
+
+    return currentYear.padStart(4, "0");
+  }
+
+  onDateChanged = (dateChangeObject) => {
+    let parsedDate = this.parseDate(this.props.value);
+    let newDate = this.composeDate({
+      day: this.formatDay(dateChangeObject.day, parsedDate.day),
+      month: this.formatMonth(dateChangeObject.month, parsedDate.month),
+      year: this.formatYear(dateChangeObject.year, parsedDate.year)
+    });
+
+    this.props.onChange(newDate);
+  }
+
+  isInputDisabled = () => {
+    if (this.props.uiSchema) {
+      return this.props.uiSchema["ui:disabled"];
+    }
+    return false;
+  }
+
+  render = () => (
+    <div className="form-group BritishDate">
+      <input
+        type="text"
+        className="form-control day"
+        data-test="date-day"
+        placeholder="dd"
+        value={this.parseDate(this.props.value).day}
+        onChange={ (e) => {this.onDateChanged({day: e.target.value})}}
+        readOnly={this.isInputDisabled()}
+      />
+      <input
+        type="text"
+        className="form-control month"
+        data-test="date-month"
+        placeholder="mm"
+        value={this.parseDate(this.props.value).month}
+        onChange={ (e) => {this.onDateChanged({month: e.target.value})}}
+        readOnly={this.isInputDisabled()}
+      />
+      <input
+        type="text"
+        className="form-control year"
+        data-test="date-year"
+        placeholder="yyyy"
+        value={this.parseDate(this.props.value).year}
+        onChange={ (e) => {this.onDateChanged({year: e.target.value})}}
+        readOnly={this.isInputDisabled()}
+      />
+    </div>
+  )
+}

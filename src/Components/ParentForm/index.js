@@ -16,6 +16,7 @@ import NumberedArrayField from "../NumberedArrayField";
 import QuarterlyBreakdown from "../QuarterlyBreakdown";
 import CurrencyWidget from "../CurrencyWidget";
 import PercentageWidget from "../PercentageWidget";
+import BritishDate from "../BritishDate";
 import "./style.css";
 import UploadFileField from "../UploadFileField";
 
@@ -161,7 +162,8 @@ export default class ParentForm extends React.Component {
 
     const widgets = {
       currency: CurrencyWidget,
-      percentage: PercentageWidget
+      percentage: PercentageWidget,
+      britishDate: BritishDate
     };
 
     if (this.selectedSchema().type === "array") {

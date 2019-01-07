@@ -1,0 +1,18 @@
+.BritishDate {
+  white-space: nowrap;
+  overflow-x: auto;
+  display: flex;
+  flex-direction: row;
+}
+
+.BritishDate .day {
+  width: 3.5em;
+}
+
+.BritishDate .month {
+  width: 3.5em;
+}
+
+.BritishDate .year {
+  width: 4em;
+}
