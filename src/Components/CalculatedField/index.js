@@ -54,8 +54,8 @@ export function secondsPassed(originalDate, newDate) {
   let newDateDatified = new Date(newDate);
 
   if (
-    newDateDatified === "Invalid Date" ||
-    originalDateDatified === "Inavlid Date"
+    newDateDatified == "Invalid Date" ||
+    originalDateDatified == "Invalid Date"
   )
     return "";
 
