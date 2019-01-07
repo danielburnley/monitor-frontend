@@ -131,6 +131,20 @@ describe("Project Gateway", () => {
 
         expect(response).toEqual({ success: true, errors: ["some_errors"], new_timestamp: "567" });
       });
+
+      it("Returns unsuccessful", async () => {
+        nock("http://rabbits.jump")
+          .matchHeader("Content-Type", "application/json")
+          .post("/project/update", {
+            project_id: 2,
+            project_data: { rabbits: "hop" },
+            timestamp: "123456"
+          })
+          .reply(500, {});
+        let response = await gateway.update(2, { rabbits: "hop" }, "123456");
+
+        expect(response).toEqual({ success: false });
+      });
     });
     describe("Example two", () => {
       let gateway;
@@ -160,13 +174,26 @@ describe("Project Gateway", () => {
         nock("http://rabbits.jump")
           .matchHeader("Content-Type", "application/json")
           .post("/project/update", {
-            project_id: 19,
-            project_data: { frogs: "croak" },
+            project_id: 6,
+            project_data: { cows: "moo" },
             timestamp: "2343"
           })
           .reply(200, { errors: ["more_errors"], timestamp: "789"});
-        let response = await gateway.update(19, { frogs: "croak" }, "2343");
+        let response = await gateway.update(6, { cows: "moo" }, "2343");
         expect(response).toEqual({ success: true, errors: ["more_errors"], new_timestamp: "789" });
+      });
+
+      it("Returns unsuccessful", async () => {
+        nock("http://rabbits.jump")
+          .matchHeader("Content-Type", "application/json")
+          .post("/project/update", {
+            project_id: 6,
+            project_data: { cows: "moo" },
+            timestamp: "2343"
+          })
+          .reply(403, {});
+        let response = await gateway.update(6, { cows: "moo" }, "2343");
+        expect(response).toEqual({ success: false });
       });
     });
   });
