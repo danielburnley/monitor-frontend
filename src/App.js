@@ -1,3 +1,4 @@
+import "core-js";
 import React from "react";
 import qs from "qs";
 
@@ -245,7 +246,7 @@ const App = () => (
                   path="/project/:projectId/return/:returnId"
                   render={renderReturnPage}
                 />
-                <Route 
+                <Route
                   exact
                   path="/project/:projectId/return/:returnId/print"
                   render={renderPrintPage}
