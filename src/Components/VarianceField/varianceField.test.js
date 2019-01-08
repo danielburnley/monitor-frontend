@@ -1,13 +1,21 @@
+import React from "react";
 import WidgetFake from "../../../test/WidgetFake";
 import VarianceField from ".";
-import React from "react";
 import { shallow, mount } from "enzyme";
+
+class PercentageFake extends WidgetFake {
+  datatest="percentage-fake"
+}
+class BritishDateFake extends WidgetFake {
+  datatest="britishDate-fake"
+}
 
 describe("VarianceField", () => {
   let field;
   let registryStub = {
     widgets: {
-      percentage: WidgetFake
+      percentage: PercentageFake,
+      britishDate: BritishDateFake
     }
   };
 
@@ -57,7 +65,7 @@ describe("VarianceField", () => {
       });
 
       it("Does not show the updated value field", () => {
-        let updatedValue = field.find("[data-test='current-date']");
+        let updatedValue = field.find("[data-test='britishDate-fake']");
         expect(updatedValue.length).toEqual(0);
       });
 
@@ -78,7 +86,8 @@ describe("VarianceField", () => {
         });
 
         it("Shows the updated value field", () => {
-          let updatedValue = field.find("[data-test='current-date']");
+          let updatedValue = field.find("[data-test='britishDate-fake']");
+
           expect(updatedValue.length).toEqual(1);
         });
 
@@ -103,7 +112,7 @@ describe("VarianceField", () => {
           let returnVariance = field.find("[data-test='return-variance']");
           expect(returnVariance.length).toEqual(0);
         });
-        
+
       });
     });
 
@@ -152,7 +161,7 @@ describe("VarianceField", () => {
       });
 
       it("Does not show the updated value field", () => {
-        let updatedValue = field.find("[data-test='current-date']");
+        let updatedValue = field.find("[data-test='britishDate-fake']");
         expect(updatedValue.length).toEqual(0);
       });
 
@@ -168,7 +177,7 @@ describe("VarianceField", () => {
         });
 
         it("Shows the updated value field", () => {
-          let updatedValue = field.find("[data-test='current-date']");
+          let updatedValue = field.find("[data-test='britishDate-fake']");
           expect(updatedValue.length).toEqual(1);
         });
 
@@ -207,7 +216,7 @@ describe("VarianceField", () => {
             status: "On schedule",
             percentComplete: 50
           };
-          let field = shallow(
+          let field = mount(
             <VarianceField
               schema={schema}
               formData={formData}
@@ -262,7 +271,7 @@ describe("VarianceField", () => {
             previousReturn: "02/08/2020",
             reason: "There were delays"
           };
-          field = shallow(
+          field = mount(
             <VarianceField
               schema={schema}
               formData={formData}
@@ -300,7 +309,7 @@ describe("VarianceField", () => {
 
         it("Fills in the updated value", () => {
           let updatedValue = field
-            .find("[data-test='current-date']")
+            .find("[data-test='britishDate-fake']")
             .props().value;
           expect(updatedValue).toEqual("02/25/2020");
         });
@@ -323,7 +332,7 @@ describe("VarianceField", () => {
             reason: "Super delays",
             previousReturn: "02/16/2020"
           };
-          field = shallow(
+          field = mount(
             <VarianceField
               schema={schema}
               formData={formData}
@@ -361,7 +370,7 @@ describe("VarianceField", () => {
 
         it("Fills in the updated value", () => {
           let updatedValue = field
-            .find("[data-test='current-date']")
+            .find("[data-test='britishDate-fake']")
             .props().value;
           expect(updatedValue).toEqual("02/25/2020");
         });
@@ -384,7 +393,7 @@ describe("VarianceField", () => {
           percentComplete: 100,
           completedDate: "2021-01-01"
         };
-        let field = shallow(
+        let field = mount(
           <VarianceField
             name={name}
             schema={schema}
@@ -416,7 +425,7 @@ describe("VarianceField", () => {
           percentComplete: 100,
           completedDate: "2025-01-01"
         };
-        let field = shallow(
+        let field = mount(
           <VarianceField
             name={name}
             schema={schema}
@@ -449,7 +458,7 @@ describe("VarianceField", () => {
           percentComplete: 100,
           completedDate: "2025-01-01"
         };
-        let field = shallow(
+        let field = mount(
           <VarianceField
             name={name}
             schema={schema}
@@ -520,7 +529,7 @@ describe("VarianceField", () => {
         describe("Example one", () => {
           it("Calls the onChange prop with the updated form data", () => {
             field
-              .find("[data-test='widget-stub']")
+              .find("[data-test='percentage-fake']")
               .simulate("change", { target: { value: 15 } });
 
             expect(onChangeSpy).toHaveBeenCalledWith({
@@ -537,7 +546,7 @@ describe("VarianceField", () => {
         describe("Example two", () => {
           it("Calls the onChange prop with the updated form data", () => {
             field
-              .find("[data-test='widget-stub']")
+              .find("[data-test='percentage-fake']")
               .simulate("change", { target: { value: 90 } });
 
             expect(onChangeSpy).toHaveBeenCalledWith({
@@ -556,7 +565,7 @@ describe("VarianceField", () => {
         describe("Example one", () => {
           it("Calls the onChange prop with the updated form data", () => {
             field
-              .find("[data-test='current-date']")
+              .find("[data-test='britishDate-fake']")
               .simulate("change", { target: { value: "2040-01-01" } });
 
             expect(onChangeSpy).toHaveBeenCalledWith({
@@ -573,7 +582,7 @@ describe("VarianceField", () => {
         describe("Example two", () => {
           it("Calls the onChange prop with the updated form data", () => {
             field
-              .find("[data-test='current-date']")
+              .find("[data-test='britishDate-fake']")
               .simulate("change", { target: { value: "2020-05-01" } });
 
             expect(onChangeSpy).toHaveBeenCalledWith({
@@ -634,7 +643,7 @@ describe("VarianceField", () => {
           status: "Completed",
           percentComplete: 100
         };
-        field = shallow(
+        field = mount(
           <VarianceField
             schema={schema}
             formData={formData}
