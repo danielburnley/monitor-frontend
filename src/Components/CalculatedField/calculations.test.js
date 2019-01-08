@@ -37,7 +37,13 @@ describe("accumulateMoney()", () => {
     it("Example 1", () => {
       expect(
         accumulateMoney([{operand: "2"}, {operand: "4"}, {operand: "8"}], 'operand')
-      ).toEqual(14);
+      ).toEqual("14.00");
+    });
+
+    it("Example 1", () => {
+      expect(
+        accumulateMoney([{operand: "0.1"}, {operand: "0.2"}], 'operand')
+      ).toEqual("0.30");
     });
   })
 });
