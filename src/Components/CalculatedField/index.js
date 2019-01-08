@@ -13,7 +13,7 @@ export function accumulateMoney(array, property) {
   return array.reduce(
     (total, object) => parseMoney(object[property]) + total,
     0
-  );
+  ).toFixed(2);
 }
 
 export function sum(data, ...keys) {
