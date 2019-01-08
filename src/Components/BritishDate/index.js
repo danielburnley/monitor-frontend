@@ -1,5 +1,6 @@
 import React from "react";
 import "./style.css";
+import "../../Polyfills/String/padStart";
 
 export default class BritishDate extends React.Component {
   parseDate = (isoDate) => {
