@@ -13,8 +13,19 @@ import {
   setCreate,
   validateArrayPropertyIsLessThan,
   periodTotal,
-  setArrayVariance
+  setArrayVariance,
+  subtract
 } from ".";
+
+describe("subtract()", () => {
+  it("Example 1", () => {
+    expect(subtract("3", "5")).toEqual(2);
+  });
+
+  it("Example 2", () => {
+    expect(subtract("£789.34", "£127.26")).toEqual(-662.08);
+  });
+});
 
 describe("parseMoney()", () => {
   it("Returns 0 when given no value", () => {
@@ -36,29 +47,32 @@ describe("accumulateMoney()", () => {
   describe("Sums up the values in an array with properties", () => {
     it("Example 1", () => {
       expect(
-        accumulateMoney([{operand: "2"}, {operand: "4"}, {operand: "8"}], 'operand')
+        accumulateMoney(
+          [{ operand: "2" }, { operand: "4" }, { operand: "8" }],
+          "operand"
+        )
       ).toEqual("14.00");
     });
 
     it("Example 1", () => {
       expect(
-        accumulateMoney([{operand: "0.1"}, {operand: "0.2"}], 'operand')
+        accumulateMoney([{ operand: "0.1" }, { operand: "0.2" }], "operand")
       ).toEqual("0.30");
     });
-  })
+  });
 });
 
 describe("set()", () => {
   it("Example 1", () => {
     let formData = {};
-    set(formData, "result", "Done")
-    expect(formData).toEqual({result: "Done"});
+    set(formData, "result", "Done");
+    expect(formData).toEqual({ result: "Done" });
   });
 
   it("Example 2", () => {
-    let formData = {parent: {}};
-    set(formData["parent"], "output", "Done")
-    expect(formData).toEqual({parent: {output: "Done"}});
+    let formData = { parent: {} };
+    set(formData["parent"], "output", "Done");
+    expect(formData).toEqual({ parent: { output: "Done" } });
   });
 });
 
@@ -70,12 +84,12 @@ describe("get()", () => {
           b: "value"
         }
       };
-      expect(get(formData, 'a','c')).toEqual(undefined);
+      expect(get(formData, "a", "c")).toEqual(undefined);
     });
 
     it("Example 2", () => {
       let formData = {};
-      expect(get(formData, 'e')).toEqual(undefined);
+      expect(get(formData, "e")).toEqual(undefined);
     });
   });
 
@@ -86,21 +100,21 @@ describe("get()", () => {
           b: "value"
         }
       };
-      expect(get(formData, 'a','b')).toEqual("value");
+      expect(get(formData, "a", "b")).toEqual("value");
     });
 
     it("Example 2", () => {
       let formData = {
         a: "data"
       };
-      expect(get(formData, 'a')).toEqual("data");
+      expect(get(formData, "a")).toEqual("data");
     });
   });
 });
 
 describe("percentageDifference()", () => {
   it("Example 1", () => {
-    expect(percentageDifference(0.75, 0.80)).toEqual(6.67);
+    expect(percentageDifference(0.75, 0.8)).toEqual(6.67);
   });
 
   it("Example 2", () => {
@@ -110,46 +124,53 @@ describe("percentageDifference()", () => {
 
 describe("calculateVariance()", () => {
   it("Example 1", () => {
-    expect(calculateVariance(0.15, 0.50)).toEqual(30);
+    expect(calculateVariance(0.15, 0.5)).toEqual(30);
   });
 
   it("Example 2", () => {
-    expect(calculateVariance(0.50, 0.75)).toEqual(66.67);
+    expect(calculateVariance(0.5, 0.75)).toEqual(66.67);
   });
 });
 
 describe("combineArrays()", () => {
   describe("With missing data", () => {
     it("Example 1", () => {
-      expect(combineArrays([1,2,3])).toEqual([1,2,3]);
+      expect(combineArrays([1, 2, 3])).toEqual([1, 2, 3]);
     });
 
     it("Example 2", () => {
-      expect(combineArrays(undefined, [9,2,6,5])).toEqual([9, 2, 6, 5]);
+      expect(combineArrays(undefined, [9, 2, 6, 5])).toEqual([9, 2, 6, 5]);
     });
   });
 
   describe("With data", () => {
     it("Example 1", () => {
-      expect(combineArrays([1,2,3], [4,5,6])).toEqual([1,2,3,4,5,6]);
+      expect(combineArrays([1, 2, 3], [4, 5, 6])).toEqual([1, 2, 3, 4, 5, 6]);
     });
 
     it("Example 2", () => {
-      expect(combineArrays([1,4,1,5], [9,2,6,5])).toEqual([1, 4, 1, 5, 9, 2, 6, 5]);
+      expect(combineArrays([1, 4, 1, 5], [9, 2, 6, 5])).toEqual([
+        1,
+        4,
+        1,
+        5,
+        9,
+        2,
+        6,
+        5
+      ]);
     });
   });
 });
 
 describe("sum()", () => {
   it("Example 1", () => {
-    expect(
-        sum({ augend: "15", addend: "14" }, "augend", "addend")
-    ).toEqual(29);
+    expect(sum({ augend: "15", addend: "14" }, "augend", "addend")).toEqual(29);
   });
 
   it("Example 2", () => {
     expect(
-        sum({ termA: "15", termB: "14", termC: "1" }, "termA", "termB", "termC")
+      sum({ termA: "15", termB: "14", termC: "1" }, "termA", "termB", "termC")
     ).toEqual(30);
   });
 });
@@ -177,11 +198,11 @@ describe("daysPassed()", () => {
 describe("secondsPassed()", () => {
   describe("Valid date", () => {
     it("Example 1", () => {
-      expect(secondsPassed("2000/08/25","2000/08/26")).toEqual(86400);
+      expect(secondsPassed("2000/08/25", "2000/08/26")).toEqual(86400);
     });
 
     it("Example 2", () => {
-      expect(secondsPassed("2000/08/24","2000/08/26")).toEqual(172800);
+      expect(secondsPassed("2000/08/24", "2000/08/26")).toEqual(172800);
     });
   });
 
@@ -199,43 +220,43 @@ describe("secondsPassed()", () => {
 describe("setCreate()", () => {
   it("Example 1", () => {
     let formData = {};
-    setCreate(formData, ["my","data"], "Hello");
-    expect(formData).toEqual({my: {data: "Hello"}});
+    setCreate(formData, ["my", "data"], "Hello");
+    expect(formData).toEqual({ my: { data: "Hello" } });
   });
 
   it("Example 2", () => {
     let formData = {};
     setCreate(formData, ["info"], "Hi");
-    expect(formData).toEqual({info: "Hi"});
+    expect(formData).toEqual({ info: "Hi" });
   });
 });
 
 describe("validateArrayPropertyIsLessThan()", () => {
   describe("Valid", () => {
     it("Example 1", () => {
-      let formData = [{main: "12"}];
+      let formData = [{ main: "12" }];
       validateArrayPropertyIsLessThan(formData, ["main"], 20);
-      expect(formData).toEqual([{"_valid": true, "main": "12"}]);
+      expect(formData).toEqual([{ _valid: true, main: "12" }]);
     });
 
     it("Example 2", () => {
-      let formData = [{main: "13"}];
+      let formData = [{ main: "13" }];
       validateArrayPropertyIsLessThan(formData, ["main"], 20);
-      expect(formData).toEqual([{"_valid": true, "main": "13"}]);
+      expect(formData).toEqual([{ _valid: true, main: "13" }]);
     });
   });
 
   describe("Invalid", () => {
     it("Example 1", () => {
-      let formData = [{main: "22"}];
+      let formData = [{ main: "22" }];
       validateArrayPropertyIsLessThan(formData, ["main"], 19);
-      expect(formData).toEqual([{"_valid": false, "main": "22"}]);
+      expect(formData).toEqual([{ _valid: false, main: "22" }]);
     });
 
     it("Example 2", () => {
-      let formData = [{main: "24"}];
+      let formData = [{ main: "24" }];
       validateArrayPropertyIsLessThan(formData, ["main"], 19);
-      expect(formData).toEqual([{"_valid": false, "main": "24"}]);
+      expect(formData).toEqual([{ _valid: false, main: "24" }]);
     });
   });
 });
@@ -243,28 +264,22 @@ describe("validateArrayPropertyIsLessThan()", () => {
 describe("periodTotal()", () => {
   describe("With data", () => {
     it("Example 1", () => {
-      let formData = {periods: [{Q1: "12", Q2: "8"}]};
+      let formData = { periods: [{ Q1: "12", Q2: "8" }] };
       periodTotal(formData, ["total"], "periods", "Q1", "Q2");
-      expect(formData).toEqual(
-        {
-          "periods": [
-            {"Q1": "12", "Q2": "8", "total": "20"}
-          ]
-        }
-      );
+      expect(formData).toEqual({
+        periods: [{ Q1: "12", Q2: "8", total: "20" }]
+      });
     });
 
     it("Example 2", () => {
-      let formData = {per: [{Q3: "12", Q4: "8"}, {Q3: "32", Q4: "16"}]};
+      let formData = { per: [{ Q3: "12", Q4: "8" }, { Q3: "32", Q4: "16" }] };
       periodTotal(formData, ["value"], "per", "Q3", "Q4");
-      expect(formData).toEqual(
-        {
-          "per": [
-            {"Q3": "12", "Q4": "8", "value": "20"},
-            {"Q3": "32", "Q4": "16", "value": "48"}
-          ]
-        }
-      );
+      expect(formData).toEqual({
+        per: [
+          { Q3: "12", Q4: "8", value: "20" },
+          { Q3: "32", Q4: "16", value: "48" }
+        ]
+      });
     });
   });
 
@@ -286,27 +301,41 @@ describe("periodTotal()", () => {
 describe("setArrayVariance()", () => {
   describe("With data", () => {
     it("Example 1", () => {
-      let originalArray = [{originalArrayProperty: "10"}, {originalArrayProperty: "20"}];
-      let newArray = [{newArrayProperty: "20"}, {newArrayProperty: "40"}];
-      setArrayVariance(originalArray, "originalArrayProperty", newArray, "newArrayProperty", "varianceField")
-      expect(newArray).toEqual(
-        [
-          {"newArrayProperty": "20", "varianceField": 10},
-          {"newArrayProperty": "40", "varianceField": 20}
-        ]
+      let originalArray = [
+        { originalArrayProperty: "10" },
+        { originalArrayProperty: "20" }
+      ];
+      let newArray = [{ newArrayProperty: "20" }, { newArrayProperty: "40" }];
+      setArrayVariance(
+        originalArray,
+        "originalArrayProperty",
+        newArray,
+        "newArrayProperty",
+        "varianceField"
       );
+      expect(newArray).toEqual([
+        { newArrayProperty: "20", varianceField: 10 },
+        { newArrayProperty: "40", varianceField: 20 }
+      ]);
     });
 
     it("Example 2", () => {
-      let originalArray = [{originalArrayProperty: "35"}, {originalArrayProperty: "64"}];
-      let newArray = [{newArrayProperty: "25"}, {newArrayProperty: "25"}];
-      setArrayVariance(originalArray, "originalArrayProperty", newArray, "newArrayProperty", "varianceField")
-      expect(newArray).toEqual(
-        [
-          {"newArrayProperty": "25", "varianceField": -10},
-          {"newArrayProperty": "25", "varianceField": -39}
-        ]
+      let originalArray = [
+        { originalArrayProperty: "35" },
+        { originalArrayProperty: "64" }
+      ];
+      let newArray = [{ newArrayProperty: "25" }, { newArrayProperty: "25" }];
+      setArrayVariance(
+        originalArray,
+        "originalArrayProperty",
+        newArray,
+        "newArrayProperty",
+        "varianceField"
       );
+      expect(newArray).toEqual([
+        { newArrayProperty: "25", varianceField: -10 },
+        { newArrayProperty: "25", varianceField: -39 }
+      ]);
     });
   });
 

@@ -21,6 +21,12 @@ export function sum(data, ...keys) {
   return keys.reduce((total, key) => parseMoney(data[key]) + total, 0);
 }
 
+export function subtract(newValue, initialValue) {
+  let value1 = parseMoney(initialValue);
+  let value2 = parseMoney(newValue);
+  return value1 - value2;
+}
+
 export function periodTotal(object, totalPath, property, ...keys) {
   if (!object[property]) return;
   return object[property].forEach((value, index) => {
