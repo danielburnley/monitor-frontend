@@ -1,4 +1,3 @@
-import WidgetFake from '../../../test/WidgetFake';
 import React from 'react';
 import MilestoneComponent from '../../../test/MilestoneField';
 
@@ -17,8 +16,7 @@ describe("<MilestoneField>", () => {
       let milestone = new MilestoneComponent(
         formData,
         onChangeSpy,
-        schemaTitle,
-        WidgetFake
+        schemaTitle
       );
 
       it("displays the milestone description", () => {
@@ -46,8 +44,7 @@ describe("<MilestoneField>", () => {
       let milestone = new MilestoneComponent(
         formData,
         onChangeSpy,
-        schemaTitle,
-        WidgetFake
+        schemaTitle
       );
 
       it("displays the milestone description", () => {
@@ -77,8 +74,7 @@ describe("<MilestoneField>", () => {
       milestone = new MilestoneComponent(
         formData,
         onChangeSpy,
-        schemaTitle,
-        WidgetFake
+        schemaTitle
       );
 
       it("Updates the values of the fields and calculates variances", () => {
@@ -116,8 +112,7 @@ describe("<MilestoneField>", () => {
       milestone = new MilestoneComponent(
         formData,
         onChangeSpy,
-        schemaTitle,
-        WidgetFake
+        schemaTitle
       );
 
       it("Updates the values of the fields and calculates variances", () => {
@@ -157,8 +152,7 @@ describe("<MilestoneField>", () => {
       milestone = new MilestoneComponent(
         formData,
         onChangeSpy,
-        schemaTitle,
-        WidgetFake
+        schemaTitle
       );
 
       it("displays the status against last return", () => {
@@ -195,8 +189,7 @@ describe("<MilestoneField>", () => {
       milestone = new MilestoneComponent(
         formData,
         onChangeSpy,
-        schemaTitle,
-        WidgetFake
+        schemaTitle
       );
 
       it("displays the status against last return", () => {
@@ -235,8 +228,7 @@ describe("<MilestoneField>", () => {
       milestone = new MilestoneComponent(
         formData,
         onChangeSpy,
-        schemaTitle,
-        WidgetFake
+        schemaTitle
       );
 
       it("updates the value of the status against last return", () => {
@@ -277,8 +269,7 @@ describe("<MilestoneField>", () => {
       milestone = new MilestoneComponent(
         formData,
         onChangeSpy,
-        schemaTitle,
-        WidgetFake
+        schemaTitle
       );
 
       it("updates the value of the status against last return", () => {
@@ -305,7 +296,7 @@ describe("<MilestoneField>", () => {
 
   describe("dependencies", () => {
     let milestone;
-    
+
     beforeEach(() => {
       let formData = {
         description: "Here is a stone that marks a mile.",
@@ -317,8 +308,7 @@ describe("<MilestoneField>", () => {
       milestone = new MilestoneComponent(
         formData,
         onChangeSpy,
-        schemaTitle,
-        WidgetFake
+        schemaTitle
       );
     });
 
@@ -451,8 +441,7 @@ describe("<MilestoneField>", () => {
         milestone = new MilestoneComponent(
           formData,
           onChangeSpy,
-          schemaTitle,
-          WidgetFake
+          schemaTitle
         );
         milestone.simulateStatusAgainstLastReturn("Delayed - moderate impact")
       });

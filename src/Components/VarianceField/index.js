@@ -16,7 +16,7 @@ export default class VarianceField extends React.Component {
       props.formData.varianceLastReturnFullPlanningPermissionGranted ||
       props.formData.landAssemblyVarianceAgainstLastReturn ||
       props.formData.procurementVarianceAgainstLastReturn ||
-      props.formData.varianceAgainstLastReturn;     
+      props.formData.varianceAgainstLastReturn;
 
     this.state = {
       baseline: props.formData.baseline,
@@ -82,12 +82,11 @@ export default class VarianceField extends React.Component {
   renderCurrentValue = () => (
     <div className="col-md-3 form-group">
       <label htmlFor="current">Current Date *</label>
-      <input
+      <this.props.registry.widgets.britishDate
         className="form-control"
         data-test="current-date"
         id="current"
-        onChange={e => this.onFieldChange("current", e.target.value)}
-        type="date"
+        onChange={e => {this.onFieldChange("current", e)}}
         value={this.state.current || ""}
       />
     </div>
@@ -155,13 +154,12 @@ export default class VarianceField extends React.Component {
     return (
       <div className="col-md-3 form-group">
         <label htmlFor="completed">Completed Date*</label>
-        <input
+        <this.props.registry.widgets.britishDate
           className="form-control"
           data-test="variance-completed"
           id="completed"
-          onChange={e => this.onFieldChange("completedDate", e.target.value)}
-          type="date"
-          value={this.state.completedDate}
+          onChange={e => {this.onFieldChange("completedDate", e)}}
+          value={this.state.completedDate || ""}
         />
       </div>
     );

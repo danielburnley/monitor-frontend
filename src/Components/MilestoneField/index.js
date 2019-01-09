@@ -50,7 +50,7 @@ export default class MilestoneField extends React.Component {
   calculateVarianceAgainstLastReturn = () => {
     return this.calculateVarianceWeeks(this.state.milestoneLastReturnDate, this.state.currentReturn)
   }
-  
+
   calculateVarianceAgainstBaseline = () => {
     return this.calculateVarianceWeeks(this.state.milestoneBaselineCompletion, this.state.currentReturn)
   }
@@ -120,12 +120,11 @@ export default class MilestoneField extends React.Component {
     return (
       <div>
         <label htmlFor="currentReturn">Current Return Date</label>
-        <input
+        <this.props.registry.widgets.britishDate
           className="form-control"
-          onChange={e => this.onFieldChange("currentReturn", e.target.value)}
+          onChange={e => {this.onFieldChange("currentReturn", e)}}
           data-test="milestone-current-return"
           value={this.state.currentReturn || ""}
-          type="date"
           id="currentReturn"
         />
       </div>
@@ -136,12 +135,11 @@ export default class MilestoneField extends React.Component {
     return (
       <div>
         <label htmlFor="milestoneBaselineCompletedDate">Completion Date</label>
-        <input
+        <this.props.registry.widgets.britishDate
           className="form-control"
-          onChange={e => this.onFieldChange("milestoneCompletedDate", e.target.value)}
+          onChange={e => {this.onFieldChange("milestoneCompletedDate", e)}}
           data-test="milestone-completed-date"
           value={this.state.milestoneCompletedDate || ""}
-          type="date"
           id="milestoneCompletedDate"
         />
       </div>
@@ -202,7 +200,7 @@ export default class MilestoneField extends React.Component {
           <label htmlFor="reasonForVariance">Reason for Variance</label>
           <textarea
             className="form-control"
-            onChange={e => this.onFieldChange("reasonForVariance", e.target.value)}
+            onChange={e => {this.onFieldChange("reasonForVariance", e.target.value)}}
             data-test="milestone-reason-for-variance"
             value={this.state.reasonForVariance }
             id="reasonForVariance"

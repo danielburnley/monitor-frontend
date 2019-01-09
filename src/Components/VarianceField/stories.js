@@ -1,4 +1,5 @@
 import React from "react";
+import WidgetFake from "../../../test/WidgetFake";
 import { storiesOf } from "@storybook/react";
 
 import VarianceField from ".";
@@ -9,6 +10,14 @@ storiesOf("Variance", module)
       formData={{ baseline: "2020-01-01" }}
       onChange={formData => console.log(formData)}
       schema={{ title: "Storybook variance" }}
+      registry={
+        {
+          widgets: {
+            percentage: WidgetFake,
+            britishDate: WidgetFake
+          }
+        }
+      }
     />
   ))
   .add("With only filled in data", () => (
@@ -16,6 +25,14 @@ storiesOf("Variance", module)
       formData={{ baseline: "2020-01-01", percentComplete: 10 }}
       onChange={formData => console.log(formData)}
       schema={{ title: "Storybook variance" }}
+      registry={
+        {
+          widgets: {
+            percentage: WidgetFake,
+            britishDate: WidgetFake
+          }
+        }
+      }
     />
   ))
   .add("Delayed", () => (
@@ -23,6 +40,14 @@ storiesOf("Variance", module)
       formData={{ baseline: "2020-01-01", status: "Delayed" }}
       onChange={formData => console.log(formData)}
       schema={{ title: "Storybook variance" }}
+      registry={
+        {
+          widgets: {
+            percentage: WidgetFake,
+            britishDate: WidgetFake
+          }
+        }
+      }
     />
   ))
   .add("Delayed with data", () => (
@@ -36,6 +61,14 @@ storiesOf("Variance", module)
       }}
       onChange={formData => console.log(formData)}
       schema={{ title: "Storybook variance" }}
+      registry={
+        {
+          widgets: {
+            percentage: WidgetFake,
+            britishDate: WidgetFake
+          }
+        }
+      }
     />
   ))
   .add("Completed", () => (
@@ -43,6 +76,14 @@ storiesOf("Variance", module)
       formData={{ baseline: "2020-01-01", status: "Completed" }}
       onChange={formData => console.log(formData)}
       schema={{ title: "Storybook variance" }}
+      registry={
+        {
+          widgets: {
+            percentage: WidgetFake,
+            britishDate: WidgetFake
+          }
+        }
+      }
     />
   ))
   .add("Completed with data", () => (
@@ -54,5 +95,13 @@ storiesOf("Variance", module)
       }}
       onChange={formData => console.log(formData)}
       schema={{ title: "Storybook variance" }}
+      registry={
+        {
+          widgets: {
+            percentage: WidgetFake,
+            britishDate: WidgetFake
+          }
+        }
+      }
     />
   ));
