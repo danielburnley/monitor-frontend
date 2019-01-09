@@ -10,10 +10,9 @@ export function parseMoney(value) {
 }
 
 export function accumulateMoney(array, property) {
-  return array.reduce(
-    (total, object) => parseMoney(object[property]) + total,
-    0
-  ).toFixed(2);
+  return array
+    .reduce((total, object) => parseMoney(object[property]) + total, 0)
+    .toFixed(2);
 }
 
 export function sum(data, ...keys) {
@@ -24,13 +23,13 @@ export function sum(data, ...keys) {
 export function add(value1, value2) {
   let parsed1 = parseMoney(value1);
   let parsed2 = parseMoney(value2);
-  return parsed1 + parsed2;
+  return (parsed1 + parsed2).toString();
 }
 
 export function subtract(newValue, initialValue) {
   let value1 = parseMoney(initialValue);
   let value2 = parseMoney(newValue);
-  return value1 - value2;
+  return (value1 - value2).toString();
 }
 
 export function periodTotal(object, totalPath, property, ...keys) {
@@ -41,8 +40,14 @@ export function periodTotal(object, totalPath, property, ...keys) {
   });
 }
 
-export function setArrayVariance(originalArray, originalArrayProperty, newArray, newArrayProperty, varianceField) {
-  if(!newArray || !originalArray) return;
+export function setArrayVariance(
+  originalArray,
+  originalArrayProperty,
+  newArray,
+  newArrayProperty,
+  varianceField
+) {
+  if (!newArray || !originalArray) return;
   newArray.map((value, index) => {
     if (!value[newArrayProperty]) return (value[varianceField] = "");
     value[varianceField] =
@@ -116,8 +121,8 @@ export function get(object, ...properties) {
 
 export function percentageDifference(valueAgainst, valueNew) {
   if (!valueAgainst) return;
-  let difference = valueNew - valueAgainst
-  return calculateVariance(difference, valueAgainst)
+  let difference = valueNew - valueAgainst;
+  return calculateVariance(difference, valueAgainst);
 }
 
 export function calculateVariance(value1, value2) {
