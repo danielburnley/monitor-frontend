@@ -39,11 +39,27 @@ export default class VarianceField extends React.Component {
     });
   };
 
+  baselineVarianceSchema = () => {
+    return ( this.props.schema.properties.varianceBaselineFullPlanningPermissionSubmitted
+    || this.props.schema.properties.varianceBaselineFullPlanningPermissionGranted
+    || this.props.schema.properties.landAssemblyVarianceAgainstBaseReturn
+    || this.props.schema.properties.procurementVarianceAgainstBaseline
+    || this.props.schema.properties.varianceAgainstBaseline)
+  }
+
+  lastReturnVarianceSchema = () => {
+    return (this.props.schema.properties.varianceLastReturnFullPlanningPermissionSubmitted
+    || this.props.schema.properties.varianceLastReturnFullPlanningPermissionGranted
+    || this.props.schema.properties.landAssemblyVarianceAgainstLastReturn
+    || this.props.schema.properties.procurementVarianceAgainstLastReturn
+    || this.props.schema.properties.varianceAgainstLastReturn )
+  }
+
   renderBaselineVariance = () => {
     if (this.state.status === "Delayed") {
       return (
         <div className="col-md-4 form-group">
-          <label>Baseline Variance (weeks)</label>
+          <label data-test="baseline-variance-title">{this.baselineVarianceSchema().title}</label>
           <p data-test="baseline-variance">
             {this.calculateVariance(this.state.baseline, this.state.current)}
           </p>
@@ -58,7 +74,7 @@ export default class VarianceField extends React.Component {
     if (this.state.previousReturn && this.state.status === "Delayed") {
       return (
         <div className="col-md-4 form-group">
-          <label>Last Return Variance (weeks)</label>
+          <label data-test="return-variance-title">{this.lastReturnVarianceSchema().title}</label>
           <p data-test="return-variance">
             {this.calculateVariance(this.state.previousReturn, this.state.current)}
           </p>
@@ -81,7 +97,7 @@ export default class VarianceField extends React.Component {
 
   renderCurrentValue = () => (
     <div className="col-md-3 form-group">
-      <label htmlFor="current">Current Date *</label>
+      <label htmlFor="current" data-test="current-date-title">{this.props.schema.properties.current.title}*</label>
       <this.props.registry.widgets.britishDate
         className="form-control"
         data-test="current-date"
@@ -94,7 +110,7 @@ export default class VarianceField extends React.Component {
 
   renderReason = () => (
     <div className="col-md-9 form-group">
-      <label htmlFor="reason">Reason for variance*</label>
+      <label htmlFor="reason" data-test="variance-reason-title">{this.props.schema.properties.reason.title}*</label>
       <textarea
         className="form-control"
         data-test="variance-reason"
@@ -116,7 +132,7 @@ export default class VarianceField extends React.Component {
     if (this.props.name === "planningSubmitted" || this.props.name === "submitted") {
       return (
         <div className="col-md-3 form-group">
-          <label htmlFor="reference">Reference*</label>
+          <label htmlFor="reference" data-test="variance-reference-title">{this.props.schema.properties.onCompletedReference.title}*</label>
           <input
             className="form-control"
             data-test="variance-reference"
@@ -135,7 +151,7 @@ export default class VarianceField extends React.Component {
     if (this.props.name === "procurementStatusAgainstLastReturn") {
       return (
         <div className="col-md-3 form-group">
-          <label htmlFor="name">Name Of Contractor*</label>
+          <label htmlFor="name" data-test="variance-name-title">{this.props.schema.properties.onCompletedNameOfContractor.title}*</label>
           <input
             className="form-control"
             data-test="variance-name"
@@ -153,7 +169,7 @@ export default class VarianceField extends React.Component {
   renderCompletedDate = () => {
     return (
       <div className="col-md-3 form-group">
-        <label htmlFor="completed">Completed Date*</label>
+        <label htmlFor="completed" data-test="variance-completed-title">{this.props.schema.properties.completedDate.title}*</label>
         <this.props.registry.widgets.britishDate
           className="form-control"
           data-test="variance-completed"
@@ -181,7 +197,7 @@ export default class VarianceField extends React.Component {
 
   renderBaseline = () => (
     <div className="col-md-4 form-group">
-      <label className="static-label">Baseline</label>
+      <label className="static-label" data-test="target-date-title">{this.props.schema.properties.baseline.title}</label>
       <p className="form-control-static" data-test="target-date">
         {this.state.baseline}
       </p>
@@ -190,7 +206,7 @@ export default class VarianceField extends React.Component {
 
   renderStatus = () => (
     <div className="col-md-3 form-group">
-      <label htmlFor="status">Status*</label>
+      <label htmlFor="status" data-test="variance-status-title">{this.props.schema.properties.status.title}*</label>
       <select
         data-test="variance-status"
         id="status"
@@ -207,7 +223,7 @@ export default class VarianceField extends React.Component {
 
   renderPercentComplete = () => (
     <div className="col-md-3 form-group">
-      <label htmlFor="percent-complete">Percent complete*</label>
+      <label htmlFor="percent-complete" data-test="variance-percentage-title">{this.props.schema.properties.percentComplete.title}*</label>
       <this.props.registry.widgets.percentage
         className="form-control"
         data-test="variance-percentage"
