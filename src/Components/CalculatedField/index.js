@@ -4,7 +4,7 @@ import React from "react";
 export function parseMoney(value) {
   if (value) {
     let cleanedString = value.replace(/[^0-9.]/g, "");
-    return new Number(cleanedString);
+    return Number(cleanedString);
   }
   return 0;
 }
@@ -32,9 +32,11 @@ export function periodTotal(object, totalPath, property, ...keys) {
 export function setArrayVariance(originalArray, originalArrayProperty, newArray, newArrayProperty, varianceField) {
   if(!newArray || !originalArray) return;
   newArray.map((value, index) => {
-    if(!value[newArrayProperty]) return value[varianceField] = "";
-    value[varianceField] = parseMoney(value[newArrayProperty]) - parseMoney(originalArray[index][originalArrayProperty])
-  })
+    if (!value[newArrayProperty]) return (value[varianceField] = "");
+    value[varianceField] =
+      parseMoney(value[newArrayProperty]) -
+      parseMoney(originalArray[index][originalArrayProperty]);
+  });
 }
 
 export function weeksPassed(originalDate, newDate) {
@@ -53,7 +55,7 @@ export function secondsPassed(originalDate, newDate) {
 
   if (
     newDateDatified == "Invalid Date" ||
-    originalDateDatified == "Inavlid Date"
+    originalDateDatified == "Invalid Date"
   )
     return "";
 
@@ -109,9 +111,9 @@ export function percentageDifference(valueAgainst, valueNew) {
 export function calculateVariance(value1, value2) {
   let result = (value1 / value2) * 100;
 
-  let variance =  Math.round(result * 100) / 100;
-  if(isNaN(variance)) return 0;
-  return variance
+  let variance = Math.round(result * 100) / 100;
+  if (isNaN(variance)) return 0;
+  return variance;
 }
 
 export function combineArrays(array1, array2) {

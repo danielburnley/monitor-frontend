@@ -25,14 +25,16 @@ export default class MilestoneField extends React.Component {
 
   onFieldChange = (name, newValue) => {
     this.setState({ [name]: newValue });
-    this.setState({
-      [name]: newValue,
-      milestoneVarianceAgainstBaseline: this.calculateVarianceAgainstBaseline(),
-      milestoneVarianceAgainstLastReturn: this.calculateVarianceAgainstLastReturn()
-    }, () => {
-      this.props.onChange(this.state);
-    })
-
+    this.setState(
+      {
+        [name]: newValue,
+        milestoneVarianceAgainstBaseline: this.calculateVarianceAgainstBaseline(),
+        milestoneVarianceAgainstLastReturn: this.calculateVarianceAgainstLastReturn()
+      },
+      () => {
+        this.props.onChange(this.state);
+      }
+    );
   };
 
   renderMilestoneDescription() {
@@ -46,29 +48,42 @@ export default class MilestoneField extends React.Component {
     );
   }
 
-
   calculateVarianceAgainstLastReturn = () => {
-    return this.calculateVarianceWeeks(this.state.milestoneLastReturnDate, this.state.currentReturn)
-  }
+    return this.calculateVarianceWeeks(
+      this.state.milestoneLastReturnDate,
+      this.state.currentReturn
+    );
+  };
 
   calculateVarianceAgainstBaseline = () => {
-    return this.calculateVarianceWeeks(this.state.milestoneBaselineCompletion, this.state.currentReturn)
-  }
+    return this.calculateVarianceWeeks(
+      this.state.milestoneBaselineCompletion,
+      this.state.currentReturn
+    );
+  };
 
   calculateVarianceWeeks = (originalDate, newDate) => {
-      if (!originalDate || originalDate === "") return null;
-      if (!newDate || newDate === "") return null;
-      let originalDateDatified = new Date(originalDate);
-      let newDateDatified = new Date(newDate);
+    if (!originalDate || originalDate === "") return null;
+    if (!newDate || newDate === "") return null;
+    let originalDateDatified = new Date(originalDate);
+    let newDateDatified = new Date(newDate);
 
-      if(newDateDatified == 'Invalid Date' || originalDateDatified == 'Inavlid Date') return ""
-      return Math.round((newDateDatified - originalDateDatified)/(7 * 60 * 60 * 24 * 1000));
-  }
+    if (
+      newDateDatified == "Invalid Date" ||
+      originalDateDatified == "Invalid Date"
+    )
+      return "";
+    return Math.round(
+      (newDateDatified - originalDateDatified) / (7 * 60 * 60 * 24 * 1000)
+    );
+  };
 
   renderMilestoneTargetDate() {
     return (
       <div>
-        <label htmlFor="milestoneBaselineCompletion">Baseline Completion Date</label>
+        <label htmlFor="milestoneBaselineCompletion">
+          Baseline Completion Date
+        </label>
         <p
           data-test="milestone-milestoneBaselineCompletion"
           id="milestoneBaselineCompletion"
@@ -99,7 +114,9 @@ export default class MilestoneField extends React.Component {
           Status against last return?
         </label>
         <select
-          onChange={e => this.onFieldChange("statusAgainstLastReturn", e.target.value)}
+          onChange={e =>
+            this.onFieldChange("statusAgainstLastReturn", e.target.value)
+          }
           data-test="milestone-status-against-last-return"
           value={this.state.statusAgainstLastReturn}
           className="form-control"
@@ -110,7 +127,6 @@ export default class MilestoneField extends React.Component {
           <option>Delayed - minimal impact</option>
           <option>Delayed - moderate impact</option>
           <option>Delayed - critcal</option>
-
         </select>
       </div>
     );
@@ -122,7 +138,9 @@ export default class MilestoneField extends React.Component {
         <label htmlFor="currentReturn">Current Return Date</label>
         <this.props.registry.widgets.britishDate
           className="form-control"
-          onChange={e => {this.onFieldChange("currentReturn", e)}}
+          onChange={e => {
+            this.onFieldChange("currentReturn", e);
+          }}
           data-test="milestone-current-return"
           value={this.state.currentReturn || ""}
           id="currentReturn"
@@ -137,50 +155,50 @@ export default class MilestoneField extends React.Component {
         <label htmlFor="milestoneBaselineCompletedDate">Completion Date</label>
         <this.props.registry.widgets.britishDate
           className="form-control"
-          onChange={e => {this.onFieldChange("milestoneCompletedDate", e)}}
+          onChange={e => {
+            this.onFieldChange("milestoneCompletedDate", e);
+          }}
           data-test="milestone-completed-date"
           value={this.state.milestoneCompletedDate || ""}
           id="milestoneCompletedDate"
         />
       </div>
     );
-  }
+  };
 
-  isDelayed = (status) => {
-    return status && status.substring(0, 7) === "Delayed"
-  }
+  isDelayed = status => {
+    return status && status.substring(0, 7) === "Delayed";
+  };
 
   renderDate = () => {
-    if(this.state.statusAgainstLastReturn === "Completed") return this.renderCompletedDate();
-    if(this.isDelayed(this.state.statusAgainstLastReturn)) return this.renderCurrentReturn();
+    if (this.state.statusAgainstLastReturn === "Completed")
+      return this.renderCompletedDate();
+    if (this.isDelayed(this.state.statusAgainstLastReturn))
+      return this.renderCurrentReturn();
     return;
-  }
+  };
 
   renderLastReturnVariance = () => {
-    if(!this.state.milestoneLastReturnDate) return null;
+    if (!this.state.milestoneLastReturnDate) return null;
     return (
       <div className="col-sm-6">
         <span>Last Return: </span>
-        <span
-          data-test="milestone-lastReturnVariance"
-        >
+        <span data-test="milestone-lastReturnVariance">
           {this.state.milestoneVarianceAgainstLastReturn}
         </span>
       </div>
-    )
-  }
+    );
+  };
 
   renderVariances = () => {
-    if(this.isDelayed(this.state.statusAgainstLastReturn)) {
+    if (this.isDelayed(this.state.statusAgainstLastReturn)) {
       return (
         <div>
           <b>Variance (Weeks)</b>
           <div className="row">
             <div className="col-sm-6">
               <span>Baseline: </span>
-              <span
-                data-test="milestone-baselineVariance"
-              >
+              <span data-test="milestone-baselineVariance">
                 {this.state.milestoneVarianceAgainstBaseline}
               </span>
             </div>
@@ -191,24 +209,25 @@ export default class MilestoneField extends React.Component {
     } else {
       return;
     }
-  }
+  };
 
   renderReasonForVariance() {
-    if(this.isDelayed(this.state.statusAgainstLastReturn)) {
+    if (this.isDelayed(this.state.statusAgainstLastReturn)) {
       return (
         <div>
           <label htmlFor="reasonForVariance">Reason for Variance</label>
           <textarea
             className="form-control"
-            onChange={e => {this.onFieldChange("reasonForVariance", e.target.value)}}
+            onChange={e => {
+              this.onFieldChange("reasonForVariance", e.target.value);
+            }}
             data-test="milestone-reason-for-variance"
-            value={this.state.reasonForVariance }
+            value={this.state.reasonForVariance}
             id="reasonForVariance"
           />
         </div>
       );
-    }
-    else {
+    } else {
       return;
     }
   }
@@ -237,15 +256,13 @@ export default class MilestoneField extends React.Component {
             {this.renderMilestoneTargetDate()}
           </div>
           <div className="col-md-6">
-          {this.renderMilestoneSummary()}
+            {this.renderMilestoneSummary()}
             {this.renderMilestonePercentCompleted()}
-            </div>
+          </div>
         </div>
         <div className="row">
           <div className="col-md-6">{this.renderStatusAgainstLastReturn()}</div>
-          <div className="col-md-6">
-          {this.renderVariances()}
-          </div>
+          <div className="col-md-6">{this.renderVariances()}</div>
         </div>
         <div className="row">
           <div className="col-md-6">{this.renderDate()}</div>
@@ -256,10 +273,6 @@ export default class MilestoneField extends React.Component {
   }
 
   render() {
-    return (
-      <div className="panel panel-default">
-        {this.renderBody()}
-      </div>
-    );
+    return <div className="panel panel-default">{this.renderBody()}</div>;
   }
 }
