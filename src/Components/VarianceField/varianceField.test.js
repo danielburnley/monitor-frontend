@@ -22,7 +22,44 @@ describe("VarianceField", () => {
   describe("Given only baseline data", () => {
     describe("Example one", () => {
       beforeEach(() => {
-        let schema = { title: "Variance One" };
+        let schema = {
+          title: "Variance One",
+          properties: {
+            baseline: {
+              title: "Unique Title One"
+            },
+            percentComplete: {
+              title: "Percent Complete"
+            },
+            status: {
+              title: "Status"
+            },
+            current: {
+              title: "Current"
+            },
+            reason: {
+              title: "Reason"
+            },
+            completedDate: {
+              title: "Completed Date"
+            },
+            varianceBaselineFullPlanningPermissionSubmitted: {
+              title: "Baseline Full Planning Permission Submitted"
+            },
+            varianceLastReturnFullPlanningPermissionSubmitted: {
+              title: "Last Return Full Planning Permission Submitted"
+            },
+            previousReturn: {
+              title: "Previous Return"
+            },
+            onCompletedReference: {
+              title: "On Completed Reference"
+            },
+            onCompletedNameOfContractor: {
+              title: "On Completed Name Of Contractor"
+            }
+          }
+        };
         let formData = { baseline: "2019-01-01" };
         field = mount(
           <VarianceField
@@ -39,28 +76,40 @@ describe("VarianceField", () => {
         expect(fieldTitle).toEqual("Variance One");
       });
 
+      it("Renders the title of the target date", () => {
+        let targetDate = field.find("[data-test='target-date-title']").text();
+        expect(targetDate).toEqual("Unique Title One");
+      });
+
       it("Renders the target date", () => {
         let targetDate = field.find("[data-test='target-date']").text();
         expect(targetDate).toEqual("2019-01-01");
       });
 
-      it("Renders the status selector defaulting to on schedule", () => {
+      it("Renders the status selector defaulting to on schedule and title", () => {
         let status = field.find("[data-test='variance-status']").props().value;
+        let title = field.find("[data-test='variance-status-title']").text();
         expect(status).toEqual("On schedule");
+        expect(title).toEqual("Status*");
       });
 
       it("Renders the percentage complete field", () => {
         let percentComplete = field.find("[data-test='variance-percentage']");
+        let title = field.find("[data-test='variance-percentage-title']").text();
+
         expect(percentComplete.length).toEqual(1);
+        expect(title).toEqual("Percent Complete*");
       });
 
       it("Does not show the baseline variance field", () => {
         let baselineVariance = field.find("[data-test='baseline-variance']");
+
         expect(baselineVariance.length).toEqual(0);
       });
 
       it("Does not show the return variance field", () => {
         let returnVariance = field.find("[data-test='return-variance']");
+
         expect(returnVariance.length).toEqual(0);
       });
 
@@ -87,13 +136,18 @@ describe("VarianceField", () => {
 
         it("Shows the updated value field", () => {
           let updatedValue = field.find("[data-test='britishDate-fake']");
+          let title = field.find("[data-test='current-date-title']").text();
 
           expect(updatedValue.length).toEqual(1);
+          expect(title).toEqual("Current*")
         });
 
         it("Shows the reason for variance field", () => {
           let reason = field.find("[data-test='variance-reason']");
+          let title = field.find("[data-test='variance-reason-title']").text();
+          
           expect(reason.length).toEqual(1);
+          expect(title).toEqual("Reason*")
         });
       });
 
@@ -105,20 +159,59 @@ describe("VarianceField", () => {
 
         it("Shows the completed date field", () => {
           let completedDate = field.find("[data-test='variance-completed']");
+          let title = field.find("[data-test='variance-completed-title']").text();
+          
           expect(completedDate.length).toEqual(1);
+          expect(title).toEqual("Completed Date*")
         });
 
         it("Does not show the return variance field", () => {
           let returnVariance = field.find("[data-test='return-variance']");
           expect(returnVariance.length).toEqual(0);
         });
-
       });
     });
 
     describe("Example two", () => {
       beforeEach(() => {
-        let schema = { title: "Meow Meow Fuzzyface" };
+        let schema = {
+          title: "Meow Meow Fuzzyface",
+          properties: {
+            baseline: {
+              title: "Unique Title Two"
+            },
+            percentComplete: {
+              title: "Percentage of Cats"
+            },
+            status: {
+              title: "Status of the Dog"
+            },
+            current: {
+              title: "Current amount of Cats"
+            },
+            reason: {
+              title: "Reason for Cats Empire"
+            },
+            completedDate: {
+              title: "Completed Date of DOg annihilation"
+            },
+            varianceBaselineFullPlanningPermissionSubmitted: {
+              title: "Dog annihilation submission"
+            },
+            varianceLastReturnFullPlanningPermissionSubmitted: {
+              title: "Permission for cat amageddon submitted"
+            },
+            previousReturn: {
+              title: "Previous attempt of destruction"
+            },
+            onCompletedReference: {
+              title: "On Completion cat party"
+            },
+            onCompletedNameOfContractor: {
+              title: "On Completed Name Of winner"
+            }
+          }
+        };
         let formData = { baseline: "2020-12-31" };
         field = mount(
           <VarianceField
@@ -137,16 +230,22 @@ describe("VarianceField", () => {
 
       it("Renders the target date", () => {
         let targetDate = field.find("[data-test='target-date']").text();
+        let title = field.find("[data-test='target-date-title']").text();
+        expect(title).toEqual("Unique Title Two");
         expect(targetDate).toEqual("2020-12-31");
       });
 
       it("Renders the status selector defaulting to on schedule", () => {
         let status = field.find("[data-test='variance-status']").props().value;
+        let title = field.find("[data-test='variance-status-title']").text();
+        expect(title).toEqual("Status of the Dog*");
         expect(status).toEqual("On schedule");
       });
 
       it("Renders the percentage complete field", () => {
         let percentComplete = field.find("[data-test='variance-percentage']");
+        let title = field.find("[data-test='variance-percentage-title']").text();
+        expect(title).toEqual("Percentage of Cats*");
         expect(percentComplete.length).toEqual(1);
       });
 
@@ -178,11 +277,15 @@ describe("VarianceField", () => {
 
         it("Shows the updated value field", () => {
           let updatedValue = field.find("[data-test='britishDate-fake']");
+          let title = field.find("[data-test='current-date-title']").text();
+          expect(title).toEqual("Current amount of Cats*");
           expect(updatedValue.length).toEqual(1);
         });
 
         it("Shows the reason for variance field", () => {
           let reason = field.find("[data-test='variance-reason']");
+          let title = field.find("[data-test='variance-reason-title']").text();
+          expect(title).toEqual("Reason for Cats Empire*");
           expect(reason.length).toEqual(1);
         });
       });
@@ -195,6 +298,8 @@ describe("VarianceField", () => {
 
         it("Shows the completed date field", () => {
           let completedDate = field.find("[data-test='variance-completed']");
+          let title = field.find("[data-test='variance-completed-title']").text();
+          expect(title).toEqual("Completed Date of DOg annihilation*");
           expect(completedDate.length).toEqual(1);
         });
 
@@ -210,7 +315,44 @@ describe("VarianceField", () => {
     describe("When on schedule", () => {
       describe("Example one", () => {
         it("Fills in the percentage complete correctly", () => {
-          let schema = { title: "Meow Meow Fuzzyface" };
+          let schema = {
+            title: "Meow Meow Fuzzyface",
+            properties: {
+              baseline: {
+                title: "Unique Title One"
+              },
+              percentComplete: {
+                title: "Percent Complete"
+              },
+              status: {
+                title: "Status"
+              },
+              current: {
+                title: "Current"
+              },
+              reason: {
+                title: "Reason"
+              },
+              completedDate: {
+                title: "Completed Date"
+              },
+              varianceBaselineFullPlanningPermissionSubmitted: {
+                title: "Baseline Full Planning Permission Submitted"
+              },
+              varianceLastReturnFullPlanningPermissionSubmitted: {
+                title: "Last Return Full Planning Permission Submitted"
+              },
+              previousReturn: {
+                title: "Previous Return"
+              },
+              onCompletedReference: {
+                title: "On Completed Reference"
+              },
+              onCompletedNameOfContractor: {
+                title: "On Completed Name Of Contractor"
+              }
+            }
+          };
           let formData = {
             baseline: "2020-12-31",
             status: "On schedule",
@@ -235,12 +377,51 @@ describe("VarianceField", () => {
 
       describe("Example two", () => {
         it("Fills in the percentage complete correctly", () => {
-          let schema = { title: "Meow Meow Fuzzyface" };
+          let schema = {
+            title: "Meow Meow Fuzzyface",
+            properties: {
+              baseline: {
+                title: "Unique Title Two"
+              },
+              percentComplete: {
+                title: "Percentage of Cats"
+              },
+              status: {
+                title: "Status of the Dog"
+              },
+              current: {
+                title: "Current amount of Cats"
+              },
+              reason: {
+                title: "Reason for Cats Empire"
+              },
+              completedDate: {
+                title: "Completed Date of DOg annihilation"
+              },
+              varianceBaselineFullPlanningPermissionSubmitted: {
+                title: "Dog annihilation submission"
+              },
+              varianceLastReturnFullPlanningPermissionSubmitted: {
+                title: "Permission for cat amageddon submitted"
+              },
+              previousReturn: {
+                title: "Previous attempt of destruction"
+              },
+              onCompletedReference: {
+                title: "On Completion cat party"
+              },
+              onCompletedNameOfContractor: {
+                title: "On Completed Name Of winner"
+              }
+            }
+          };
+
           let formData = {
             baseline: "2020-12-31",
             status: "On schedule",
             percentComplete: 90
           };
+
           let field = shallow(
             <VarianceField
               schema={schema}
@@ -262,7 +443,44 @@ describe("VarianceField", () => {
     describe("When delayed", () => {
       describe("Example one", () => {
         beforeEach(() => {
-          let schema = { title: "Meow Meow Fuzzyface" };
+          let schema = {
+            title: "Meow Meow Fuzzyface",
+            properties: {
+              baseline: {
+                title: "Unique Title One"
+              },
+              percentComplete: {
+                title: "Percent Complete"
+              },
+              status: {
+                title: "Status"
+              },
+              current: {
+                title: "Current"
+              },
+              reason: {
+                title: "Reason"
+              },
+              completedDate: {
+                title: "Completed Date"
+              },
+              varianceBaselineFullPlanningPermissionSubmitted: {
+                title: "Baseline Full Planning Permission Submitted"
+              },
+              varianceLastReturnFullPlanningPermissionSubmitted: {
+                title: "Last Return Full Planning Permission Submitted"
+              },
+              previousReturn: {
+                title: "Previous Return"
+              },
+              onCompletedReference: {
+                title: "On Completed Reference"
+              },
+              onCompletedNameOfContractor: {
+                title: "On Completed Name Of Contractor"
+              }
+            }
+          };
           let formData = {
             baseline: "02/01/2020",
             status: "Delayed",
@@ -289,6 +507,8 @@ describe("VarianceField", () => {
 
         it("Renders the baseline variance field", () => {
           let baselineVariance = field.find("[data-test='baseline-variance']");
+          let title = field.find("[data-test='baseline-variance-title']").text();
+          expect(title).toEqual("Baseline Full Planning Permission Submitted")
           expect(baselineVariance.length).toEqual(1);
         });
 
@@ -299,6 +519,8 @@ describe("VarianceField", () => {
 
         it("Renders the return variance field", () => {
           let returnVariance = field.find("[data-test='return-variance']");
+          let title = field.find("[data-test='return-variance-title']").text();
+          expect(title).toEqual("Last Return Full Planning Permission Submitted")
           expect(returnVariance.length).toEqual(1);
         });
 
@@ -323,7 +545,44 @@ describe("VarianceField", () => {
 
       describe("Example two", () => {
         beforeEach(() => {
-          let schema = { title: "Meow Meow Fuzzyface" };
+          let schema = {
+            title: "Meow Meow Fuzzyface",
+            properties: {
+              baseline: {
+                title: "Unique Title Two"
+              },
+              percentComplete: {
+                title: "Percentage of Cats"
+              },
+              status: {
+                title: "Status of the Dog"
+              },
+              current: {
+                title: "Current amount of Cats"
+              },
+              reason: {
+                title: "Reason for Cats Empire"
+              },
+              completedDate: {
+                title: "Completed Date of DOg annihilation"
+              },
+              varianceBaselineFullPlanningPermissionSubmitted: {
+                title: "Dog annihilation submission"
+              },
+              varianceLastReturnFullPlanningPermissionSubmitted: {
+                title: "Permission for cat amageddon submitted"
+              },
+              previousReturn: {
+                title: "Previous attempt of destruction"
+              },
+              onCompletedReference: {
+                title: "On Completion cat party"
+              },
+              onCompletedNameOfContractor: {
+                title: "On Completed Name Of winner"
+              }
+            }
+          };
           let formData = {
             baseline: "02/02/2020",
             status: "Delayed",
@@ -350,6 +609,8 @@ describe("VarianceField", () => {
 
         it("Renders the baseline variance field", () => {
           let baselineVariance = field.find("[data-test='baseline-variance']");
+          let title = field.find("[data-test='baseline-variance-title']").text();
+          expect(title).toEqual("Dog annihilation submission")
           expect(baselineVariance.length).toEqual(1);
         });
 
@@ -360,6 +621,8 @@ describe("VarianceField", () => {
 
         it("Renders the return variance field", () => {
           let returnVariance = field.find("[data-test='return-variance']");
+          let title = field.find("[data-test='return-variance-title']").text();
+          expect(title).toEqual("Permission for cat amageddon submitted")
           expect(returnVariance.length).toEqual(1);
         });
 
@@ -385,13 +648,51 @@ describe("VarianceField", () => {
 
     describe("When completed", () => {
       describe("Example one", () => {
-        let schema = { title: "Meow Meow Fuzzyface" };
+        let schema = {
+          title: "Meow Meow Fuzzyface",
+          properties: {
+            baseline: {
+              title: "Unique Title Two"
+            },
+            percentComplete: {
+              title: "Percentage of Cats"
+            },
+            status: {
+              title: "Status of the Dog"
+            },
+            current: {
+              title: "Current amount of Cats"
+            },
+            reason: {
+              title: "Reason for Cats Empire"
+            },
+            completedDate: {
+              title: "Completed Date of DOg annihilation"
+            },
+            varianceBaselineFullPlanningPermissionSubmitted: {
+              title: "Dog annihilation submission"
+            },
+            varianceLastReturnFullPlanningPermissionSubmitted: {
+              title: "Permission for cat amageddon submitted"
+            },
+            previousReturn: {
+              title: "Previous attempt of destruction"
+            },
+            onCompletedReference: {
+              title: "On Completion cat party"
+            },
+            onCompletedNameOfContractor: {
+              title: "On Completed Name Of winner"
+            }
+          }
+        };
         let name = "planningSubmitted";
         let formData = {
           baseline: "2020-12-31",
           status: "Completed",
           percentComplete: 100,
-          completedDate: "2021-01-01"
+          completedDate: "2021-01-01",
+          onCompletedReference: "The Reference"
         };
         let field = mount(
           <VarianceField
@@ -412,12 +713,56 @@ describe("VarianceField", () => {
 
         it("Renders the reference field", () => {
           let reference = field.find("[data-test='variance-reference']");
+          let title = field.find("[data-test='variance-reference-title']").text();
           expect(reference.length).toEqual(1);
+          expect(title).toEqual("On Completion cat party*")
+        });
+
+        it("Prepopulates the reference field with the formdata", () => {
+          let reference = field.find("[data-test='variance-reference']").props().value;
+          expect(reference).toEqual("The Reference");
         });
       });
 
       describe("Example two", () => {
-        let schema = { title: "Meow Meow Fuzzyface" };
+        let schema = {
+          title: "Meow Meow Fuzzyface",
+          properties: {
+            baseline: {
+              title: "Unique Title Two"
+            },
+            percentComplete: {
+              title: "Percentage of Cats"
+            },
+            status: {
+              title: "Status of the Dog"
+            },
+            current: {
+              title: "Current amount of Cats"
+            },
+            reason: {
+              title: "Reason for Cats Empire"
+            },
+            completedDate: {
+              title: "Completed Date of DOg annihilation"
+            },
+            varianceBaselineFullPlanningPermissionSubmitted: {
+              title: "Dog annihilation submission"
+            },
+            varianceLastReturnFullPlanningPermissionSubmitted: {
+              title: "Permission for cat amageddon submitted"
+            },
+            previousReturn: {
+              title: "Previous attempt of destruction"
+            },
+            onCompletedReference: {
+              title: "On Completion cat party"
+            },
+            onCompletedNameOfContractor: {
+              title: "On Completed Name Of winner"
+            }
+          }
+        };
         let name = "granted";
         let formData = {
           baseline: "2020-12-31",
@@ -450,13 +795,51 @@ describe("VarianceField", () => {
       });
 
       describe("procurementStatusAgainstLastReturn", () => {
-        let schema = { title: "Meow Meow Fuzzyface" };
+        let schema = {
+          title: "Meow Meow Fuzzyface",
+          properties: {
+            baseline: {
+              title: "Unique Title Two"
+            },
+            percentComplete: {
+              title: "Percentage of Cats"
+            },
+            status: {
+              title: "Status of the Dog"
+            },
+            current: {
+              title: "Current amount of Cats"
+            },
+            reason: {
+              title: "Reason for Cats Empire"
+            },
+            completedDate: {
+              title: "Completed Date of DOg annihilation"
+            },
+            varianceBaselineFullPlanningPermissionSubmitted: {
+              title: "Dog annihilation submission"
+            },
+            varianceLastReturnFullPlanningPermissionSubmitted: {
+              title: "Permission for cat amageddon submitted"
+            },
+            previousReturn: {
+              title: "Previous attempt of destruction"
+            },
+            onCompletedReference: {
+              title: "On Completion cat party"
+            },
+            onCompletedNameOfContractor: {
+              title: "On Completed Name Of winner"
+            }
+          }
+        };
         let name = "procurementStatusAgainstLastReturn";
         let formData = {
           baseline: "2020-12-31",
           status: "Completed",
           percentComplete: 100,
-          completedDate: "2025-01-01"
+          completedDate: "2025-01-01",
+          onCompletedNameOfContractor: "John"
         };
         let field = mount(
           <VarianceField
@@ -480,6 +863,11 @@ describe("VarianceField", () => {
           let name = field.find("[data-test='variance-name']");
           expect(name.length).toEqual(1);
         });
+
+        it("Prepopulates the contractor name field with the form data", () => {
+          let name = field.find("[data-test='variance-name']").props().value;
+          expect(name).toEqual("John");
+        });
       });
     });
   });
@@ -490,7 +878,44 @@ describe("VarianceField", () => {
     describe("When delayed", () => {
       beforeEach(() => {
         onChangeSpy = jest.fn();
-        let schema = { title: "Meow Meow Fuzzyface" };
+        let schema = {
+          title: "Meow Meow Fuzzyface",
+          properties: {
+            baseline: {
+              title: "Unique Title Two"
+            },
+            percentComplete: {
+              title: "Percentage of Cats"
+            },
+            status: {
+              title: "Status of the Dog"
+            },
+            current: {
+              title: "Current amount of Cats"
+            },
+            reason: {
+              title: "Reason for Cats Empire"
+            },
+            completedDate: {
+              title: "Completed Date of DOg annihilation"
+            },
+            varianceBaselineFullPlanningPermissionGranted: {
+              title: "Dog annihilation submission"
+            },
+            varianceAgainstLastReturn: {
+              title: "Permission for cat amageddon submitted"
+            },
+            previousReturn: {
+              title: "Previous attempt of destruction"
+            },
+            onCompletedReference: {
+              title: "On Completion cat party"
+            },
+            onCompletedNameOfContractor: {
+              title: "On Completed Name Of winner"
+            }
+          }
+        };
         let formData = {
           baseline: "2020-12-31",
           status: "Delayed",
@@ -635,25 +1060,160 @@ describe("VarianceField", () => {
     });
 
     describe("When completed", () => {
-      beforeEach(() => {
-        onChangeSpy = jest.fn();
-        let schema = { title: "Meow Meow Fuzzyface" };
-        let formData = {
-          baseline: "2020-12-31",
-          status: "Completed",
-          percentComplete: 100
-        };
-        field = mount(
-          <VarianceField
-            schema={schema}
-            formData={formData}
-            onChange={onChangeSpy}
-            registry={registryStub}
-          />
-        );
+
+      describe("When changing onCompletedReference", () => {
+        beforeEach(() => {
+          onChangeSpy = jest.fn();
+          let schema = {
+            title: "Meow Meow Fuzzyface",
+            properties: {
+              baseline: {
+                title: "Unique Title Two"
+              },
+              percentComplete: {
+                title: "Percentage of Cats"
+              },
+              status: {
+                title: "Status of the Dog"
+              },
+              current: {
+                title: "Current amount of Cats"
+              },
+              reason: {
+                title: "Reason for Cats Empire"
+              },
+              completedDate: {
+                title: "Completed Date of DOg annihilation"
+              },
+              varianceBaselineFullPlanningPermissionSubmitted: {
+                title: "Dog annihilation submission"
+              },
+              varianceLastReturnFullPlanningPermissionSubmitted: {
+                title: "Permission for cat amageddon submitted"
+              },
+              previousReturn: {
+                title: "Previous attempt of destruction"
+              },
+              onCompletedReference: {
+                title: "On Completion cat party"
+              },
+              onCompletedNameOfContractor: {
+                title: "On Completed Name Of winner"
+              }
+            }
+          };
+          let formData = {
+            baseline: "2020-12-31",
+            status: "Completed",
+            percentComplete: 100
+          };
+          let name = "planningSubmitted";
+          field = mount(
+            <VarianceField
+              name={name}
+              schema={schema}
+              formData={formData}
+              onChange={onChangeSpy}
+              registry={registryStub}
+            />
+          );
+        });
+
+        describe("Example one", () => {
+          it("Calls the onChange prop with the updated form data", () => {
+            field
+              .find("[data-test='variance-reference']")
+              .simulate("change", { target: { value: "HIF" } });
+
+            expect(onChangeSpy).toHaveBeenCalledWith({
+              baseline: "2020-12-31",
+              status: "Completed",
+              percentComplete: 100,
+              current: undefined,
+              reason: undefined,
+              completedDate: undefined,
+              onCompletedReference: "HIF"
+            });
+          });
+        });
+
+        describe("Example two", () => {
+          it("Calls the onChange prop with the updated form data", () => {
+            field
+              .find("[data-test='variance-reference']")
+              .simulate("change", { target: { value: "BIJ" } });
+
+            expect(onChangeSpy).toHaveBeenCalledWith({
+              baseline: "2020-12-31",
+              status: "Completed",
+              percentComplete: 100,
+              current: undefined,
+              reason: undefined,
+              completedDate: undefined,
+              onCompletedReference: "BIJ"
+            });
+          });
+        });
       });
 
       describe("When changing the completed date", () => {
+        beforeEach(() => {
+          onChangeSpy = jest.fn();
+          let schema = {
+            title: "Meow Meow Fuzzyface",
+            properties: {
+              baseline: {
+                title: "Unique Title Two"
+              },
+              percentComplete: {
+                title: "Percentage of Cats"
+              },
+              status: {
+                title: "Status of the Dog"
+              },
+              current: {
+                title: "Current amount of Cats"
+              },
+              reason: {
+                title: "Reason for Cats Empire"
+              },
+              completedDate: {
+                title: "Completed Date of DOg annihilation"
+              },
+              varianceBaselineFullPlanningPermissionSubmitted: {
+                title: "Dog annihilation submission"
+              },
+              varianceLastReturnFullPlanningPermissionSubmitted: {
+                title: "Permission for cat amageddon submitted"
+              },
+              previousReturn: {
+                title: "Previous attempt of destruction"
+              },
+              onCompletedReference: {
+                title: "On Completion cat party"
+              },
+              onCompletedNameOfContractor: {
+                title: "On Completed Name Of winner"
+              }
+            }
+          };
+          let formData = {
+            baseline: "2020-12-31",
+            status: "Completed",
+            percentComplete: 100
+          };
+          let name = "planningSubmitted";
+          field = mount(
+            <VarianceField
+              name={name}
+              schema={schema}
+              formData={formData}
+              onChange={onChangeSpy}
+              registry={registryStub}
+            />
+          );
+        });
+
         describe("Example one", () => {
           it("Calls the onChange prop with the updated form data", () => {
             field
@@ -671,7 +1231,7 @@ describe("VarianceField", () => {
           });
         });
 
-        describe("Example one", () => {
+        describe("Example two", () => {
           it("Calls the onChange prop with the updated form data", () => {
             field
               .find("[data-test='variance-completed']")
@@ -684,6 +1244,99 @@ describe("VarianceField", () => {
               current: undefined,
               reason: undefined,
               completedDate: "2025-01-01"
+            });
+          });
+        });
+      });
+
+      describe("When changing the contractor name", () => {
+        beforeEach(() => {
+        onChangeSpy = jest.fn();
+        let schema = {
+          title: "Meow Meow Fuzzyface",
+          properties: {
+            baseline: {
+              title: "Unique Title Two"
+            },
+            percentComplete: {
+              title: "Percentage of Cats"
+            },
+            status: {
+              title: "Status of the Dog"
+            },
+            current: {
+              title: "Current amount of Cats"
+            },
+            reason: {
+              title: "Reason for Cats Empire"
+            },
+            completedDate: {
+              title: "Completed Date of DOg annihilation"
+            },
+            varianceBaselineFullPlanningPermissionSubmitted: {
+              title: "Dog annihilation submission"
+            },
+            varianceLastReturnFullPlanningPermissionSubmitted: {
+              title: "Permission for cat amageddon submitted"
+            },
+            previousReturn: {
+              title: "Previous attempt of destruction"
+            },
+            onCompletedReference: {
+              title: "On Completion cat party"
+            },
+            onCompletedNameOfContractor: {
+              title: "On Completed Name Of winner"
+            }
+          }
+        };
+        let formData = {
+          baseline: "2020-12-31",
+          status: "Completed",
+          percentComplete: 100
+        };
+        let name = "procurementStatusAgainstLastReturn";
+        field = mount(
+          <VarianceField
+            name={name}
+            schema={schema}
+            formData={formData}
+            onChange={onChangeSpy}
+            registry={registryStub}
+          />
+        );
+      });
+
+        describe("Example one", () => {
+          it("Calls the onChange prop with the updated form data", () => {
+            field
+              .find("[data-test='variance-name']")
+              .simulate("change", { target: { value: "Bob" } });
+
+            expect(onChangeSpy).toHaveBeenCalledWith({
+              baseline: "2020-12-31",
+              status: "Completed",
+              percentComplete: 100,
+              current: undefined,
+              reason: undefined,
+              onCompletedNameOfContractor: "Bob"
+            });
+          });
+        });
+
+        describe("Example two", () => {
+          it("Calls the onChange prop with the updated form data", () => {
+            field
+              .find("[data-test='variance-name']")
+              .simulate("change", { target: { value: "Jeremy" } });
+
+            expect(onChangeSpy).toHaveBeenCalledWith({
+              baseline: "2020-12-31",
+              status: "Completed",
+              percentComplete: 100,
+              current: undefined,
+              reason: undefined,
+              onCompletedNameOfContractor: "Jeremy"
             });
           });
         });
