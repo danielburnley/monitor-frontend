@@ -21,6 +21,12 @@ export function sum(data, ...keys) {
   return keys.reduce((total, key) => parseMoney(data[key]) + total, 0);
 }
 
+export function add(value1, value2) {
+  let parsed1 = parseMoney(value1);
+  let parsed2 = parseMoney(value2);
+  return parsed1 + parsed2;
+}
+
 export function subtract(newValue, initialValue) {
   let value1 = parseMoney(initialValue);
   let value2 = parseMoney(newValue);

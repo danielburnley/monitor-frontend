@@ -14,7 +14,8 @@ import {
   validateArrayPropertyIsLessThan,
   periodTotal,
   setArrayVariance,
-  subtract
+  subtract,
+  add
 } from ".";
 
 describe("subtract()", () => {
@@ -24,6 +25,16 @@ describe("subtract()", () => {
 
   it("Example 2", () => {
     expect(subtract("£789.34", "£127.26")).toEqual(-662.08);
+  });
+});
+
+describe("add()", () => {
+  it("Example 1", () => {
+    expect(add("48", "52")).toEqual(100);
+  });
+
+  it("Example 2", () => {
+    expect(add("$27896.34", "$8625.26")).toEqual(36521.6);
   });
 });
 
