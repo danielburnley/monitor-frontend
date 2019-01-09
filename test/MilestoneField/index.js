@@ -1,9 +1,17 @@
 import React from "react";
 import { shallow, mount } from "enzyme";
 import MilestoneField from "../../src/Components/MilestoneField";
+import WidgetFake from "../WidgetFake";
+
+class PercentageFake extends WidgetFake {
+  datatest="percentage-fake"
+}
+class BritishDateFake extends WidgetFake {
+  datatest="britishDate-fake"
+}
 
 export default class MilestoneComponent {
-  constructor(formData, onChange, schemaTitle, percentagewidget) {
+  constructor(formData, onChange, schemaTitle) {
     this.milestone = mount(
       <MilestoneField
         schema={{ title: schemaTitle }}
@@ -12,7 +20,8 @@ export default class MilestoneComponent {
         registry={
           {
             widgets: {
-              percentage: percentagewidget
+              percentage: PercentageFake,
+              britishDate: BritishDateFake
             }
           }
         }
@@ -34,44 +43,44 @@ export default class MilestoneComponent {
 
   summary = () => this.milestone.find("[data-test='milestone-summary']").text();
 
-  varianceAgainstLastReturndata = () => 
+  varianceAgainstLastReturndata = () =>
     this.milestone
     .find("[data-test='milestone-lastReturnVariance']")
     .text();
 
-  varianceAgainstBaselinedata= () => 
+  varianceAgainstBaselinedata= () =>
     this.milestone
     .find("[data-test='milestone-baselineVariance']")
     .text();
 
-  milestoneCompletedDate = () => 
+  milestoneCompletedDate = () =>
     this.milestone
-    .find("[data-test='milestone-completed-date']")
+    .find("[data-test='milestone-completed-date'] [data-test='britishDate-fake']")
     .length;
 
-  currentReturn = () => 
+  currentReturn = () =>
     this.milestone
-    .find("[data-test='milestone-current-return']")
+    .find("[data-test='milestone-current-return'] [data-test='britishDate-fake']")
     .length;
 
-  reasonForVariance = () => 
+  reasonForVariance = () =>
     this.milestone
     .find("[data-test='milestone-reason-for-variance']")
     .length;
-  
-  baselineVariance = () => 
+
+  baselineVariance = () =>
     this.milestone
     .find("[data-test='milestone-baselineVariance']")
     .length;
 
-  lastReturnVariance = () => 
+  lastReturnVariance = () =>
     this.milestone
     .find("[data-test='milestone-lastReturnVariance']")
     .length;
 
-  milestonePercentCompleted = () => 
+  milestonePercentCompleted = () =>
     this.milestone
-    .find("[data-test='widget-stub']")
+    .find("[data-test='percentage-fake']")
     .length;
 
   simulateStatusAgainstLastReturn = inputValue =>
@@ -81,7 +90,7 @@ export default class MilestoneComponent {
 
   simulateCurrentReturn = inputValue =>
     this.milestone
-      .find("[data-test='milestone-current-return']")
+      .find("[data-test='milestone-current-return'] [data-test='britishDate-fake']")
       .simulate("change", { target: { value: inputValue } });
 
   simulateReasonForVariance = inputValue =>
@@ -91,7 +100,7 @@ export default class MilestoneComponent {
 
   simulateMilestonePercentCompleted = inputValue =>
     this.milestone
-      .find("[data-test='widget-stub']")
+      .find("[data-test='percentage-fake']")
       .simulate("change", { target: { value: inputValue } });
 
   findStatusAgainstLastReturn = () =>
@@ -99,13 +108,13 @@ export default class MilestoneComponent {
       .find("[data-test='milestone-status-against-last-return']")
       .props().value;
 
-  findMilestoneCompletedDate = () => 
+  findMilestoneCompletedDate = () =>
     this.milestone
-      .find("[data-test='milestone-completed-date']")
+      .find("[data-test='milestone-completed-date'] [data-test='britishDate-fake']")
       .props().value
 
   findCurrentReturn = () =>
-    this.milestone.find("[data-test='milestone-current-return']").props().value;
+    this.milestone.find("[data-test='milestone-current-return'] [data-test='britishDate-fake']").props().value;
 
   findReasonForVariance = () =>
     this.milestone.find("[data-test='milestone-reason-for-variance']").props()

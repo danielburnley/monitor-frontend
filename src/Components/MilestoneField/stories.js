@@ -1,6 +1,7 @@
 import React from "react";
 import MilestoneField from ".";
 import { storiesOf } from "@storybook/react";
+import WidgetFake from "../../../test/WidgetFake";
 
 storiesOf("Milestone Form", module).add("Simple form", () => {
   return (
@@ -14,6 +15,14 @@ storiesOf("Milestone Form", module).add("Simple form", () => {
       onChange={formData => {
         console.log(formData);
       }}
+      registry={
+        {
+          widgets: {
+            percentage: PercentageFake,
+            britishDate: BritishDateFake
+          }
+        }
+      }
     />
   );
 });
@@ -34,6 +43,14 @@ storiesOf("Milestone Form", module).add("Prepopulated Data", () => {
       onChange={formData => {
         console.log(formData);
       }}
+      registry={
+        {
+          widgets: {
+            percentage: PercentageFake,
+            britishDate: BritishDateFake
+          }
+        }
+      }
     />
   );
 });
