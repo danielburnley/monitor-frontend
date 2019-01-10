@@ -126,7 +126,7 @@ export default class MilestoneField extends React.Component {
           <option>On schedule</option>
           <option>Delayed - minimal impact</option>
           <option>Delayed - moderate impact</option>
-          <option>Delayed - critcal</option>
+          <option>Delayed - critical</option>
         </select>
       </div>
     );
