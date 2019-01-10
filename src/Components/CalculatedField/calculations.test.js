@@ -44,12 +44,24 @@ describe("parseMoney()", () => {
   });
 
   describe("Parses a formatted money value", () => {
-    it("Example 1", () => {
-      expect(parseMoney("$6.28")).toEqual(6.28);
+    describe("Negative", () => {
+      it("Example 1", () => {
+        expect(parseMoney("-6.28")).toEqual(-6.28);
+      });
+
+      it("Example 2", () => {
+        expect(parseMoney("-3.14")).toEqual(-3.14);
+      });
     });
 
-    it("Example 2", () => {
-      expect(parseMoney("฿3.14")).toEqual(3.14);
+    describe("With invalid characters", () => {
+      it("Example 1", () => {
+        expect(parseMoney("$6.28")).toEqual(6.28);
+      });
+
+      it("Example 2", () => {
+        expect(parseMoney("฿3.14")).toEqual(3.14);
+      });
     });
   });
 });

@@ -4,65 +4,129 @@ import { shallow } from "enzyme";
 
 describe("CurrencyWidget", () => {
   describe("Formatting of data entry", () => {
-    describe("Example 1", () => {
-      let schema, value, uiSchema, field, currencySymbol, onChangeSpy;
-      beforeEach(() => {
-        schema = {
-          title: "Cats",
-          type: "string",
-          currency: true,
-          currencyMaximum: "8388608999999999"
-        };
+    describe("Negative", () => {
+      describe("Example 1", () => {
+        let schema, value, uiSchema, field, currencySymbol, onChangeSpy;
+        beforeEach(() => {
+          schema = {
+            title: "Cats",
+            type: "string",
+            currency: true
+          };
 
-        onChangeSpy = jest.fn();
-        value = "8000000";
-        currencySymbol = "btc";
+          onChangeSpy = jest.fn();
+          value = "-256";
+          currencySymbol = "XMR";
 
-        field = shallow(
-          <CurrencyWidget
-            value={value}
-            schema={schema}
-            onChange={onChangeSpy}
-            currency={currencySymbol}
-          />
-        );
+          field = shallow(
+            <CurrencyWidget
+              value={value}
+              schema={schema}
+              onChange={onChangeSpy}
+              currency={currencySymbol}
+              />
+          );
+        });
+
+        it("Inserts commas for preset value", () => {
+          expect(field.find("[data-test='currency-input']").props().value).toEqual(
+            "-256"
+          );
+        });
       });
 
-      it("Inserts commas for preset value", () => {
-        expect(field.find("[data-test='currency-input']").props().value).toEqual(
-          "8,000,000"
-        );
+      describe("Example 2", () => {
+        let schema, value, uiSchema, field, currencySymbol, onChangeSpy;
+        beforeEach(() => {
+          schema = {
+            title: "Cats",
+            type: "string",
+            currency: true
+          };
+
+          onChangeSpy = jest.fn();
+          value = "-1024";
+          currencySymbol = "BTC";
+
+          field = shallow(
+            <CurrencyWidget
+              value={value}
+              schema={schema}
+              onChange={onChangeSpy}
+              currency={currencySymbol}
+              />
+          );
+        });
+
+        it("Inserts commas for preset value", () => {
+          expect(field.find("[data-test='currency-input']").props().value).toEqual(
+            "-1,024"
+          );
+        });
       });
     });
 
-    describe("Example 2", () => {
-      let schema, value, uiSchema, field, currencySymbol, onChangeSpy;
-      beforeEach(() => {
-        schema = {
-          title: "Cats",
-          type: "string",
-          currency: true,
-          currencyMaximum: "3573599357999999"
-        };
+    describe("Comma seperators", () => {
+      describe("Example 1", () => {
+        let schema, value, uiSchema, field, currencySymbol, onChangeSpy;
+        beforeEach(() => {
+          schema = {
+            title: "Cats",
+            type: "string",
+            currency: true,
+            currencyMaximum: "8388608999999999"
+          };
 
-        onChangeSpy = jest.fn();
-        value = "322222222";
-        currencySymbol = "sat";
+          onChangeSpy = jest.fn();
+          value = "8000000";
+          currencySymbol = "btc";
 
-        field = shallow(
-          <CurrencyWidget
-            value={value}
-            schema={schema}
-            onChange={onChangeSpy}
-            currency={currencySymbol}
-          />
-        );
+          field = shallow(
+            <CurrencyWidget
+              value={value}
+              schema={schema}
+              onChange={onChangeSpy}
+              currency={currencySymbol}
+              />
+          );
+        });
+
+        it("Inserts commas for preset value", () => {
+          expect(field.find("[data-test='currency-input']").props().value).toEqual(
+            "8,000,000"
+          );
+        });
       });
 
-      it("Inserts commas for preset value", () => {
-        expect(field.find("[data-test='currency-input']").props().value).toEqual(
-          "322,222,222"
-        );
+      describe("Example 2", () => {
+        let schema, value, uiSchema, field, currencySymbol, onChangeSpy;
+        beforeEach(() => {
+          schema = {
+            title: "Cats",
+            type: "string",
+            currency: true,
+            currencyMaximum: "3573599357999999"
+          };
+
+          onChangeSpy = jest.fn();
+          value = "322222222";
+          currencySymbol = "sat";
+
+          field = shallow(
+            <CurrencyWidget
+              value={value}
+              schema={schema}
+              onChange={onChangeSpy}
+              currency={currencySymbol}
+              />
+          );
+        });
+
+        it("Inserts commas for preset value", () => {
+          expect(field.find("[data-test='currency-input']").props().value).toEqual(
+            "322,222,222"
+          );
+        });
       });
     });
   });

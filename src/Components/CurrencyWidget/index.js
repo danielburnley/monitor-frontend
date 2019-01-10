@@ -3,7 +3,7 @@ import "./style.css"
 
 export default class CurrencyWidget extends React.Component {
   removeInvalidCharacters = (value) =>
-    value.replace(/[^0-9.]/g, "");
+    value.replace(/[^0-9.-]/g, "");
 
   clampValue = (value) => {
     if (this.props.schema && Number(value) > Number(this.props.schema.currencyMaximum)) {
