@@ -364,7 +364,7 @@ describe("<MilestoneField>", () => {
         expect(milestone.varianceAgainstBaselinedata()).toEqual("1")
       });
 
-      it("calculates varaince from last return", () => {
+      it("calculates variance from last return", () => {
         milestone.simulateCurrentReturn("05/07/2019");
         expect(milestone.varianceAgainstLastReturndata()).toEqual("1")
       });
