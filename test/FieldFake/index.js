@@ -42,7 +42,7 @@ export default class FieldFake extends React.Component {
             key={this.props["data-test"]}
             id={`root_${this.props["data-test"]}`}
             onChange={(e) => this.onChangeWidget(null, e.target.value)}
-            value={this.state.formData}
+            value={this.state.formData || ""}
           />
         </div>
       )

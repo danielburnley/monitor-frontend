@@ -929,6 +929,21 @@ describe("<ParentForm>", () => {
                 properties: {
                   name: {
                     type: "string"
+                  },
+                  riskAnyChange: {
+                    type: 'string',
+                    title: 'Any Change?',
+                    enum: ["Yes", "No"]
+                  },
+                  riskCurrentReturnLikelihood: {
+                    type: "string",
+                    title: "Current Return Liklihood",
+                    enum: ["1", "2", "3", "4", "5"]
+                  },
+                  riskMet: {
+                    type: "string",
+                    title: "Risk Met?",
+                    enum: ["Yes", "No"]
                   }
                 }
               },
