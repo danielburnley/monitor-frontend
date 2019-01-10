@@ -79,11 +79,11 @@ describe("<MilestoneField>", () => {
 
       it("Updates the values of the fields and calculates variances", () => {
         milestone.simulateStatusAgainstLastReturn("Delayed - moderate impact");
-        milestone.simulateCurrentReturn("04/07/2018");
         milestone.simulateReasonForVariance(
           "A variance has occured, causing variance"
-        );
+          );
         milestone.simulateMilestonePercentCompleted("65");
+        milestone.simulateCurrentReturn("04/07/2018");
 
         expect(onChangeSpy).toHaveBeenCalledWith({
           description: "Here is a stone that marks a mile.",
@@ -302,7 +302,7 @@ describe("<MilestoneField>", () => {
         description: "Here is a stone that marks a mile.",
         milestoneBaselineCompletion: "03/31/2018",
         milestoneSummaryOfCriticalPath: "Contract begins!!!",
-        milestoneLastReturnDate: "04/31/2019"
+        milestoneLastReturnDate: "04/30/2019"
       };
       let schemaTitle =  "Milestone Fields";
       milestone = new MilestoneComponent(
@@ -357,6 +357,16 @@ describe("<MilestoneField>", () => {
 
       it("does display the last return variance", () => {
         expect(milestone.lastReturnVariance()).toEqual(1)
+      });
+
+      it("calculates varaince from basleine", () => {
+        milestone.simulateCurrentReturn("04/07/2018");
+        expect(milestone.varianceAgainstBaselinedata()).toEqual("1")
+      });
+
+      it("calculates varaince from last return", () => {
+        milestone.simulateCurrentReturn("05/07/2019");
+        expect(milestone.varianceAgainstLastReturndata()).toEqual("1")
       });
     });
 

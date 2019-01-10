@@ -24,17 +24,21 @@ export default class MilestoneField extends React.Component {
   }
 
   onFieldChange = (name, newValue) => {
-    this.setState({ [name]: newValue });
-    this.setState(
-      {
-        [name]: newValue,
-        milestoneVarianceAgainstBaseline: this.calculateVarianceAgainstBaseline(),
-        milestoneVarianceAgainstLastReturn: this.calculateVarianceAgainstLastReturn()
-      },
-      () => {
-        this.props.onChange(this.state);
-      }
-    );
+    this.setState({ [name]: newValue }, () => {
+      this.props.onChange(this.state);
+    });
+  };
+
+  onCurrentReturnChange = (newValue) => {
+    let baselineVariance = this.calculateVarianceWeeks(this.state.milestoneBaselineCompletion, newValue);
+    let lastReturnVariance = this.calculateVarianceWeeks(this.state.milestoneLastReturnDate, newValue);
+    this.setState({
+      currentReturn: newValue,
+      milestoneVarianceAgainstLastReturn: lastReturnVariance,
+      milestoneVarianceAgainstBaseline: baselineVariance
+    }, () => {
+      this.props.onChange(this.state);
+    });
   };
 
   renderMilestoneDescription() {
@@ -47,20 +51,6 @@ export default class MilestoneField extends React.Component {
       </div>
     );
   }
-
-  calculateVarianceAgainstLastReturn = () => {
-    return this.calculateVarianceWeeks(
-      this.state.milestoneLastReturnDate,
-      this.state.currentReturn
-    );
-  };
-
-  calculateVarianceAgainstBaseline = () => {
-    return this.calculateVarianceWeeks(
-      this.state.milestoneBaselineCompletion,
-      this.state.currentReturn
-    );
-  };
 
   calculateVarianceWeeks = (originalDate, newDate) => {
     if (!originalDate || originalDate === "") return null;
@@ -139,10 +129,10 @@ export default class MilestoneField extends React.Component {
         <this.props.registry.widgets.britishDate
           className="form-control"
           onChange={e => {
-            this.onFieldChange("currentReturn", e);
+            this.onCurrentReturnChange(e);
           }}
           data-test="milestone-current-return"
-          value={this.state.currentReturn || ""}
+          value={this.state.currentReturn}
           id="currentReturn"
         />
       </div>
