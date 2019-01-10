@@ -140,7 +140,7 @@ export default class VarianceField extends React.Component {
             onChange={e =>
               this.onFieldChange("onCompletedReference", e.target.value)
             }
-            value={this.state.onCompletedReference}
+            value={this.state.onCompletedReference || ""}
           />
         </div>
       );
@@ -159,7 +159,7 @@ export default class VarianceField extends React.Component {
             onChange={e =>
               this.onFieldChange("onCompletedNameOfContractor", e.target.value)
             }
-            value={this.state.onCompletedNameOfContractor}
+            value={this.state.onCompletedNameOfContractor || ""}
           />
         </div>
       );
@@ -197,16 +197,24 @@ export default class VarianceField extends React.Component {
 
   renderBaseline = () => (
     <div className="col-md-4 form-group">
-      <label className="static-label" data-test="target-date-title">{this.props.schema.properties.baseline.title}</label>
-      <p className="form-control-static" data-test="target-date">
-        {this.state.baseline}
-      </p>
+      <label className="static-label" data-test="target-date-title">
+        {this.props.schema.properties.baseline.title}
+      </label>
+      <this.props.registry.widgets.britishDate
+        className="form-control"
+        uiSchema={{"ui:disabled": true}}
+        onChange={e => this.onFieldChange("targetDate", e.target.value)}
+        data-test="target-date"
+        value={this.state.baseline}
+      />
     </div>
   );
 
   renderStatus = () => (
     <div className="col-md-3 form-group">
-      <label htmlFor="status" data-test="variance-status-title">{this.props.schema.properties.status.title}*</label>
+      <label htmlFor="status" data-test="variance-status-title">
+        {this.props.schema.properties.status.title}*
+      </label>
       <select
         data-test="variance-status"
         id="status"

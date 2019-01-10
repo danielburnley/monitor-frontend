@@ -82,7 +82,10 @@ describe("VarianceField", () => {
       });
 
       it("Renders the target date", () => {
-        let targetDate = field.find("[data-test='target-date']").text();
+        let targetDate = field
+          .find("[data-test='target-date'] [data-test='britishDate-fake']")
+          .props()
+          .value;
         expect(targetDate).toEqual("2019-01-01");
       });
 
@@ -114,7 +117,7 @@ describe("VarianceField", () => {
       });
 
       it("Does not show the updated value field", () => {
-        let updatedValue = field.find("[data-test='britishDate-fake']");
+        let updatedValue = field.find("[data-test='current-date'] [data-test='britishDate-fake']");
         expect(updatedValue.length).toEqual(0);
       });
 
@@ -135,7 +138,7 @@ describe("VarianceField", () => {
         });
 
         it("Shows the updated value field", () => {
-          let updatedValue = field.find("[data-test='britishDate-fake']");
+          let updatedValue = field.find("[data-test='current-date'] [data-test='britishDate-fake']");
           let title = field.find("[data-test='current-date-title']").text();
 
           expect(updatedValue.length).toEqual(1);
@@ -145,7 +148,7 @@ describe("VarianceField", () => {
         it("Shows the reason for variance field", () => {
           let reason = field.find("[data-test='variance-reason']");
           let title = field.find("[data-test='variance-reason-title']").text();
-          
+
           expect(reason.length).toEqual(1);
           expect(title).toEqual("Reason*")
         });
@@ -160,7 +163,7 @@ describe("VarianceField", () => {
         it("Shows the completed date field", () => {
           let completedDate = field.find("[data-test='variance-completed']");
           let title = field.find("[data-test='variance-completed-title']").text();
-          
+
           expect(completedDate.length).toEqual(1);
           expect(title).toEqual("Completed Date*")
         });
@@ -229,7 +232,7 @@ describe("VarianceField", () => {
       });
 
       it("Renders the target date", () => {
-        let targetDate = field.find("[data-test='target-date']").text();
+        let targetDate = field.find("[data-test='target-date'] [data-test='britishDate-fake']").props().value;
         let title = field.find("[data-test='target-date-title']").text();
         expect(title).toEqual("Unique Title Two");
         expect(targetDate).toEqual("2020-12-31");
@@ -260,7 +263,7 @@ describe("VarianceField", () => {
       });
 
       it("Does not show the updated value field", () => {
-        let updatedValue = field.find("[data-test='britishDate-fake']");
+        let updatedValue = field.find("[data-test='current-date'] [data-test='britishDate-fake']");
         expect(updatedValue.length).toEqual(0);
       });
 
@@ -276,7 +279,7 @@ describe("VarianceField", () => {
         });
 
         it("Shows the updated value field", () => {
-          let updatedValue = field.find("[data-test='britishDate-fake']");
+          let updatedValue = field.find("[data-test='current-date'] [data-test='britishDate-fake']");
           let title = field.find("[data-test='current-date-title']").text();
           expect(title).toEqual("Current amount of Cats*");
           expect(updatedValue.length).toEqual(1);
@@ -531,7 +534,7 @@ describe("VarianceField", () => {
 
         it("Fills in the updated value", () => {
           let updatedValue = field
-            .find("[data-test='britishDate-fake']")
+            .find("[data-test='current-date'] [data-test='britishDate-fake']")
             .props().value;
           expect(updatedValue).toEqual("02/25/2020");
         });
@@ -633,7 +636,7 @@ describe("VarianceField", () => {
 
         it("Fills in the updated value", () => {
           let updatedValue = field
-            .find("[data-test='britishDate-fake']")
+            .find("[data-test='current-date'] [data-test='britishDate-fake']")
             .props().value;
           expect(updatedValue).toEqual("02/25/2020");
         });
@@ -990,7 +993,7 @@ describe("VarianceField", () => {
         describe("Example one", () => {
           it("Calls the onChange prop with the updated form data", () => {
             field
-              .find("[data-test='britishDate-fake']")
+              .find("[data-test='current-date'] [data-test='britishDate-fake']")
               .simulate("change", { target: { value: "2040-01-01" } });
 
             expect(onChangeSpy).toHaveBeenCalledWith({
@@ -1007,7 +1010,7 @@ describe("VarianceField", () => {
         describe("Example two", () => {
           it("Calls the onChange prop with the updated form data", () => {
             field
-              .find("[data-test='britishDate-fake']")
+              .find("[data-test='current-date'] [data-test='britishDate-fake']")
               .simulate("change", { target: { value: "2020-05-01" } });
 
             expect(onChangeSpy).toHaveBeenCalledWith({

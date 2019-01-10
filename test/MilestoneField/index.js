@@ -38,8 +38,9 @@ export default class MilestoneComponent {
 
   milestoneBaselineCompletion = () =>
     this.milestone
-      .find("[data-test='milestone-milestoneBaselineCompletion']")
-      .text();
+      .find("[data-test='milestone-baseline-completion'] [data-test='britishDate-fake']")
+      .props()
+      .value
 
   summary = () => this.milestone.find("[data-test='milestone-summary']").text();
 
