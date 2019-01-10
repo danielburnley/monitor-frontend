@@ -26,9 +26,9 @@ export function add(value1, value2) {
   return (parsed1 + parsed2).toString();
 }
 
-export function subtract(newValue, initialValue) {
-  let value1 = parseMoney(initialValue);
-  let value2 = parseMoney(newValue);
+export function subtract(value1, value2) {
+  value1 = parseMoney(value1);
+  value2 = parseMoney(value2);
   return (value1 - value2).toString();
 }
 

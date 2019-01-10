@@ -20,11 +20,11 @@ import {
 
 describe("subtract()", () => {
   it("Example 1", () => {
-    expect(subtract("3", "5")).toEqual("2");
+    expect(subtract("5", "3")).toEqual("2");
   });
 
   it("Example 2", () => {
-    expect(subtract("£789.34", "£127.26")).toEqual("-662.08");
+    expect(subtract("£127.26", "£789.34")).toEqual("-662.08");
   });
 });
 
