@@ -278,17 +278,17 @@ describe("periodTotal()", () => {
       let formData = { periods: [{ Q1: "12", Q2: "8" }] };
       periodTotal(formData, ["total"], "periods", "Q1", "Q2");
       expect(formData).toEqual({
-        periods: [{ Q1: "12", Q2: "8", total: "20" }]
+        periods: [{ Q1: "12", Q2: "8", total: "20.00" }]
       });
     });
 
     it("Example 2", () => {
-      let formData = { per: [{ Q3: "12", Q4: "8" }, { Q3: "32", Q4: "16" }] };
+      let formData = { per: [{ Q3: "12", Q4: "8.111" }, { Q3: "32.333", Q4: "16" }] };
       periodTotal(formData, ["value"], "per", "Q3", "Q4");
       expect(formData).toEqual({
         per: [
-          { Q3: "12", Q4: "8", value: "20" },
-          { Q3: "32", Q4: "16", value: "48" }
+          { Q3: "12", Q4: "8.111", value: "20.11" },
+          { Q3: "32.333", Q4: "16", value: "48.33" }
         ]
       });
     });

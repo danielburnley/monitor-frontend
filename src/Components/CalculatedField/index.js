@@ -35,8 +35,8 @@ export function subtract(value1, value2) {
 export function periodTotal(object, totalPath, property, ...keys) {
   if (!object[property]) return;
   return object[property].forEach((value, index) => {
-    setCreate(object[property][index], totalPath, "" + sum(value, keys));
-    return sum(value, keys);
+    setCreate(object[property][index], totalPath, sum(value, keys).toFixed(2));
+    return sum(value, keys).toFixed(2);
   });
 }
 
