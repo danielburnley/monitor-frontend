@@ -3,7 +3,7 @@ import React from "react";
 
 export function parseMoney(value) {
   if (value) {
-    let cleanedString = value.replace(/[^0-9.]/g, "");
+    let cleanedString = value.replace(/[^0-9.-]/g, "");
     return Number(cleanedString);
   }
   return 0;
