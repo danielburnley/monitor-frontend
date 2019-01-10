@@ -70,9 +70,11 @@ export default class BritishDate extends React.Component {
   }
 
   isInputDisabled = () => {
-    if (this.props.uiSchema) {
-      return this.props.uiSchema["ui:disabled"];
+    if ((this.props.uiSchema && this.props.uiSchema["ui:disabled"])
+        || (this.props.schema && this.props.schema.readonly)) {
+      return true;
     }
+
     return false;
   }
 

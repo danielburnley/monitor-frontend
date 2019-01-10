@@ -182,11 +182,12 @@ describe("<BritishDate>", () => {
   });
 
   describe("Readonly", () => {
-    it("Can be made readonly", async () => {
-      let wrapper = mount(<BritishDate
-        value="2007/06/29"
-        onChange={onChangeSpy}
-        uiSchema={{ "ui:disabled": true }}
+    describe("Can be made readonly", async () => {
+      it("When disabled with ui:disabled uiSchema property", async () => {
+        let wrapper = mount(<BritishDate
+          value="2007/06/29"
+          onChange={onChangeSpy}
+          uiSchema={{ "ui:disabled": true }}
         />);
 
         await wrapper.update();
@@ -195,11 +196,50 @@ describe("<BritishDate>", () => {
         expect(wrapper.find("[data-test='date-year']").props().readOnly).toEqual(true);
       });
 
-    it("Doesn't disable input when not readonly", async () => {
-      let wrapper = mount(<BritishDate
-        value="2007/06/29"
-        onChange={onChangeSpy}
-        uiSchema={{}}
+      describe("When disabled with .readonly schema property", () => {
+        it("With an empty uiSchema", async () => {
+          let wrapper = mount(<BritishDate
+              value="2007/06/29"
+              onChange={onChangeSpy}
+              uiSchema={{}}
+              schema={
+                {
+                  readonly: true
+                }
+              }
+            />);
+
+            await wrapper.update();
+            expect(wrapper.find("[data-test='date-day']").props().readOnly).toEqual(true);
+            expect(wrapper.find("[data-test='date-month']").props().readOnly).toEqual(true);
+            expect(wrapper.find("[data-test='date-year']").props().readOnly).toEqual(true);
+          });
+
+          it("With no uiSchema", async () => {
+            let wrapper = mount(<BritishDate
+              value="2007/06/29"
+              onChange={onChangeSpy}
+              schema={
+                {
+                  readonly: true
+                }
+              }
+              />
+            );
+
+            await wrapper.update();
+            expect(wrapper.find("[data-test='date-day']").props().readOnly).toEqual(true);
+            expect(wrapper.find("[data-test='date-month']").props().readOnly).toEqual(true);
+            expect(wrapper.find("[data-test='date-year']").props().readOnly).toEqual(true);
+          });
+      });
+
+
+      it("Doesn't disable input when not readonly", async () => {
+        let wrapper = mount(<BritishDate
+          value="2007/06/29"
+          onChange={onChangeSpy}
+          uiSchema={{}}
         />);
 
         await wrapper.update();
@@ -207,5 +247,6 @@ describe("<BritishDate>", () => {
         expect(wrapper.find("[data-test='date-month']").props().readOnly).toBeFalsy();
         expect(wrapper.find("[data-test='date-year']").props().readOnly).toBeFalsy();
       });
+    });
   });
 });
