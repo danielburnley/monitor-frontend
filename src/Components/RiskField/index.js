@@ -8,18 +8,17 @@ export default class RiskField extends React.Component {
       riskBaselineRisk: this.props.formData.riskBaselineRisk,
       riskBaselineImpact: this.props.formData.riskBaselineImpact,
       riskBaselineLikelihood: this.props.formData.riskBaselineLikelihood,
-      riskBaselineMitigationsInPlace: this.props.formData
-        .riskBaselineMitigationsInPlace,
-      riskCurrentReturnLikelihood:
-        this.props.formData.riskCurrentReturnLikelihood || "1",
-      riskAnyChange: this.props.formData.riskAnyChange || "No",
-      riskCurrentReturnMitigationsInPlace: this.props.formData
-        .riskCurrentReturnMitigationsInPlace
+      riskBaselineMitigationsInPlace: this.props.formData.riskBaselineMitigationsInPlace,
+      riskCurrentReturnLikelihood: this.props.formData.riskCurrentReturnLikelihood || "1",
+      riskAnyChange: this.props.formData.riskAnyChange,
+      riskCurrentReturnMitigationsInPlace: this.props.formData.riskCurrentReturnMitigationsInPlace,
+      riskMet: this.props.formData.riskMet,
+      riskCompletionDate: this.props.formData.riskCompletionDate
     };
   }
 
   onFieldChange = (name, e) => {
-    this.setState({ [name]: e.target.value }, () => {
+    this.setState({ [name]: e }, () => {
       this.props.onChange(this.state);
     });
   };
@@ -61,7 +60,7 @@ export default class RiskField extends React.Component {
   );
 
   renderRiskMitigationInPlace = () => (
-    <div className="col-md-6">
+    <div className="col-md-6">    
       <h5>
         <b data-test="risk-mitigation-in-place-title">
           {this.props.schema.properties.riskBaselineMitigationsInPlace &&
@@ -74,74 +73,86 @@ export default class RiskField extends React.Component {
     </div>
   );
 
-  renderCurrentReturnLikelihood = () => (
-    <div className="col-md-3">
-      <div className="row">
-        <div className="col-md-12">
-          <label
-            htmlFor="currentReturnLikelihood"
-            data-test="risk-current-likelihood-title"
-          >
-            {this.props.schema.properties.riskCurrentReturnLikelihood &&
-              this.props.schema.properties.riskCurrentReturnLikelihood
-                .title}{" "}
-          </label>
-        </div>
-        <div row="row">
+  renderCurrentReturnLikelihood = () => {
+    if(this.state.riskMet !== "No") return null;
+    return (<div className="col-md-2">
+        <this.props.registry.fields.SchemaField
+          id="currentReturnLikelihood"
+          schema = {this.props.schema.properties.riskCurrentReturnLikelihood}
+          uiSchema = {{}}
+          data-test="current-return-likelihood"
+          formData = {this.state.riskCurrentReturnLikelihood}
+          onChange={e =>
+            this.onFieldChange("riskCurrentReturnLikelihood", e)}
+        />
+    </div>
+    )
+  };
+
+
+  renderChangeInRisk = () => {
+    if(this.state.riskMet !== "No") return null;
+    return (<div className="col-md-2">
+      <this.props.registry.fields.SchemaField
+          id="riskMet"
+          schema = {this.props.schema.properties.riskAnyChange}
+          uiSchema = {{"ui:widget": "radio"}}
+          formData = {this.state.riskAnyChange}
+          data-test = "change-in-risk"
+          onChange = {e => this.onFieldChange("riskAnyChange", e)}
+        />
+      </div>
+    )
+  };
+
+  renderRiskMet = () => {
+    return (
+      <div className="col-md-2">
+        <this.props.registry.fields.SchemaField
+          id="riskMet"
+          schema = {this.props.schema.properties.riskMet}
+          uiSchema = {{"ui:widget": "radio"}}
+          data-test="risk-met"
+          formData = {this.state.riskMet}
+          onChange = {e => this.onFieldChange("riskMet", e)}
+        />
+      </div>
+    );
+  }
+
+  renderCompletionDate = () => {
+    if(this.state.riskMet !== "Yes") return null;
+    return (
+      <div className="col-md-6">
+        <div className="row">
           <div className="col-md-12">
-            <select
-              onChange={e =>
-                this.onFieldChange("riskCurrentReturnLikelihood", e)
-              }
-              data-test="risk-current-likelihood"
-              value={this.state.riskCurrentReturnLikelihood}
-              className="form-control"
-              id="currentReturnLikelihood"
+            <label
+              htmlFor="completionDate"
+              data-test="risk-completed-date-title"
             >
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-            </select>
+              {this.props.schema.properties.riskCompletionDate &&
+                this.props.schema.properties.riskCompletionDate.title}{" "}
+            </label>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-md-12">
+            <this.props.registry.widgets.britishDate
+              onChange={e => this.onFieldChange("riskCompletionDate", e)}
+              data-test="risk-completed-date"
+              value={this.state.riskCompletionDate}
+              className="form-control"
+              id="completionDate"
+            />
           </div>
         </div>
       </div>
-    </div>
-  );
-
-  renderChangeInRisk = () => (
-    <div className="col-md-3">
-      <div className="row">
-        <div className="col-md-12">
-          <label
-            htmlFor="anyChangeInRisk"
-            data-test="risk-change-in-risk-title"
-          >
-            {this.props.schema.properties.riskAnyChange &&
-              this.props.schema.properties.riskAnyChange.title}{" "}
-          </label>
-        </div>
-      </div>
-      <div className="row">
-        <div className="col-md-12">
-          <select
-            onChange={e => this.onFieldChange("riskAnyChange", e)}
-            data-test="risk-change-in-risk"
-            value={this.state.riskAnyChange}
-            className="form-control"
-            id="anyChangeInRisk"
-          >
-            <option>Yes</option>
-            <option>No</option>
-          </select>
-        </div>
-      </div>
-    </div>
-  );
+   
+    )
+  }
 
   renderCurrentMitigationsInPlace = () => {
-    if (this.state.riskAnyChange !== "Yes") return null;
+    if ((this.state.riskAnyChange !== "Yes") || (this.state.riskMet !== "No")) return null;
     return (
       <div className="col-md-6">
         <label
@@ -156,7 +167,7 @@ export default class RiskField extends React.Component {
           className="form-control"
           id="currentReturnMitigationInPlace"
           onChange={e =>
-            this.onFieldChange("riskCurrentReturnMitigationsInPlace", e)
+            this.onFieldChange("riskCurrentReturnMitigationsInPlace", e.target.value)
           }
           data-test="risk-current-mitigations-in-place"
           value={this.state.riskCurrentReturnMitigationsInPlace}
@@ -180,8 +191,10 @@ export default class RiskField extends React.Component {
       </div>
       <div className="row">&nbsp;</div>
       <div className="row">
+        {this.renderRiskMet()}
         {this.renderCurrentReturnLikelihood()}
         {this.renderChangeInRisk()}
+        {this.renderCompletionDate()}
         {this.renderCurrentMitigationsInPlace()}
       </div>
     </div>
