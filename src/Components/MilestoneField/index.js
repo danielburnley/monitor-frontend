@@ -72,14 +72,18 @@ export default class MilestoneField extends React.Component {
     return (
       <div>
         <label htmlFor="milestoneBaselineCompletion">
-          Baseline Completion Date
+          Baseline Target Date
         </label>
-        <p
-          data-test="milestone-milestoneBaselineCompletion"
+        <this.props.registry.widgets.britishDate
+          className="form-control"
+          onChange={e => {
+            this.onCurrentReturnChange(e);
+          }}
+          uiSchema={{"ui:disabled": true}}
+          data-test="milestone-baseline-completion"
+          value={this.state.milestoneBaselineCompletion}
           id="milestoneBaselineCompletion"
-        >
-          {this.state.milestoneBaselineCompletion}
-        </p>
+        />
       </div>
     );
   }
