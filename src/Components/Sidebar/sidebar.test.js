@@ -286,4 +286,138 @@ describe("<Sidebar>", () => {
       expect(itemClickSpy).toHaveBeenCalledWith("aSubSectionAboutToys4U.bark", 1);
     })
   });
+
+  describe("Given an addable array", () => {
+    let onChangeSpy
+    describe("As a Home England or Superuser", () => {
+      beforeEach(() => {
+        let onItemClickSpy = jest.fn();      
+        onChangeSpy = jest.fn();
+        sidebar = mount(
+          <Sidebar
+            userRole="Homes England"
+            items={{
+              0: {},
+              1: {},
+              2: {}
+            }}
+            addable = {true}
+            formData = {[
+              {data1: "somedate"},
+              {more: "moredata"},
+              {andanother: "lotsofdata"}
+            ]}
+            onItemClick = {onItemClickSpy}
+            onChange = {onChangeSpy}
+          />
+        );
+      });
+  
+      it("displays an add button", () => {
+        expect(sidebar.find('[data-test="add-button"]').length).toEqual(1)
+      });
+  
+      it("clicking the add button calls on onchange prop with an extra array item", () => {
+        sidebar.find('[data-test="add-button"]').simulate('click')
+        expect(onChangeSpy).toHaveBeenCalledWith([
+          {data1: "somedate"},
+          {more: "moredata"},
+          {andanother: "lotsofdata"},
+          {}
+        ])
+      });
+  
+      it("displays a remove button", () => {
+        expect(sidebar.find('[data-test="remove-button"]').length).toEqual(1)
+      });
+  
+      describe("Accpeting the confirm message", () => {
+        beforeEach(() => {
+          global.confirm = jest.fn(message => true)
+        });
+  
+        it("clicking the remove button calls on onchange prop with an item removed", () => {
+          sidebar.find('[data-test="remove-button"]').simulate('click')
+          expect(onChangeSpy).toHaveBeenCalledWith([{data1: "somedate"},{more: "moredata"}])
+        });
+      });
+  
+      describe("Declining the confirm message", () => {
+        beforeEach(() => {
+          global.confirm = jest.fn(message => false)
+        });
+  
+        it("clicking the remove button calls on onchange prop with an item removed", () => {
+          sidebar.find('[data-test="remove-button"]').simulate('click')
+          expect(onChangeSpy).not.toHaveBeenCalled()
+        });
+      });
+    });
+
+    describe("As other users", () => {
+      beforeEach(() => {
+        let onItemClickSpy = jest.fn();      
+        onChangeSpy = jest.fn();
+        sidebar = mount(
+          <Sidebar
+            userRole="somethingelse"
+            items={{
+              0: {},
+              1: {},
+              2: {}
+            }}
+            addable = {true}
+            formData = {[
+              {data1: "somedate"},
+              {more: "moredata"},
+              {andanother: "lotsofdata"}
+            ]}
+            onItemClick = {onItemClickSpy}
+            onChange = {onChangeSpy}
+          />
+        );
+      });
+
+    it("doesn't display an add button", () => {
+      expect(sidebar.find('[data-test="add-button"]').length).toEqual(0)
+    });
+
+    it("doesn't display a remove button", () => {
+      expect(sidebar.find('[data-test="remove-button"]').length).toEqual(0)
+    });
+    })
+  });
+
+  describe("Given something that is non addable", () => {
+    let onChangeSpy
+    beforeEach(() => {
+      let onItemClickSpy = jest.fn();      
+      onChangeSpy = jest.fn();
+      sidebar = mount(
+        <Sidebar
+          items={{
+            0: {},
+            1: {},
+            2: {}
+          }}
+          addable = {false}
+          formData = {[
+            {data1: "somedate"},
+            {more: "moredata"},
+            {andanother: "lotsofdata"}
+          ]}
+          onItemClick = {onItemClickSpy}
+          onChange = {onChangeSpy}
+        />
+      );
+    });
+
+    it("doesn't display an add button", () => {
+      expect(sidebar.find('[data-test="add-button"]').length).toEqual(0)
+    });
+
+    it("doesn't display a remove button", () => {
+      expect(sidebar.find('[data-test="remove-button"]').length).toEqual(0)
+    });
+  });
 });

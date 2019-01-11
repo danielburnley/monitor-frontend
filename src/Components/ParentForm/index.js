@@ -99,9 +99,12 @@ export default class ParentForm extends React.Component {
       this.props.schema.properties[this.state.selected],
       this.state.formData[this.state.selected]
     ).items;
-
     return (
       <Sidebar
+        userRole = {this.state.userRole}
+        addable={this.selectedSchema().addable}
+        formData={this.state.formData[this.state.selected]}
+        onChange={data => this.subformOnChange(data)}
         items={items}
         selectedFormItemIndex={this.state.selectedFormItemIndex}
         selectedFormSection={this.state.selectedFormSection}

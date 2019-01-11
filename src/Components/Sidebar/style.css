@@ -21,3 +21,9 @@
   color: #005ea5;
   font-weight: bold;
 }
+
+.sidebar-button {
+  margin: 5px;
+  background-color: transparent;
+  width: 30%;
+}
