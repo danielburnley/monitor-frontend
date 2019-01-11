@@ -46,7 +46,8 @@ describe("<HorizontalFields>", () => {
           fields
             .find("FieldFake")
             .at(0)
-            .props().registry
+            .props()
+            .registry
         ).toEqual({
           fields: { SchemaField: FieldFake, extraField: FieldFake }
         });
@@ -57,7 +58,8 @@ describe("<HorizontalFields>", () => {
           fields
             .find("FieldFake")
             .at(0)
-            .props().uiSchema
+            .props()
+            .uiSchema
         ).toEqual({ testing: "1234" });
       });
 
@@ -116,7 +118,8 @@ describe("<HorizontalFields>", () => {
           fields
             .find("FieldFake")
             .at(0)
-            .props().registry
+            .props()
+            .registry
         ).toEqual({
           fields: { SchemaField: FieldFake, extraField: FieldFake }
         });
@@ -127,7 +130,8 @@ describe("<HorizontalFields>", () => {
           fields
             .find("FieldFake")
             .at(0)
-            .props().uiSchema
+            .props()
+            .uiSchema
         ).toEqual({ testing: "1234" });
       });
 
@@ -283,7 +287,7 @@ describe("<HorizontalFields>", () => {
       expect(fields.find("#root_moo-input").props().value).toEqual("Cow noise");
     });
 
-    it("Calls the onChange method passed in with the form data", () => {
+    it("Calls the onChange method passed in with the form data", async () => {
       fields
         .find("#root_quack-input")
         .simulate("change", { target: { value: "New Quack" } });
@@ -291,6 +295,13 @@ describe("<HorizontalFields>", () => {
       expect(onChangeSpy).toHaveBeenLastCalledWith({
         quack: "New Quack",
         moo: "Cow noise"
+      });
+
+      await fields.setProps({
+          formData: {
+          quack: "New Quack",
+          moo: "New Moo"
+        }
       });
 
       fields
