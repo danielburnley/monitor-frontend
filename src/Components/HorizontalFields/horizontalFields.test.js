@@ -6,6 +6,35 @@ import { mount } from "enzyme";
 describe("<HorizontalFields>", () => {
   let schema, fields, formData, onChangeSpy, registrySpy, uiSchema;
 
+  describe("Given empty data", () => {
+    beforeEach(() => {
+      schema = {properties: {input: { type: "string" }}};
+      uiSchema = undefined;
+      formData = undefined;
+      onChangeSpy = jest.fn();
+      fields = mount(
+        <HorizontalFields
+          registry={registrySpy}
+          schema={schema}
+          uiSchema={uiSchema}
+          formData={formData}
+          registry={{
+            fields: { SchemaField: FieldFake, extraField: FieldFake }
+          }}
+          onChange={onChangeSpy}
+        />
+      );
+    });
+
+    it("Can call onchange", () => {
+      fields
+        .find("input")
+        .simulate("change", { target: { value: "New Meow" } });
+
+      expect(onChangeSpy).toHaveBeenCalledWith({ input: "New Meow" });
+    });
+  });
+
   describe("Given a SchemaField", () => {
     describe("Example 1", () => {
       beforeEach(() => {
