@@ -2,43 +2,33 @@ import React from "react";
 import "./style.css";
 
 export default class HorizontalFields extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      data: this.props.formData || {}
-    };
-  }
-
   onFieldChange = (name, value) => {
-    let newData = this.state.data;
+    let newData = JSON.parse(JSON.stringify(this.props.formData));
     newData[name] = value;
 
-    this.setState({ data: newData });
-    
     this.props.onChange(newData);
   };
 
-  renderItem = (k, v) => {
+  renderItem = (key, value) => {
     return (
       <this.props.registry.fields.SchemaField
-        id={k}
-        schema={v}
-        uiSchema={this.props.uiSchema && this.props.uiSchema[k]}
-        data-test={`${k}-input`}
-        formData={this.state.data[k]}
+        id={key}
+        schema={value}
+        uiSchema={this.props.uiSchema && this.props.uiSchema[key]}
+        data-test={`${key}-input`}
+        formData={this.props.formData && this.props.formData[key]}
         registry={this.props.registry}
-        onChange={e => this.onFieldChange(k, e)}
+        onChange={e => this.onFieldChange(key, e)}
       />
     );
   };
 
   renderItems = () =>
-    Object.entries(this.props.schema.properties).map(([k, v]) => {
-      if (!v.hidden) {
+    Object.entries(this.props.schema.properties).map(([key, value]) => {
+      if (!value.hidden) {
         return (
-          <div key={k} data-test="form-field" className="horizontal-item">
-            {this.renderItem(k, v)}
+          <div key={key} data-test="form-field" className="horizontal-item">
+            {this.renderItem(key, value)}
           </div>
         );
       }
