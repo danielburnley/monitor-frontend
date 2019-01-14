@@ -291,7 +291,14 @@ describe("<Sidebar>", () => {
     let onChangeSpy
     describe("As a Home England or Superuser", () => {
       beforeEach(() => {
-        let onItemClickSpy = jest.fn();      
+        let onItemClickSpy = jest.fn();     
+        let formData = {
+          "mainSection": [
+            {data1: "somedate"},
+            {more: "moredata"},
+            {andanother: "lotsofdata"}
+          ]
+        } 
         onChangeSpy = jest.fn();
         sidebar = mount(
           <Sidebar
@@ -302,11 +309,8 @@ describe("<Sidebar>", () => {
               2: {}
             }}
             addable = {true}
-            formData = {[
-              {data1: "somedate"},
-              {more: "moredata"},
-              {andanother: "lotsofdata"}
-            ]}
+            formData = {formData}
+            section={'mainSection'}
             onItemClick = {onItemClickSpy}
             onChange = {onChangeSpy}
           />
@@ -319,12 +323,12 @@ describe("<Sidebar>", () => {
   
       it("clicking the add button calls on onchange prop with an extra array item", () => {
         sidebar.find('[data-test="add-button"]').simulate('click')
-        expect(onChangeSpy).toHaveBeenCalledWith([
+        expect(onChangeSpy).toHaveBeenCalledWith({"mainSection": [
           {data1: "somedate"},
           {more: "moredata"},
           {andanother: "lotsofdata"},
           {}
-        ])
+        ]})
       });
   
       it("displays a remove button", () => {
@@ -338,7 +342,7 @@ describe("<Sidebar>", () => {
   
         it("clicking the remove button calls on onchange prop with an item removed", () => {
           sidebar.find('[data-test="remove-button"]').simulate('click')
-          expect(onChangeSpy).toHaveBeenCalledWith([{data1: "somedate"},{more: "moredata"}])
+          expect(onChangeSpy).toHaveBeenCalledWith({"mainSection":[{data1: "somedate"},{more: "moredata"}]})
         });
       });
   
@@ -352,6 +356,74 @@ describe("<Sidebar>", () => {
           expect(onChangeSpy).not.toHaveBeenCalled()
         });
       });
+
+      describe("Given a linked array", () => {
+        beforeEach(() => {
+          let formData = {
+            "mainSection": [
+              {data1: "somedate"},
+              {more: "moredata"},
+              {andanother: "lotsofdata"}
+            ],
+            "anotherSection": [
+              {},
+              {}
+            ]
+          }
+          sidebar = mount(
+            <Sidebar
+              userRole="Homes England"
+              items={{
+                0: {},
+                1: {},
+                2: {}
+              }}
+              addable = {true}
+              linkedArray={['anotherSection']}
+              formData = {formData}
+              section={'mainSection'}
+              onItemClick = {jest.fn()}
+              onChange = {onChangeSpy}
+            />
+          );
+          global.confirm = jest.fn(message => true)
+        });
+
+        it("calls the onchange with an extra section in both arrays when clicking add", () => {
+          sidebar.find('[data-test="add-button"]').simulate('click')
+          expect(onChangeSpy).toHaveBeenCalledWith(
+            {
+              "mainSection": [
+                {data1: "somedate"},
+                {more: "moredata"},
+                {andanother: "lotsofdata"},
+                {}
+              ],
+              "anotherSection": [
+                {},
+                {},
+                {}
+              ]
+            } 
+          )
+        });
+
+        it("calls the onchange with one less section extra section in both arrays when removing", () => {
+          sidebar.find('[data-test="remove-button"]').simulate('click')
+          expect(onChangeSpy).toHaveBeenCalledWith(
+            {
+              "mainSection": [
+                {data1: "somedate"},
+                {more: "moredata"}
+              ],
+              "anotherSection": [
+                {}
+              ]
+            } 
+          )
+        });
+      });
+
     });
 
     describe("As other users", () => {
@@ -367,25 +439,26 @@ describe("<Sidebar>", () => {
               2: {}
             }}
             addable = {true}
-            formData = {[
+            formData = {{"aSection": [
               {data1: "somedate"},
               {more: "moredata"},
               {andanother: "lotsofdata"}
-            ]}
+            ]}}
+            section = {"aSection"}
             onItemClick = {onItemClickSpy}
             onChange = {onChangeSpy}
           />
         );
       });
 
-    it("doesn't display an add button", () => {
-      expect(sidebar.find('[data-test="add-button"]').length).toEqual(0)
-    });
+      it("doesn't display an add button", () => {
+        expect(sidebar.find('[data-test="add-button"]').length).toEqual(0)
+      });
 
-    it("doesn't display a remove button", () => {
-      expect(sidebar.find('[data-test="remove-button"]').length).toEqual(0)
+      it("doesn't display a remove button", () => {
+        expect(sidebar.find('[data-test="remove-button"]').length).toEqual(0)
+      });
     });
-    })
   });
 
   describe("Given something that is non addable", () => {
@@ -401,11 +474,12 @@ describe("<Sidebar>", () => {
             2: {}
           }}
           addable = {false}
-          formData = {[
+          formData = {{"section": [
             {data1: "somedate"},
             {more: "moredata"},
             {andanother: "lotsofdata"}
-          ]}
+          ]}}
+          section={"section"}
           onItemClick = {onItemClickSpy}
           onChange = {onChangeSpy}
         />

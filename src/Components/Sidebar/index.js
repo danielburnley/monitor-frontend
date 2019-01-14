@@ -80,12 +80,17 @@ export default class Sidebar extends React.Component {
 
   addEntry = () => {
     let extraFormData = this.props.formData
-    extraFormData.push({})
+    extraFormData[this.props.section].push({})
+    if(this.props.linkedArray) {
+      this.props.linkedArray.forEach(section => {
+        extraFormData[section].push({})
+      });
+    }
     this.props.onChange(extraFormData)
   }
 
   confirmDeletion = () => {
-    let itemToDelete = this.props.items[this.props.formData.length - 1].title
+    let itemToDelete = this.props.items[this.props.formData[this.props.section].length - 1].title
     let confirmationText = `Are you sure you want to remove ${itemToDelete}. This will delete any data it contains.`
     return window.confirm(confirmationText)
   }
@@ -93,7 +98,12 @@ export default class Sidebar extends React.Component {
   removeEntry = () => {
     if (this.confirmDeletion()) {
       let smallerFormData = this.props.formData
-      smallerFormData.pop()
+      smallerFormData[this.props.section].pop()
+      if(this.props.linkedArray) {
+        this.props.linkedArray.forEach(section => {
+          smallerFormData[section].pop({})
+        });
+      }
       this.props.onChange(smallerFormData)
     }
   }
