@@ -922,6 +922,131 @@ describe("GenerateUISchema", () => {
   });
 
   describe("With Dependencies", () => {
+    describe("At multiple levels", () => {
+      it("Sets the UI schema for dependencies", () => {
+        let schema = {
+          type: "object",
+          properties: {
+            widerScheme: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  topRisks: {
+                    type: "object",
+                    properties: {
+                      landAssembly: {
+                        type: "object",
+                        properties: {
+                          riskHolder: {
+                            type: "object",
+                            properties: {
+                              liveRisk: {
+                                type: "string",
+                                radio: true
+                              }
+                            },
+                            dependencies: {
+                              liveRisk: {
+                                oneOf: [
+                                  {
+                                    properties: {
+                                      liveRisk: {
+                                        type: "string",
+                                        radio: true
+                                      },
+                                      description: {
+                                        type: "string",
+                                        extendedText: true,
+                                      }
+                                    }
+                                  },
+                                  {
+                                    properties: {
+                                      liveRisk: {
+                                        type: "string",
+                                        radio: true
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        },
+                        dependencies: {
+                          riskHolder: {
+                            oneOf: [
+                              {
+                                properties: {
+                                  riskHolder: {
+                                    type: "object",
+                                    properties: {
+                                      liveRisk: {
+                                        type: "string",
+                                        radio: true
+                                      },
+                                      description: {
+                                        type: "string",
+                                        extendedText: true,
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              {
+                                properties: {
+                                  riskHolder: {
+                                    type: "object",
+                                    properties: {
+                                      liveRisk: {
+                                        type: "string",
+                                        radio: true
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        };
+
+        let response = useCase.execute(schema);
+
+        expect(response).toEqual({
+          "widerScheme": {
+            "items": {
+              "topRisks": {
+                "landAssembly": {
+                  "riskHolder": {
+                    "liveRisk": {
+                      "ui:widget": "radio"
+                    },
+                    "description": {
+                      "ui:widget": "textarea"
+                    }
+                  }
+                }
+              }
+            },
+            "ui:options": {
+              "addable": false,
+              "orderable": false,
+              "removable": false
+            }
+          }
+        });
+      });
+    });
+
     describe("With a single dependency", () => {
       describe("Inside an object", () => {
         describe("Example one", () => {

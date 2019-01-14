@@ -1,3 +1,5 @@
+import merge from "@amory/merge";
+
 export default class GenerateUISchema {
   constructor(userRoleCookieGateway) {
     this.userRoleGateway = userRoleCookieGateway;
@@ -36,7 +38,7 @@ export default class GenerateUISchema {
 
     if (value.dependencies) {
       let dependencySchema = this.generateSchemaForDependencies(value, role);
-      ret = this.mergeObjects(ret, dependencySchema);
+      ret = merge(ret, dependencySchema);
     }
 
     return ret;
@@ -82,7 +84,7 @@ export default class GenerateUISchema {
 
   generateSchemaForDependencies(value, role) {
     let reducer = (acc, dependency) =>
-      this.mergeObjects(acc, this.generateSchemaForObject(dependency, role));
+      merge(acc, this.generateSchemaForObject(dependency, role));
 
     let dependencies = Object.values(value.dependencies)[0];
     return dependencies.oneOf.reduce(reducer, {});
@@ -148,10 +150,6 @@ export default class GenerateUISchema {
 
   isAddableArray(arr) {
     return arr.addable ? true : false;
-  }
-
-  mergeObjects(one, two) {
-    return { ...one, ...two };
   }
 
   getUIFieldForObject(obj) {
