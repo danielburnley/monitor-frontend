@@ -3,7 +3,7 @@ import "./style.css";
 
 export default class HorizontalFields extends React.Component {
   onFieldChange = (name, value) => {
-    let newData = JSON.parse(JSON.stringify(this.props.formData));
+    let newData = JSON.parse(JSON.stringify(this.props.formData || {}));
     newData[name] = value;
 
     this.props.onChange(newData);
