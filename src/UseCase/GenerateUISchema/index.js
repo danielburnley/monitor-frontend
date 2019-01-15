@@ -1,4 +1,4 @@
-import merge from "@amory/merge";
+import merge from "utils-merge2";
 
 export default class GenerateUISchema {
   constructor(userRoleCookieGateway) {
