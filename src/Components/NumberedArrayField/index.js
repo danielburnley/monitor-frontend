@@ -14,6 +14,7 @@ export default class NumberedArrayField extends React.Component {
 
   addItem = e => {
     let formData = this.state.formData;
+    if(!formData) formData = [];
     formData.push({});
     this.setState({ formData });
   };

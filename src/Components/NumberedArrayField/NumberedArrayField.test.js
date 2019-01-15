@@ -60,6 +60,18 @@ describe("Numbered Array Field", () => {
     expect(wrapper.find("input#root_otherData").length).toEqual(3);
   });
 
+  it("Adds items to an empty array", async () => {
+    let wrapper = mount(<NumberedArrayField
+        registry={{fields: {SchemaField: FieldFake}}}
+        formData={undefined}
+        schema={ {addable: true, items: {type: "object", properties: {otherData: {type: "string"}}} }}
+      />
+    );
+    await wrapper.update();
+    wrapper.find('[data-test="add-button"]').simulate('click');
+    expect(wrapper.find("input#root_otherData").length).toEqual(1);
+  });
+
   describe("Removes items", async () => {
     it("Example 1", async () => {
       let wrapper = mount(<NumberedArrayField

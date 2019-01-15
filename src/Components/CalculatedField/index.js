@@ -10,6 +10,7 @@ export function parseMoney(value) {
 }
 
 export function accumulateMoney(array, property) {
+  if(!array) return null;
   return array
     .reduce((total, object) => parseMoney(object[property]) + total, 0)
     .toFixed(2);
