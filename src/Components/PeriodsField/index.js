@@ -57,11 +57,12 @@ export default class PeriodsField extends React.Component {
      return schema_title_striped
   }
 
-  renderHeader(title) {
+  renderHeader(value) {
+    if (value.hidden) return null;
     return (
       <div className="col-sm-2 no-wrap less-padding flex-header">
         <p data-test="line-title">
-          <strong>{title}</strong>
+          <strong>{value.title}</strong>
         </p>
       </div>
     );
@@ -109,7 +110,7 @@ export default class PeriodsField extends React.Component {
             return (
               <div key={`${key}`}>
                 <div className="row flex-row">
-                  {this.renderHeader(value.title)}
+                  {this.renderHeader(value)}
                   {this.renderLine(key, value)}
                 </div>
               </div>
