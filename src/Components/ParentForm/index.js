@@ -50,9 +50,35 @@ export default class ParentForm extends React.Component {
     }
   }
 
+  getChild(path, key) {
+    return path && path[key];
+  }
+
+  setChild(path, key) {
+   return path[key] || (path[key] = {})
+  }
+
+  shareDataBetweenTabs = (formData)  => {
+    if(!this.props.schema.sharedData ) return null;
+    this.props.schema.sharedData.forEach(path => {
+      let value = path.from
+        .reduce((fromPath, key) => this.getChild(fromPath, key), formData)
+      
+      let lastIndex = path.to.length - 1
+      
+      let pathToSet = path.to
+        .slice(0, lastIndex)
+        .reduce((toPath, key) => this.setChild(toPath, key), formData);
+      
+      pathToSet[path.to[lastIndex]] = value
+    });
+  }
+
   subformOnChange = formData => {
     let newFormData = { ...this.state.formData };
     newFormData[this.state.selected] = formData;
+    this.shareDataBetweenTabs(newFormData)
+    
     this.setState({ formData: newFormData }, () =>
       this.props.onChange({ formData: this.state.formData })
     );
