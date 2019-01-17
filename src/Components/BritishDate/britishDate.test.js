@@ -47,6 +47,26 @@ describe("<BritishDate>", () => {
     });
   });
 
+  describe("Converts data to iso date format", () => {
+    it("Example 1", () => {
+      let wrapper = mount(<BritishDate value="08/07/2019" onChange={onChangeSpy}/>);
+
+      expect(wrapper.find("input").at(0).props().value).toEqual("08");
+      expect(wrapper.find("input").at(1).props().value).toEqual("07");
+      expect(wrapper.find("input").at(2).props().value).toEqual("2019");
+      expect
+    });
+
+    it("Example 2", () => {
+      let wrapper = mount(<BritishDate value="30/09/2019" onChange={onChangeSpy}/>);
+
+      expect(wrapper.find("input").at(0).props().value).toEqual("30");
+      expect(wrapper.find("input").at(1).props().value).toEqual("09");
+      expect(wrapper.find("input").at(2).props().value).toEqual("2019");
+      expect
+    });
+  });
+
   describe("Displays ISO 8601 date in British format", () => {
     it("Example 1", () => {
       let wrapper = mount(<BritishDate value="2000-08-25" onChange={onChangeSpy}/>);

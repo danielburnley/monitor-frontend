@@ -4,6 +4,7 @@ import "./style.css";
 export default class BritishDate extends React.Component {
   parseDate = (isoDate) => {
     if (isoDate) {
+      isoDate = this.convertToIsoDate(isoDate)
       let [year, month, day] = isoDate.split("-");
       if (year === "0000")
       {
@@ -20,6 +21,13 @@ export default class BritishDate extends React.Component {
       return {year, month, day};
     }
     return {year: "", month: "", day: ""};
+  }
+
+  convertToIsoDate = (date) => {
+    if (date[2] === "/") {
+      return `${date.substring(6, 10)}-${date.substring(3, 5)}-${date.substring(0,2)}`;
+    }
+    return date;
   }
 
   composeDate = (dateObject) => (
