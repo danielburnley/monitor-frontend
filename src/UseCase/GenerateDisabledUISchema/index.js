@@ -1,6 +1,13 @@
+import merge from "utils-merge2";
+
 export default class GenerateDisabledUISchema {
+  constructor(generateUISchemaUseCase) {
+    this.generateUISchemaUseCase = generateUISchemaUseCase;
+  }
   execute(data) {
-    return this.generateUISchema(data.properties);
+    let generatedUISchema = this.generateUISchemaUseCase.execute(data);
+    let generatedDisabledUISchema = this.generateUISchema(data.properties);
+    return merge(generatedUISchema, generatedDisabledUISchema);
   }
 
   generateUISchema(data) {

@@ -119,12 +119,14 @@ describe('ReturnPage', () => {
     it('does not show any messages', async () => {
       let unresolvingUpdateReturnStub = {execute: jest.fn(() => {execute: async (presenter, request) => {await new Promise(resolve => setTimeout(resolve, 14159265358));}})};
 
+      let generateUISchema = new GenerateUISchema({ getUserRole: () => ({userRole: ""}) });
+      let generateDisabledUISchema = new GenerateDisabledUISchema(generateUISchema);
       let projectId = 1;
       let wrap = mount(<ReturnPage
               validateReturn={validateReturnSpy}
               match={{ params: { projectId: 1, returnId: 1 } }}
-              generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
-              generateSubmittedSchema={new GenerateDisabledUISchema()}
+              generateUISchema={ generateUISchema }
+              generateSubmittedSchema={ generateDisabledUISchema }
               history={[]}
               createReturn={createReturnSpy}
               submitReturn={submitReturnSpy}
@@ -153,11 +155,13 @@ describe('ReturnPage', () => {
 
     it("Passes the document gateway to the return form", async () => {
       let documentGatewayDummy = jest.fn()
+      let generateUISchema = new GenerateUISchema({ getUserRole: () => ({userRole: ""}) });
+      let generateDisabledUISchema = new GenerateDisabledUISchema(generateUISchema);
       let wrap = shallow(<ReturnPage
               validateReturn={validateReturnSpy}
               match={{ params: { projectId: 1, returnId: 1 } }}
-              generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
-              generateSubmittedSchema={new GenerateDisabledUISchema()}
+              generateUISchema={ generateUISchema }
+              generateSubmittedSchema={generateDisabledUISchema}
               history={[]}
               createReturn={createReturnSpy}
               submitReturn={submitReturnSpy}
@@ -175,13 +179,14 @@ describe('ReturnPage', () => {
     describe('nothing has been submitted', () => {
       it('does not show any messages', async () => {
         let unresolvingUpdateReturnStub = {execute: jest.fn(() => {execute: async (presenter, request) => {await new Promise(resolve => setTimeout(resolve, 14159265358));}})};
-
+        let generateUISchema = new GenerateUISchema({ getUserRole: () => ({userRole: ""}) });
+        let generateDisabledUISchema = new GenerateDisabledUISchema(generateUISchema);
         let projectId = 1;
         let wrap = mount(<ReturnPage
                 validateReturn={validateReturnSpy}
                 match={{ params: { projectId: 1, returnId: 1 } }}
-                generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
-                generateSubmittedSchema={new GenerateDisabledUISchema()}
+                generateUISchema={generateUISchema}
+                generateSubmittedSchema={generateDisabledUISchema}
                 history={[]}
                 createReturn={createReturnSpy}
                 submitReturn={submitReturnSpy}
@@ -207,13 +212,15 @@ describe('ReturnPage', () => {
     describe('saving', () => {
       it('it disables the save button until it finishes saving', async () => {
         let unresolvingUpdateReturnStub = {execute: jest.fn(() => {execute: async (presenter, request) => {await new Promise(resolve => setTimeout(resolve, 14159265358));}})};
-
+        let generateUISchema = new GenerateUISchema({ getUserRole: () => ({userRole: ""}) });
+        let generateDisabledUISchema = new GenerateDisabledUISchema(generateUISchema);
         let projectId = 1;
+
         let wrap = mount(<ReturnPage
                 validateReturn={validateReturnSpy}
                 match={{ params: { projectId: 1, returnId: 1 } }}
-                generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
-                generateSubmittedSchema={new GenerateDisabledUISchema()}
+                generateUISchema={generateUISchema}
+                generateSubmittedSchema={generateDisabledUISchema}
                 history={[]}
                 createReturn={createReturnSpy}
                 submitReturn={submitReturnSpy}
@@ -237,12 +244,15 @@ describe('ReturnPage', () => {
 
       describe('shows a success message', () => {
         it('example 1', async () => {
+          let generateUISchema = new GenerateUISchema({ getUserRole: () => ({userRole: ""}) });
+          let generateDisabledUISchema = new GenerateDisabledUISchema(generateUISchema);
           let projectId = 1;
+
           let wrap = mount(<ReturnPage
                   validateReturn={validateReturnSpy}
                   match={{ params: { projectId: 1, returnId: 1 } }}
-                  generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
-                  generateSubmittedSchema={new GenerateDisabledUISchema()}
+                  generateUISchema={generateUISchema}
+                  generateSubmittedSchema={generateDisabledUISchema}
                   history={[]}
                   createReturn={createReturnSpy}
                   submitReturn={submitReturnSpy}
@@ -263,12 +273,15 @@ describe('ReturnPage', () => {
         });
 
         it('example 2', async () => {
+          let generateUISchema = new GenerateUISchema({ getUserRole: () => ({userRole: ""}) });
+          let generateDisabledUISchema = new GenerateDisabledUISchema(generateUISchema);
           let projectId = 1;
+
           let wrap = mount(<ReturnPage
                   validateReturn={validateReturnSpy}
                   match={{ params: { projectId: 1, returnId: 1 } }}
-                  generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
-                  generateSubmittedSchema={new GenerateDisabledUISchema()}
+                  generateUISchema={generateUISchema}
+                  generateSubmittedSchema={generateDisabledUISchema}
                   history={[]}
                   createReturn={createReturnSpy}
                   submitReturn={submitReturnSpy}
@@ -290,12 +303,15 @@ describe('ReturnPage', () => {
       });
 
       it('hides the success message after data entry resumes', async () => {
+        let generateUISchema = new GenerateUISchema({ getUserRole: () => ({userRole: ""}) });
+        let generateDisabledUISchema = new GenerateDisabledUISchema(generateUISchema);
         let projectId = 1;
+
         let wrap = mount(<ReturnPage
                 validateReturn={validateReturnSpy}
                 match={{ params: { projectId: 1, returnId: 1 } }}
-                generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
-                generateSubmittedSchema={new GenerateDisabledUISchema()}
+                generateUISchema={generateUISchema}
+                generateSubmittedSchema={generateDisabledUISchema}
                 history={[]}
                 createReturn={createReturnSpy}
                 submitReturn={submitReturnSpy}
@@ -318,14 +334,16 @@ describe('ReturnPage', () => {
 
     describe('submitting', () => {
       it('it disables the save button until it finishes saving', async () => {
+        let generateUISchema = new GenerateUISchema({ getUserRole: () => ({userRole: ""}) });
+        let generateDisabledUISchema = new GenerateDisabledUISchema(generateUISchema);
         let unresolvingUpdateReturnStub = {execute: jest.fn(() => {execute: async (presenter, request) => {await new Promise(resolve => setTimeout(resolve, 14159265358));}})};
 
         let projectId = 1;
         let wrap = mount(<ReturnPage
                 validateReturn={validateReturnSpy}
                 match={{ params: { projectId: 1, returnId: 1 } }}
-                generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
-                generateSubmittedSchema={new GenerateDisabledUISchema()}
+                generateUISchema={generateUISchema}
+                generateSubmittedSchema={generateDisabledUISchema}
                 history={[]}
                 createReturn={createReturnSpy}
                 submitReturn={submitReturnSpy}
@@ -349,12 +367,15 @@ describe('ReturnPage', () => {
 
       describe('permits submission', () => {
         it('example 1', async () => {
+          let generateUISchema = new GenerateUISchema({ getUserRole: () => ({userRole: ""}) });
+          let generateDisabledUISchema = new GenerateDisabledUISchema(generateUISchema);
           let projectId = 9;
+
           let wrap = mount(<ReturnPage
                   validateReturn={validateReturnSpy}
                   match={{ params: { projectId: 9, returnId: 1 } }}
-                  generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
-                  generateSubmittedSchema={new GenerateDisabledUISchema()}
+                  generateUISchema={generateUISchema}
+                  generateSubmittedSchema={generateDisabledUISchema}
                   history={[]}
                   createReturn={createReturnSpy}
                   submitReturn={submitReturnSpy}
@@ -378,12 +399,15 @@ describe('ReturnPage', () => {
         });
 
         it('example 1', async () => {
+          let generateUISchema = new GenerateUISchema({ getUserRole: () => ({userRole: ""}) });
+          let generateDisabledUISchema = new GenerateDisabledUISchema(generateUISchema);
           let projectId = 9;
+
           let wrap = mount(<ReturnPage
                   validateReturn={validateReturnSpy}
                   match={{ params: { projectId: 9, returnId: 1 } }}
-                  generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
-                  generateSubmittedSchema={new GenerateDisabledUISchema()}
+                  generateUISchema={generateUISchema}
+                  generateSubmittedSchema={generateDisabledUISchema}
                   history={[]}
                   createReturn={createReturnSpy}
                   submitReturn={submitReturnSpy}
@@ -420,12 +444,15 @@ describe('ReturnPage', () => {
 
     describe('submitting', () => {
       it('prevents submission', async () => {
+        let generateUISchema = new GenerateUISchema({ getUserRole: () => ({userRole: ""}) });
+        let generateDisabledUISchema = new GenerateDisabledUISchema(generateUISchema);
         let projectId = 1;
+
         let wrap = mount(<ReturnPage
                 validateReturn={validateReturnSpy}
                 match={{ params: { projectId: 1, returnId: 1 } }}
-                generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
-                generateSubmittedSchema={new GenerateDisabledUISchema()}
+                generateUISchema={generateUISchema}
+                generateSubmittedSchema={generateDisabledUISchema}
                 history={[]}
                 createReturn={createReturnSpy}
                 submitReturn={submitReturnSpy}
@@ -449,14 +476,16 @@ describe('ReturnPage', () => {
 
     describe('saving', () => {
       it('shows a validation warning', async () => {
+        let generateUISchema = new GenerateUISchema({ getUserRole: () => ({userRole: ""}) });
+        let generateDisabledUISchema = new GenerateDisabledUISchema(generateUISchema);
         let projectId = 1;
         let returnId = 1;
 
         let wrap = mount(<ReturnPage
                 validateReturn={validateReturnSpy}
                 match={{ params: { projectId: 1, returnId: 1 } }}
-                generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
-                generateSubmittedSchema={new GenerateDisabledUISchema()}
+                generateUISchema={generateUISchema}
+                generateSubmittedSchema={generateDisabledUISchema}
                 history={[]}
                 createReturn={createReturnSpy}
                 submitReturn={submitReturnSpy}
@@ -482,11 +511,14 @@ describe('ReturnPage', () => {
   describe('When editing a form', () => {
     describe('Before creation', () => {
       it('Does keeps the state as "Draft"', async () => {
+        let generateUISchema = new GenerateUISchema({ getUserRole: () => ({userRole: ""}) });
+        let generateDisabledUISchema = new GenerateDisabledUISchema(generateUISchema);
+
         let wrap = mount(<ReturnPage
                 validateReturn={() => {}}
                 match={{ params: { projectId: 1 } }}
-                generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
-                generateSubmittedSchema={new GenerateDisabledUISchema()}
+                generateUISchema={generateUISchema}
+                generateSubmittedSchema={generateDisabledUISchema}
                 history={[]}
                 createReturn={()=>{}}
                 submitReturn={()=>{}}
@@ -505,11 +537,14 @@ describe('ReturnPage', () => {
 
     describe('After creation', () => {
       it('Updates the state to editing', async () => {
+        let generateUISchema = new GenerateUISchema({ getUserRole: () => ({userRole: ""}) });
+        let generateDisabledUISchema = new GenerateDisabledUISchema(generateUISchema);
+
         let wrap = mount(<ReturnPage
                 validateReturn={() => {}}
                 match={{ params: { projectId: 1, returnId: 1 } }}
-                generateUISchema={new GenerateUISchema({ getUserRole: () => ({userRole: ""}) })}
-                generateSubmittedSchema={new GenerateDisabledUISchema()}
+                generateUISchema={generateUISchema}
+                generateSubmittedSchema={generateDisabledUISchema}
                 history={[]}
                 createReturn={()=>{}}
                 submitReturn={()=>{}}

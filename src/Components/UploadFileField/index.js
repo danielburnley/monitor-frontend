@@ -52,8 +52,9 @@ export default class UploadFileField extends React.Component {
   }
 
   renderNewFileUpload = () => {
-    if (this.props.schema.readonly) return <p data-test="title">
-      <b>{this.props.schema.title}</b>
+    if (this.props.schema.readonly || (this.props.uiSchema && this.props.uiSchema["ui:disabled"]))
+      return <p data-test="title">
+        <b>{this.props.schema.title}</b>
       </p>;
 
     return <this.props.registry.fields.SchemaField
