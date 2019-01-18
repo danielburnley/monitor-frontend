@@ -56,7 +56,7 @@ export default class VarianceField extends React.Component {
   }
 
   renderBaselineVariance = () => {
-    if (this.state.status === "Delayed") {
+    if (this.isDelayed()) {
       return (
         <div className="col-md-4 form-group">
           <label data-test="baseline-variance-title">{this.baselineVarianceSchema().title}</label>
@@ -71,7 +71,7 @@ export default class VarianceField extends React.Component {
   };
 
   renderReturnVariance() {
-    if (this.state.previousReturn && this.state.status === "Delayed") {
+    if (this.state.previousReturn && this.isDelayed()) {
       return (
         <div className="col-md-4 form-group">
           <label data-test="return-variance-title">{this.lastReturnVarianceSchema().title}</label>
@@ -223,7 +223,9 @@ export default class VarianceField extends React.Component {
         onChange={e => this.onFieldChange("status", e.target.value)}
       >
         <option>On schedule</option>
-        <option>Delayed</option>
+        <option>Delayed - minimal impact</option>
+        <option>Delayed - moderate impact</option>
+        <option>Delayed - critical</option>
         <option>Completed</option>
       </select>
     </div>
@@ -242,6 +244,10 @@ export default class VarianceField extends React.Component {
     </div>
   );
 
+  isDelayed = () => {
+    return this.state.status.substring(0, 7) === "Delayed";
+  }
+
   renderBody = () => (
     <div className="panel-body">
       <div className="row">
@@ -253,7 +259,7 @@ export default class VarianceField extends React.Component {
         {this.renderStatus()}
         {this.renderPercentComplete()}
       </div>
-      {this.state.status === "Delayed" && this.renderDelayed()}
+      {this.state.status && this.isDelayed() && this.renderDelayed()}
       {this.state.status === "Completed" && this.renderCompleted()}
     </div>
   );
@@ -272,7 +278,7 @@ VarianceField.propTypes = {
   formData: PropTypes.shape({
     baseline: PropTypes.string.isRequired,
     percentComplete: PropTypes.number,
-    status: PropTypes.oneOf(["Delayed", "On schedule", "Completed"]),
+    status: PropTypes.oneOf(["Completed", "On schedule", "Delayed - minimal impact", "Delayed - moderate impact", "Delayed - critical", "Delayed"]),
     current: PropTypes.string,
     reason: PropTypes.string,
     completedDate: PropTypes.string,
