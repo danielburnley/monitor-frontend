@@ -94,6 +94,25 @@ export function validateArrayPropertyIsLessThan(array, path, value) {
   });
 }
 
+export function setArrayField(copyFromArray, fieldPath, copyToArray) {
+  if(!copyFromArray || copyFromArray.constructor !== Array) return ;
+  copyFromArray.forEach((item, index) => {
+    if(!copyToArray) copyToArray = [{}];
+    if (copyToArray.length < index + 1 ) copyToArray.push({});
+    
+    let getValue = fieldPath.reduce((accumulator, property) => {
+      if (accumulator && accumulator[property]) {
+        return accumulator[property];
+      } else {
+        return undefined;
+      }
+    }, item);
+    
+    setCreate(copyToArray[index], fieldPath , getValue )
+  });
+  return copyToArray
+}
+
 export function setCreate(object, path, value) {
   let jsonToSet = path
     .slice(0, path.length - 1)
