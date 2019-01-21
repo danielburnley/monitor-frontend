@@ -98,7 +98,10 @@ export default class RiskField extends React.Component {
       <this.props.registry.fields.SchemaField
           id="riskMet"
           schema = {this.props.schema.properties.riskAnyChange}
-          uiSchema = {{"ui:widget": "radio"}}
+          uiSchema = {
+            this.props.uiSchema &&
+            this.props.uiSchema.riskAnyChange
+          }
           formData = {this.state.riskAnyChange}
           data-test = "change-in-risk"
           onChange = {e => this.onFieldChange("riskAnyChange", e)}
@@ -172,6 +175,7 @@ export default class RiskField extends React.Component {
           onChange={e =>
             this.onFieldChange("riskCurrentReturnMitigationsInPlace", e.target.value)
           }
+          disabled={this.props.uiSchema && this.props.uiSchema.riskCurrentReturnMitigationsInPlace}
           data-test="risk-current-mitigations-in-place"
           value={this.state.riskCurrentReturnMitigationsInPlace}
         />

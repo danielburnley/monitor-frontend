@@ -125,6 +125,20 @@ class RiskComponent {
   isAnyChangePresent = () =>
     this.risk.find("#root_change-in-risk").length;
 
+  changeInRiskIsDisabled = () => {
+    let uiSchema = this.risk
+      .find("[data-test='change-in-risk']")
+      .props()
+      .uiSchema;
+    return uiSchema && uiSchema["ui:disabled"];
+  }
+
+  riskCurrentReturnMitigationsInPlaceIsDisabled = () =>
+    this.risk
+      .find("[data-test='risk-current-mitigations-in-place']")
+      .props()
+      .disabled;
+
   isCompletedDatePresent = () =>
     this.risk.find(`[data-test='risk-completed-date']`).length;
 }
@@ -576,6 +590,7 @@ describe("<RiskField>", () => {
 
       it("Displays the Change in Risk", () => {
         expect(risk.findChangeInRiskValue()).toEqual("Yes");
+        expect(risk.changeInRiskIsDisabled()).toBeFalsy();
       });
 
       it("Displays whether the risk has been met", () => {
@@ -701,7 +716,8 @@ describe("<RiskField>", () => {
         });
 
         it("Shows current return mitigation if any change is Yes" , () => {
-          expect(risk.isCurentMitigationsInPlacePresent()).toEqual(1)
+          expect(risk.isCurentMitigationsInPlacePresent()).toEqual(1);
+          expect(risk.riskCurrentReturnMitigationsInPlaceIsDisabled()).toBeFalsy();
         });
       });
     });
@@ -811,6 +827,14 @@ describe("<RiskField>", () => {
 
       it("Current return likelihood", () => {
         expect(risk.currentReturnLikelihoodIsDisabled()).toBeTruthy();
+      });
+
+      it("Change in risk", () => {
+        expect(risk.changeInRiskIsDisabled()).toBeTruthy();
+      });
+
+      it("Current mitigations in place", () => {
+        expect(risk.riskCurrentReturnMitigationsInPlaceIsDisabled()).toBeTruthy();
       });
     });
   });
