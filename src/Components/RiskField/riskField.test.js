@@ -14,11 +14,26 @@ async function wait() {
 }
 
 class RiskComponent {
-  constructor(formData, onChange, schema) {
+  constructor(formData, onChange, schema, disabled = false) {
+    let uiSchema = {};
+    if (disabled) {
+      uiSchema = {
+        riskBaselineRisk: {"ui:disabled": true},
+        riskBaselineImpact: {"ui:disabled": true},
+        riskBaselineLikelihood: {"ui:disabled": true},
+        riskBaselineMitigationsInPlace: {"ui:disabled": true},
+        riskCurrentReturnLikelihood: {"ui:disabled": true},
+        riskCompletionDate: {"ui:disabled": true},
+        riskAnyChange: {"ui:disabled": true},
+        riskMet: {"ui:disabled": true},
+        riskCurrentReturnMitigationsInPlace: {"ui:disabled": true}
+      };
+    }
     this.risk = mount(
       <RiskField
         schema={schema}
         formData={formData}
+        uiSchema={uiSchema}
         onChange={onChange}
         registry={
           {
@@ -40,7 +55,7 @@ class RiskComponent {
   likelihood = (title) => this.risk.find(`[data-test='risk-likelihood${title}']`).text();
 
   title = () => this.risk.find("[data-test='schema-title']").text();
-  
+
   mitigationsInPlace = (title) =>
     this.risk.find(`[data-test='risk-mitigation-in-place${title}']`).text();
 
@@ -82,8 +97,24 @@ class RiskComponent {
       .value;
 
   riskMet = () => this.risk.find("#root_risk-met").props().value;
-  
+
   riskCompletedDate = () => this.risk.find(`[data-test='risk-completed-date']`).props().value;
+
+  riskCompletedDateIsDisabled = () => {
+    let uiSchema = this.risk
+      .find("[data-test='risk-completed-date']")
+      .props()
+      .uiSchema;
+    return uiSchema && uiSchema["ui:disabled"];
+  }
+
+  currentReturnLikelihoodIsDisabled = () => {
+    let uiSchema = this.risk
+      .find("[data-test='current-return-likelihood']")
+      .props()
+      .uiSchema;
+    return uiSchema && uiSchema["ui:disabled"];
+  }
 
   isCurentMitigationsInPlacePresent = () =>
     this.risk.find(`[data-test='risk-current-mitigations-in-place']`).length;
@@ -156,7 +187,7 @@ describe("<RiskField>", () => {
         }
       }
       let risk = new RiskComponent(formData, onChangeSpy, schema);
-      
+
       it("displays the schema title", () => {
         expect(risk.title()).toEqual("Risk Fields");
       });
@@ -509,7 +540,7 @@ describe("<RiskField>", () => {
       it("Displays the Change in Risk", () => {
         expect(risk.findChangeInRiskValue()).toEqual("Yes");
       });
-      
+
       it("Displays the risk met", () => {
         expect(risk.riskMet()).toEqual("No")
       });
@@ -540,6 +571,7 @@ describe("<RiskField>", () => {
 
       it("Displays the Current Return Likelihood", () => {
         expect(risk.findReturnLikelihoodValue()).toEqual("3");
+        expect(risk.currentReturnLikelihoodIsDisabled()).toBeFalsy();
       });
 
       it("Displays the Change in Risk", () => {
@@ -550,9 +582,10 @@ describe("<RiskField>", () => {
         expect(risk.riskMet()).toEqual("No")
       });
 
-      it("Display the completed date", () => {
+      it("Displays the completed date", () => {
         risk.simulateChangeRiskMet("Yes")
         expect(risk.riskCompletedDate()).toEqual("01-02-03")
+        expect(risk.riskCompletedDateIsDisabled()).toBeFalsy();
       });
 
       it("Displays the Current Mitigation in Place", () => {
@@ -646,12 +679,12 @@ describe("<RiskField>", () => {
           };
           risk = new RiskComponent(formData, onChangeSpy, schema);
         });
-      
+
         it("Hides current return mitigation if any change is no", () => {
           expect(risk.isCurentMitigationsInPlacePresent()).toEqual(0)
         });
       });
-  
+
       describe("Example 2", () => {
         let risk;
         beforeEach(() => {
@@ -666,7 +699,7 @@ describe("<RiskField>", () => {
           };
           risk = new RiskComponent(formData, onChangeSpy, schema);
         });
-      
+
         it("Shows current return mitigation if any change is Yes" , () => {
           expect(risk.isCurentMitigationsInPlacePresent()).toEqual(1)
         });
@@ -686,7 +719,7 @@ describe("<RiskField>", () => {
           };
           risk = new RiskComponent(formData, onChangeSpy, schema);
         });
-      
+
         it("Hides current return mitigation", () => {
           expect(risk.isCurentMitigationsInPlacePresent()).toEqual(0)
         });
@@ -717,7 +750,7 @@ describe("<RiskField>", () => {
           };
           risk = new RiskComponent(formData, onChangeSpy, schema);
         });
-      
+
         it("Shows current return mitigation", () => {
           expect(risk.isCurentMitigationsInPlacePresent()).toEqual(1)
         });
@@ -733,6 +766,51 @@ describe("<RiskField>", () => {
         it("Hides Completed date", () => {
           expect(risk.isCompletedDatePresent()).toEqual(0)
         })
+      });
+    });
+  });
+  describe("Disabled", () => {
+    describe("Risk met", () => {
+      let risk;
+      beforeEach(() => {
+        let formData = {
+          riskBaselineRisk: "Cat gets stuck in the tree",
+          riskBaselineImpact: "3",
+          riskBaselineLikelihood: "4",
+          riskBaselineMitigationsInPlace: "Cut down the tree",
+          riskCurrentReturnLikelihood: "3",
+          riskMet: "Yes",
+          riskCompletionDate: "01-02-03",
+          riskAnyChange: "Yes",
+          riskCurrentReturnMitigationsInPlace: "More cat teamwork!"
+        };
+        risk = new RiskComponent(formData, onChangeSpy, schema, true);
+      });
+
+      it("The completed date", () => {
+        expect(risk.riskCompletedDateIsDisabled()).toBeTruthy();
+      });
+    });
+
+    describe("Risk not met", () => {
+      let risk;
+      beforeEach(() => {
+        let formData = {
+          riskBaselineRisk: "Cat gets stuck in the tree",
+          riskBaselineImpact: "3",
+          riskBaselineLikelihood: "4",
+          riskBaselineMitigationsInPlace: "Cut down the tree",
+          riskCurrentReturnLikelihood: "3",
+          riskMet: "No",
+          riskCompletionDate: "01-02-03",
+          riskAnyChange: "Yes",
+          riskCurrentReturnMitigationsInPlace: "More cat teamwork!"
+        };
+        risk = new RiskComponent(formData, onChangeSpy, schema, true);
+      });
+
+      it("Current return likelihood", () => {
+        expect(risk.currentReturnLikelihoodIsDisabled()).toBeTruthy();
       });
     });
   });
