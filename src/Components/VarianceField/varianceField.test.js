@@ -682,6 +682,17 @@ describe("VarianceField", () => {
           ).toBeFalsy();
         });
 
+        it("Enables the percentage", () => {
+          expect(
+            field.find("[data-test='variance-percentage']").props().uiSchema &&
+            field.find("[data-test='variance-percentage']").props().uiSchema["ui:disabled"]
+          ).toBeFalsy();
+        });
+
+        it("Enables the variance status", () => {
+          expect(field.find("[data-test='variance-status']").props().disabled).toBeFalsy();
+        });
+
         it("Fills in the reason for variance", () => {
           let reason = field.find("[data-test='variance-reason']").props()
             .value;
@@ -1020,6 +1031,13 @@ describe("VarianceField", () => {
         it("Prepopulates the contractor name field with the form data", () => {
           let name = field.find("[data-test='variance-name']").props().value;
           expect(name).toEqual("John");
+        });
+
+        it("Enables variance completed", () => {
+          expect(
+            field.find("[data-test='variance-completed']").props().uiSchema &&
+            field.find("[data-test='variance-completed']").props().uiSchema["ui:disabled"]
+          ).toBeFalsy();
         });
       });
     });
@@ -1599,10 +1617,47 @@ describe("VarianceField", () => {
         expect(field.find("[data-test='variance-reason']").props().disabled).toBeTruthy();
       });
 
+      it("Disables the variance status", () => {
+        expect(field.find("[data-test='variance-status']").props().disabled).toBeTruthy();
+      });
+
       it("Disables current date", () => {
         expect(
           field.find("[data-test='current-date']").props().uiSchema &&
           field.find("[data-test='current-date']").props().uiSchema["ui:disabled"]
+        ).toBeTruthy();
+      });
+
+      it("Disables percent complete", () => {
+        expect(
+          field.find("[data-test='variance-percentage']").props().uiSchema &&
+          field.find("[data-test='variance-percentage']").props().uiSchema["ui:disabled"]
+        ).toBeTruthy();
+      });
+    });
+
+    describe("Completed", () => {
+      beforeEach(() => {
+        let formData = {
+          baseline: "2020-12-31",
+          status: "Completed",
+          percentComplete: 50
+        };
+        field = mount(
+          <VarianceField
+            schema={schema}
+            formData={formData}
+            uiSchema={uiSchema}
+            onChange={jest.fn()}
+            registry={registryStub}
+          />
+        );
+      });
+
+      it("Disables variance completed", () => {
+        expect(
+          field.find("[data-test='variance-completed']").props().uiSchema &&
+          field.find("[data-test='variance-completed']").props().uiSchema["ui:disabled"]
         ).toBeTruthy();
       });
     });

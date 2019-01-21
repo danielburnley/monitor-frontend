@@ -183,6 +183,7 @@ export default class VarianceField extends React.Component {
           className="form-control"
           data-test="variance-completed"
           id="completed"
+          uiSchema={ this.props.uiSchema && this.props.uiSchema.completedDate }
           onChange={e => {this.onFieldChange("completedDate", e)}}
           value={this.state.completedDate || ""}
         />
@@ -226,6 +227,11 @@ export default class VarianceField extends React.Component {
       </label>
       <select
         data-test="variance-status"
+        disabled={
+          this.props.uiSchema &&
+          this.props.uiSchema.status &&
+          this.props.uiSchema.status["ui:disabled"]
+        }
         id="status"
         className="form-control"
         value={this.state.status}
@@ -246,6 +252,10 @@ export default class VarianceField extends React.Component {
       <this.props.registry.widgets.percentage
         className="form-control"
         data-test="variance-percentage"
+        uiSchema={
+          this.props.uiSchema &&
+          this.props.uiSchema.reason
+        }
         id="percent-complete"
         onChange={e => this.onFieldChange("percentComplete", e)}
         value={this.state.percentComplete || ""}
