@@ -1,6 +1,10 @@
 import "../../Polyfills/Array/flat";
 import React from "react";
 
+export function filterForNos(array, path) {
+  return array.filter((i) => get(i, ...path) === "No")
+}
+
 export function parseMoney(value) {
   if (value) {
     let cleanedString = value.replace(/[^0-9.-]/g, "");

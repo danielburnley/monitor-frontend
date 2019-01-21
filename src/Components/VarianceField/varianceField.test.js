@@ -154,6 +154,75 @@ describe("VarianceField", () => {
         });
       });
 
+      describe("When selecting Delayed - minimal impact", () => {
+        beforeEach(() => {
+          let status = field.find("[data-test='variance-status']");
+          status.simulate("change", { target: { value: "Delayed - minimal impact" } });
+        });
+
+        it("Shows the updated value field", () => {
+          let updatedValue = field.find("[data-test='current-date'] [data-test='britishDate-fake']");
+          let title = field.find("[data-test='current-date-title']").text();
+
+          expect(updatedValue.length).toEqual(1);
+          expect(title).toEqual("Current*")
+        });
+
+        it("Shows the reason for variance field", () => {
+          let reason = field.find("[data-test='variance-reason']");
+          let title = field.find("[data-test='variance-reason-title']").text();
+
+          expect(reason.length).toEqual(1);
+          expect(title).toEqual("Reason*")
+        });
+      });
+
+      describe("When selecting Delayed - moderate impact", () => {
+        beforeEach(() => {
+          let status = field.find("[data-test='variance-status']");
+          status.simulate("change", { target: { value: "Delayed - moderate impact" } });
+        });
+
+        it("Shows the updated value field", () => {
+          let updatedValue = field.find("[data-test='current-date'] [data-test='britishDate-fake']");
+          let title = field.find("[data-test='current-date-title']").text();
+
+          expect(updatedValue.length).toEqual(1);
+          expect(title).toEqual("Current*")
+        });
+
+        it("Shows the reason for variance field", () => {
+          let reason = field.find("[data-test='variance-reason']");
+          let title = field.find("[data-test='variance-reason-title']").text();
+
+          expect(reason.length).toEqual(1);
+          expect(title).toEqual("Reason*")
+        });
+      });
+
+      describe("When selecting Delayed - critical", () => {
+        beforeEach(() => {
+          let status = field.find("[data-test='variance-status']");
+          status.simulate("change", { target: { value: "Delayed - critical" } });
+        });
+
+        it("Shows the updated value field", () => {
+          let updatedValue = field.find("[data-test='current-date'] [data-test='britishDate-fake']");
+          let title = field.find("[data-test='current-date-title']").text();
+
+          expect(updatedValue.length).toEqual(1);
+          expect(title).toEqual("Current*")
+        });
+
+        it("Shows the reason for variance field", () => {
+          let reason = field.find("[data-test='variance-reason']");
+          let title = field.find("[data-test='variance-reason-title']").text();
+
+          expect(reason.length).toEqual(1);
+          expect(title).toEqual("Reason*")
+        });
+      });
+
       describe("When selecting completed", () => {
         beforeEach(() => {
           let status = field.find("[data-test='variance-status']");
@@ -276,6 +345,69 @@ describe("VarianceField", () => {
         beforeEach(() => {
           let status = field.find("[data-test='variance-status']");
           status.simulate("change", { target: { value: "Delayed" } });
+        });
+
+        it("Shows the updated value field", () => {
+          let updatedValue = field.find("[data-test='current-date'] [data-test='britishDate-fake']");
+          let title = field.find("[data-test='current-date-title']").text();
+          expect(title).toEqual("Current amount of Cats*");
+          expect(updatedValue.length).toEqual(1);
+        });
+
+        it("Shows the reason for variance field", () => {
+          let reason = field.find("[data-test='variance-reason']");
+          let title = field.find("[data-test='variance-reason-title']").text();
+          expect(title).toEqual("Reason for Cats Empire*");
+          expect(reason.length).toEqual(1);
+        });
+      });
+
+      describe("When selecting Delayed - minimal impact", () => {
+        beforeEach(() => {
+          let status = field.find("[data-test='variance-status']");
+          status.simulate("change", { target: { value: "Delayed - minimal impact" } });
+        });
+
+        it("Shows the updated value field", () => {
+          let updatedValue = field.find("[data-test='current-date'] [data-test='britishDate-fake']");
+          let title = field.find("[data-test='current-date-title']").text();
+          expect(title).toEqual("Current amount of Cats*");
+          expect(updatedValue.length).toEqual(1);
+        });
+
+        it("Shows the reason for variance field", () => {
+          let reason = field.find("[data-test='variance-reason']");
+          let title = field.find("[data-test='variance-reason-title']").text();
+          expect(title).toEqual("Reason for Cats Empire*");
+          expect(reason.length).toEqual(1);
+        });
+      });
+
+      describe("When selecting Delayed - moderate impact", () => {
+        beforeEach(() => {
+          let status = field.find("[data-test='variance-status']");
+          status.simulate("change", { target: { value: "Delayed - moderate impact" } });
+        });
+
+        it("Shows the updated value field", () => {
+          let updatedValue = field.find("[data-test='current-date'] [data-test='britishDate-fake']");
+          let title = field.find("[data-test='current-date-title']").text();
+          expect(title).toEqual("Current amount of Cats*");
+          expect(updatedValue.length).toEqual(1);
+        });
+
+        it("Shows the reason for variance field", () => {
+          let reason = field.find("[data-test='variance-reason']");
+          let title = field.find("[data-test='variance-reason-title']").text();
+          expect(title).toEqual("Reason for Cats Empire*");
+          expect(reason.length).toEqual(1);
+        });
+      });
+
+      describe("When selecting Delayed - critical", () => {
+        beforeEach(() => {
+          let status = field.find("[data-test='variance-status']");
+          status.simulate("change", { target: { value: "Delayed - critical" } });
         });
 
         it("Shows the updated value field", () => {
@@ -588,7 +720,7 @@ describe("VarianceField", () => {
           };
           let formData = {
             baseline: "02/02/2020",
-            status: "Delayed",
+            status: "Delayed - minimal impact",
             percentComplete: 10,
             current: "02/25/2020",
             reason: "Super delays",
@@ -607,7 +739,7 @@ describe("VarianceField", () => {
         it("Renders the status as delayed", () => {
           let status = field.find("[data-test='variance-status']").props()
             .value;
-          expect(status).toEqual("Delayed");
+          expect(status).toEqual("Delayed - minimal impact");
         });
 
         it("Renders the baseline variance field", () => {
@@ -719,6 +851,13 @@ describe("VarianceField", () => {
           let title = field.find("[data-test='variance-reference-title']").text();
           expect(reference.length).toEqual(1);
           expect(title).toEqual("On Completion cat party*")
+        });
+
+        it("Doesn't render the return variance field", () => {
+          let returnVariance = field.find("[data-test='return-variance']");
+          let title = field.find("[data-test='return-variance-title']");
+          expect(title.length).toEqual(0);
+          expect(returnVariance.length).toEqual(0);
         });
 
         it("Prepopulates the reference field with the formdata", () => {

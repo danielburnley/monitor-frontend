@@ -1199,4 +1199,205 @@ describe("<ParentForm>", () => {
       expect(parentForm.find("UploadFileField").length).toEqual(1);
     });
   });
+  
+  describe("Sharing data accross tabs", () => {
+    let wrap;
+    describe("Between two simple object tabs", () => {
+      beforeEach(() => {
+        wrap = mount(
+          <ParentForm
+            documentGateway={documentGatewaySpy}
+            getRole={getRoleUseCaseSpy}
+            onChange={onChangeSpy}
+            formData={{}}
+            schema={{
+              type: "object",
+              sharedData: [{ from: ['tab_one', 'cat'], to: ['tab_two', 'dog'] }],
+              properties: {
+                tab_one: {
+                  type: "object",
+                  properties:{
+                    cat: {
+                      type: "string"
+                    }
+                  }
+                },
+                tab_two: {
+                  type: "object",
+                  properties: {
+                    dog: {
+                      type: "string"
+                    }
+                  }
+                }
+              }
+            }}
+          />
+        );
+      });
+
+      it("calls the onchange spy with data in both fields if one is changed", async () => {
+        let input = wrap.find(".form-control").first();
+
+        await updateFormField(input, "Tabby");
+
+        expect(onChangeSpy).toHaveBeenCalledWith({
+          formData: {
+            tab_one: { cat: "Tabby" },
+            tab_two: { dog: "Tabby" } 
+          }
+        });
+      });
+    });
+
+    describe("With two bits of data to be shared", () => {
+      beforeEach(() => {
+        wrap = mount(
+          <ParentForm
+            documentGateway={documentGatewaySpy}
+            getRole={getRoleUseCaseSpy}
+            onChange={onChangeSpy}
+            formData={{}}
+            schema={{
+              type: "object",
+              sharedData: [
+                { from: ['tab_one', 'cat'], to: ['tab_two', 'dog'] },
+                { from: ['tab_one', 'mouse'], to: ['tab_two', 'hamster'] }
+              ],
+              properties: {
+                tab_one: {
+                  type: "object",
+                  properties:{
+                    cat: {
+                      type: "string"
+                    },
+                    mouse: {
+                      type: "string"
+                    }
+                  }
+                },
+                tab_two: {
+                  type: "object",
+                  properties: {
+                    dog: {
+                      type: "string"
+                    },
+                    hamster: {
+                      type: "string"
+                    }
+                  }
+                }
+              }
+            }}
+          />
+        );
+      });
+
+      it("calls the onchange spy with correct fields if one is changed", async () => {
+        
+        let input = wrap.find(".form-control").at(1);
+        
+        await updateFormField(input, "squeaky");
+
+        expect(onChangeSpy).toHaveBeenCalledWith({
+          formData: {
+            tab_one: { mouse: "squeaky" },
+            tab_two: { hamster: "squeaky"}
+          }
+        });
+      });
+    });
+
+    describe("With the data is an entire array", () => {
+      beforeEach(() => {
+        wrap = mount(
+          <ParentForm
+            documentGateway={documentGatewaySpy}
+            getRole={getRoleUseCaseSpy}
+            onChange={onChangeSpy}
+            formData={{
+              tab_one: {
+                cat: [
+                  {period1: "1", period2: "2"},
+                  {period1: "3", period2: "4"}
+                ]
+              }
+            }}
+            schema={{
+              type: "object",
+              sharedData: [
+                { from: ['tab_one', 'cat'], to: ['tab_two', 'dog'] }
+              ],
+              properties: {
+                tab_one: {
+                  type: "object",
+                  properties: {
+                    cat: {
+                      type: "array",
+                      items: {
+                        type: "object",
+                        properties: {
+                          period1: {
+                            type: "string"
+                          },
+                          period2: {
+                            type: "string"
+                          }
+                        },
+                      }
+                    }
+                  }
+                },
+                tab_two: {
+                  type: "object",
+                  properties: {
+                    dog: {
+                      type: "array",
+                      items: {
+                        type: "object",
+                        properties: {
+                          period1: {
+                            type: "string"
+                          },
+                          period2: {
+                            type: "string"
+                          }
+                        },
+                      }
+                    },
+                    hamster: {
+                      type: "string"
+                    }
+                  }
+                }
+              }
+            }}
+          />
+        );
+      });
+
+      it("calls the onchange spy with correct fields if one is changed", async () => { 
+        let input = wrap.find(".form-control").at(0);
+        
+        await updateFormField(input, "squeaky");
+
+        expect(onChangeSpy).toHaveBeenCalledWith({
+          formData: {
+            tab_one: {
+              cat: [
+                {period1: "squeaky", period2: "2"},
+                {period1: "3", period2: "4"}
+              ]
+            },
+            tab_two: {
+              dog: [
+                {period1: "squeaky", period2: "2"},
+                {period1: "3", period2: "4"}
+              ]
+            }
+          }
+        });
+      });
+    });
+  });
 });

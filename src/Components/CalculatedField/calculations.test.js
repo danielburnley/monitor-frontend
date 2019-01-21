@@ -15,8 +15,23 @@ import {
   periodTotal,
   setArrayVariance,
   subtract,
-  add
+  add,
+  filterForNos
 } from ".";
+
+describe("filterForProperty()", () => {
+  it("Example 1", () => {
+    expect(
+      filterForNos([{a: {b:"Yes"}, b: "we"}, {a: {b: "No"}, b: "e"}], ['a','b'])
+    ).toEqual([{a: {b: "No"}, b: "e"}]);
+  });
+
+  it("Example 2", () => {
+    expect(
+      filterForNos([{en: "Yes", gb: true}, {en: "Yes"}, {en: "No", gb: true}], ['en'])
+    ).toEqual([{en: "No", gb: true}]);
+  });
+});
 
 describe("subtract()", () => {
   it("Example 1", () => {
