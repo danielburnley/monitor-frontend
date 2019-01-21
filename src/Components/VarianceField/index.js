@@ -101,6 +101,10 @@ export default class VarianceField extends React.Component {
       <this.props.registry.widgets.britishDate
         className="form-control"
         data-test="current-date"
+        uiSchema={
+          this.props.uiSchema &&
+          this.props.uiSchema.current
+        }
         id="current"
         onChange={e => {this.onFieldChange("current", e)}}
         value={this.state.current || ""}
@@ -114,6 +118,11 @@ export default class VarianceField extends React.Component {
       <textarea
         className="form-control"
         data-test="variance-reason"
+        disabled={
+          this.props.uiSchema &&
+          this.props.uiSchema.reason &&
+          this.props.uiSchema.reason["ui:disabled"]
+        }
         onChange={e => this.onFieldChange("reason", e.target.value)}
         type="text"
         value={this.state.reason}
