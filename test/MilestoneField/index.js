@@ -68,7 +68,7 @@ export default class MilestoneComponent {
             widgets: {
               percentage: PercentageFake,
               britishDate: BritishDateFake,
-              textarea: TextareaFake
+              TextareaWidget: TextareaFake
             }
           }
         }
@@ -132,13 +132,11 @@ export default class MilestoneComponent {
     .find("[data-test='milestone-reason-for-variance'] [data-test='textarea-fake']")
     .length;
 
-  reasonForVarianceIsDisabled = () => {
-    let uiSchema = this.milestone
+  reasonForVarianceIsDisabled = () =>
+    this.milestone
       .find("[data-test='milestone-reason-for-variance']")
       .props()
-      .uiSchema;
-    return uiSchema && uiSchema["ui:disabled"];
-  }
+      .disabled;
 
   baselineVariance = () =>
     this.milestone
@@ -154,6 +152,14 @@ export default class MilestoneComponent {
     this.milestone
     .find("[data-test='percentage-fake']")
     .length;
+
+  milestonePercentCompletedIsDisabled = () => {
+    let uiSchema = this.milestone
+      .find("[data-test='milestone-percent-completed']")
+      .props()
+      .uiSchema;
+    return uiSchema && uiSchema["ui:disabled"];
+  }
 
   simulateStatusAgainstLastReturn = inputValue =>
     this.milestone

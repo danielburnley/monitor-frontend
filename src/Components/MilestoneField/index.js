@@ -136,8 +136,10 @@ export default class MilestoneField extends React.Component {
             this.onCurrentReturnChange(e);
           }}
           data-test="milestone-current-return"
-          uiSchema = {this.props.uiSchema &&
-            this.props.uiSchema.currentReturn}
+          uiSchema = {
+            this.props.uiSchema &&
+            this.props.uiSchema.currentReturn
+          }
           value={this.state.currentReturn}
           id="currentReturn"
         />
@@ -216,14 +218,15 @@ export default class MilestoneField extends React.Component {
       return (
         <div>
           <label htmlFor="reasonForVariance">Reason for Variance</label>
-          <this.props.registry.widgets.textarea
+          <this.props.registry.widgets.TextareaWidget
             className="form-control"
             onChange={e => {
               this.onFieldChange("reasonForVariance", e);
             }}
-            uiSchema={
+            disabled={
               this.props.uiSchema &&
-              this.props.uiSchema.reasonForVariance
+              this.props.uiSchema.reasonForVariance &&
+              this.props.uiSchema.reasonForVariance["ui:disabled"]
             }
             data-test="milestone-reason-for-variance"
             value={this.state.reasonForVariance}
@@ -244,6 +247,10 @@ export default class MilestoneField extends React.Component {
           className="form-control"
           onChange={e => this.onFieldChange("milestonePercentCompleted", e)}
           data-test="milestone-percent-completed"
+          uiSchema = {
+            this.props.uiSchema &&
+            this.props.uiSchema.milestonePercentCompleted
+          }
           value={this.state.milestonePercentCompleted}
           id="milestonePercentCompleted"
         />
