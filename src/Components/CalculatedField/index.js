@@ -2,7 +2,11 @@ import "../../Polyfills/Array/flat";
 import React from "react";
 
 export function filterForNos(array, path) {
-  return array.filter((i) => get(i, ...path) === "No")
+  if (array)
+  {
+    return array.filter((i) => get(i, ...path) === "No")
+  }
+  return [];
 }
 
 export function parseMoney(value) {
