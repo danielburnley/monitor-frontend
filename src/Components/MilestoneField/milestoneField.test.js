@@ -348,6 +348,7 @@ describe("<MilestoneField>", () => {
       });
 
       it("All widgets are enabled", () => {
+        expect(milestone.milestoneStatusAgainstLastReturnIsDisabled()).toBeFalsy();
         expect(milestone.milestonePercentCompletedIsDisabled()).toBeFalsy();
         expect(milestone.reasonForVarianceIsDisabled()).toBeFalsy();
         expect(milestone.currentReturnIsDisabled()).toBeFalsy();
@@ -491,8 +492,12 @@ describe("<MilestoneField>", () => {
       );
     });
 
+    it("Disables the status against last return", () => {
+      expect(milestone.milestoneStatusAgainstLastReturnIsDisabled()).toBeTruthy();
+    });
+
     it("The percentage is disabled", () => {
-      expect(milestone.milestonePercentCompletedIsDisabled()).toBeTruthy()
+      expect(milestone.milestonePercentCompletedIsDisabled()).toBeTruthy();
     });
 
     describe("If completed", () => {
@@ -501,7 +506,7 @@ describe("<MilestoneField>", () => {
       });
 
       it("The completed date is disabled", () => {
-        expect(milestone.milestoneCompletedDateIsDisabled()).toBeTruthy()
+        expect(milestone.milestoneCompletedDateIsDisabled()).toBeTruthy();
       });
     });
 

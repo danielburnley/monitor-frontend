@@ -107,21 +107,36 @@ export default class MilestoneField extends React.Component {
         <label htmlFor="statusAgainstLastReturn">
           Status against last return?
         </label>
-        <select
+        <this.props.registry.widgets.SelectWidget
           onChange={e =>
-            this.onFieldChange("statusAgainstLastReturn", e.target.value)
+            this.onFieldChange("statusAgainstLastReturn", e)
           }
           data-test="milestone-status-against-last-return"
           value={this.state.statusAgainstLastReturn}
           className="form-control"
           id="statusAgainstLastReturn"
-        >
-          <option>Completed</option>
-          <option>On schedule</option>
-          <option>Delayed - minimal impact</option>
-          <option>Delayed - moderate impact</option>
-          <option>Delayed - critical</option>
-        </select>
+          schema={
+            this.props.schema &&
+            this.props.schema.properties &&
+            this.props.schema.properties.statusAgainstLastReturn
+          }
+          disabled={
+            this.props.uiSchema &&
+            this.props.uiSchema.statusAgainstLastReturn &&
+            this.props.uiSchema.statusAgainstLastReturn["ui:disabled"]
+          }
+          options={
+            {
+              enumOptions: [
+                {label: "Completed"},
+                {label: "On schedule"},
+                {label: "Delayed - minimal impact"},
+                {label: "Delayed - moderate impact"},
+                {label: "Delayed - critical"}
+              ]
+            }
+          }
+        />
       </div>
     );
   }

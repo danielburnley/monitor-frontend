@@ -3,6 +3,9 @@ import { shallow, mount } from "enzyme";
 import MilestoneField from "../../src/Components/MilestoneField";
 import WidgetFake from "../WidgetFake";
 
+class SelectFake extends WidgetFake {
+  datatest="select-fake"
+}
 class TextareaFake extends WidgetFake {
   datatest="textarea-fake"
 }
@@ -68,7 +71,8 @@ export default class MilestoneComponent {
             widgets: {
               percentage: PercentageFake,
               britishDate: BritishDateFake,
-              TextareaWidget: TextareaFake
+              TextareaWidget: TextareaFake,
+              SelectWidget: SelectFake
             }
           }
         }
@@ -163,7 +167,7 @@ export default class MilestoneComponent {
 
   simulateStatusAgainstLastReturn = inputValue =>
     this.milestone
-      .find("[data-test='milestone-status-against-last-return']")
+      .find("[data-test='milestone-status-against-last-return'] [data-test='select-fake']")
       .simulate("change", { target: { value: inputValue } });
 
   simulateCurrentReturn = inputValue =>
@@ -183,8 +187,14 @@ export default class MilestoneComponent {
 
   findStatusAgainstLastReturn = () =>
     this.milestone
-      .find("[data-test='milestone-status-against-last-return']")
+      .find("[data-test='milestone-status-against-last-return'] [data-test='select-fake']")
       .props().value;
+
+  milestoneStatusAgainstLastReturnIsDisabled = () =>
+    this.milestone
+      .find("[data-test='milestone-status-against-last-return']")
+      .props()
+      .disabled;
 
   findMilestoneCompletedDate = () =>
     this.milestone
