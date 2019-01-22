@@ -1,4 +1,5 @@
 import React from 'react';
+import ie from 'ie-version';
 
 function dataURItoBlob(dataURI) {
   let byteString, fileType
@@ -68,7 +69,12 @@ export default class UploadFileField extends React.Component {
   renderSavedFiles = () => {
     if(this.state.files.length === 0 ) return null;
     return (<div>
-      <em>Click on the link(s) below to download the file(s). Once downloaded please save with an appropriate file name and extension.</em>
+
+      <em>{
+          (ie.version)?
+          "Right click and save as to download the files below."
+           : "Click on the link(s) below to download the file(s)."
+         } Once downloaded please save with an appropriate file name and extension.</em>
       {this.renderFileLinks()}
     </div>)
   }
