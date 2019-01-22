@@ -96,7 +96,7 @@ export default class RiskField extends React.Component {
     if(this.state.riskMet !== "No") return null;
     return (<div className="col-md-2">
       <this.props.registry.fields.SchemaField
-          id="riskMet"
+          id="riskAnyChange"
           schema = {this.props.schema.properties.riskAnyChange}
           uiSchema = {
             this.props.uiSchema &&
@@ -116,7 +116,7 @@ export default class RiskField extends React.Component {
         <this.props.registry.fields.SchemaField
           id="riskMet"
           schema = {this.props.schema.properties.riskMet}
-          uiSchema = {{"ui:widget": "radio"}}
+          uiSchema = {this.props.uiSchema && this.props.uiSchema.riskMet}
           data-test="risk-met"
           formData = {this.state.riskMet}
           onChange = {e => this.onFieldChange("riskMet", e)}

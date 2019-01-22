@@ -48,6 +48,21 @@ class RiskComponent {
       />
     );
   }
+
+  inputIsDisabled = (datatest) =>
+    this.risk
+      .find(`[data-test='${datatest}']`)
+      .props()
+      .disabled;
+
+  widgetIsDisabled = (datatest) => {
+    let uiSchema = this.risk
+      .find(`[data-test='${datatest}']`)
+      .props()
+      .uiSchema;
+    return uiSchema && uiSchema["ui:disabled"];
+  }
+
   description = (title) => this.risk.find(`[data-test='risk-description${title}']`).text();
 
   impact = (title) => this.risk.find(`[data-test='risk-impact${title}']`).text();
@@ -100,21 +115,11 @@ class RiskComponent {
 
   riskCompletedDate = () => this.risk.find(`[data-test='risk-completed-date']`).props().value;
 
-  riskCompletedDateIsDisabled = () => {
-    let uiSchema = this.risk
-      .find("[data-test='risk-completed-date']")
-      .props()
-      .uiSchema;
-    return uiSchema && uiSchema["ui:disabled"];
-  }
+  riskCompletedDateIsDisabled = () =>
+    this.widgetIsDisabled("risk-completed-date")
 
-  currentReturnLikelihoodIsDisabled = () => {
-    let uiSchema = this.risk
-      .find("[data-test='current-return-likelihood']")
-      .props()
-      .uiSchema;
-    return uiSchema && uiSchema["ui:disabled"];
-  }
+  currentReturnLikelihoodIsDisabled = () =>
+    this.widgetIsDisabled("current-return-likelihood")
 
   isCurentMitigationsInPlacePresent = () =>
     this.risk.find(`[data-test='risk-current-mitigations-in-place']`).length;
@@ -125,22 +130,17 @@ class RiskComponent {
   isAnyChangePresent = () =>
     this.risk.find("#root_change-in-risk").length;
 
-  changeInRiskIsDisabled = () => {
-    let uiSchema = this.risk
-      .find("[data-test='change-in-risk']")
-      .props()
-      .uiSchema;
-    return uiSchema && uiSchema["ui:disabled"];
-  }
+  changeInRiskIsDisabled = () =>
+    this.widgetIsDisabled("change-in-risk")
 
   riskCurrentReturnMitigationsInPlaceIsDisabled = () =>
-    this.risk
-      .find("[data-test='risk-current-mitigations-in-place']")
-      .props()
-      .disabled;
+    this.inputIsDisabled("risk-current-mitigations-in-place")
 
   isCompletedDatePresent = () =>
     this.risk.find(`[data-test='risk-completed-date']`).length;
+
+  riskMetIsDisabled = () =>
+    this.widgetIsDisabled("risk-met")
 }
 
 describe("<RiskField>", () => {
@@ -594,12 +594,13 @@ describe("<RiskField>", () => {
       });
 
       it("Displays whether the risk has been met", () => {
-        expect(risk.riskMet()).toEqual("No")
+        expect(risk.riskMet()).toEqual("No");
+        expect(risk.riskMetIsDisabled()).toBeFalsy();
       });
 
       it("Displays the completed date", () => {
         risk.simulateChangeRiskMet("Yes")
-        expect(risk.riskCompletedDate()).toEqual("01-02-03")
+        expect(risk.riskCompletedDate()).toEqual("01-02-03");
         expect(risk.riskCompletedDateIsDisabled()).toBeFalsy();
       });
 
@@ -835,6 +836,10 @@ describe("<RiskField>", () => {
 
       it("Current mitigations in place", () => {
         expect(risk.riskCurrentReturnMitigationsInPlaceIsDisabled()).toBeTruthy();
+      });
+
+      it("Risk Met", () => {
+        expect(risk.riskMetIsDisabled()).toBeTruthy();
       });
     });
   });
