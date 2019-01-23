@@ -1308,7 +1308,7 @@ describe("<ParentForm>", () => {
       });
     });
 
-    describe("With the data is an entire array", () => {
+    describe("With the data as an entire array", () => {
       beforeEach(() => {
         wrap = mount(
           <ParentForm
@@ -1394,6 +1394,194 @@ describe("<ParentForm>", () => {
                 {period1: "squeaky", period2: "2"},
                 {period1: "3", period2: "4"}
               ]
+            }
+          }
+        });
+      });
+    });
+
+    describe("With item in an array", () => {
+      beforeEach(() => {
+        wrap = mount(
+          <ParentForm
+            documentGateway={documentGatewaySpy}
+            getRole={getRoleUseCaseSpy}
+            onChange={onChangeSpy}
+            formData={{
+              tab_one: {
+                cat: [
+                  {period1: "3", period2: "4"}
+                ]
+              }
+            }}
+            schema={{
+              type: "object",
+              sharedData: [
+                { from: ['tab_one', 'cat', '#', 'period1'], to: ['tab_two', 'dog', '#', 'period1'] }
+              ],
+              properties: {
+                tab_one: {
+                  type: "object",
+                  properties: {
+                    cat: {
+                      type: "array",
+                      items: {
+                        type: "object",
+                        properties: {
+                          period1: {
+                            type: "string"
+                          },
+                          period2: {
+                            type: "string"
+                          }
+                        },
+                      }
+                    }
+                  }
+                },
+                tab_two: {
+                  type: "object",
+                  properties: {
+                    dog: {
+                      type: "array",
+                      items: {
+                        type: "object",
+                        properties: {
+                          period1: {
+                            type: "string"
+                          },
+                          period2: {
+                            type: "string"
+                          }
+                        },
+                      }
+                    },
+                    hamster: {
+                      type: "string"
+                    }
+                  }
+                }
+              }
+            }}
+          />
+        );
+      });
+
+      it("calls the onchange spy with correct fields if one is changed", async () => { 
+        let input = wrap.find(".form-control").at(0);
+        
+        await updateFormField(input, "squeaky");
+
+        expect(onChangeSpy).toHaveBeenCalledWith({
+          formData: {
+            tab_one: {
+              cat: [
+                {period1: "squeaky", period2: "4"}
+              ]
+            },
+            tab_two: {
+              dog: [
+                {period1: "squeaky"}
+              ]
+            }
+          }
+        });
+      });
+    });
+
+    describe("With more items in an array", () => {
+      beforeEach(() => {
+        wrap = mount(
+          <ParentForm
+            documentGateway={documentGatewaySpy}
+            getRole={getRoleUseCaseSpy}
+            onChange={onChangeSpy}
+            formData={{
+              tab_one: {
+                cat: [
+                  {period1: "3", period2: "4"},
+                  {period1: "more", period2: "data"}
+                ]
+              }
+            }}
+            schema={{
+              type: "object",
+              sharedData: [
+                { from: ['tab_one', 'cat', '#', 'period1'], to: ['tab_two', 'dog', 'tree', '#', 'period1'] }
+              ],
+              properties: {
+                tab_one: {
+                  type: "object",
+                  properties: {
+                    cat: {
+                      type: "array",
+                      items: {
+                        type: "object",
+                        properties: {
+                          period1: {
+                            type: "string"
+                          },
+                          period2: {
+                            type: "string"
+                          }
+                        },
+                      }
+                    }
+                  }
+                },
+                tab_two: {
+                  type: "object",
+                  properties: {
+                    dog: {
+                      type: "object",
+                      properties: {
+                        tree: {
+                          type: "array",
+                          items: {
+                            type: "object",
+                            properties: {
+                              period1: {
+                                type: "string"
+                              },
+                              period2: {
+                                type: "string"
+                              }
+                            },
+                          }
+                        },
+                        hamster: {
+                          type: "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }}
+          />
+        );
+      });
+
+      it("calls the onchange spy with correct fields if one is changed", async () => { 
+        let input = wrap.find(".form-control").at(0);
+        
+        await updateFormField(input, "squeaky");
+
+        expect(onChangeSpy).toHaveBeenCalledWith({
+          formData: {
+            tab_one: {
+              cat: [
+                {period1: "squeaky", period2: "4"},
+                {period1: "more", period2: "data"}
+              ]
+            },
+            tab_two: {
+              dog: {
+                tree: [
+                  {period1: "squeaky"},
+                  {period1: "more"}
+                ]
+              }
             }
           }
         });
