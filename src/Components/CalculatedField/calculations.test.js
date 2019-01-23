@@ -24,26 +24,26 @@ describe("setArrayField", () => {
   describe("Passes items which aren't arrays", () => {
     it("Returns null", () => {
       let newArray
-      setArrayField(null, ['property'], newArray)
+      setArrayField(null, ['property'], newArray, ['property'])
       expect(newArray).toBeUndefined();
     });
 
     it("Returns null", () => {
       let newArray
-      setArrayField({someObject: "What? this isnt supposed to be an object"}, ['property'], newArray)
+      setArrayField({someObject: "What? this isnt supposed to be an object"}, ['property'], newArray, ['property'])
       expect(newArray).toBeUndefined();
     });
   });
 
   it("Example 1",() => {
     let array = [{ property1: "1", property2: "2" }, { property1: "3", property2: "4" }]
-    let newArray = setArrayField(array, ['property1'], undefined)
-    expect(newArray).toEqual([{ property1: "1"}, { property1: "3"}])
+    let newArray = setArrayField(array, ['property1'], undefined, ['differentproperty1'])
+    expect(newArray).toEqual([{ differentproperty1: "1"}, { differentproperty1: "3"}])
   });
 
   it("Example 2",() => {
     let array = [{ property1: "1", property2: "2" }, { property1: "3", property2: "4" }]
-    let newArray = setArrayField(array, ['property1'], [{anUnrelatedProperty: "5"}])
+    let newArray = setArrayField(array, ['property1'], [{anUnrelatedProperty: "5"}], ['property1'])
     expect(newArray).toEqual([{ property1: "1", anUnrelatedProperty: "5"}, { property1: "3"}])
   });
 });

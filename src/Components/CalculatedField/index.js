@@ -94,13 +94,13 @@ export function validateArrayPropertyIsLessThan(array, path, value) {
   });
 }
 
-export function setArrayField(copyFromArray, fieldPath, copyToArray) {
+export function setArrayField(copyFromArray, copyFromFieldPath, copyToArray, copyToFieldPath) {
   if(!copyFromArray || copyFromArray.constructor !== Array) return ;
   copyFromArray.forEach((item, index) => {
     if(!copyToArray) copyToArray = [{}];
     if (copyToArray.length < index + 1 ) copyToArray.push({});
     
-    let getValue = fieldPath.reduce((accumulator, property) => {
+    let getValue = copyFromFieldPath.reduce((accumulator, property) => {
       if (accumulator && accumulator[property]) {
         return accumulator[property];
       } else {
@@ -108,7 +108,7 @@ export function setArrayField(copyFromArray, fieldPath, copyToArray) {
       }
     }, item);
     
-    setCreate(copyToArray[index], fieldPath , getValue )
+    setCreate(copyToArray[index], copyToFieldPath , getValue )
   });
   return copyToArray
 }
