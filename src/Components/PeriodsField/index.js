@@ -8,7 +8,7 @@ export default class PeriodsField extends React.Component {
     super(props);
 
     this.state = {
-      formData: this.props.formData
+      formData: this.props.formData || [{}]
     };
   }
 
@@ -22,7 +22,7 @@ export default class PeriodsField extends React.Component {
   };
 
   renderData() {
-    return this.props.formData.map((columnData, index) => (
+    return this.state.formData.map((columnData, index) => (
       <div
         className="flex-data less-padding"
         key={`input-${index}`}
