@@ -1,3 +1,7 @@
+textarea {
+  min-height: 5em;
+}
+
 .subform-selectors {
   background: white;
   border-bottom: 1px solid black;
