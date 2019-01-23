@@ -21,22 +21,29 @@ export default class PeriodsField extends React.Component {
     this.setState({ formData: newFormData })
   };
 
-  renderLine(key, item) {
-    return this.props.formData.map((column, index) => (
+  renderData() {
+    return this.props.formData.map((columnData, index) => (
       <div
-        className="col-sm-1 flex-data less-padding"
-        key={`input-${index}-${key}`}
+        className="flex-data less-padding"
+        key={`input-${index}`}
       >
-        {this.renderItem(key, index, column)}
+        {this.renderColumn(index, columnData)}
       </div>
     ));
+  }
+
+  renderColumn = (index, column) => {
+    return Object.entries(this.props.schema.items.properties).map( ([key, value]) => {
+      return <div key={`${key}-${value}-${index}`}>
+        {this.renderItem(key, index, column)}
+      </div>
+    });
   }
   
   renderItem = (key, index, column) => {
     if (key === "remove") {
       return this.renderRemoveButton(index)
     } else {
-      
       return (
         <this.props.registry.fields.SchemaField
           data-test={`${key}-input`}
@@ -57,15 +64,15 @@ export default class PeriodsField extends React.Component {
      return schema_title_striped
   }
 
-  renderHeader(value) {
-    if (value.hidden) return null;
-    return (
-      <div className="col-sm-2 no-wrap less-padding flex-header">
-        <p data-test="line-title">
+  renderHeaders() {
+    return Object.entries(this.props.schema.items.properties).map( ([key, value]) => {
+      if(value.hidden) return null;
+      return (
+        <p key={key} data-test="line-title" className="no-wrap period-header form-control">
           <strong>{value.title}</strong>
         </p>
-      </div>
-    );
+      );
+    })
   }
 
   renderAddButton() {
@@ -102,23 +109,16 @@ export default class PeriodsField extends React.Component {
     if (this.props.schema.addable) {
       updatedRows.remove = { title: "Remove", type: "string" };
     }
-
     return (
       <div>
-        {Object.entries(this.props.schema.items.properties).map(
-          ([key, value]) => {
-            return (
-              <div key={`${key}`}>
-                <div className="row flex-row">
-                  {this.renderHeader(value)}
-                  {this.renderLine(key, value)}
-                </div>
-              </div>
-            );
-          }
-        )}
+        <div className="flex-row">
+          <div className="flex-header">
+            {this.renderHeaders()}
+          </div>
+          {this.renderData()}
+        </div>
         {this.renderAddButton()}
       </div>
-    );
+    )
   }
 }
