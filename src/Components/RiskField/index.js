@@ -60,7 +60,7 @@ export default class RiskField extends React.Component {
   );
 
   renderRiskMitigationInPlace = () => (
-    <div className="col-md-6">    
+    <div className="col-md-6">
       <h5>
         <b data-test="risk-mitigation-in-place-title">
           {this.props.schema.properties.riskBaselineMitigationsInPlace &&
@@ -79,7 +79,9 @@ export default class RiskField extends React.Component {
         <this.props.registry.fields.SchemaField
           id="currentReturnLikelihood"
           schema = {this.props.schema.properties.riskCurrentReturnLikelihood}
-          uiSchema = {{}}
+          uiSchema = {
+            this.props.uiSchema &&
+            this.props.uiSchema.riskCurrentReturnLikelihood}
           data-test="current-return-likelihood"
           formData = {this.state.riskCurrentReturnLikelihood}
           onChange={e =>
@@ -94,9 +96,12 @@ export default class RiskField extends React.Component {
     if(this.state.riskMet !== "No") return null;
     return (<div className="col-md-2">
       <this.props.registry.fields.SchemaField
-          id="riskMet"
+          id="riskAnyChange"
           schema = {this.props.schema.properties.riskAnyChange}
-          uiSchema = {{"ui:widget": "radio"}}
+          uiSchema = {
+            this.props.uiSchema &&
+            this.props.uiSchema.riskAnyChange
+          }
           formData = {this.state.riskAnyChange}
           data-test = "change-in-risk"
           onChange = {e => this.onFieldChange("riskAnyChange", e)}
@@ -111,7 +116,7 @@ export default class RiskField extends React.Component {
         <this.props.registry.fields.SchemaField
           id="riskMet"
           schema = {this.props.schema.properties.riskMet}
-          uiSchema = {{"ui:widget": "radio"}}
+          uiSchema = {this.props.uiSchema && this.props.uiSchema.riskMet}
           data-test="risk-met"
           formData = {this.state.riskMet}
           onChange = {e => this.onFieldChange("riskMet", e)}
@@ -140,6 +145,7 @@ export default class RiskField extends React.Component {
             <this.props.registry.widgets.britishDate
               onChange={e => this.onFieldChange("riskCompletionDate", e)}
               data-test="risk-completed-date"
+              uiSchema={this.props.uiSchema && this.props.uiSchema.riskCompletionDate}
               value={this.state.riskCompletionDate}
               className="form-control"
               id="completionDate"
@@ -147,7 +153,7 @@ export default class RiskField extends React.Component {
           </div>
         </div>
       </div>
-   
+
     )
   }
 
@@ -169,6 +175,7 @@ export default class RiskField extends React.Component {
           onChange={e =>
             this.onFieldChange("riskCurrentReturnMitigationsInPlace", e.target.value)
           }
+          disabled={this.props.uiSchema && this.props.uiSchema.riskCurrentReturnMitigationsInPlace}
           data-test="risk-current-mitigations-in-place"
           value={this.state.riskCurrentReturnMitigationsInPlace}
         />

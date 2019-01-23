@@ -1,13 +1,19 @@
 import GenerateDisabledUISchema from ".";
 
 describe("GenerateDisabledUISchema", () => {
-  let useCase;
-
-  beforeEach(() => {
-    useCase = new GenerateDisabledUISchema();
-  });
+  let useCase, generateUISchemaSpy;
 
   describe("Example one", () => {
+    beforeEach(() => {
+      generateUISchemaSpy = {execute: jest.fn(() => ({ a: {"ui:field": "field"} }))};
+      useCase = new GenerateDisabledUISchema(generateUISchemaSpy);
+    });
+
+    it("Calls the generateUISchema use case", () => {
+      useCase.execute({properties: {}});
+      expect(generateUISchemaSpy.execute).toHaveBeenCalledWith({properties: {}});
+    });
+
     it("Generates a ui schema from a single field", () => {
       let schema = {
         type: "object",
@@ -16,10 +22,10 @@ describe("GenerateDisabledUISchema", () => {
         }
       };
       let response = useCase.execute(schema);
-      expect(response).toEqual({ a: { "ui:disabled": true } });
+      expect(response).toEqual({ a: { "ui:disabled": true, "ui:field": "field" } });
     });
 
-    it("Generates a ui schema from a multiple fields", () => {
+    it("Generates a ui schema from multiple fields", () => {
       let schema = {
         type: "object",
         properties: {
@@ -29,7 +35,7 @@ describe("GenerateDisabledUISchema", () => {
       };
       let response = useCase.execute(schema);
       expect(response).toEqual({
-        a: { "ui:disabled": true },
+        a: { "ui:disabled": true, "ui:field": "field" },
         b: { "ui:disabled": true }
       });
     });
@@ -48,7 +54,7 @@ describe("GenerateDisabledUISchema", () => {
       };
       let response = useCase.execute(schema);
       expect(response).toEqual({
-        a: { b: { "ui:disabled": true } }
+        a: { b: { "ui:disabled": true }, "ui:field": "field" }
       });
     });
 
@@ -69,7 +75,7 @@ describe("GenerateDisabledUISchema", () => {
       };
       let response = useCase.execute(schema);
       expect(response).toEqual({
-        a: { b: { c: { "ui:disabled": true } } }
+        a: { b: { c: { "ui:disabled": true } }, "ui:field": "field" }
       });
     });
 
@@ -92,6 +98,7 @@ describe("GenerateDisabledUISchema", () => {
       let response = useCase.execute(schema);
       expect(response).toEqual({
         a: {
+          "ui:field": "field",
           "ui:options": { addable: false, orderable: false, removable: false },
           items: { b: { "ui:disabled": true }, c: { "ui:disabled": true } }
         }
@@ -131,6 +138,7 @@ describe("GenerateDisabledUISchema", () => {
       let response = useCase.execute(schema);
       expect(response).toEqual({
         a: {
+          "ui:field": "field",
           cats: { "ui:disabled": true },
           meow: { cat: { "ui:disabled": true } },
           quack: { "ui:disabled": true }
@@ -140,6 +148,16 @@ describe("GenerateDisabledUISchema", () => {
   });
 
   describe("Example two", () => {
+    beforeEach(() => {
+      generateUISchemaSpy = {execute: jest.fn(() => ({ b: {"ui:widget": "widget"} }))};
+      useCase = new GenerateDisabledUISchema(generateUISchemaSpy);
+    });
+
+    fit("Calls the generateUISchema use case", () => {
+      useCase.execute({properties: {a: {}}});
+      expect(generateUISchemaSpy.execute).toHaveBeenCalledWith({properties: {a: {}}});
+    });
+
     it("Generates a ui schema from a single field", () => {
       let schema = {
         type: "object",
@@ -148,7 +166,7 @@ describe("GenerateDisabledUISchema", () => {
         }
       };
       let response = useCase.execute(schema);
-      expect(response).toEqual({ b: { "ui:disabled": true } });
+      expect(response).toEqual({ b: { "ui:disabled": true, "ui:widget": "widget" } });
     });
 
     it("Generates a ui schema from a multiple fields", () => {
@@ -162,6 +180,7 @@ describe("GenerateDisabledUISchema", () => {
 
       let response = useCase.execute(schema);
       expect(response).toEqual({
+        b: { "ui:widget": "widget" },
         d: { "ui:disabled": true },
         f: { "ui:disabled": true }
       });
@@ -181,6 +200,7 @@ describe("GenerateDisabledUISchema", () => {
       };
       let response = useCase.execute(schema);
       expect(response).toEqual({
+        b: { "ui:widget": "widget" },
         d: { e: { "ui:disabled": true } }
       });
     });
@@ -218,6 +238,7 @@ describe("GenerateDisabledUISchema", () => {
       let response = useCase.execute(schema);
       expect(response).toEqual({
         b: {
+          "ui:widget": "widget",
           dogs: { "ui:disabled": true },
           woof: { moo: { "ui:disabled": true } },
           cluck: { "ui:disabled": true }

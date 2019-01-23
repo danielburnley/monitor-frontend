@@ -254,7 +254,7 @@ describe("<MilestoneField>", () => {
       });
     });
 
-    describe("Example 1", () => {
+    describe("Example 2", () => {
       let milestone;
       let formData = {
         description: "Cats have walked very far",
@@ -321,6 +321,10 @@ describe("<MilestoneField>", () => {
         expect(milestone.milestoneCompletedDate()).toEqual(1)
       });
 
+      it("Is enabled", () => {
+        expect(milestone.milestoneCompletedDateIsDisabled()).toBeFalsy();
+      });
+
       it("doesn't display the current return date", () => {
         expect(milestone.currentReturn()).toEqual(0);
       });
@@ -341,6 +345,13 @@ describe("<MilestoneField>", () => {
     describe("If Delayed - moderate impact", () => {
       beforeEach(() => {
         milestone.simulateStatusAgainstLastReturn("Delayed - moderate impact")
+      });
+
+      it("All widgets are enabled", () => {
+        expect(milestone.milestoneStatusAgainstLastReturnIsDisabled()).toBeFalsy();
+        expect(milestone.milestonePercentCompletedIsDisabled()).toBeFalsy();
+        expect(milestone.reasonForVarianceIsDisabled()).toBeFalsy();
+        expect(milestone.currentReturnIsDisabled()).toBeFalsy();
       });
 
       it("shows the reason for variance", () => {
@@ -458,6 +469,58 @@ describe("<MilestoneField>", () => {
 
       it("doesn't display the last return variance", () => {
         expect(milestone.lastReturnVariance()).toEqual(0)
+      });
+    });
+  });
+
+  describe("Disabled items", () => {
+    let milestone;
+
+    beforeEach(() => {
+      let formData = {
+        description: "Here is a stone that marks a mile.",
+        milestoneBaselineCompletion: "03/31/2018",
+        milestoneSummaryOfCriticalPath: "Contract begins!!!",
+        milestoneLastReturnDate: "04/30/2019"
+      };
+      let schemaTitle =  "Milestone Fields";
+      milestone = new MilestoneComponent(
+        formData,
+        onChangeSpy,
+        schemaTitle,
+        true
+      );
+    });
+
+    it("Disables the status against last return", () => {
+      expect(milestone.milestoneStatusAgainstLastReturnIsDisabled()).toBeTruthy();
+    });
+
+    it("The percentage is disabled", () => {
+      expect(milestone.milestonePercentCompletedIsDisabled()).toBeTruthy();
+    });
+
+    describe("If completed", () => {
+      beforeEach(() => {
+        milestone.simulateStatusAgainstLastReturn("Completed")
+      });
+
+      it("The completed date is disabled", () => {
+        expect(milestone.milestoneCompletedDateIsDisabled()).toBeTruthy();
+      });
+    });
+
+    describe("If Delayed - moderate impact", () => {
+      beforeEach(() => {
+        milestone.simulateStatusAgainstLastReturn("Delayed - moderate impact")
+      });
+
+      it("Disables the reason for variance", () => {
+        expect(milestone.reasonForVarianceIsDisabled()).toBeTruthy();
+      });
+
+      it("Disables the current return value", () => {
+        expect(milestone.currentReturnIsDisabled()).toBeTruthy();
       });
     });
   });

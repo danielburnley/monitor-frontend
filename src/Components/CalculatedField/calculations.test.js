@@ -49,16 +49,22 @@ describe("setArrayField", () => {
 });
 
 describe("filterForNos()", () => {
-  it("Example 1", () => {
-    expect(
-      filterForNos([{a: {b:"Yes"}, b: "we"}, {a: {b: "No"}, b: "e"}], ['a','b'])
-    ).toEqual([{a: {b: "No"}, b: "e"}]);
+  it("With no data", () => {
+    expect(filterForNos(undefined)).toEqual([]);
   });
 
-  it("Example 2", () => {
-    expect(
-      filterForNos([{en: "Yes", gb: true}, {en: "Yes"}, {en: "No", gb: true}], ['en'])
-    ).toEqual([{en: "No", gb: true}]);
+  describe("With data", () => {
+    it("Example 1", () => {
+      expect(
+        filterForNos([{a: {b:"Yes"}, b: "we"}, {a: {b: "No"}, b: "e"}], ['a','b'])
+      ).toEqual([{a: {b: "No"}, b: "e"}]);
+    });
+
+    it("Example 2", () => {
+      expect(
+        filterForNos([{en: "Yes", gb: true}, {en: "Yes"}, {en: "No", gb: true}], ['en'])
+      ).toEqual([{en: "No", gb: true}]);
+    });
   });
 });
 
