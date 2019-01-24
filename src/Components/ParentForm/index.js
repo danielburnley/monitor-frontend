@@ -54,24 +54,64 @@ export default class ParentForm extends React.Component {
     return path && path[key];
   }
 
-  setChild(path, key) {
-   return path[key] || (path[key] = {})
+  setChild(toBurrow, path, nextItemKey, nextIndex) {
+    if (toBurrow && toBurrow[nextItemKey]) return toBurrow[nextItemKey];
+    if (Number.isInteger(path[nextIndex])) return (toBurrow[nextItemKey] = []);
+    if (Array.isArray(toBurrow)) {
+      toBurrow.push({})
+      return toBurrow[nextItemKey]; 
+    }
+    return toBurrow[nextItemKey] = {}
   }
 
   shareDataBetweenTabs = (formData)  => {
     if(!this.props.schema.sharedData ) return null;
-    this.props.schema.sharedData.forEach(path => {
-      let value = path.from
-        .reduce((fromPath, key) => this.getChild(fromPath, key), formData)
-      
-      let lastIndex = path.to.length - 1
-      
-      let pathToSet = path.to
-        .slice(0, lastIndex)
-        .reduce((toPath, key) => this.setChild(toPath, key), formData);
-      
-      pathToSet[path.to[lastIndex]] = value
+
+    let sharedDataPaths = this.createPathsInArrays(this.props.schema.sharedData, formData)
+
+    sharedDataPaths.forEach(path => {
+      let value = this.getObject(formData, path.from)      
+      let pathToSet = this.setPath(formData, path.to)
+
+      pathToSet[path.to[path.to.length - 1]] = value
     });
+  }
+
+  createPathsInArrays(sharedData, formData) {
+    let allDataPaths = sharedData
+    sharedData.forEach((value, key) => {
+      if (!value.from.includes('#')) return;
+
+      allDataPaths.splice(key, 1)
+
+      let arrayIndex = value.from.indexOf('#')
+      let arrayData = this.getObject(formData, value.from.slice(0, arrayIndex))
+      
+      for (let i = 0; i < arrayData.length; i++) {
+        let newFromPath = value.from.slice(0, value.from.length)
+        newFromPath[arrayIndex] = i;
+        
+        let newToPath = value.to.slice(0, value.to.length)
+        newToPath[value.to.indexOf('#')] = i;
+
+        allDataPaths.push({
+          from: newFromPath,
+          to: newToPath
+        })
+      }
+    })
+
+    return allDataPaths
+  }
+
+  getObject = (formData, path) => {
+    return path
+      .reduce((accumulator, fromPath) => this.getChild(accumulator, fromPath),formData)
+  }
+
+  setPath = (formData, path) => {
+    return path.slice(0, path.length -1)
+      .reduce((accumulator, key, index) => this.setChild(accumulator, path, key, index + 1), formData)
   }
 
   subformOnChange = formData => {
