@@ -104,23 +104,24 @@ export function setArrayField(
   copyToFieldPath
 ) {
   if (!copyFromArray || copyFromArray.constructor !== Array) return;
-  if (copyToFieldPath === undefined || copyFromFieldPath === undefined) {
+  try {
+    copyFromArray.forEach((item, index) => {
+      if (!copyToArray) copyToArray = [{}];
+      if (copyToArray.length < index + 1) copyToArray.push({});
+
+      let getValue = copyFromFieldPath.reduce((accumulator, property) => {
+        if (accumulator && accumulator[property]) {
+          return accumulator[property];
+        } else {
+          return undefined;
+        }
+      }, item);
+
+      setCreate(copyToArray[index], copyToFieldPath, getValue);
+    });
+  } catch (e) {
     return;
   }
-  copyFromArray.forEach((item, index) => {
-    if (!copyToArray) copyToArray = [{}];
-    if (copyToArray.length < index + 1) copyToArray.push({});
-
-    let getValue = copyFromFieldPath.reduce((accumulator, property) => {
-      if (accumulator && accumulator[property]) {
-        return accumulator[property];
-      } else {
-        return undefined;
-      }
-    }, item);
-
-    setCreate(copyToArray[index], copyToFieldPath, getValue);
-  });
   return copyToArray;
 }
 
