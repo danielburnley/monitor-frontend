@@ -23,28 +23,82 @@ import {
 describe("setArrayField", () => {
   describe("Passes items which aren't arrays", () => {
     it("Returns null", () => {
-      let newArray
-      setArrayField(null, ['property'], newArray, ['property'])
+      let newArray;
+      setArrayField(null, ["property"], newArray, ["property"]);
       expect(newArray).toBeUndefined();
     });
 
     it("Returns null", () => {
-      let newArray
-      setArrayField({someObject: "What? this isnt supposed to be an object"}, ['property'], newArray, ['property'])
+      let newArray;
+      setArrayField(
+        { someObject: "What? this isnt supposed to be an object" },
+        ["property"],
+        newArray,
+        ["property"]
+      );
       expect(newArray).toBeUndefined();
     });
   });
 
-  it("Example 1",() => {
-    let array = [{ property1: "1", property2: "2" }, { property1: "3", property2: "4" }]
-    let newArray = setArrayField(array, ['property1'], undefined, ['differentproperty1'])
-    expect(newArray).toEqual([{ differentproperty1: "1"}, { differentproperty1: "3"}])
+  describe("Returns early without an error when field paths return undefined", () => {
+    it("Example 1", () => {
+      let array = [
+        { property1: "1", property2: "2" },
+        { property1: "3", property2: "4" }
+      ];
+      let newArray = setArrayField(
+        array,
+        undefined,
+        [{ anUnrelatedProperty: "5" }],
+        ["property1"]
+      );
+      expect(newArray).toBeUndefined();
+    });
+
+    it("Example 2", () => {
+      let array = [
+        { property1: "1", property2: "2" },
+        { property1: "3", property2: "4" }
+      ];
+      let newArray = setArrayField(
+        array,
+        ["property1"],
+        [{ anUnrelatedProperty: "5" }],
+        undefined
+      );
+      expect(newArray).toBeUndefined();
+    });
   });
 
-  it("Example 2",() => {
-    let array = [{ property1: "1", property2: "2" }, { property1: "3", property2: "4" }]
-    let newArray = setArrayField(array, ['property1'], [{anUnrelatedProperty: "5"}], ['property1'])
-    expect(newArray).toEqual([{ property1: "1", anUnrelatedProperty: "5"}, { property1: "3"}])
+  it("Example 1", () => {
+    let array = [
+      { property1: "1", property2: "2" },
+      { property1: "3", property2: "4" }
+    ];
+    let newArray = setArrayField(array, ["property1"], undefined, [
+      "differentproperty1"
+    ]);
+    expect(newArray).toEqual([
+      { differentproperty1: "1" },
+      { differentproperty1: "3" }
+    ]);
+  });
+
+  it("Example 2", () => {
+    let array = [
+      { property1: "1", property2: "2" },
+      { property1: "3", property2: "4" }
+    ];
+    let newArray = setArrayField(
+      array,
+      ["property1"],
+      [{ anUnrelatedProperty: "5" }],
+      ["property1"]
+    );
+    expect(newArray).toEqual([
+      { property1: "1", anUnrelatedProperty: "5" },
+      { property1: "3" }
+    ]);
   });
 });
 
@@ -56,14 +110,20 @@ describe("filterForNos()", () => {
   describe("With data", () => {
     it("Example 1", () => {
       expect(
-        filterForNos([{a: {b:"Yes"}, b: "we"}, {a: {b: "No"}, b: "e"}], ['a','b'])
-      ).toEqual([{a: {b: "No"}, b: "e"}]);
+        filterForNos(
+          [{ a: { b: "Yes" }, b: "we" }, { a: { b: "No" }, b: "e" }],
+          ["a", "b"]
+        )
+      ).toEqual([{ a: { b: "No" }, b: "e" }]);
     });
 
     it("Example 2", () => {
       expect(
-        filterForNos([{en: "Yes", gb: true}, {en: "Yes"}, {en: "No", gb: true}], ['en'])
-      ).toEqual([{en: "No", gb: true}]);
+        filterForNos(
+          [{ en: "Yes", gb: true }, { en: "Yes" }, { en: "No", gb: true }],
+          ["en"]
+        )
+      ).toEqual([{ en: "No", gb: true }]);
     });
   });
 });
@@ -345,7 +405,9 @@ describe("periodTotal()", () => {
     });
 
     it("Example 2", () => {
-      let formData = { per: [{ Q3: "12", Q4: "8.111" }, { Q3: "32.333", Q4: "16" }] };
+      let formData = {
+        per: [{ Q3: "12", Q4: "8.111" }, { Q3: "32.333", Q4: "16" }]
+      };
       periodTotal(formData, ["value"], "per", "Q3", "Q4");
       expect(formData).toEqual({
         per: [
