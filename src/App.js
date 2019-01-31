@@ -94,7 +94,7 @@ const renderReturnPage = props => (
 const CreateReturnButton = props => (
   <button
     data-test="new-return-button"
-    className="btn btn-primary btn-block"
+    className="btn btn-primary"
     onClick={() =>
       props.history.push(`/project/${props.match.params.id}/return`)
     }
