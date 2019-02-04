@@ -9,6 +9,11 @@ export default class ArraySubform extends React.Component {
   };
 
   formData = () => {
+    const isCurrentInfraDelted =
+      this.props.data[this.props.selectedIndex] === undefined;
+    if (isCurrentInfraDelted) {
+      return;
+    }
     return this.props.data[this.props.selectedIndex][
       this.props.selectedFormSection
     ];
