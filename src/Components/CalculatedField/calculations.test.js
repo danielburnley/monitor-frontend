@@ -12,6 +12,7 @@ import {
   secondsPassed,
   setCreate,
   validateArrayPropertyIsLessThan,
+  validateDatesSequential,
   periodTotal,
   setArrayVariance,
   subtract,
@@ -243,6 +244,24 @@ describe("get()", () => {
       expect(get(formData, "a")).toEqual("data");
     });
   });
+
+  describe("With a path enclosed in a double array", () => {
+    it("Example 1", () => {
+      let formData = {
+        a: {
+          b: "value"
+        }
+      };
+      expect(get(formData, ["a", "b"])).toEqual("value");
+    });
+
+    it("Example 2", () => {
+      let formData = {
+        a: "data"
+      };
+      expect(get(formData, ["a"])).toEqual("data");
+    });
+  });
 });
 
 describe("percentageDifference()", () => {
@@ -391,6 +410,36 @@ describe("validateArrayPropertyIsLessThan()", () => {
       validateArrayPropertyIsLessThan(formData, ["main"], 19);
       expect(formData).toEqual([{ _valid: false, main: "24" }]);
     });
+  });
+});
+
+describe("validateDatesSequential", () => {
+  describe("Valid", () => {
+    it("Example 1", () => {
+      let formData = { date1: "2010-01-01", date2Holder: {date2: "2010-01-07"}}
+      validateDatesSequential(formData, ["date1"], ["date2Holder", "date2"])
+      expect(formData).toEqual({ date1: "2010-01-01", date2Holder: {date2: "2010-01-07", _valid: true}})
+    });
+
+    it("Example 2", () => {
+      let formData = { date1: "2010-01-01", date2Holder: {date2: "2010-01-07"}, date3holder: {date3: "2010-01-14"}}
+      validateDatesSequential(formData, ["date1"], ["date2Holder", "date2"], ["date3holder", "date3"])
+      expect(formData).toEqual({ date1: "2010-01-01", date2Holder: {date2: "2010-01-07", _valid: true}, date3holder: {date3: "2010-01-14", _valid: true}})
+    })
+  });
+
+  describe("Invalid", () => {
+    it("Example 1", () => {
+      let formData = { date1: "2010-01-01", date2Holder: {date2: "2009-01-07"}}
+      validateDatesSequential(formData, ["date1"], ["date2Holder", "date2"])
+      expect(formData).toEqual({ date1: "2010-01-01", date2Holder: {date2: "2009-01-07", _valid: false}})
+    });
+
+    it("Example 2", () => {
+      let formData = { date1: "2010-01-01", date2Holder: {date2: "2009-01-07"}, date3holder: {date3: "2010-01-14"}}
+      validateDatesSequential(formData, ["date1"], ["date2Holder", "date2"], ["date3holder", "date3"])
+      expect(formData).toEqual({ date1: "2010-01-01", date2Holder: {date2: "2009-01-07", _valid: false}, date3holder: {date3: "2010-01-14", _valid: true}})
+    })
   });
 });
 
