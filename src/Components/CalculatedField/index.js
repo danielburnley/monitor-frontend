@@ -2,9 +2,8 @@ import "../../Polyfills/Array/flat";
 import React from "react";
 
 export function filterForNos(array, path) {
-  if (array)
-  {
-    return array.filter((i) => get(i, ...path) === "No")
+  if (array) {
+    return array.filter(i => get(i, ...path) === "No");
   }
   return [];
 }
@@ -18,7 +17,7 @@ export function parseMoney(value) {
 }
 
 export function accumulateMoney(array, property) {
-  if(!array) return null;
+  if (!array) return null;
   return array
     .reduce((total, object) => parseMoney(object[property]) + total, 0)
     .toFixed(2);
@@ -98,23 +97,32 @@ export function validateArrayPropertyIsLessThan(array, path, value) {
   });
 }
 
-export function setArrayField(copyFromArray, copyFromFieldPath, copyToArray, copyToFieldPath) {
-  if(!copyFromArray || copyFromArray.constructor !== Array) return ;
-  copyFromArray.forEach((item, index) => {
-    if(!copyToArray) copyToArray = [{}];
-    if (copyToArray.length < index + 1 ) copyToArray.push({});
-    
-    let getValue = copyFromFieldPath.reduce((accumulator, property) => {
-      if (accumulator && accumulator[property]) {
-        return accumulator[property];
-      } else {
-        return undefined;
-      }
-    }, item);
-    
-    setCreate(copyToArray[index], copyToFieldPath , getValue )
-  });
-  return copyToArray
+export function setArrayField(
+  copyFromArray,
+  copyFromFieldPath,
+  copyToArray,
+  copyToFieldPath
+) {
+  if (!copyFromArray || copyFromArray.constructor !== Array) return;
+  try {
+    copyFromArray.forEach((item, index) => {
+      if (!copyToArray) copyToArray = [{}];
+      if (copyToArray.length < index + 1) copyToArray.push({});
+
+      let getValue = copyFromFieldPath.reduce((accumulator, property) => {
+        if (accumulator && accumulator[property]) {
+          return accumulator[property];
+        } else {
+          return undefined;
+        }
+      }, item);
+
+      setCreate(copyToArray[index], copyToFieldPath, getValue);
+    });
+  } catch (e) {
+    return;
+  }
+  return copyToArray;
 }
 
 export function setCreate(object, path, value) {
