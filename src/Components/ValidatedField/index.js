@@ -1,4 +1,5 @@
 import React from "react";
+import "./style.css";
 
 export default class ValidatedField extends React.Component {
   onChange = formData => {
@@ -28,7 +29,7 @@ export default class ValidatedField extends React.Component {
   }
 
   render = () => (
-    <div className={`form-group ${ this.getHasError() }`}>
+    <div className={`form-group ${ this.getHasError() } error-message-no-wrap`}>
       <this.props.registry.fields.SchemaField
         formData={this.props.formData}
         schema={this.props.schema}
