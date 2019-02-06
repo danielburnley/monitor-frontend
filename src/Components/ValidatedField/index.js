@@ -24,7 +24,7 @@ export default class ValidatedField extends React.Component {
 
   getErrorText = () => {
     if (this.props.formData && !this.props.formData._valid) {
-      return <span className="help-block ">{this.props.schema.invalidText}</span>;
+      return <span className="help-block">{this.props.schema.invalidText}</span>;
     }
   }
 
