@@ -98,16 +98,19 @@ export function validateArrayPropertyIsLessThan(array, path, value) {
 }
 
 export function validateDatesSequential(object, ...dates) {
-  dates = dates.map(currentValue => [currentValue, new Date(get(object, currentValue))]);
-  
+  dates = dates.map(currentValue => [
+    currentValue,
+    (new Date(get(object, currentValue)))
+  ]);
+
   dates.forEach((dateInfo, index) => {
-    if (index === 0) return; 
-    setCreate(
-      object,
-      [...dateInfo[0].slice(0, dateInfo[0].length - 1), "_valid"],
-      dateInfo[1] >= dates[index - 1][1] 
-    )
-  })
+    if (index === 0) return;
+
+    let key = dateInfo[0].slice(0, dateInfo[0].length - 1);
+    let valid = dateInfo[1] >= dates[index - 1][1] || dateInfo[1] == "Invalid Date";
+
+    setCreate(object, [...key, "_valid"], valid);
+  });
 }
 
 export function setArrayField(

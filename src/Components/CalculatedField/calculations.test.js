@@ -428,6 +428,20 @@ describe("validateDatesSequential", () => {
     })
   });
 
+  describe("Empty but valid", () => {
+    it("Example 1", () => {
+      let formData = { date1: undefined, date2Holder: {date2: undefined}}
+      validateDatesSequential(formData, ["date1"], ["date2Holder", "date2"])
+      expect(formData).toEqual({ date1: undefined, date2Holder: {date2: undefined, _valid: true}})
+    })
+
+    it("Example 2", () => {
+      let formData = { date1: undefined, date2Holder: {date2: undefined}, date3Holder: {date3: undefined}}
+      validateDatesSequential(formData, ["date1"], ["date2Holder", "date2"], ["date3Holder", "date3"])
+      expect(formData).toEqual({ date1: undefined, date2Holder: {date2: undefined, _valid: true}, date3Holder: {date3: undefined, _valid: true}})
+    })
+  });
+
   describe("Invalid", () => {
     it("Example 1", () => {
       let formData = { date1: "2010-01-01", date2Holder: {date2: "2009-01-07"}}
