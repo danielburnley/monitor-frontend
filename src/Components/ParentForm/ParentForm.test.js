@@ -1587,5 +1587,189 @@ describe("<ParentForm>", () => {
         });
       });
     });
+
+    describe("Copy from an object into every item of an array", () => {
+      beforeEach(() => {
+        wrap = mount(
+          <ParentForm
+            documentGateway={documentGatewaySpy}
+            getRole={getRoleUseCaseSpy}
+            onChange={onChangeSpy}
+            formData={{
+              tab_one: {
+                cat: {period1: "3", period2: "4"}
+              },
+              tab_two: {
+                dog: [
+                  { anotherProp: "1" },
+                  { anotherProp: "2" }
+                ]
+              }
+
+            }}
+            schema={{
+              type: "object",
+              sharedData: [
+                { from: ['tab_one', 'cat', 'period1'], to: ['tab_two', 'dog', '#', 'period1'] }
+              ],
+              properties: {
+                tab_one: {
+                  type: "object",
+                  properties: {
+                    cat: {
+                      type: "object",
+                      properties: {
+                        period1: {
+                          type: "string"
+                        },
+                        period2: {
+                          type: "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                tab_two: {
+                  type: "object",
+                  properties: {
+                    dog: {
+                      type: "array",
+                      items: {
+                        type: "object",
+                        properties: {
+                          period1: {
+                            type: "string"
+                          },
+                          period2: {
+                            type: "string"
+                          }
+                        },
+                      }
+                    },
+                    hamster: {
+                      type: "string"
+                    }
+                  }
+                }
+              }
+            }}
+          />
+        );
+      });
+
+      it("calls the onchange spy with correct fields if one is changed", async () => { 
+        let input = wrap.find(".form-control").at(0);
+        
+        await updateFormField(input, "squeaky");
+
+        expect(onChangeSpy).toHaveBeenCalledWith({
+          formData: {
+            tab_one: {
+              cat: {period1: "squeaky", period2: "4"}
+            },
+            tab_two: {
+              dog: [
+                { period1: "squeaky", anotherProp: "1" },
+                { period1: "squeaky", anotherProp: "2" }
+              ]
+            }
+          }
+        });
+      });
+    });
+    describe("Copy multiple objects, in an object into every item of an array", () => {
+      beforeEach(() => {
+        wrap = mount(
+          <ParentForm
+            documentGateway={documentGatewaySpy}
+            getRole={getRoleUseCaseSpy}
+            onChange={onChangeSpy}
+            formData={{
+              tab_one: {
+                cat: { period1: "3", period2: "4", period3: "3",  period4: "4", period5: "5" }
+              },
+              tab_two: {
+                dog: [
+                  { anotherProp: "1" },
+                  { anotherProp: "2" }
+                ]
+              }
+
+            }}
+            schema={{
+              type: "object",
+              sharedData: [
+                { from: ['tab_one', 'cat', 'period1'], to: ['tab_two', 'dog', '#', 'period1'] },
+                { from: ['tab_one', 'cat', 'period2'], to: ['tab_two', 'dog', '#', 'period2'] },
+                { from: ['tab_one', 'cat', 'period3'], to: ['tab_two', 'dog', '#', 'period3'] },
+                { from: ['tab_one', 'cat', 'period4'], to: ['tab_two', 'dog', '#', 'period4'] },
+                { from: ['tab_one', 'cat', 'period5'], to: ['tab_two', 'dog', '#', 'period5'] },
+
+              ],
+              properties: {
+                tab_one: {
+                  type: "object",
+                  properties: {
+                    cat: {
+                      type: "object",
+                      properties: {
+                        period1: {
+                          type: "string"
+                        },
+                        period2: {
+                          type: "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                tab_two: {
+                  type: "object",
+                  properties: {
+                    dog: {
+                      type: "array",
+                      items: {
+                        type: "object",
+                        properties: {
+                          period1: {
+                            type: "string"
+                          },
+                          period2: {
+                            type: "string"
+                          }
+                        },
+                      }
+                    },
+                    hamster: {
+                      type: "string"
+                    }
+                  }
+                }
+              }
+            }}
+          />
+        );
+      });
+
+      it("calls the onchange spy with correct fields if one is changed", async () => { 
+        let input = wrap.find(".form-control").at(0);
+        
+        await updateFormField(input, "squeaky");
+
+        expect(onChangeSpy).toHaveBeenCalledWith({
+          formData: {
+            tab_one: {
+              cat: {period1: "squeaky", period2: "4", period3: "3",  period4: "4", period5: "5" }
+            },
+            tab_two: {
+              dog: [
+                { period1: "squeaky", anotherProp: "1", period2: "4", period3: "3",  period4: "4", period5: "5" },
+                { period1: "squeaky", anotherProp: "2", period2: "4", period3: "3",  period4: "4", period5: "5" }
+              ]
+            }
+          }
+        });
+      });
+    });
   });
 });
