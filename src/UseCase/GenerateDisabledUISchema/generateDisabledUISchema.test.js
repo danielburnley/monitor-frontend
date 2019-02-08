@@ -153,7 +153,7 @@ describe("GenerateDisabledUISchema", () => {
       useCase = new GenerateDisabledUISchema(generateUISchemaSpy);
     });
 
-    fit("Calls the generateUISchema use case", () => {
+    it("Calls the generateUISchema use case", () => {
       useCase.execute({properties: {a: {}}});
       expect(generateUISchemaSpy.execute).toHaveBeenCalledWith({properties: {a: {}}});
     });
@@ -248,6 +248,10 @@ describe("GenerateDisabledUISchema", () => {
   });
 
   describe("With hidden fields", () => {
+    beforeEach(() => {
+      generateUISchemaSpy = {execute: jest.fn(() => ({a: {b: {"ui:widget": "widget"} }}))};
+      useCase = new GenerateDisabledUISchema(generateUISchemaSpy);
+    });
     describe("In an object", () => {
       describe("Example one", () => {
         it("Marks the field as hidden", () => {
@@ -290,6 +294,7 @@ describe("GenerateDisabledUISchema", () => {
           };
           let response = useCase.execute(schema);
           expect(response).toEqual({
+            a: { b: { "ui:widget": "widget" } },
             c: { d: { "ui:widget": "hidden" } },
             e: { f: { "ui:widget": "hidden" } }
           });
@@ -332,7 +337,8 @@ describe("GenerateDisabledUISchema", () => {
             a: {
               cats: { "ui:disabled": true },
               meow: { cat: { "ui:widget": "hidden" } },
-              quack: { "ui:disabled": true }
+              quack: { "ui:disabled": true },
+              b: { "ui:widget": "widget" }
             }
           });
         });

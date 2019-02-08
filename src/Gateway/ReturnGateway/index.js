@@ -36,7 +36,7 @@ export default class ReturnGateway {
 
     if (rawResponse.ok) {
       let jsonResponse = await rawResponse.json();
-      let foundReturn = new Return(jsonResponse.baseReturn.data, jsonResponse.baseReturn.schema);
+      let foundReturn = new Return(jsonResponse.baseReturn.data, jsonResponse.baseReturn.schema, jsonResponse.baseReturn.no_of_previous_returns);
       return {success: true, foundReturn};
     } else {
       return {success: false};

@@ -100,7 +100,7 @@ export default class ReturnPage extends React.Component {
     if (returnData.status === "Submitted") {
       uiSchema = this.props.generateSubmittedSchema.execute(returnData.schema);
     } else {
-      uiSchema = this.props.generateUISchema.execute(returnData.schema);
+      uiSchema = this.props.generateUISchema.execute(returnData.schema, returnData.no_of_previous_returns);
     }
 
     await this.setState({
