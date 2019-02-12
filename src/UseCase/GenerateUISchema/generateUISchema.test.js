@@ -146,9 +146,10 @@ describe("GenerateUISchema", () => {
       });
     });
   });
+
   describe("Readonly", () => {
     describe("Example one", () => {
-      it("Generates a ui schema from a single field", () => {
+        it("Generates a ui schema from a single field", () => {
         let useCase = new GenerateUISchema(userRoleCookieGateway);
         let schema = {
           type: "object",
@@ -369,6 +370,246 @@ describe("GenerateUISchema", () => {
         let response = useCase.execute(schema);
         expect(response).toEqual({
           d: { e: { "ui:disabled": true } }
+        });
+      });
+    });
+  });
+
+  describe("Readonly after certain number of returns", () => {
+    describe("Example one", () => {
+      it("Generates no disabled ui schema for a valid number of returns", () => {
+        let useCase = new GenerateUISchema(userRoleCookieGateway);
+        let schema = {
+          type: "object",
+          properties: {
+            a: { type: "string", readonly_after_return: 4 }
+          }
+        };
+        let noOfPreviousReturns = 2
+        let response = useCase.execute(schema, noOfPreviousReturns);
+        expect(response).toEqual({});
+      });
+
+      it("Generates a ui schema for an invalid number of returns", () => {
+        let useCase = new GenerateUISchema(userRoleCookieGateway);
+        let schema = {
+          type: "object",
+          properties: {
+            a: { type: "string", readonly_after_return: 2 }
+          }
+        };
+        let noOfPreviousReturns = 4
+        let response = useCase.execute(schema, noOfPreviousReturns);
+        expect(response).toEqual({a: {"ui:disabled": true}});
+      });
+
+      it("Generates a ui schema for the same number of returns", () => {
+        let useCase = new GenerateUISchema(userRoleCookieGateway);
+        let schema = {
+          type: "object",
+          properties: {
+            a: { type: "string", readonly_after_return: 1 }
+          }
+        };
+        let noOfPreviousReturns = 1
+        let response = useCase.execute(schema, noOfPreviousReturns);
+        expect(response).toEqual({a: {"ui:disabled": true}});
+      });
+
+      it("Generates the correct ui schema with different types of readonly fields", () => {
+        let useCase = new GenerateUISchema(userRoleCookieGateway);
+        let schema = {
+          type: "object",
+          properties: {
+            a: {
+              type: "object",
+              properties: {
+                c: { type: "string" },
+                d: { type: "string", readonly_after_return: 4 }
+              }
+            },
+            b: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  e: { type: "string", readonly: true },
+                  f: { type: "string" }
+                }
+              }
+            }
+          }
+        };
+        let noOfPreviousReturns = 2
+        let response = useCase.execute(schema, noOfPreviousReturns);
+        expect(response).toEqual({
+          a: {},
+          b: {
+            "ui:options": {
+              addable: false,
+              orderable: false,
+              removable: false
+            },
+            items: { e: { "ui:disabled": true } }
+          }
+        });
+      });
+
+      it("Generates the correct ui schema with different types of readonly fields", () => {
+        let useCase = new GenerateUISchema(userRoleCookieGateway);
+        let schema = {
+          type: "object",
+          properties: {
+            a: {
+              type: "object",
+              properties: {
+                c: { type: "string" },
+                d: { type: "string", readonly_after_return: 2 }
+              }
+            },
+            b: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  e: { type: "string", readonly: true },
+                  f: { type: "string" }
+                }
+              }
+            }
+          }
+        };
+        let noOfPreviousReturns = 4
+        let response = useCase.execute(schema, noOfPreviousReturns);
+        expect(response).toEqual({
+          a: {d: {"ui:disabled": true}},
+          b: {
+            "ui:options": {
+              addable: false,
+              orderable: false,
+              removable: false
+            },
+            items: { e: { "ui:disabled": true } }
+          }
+        });
+      });
+    });
+
+    describe("Example two", () => {
+      it("Generates a disabled ui schema for a valid number of returns", () => {
+        let useCase = new GenerateUISchema(userRoleCookieGateway);
+        let schema = {
+          type: "object",
+          properties: {
+            a: { type: "string", readonly_after_return: 4 }
+          }
+        };
+        let noOfPreviousReturns = 2
+        let response = useCase.execute(schema, noOfPreviousReturns);
+        expect(response).toEqual({});
+      });
+
+      it("Generates a ui schema for an invalid number of returns", () => {
+        let useCase = new GenerateUISchema(userRoleCookieGateway);
+        let schema = {
+          type: "object",
+          properties: {
+            a: { type: "string", readonly_after_return: 6 }
+          }
+        };
+        let noOfPreviousReturns = 10
+        let response = useCase.execute(schema, noOfPreviousReturns);
+        expect(response).toEqual({a: {"ui:disabled": true}});
+      });
+
+      it("Generates a ui schema for the same number of returns", () => {
+        let useCase = new GenerateUISchema(userRoleCookieGateway);
+        let schema = {
+          type: "object",
+          properties: {
+            a: { type: "string", readonly_after_return: 5 }
+          }
+        };
+        let noOfPreviousReturns = 5
+        let response = useCase.execute(schema, noOfPreviousReturns);
+        expect(response).toEqual({a: {"ui:disabled": true}});
+      });
+
+      it("Generates the correct ui schema with different types of readonly fields", () => {
+        let useCase = new GenerateUISchema(userRoleCookieGateway);
+        let schema = {
+          type: "object",
+          properties: {
+            a: {
+              type: "object",
+              properties: {
+                c: { type: "string" },
+                d: { type: "string", readonly_after_return: 5 }
+              }
+            },
+            b: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  e: { type: "string", readonly: true },
+                  f: { type: "string" }
+                }
+              }
+            }
+          }
+        };
+        let noOfPreviousReturns = 1
+        let response = useCase.execute(schema, noOfPreviousReturns);
+        expect(response).toEqual({
+          a: {},
+          b: {
+            "ui:options": {
+              addable: false,
+              orderable: false,
+              removable: false
+            },
+            items: { e: { "ui:disabled": true } }
+          }
+        });
+      });
+
+      it("Generates the correct ui schema with different types of readonly fields", () => {
+        let useCase = new GenerateUISchema(userRoleCookieGateway);
+        let schema = {
+          type: "object",
+          properties: {
+            a: {
+              type: "object",
+              properties: {
+                c: { type: "string" },
+                d: { type: "string", readonly_after_return: 5 }
+              }
+            },
+            b: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  e: { type: "string", readonly: true },
+                  f: { type: "string" }
+                }
+              }
+            }
+          }
+        };
+        let noOfPreviousReturns = 7
+        let response = useCase.execute(schema, noOfPreviousReturns);
+        expect(response).toEqual({
+          a: {d: {"ui:disabled": true}},
+          b: {
+            "ui:options": {
+              addable: false,
+              orderable: false,
+              removable: false
+            },
+            items: { e: { "ui:disabled": true } }
+          }
         });
       });
     });

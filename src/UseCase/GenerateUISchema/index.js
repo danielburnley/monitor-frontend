@@ -4,22 +4,22 @@ export default class GenerateUISchema {
   constructor(userRoleCookieGateway) {
     this.userRoleGateway = userRoleCookieGateway;
   }
-  execute(data) {
+  execute(data, noOfPreviousReturns) {
     let userRole = this.userRoleGateway.getUserRole().userRole;
 
-    return this.generateUISchema(data.properties, userRole);
+    return this.generateUISchema(data.properties, userRole, noOfPreviousReturns);
   }
 
-  generateUISchema(data, role) {
+  generateUISchema(data, role, noOfPreviousReturns) {
     let ret = {};
 
     Object.entries(data).forEach(([key, value]) => {
       if (value.type === "object") {
-        ret[key] = this.generateSchemaForObject(value, role);
+        ret[key] = this.generateSchemaForObject(value, role, noOfPreviousReturns);
       } else if (value.type === "array") {
-        ret[key] = this.generateSchemaForArray(value, role);
+        ret[key] = this.generateSchemaForArray(value, role, noOfPreviousReturns);
       } else {
-        let itemSchema = this.generateSchemaForProperties(value, role);
+        let itemSchema = this.generateSchemaForProperties(value, role, noOfPreviousReturns);
         if (itemSchema) {
           ret[key] = itemSchema;
         }
@@ -28,8 +28,8 @@ export default class GenerateUISchema {
     return ret;
   }
 
-  generateSchemaForObject(value, role) {
-    let ret = this.generateUISchema(value.properties, role);
+  generateSchemaForObject(value, role, noOfPreviousReturns) {
+    let ret = this.generateUISchema(value.properties, role, noOfPreviousReturns);
     let uiField = this.getUIFieldForObject(value);
 
     if (uiField) {
@@ -37,14 +37,14 @@ export default class GenerateUISchema {
     }
 
     if (value.dependencies) {
-      let dependencySchema = this.generateSchemaForDependencies(value, role);
+      let dependencySchema = this.generateSchemaForDependencies(value, role, noOfPreviousReturns);
       ret = merge(ret, dependencySchema);
     }
 
     return ret;
   }
 
-  generateSchemaForArray(value, role) {
+  generateSchemaForArray(value, role, noOfPreviousReturns) {
     let ret = {};
     ret["ui:options"] = {
       addable: this.isAddableArray(value),
@@ -52,7 +52,7 @@ export default class GenerateUISchema {
       removable: this.isAddableArray(value)
     };
 
-    ret["items"] = this.generateSchemaForObject(value.items, role);
+    ret["items"] = this.generateSchemaForObject(value.items, role, noOfPreviousReturns);
 
     if (value.items.horizontal) {
       ret["items"]["ui:field"] = "horizontal";
@@ -82,15 +82,15 @@ export default class GenerateUISchema {
     return ret;
   }
 
-  generateSchemaForDependencies(value, role) {
+  generateSchemaForDependencies(value, role, noOfPreviousReturns) {
     let reducer = (acc, dependency) =>
-      merge(acc, this.generateSchemaForObject(dependency, role));
+      merge(acc, this.generateSchemaForObject(dependency, role, noOfPreviousReturns));
 
     let dependencies = Object.values(value.dependencies)[0];
     return dependencies.oneOf.reduce(reducer, {});
   }
 
-  generateSchemaForProperties(item, role) {
+  generateSchemaForProperties(item, role, noOfPreviousReturns) {
     let schema = {}
 
     if (item.extendedText) {
@@ -113,7 +113,11 @@ export default class GenerateUISchema {
       schema["ui:field"] = "uploadFile"
     }
 
-    if (item.readonly) {
+    if (item.readonly === true) {
+      schema["ui:disabled"] = true
+    }
+
+    if (item.readonly_after_return <= noOfPreviousReturns) {
       schema["ui:disabled"] = true
     }
 

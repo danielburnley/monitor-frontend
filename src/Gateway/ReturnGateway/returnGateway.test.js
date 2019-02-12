@@ -303,7 +303,7 @@ describe("Return Gateway", () => {
             .matchHeader("Content-Type", "application/json")
             .get("/project/1/return")
             .reply(200, {
-              baseReturn: { data: { some: "data" }, schema: { some: "schema" } }
+              baseReturn: { data: { some: "data" }, schema: { some: "schema" }, no_of_previous_returns: 1 }
             });
           let gateway = new ReturnGateway(apiKeyGateway, locationGateway);
           response = await gateway.baseReturnFor(1);
@@ -317,6 +317,7 @@ describe("Return Gateway", () => {
           expect(response.success).toEqual(true);
           expect(response.foundReturn.data).toEqual({ some: "data" });
           expect(response.foundReturn.schema).toEqual({ some: "schema" });
+          expect(response.foundReturn.no_of_previous_returns).toEqual(1);
         });
       });
 
@@ -327,7 +328,7 @@ describe("Return Gateway", () => {
             .matchHeader("Content-Type", "application/json")
             .get("/project/5/return")
             .reply(200, {
-              baseReturn: { data: { cats: "meow" }, schema: { dogs: "woof" } }
+              baseReturn: { data: { cats: "meow" }, schema: { dogs: "woof" }, no_of_previous_returns: 7 }
             });
           let gateway = new ReturnGateway(apiKeyGateway, locationGateway);
           response = await gateway.baseReturnFor(5);
@@ -342,6 +343,7 @@ describe("Return Gateway", () => {
           expect(response.success).toEqual(true);
           expect(response.foundReturn.data).toEqual({ cats: "meow" });
           expect(response.foundReturn.schema).toEqual({ dogs: "woof" });
+          expect(response.foundReturn.no_of_previous_returns).toEqual(7);
         });
       });
     });

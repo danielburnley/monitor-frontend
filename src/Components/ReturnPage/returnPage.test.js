@@ -74,7 +74,8 @@ class getReturnStub {
             }
           }
         }
-      }
+      },
+      no_of_previous_returns: 7
     });
   }
 }
@@ -101,7 +102,8 @@ class getBaseReturnStub {
             }
           }
         }
-      }
+      },
+      no_of_previous_returns: 7
     });
   }
 }
