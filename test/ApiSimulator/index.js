@@ -82,9 +82,9 @@ class APISimulator {
   expendEmptyTokenForProject() {
     let request = nock(this.url)
       .matchHeader("Content-Type", "application/json")
-      .post("/token/expend", { });
+      .post("/token/expend", {});
 
-    return new APIResponse(request, { apiKey: "abc" });
+    return new APIResponse(request, { apiKey: "abc", role: "Homes England" });
   }
 
   expendToken(access_token, role = "Homes England") {
@@ -92,7 +92,7 @@ class APISimulator {
       .matchHeader("Content-Type", "application/json")
       .post("/token/expend", { access_token });
 
-    return new APIResponse(request, { apiKey: "abc", role });
+    return new APIResponse(request, { apiKey: "abc", role: "Homes England" });
   }
 }
 

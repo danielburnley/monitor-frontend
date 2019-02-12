@@ -96,6 +96,13 @@ describe("Authentication against routes", () => {
     expect(page.find("GetToken").length).toEqual(1);
   });
 
+  it("Asks for authentication against the home page", async () => {
+    let page = new AppPage("/");
+    await page.load();
+
+    expect(page.find("GetToken").length).toEqual(1);
+  });
+
   it("Asks for authentication against the base return page", async () => {
     let page = new AppPage("/project/0/return");
     await page.load();
@@ -109,8 +116,15 @@ describe("Authentication against routes", () => {
 
     expect(page.find("GetToken").length).toEqual(1);
   });
-});
 
+  it("Asks for authentication against any other page", async () => {
+    let page = new AppPage("/not-a-page");
+    await page.load();
+
+    expect(page.find("GetToken").length).toEqual(1);
+  });
+});
+  
 describe("Viewing a project", () => {
   let api;
 
@@ -124,7 +138,7 @@ describe("Viewing a project", () => {
     nock.cleanAll();
   });
 
-  it("Given invalid token GetToken is shown", async () => {
+  it("Given invalid token project page is not shown", async () => {
     api.getProject({}, 0).unsuccessfully();
 
     api.expendToken("Hello").unauthorised();
@@ -132,23 +146,27 @@ describe("Viewing a project", () => {
     let page = new AppPage("/project/0?token=Hello");
     await page.load();
 
-    expect(page.find("GetToken").length).toEqual(1);
     expect(page.find("ProjectPage").length).toEqual(0);
   });
 
   describe("Given valid token", () => {
     beforeEach(() => {
       api.expendToken("Cats").successfully();
+      api.expendEmptyTokenForProject().successfully();
+    });
+    
+    afterEach(() => {
+      nock.cleanAll();
     });
 
     it("will not show GetToken", async () => {
-      api.expendToken("Cats").successfully();
-
       api.getProject(projectSchema, projectData).successfully();
       api.getReturns({returns: []}).successfully();
 
-      let page = new AppPage("/project/0?token=Cats");
+      let page = new AppPage("/project/0/?token=Cats");
       await page.load();
+      await page.load();
+
 
       expect(page.find("GetToken").length).toEqual(0);
       expect(page.find("ProjectPage").length).toEqual(1);
@@ -278,7 +296,7 @@ describe("Viewing a project", () => {
         ];
         expect(page.getFormInputs()).toEqual(expectedInputValues);
       });
-    })
+    });
   });
 });
 
@@ -287,7 +305,7 @@ describe('Submitting a draft project', () => {
   beforeEach(() => {
     process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
     api = new APISimulator("http://cat.meow");
-    api.expendToken("Cats", 0).successfully();
+    api.expendToken("Hello", "Homes England").successfully();
     api.getProject(projectSchema, draftProjectData, "Draft", projectType, "5").successfully();
     api.getProject(projectSchema, draftProjectData, "Draft", projectType, "8").successfully();
     api.updateProject(submittedProjectData, 0, {errors: []}, "8").successfully();
@@ -299,7 +317,7 @@ describe('Submitting a draft project', () => {
   });
 
   it('Allows you to edit, save and submit a draft project', async () => {
-    let page = new AppPage("/project/0");
+    let page = new AppPage("/project/0?token=Hello");
     let response = {
       valid: true,
       invalidPaths: [],
@@ -331,7 +349,7 @@ describe('Submitting a draft project', () => {
   });
 
   it('Presents you with validation when you attempt to save and submit an invalid draft project', async () => {
-    let page = new AppPage("/project/0");
+    let page = new AppPage("/project/0?token=Hello");
     let response = {
       valid: false,
       invalidPaths: [['cats'], ['meow']],
@@ -364,6 +382,7 @@ describe('Submitting a draft project', () => {
   });
 
   it('Present you with an error when you attempt to save over data which has been previously saved', async () => {
+    Cookies.remove('userrole');    
     let page = new AppPage("/project/0");
     let response = {
       valid: true,
@@ -422,6 +441,14 @@ describe("Printing a return", () => {
 });
 
 describe("Page not found", () => {
+  let api
+  beforeEach(() => {
+    process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
+    api = new APISimulator("http://cat.meow");
+    api.expendToken("Cats").successfully();
+    api.expendToken("Cats").successfully();
+  });
+
   it("Renders a 404 page", async () => {
     let page = new AppPage("/non-existent");
     await page.load();
@@ -431,6 +458,14 @@ describe("Page not found", () => {
 });
 
 describe("Cookie consent", () => {
+  let api
+  beforeEach(() => {
+    process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
+    api = new APISimulator("http://cat.meow");
+    api.expendEmptyTokenForProject().successfully();
+    api.expendEmptyTokenForProject().successfully();
+  });
+
   it("Renders a cookie notice once", async () => {
     Cookies.remove('consent');
     let page = new AppPage("/");

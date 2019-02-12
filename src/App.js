@@ -13,6 +13,7 @@ import ReturnList from "./Components/ReturnList";
 import ReturnListProvider from "./Components/ReturnListProvider";
 import ReturnPage from "./Components/ReturnPage";
 import Portal from "./Components/Portal";
+import ProjectPortal from "./Components/ProjectPortal";
 import NotFound from "./Components/NotFound";
 import CookieConsent from "./Components/CookieConsent";
 import PrintReturn from "./Components/PrintReturn";
@@ -24,6 +25,7 @@ import GenerateDisabledUISchema from "./UseCase/GenerateDisabledUISchema";
 import GenerateUISchema from "./UseCase/GenerateUISchema";
 import GetBaseReturn from "./UseCase/GetBaseReturn";
 import CanAccessProject from "./UseCase/CanAccessProject";
+import CanAccessMonitor from "./UseCase/CanAccessMonitor";
 import GetProject from "./UseCase/GetProject";
 import GetReturn from "./UseCase/GetReturn";
 import GetReturns from "./UseCase/GetReturns"
@@ -68,6 +70,7 @@ const getBaseReturnUseCase = new GetBaseReturn(returnGateway);
 const getProjectUseCase = new GetProject(projectGateway);
 const getReturnUseCase = new GetReturn(returnGateway);
 const canAccessProjectUseCase = new CanAccessProject(tokenGateway, apiKeyGateway, userRoleGateway, projectGateway);
+const canAccessMonitorUseCase = new CanAccessMonitor(tokenGateway, apiKeyGateway, userRoleGateway);
 const getReturnsUseCase = new GetReturns(returnGateway);
 const requestTokenUseCase = new RequestToken(tokenGateway);
 const submitReturnUseCase = new SubmitReturn(returnGateway);
@@ -200,6 +203,12 @@ const renderPrintPage = props => (
    </PrintReturn>
 );
 
+const renderhomepage = props => (
+  <Homepage 
+
+  />
+)
+
 
 const App = () => (
   <Router>
@@ -208,55 +217,73 @@ const App = () => (
       <Header />
 
       <div className="monitor-container">
-        <Switch>
-          <Route exact path="/">
-            <Homepage />
-          </Route>
           <Route
-            path="/project/:id"
+            path="/"
             render={props => (
               <Portal
                 {...props}
-                projectId={props.match.params.id}
                 requestToken={requestTokenUseCase}
                 token={
                   qs.parse(props.location.search, { ignoreQueryPrefix: true })
                     .token
                 }
-                canAccessProject={canAccessProjectUseCase}
+                canAccessMonitor={canAccessMonitorUseCase}
               >
-                <Route
-                  exact
-                  path="/project/:id/new"
-                  render={renderNewProjectPage}
-                />
-                <Route exact path="/project/:id" render={renderProjectPage} />
-                <Route
-                  exact
-                  path="/project/:id/baseline"
-                  render={renderBaselinePage}
-                />
-                <Route
-                  exact
-                  path="/project/:projectId/return"
-                  render={renderReturnPage}
-                />
-                <Route
-                  exact
-                  path="/project/:projectId/return/:returnId"
-                  render={renderReturnPage}
-                />
-                <Route
-                  exact
-                  path="/project/:projectId/return/:returnId/print"
-                  render={renderPrintPage}
-                />
+                <Switch>
+                  <Route 
+                    exact
+                    path="/"
+                    render={renderhomepage}
+                  />
+                  <Route
+                    path="/project/:id"
+                    render={props => (
+                      <ProjectPortal
+                      {...props}
+                      url={props.match.url}
+                      projectId={props.match.params.id}
+                      canAccessProject={canAccessProjectUseCase}
+
+                      >
+                        <Route exact path="/project/:id" render={renderProjectPage} />
+                        <Route
+                          exact
+                          path="/project/:id/new"
+                          render={renderNewProjectPage}
+                        />
+                        <Route
+                          exact
+                          path="/project/:id/baseline"
+                          render={renderBaselinePage}
+                        />
+                        <Route
+                          exact
+                          path="/project/:projectId/return"
+                          render={renderReturnPage}
+                        />
+                        <Route
+                          exact
+                          path="/project/:projectId/return/:returnId"
+                          render={renderReturnPage}
+                        />
+                        <Route
+                          exact
+                          path="/project/:projectId/return/:returnId/print"
+                          render={renderPrintPage}
+                        />
+                      </ProjectPortal>
+                    )}
+                    />
+                  <Route
+                    path="*"
+                    exact={true}
+                    component={NotFound}
+                  />
+                </Switch>
               </Portal>
             )}
           />
 
-          <Route path="*" exact={true} component={NotFound} />
-        </Switch>
       </div>
 
       <Footer />

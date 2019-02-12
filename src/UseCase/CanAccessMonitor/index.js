@@ -1,21 +1,17 @@
 export default class CanAccessProject {
-  constructor(tokenGateway, apiKeyGateway, userRoleGateway, projectGateway) {
+  constructor(tokenGateway, apiKeyGateway, userRoleGateway, ) {
     this.tokenGateway = tokenGateway;
     this.apiKeyGateway = apiKeyGateway;
     this.userRoleGateway = userRoleGateway;
-    this.projectGateway = projectGateway;
   }
 
-  async execute(access_token, project_id) {
-    let project = await this.projectGateway.findById(project_id);
-
-    if (project.success) {
+  async execute(access_token) {
+    if(this.apiKeyGateway.getApiKey().apiKey) {
       return {
         valid: true,
         apiKey: this.apiKeyGateway.getApiKey().apiKey,
         userRole: this.userRoleGateway.getUserRole().userRole
       };
-
     } else {
       let receivedApiKey = await this.tokenGateway.getAccess(access_token);
       if (receivedApiKey === null) {

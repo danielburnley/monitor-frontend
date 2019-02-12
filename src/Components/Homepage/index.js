@@ -7,6 +7,7 @@ export default class Homepage extends React.Component {
     super(props);
     this.env = runtimeEnv();
   }
+
   render() {
     return (
       <div className="row homepage">
