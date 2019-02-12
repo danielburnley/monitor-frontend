@@ -382,7 +382,7 @@ describe("GenerateUISchema", () => {
         let schema = {
           type: "object",
           properties: {
-            a: { type: "string", readonly: 4 }
+            a: { type: "string", readonly_after_return: 4 }
           }
         };
         let noOfPreviousReturns = 2
@@ -395,7 +395,7 @@ describe("GenerateUISchema", () => {
         let schema = {
           type: "object",
           properties: {
-            a: { type: "string", readonly: 2 }
+            a: { type: "string", readonly_after_return: 2 }
           }
         };
         let noOfPreviousReturns = 4
@@ -408,7 +408,7 @@ describe("GenerateUISchema", () => {
         let schema = {
           type: "object",
           properties: {
-            a: { type: "string", readonly: 1 }
+            a: { type: "string", readonly_after_return: 1 }
           }
         };
         let noOfPreviousReturns = 1
@@ -425,7 +425,7 @@ describe("GenerateUISchema", () => {
               type: "object",
               properties: {
                 c: { type: "string" },
-                d: { type: "string", readonly: 4 }
+                d: { type: "string", readonly_after_return: 4 }
               }
             },
             b: {
@@ -464,7 +464,7 @@ describe("GenerateUISchema", () => {
               type: "object",
               properties: {
                 c: { type: "string" },
-                d: { type: "string", readonly: 2 }
+                d: { type: "string", readonly_after_return: 2 }
               }
             },
             b: {
@@ -501,7 +501,7 @@ describe("GenerateUISchema", () => {
         let schema = {
           type: "object",
           properties: {
-            a: { type: "string", readonly: 4 }
+            a: { type: "string", readonly_after_return: 4 }
           }
         };
         let noOfPreviousReturns = 2
@@ -514,7 +514,7 @@ describe("GenerateUISchema", () => {
         let schema = {
           type: "object",
           properties: {
-            a: { type: "string", readonly: 6 }
+            a: { type: "string", readonly_after_return: 6 }
           }
         };
         let noOfPreviousReturns = 10
@@ -527,7 +527,7 @@ describe("GenerateUISchema", () => {
         let schema = {
           type: "object",
           properties: {
-            a: { type: "string", readonly: 5 }
+            a: { type: "string", readonly_after_return: 5 }
           }
         };
         let noOfPreviousReturns = 5
@@ -544,7 +544,7 @@ describe("GenerateUISchema", () => {
               type: "object",
               properties: {
                 c: { type: "string" },
-                d: { type: "string", readonly: 5 }
+                d: { type: "string", readonly_after_return: 5 }
               }
             },
             b: {
@@ -583,7 +583,7 @@ describe("GenerateUISchema", () => {
               type: "object",
               properties: {
                 c: { type: "string" },
-                d: { type: "string", readonly: 5 }
+                d: { type: "string", readonly_after_return: 5 }
               }
             },
             b: {

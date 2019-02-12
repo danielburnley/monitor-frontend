@@ -113,7 +113,11 @@ export default class GenerateUISchema {
       schema["ui:field"] = "uploadFile"
     }
 
-    if (item.readonly === true || item.readonly <= noOfPreviousReturns) {
+    if (item.readonly === true) {
+      schema["ui:disabled"] = true
+    }
+
+    if (item.readonly_after_return <= noOfPreviousReturns) {
       schema["ui:disabled"] = true
     }
 
