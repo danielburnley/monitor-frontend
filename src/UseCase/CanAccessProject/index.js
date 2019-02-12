@@ -16,7 +16,7 @@ export default class CanAccessProject {
         userRole: this.userRoleGateway.getUserRole().userRole
       };
     } else {
-      let receivedApiKey = await this.tokenGateway.getAccess(access_token, project_id);
+      let receivedApiKey = await this.tokenGateway.getAccess(access_token);
       if (receivedApiKey === null) {
         return { valid: false }
       } else {

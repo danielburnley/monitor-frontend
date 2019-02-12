@@ -82,12 +82,12 @@ describe("CanAccessProject", () => {
 
     it('Calls the token gateway', async () => {
       await useCase.execute("", 1);
-      expect(tokenGatewaySpy.getAccess).toBeCalledWith("", 1);
+      expect(tokenGatewaySpy.getAccess).toBeCalledWith("");
     });
 
     it('Calls the token gateway with an access token', async () => {
       await useCase.execute("Cats", 3);
-      expect(tokenGatewaySpy.getAccess).toBeCalledWith("Cats", 3);
+      expect(tokenGatewaySpy.getAccess).toBeCalledWith("Cats");
     });
 
     it('returns the api key', async () => {

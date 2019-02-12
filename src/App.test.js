@@ -81,7 +81,7 @@ describe("Authentication against routes", () => {
   beforeEach(() => {
     process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
     api = new APISimulator("http://cat.meow");
-    api.expendEmptyTokenForProject(0).unauthorised();
+    api.expendEmptyTokenForProject().unauthorised();
     api.getProject({}, 0).unsuccessfully();
   });
 
@@ -127,7 +127,7 @@ describe("Viewing a project", () => {
   it("Given invalid token GetToken is shown", async () => {
     api.getProject({}, 0).unsuccessfully();
 
-    api.expendToken("Hello", 0).unauthorised();
+    api.expendToken("Hello").unauthorised();
 
     let page = new AppPage("/project/0?token=Hello");
     await page.load();
@@ -138,11 +138,11 @@ describe("Viewing a project", () => {
 
   describe("Given valid token", () => {
     beforeEach(() => {
-      api.expendToken("Cats", 0).successfully();
+      api.expendToken("Cats").successfully();
     });
 
     it("will not show GetToken", async () => {
-      api.expendToken("Cats", 0).successfully();
+      api.expendToken("Cats").successfully();
 
       api.getProject(projectSchema, projectData).successfully();
       api.getReturns({returns: []}).successfully();

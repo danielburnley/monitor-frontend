@@ -61,7 +61,7 @@ describe('GetToken', () => {
     page.submit()
     page.load()
 
-    expect(requestTokenSpy.execute).toHaveBeenCalledWith("cat@cathouse.com", "1", "http://localhost/")
+    expect(requestTokenSpy.execute).toHaveBeenCalledWith("cat@cathouse.com", "http://localhost/")
   });
 
   it("shows the 'sent' message when submitted", async () => {

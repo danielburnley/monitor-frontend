@@ -68,7 +68,6 @@ describe("Portal", () => {
 
     expect(RequestTokenSpy.execute).toHaveBeenCalledWith(
       "cats@cathouse.com",
-      "1",
       "http://localhost/"
     );
   });

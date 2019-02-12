@@ -11,10 +11,10 @@ describe('token gateway', () => {
         process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
         let accessInfoRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
-          .post('/token/request', {email_address: 'cats@cathouse.com', project_id: 1})
+          .post('/token/request', {email_address: 'cats@cathouse.com'})
           .reply(200);
         let gateway = new TokenGateway();
-        await gateway.requestToken('cats@cathouse.com', 1);
+        await gateway.requestToken('cats@cathouse.com');
         expect(accessInfoRequest.isDone()).toBeTruthy()
       })
     })
@@ -24,10 +24,10 @@ describe('token gateway', () => {
         process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
         let accessInfoRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
-          .post('/token/expend', {access_token: 'Cats', project_id: 1})
+          .post('/token/expend', {access_token: 'Cats'})
           .reply(202, {apiKey: 'Dogs', role: 'HE'});
         let gateway = new TokenGateway();
-        let access_info = await gateway.getAccess('Cats', 1);
+        let access_info = await gateway.getAccess('Cats');
         expect(accessInfoRequest.isDone()).toBeTruthy()
       })
 
@@ -35,10 +35,10 @@ describe('token gateway', () => {
         process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
         let accessInfoRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
-          .post('/token/expend', {access_token: 'Cats', project_id: 1})
+          .post('/token/expend', {access_token: 'Cats'})
           .reply(202, {apiKey: 'Dogs'});
         let gateway = new TokenGateway();
-        let access_info = await gateway.getAccess('Cats', 1);
+        let access_info = await gateway.getAccess('Cats');
         expect(access_info.apiKey.apiKey).toEqual('Dogs')
       });
 
@@ -46,10 +46,10 @@ describe('token gateway', () => {
         process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
         let accessInfoRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
-          .post('/token/expend', {access_token: 'Cats', project_id: 1})
+          .post('/token/expend', {access_token: 'Cats'})
           .reply(202, {apiKey: 'Dogs', role: "6"});
         let gateway = new TokenGateway();
-        let access_info = await gateway.getAccess('Cats', 1);
+        let access_info = await gateway.getAccess('Cats');
         expect(access_info.userRole.userRole).toEqual("6")
       })
     });
@@ -59,10 +59,10 @@ describe('token gateway', () => {
         process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
         let accessInfoRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
-          .post('/token/expend', {access_token: 'Cats', project_id: 1})
+          .post('/token/expend', {access_token: 'Cats'})
           .reply(400);
         let gateway = new TokenGateway();
-        let apiKey = await gateway.getAccess('Cats', 1);
+        let apiKey = await gateway.getAccess('Cats');
         expect(apiKey).toEqual(null)
       })
     })
@@ -72,10 +72,10 @@ describe('token gateway', () => {
         process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
         let accessInfoRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
-          .post('/token/expend', {access_token: 'Cats', project_id: 1})
+          .post('/token/expend', {access_token: 'Cats'})
           .reply(403);
         let gateway = new TokenGateway();
-        let apiKey = await gateway.getAccess('Cats', 1);
+        let apiKey = await gateway.getAccess('Cats');
         expect(apiKey).toEqual(null)
       })
     })
@@ -87,10 +87,10 @@ describe('token gateway', () => {
         process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
         let accessInfoRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
-          .post('/token/request', {email_address: 'cats@cathouse.com', project_id: 8})
+          .post('/token/request', {email_address: 'cats@cathouse.com'})
           .reply(200);
         let gateway = new TokenGateway();
-        await gateway.requestToken('cats@cathouse.com', 8);
+        await gateway.requestToken('cats@cathouse.com');
         expect(accessInfoRequest.isDone()).toBeTruthy()
       })
     })
@@ -100,10 +100,10 @@ describe('token gateway', () => {
         process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
         let accessInfoRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
-          .post('/token/expend', {access_token: 'Cats', project_id: 8})
+          .post('/token/expend', {access_token: 'Cats'})
           .reply(202, {apiKey: 'Dogs'});
         let gateway = new TokenGateway();
-        let apiKey = await gateway.getAccess('Cats', 8);
+        let apiKey = await gateway.getAccess('Cats');
         expect(accessInfoRequest.isDone()).toBeTruthy()
       })
 
@@ -111,10 +111,10 @@ describe('token gateway', () => {
         process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
         let accessInfoRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
-          .post('/token/expend', {access_token: 'Cats', project_id: 8})
+          .post('/token/expend', {access_token: 'Cats'})
           .reply(202, {apiKey: 'Dogs'});
         let gateway = new TokenGateway();
-        let access_info = await gateway.getAccess('Cats', 8);
+        let access_info = await gateway.getAccess('Cats');
         expect(access_info.apiKey.apiKey).toEqual('Dogs')
       });
     });
@@ -124,10 +124,10 @@ describe('token gateway', () => {
         process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
         let accessInfoRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
-          .post('/token/expend', {access_token: 'Cats', project_id: 8})
+          .post('/token/expend', {access_token: 'Cats'})
           .reply(400);
         let gateway = new TokenGateway();
-        let apiKey = await gateway.getAccess('Cats', 8);
+        let apiKey = await gateway.getAccess('Cats');
         expect(apiKey).toEqual(null)
       })
     })
@@ -137,10 +137,10 @@ describe('token gateway', () => {
         process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
         let accessInfoRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
-          .post('/token/expend', {access_token: 'Cats', project_id: 8})
+          .post('/token/expend', {access_token: 'Cats'})
           .reply(403);
         let gateway = new TokenGateway();
-        let apiKey = await gateway.getAccess('Cats', 8);
+        let apiKey = await gateway.getAccess('Cats');
         expect(apiKey).toEqual(null)
       })
     })

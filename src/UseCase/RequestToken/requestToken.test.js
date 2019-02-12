@@ -7,7 +7,7 @@ describe('requesting a new token', () => {
 
   it('requests a token', async () => {
     let use_case = new RequestToken(tokenGatewaySpy);
-    use_case.execute("cats@cathouse.com", 1, "http://localhost")
-    expect(tokenGatewaySpy.requestToken).toHaveBeenCalledWith("cats@cathouse.com", 1, "http://localhost")
+    use_case.execute("cats@cathouse.com", "http://localhost")
+    expect(tokenGatewaySpy.requestToken).toHaveBeenCalledWith("cats@cathouse.com", "http://localhost")
   })
 });
