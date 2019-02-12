@@ -19,7 +19,7 @@ export default class GenerateUISchema {
       } else if (value.type === "array") {
         ret[key] = this.generateSchemaForArray(value, role, noOfPreviousReturns);
       } else {
-        let itemSchema = this.generateSchemaForItem(value, role, noOfPreviousReturns);
+        let itemSchema = this.generateSchemaForProperties(value, role, noOfPreviousReturns);
         if (itemSchema) {
           ret[key] = itemSchema;
         }
@@ -52,7 +52,7 @@ export default class GenerateUISchema {
       removable: this.isAddableArray(value)
     };
 
-    ret["items"] = this.generateUISchema(value.items.properties, role, noOfPreviousReturns);
+    ret["items"] = this.generateSchemaForObject(value.items, role, noOfPreviousReturns);
 
     if (value.items.horizontal) {
       ret["items"]["ui:field"] = "horizontal";
@@ -90,7 +90,7 @@ export default class GenerateUISchema {
     return dependencies.oneOf.reduce(reducer, {});
   }
 
-  generateSchemaForItem(item, role, noOfPreviousReturns) {
+  generateSchemaForProperties(item, role, noOfPreviousReturns) {
     let schema = {}
 
     if (item.extendedText) {

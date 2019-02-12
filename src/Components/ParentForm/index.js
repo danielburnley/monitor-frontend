@@ -66,9 +66,9 @@ export default class ParentForm extends React.Component {
 
   shareDataBetweenTabs = (formData)  => {
     if(!this.props.schema.sharedData ) return null;
-
+    
     let sharedDataPaths = this.createPathsInArrays(this.props.schema.sharedData, formData)
-
+    
     sharedDataPaths.forEach(path => {
       let value = this.getObject(formData, path.from)      
       let pathToSet = this.setPath(formData, path.to)
@@ -76,32 +76,31 @@ export default class ParentForm extends React.Component {
       pathToSet[path.to[path.to.length - 1]] = value
     });
   }
-
+  
   createPathsInArrays(sharedData, formData) {
-    let allDataPaths = sharedData
-    sharedData.forEach((value, key) => {
-      if (!value.from.includes('#')) return;
+    let allDataPaths = sharedData.map(value => {
+      if (!value.from.includes('#') && !value.to.includes('#')) return value;
 
-      allDataPaths.splice(key, 1)
+      let arrayHolder = value.from.includes('#') ? value.from : value.to
+      let arrayData = this.getObject(formData, arrayHolder.slice(0, arrayHolder.indexOf('#')))
 
-      let arrayIndex = value.from.indexOf('#')
-      let arrayData = this.getObject(formData, value.from.slice(0, arrayIndex))
-      
+      let newPaths = []
       for (let i = 0; i < arrayData.length; i++) {
         let newFromPath = value.from.slice(0, value.from.length)
-        newFromPath[arrayIndex] = i;
-        
+        if (value.from.includes('#')) newFromPath[value.from.indexOf('#')] = i;
+
         let newToPath = value.to.slice(0, value.to.length)
         newToPath[value.to.indexOf('#')] = i;
 
-        allDataPaths.push({
+        newPaths.push({
           from: newFromPath,
           to: newToPath
         })
       }
+      return newPaths; 
     })
 
-    return allDataPaths
+    return allDataPaths.flat()
   }
 
   getObject = (formData, path) => {

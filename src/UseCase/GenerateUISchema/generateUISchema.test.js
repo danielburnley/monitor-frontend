@@ -690,6 +690,59 @@ describe("GenerateUISchema", () => {
         });
       });
     });
+
+    it("When used as the item in the array", () => {
+      let schema = {
+        type: "object",
+        properties: {
+          main: {
+            type: "object",
+            properties: {
+            },
+            dependencies: {
+              anyStatutoryConsents: {
+                oneOf: [
+                  {
+                    properties: {
+                      statutoryConsents: {
+                        title: "Status of Statutory Consents",
+                        type: "array",
+                        items: {
+                          type: "object",
+                          variance: true,
+                          properties: {
+                            detailsOfConsent: {
+                              type: "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      };
+
+      let response = useCase.execute(schema);
+
+      expect(response).toEqual({
+        main: {
+          statutoryConsents: {
+            items: {
+              "ui:field": "variance"
+            },
+            "ui:options": {
+              addable: false,
+              orderable: false,
+              removable: false
+            }
+          }
+        }
+      });
+    });
   });
 
   describe("Risk", () => {
