@@ -54,7 +54,7 @@ export default class Portal extends React.Component {
         <div className="col-md-8">
           <h1>Homes England Monitor</h1>
           <p>
-            Welcome to the Homes England monitoring system. You are not a member of this project. If you believe you should have access
+            Welcome to the Homes England monitoring system. If you believe you should have access
             to this project, or have any feedback or queries please feel free to email{" "}
             <a href={"mailto:" + this.env.REACT_APP_SUPPORT_EMAIL}>
               {this.env.REACT_APP_SUPPORT_EMAIL}
