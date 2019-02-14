@@ -79,6 +79,14 @@ class APISimulator {
     return new APIResponse(returnRequest, response);
   }
 
+  getUserProjects(project_list = []) {
+    let response = { project_list } ;
+    let returnRequest = nock(this.url)
+      .matchHeader("Content-Type", "application/json")
+      .get("/user/projects");
+    return new APIResponse(returnRequest, response);
+  }
+
   expendEmptyTokenForProject() {
     let request = nock(this.url)
       .matchHeader("Content-Type", "application/json")

@@ -9,6 +9,7 @@ import Header from "./Components/Header";
 import NewProjectPage from "./Components/NewProjectPage";
 import ProjectPage from "./Components/ProjectPage";
 import ProjectSummary from "./Components/ProjectPage/ProjectSummary";
+import ProjectList from "./Components/ProjectList";
 import ReturnList from "./Components/ReturnList";
 import ReturnListProvider from "./Components/ReturnListProvider";
 import ReturnPage from "./Components/ReturnPage";
@@ -29,6 +30,7 @@ import CanAccessMonitor from "./UseCase/CanAccessMonitor";
 import GetProject from "./UseCase/GetProject";
 import GetReturn from "./UseCase/GetReturn";
 import GetReturns from "./UseCase/GetReturns"
+import GetUserProjects from "./UseCase/GetUserProjects";
 import SubmitReturn from "./UseCase/SubmitReturn";
 import GetRole from "./UseCase/GetRole";
 import UpdateReturn from "./UseCase/UpdateReturn";
@@ -40,6 +42,7 @@ import ValidateProject from "./UseCase/ValidateProject";
 import ProjectGateway from "./Gateway/ProjectGateway";
 import ReturnGateway from "./Gateway/ReturnGateway";
 import LocationGateway from "./Gateway/LocationGateway";
+import UserGateway from "./Gateway/UserGateway";
 import CookieApiKey from "./Gateway/CookieApiKey";
 import TokenGateway from "./Gateway/TokenGateway";
 import DocumentGateway from "./Gateway/DocumentGateway";
@@ -59,6 +62,7 @@ const userRoleGateway = new CookieUserRole();
 const projectGateway = new ProjectGateway(apiKeyGateway, locationGateway);
 const returnGateway = new ReturnGateway(apiKeyGateway, locationGateway);
 const documentGateway = new DocumentGateway(document)
+const userGateway = new UserGateway(apiKeyGateway);
 const getRole = new GetRole(userRoleGateway);
 const validateReturnUseCase = new ValidateReturn(returnGateway);
 const validateProjectUseCase = new ValidateProject(projectGateway);
@@ -69,6 +73,7 @@ const generateDisabledUISchema = new GenerateDisabledUISchema(generateUISchema);
 const getBaseReturnUseCase = new GetBaseReturn(returnGateway);
 const getProjectUseCase = new GetProject(projectGateway);
 const getReturnUseCase = new GetReturn(returnGateway);
+const getUserProjectsUseCase = new GetUserProjects(userGateway);
 const canAccessProjectUseCase = new CanAccessProject(tokenGateway, apiKeyGateway, userRoleGateway, projectGateway);
 const canAccessMonitorUseCase = new CanAccessMonitor(tokenGateway, apiKeyGateway, userRoleGateway);
 const getReturnsUseCase = new GetReturns(returnGateway);
@@ -204,10 +209,12 @@ const renderPrintPage = props => (
 );
 
 const renderhomepage = props => (
-  <Homepage 
-
-  />
-)
+  <Homepage {...props} getUserProjects={getUserProjectsUseCase} >
+    {({projectList}) => (
+      <ProjectList projectList={projectList} {...props} />
+    )}
+  </Homepage>
+);
 
 
 const App = () => (

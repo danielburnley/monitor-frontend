@@ -31,7 +31,7 @@ describe('user gateway', () => {
     });
 
     it("Returns the response from the api", () => {
-      let projects = [new Project({ summary: { projectName: "name" }}, null, "Draft", "a type", null)];
+      let projects = [new Project({}, null, "Draft", "a type", null, "name", 1)];
       expect(response).toEqual({
         success: true,
         projectList: projects
@@ -67,8 +67,8 @@ describe('user gateway', () => {
 
     it("Returns the response from the api", () => {
       let projects = [
-        new Project({ summary: { projectName: "cat" }}, null, "not done", "ac", null),
-        new Project({ summary: { projectName: "another name" }}, null, "Submitted", "a different type", null)
+        new Project({}, null, "not done", "ac", null, "cat", 3),
+        new Project({}, null, "Submitted", "a different type", null, "another name", 4)
       ];
       expect(response).toEqual({
         success: true,

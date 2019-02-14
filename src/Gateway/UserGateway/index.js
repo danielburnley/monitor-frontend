@@ -20,10 +20,10 @@ export default class UserGateway {
     );
     if (rawResponse.ok) {
       let response = await rawResponse.json();
-      let projects = response.project_list.map( project => 
-        new Project({ summary: { projectName: project.name }}, null, project.status, project.type, null)
+      let projectList = response.project_list.map(project => 
+        new Project({}, null, project.status, project.type, null, project.name, project.id)
       );
-      return { success: true, projectList: projects };
+      return { success: true, projectList };
     } else {
       return { success: false };
     }
