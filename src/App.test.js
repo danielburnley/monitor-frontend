@@ -82,6 +82,7 @@ describe("Authentication against routes", () => {
     process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
     api = new APISimulator("http://cat.meow");
     api.expendEmptyTokenForProject().unauthorised();
+    api.getUserProjects().successfully();
     api.getProject({}, 0).unsuccessfully();
   });
 
@@ -124,6 +125,48 @@ describe("Authentication against routes", () => {
     expect(page.find("GetToken").length).toEqual(1);
   });
 });
+
+describe("Viewing the Homepage", () => {
+  let api;
+  beforeEach(() => {
+    process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
+    api = new APISimulator("http://cat.meow");
+    api.expendToken("Cats", "Homes England").successfully();
+    api.expendToken("Cats", "Homes England").successfully();
+    api.expendEmptyTokenForProject().successfully();
+    api.expendEmptyTokenForProject().successfully();
+  });
+
+  afterEach(() => {
+    nock.cleanAll();
+  });
+
+  it("will not show get token", async () => {
+    api.getUserProjects().successfully();
+
+
+    let page = new AppPage("/?token=Cats");
+
+    await page.load();
+
+
+    expect(page.find("GetToken").length).toEqual(0);
+    expect(page.find("Homepage").length).toEqual(1);
+  });
+
+  it("will show the Project list from the api.", async () => {
+    api.getUserProjects().successfully();
+
+    let page = new AppPage("/?token=Cats");
+    await page.load();
+    await page.load();
+
+
+
+    expect(page.find("GetToken").length).toEqual(0);
+    expect(page.find("ProjectList").length).toEqual(1);
+  });
+});
   
 describe("Viewing a project", () => {
   let api;
@@ -140,7 +183,7 @@ describe("Viewing a project", () => {
 
   it("Given invalid token project page is not shown", async () => {
     api.getProject({}, 0).unsuccessfully();
-
+    api.expendEmptyTokenForProject().unauthorised();
     api.expendToken("Hello").unauthorised();
 
     let page = new AppPage("/project/0?token=Hello");
@@ -149,7 +192,7 @@ describe("Viewing a project", () => {
     expect(page.find("ProjectPage").length).toEqual(0);
   });
 
-  describe("Given valid token", () => {
+   describe("Given valid token", () => {
     beforeEach(() => {
       api.expendToken("Cats").successfully();
       api.expendEmptyTokenForProject().successfully();
@@ -192,6 +235,7 @@ describe("Viewing a project", () => {
 
         expect(summary.find('div[data-test="summary_toes"]').length).toEqual(0)
       });
+
 
       it("Renders the return list within the project sumary page with information from the API", async () => {
         let data = {
@@ -250,6 +294,7 @@ describe("Viewing a project", () => {
 
         expect(returnList.find("[data-test='return-1']").text()).toEqual("Return 1");
       });
+
 
       it("Renders the project baseline page", async () => {
         api.getProject(projectSchema, projectData, projectStatus, projectType).successfully();
@@ -464,6 +509,8 @@ describe("Cookie consent", () => {
     api = new APISimulator("http://cat.meow");
     api.expendEmptyTokenForProject().successfully();
     api.expendEmptyTokenForProject().successfully();
+    api.getUserProjects().successfully();
+    api.getUserProjects().successfully();
   });
 
   it("Renders a cookie notice once", async () => {
