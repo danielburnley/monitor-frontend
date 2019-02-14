@@ -18,7 +18,6 @@ export default class GetToken extends React.Component {
     if (this.state.email) {
       this.props.requestToken.execute(
         this.state.email,
-        this.props.projectId,
         this.props.targetUrl
       );
       this.setState({ message_sent: true });

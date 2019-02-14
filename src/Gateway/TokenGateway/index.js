@@ -8,24 +8,24 @@ export default class TokenGateway {
     this.env = runtimeEnv()
   }
 
-  async requestToken(email_address, project_id, url) {
+  async requestToken(email_address, url) {
     await fetch(
       `${this.env.REACT_APP_HIF_API_URL}token/request`,
       {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({email_address, project_id, url}),
+        body: JSON.stringify({email_address, url}),
       },
     );
   }
 
-  async getAccess(access_token, project_id) {
+  async getAccess(access_token) {
     let response = await fetch(
       `${this.env.REACT_APP_HIF_API_URL}token/expend`,
       {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({access_token, project_id}),
+        body: JSON.stringify({access_token}),
       },
     );
 

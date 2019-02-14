@@ -12,7 +12,7 @@ async function updateFormField(input, value) {
 }
 
 describe("Portal", () => {
-  let CanAccessProjectSpy = {
+  let CanAccessMonitorSpy = {
     execute: jest.fn(async () => {
       return {
         valid: true,
@@ -25,19 +25,19 @@ describe("Portal", () => {
     execute: jest.fn()
   };
 
-  it("calls the CanAccessProject use case", async () => {
-    let wrapper = mount(
-      <Portal projectId="1" token="Cats" canAccessProject={CanAccessProjectSpy}>
+  it("calls the CanAccessMonitor use case", async () => {
+    mount(
+      <Portal token="Cats" canAccessMonitor={CanAccessMonitorSpy}>
         <div />
       </Portal>
     );
 
     await wait();
-    expect(CanAccessProjectSpy.execute).toHaveBeenCalledWith("Cats", 1);
+    expect(CanAccessMonitorSpy.execute).toHaveBeenCalledWith("Cats");
   });
 
   it("calls the requestToken use case", async () => {
-    CanAccessProjectSpy = {
+    CanAccessMonitorSpy = {
       execute: jest.fn(async () => {
         return {
           valid: false
@@ -46,9 +46,8 @@ describe("Portal", () => {
     };
     let wrapper = mount(
       <Portal
-        projectId="1"
         token="Cats"
-        canAccessProject={CanAccessProjectSpy}
+        canAccessMonitor={CanAccessMonitorSpy}
         requestToken={RequestTokenSpy}
       >
         <div />
@@ -68,13 +67,12 @@ describe("Portal", () => {
 
     expect(RequestTokenSpy.execute).toHaveBeenCalledWith(
       "cats@cathouse.com",
-      "1",
       "http://localhost/"
     );
   });
 
   it("shows getToken if use case returns false", async () => {
-    CanAccessProjectSpy = {
+    CanAccessMonitorSpy = {
       execute: jest.fn(async () => {
         return {
           valid: false
@@ -83,9 +81,8 @@ describe("Portal", () => {
     };
     let wrapper = mount(
       <Portal
-        projectId="1"
         token="Cats"
-        canAccessProject={CanAccessProjectSpy}
+        canAccessMonitor={CanAccessMonitorSpy}
       />
     );
     await wait();
@@ -94,7 +91,7 @@ describe("Portal", () => {
   });
 
   it("renders children if the use case returns true", async () => {
-    CanAccessProjectSpy = {
+    CanAccessMonitorSpy = {
       execute: jest.fn(async () => {
         return {
           valid: true,
@@ -104,7 +101,7 @@ describe("Portal", () => {
     };
 
     let wrapper = mount(
-      <Portal projectId="1" token="Cats" canAccessProject={CanAccessProjectSpy}>
+      <Portal token="Cats" canAccessMonitor={CanAccessMonitorSpy}>
         <h1>Hiya!</h1>
       </Portal>
     );
