@@ -31,25 +31,38 @@ describe("ProjectPortal", () => {
     expect(CanAccessProjectSpy.execute).toHaveBeenCalledWith("Cats", 1);
   });
 
-  it("shows a button back to homepage if use case returns false", async () => {
-    CanAccessProjectSpy = {
-      execute: jest.fn(async () => {
-        return {
-          valid: false
-        };
-      })
-    };
-    let wrapper = mount(
-      <ProjectPortal
-        projectId="1"
-        token="Cats"
-        canAccessProject={CanAccessProjectSpy}
-      />
-    );
-    await wait();
-    wrapper.update();
-    expect(wrapper.find('[data-test="back-to-homepage"]').length).toEqual(1);
+  describe("Use Case returns false", () => {
+    let wrapper;
+    beforeEach(() => {
+      CanAccessProjectSpy = {
+        execute: jest.fn(async () => {
+          return {
+            valid: false
+          };
+        })
+      };
+      wrapper = mount(
+        <ProjectPortal
+          projectId="1"
+          token="Cats"
+          canAccessProject={CanAccessProjectSpy}
+        />
+      );
+    });
+
+    it("shows a button back to homepage ", async () => {
+      await wait();
+      wrapper.update();
+      expect(wrapper.find('[data-test="back-to-homepage"]').length).toEqual(1);
+    });
+  
+    it("shows a button to remove cookies", async () => {
+      await wait();
+      wrapper.update();
+      expect(wrapper.find('[data-test="refresh-cookies"]').length).toEqual(1);
+    });
   });
+
 
   it("renders children if the use case returns true", async () => {
     CanAccessProjectSpy = {
