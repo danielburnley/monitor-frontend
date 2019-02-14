@@ -56,7 +56,6 @@ export default class ProjectGateway {
     }
   }
 
-
   async unsubmit(project_id) {
     if(!process.env.REACT_APP_BACK_TO_BASELINE) return
     let response = await fetch(
@@ -120,6 +119,30 @@ export default class ProjectGateway {
         prettyInvalidPaths: response_json.prettyInvalidPaths,
         invalidPaths: response_json.invalidPaths,
       };
+    }
+  }
+
+  async create(type, name) {
+    let response = await fetch(
+      `${this.env.REACT_APP_HIF_API_URL}project/create`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          API_KEY: this.apiKeyGateway.getApiKey().apiKey
+        },
+        body: JSON.stringify({type, name})
+      }
+    );
+
+    if (response.ok) {
+      let response_json = await response.json();
+      return {
+        success: true,
+        id: response_json.id
+      };
+    } else {
+      return { success: false }
     }
   }
 }

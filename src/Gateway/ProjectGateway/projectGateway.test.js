@@ -198,7 +198,7 @@ describe("Project Gateway", () => {
     });
   });
 
-  describe("Submit", () => {
+  describe("#Submit", () => {
     describe("Example 1", () => {
       let gateway, apiKeyGateway, locationGateway;
 
@@ -414,6 +414,110 @@ describe("Project Gateway", () => {
             valid: false
           })
         })
+      });
+    });
+  });
+
+  describe("#Create", () => {
+    describe("Example one", () => {
+      let gateway;
+      let apiKeyGateway = {
+        getApiKey: jest.fn(() => ({ apiKey: "superSecret" }))
+      };
+
+      beforeEach(async () => {
+        process.env.REACT_APP_HIF_API_URL = "http://rabbits.jump/";
+        gateway = new ProjectGateway(apiKeyGateway);
+      });
+
+      it("Submits data to the API", async () => {
+        let updateProjectRequest = nock("http://rabbits.jump")
+          .matchHeader("Content-Type", "application/json")
+          .post("/project/create", {
+            type: "mvf",
+            name: "my first project"
+          })
+          .reply(200, { errors: [], id: 4});
+        await gateway.create("mvf", "my first project");
+
+        expect(updateProjectRequest.isDone()).toBeTruthy();
+      });
+
+      it("Returns successful", async () => {
+        nock("http://rabbits.jump")
+          .matchHeader("Content-Type", "application/json")
+          .post("/project/create", {
+            type: "mvf",
+            name: "my first project"
+          })
+          .reply(200, { errors: [], id: 4});
+        let response = await gateway.create("mvf", "my first project");
+
+        expect(response).toEqual({ success: true, id: 4 });
+      });
+
+      it("Returns unsuccessful", async () => {
+        nock("http://rabbits.jump")
+          .matchHeader("Content-Type", "application/json")
+          .post("/project/create", {
+            type: "mvf",
+            name: "my first project"
+          })
+          .reply(403, { errors: [], id: 4});
+        let response = await gateway.create("mvf", "my first project");
+
+        expect(response).toEqual({ success: false});
+      });
+    });
+
+    describe("Example two", () => {
+      let gateway;
+      let apiKeyGateway = {
+        getApiKey: jest.fn(() => ({ apiKey: "superSecret" }))
+      };
+
+      beforeEach(async () => {
+        process.env.REACT_APP_HIF_API_URL = "http://rabbits.jump/";
+        gateway = new ProjectGateway(apiKeyGateway);
+      });
+
+      it("Submits data to the API", async () => {
+        let updateProjectRequest = nock("http://rabbits.jump")
+          .matchHeader("Content-Type", "application/json")
+          .post("/project/create", {
+            type: "ff",
+            name: "my second project"
+          })
+          .reply(200, { errors: [], id: 67});
+        await gateway.create("ff", "my second project");
+
+        expect(updateProjectRequest.isDone()).toBeTruthy();
+      });
+
+      it("Returns successful", async () => {
+        nock("http://rabbits.jump")
+          .matchHeader("Content-Type", "application/json")
+          .post("/project/create", {
+            type: "ff",
+            name: "my second project"
+          })
+          .reply(200, { errors: [], id: 67});
+        let response = await gateway.create("ff", "my second project");
+
+        expect(response).toEqual({ success: true, id: 67 });
+      });
+
+      it("Returns unsuccessful", async () => {
+        nock("http://rabbits.jump")
+          .matchHeader("Content-Type", "application/json")
+          .post("/project/create", {
+            type: "ff",
+            name: "my second project"
+          })
+          .reply(403, { errors: [], id: 67});
+        let response = await gateway.create("ff", "my second project");
+
+        expect(response).toEqual({ success: false});
       });
     });
   });

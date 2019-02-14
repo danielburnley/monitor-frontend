@@ -18,6 +18,7 @@ import ProjectPortal from "./Components/ProjectPortal";
 import NotFound from "./Components/NotFound";
 import CookieConsent from "./Components/CookieConsent";
 import PrintReturn from "./Components/PrintReturn";
+import AdminPortal from "./Components/AdminPortal";
 
 import CreateReturn from "./UseCase/CreateReturn";
 import SubmitProject from "./UseCase/SubmitProject";
@@ -211,7 +212,10 @@ const renderPrintPage = props => (
 const renderhomepage = props => (
   <Homepage {...props} getUserProjects={getUserProjectsUseCase} >
     {({projectList}) => (
+      <div>
       <ProjectList projectList={projectList} {...props} />
+      <AdminPortal getRole={getRole} />
+      </div>
     )}
   </Homepage>
 );
