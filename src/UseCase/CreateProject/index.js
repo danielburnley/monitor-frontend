@@ -1,13 +1,12 @@
-export default class CreateReturn {
+export default class CreateProject {
   constructor(projectGateway) {
     this.projectGateway = projectGateway
   }
 
-  async execute(presenter, formData) {
-    let {id, status} = await this.projectGateway.create(formData);
-    if (status === "success")
-    {
-      presenter.creationSuccess(id);
+  async execute(presenter, name, type) {
+    let {id, success} = await this.projectGateway.create(name, type);
+    if (success) {
+      presenter.creationSuccess(id.id);
     } else {
       presenter.creationFailure();
     }

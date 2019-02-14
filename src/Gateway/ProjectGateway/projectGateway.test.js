@@ -438,7 +438,7 @@ describe("Project Gateway", () => {
             name: "my first project"
           })
           .reply(200, { errors: [], id: 4});
-        await gateway.create("mvf", "my first project");
+        await gateway.create("my first project", "mvf");
 
         expect(updateProjectRequest.isDone()).toBeTruthy();
       });
@@ -451,7 +451,7 @@ describe("Project Gateway", () => {
             name: "my first project"
           })
           .reply(200, { errors: [], id: 4});
-        let response = await gateway.create("mvf", "my first project");
+        let response = await gateway.create("my first project", "mvf");
 
         expect(response).toEqual({ success: true, id: 4 });
       });
@@ -464,7 +464,7 @@ describe("Project Gateway", () => {
             name: "my first project"
           })
           .reply(403, { errors: [], id: 4});
-        let response = await gateway.create("mvf", "my first project");
+        let response = await gateway.create("my first project", "mvf");
 
         expect(response).toEqual({ success: false});
       });
@@ -489,7 +489,7 @@ describe("Project Gateway", () => {
             name: "my second project"
           })
           .reply(200, { errors: [], id: 67});
-        await gateway.create("ff", "my second project");
+        await gateway.create("my second project", "ff");
 
         expect(updateProjectRequest.isDone()).toBeTruthy();
       });
@@ -502,7 +502,7 @@ describe("Project Gateway", () => {
             name: "my second project"
           })
           .reply(200, { errors: [], id: 67});
-        let response = await gateway.create("ff", "my second project");
+        let response = await gateway.create("my second project", "ff");
 
         expect(response).toEqual({ success: true, id: 67 });
       });
@@ -515,7 +515,7 @@ describe("Project Gateway", () => {
             name: "my second project"
           })
           .reply(403, { errors: [], id: 67});
-        let response = await gateway.create("ff", "my second project");
+        let response = await gateway.create("my second project", "ff");
 
         expect(response).toEqual({ success: false});
       });

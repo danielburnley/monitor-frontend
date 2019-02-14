@@ -21,6 +21,7 @@ import PrintReturn from "./Components/PrintReturn";
 import AdminPortal from "./Components/AdminPortal";
 
 import CreateReturn from "./UseCase/CreateReturn";
+import CreateProject from "./UseCase/CreateProject";
 import SubmitProject from "./UseCase/SubmitProject";
 import UpdateProject from "./UseCase/UpdateProject";
 import GenerateDisabledUISchema from "./UseCase/GenerateDisabledUISchema";
@@ -68,6 +69,7 @@ const getRole = new GetRole(userRoleGateway);
 const validateReturnUseCase = new ValidateReturn(returnGateway);
 const validateProjectUseCase = new ValidateProject(projectGateway);
 const createReturnUseCase = new CreateReturn(returnGateway);
+const createProjectUseCase = new CreateProject(projectGateway);
 const submitProjectUseCase = new SubmitProject(projectGateway);
 const generateUISchema = new GenerateUISchema(userRoleGateway);
 const generateDisabledUISchema = new GenerateDisabledUISchema(generateUISchema);
@@ -214,7 +216,7 @@ const renderhomepage = props => (
     {({projectList}) => (
       <div>
       <ProjectList projectList={projectList} {...props} />
-      <AdminPortal getRole={getRole} />
+      <AdminPortal getRole={getRole} createProject={createProjectUseCase} />
       </div>
     )}
   </Homepage>
