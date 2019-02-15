@@ -1,5 +1,6 @@
 import React from 'react';
 import "../Homepage/style.css";
+import Cookies from 'js-cookie';
 import runtimeEnv from "@mars/heroku-js-runtime-env";
 
 export default class Portal extends React.Component {
@@ -25,6 +26,21 @@ export default class Portal extends React.Component {
     </button>
   }
 
+  refreshCookies = () => {
+    Cookies.remove('apikey');
+    window.location.reload();
+  }
+
+  renderRefreshCookiesButton = () => {
+    return <button
+      data-test="refresh-cookies"
+      className="btn btn-link"
+      onClick={this.refreshCookies}
+    >
+      Refresh Login
+    </button>
+  }
+
   render() {
     if (this.state.apiKey === null) {
       return <div>Loading</div>
@@ -38,13 +54,15 @@ export default class Portal extends React.Component {
         <div className="col-md-8">
           <h1>Homes England Monitor</h1>
           <p>
-            Welcome to the Homes England monitoring system. You are not a member of this project. If you believe you should have access
+            Welcome to the Homes England monitoring system. If you believe you should have access
             to this project, or have any feedback or queries please feel free to email{" "}
             <a href={"mailto:" + this.env.REACT_APP_SUPPORT_EMAIL}>
               {this.env.REACT_APP_SUPPORT_EMAIL}
             </a>
             .
           </p>
+          <p>If you believe you have already been added to project {this.props.projectId}, you can try refreshing your login: {this.renderRefreshCookiesButton()}</p>
+          
           {this.renderBackToHomepageButton()}
         </div>
         <div className="col-md-2" />
