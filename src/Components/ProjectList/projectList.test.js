@@ -34,6 +34,11 @@ describe("ProjectList", () => {
       expect(list.find('[data-test="project-1"]').length).toEqual(1)
       expect(list.find('[data-test="project-2"]').length).toEqual(1)
     });
+
+    it("Displays the ID of each project", () => {
+      expect(list.find('[data-test="project-id-1"]').text()).toEqual("1")
+      expect(list.find('[data-test="project-id-2"]').text()).toEqual("2")
+    });
   
     it("Displays the name of each project", () => {
       expect(list.find('[data-test="project-name-1"]').text()).toEqual("Building")
@@ -80,6 +85,11 @@ describe("ProjectList", () => {
     it("Displays all projects", () => {
       expect(list.find('[data-test="project-1"]').length).toEqual(1)
       expect(list.find('[data-test="project-2"]').length).toEqual(1)
+    });
+
+    it("Displays the id of each project", () => {
+      expect(list.find('[data-test="project-id-1"]').text()).toEqual("1")
+      expect(list.find('[data-test="project-id-2"]').text()).toEqual("2")
     });
   
     it("Displays the name of each project", () => {

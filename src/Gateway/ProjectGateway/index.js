@@ -145,4 +145,21 @@ export default class ProjectGateway {
       return { success: false }
     }
   }
+
+  async addUser(project_id, users) {
+    let response = await fetch(
+      `${this.env.REACT_APP_HIF_API_URL}project/${project_id}/add_users`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          API_KEY: this.apiKeyGateway.getApiKey().apiKey
+        },
+        body: JSON.stringify({users})
+      }
+    );
+
+    if (response.ok) return { success: true };
+    return { success: false }
+  }
 }

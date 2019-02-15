@@ -437,7 +437,7 @@ describe("Project Gateway", () => {
             type: "mvf",
             name: "my first project"
           })
-          .reply(200, { errors: [], id: 4});
+          .reply(200, {projectId: 4});
         await gateway.create("my first project", "mvf");
 
         expect(updateProjectRequest.isDone()).toBeTruthy();
@@ -450,7 +450,7 @@ describe("Project Gateway", () => {
             type: "mvf",
             name: "my first project"
           })
-          .reply(200, { errors: [], id: 4});
+          .reply(200, {projectId: 4});
         let response = await gateway.create("my first project", "mvf");
 
         expect(response).toEqual({ success: true, id: 4 });
@@ -463,7 +463,7 @@ describe("Project Gateway", () => {
             type: "mvf",
             name: "my first project"
           })
-          .reply(403, { errors: [], id: 4});
+          .reply(403, {projectId: 4});
         let response = await gateway.create("my first project", "mvf");
 
         expect(response).toEqual({ success: false});
@@ -488,7 +488,7 @@ describe("Project Gateway", () => {
             type: "ff",
             name: "my second project"
           })
-          .reply(200, { errors: [], id: 67});
+          .reply(200, { projectId: 67});
         await gateway.create("my second project", "ff");
 
         expect(updateProjectRequest.isDone()).toBeTruthy();
@@ -501,7 +501,7 @@ describe("Project Gateway", () => {
             type: "ff",
             name: "my second project"
           })
-          .reply(200, { errors: [], id: 67});
+          .reply(200, { projectId: 67});
         let response = await gateway.create("my second project", "ff");
 
         expect(response).toEqual({ success: true, id: 67 });
@@ -514,8 +514,142 @@ describe("Project Gateway", () => {
             type: "ff",
             name: "my second project"
           })
-          .reply(403, { errors: [], id: 67});
+          .reply(403, { projectId: 67});
         let response = await gateway.create("my second project", "ff");
+
+        expect(response).toEqual({ success: false});
+      });
+    });
+  });
+
+  describe("#addUser", () => {
+    describe("Example one", () => {
+      let gateway;
+      let apiKeyGateway = {
+        getApiKey: jest.fn(() => ({ apiKey: "superSecret" }))
+      };
+
+      beforeEach(async () => {
+        process.env.REACT_APP_HIF_API_URL = "http://rabbits.jump/";
+        gateway = new ProjectGateway(apiKeyGateway);
+      });
+
+      it("Submits data to the API", async () => {
+        let users = [{
+          email: "my_email@email.com",
+          role: "Homes England"
+        }]
+
+        let updateProjectRequest = nock("http://rabbits.jump")
+          .matchHeader("Content-Type", "application/json")
+          .post("/project/1/add_users", {
+            users: users
+          })
+          .reply(200);
+        await gateway.addUser(1, users);
+
+        expect(updateProjectRequest.isDone()).toBeTruthy();
+      });
+
+      it("Returns successful", async () => {
+        let users = [{
+          email: "my_email@email.com",
+          role: "Homes England"
+        }]
+
+        nock("http://rabbits.jump")
+          .matchHeader("Content-Type", "application/json")
+          .post("/project/1/add_users", {
+            users: users
+          })
+          .reply(200);
+        let response = await gateway.addUser(1, users);
+
+        expect(response).toEqual({ success: true });
+      });
+
+      it("Returns unsuccessful", async () => {
+        let users = [{
+          email: "my_email@email.com",
+          role: "Homes England"
+        }]
+
+        nock("http://rabbits.jump")
+          .matchHeader("Content-Type", "application/json")
+          .post("/project/1/add_users", {
+            users: users
+          })
+          .reply(403);
+        let response = await gateway.addUser(1, users);
+
+        expect(response).toEqual({ success: false});
+      });
+    });
+
+    describe("Example two", () => {
+      let gateway;
+      let apiKeyGateway = {
+        getApiKey: jest.fn(() => ({ apiKey: "superSecret" }))
+      };
+
+      beforeEach(async () => {
+        process.env.REACT_APP_HIF_API_URL = "http://rabbits.jump/";
+        gateway = new ProjectGateway(apiKeyGateway);
+      });
+
+      it("Submits data to the API", async () => {
+        let users = [
+          {
+            email: "my_email@email.com",
+            role: "Homes England"
+          },
+          {
+            email: "email2@gov.uk",
+            role: "Local Authority"
+          }
+        ]
+
+        let updateProjectRequest = nock("http://rabbits.jump")
+          .matchHeader("Content-Type", "application/json")
+          .post("/project/6/add_users", {
+            users: users
+          })
+          .reply(200);
+        await gateway.addUser(6, users);
+
+        expect(updateProjectRequest.isDone()).toBeTruthy();
+      });
+
+      it("Returns successful", async () => {
+        let users = [{
+          email: "my_email@email.com",
+          role: "Homes England"
+        }]
+
+        nock("http://rabbits.jump")
+          .matchHeader("Content-Type", "application/json")
+          .post("/project/6/add_users", {
+            users: users
+          })
+          .reply(200);
+        let response = await gateway.addUser(6, users);
+
+        expect(response).toEqual({ success: true });
+      });
+
+      it("Returns unsuccessful", async () => {
+        let users = [{
+          email: "my_email@email.com",
+          role: "Homes England"
+        }]
+
+        nock("http://rabbits.jump")
+          .matchHeader("Content-Type", "application/json")
+          .post("/project/6/add_users", {
+            users: users
+          })
+          .reply(403);
+        let response = await gateway.addUser(6, users);
 
         expect(response).toEqual({ success: false});
       });

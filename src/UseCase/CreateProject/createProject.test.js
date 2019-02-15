@@ -5,7 +5,7 @@ describe("CreateProject", () => {
 
   function getUseCase(success = true, id = 1) {
     presenterSpy = { creationSuccess: jest.fn(), creationFailure: jest.fn() }
-    projectGateway = { create: jest.fn(async () => ({success, id})) };
+    projectGateway = { create: jest.fn(() => ({id: {id: id}, success})) };
     return new CreateProject(projectGateway);
   }
 
@@ -29,14 +29,14 @@ describe("CreateProject", () => {
     describe("Calls the presenter", () => {
       it("Example 1", async () => {
         let usecase = getUseCase();
-        await usecase.execute(presenterSpy, {});
+        await usecase.execute(presenterSpy, "name", "type");
         expect(presenterSpy.creationSuccess).toHaveBeenCalledWith(1);
         expect(presenterSpy.creationFailure).not.toHaveBeenCalled();
       });
 
       it("Example 2", async () => {
         let usecase = getUseCase(true, 9);
-        await usecase.execute(presenterSpy, {});
+        await usecase.execute(presenterSpy, "name", "type");
         expect(presenterSpy.creationSuccess).toHaveBeenCalledWith(9);
         expect(presenterSpy.creationFailure).not.toHaveBeenCalled();
 

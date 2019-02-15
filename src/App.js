@@ -20,6 +20,7 @@ import CookieConsent from "./Components/CookieConsent";
 import PrintReturn from "./Components/PrintReturn";
 import AdminPortal from "./Components/AdminPortal";
 
+import AddUsersToProject from "./UseCase/AddUsersToProject";
 import CreateReturn from "./UseCase/CreateReturn";
 import CreateProject from "./UseCase/CreateProject";
 import SubmitProject from "./UseCase/SubmitProject";
@@ -85,6 +86,7 @@ const submitReturnUseCase = new SubmitReturn(returnGateway);
 const unsubmitProject = new UnsubmitProject(projectGateway)
 const updateReturnUseCase = new UpdateReturn(returnGateway);
 const updateProjectUseCase = new UpdateProject(projectGateway);
+const addUsersToProject = new AddUsersToProject(projectGateway);
 
 const renderReturnPage = props => (
   <ReturnPage
@@ -216,7 +218,11 @@ const renderhomepage = props => (
     {({projectList}) => (
       <div>
       <ProjectList projectList={projectList} {...props} />
-      <AdminPortal getRole={getRole} createProject={createProjectUseCase} />
+      <AdminPortal
+        getRole={getRole}
+        createProject={createProjectUseCase}
+        addUsersToProject={addUsersToProject}
+        />
       </div>
     )}
   </Homepage>

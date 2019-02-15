@@ -12,6 +12,7 @@ describe("<Homepage>", () => {
         homepage = mount(
           <Homepage
             getUserProjects={getUserProjectsSpy}
+            match={{params: {id: 2}}}
           >
             {() => {}}
           </Homepage>
@@ -25,11 +26,6 @@ describe("<Homepage>", () => {
       it("Calls the getUserProjects use case", () => {
         expect(getUserProjectsSpy.execute).toHaveBeenCalled();
       });
-
-      it("Renders its children when it's finished loading", async () => {
-
-        expect()
-      });
     });
 
     describe("When the project list has loaded", () => {
@@ -41,6 +37,7 @@ describe("<Homepage>", () => {
         homepage = mount(
           <Homepage
             getUserProjects={getUserProjectsSpy}
+            match={{params: {id: 2}}}
           >
             {childrenSpy}
           </Homepage>
@@ -72,6 +69,7 @@ describe("<Homepage>", () => {
         homepage = mount(
           <Homepage
             getUserProjects={getUserProjectsSpy}
+            match={{params: {id: 4}}}
           >
             {() => {}}
           </Homepage>
@@ -85,11 +83,6 @@ describe("<Homepage>", () => {
       it("Calls the getUserProjects use case", () => {
         expect(getUserProjectsSpy.execute).toHaveBeenCalled();
       });
-
-      it("Renders its children when it's finished loading", async () => {
-
-        expect()
-      });
     });
 
     describe("When the project list has loaded", () => {
@@ -101,6 +94,7 @@ describe("<Homepage>", () => {
         homepage = mount(
           <Homepage
             getUserProjects={getUserProjectsSpy}
+            match={{params: {id: 4}}}
           >
             {childrenSpy}
           </Homepage>
