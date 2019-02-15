@@ -116,7 +116,7 @@ describe("<ErrorMessage>", () => {
         />
       );
       expect(wrap.text()).toEqual(
-        "Error: You can not save as newer data has already been saved to the system."
+        "Error: You cannot save as newer data has already been saved to the system."
       );
     });
   });
