@@ -34,6 +34,10 @@ export default class ProjectGateway {
     }
   }
 
+  async getInfrastructures(projectId) {
+    
+  }
+
   async submit(project_id) {
     let response = await fetch(
       `${this.env.REACT_APP_HIF_API_URL}project/submit`,
