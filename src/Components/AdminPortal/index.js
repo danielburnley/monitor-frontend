@@ -124,6 +124,17 @@ export default class AdminPortal extends React.Component {
           <label>
             <input
               type="radio"
+              data-test="user-role-s151"
+              value="S151"
+              name="userRole"
+              onChange={e => this.onFieldChange(e.target.value, "role")}
+            />S.151 Officer
+          </label>
+        </div>
+        <div className="radio">
+          <label>
+            <input
+              type="radio"
               value="Homes England"
               name="userRole"
               data-test="user-role-he"
