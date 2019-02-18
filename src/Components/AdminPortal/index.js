@@ -162,6 +162,7 @@ export default class AdminPortal extends React.Component {
         <h3>
           Add a user to a project
         </h3>
+        <p>You can only add users to a project here if the project has already been created.</p>
         {this.renderAddUsersForm()}
       </div>
   }
