@@ -98,7 +98,7 @@ export default class AdminPortal extends React.Component {
   renderUserDetails = () => {
     return <div>
       <div className="form-group">
-        <label htmlFor="userEmail">Enter the users email here.</label>
+        <label htmlFor="userEmail">Enter the user's email here.</label>
         <input 
           className="form-control"
           data-test="user-email"
