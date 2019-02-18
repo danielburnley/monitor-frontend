@@ -108,7 +108,7 @@ export default class AdminPortal extends React.Component {
         />
       </div>
       <div className="form-group">
-        <label htmlFor="userRole"> Please select the users role priveledges.</label>
+        <label htmlFor="userRole"> Please select the user's role privileges.</label>
         <div className="radio">
           <label>
             <input
