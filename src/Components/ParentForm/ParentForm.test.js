@@ -1199,7 +1199,7 @@ describe("<ParentForm>", () => {
       expect(parentForm.find("UploadFileField").length).toEqual(1);
     });
   });
-  
+
   describe("Sharing data accross tabs", () => {
     let wrap;
     describe("Between two simple object tabs", () => {
@@ -1244,7 +1244,7 @@ describe("<ParentForm>", () => {
         expect(onChangeSpy).toHaveBeenCalledWith({
           formData: {
             tab_one: { cat: "Tabby" },
-            tab_two: { dog: "Tabby" } 
+            tab_two: { dog: "Tabby" }
           }
         });
       });
@@ -1294,9 +1294,9 @@ describe("<ParentForm>", () => {
       });
 
       it("calls the onchange spy with correct fields if one is changed", async () => {
-        
+
         let input = wrap.find(".form-control").at(1);
-        
+
         await updateFormField(input, "squeaky");
 
         expect(onChangeSpy).toHaveBeenCalledWith({
@@ -1376,9 +1376,9 @@ describe("<ParentForm>", () => {
         );
       });
 
-      it("calls the onchange spy with correct fields if one is changed", async () => { 
+      it("calls the onchange spy with correct fields if one is changed", async () => {
         let input = wrap.find(".form-control").at(0);
-        
+
         await updateFormField(input, "squeaky");
 
         expect(onChangeSpy).toHaveBeenCalledWith({
@@ -1467,9 +1467,9 @@ describe("<ParentForm>", () => {
         );
       });
 
-      it("calls the onchange spy with correct fields if one is changed", async () => { 
+      it("calls the onchange spy with correct fields if one is changed", async () => {
         let input = wrap.find(".form-control").at(0);
-        
+
         await updateFormField(input, "squeaky");
 
         expect(onChangeSpy).toHaveBeenCalledWith({
@@ -1562,9 +1562,9 @@ describe("<ParentForm>", () => {
         );
       });
 
-      it("calls the onchange spy with correct fields if one is changed", async () => { 
+      it("calls the onchange spy with correct fields if one is changed", async () => {
         let input = wrap.find(".form-control").at(0);
-        
+
         await updateFormField(input, "squeaky");
 
         expect(onChangeSpy).toHaveBeenCalledWith({
@@ -1657,9 +1657,9 @@ describe("<ParentForm>", () => {
         );
       });
 
-      it("calls the onchange spy with correct fields if one is changed", async () => { 
+      it("calls the onchange spy with correct fields if one is changed", async () => {
         let input = wrap.find(".form-control").at(0);
-        
+
         await updateFormField(input, "squeaky");
 
         expect(onChangeSpy).toHaveBeenCalledWith({
@@ -1751,9 +1751,9 @@ describe("<ParentForm>", () => {
         );
       });
 
-      it("calls the onchange spy with correct fields if one is changed", async () => { 
+      it("calls the onchange spy with correct fields if one is changed", async () => {
         let input = wrap.find(".form-control").at(0);
-        
+
         await updateFormField(input, "squeaky");
 
         expect(onChangeSpy).toHaveBeenCalledWith({
