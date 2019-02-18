@@ -56,7 +56,6 @@ export default class ProjectGateway {
     }
   }
 
-
   async unsubmit(project_id) {
     if(!process.env.REACT_APP_BACK_TO_BASELINE) return
     let response = await fetch(
@@ -121,5 +120,46 @@ export default class ProjectGateway {
         invalidPaths: response_json.invalidPaths,
       };
     }
+  }
+
+  async create(name, type) {
+    let response = await fetch(
+      `${this.env.REACT_APP_HIF_API_URL}project/create`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          API_KEY: this.apiKeyGateway.getApiKey().apiKey
+        },
+        body: JSON.stringify({name, type})
+      }
+    );
+
+    if (response.ok) {
+      let response_json = await response.json();
+      return {
+        success: true,
+        id: response_json.projectId
+      };
+    } else {
+      return { success: false }
+    }
+  }
+
+  async addUser(project_id, users) {
+    let response = await fetch(
+      `${this.env.REACT_APP_HIF_API_URL}project/${project_id}/add_users`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          API_KEY: this.apiKeyGateway.getApiKey().apiKey
+        },
+        body: JSON.stringify({users})
+      }
+    );
+
+    if (response.ok) return { success: true };
+    return { success: false }
   }
 }

@@ -166,6 +166,16 @@ describe("Viewing the Homepage", () => {
     expect(page.find("GetToken").length).toEqual(0);
     expect(page.find("ProjectList").length).toEqual(1);
   });
+
+  it("Will show the Admin Portal", async () => {
+    api.getUserProjects().successfully();
+
+    let page = new AppPage("/?token=Cats");
+    await page.load();
+    await page.load();
+
+    expect(page.find("AdminPortal").length).toEqual(1);
+  });
 });
 
 describe("Viewing a project", () => {

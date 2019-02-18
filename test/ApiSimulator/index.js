@@ -12,11 +12,12 @@ class APISimulator {
       .get(`/baseline/${type}`);
     return new APIResponse(baselineRequest, response);
   }
-  createProject(data, id) {
+
+  createProject(name, type, id) {
     let response = {id};
     let projectRequest = nock(this.url)
       .matchHeader("Content-Type", "application/json")
-      .post("/project/create", data);
+      .post("/project/create", {name, type});
 
       return new APIResponse(projectRequest, response);
   }

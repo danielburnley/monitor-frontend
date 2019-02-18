@@ -18,8 +18,11 @@ import ProjectPortal from "./Components/ProjectPortal";
 import NotFound from "./Components/NotFound";
 import CookieConsent from "./Components/CookieConsent";
 import PrintReturn from "./Components/PrintReturn";
+import AdminPortal from "./Components/AdminPortal";
 
+import AddUsersToProject from "./UseCase/AddUsersToProject";
 import CreateReturn from "./UseCase/CreateReturn";
+import CreateProject from "./UseCase/CreateProject";
 import SubmitProject from "./UseCase/SubmitProject";
 import UpdateProject from "./UseCase/UpdateProject";
 import GenerateDisabledUISchema from "./UseCase/GenerateDisabledUISchema";
@@ -67,6 +70,7 @@ const getRole = new GetRole(userRoleGateway);
 const validateReturnUseCase = new ValidateReturn(returnGateway);
 const validateProjectUseCase = new ValidateProject(projectGateway);
 const createReturnUseCase = new CreateReturn(returnGateway);
+const createProjectUseCase = new CreateProject(projectGateway);
 const submitProjectUseCase = new SubmitProject(projectGateway);
 const generateUISchema = new GenerateUISchema(userRoleGateway);
 const generateDisabledUISchema = new GenerateDisabledUISchema(generateUISchema);
@@ -82,6 +86,7 @@ const submitReturnUseCase = new SubmitReturn(returnGateway);
 const unsubmitProject = new UnsubmitProject(projectGateway)
 const updateReturnUseCase = new UpdateReturn(returnGateway);
 const updateProjectUseCase = new UpdateProject(projectGateway);
+const addUsersToProject = new AddUsersToProject(projectGateway);
 
 const renderReturnPage = props => (
   <ReturnPage
@@ -211,7 +216,14 @@ const renderPrintPage = props => (
 const renderhomepage = props => (
   <Homepage {...props} getUserProjects={getUserProjectsUseCase} >
     {({projectList}) => (
+      <div>
       <ProjectList projectList={projectList} {...props} />
+      <AdminPortal
+        getRole={getRole}
+        createProject={createProjectUseCase}
+        addUsersToProject={addUsersToProject}
+        />
+      </div>
     )}
   </Homepage>
 );

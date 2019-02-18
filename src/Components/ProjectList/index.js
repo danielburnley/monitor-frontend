@@ -5,6 +5,7 @@ export default class ProjectList extends React.Component {
   
   renderProjectLine = (id, name, type, status) => {
     return <tr data-test={`project-${id}`} key={`project-${id}`}>
+      <td className="project-details" data-test={`project-id-${id}`}>{id}</td>
       <td className="project-details" data-test={`project-name-${id}`}>{name}</td>
       <td className="project-details" data-test={`project-type-${id}`}>{this.getSchemeName(type)}</td>
       <td className="project-details" data-test={`project-status-${id}`}>{this.getStatus(status)}</td>
@@ -38,6 +39,7 @@ export default class ProjectList extends React.Component {
 
   renderTitles = () => {
     return <tr>
+        <th>ID</th>
         <th>Project Name</th>
         <th>Scheme</th>
         <th>Status of Project</th>
