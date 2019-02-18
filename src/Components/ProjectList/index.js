@@ -39,7 +39,7 @@ export default class ProjectList extends React.Component {
 
   renderTitles = () => {
     return <tr>
-        <th>#</th>
+        <th>ID</th>
         <th>Project Name</th>
         <th>Scheme</th>
         <th>Status of Project</th>
