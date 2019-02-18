@@ -167,7 +167,7 @@ describe("Viewing the Homepage", () => {
     expect(page.find("ProjectList").length).toEqual(1);
   });
 });
-  
+
 describe("Viewing a project", () => {
   let api;
 
@@ -197,7 +197,7 @@ describe("Viewing a project", () => {
       api.expendToken("Cats").successfully();
       api.expendEmptyTokenForProject().successfully();
     });
-    
+
     afterEach(() => {
       nock.cleanAll();
     });
@@ -418,6 +418,7 @@ describe('Submitting a draft project', () => {
     await page.load();
     expect(page.find('[data-test="validationWarning"]').length).toEqual(1);
 
+    response = {valid: true, invalidPaths: [], prettyInvalidPaths: []}
     api.validateProject(0, projectType, submittedProjectData, response).successfully();
 
 
@@ -427,7 +428,7 @@ describe('Submitting a draft project', () => {
   });
 
   it('Present you with an error when you attempt to save over data which has been previously saved', async () => {
-    Cookies.remove('userrole');    
+    Cookies.remove('userrole');
     let page = new AppPage("/project/0");
     let response = {
       valid: true,
@@ -436,7 +437,7 @@ describe('Submitting a draft project', () => {
     };
 
     api.validateProject(0, projectType, returnData, response).successfully();
-    
+
     api.updateProject(returnData, 0, {successful: false, errors: ["incomplete_timestamp"]}, "8").successfully();
 
     await page.load();
@@ -475,7 +476,7 @@ describe("Printing a return", () => {
     }
     api.getProject(schema, data, "Submitted", "hif").successfully();
     api.getReturn(data, schema).successfully();
-    
+
     let page = new AppPage("/project/0/return/1/print?token=Cats");
     await page.load();
 

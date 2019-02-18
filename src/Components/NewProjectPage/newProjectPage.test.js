@@ -54,7 +54,7 @@ describe("NewProjectPage", () => {
     )
     expect(userRoleUseCaseSpy.execute).toBeCalled()
   });
-  
+
   it("Passes the document gateway to the parent form", () => {
     let documentGatewayDummy = jest.fn();
     let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
@@ -86,7 +86,7 @@ describe("NewProjectPage", () => {
           execute: jest.fn(async (presenter, id) => {presenter.projectUpdated([])})
         };
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
-  
+
         let wrap = mount(
           <NewProjectPage
             getRole={userRoleUseCaseSpy}
@@ -113,12 +113,12 @@ describe("NewProjectPage", () => {
           0
         );
       });
-  
+
       it("example 2", async () => {
         let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {}) };
         let updateProjectSpy = { execute: jest.fn(async (presenter, id) => {}) };
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
-  
+
         let wrap = mount(
           <NewProjectPage
             getRole={userRoleUseCaseSpy}
@@ -156,7 +156,7 @@ describe("NewProjectPage", () => {
           execute: jest.fn(async (presenter, id) => {presenter.projectUpdated([])})
         };
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
-  
+
         let wrap = mount(
           <NewProjectPage
             getRole={userRoleUseCaseSpy}
@@ -183,12 +183,12 @@ describe("NewProjectPage", () => {
           0
         );
       });
-  
+
       it("example 2", async () => {
         let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {}) };
         let updateProjectSpy = { execute: jest.fn(async (presenter, id) => {}) };
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
-  
+
         let wrap = mount(
           <NewProjectPage
             getRole={userRoleUseCaseSpy}
@@ -226,7 +226,7 @@ describe("NewProjectPage", () => {
           execute: jest.fn(async (presenter, id) => {presenter.projectUpdated([])})
         };
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
-  
+
         let wrap = mount(
           <NewProjectPage
             getRole={userRoleUseCaseSpy}
@@ -253,12 +253,12 @@ describe("NewProjectPage", () => {
           0
         );
       });
-  
+
       it("example 2", async () => {
         let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {}) };
         let updateProjectSpy = { execute: jest.fn(async (presenter, id) => {}) };
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
-  
+
         let wrap = mount(
           <NewProjectPage
             getRole={userRoleUseCaseSpy}
@@ -298,7 +298,7 @@ describe("NewProjectPage", () => {
           execute: jest.fn(async (presenter, id) => {presenter.projectUpdated([])})
         };
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
-  
+
         let wrap = mount(
           <NewProjectPage
             getRole={userRoleUseCaseSpy}
@@ -310,7 +310,7 @@ describe("NewProjectPage", () => {
             schema={schema}
           />
         );
-        
+
         expect(
           wrap.find('[data-test="disabled-submit-project-button"]').length
         ).toEqual(0);
@@ -324,12 +324,12 @@ describe("NewProjectPage", () => {
           1
         );
       });
-  
+
       it("example 2", async () => {
         let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {}) };
         let updateProjectSpy = { execute: jest.fn(async (presenter, id) => {}) };
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
-  
+
         let wrap = mount(
           <NewProjectPage
             getRole={userRoleUseCaseSpy}
@@ -341,7 +341,7 @@ describe("NewProjectPage", () => {
             schema={schema}
           />
         );
-        
+
         expect(
           wrap.find('[data-test="disabled-submit-project-button"]').length
         ).toEqual(0);
@@ -366,7 +366,7 @@ describe("NewProjectPage", () => {
           execute: jest.fn(async (presenter, id) => {presenter.projectUpdated({errors: id})})
         };
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
-  
+
         let wrap = mount(
           <NewProjectPage
             getRole={userRoleUseCaseSpy}
@@ -378,7 +378,7 @@ describe("NewProjectPage", () => {
             schema={schema}
           />
         );
-        
+
         expect(
           wrap.find('[data-test="disabled-update-project-button"]').length
         ).toEqual(0);
@@ -392,12 +392,12 @@ describe("NewProjectPage", () => {
           1
         );
       });
-  
+
       it("example 2", async () => {
         let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {}) };
         let updateProjectSpy = { execute: jest.fn(async (presenter, id) => {}) };
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
-  
+
         let wrap = mount(
           <NewProjectPage
             getRole={userRoleUseCaseSpy}
@@ -409,7 +409,7 @@ describe("NewProjectPage", () => {
             schema={schema}
           />
         );
-        
+
         expect(
           wrap.find('[data-test="disabled-update-project-button"]').length
         ).toEqual(0);
@@ -559,83 +559,165 @@ describe("NewProjectPage", () => {
     });
   });
 
-  describe("call the validate project use case when updating a project", () => {
-    it("Example 1", async () => {
-      let submitProjectSpy = {
-        execute: jest.fn(async (presenter, id) => {
-          presenter.creationSuccess(id);
-        })
-      };
-      let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
-      let updateProjectSpy = {
-        execute: jest.fn(async (presenter, id) => presenter.projectUpdated([]))
-      };
-      let validateProjectSpy = { execute: jest.fn(async () => {}) };
+  describe("Validating the project", () => {
+    describe("when updating a project", () => {
+      it("Example 1", async () => {
+        let submitProjectSpy = {
+          execute: jest.fn(async (presenter, id) => {
+            presenter.creationSuccess(id);
+          })
+        };
+        let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
+        let updateProjectSpy = {
+          execute: jest.fn(async (presenter, id) => presenter.projectUpdated([]))
+        };
+        let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
-      let wrap = mount(
-        <NewProjectPage
-          projectType={"hif"}
-          match={{ params: { id: 1 } }}
-          updateProject={updateProjectSpy}
-          submitProject={submitProjectSpy}
-          validateProject={validateProjectSpy}
-          data={data}
-          schema={schema}
-          getRole={userRoleUseCaseSpy}
-          status={"LA Draft"}
-        />
-      );
+        let wrap = mount(
+          <NewProjectPage
+            projectType={"hif"}
+            match={{ params: { id: 1 } }}
+            updateProject={updateProjectSpy}
+            submitProject={submitProjectSpy}
+            validateProject={validateProjectSpy}
+            data={data}
+            schema={schema}
+            getRole={userRoleUseCaseSpy}
+            status={"LA Draft"}
+          />
+        );
 
-      await wait();
-      await updateFormField(wrap.find('input[type="text"]'), "hi");
-      await wrap.update();
-      wrap.find('[data-test="update-project-button"]').simulate("click");
-      await wait();
-      expect(validateProjectSpy.execute).toBeCalledWith(
-        expect.anything(),
-        1,
-        "hif",
-        { cat: { catA: { catB: "hi" } } }
-      );
+        await wait();
+        await updateFormField(wrap.find('input[type="text"]'), "hi");
+        await wrap.update();
+        wrap.find('[data-test="update-project-button"]').simulate("click");
+        await wait();
+        expect(validateProjectSpy.execute).toBeCalledWith(
+          expect.anything(),
+          1,
+          "hif",
+          { cat: { catA: { catB: "hi" } } }
+        );
+      });
+
+      it("Example 2", async () => {
+        let submitProjectSpy = {
+          execute: jest.fn(async (presenter, id) => {
+            presenter.creationSuccess(id);
+          })
+        };
+        let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
+        let updateProjectSpy = {
+          execute: jest.fn(async (presenter, id) => presenter.projectUpdated([]))
+        };
+        let validateProjectSpy = { execute: jest.fn(async () => {}) };
+
+        let wrap = mount(
+          <NewProjectPage
+            projectType={"ac"}
+            match={{ params: { id: 6 } }}
+            updateProject={updateProjectSpy}
+            submitProject={submitProjectSpy}
+            validateProject={validateProjectSpy}
+            data={data}
+            schema={schema}
+            getRole={userRoleUseCaseSpy}
+            status={"LA Draft"}
+          />
+        );
+
+        await wait();
+        await updateFormField(wrap.find('input[type="text"]'), "Meow");
+        await wrap.update();
+        wrap.find('[data-test="update-project-button"]').simulate("click");
+        await wait();
+        expect(validateProjectSpy.execute).toBeCalledWith(
+          expect.anything(),
+          6,
+          "ac",
+          { cat: { catA: { catB: "Meow" } } }
+        );
+      });
     });
 
-    it("Example 2", async () => {
-      let submitProjectSpy = {
-        execute: jest.fn(async (presenter, id) => {
-          presenter.creationSuccess(id);
-        })
-      };
-      let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
-      let updateProjectSpy = {
-        execute: jest.fn(async (presenter, id) => presenter.projectUpdated([]))
-      };
-      let validateProjectSpy = { execute: jest.fn(async () => {}) };
+    describe("when submitting the project", () => {
+      it("Example 1", async () => {
+        let submitProjectSpy = {
+          execute: jest.fn(async (presenter, id) => {
+            presenter.creationSuccess(id);
+          })
+        };
+        let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"})) };
+        let updateProjectSpy = {
+          execute: jest.fn(async (presenter, id) => presenter.projectUpdated([]))
+        };
+        let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
-      let wrap = mount(
-        <NewProjectPage
-          projectType={"ac"}
-          match={{ params: { id: 6 } }}
-          updateProject={updateProjectSpy}
-          submitProject={submitProjectSpy}
-          validateProject={validateProjectSpy}
-          data={data}
-          schema={schema}
-          getRole={userRoleUseCaseSpy}
-          status={"LA Draft"}
-        />
-      );
+        let wrap = mount(
+          <NewProjectPage
+            projectType={"hif"}
+            match={{ params: { id: 1 } }}
+            updateProject={updateProjectSpy}
+            submitProject={submitProjectSpy}
+            validateProject={validateProjectSpy}
+            data={data}
+            schema={schema}
+            getRole={userRoleUseCaseSpy}
+            status={"LA Draft"}
+          />
+        );
 
-      await wait();
-      await updateFormField(wrap.find('input[type="text"]'), "Meow");
-      await wrap.update();
-      wrap.find('[data-test="update-project-button"]').simulate("click");
-      await wait();
-      expect(validateProjectSpy.execute).toBeCalledWith(
-        expect.anything(),
-        6,
-        "ac",
-        { cat: { catA: { catB: "Meow" } } }
-      );
+        await wait();
+        await updateFormField(wrap.find('input[type="text"]'), "hi");
+        await wrap.update();
+        wrap.find('[data-test="submit-project-button"]').simulate("click");
+        await wait();
+        expect(validateProjectSpy.execute).toBeCalledWith(
+          expect.anything(),
+          1,
+          "hif",
+          { cat: { catA: { catB: "hi" } } }
+        );
+      });
+
+      it("Example 2", async () => {
+        let submitProjectSpy = {
+          execute: jest.fn(async (presenter, id) => {
+            presenter.creationSuccess(id);
+          })
+        };
+        let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"})) };
+        let updateProjectSpy = {
+          execute: jest.fn(async (presenter, id) => presenter.projectUpdated([]))
+        };
+        let validateProjectSpy = { execute: jest.fn(async () => {}) };
+
+        let wrap = mount(
+          <NewProjectPage
+            projectType={"ac"}
+            match={{ params: { id: 6 } }}
+            updateProject={updateProjectSpy}
+            submitProject={submitProjectSpy}
+            validateProject={validateProjectSpy}
+            data={data}
+            schema={schema}
+            getRole={userRoleUseCaseSpy}
+            status={"LA Draft"}
+          />
+        );
+
+        await wait();
+        await updateFormField(wrap.find('input[type="text"]'), "Meow");
+        await wrap.update();
+        wrap.find('[data-test="submit-project-button"]').simulate("click");
+        await wait();
+        expect(validateProjectSpy.execute).toBeCalledWith(
+          expect.anything(),
+          6,
+          "ac",
+          { cat: { catA: { catB: "Meow" } } }
+        );
+      });
     });
   });
 
@@ -778,7 +860,7 @@ describe("NewProjectPage", () => {
       let updateProjectSpy = {
         execute: jest.fn(async (presenter, id) => presenter.projectUpdated([]))
       };
-      let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"})) };      
+      let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"})) };
       let validateProjectSpy = { execute: jest.fn(async presenter => {}) };
 
       let wrap = mount(
@@ -948,16 +1030,16 @@ describe("NewProjectPage", () => {
 
   describe("Overwriting data error", () => {
     let submitProjectSpy = { execute: jest.fn(async () => {}) };
-    let errors = "incorrect_timestamp"
-    let updateProjectSpy = { execute: jest.fn(async (presenter, id) => presenter.projectUpdated(errors)) };
     let validateProjectSpy = {
       execute: jest.fn(async presenter => {
         await presenter.invalidateFields([["less", "cats"]]);
       })
     };
-    let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
+    let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"})) };
 
     it("shows warning upon update if in draft state", async () => {
+      let errors = "incorrect_timestamp"
+      let updateProjectSpy = { execute: jest.fn(async (presenter, id) => presenter.projectUpdated(errors)) };
       let wrap = mount(
         <NewProjectPage
           match={{ params: { id: 1 } }}
@@ -967,7 +1049,7 @@ describe("NewProjectPage", () => {
           validateProject={validateProjectSpy}
           data={data}
           schema={schema}
-          status={"LA Draft"}
+          status={"Draft"}
           getRole={userRoleUseCaseSpy}
           UiSchema={{}}
         />
@@ -980,6 +1062,41 @@ describe("NewProjectPage", () => {
       await wait();
       await wrap.update();
       expect(wrap.find('[data-test="overwriting-error"]').length).toEqual(1);
+    });
+
+    it("Does not show warning upon submission after being updated", async () => {
+      let errors = ""
+      let updateProjectSpy = { execute: jest.fn(async (presenter, id) => presenter.projectUpdated(errors, 11)) };
+      let wrap = mount(
+        <NewProjectPage
+          match={{ params: { id: 1 } }}
+          projectType={"hey"}
+          updateProject={updateProjectSpy}
+          submitProject={submitProjectSpy}
+          validateProject={validateProjectSpy}
+          data={data}
+          schema={schema}
+          status={"Draft"}
+          getRole={userRoleUseCaseSpy}
+          UiSchema={{}}
+          timestamp={10}
+        />
+      );
+
+      await wait();
+      await wrap
+        .find('[data-test="update-project-button"]')
+        .simulate("click");
+      await wait();
+      await wrap.update();
+      expect(updateProjectSpy.execute).toBeCalledWith(expect.anything(), 1, data, 10);
+
+      await wrap
+        .find('[data-test="submit-project-button"]')
+        .simulate("click");
+      await wait();
+      await wrap.update();
+      expect(updateProjectSpy.execute).toBeCalledWith(expect.anything(), 1, data, 11);
     });
   });
 

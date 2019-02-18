@@ -60,7 +60,7 @@ export default class ErrorMessage extends React.Component {
         role="alert"
         data-test="overwriting-error"
       >
-        <strong>Error:</strong> You can not save as newer data has already been saved to the system.<br />
+        <strong>Error:</strong> You cannot save as newer data has already been saved to the system.<br />
       </div>
     );
   }

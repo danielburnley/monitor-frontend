@@ -73,8 +73,10 @@ export default class NewProjectPage extends React.Component {
       this,
       this.props.match.params.id,
       this.state.formData,
-      this.props.timestamp
+      this.state.timestamp
     );
+
+    await this.validateProject();
 
     if (this.state.valid) {
       await this.props.submitProject.execute(this, this.props.match.params.id);
