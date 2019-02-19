@@ -1,6 +1,7 @@
 import nock from "nock";
 import ProjectGateway from ".";
 import Project from "../../Domain/Project";
+import Infrastructure from "../../Domain/Infrastructure";
 
 describe("Project Gateway", () => {
   afterEach(() => {
@@ -94,7 +95,7 @@ describe("Project Gateway", () => {
 
   describe("#GetInfrastructures", () => {
     describe("Given a Infrastructures are returned", () => {
-      let projectRequest, response, apiKeyGateway;
+      let request, response, apiKeyGateway;
 
       describe("Example one", () => {
         beforeEach(async () => {
@@ -102,7 +103,7 @@ describe("Project Gateway", () => {
           apiKeyGateway = {
             getApiKey: jest.fn(() => ({ apiKey: "superSecret" }))
           };
-          projectRequest = nock("http://cat.meow")
+          request = nock("http://cat.meow")
             .matchHeader("Content-Type", "application/json")
             .matchHeader("API_KEY", "superSecret")
             .get("/project/1/infrastructures")
@@ -112,14 +113,14 @@ describe("Project Gateway", () => {
         });
 
         it("Fetches the project from the API", () => {
-          expect(projectRequest.isDone()).toBeTruthy();
+          expect(request.isDone()).toBeTruthy();
         });
 
         it("Projects the response from the api", () => {
-          let project = new Infrastructure({ cow: "moo" }, { duck: "quack" }, 'Draft', 'ac', "12345");
+          let infrastructure = new Infrastructure({ cow: "moo" })
           expect(response).toEqual({
             success: true,
-            foundProject: { data: project.data}
+            infrastructures: [infrastructure]
           });
         });
 
@@ -129,30 +130,30 @@ describe("Project Gateway", () => {
       });
 
       describe("Example two", () => {
-        let projectRequest, response, apiKeyGateway;
+        let request, response, apiKeyGateway;
         beforeEach(async () => {
           process.env.REACT_APP_HIF_API_URL = "http://dog.woof/";
           apiKeyGateway = {
             getApiKey: jest.fn(() => ({ apiKey: "extraSecret" }))
           };
-          projectRequest = nock("http://dog.woof")
+          request = nock("http://dog.woof")
             .matchHeader("Content-Type", "application/json")
             .matchHeader("API_KEY", "extraSecret")
             .get("/project/5/infrastructures")
-            .reply(200, { data: [{ dogs: "woof" }]});
+            .reply(200, { infrastructures: [{ dogs: "woof" }]});
           let gateway = new ProjectGateway(apiKeyGateway);
           response = await gateway.getInfrastructures(5);
         });
 
         it("Fetches the project from the API", () => {
-          expect(projectRequest.isDone()).toBeTruthy();
+          expect(request.isDone()).toBeTruthy();
         });
 
         it("Projects the response from the api", () => {
-          let project = new Project({ dogs: "woof" }, { cats: "meow" }, 'Submited', 'hif', "2344");
+          let infrastructure = new Infrastructure({ dogs: "woof" });
           expect(response).toEqual({
             success: true,
-            foundProject: { data: project.data, schema: project.schema, type: project.type, status: project.status, timestamp: project.timestamp }
+            infrastructures: [infrastructure]
           });
         });
 
