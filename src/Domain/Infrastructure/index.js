@@ -1,6 +1,5 @@
 export default class Infrastructure {
-  constructor(data, id){
+  constructor(data){
     this.data = data
-    this.id = id
   }
 }

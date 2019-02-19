@@ -4,9 +4,15 @@ export default class PickInfrastruture extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      laoding: true
+      loading: true,
+      infrastructures: []
     }
   }
+
+  componentDidMount = async () => {
+    await this.props.getInfrastructures.execute(this, this.props.projectId)
+  }
+
   presentInfrastructures = async (infrastructuresData) => {
     let infrastructures = infrastructuresData.map(infrastructure => infrastructure.data)
     await this.setState({
@@ -15,16 +21,24 @@ export default class PickInfrastruture extends React.Component {
     })
   }
 
-  componentDidMount = async () => {
-    await this.props.getInfrastructures.execute(this, this.props.projectId)
+  presentProjectNotFound = () => {}
+
+  onSelection = (id) => {
+    this.props.onChange({infrastructureId: id})
   }
 
   renderInfrastructures = () => {
-    // this.state.infrastructures.forEach(infrastructure => {
-    //   <div data-test={`infrastructure-${infrastructure.id}`}>
-
-    //   </div>
-    // })
+    return this.state.infrastructures.map(infrastructure => {
+      return  (
+      <option
+        key={`infrastructure-${infrastructure.id}`}
+        value={infrastructure.id}
+        data-test={`infrastructure-${infrastructure.id}`}
+      >
+        {infrastructure.description}
+      </option>
+      )
+    })
   }
 
   render() {
@@ -32,7 +46,17 @@ export default class PickInfrastruture extends React.Component {
       return <div />
     } else {
       return <div>
-        {this.renderInfrastructures()}
+        <div className="form-group">
+          <label htmlFor="infrastructurePicker">Please select which infrastructure this relates to.</label>
+          <select
+            data-test="infrastructue-picker"
+            className="form-control"
+            id="infrastructurePicker"
+            onChange={e => this.onSelection(e.target.value)}
+          >
+          {this.renderInfrastructures()}
+          </select>
+        </div>
       </div>
     }
   }
