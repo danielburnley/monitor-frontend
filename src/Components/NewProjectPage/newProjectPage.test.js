@@ -76,6 +76,50 @@ describe("NewProjectPage", () => {
     ).toEqual(documentGatewayDummy);
   });
 
+  describe("Passes the project id", () => {
+    it("Example 1", () => {
+      let documentGatewayDummy = jest.fn();
+      let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
+      let wrap = shallow(
+        <NewProjectPage
+          documentGateway={documentGatewayDummy}
+          match={{ params: { id: 6 } }}
+          updateProject={{}}
+          submitProject={{}}
+          validateProject={ { execute: () => null } }
+          data={{}}
+          schema={schema}
+          getRole={userRoleUseCaseSpy}
+        />
+      );
+
+      expect(
+        wrap.find({ "data-test": "project-form" }).props().formContext
+      ).toEqual({projectId: 6});
+    });
+
+    it("Example 2", () => {
+      let documentGatewayDummy = jest.fn();
+      let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
+      let wrap = shallow(
+        <NewProjectPage
+          documentGateway={documentGatewayDummy}
+          match={{ params: { id: 8 } }}
+          updateProject={{}}
+          submitProject={{}}
+          validateProject={ { execute: () => null } }
+          data={{}}
+          schema={schema}
+          getRole={userRoleUseCaseSpy}
+        />
+      );
+
+      expect(
+        wrap.find({ "data-test": "project-form" }).props().formContext
+      ).toEqual({projectId: 8});
+    });
+  });
+
   describe("disables buttons while project updating hasnt completed", () => {
     describe("In Homes England draft mode", () => {
       let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"})) };

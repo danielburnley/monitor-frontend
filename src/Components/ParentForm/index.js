@@ -268,6 +268,7 @@ export default class ParentForm extends React.Component {
       return (
         <div className="col-md-10">
           <ArraySubform
+            formContext={this.props.formContext}
             data-test={`${this.state.selected}_subform`}
             key={`${this.state.selected}_subform`}
             onChange={formData => {
@@ -290,6 +291,7 @@ export default class ParentForm extends React.Component {
       return (
         <div className="col-md-10 subform">
           <Form
+            formContext={this.props.formContext}
             data-test={`${this.state.selected}_subform`}
             onChange={({ formData }) => {
               this.subformOnChange(formData);

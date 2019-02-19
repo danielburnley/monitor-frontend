@@ -476,6 +476,7 @@ describe("<ParentForm>", () => {
       beforeEach(() => {
         parentForm = shallow(
           <ParentForm
+            formContext={{projectId: 3}}
             documentGateway={documentGatewaySpy}
             getRole={getRoleUseCaseSpy}
             onChange={jest.fn()}
@@ -513,6 +514,10 @@ describe("<ParentForm>", () => {
       it("Defaults the selected form section to the first property in the object", () => {
         expect(parentForm.state().selectedFormSection).toEqual("name");
       });
+
+      it("Passes through the formContext", () => {
+        expect(parentForm.find("Form").props().formContext).toEqual({projectId: 3});
+      });
     });
 
     describe("Example two", () => {
@@ -521,6 +526,7 @@ describe("<ParentForm>", () => {
       beforeEach(() => {
         parentForm = shallow(
           <ParentForm
+            formContext={{projectId: 6}}
             documentGateway={documentGatewaySpy}
             getRole={getRoleUseCaseSpy}
             onChange={jest.fn()}
@@ -558,6 +564,10 @@ describe("<ParentForm>", () => {
       it("Defaults the selected form section to the first property in the object", () => {
         expect(parentForm.state().selectedFormSection).toEqual("farm");
       });
+
+      it("Passes through the formContext", () => {
+        expect(parentForm.find("Form").props().formContext).toEqual({projectId: 6});
+      });
     });
   });
 
@@ -569,6 +579,7 @@ describe("<ParentForm>", () => {
         onChangeSpy = jest.fn();
         parentForm = shallow(
           <ParentForm
+            formContext={{projectId: 1}}
             documentGateway={documentGatewaySpy}
             getRole={getRoleUseCaseSpy}
             onChange={jest.fn()}
@@ -625,6 +636,7 @@ describe("<ParentForm>", () => {
         expect(subform.props().schema).toEqual(expectedSchema);
         expect(subform.props().data).toEqual([{ details: { name: "Meow" } }]);
         expect(subform.props().uiSchema).toEqual({ a: "b" });
+        expect(subform.props().formContext).toEqual({ projectId: 1 });
       });
 
       it("Defaults the selected form section to the first property in the object", () => {
@@ -728,6 +740,7 @@ describe("<ParentForm>", () => {
         onChangeSpy = jest.fn();
         parentForm = shallow(
           <ParentForm
+            formContext={{projectId: 6}}
             documentGateway={documentGatewaySpy}
             getRole={getRoleUseCaseSpy}
             onChange={jest.fn()}
@@ -786,6 +799,7 @@ describe("<ParentForm>", () => {
         expect(subform.props().schema).toEqual(expectedSchema);
         expect(subform.props().data).toEqual([{ noise: { bark: "woof" } }]);
         expect(subform.props().uiSchema).toEqual({ noise: { bark: "meow" } });
+        expect(subform.props().formContext).toEqual({ projectId: 6 });
       });
 
       it("Defaults the selected form section to the first property in the object", () => {

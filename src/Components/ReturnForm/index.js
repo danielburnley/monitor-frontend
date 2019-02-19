@@ -67,8 +67,8 @@ export default class ReturnForm extends React.Component {
         </div>
       );
     }
-    
-    
+
+
     return (
       <div className="col-md-offset-3 col-md-9 return-actions">
         <button
@@ -93,6 +93,7 @@ export default class ReturnForm extends React.Component {
         {this.renderActions()}
         <ParentForm
           data-test="return-form"
+          formContext={{projectId: this.props.projectId}}
           schema={this.props.schema}
           uiSchema={this.props.uiSchema}
           formData={this.state.formData}

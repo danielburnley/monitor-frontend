@@ -6,7 +6,6 @@ describe("<ProjectPage>", () => {
   let page, getProjectSpy, childrenSpy, generateNewProjectUISchemaSpy, UISchema;
 
   describe("Example one", () => {
-
     describe("When loading the project", () => {
       beforeEach(() => {
         getProjectSpy = { execute: jest.fn() };
@@ -218,7 +217,7 @@ describe("<ProjectPage>", () => {
         generateNewProjectUISchemaSpy = {
           execute: (data, flag) => ({ heya: { "ui:disabled": true } })
         };
-        
+
 
         childrenSpy = jest.fn();
 

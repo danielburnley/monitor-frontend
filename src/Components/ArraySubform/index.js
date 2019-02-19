@@ -37,6 +37,7 @@ export default class ArraySubform extends React.Component {
     return (
       <div className="subform" id="subform">
         <Form
+          formContext={this.props.formContext}
           key={`${this.props.selectedIndex}_${this.props.selectedFormSection}`}
           fields={this.props.fields}
           widgets={this.props.widgets}
