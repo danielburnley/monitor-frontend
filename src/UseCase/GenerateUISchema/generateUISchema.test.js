@@ -1116,6 +1116,35 @@ describe("GenerateUISchema", () => {
     });
   });
 
+  describe("Picking an infrastructure fiels", () => {
+    it("Sets the UI field to pickInfrastructure", () => {
+      let schema = {
+        type: "object",
+        properties: {
+          a: {
+            type: "object",
+            properties: {
+              infraId: {
+                linkToInfra: true,
+                type: "string"
+              }
+            }
+          }
+        }
+      };
+
+      let response = useCase.execute(schema);
+
+      expect(response).toEqual({
+        a: {
+          infraId: {
+            "ui:field": "pickInfrastructure"
+          }
+        }
+      });
+    });
+  });
+
   describe("Horizontal", () => {
     describe("Given an array with horizontal items", () => {
       it("Sets the UI field to horizontal", () => {

@@ -84,6 +84,7 @@ describe("NewProjectPage", () => {
         <NewProjectPage
           documentGateway={documentGatewayDummy}
           match={{ params: { id: 6 } }}
+          getInfrastructures={"get me some infrastructures"}
           updateProject={{}}
           submitProject={{}}
           validateProject={ { execute: () => null } }
@@ -95,7 +96,7 @@ describe("NewProjectPage", () => {
 
       expect(
         wrap.find({ "data-test": "project-form" }).props().formContext
-      ).toEqual({projectId: 6});
+      ).toEqual({projectId: 6, getInfrastructures: "get me some infrastructures"});
     });
 
     it("Example 2", () => {
@@ -106,6 +107,7 @@ describe("NewProjectPage", () => {
           documentGateway={documentGatewayDummy}
           match={{ params: { id: 8 } }}
           updateProject={{}}
+          getInfrastructures={"infras"}
           submitProject={{}}
           validateProject={ { execute: () => null } }
           data={{}}
@@ -116,7 +118,7 @@ describe("NewProjectPage", () => {
 
       expect(
         wrap.find({ "data-test": "project-form" }).props().formContext
-      ).toEqual({projectId: 8});
+      ).toEqual({projectId: 8, getInfrastructures: "infras"});
     });
   });
 

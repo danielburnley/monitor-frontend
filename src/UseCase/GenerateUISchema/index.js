@@ -133,6 +133,10 @@ export default class GenerateUISchema {
       schema["ui:field"] = "base"
     }
 
+    if(item.linkToInfra) {
+      schema["ui:field"] = "pickInfrastructure"
+    }
+
     if(item.periods) {
       schema["ui:field"] = "periods"
     }

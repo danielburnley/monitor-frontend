@@ -1796,7 +1796,7 @@ describe("<ParentForm>", () => {
             documentGateway={documentGatewaySpy}
             getRole={getRoleUseCaseSpy}
             onChange={jest.fn()}
-            formContext={{projectId: 2, getInfrastructures: { execute: jest.fn() }}}
+            formContext={{projectId: 2, getInfrastructures: {execute: jest.fn()}} }
             schema={{
               type: "object",
               properties: {
@@ -1830,9 +1830,11 @@ describe("<ParentForm>", () => {
             }}
           />
         );
+
+        await parentForm.update();
         await wait();
 
-        expect(parentForm.find("PickInfrastructureField").length).toEqual(1);
+        expect(parentForm.find("PickInfrastrutureField").length).toEqual(1);
       });
     });
   });
