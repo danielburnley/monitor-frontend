@@ -122,7 +122,7 @@ export default class ProjectGateway {
     }
   }
 
-  async create(name, type) {
+  async create(name, type, bidId) {
     let response = await fetch(
       `${this.env.REACT_APP_HIF_API_URL}project/create`,
       {
@@ -131,7 +131,7 @@ export default class ProjectGateway {
           "Content-Type": "application/json",
           API_KEY: this.apiKeyGateway.getApiKey().apiKey
         },
-        body: JSON.stringify({name, type})
+        body: JSON.stringify({name, type, bidId})
       }
     );
 

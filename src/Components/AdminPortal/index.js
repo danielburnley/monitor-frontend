@@ -35,7 +35,7 @@ export default class AdminPortal extends React.Component {
 
   onProjectCreate = async () => {
     if(this.state.name && this.state.type) {
-      await this.props.createProject.execute(this, this.state.name, this.state.type)
+      await this.props.createProject.execute(this, this.state.name, this.state.type, this.state.bidId)
 
       await this.addUser()
       Cookies.remove('apikey');
@@ -91,6 +91,16 @@ export default class AdminPortal extends React.Component {
           <option value="hif">Marginal Viability Fund</option>
           
         </select>
+      </div>
+      <div className="form-group">
+        <label htmlFor="projectBidId">Enter Bid Reference for the project</label>
+        <input
+          className="form-control"
+          id="projectBidId"
+          data-test="create-project-bidId"
+          placeholder="Bid Reference"
+          onChange={e => this.onFieldChange(e.target.value, "bidId")}
+        />
       </div>
     </div>
   }
