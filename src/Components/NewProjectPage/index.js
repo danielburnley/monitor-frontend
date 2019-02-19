@@ -121,7 +121,7 @@ export default class NewProjectPage extends React.Component {
       <div>
         <ParentForm
           data-test="project-form"
-          formContext = {{projectId: this.props.match.params.id}}
+          formContext = {{projectId: this.props.match.params.id, getInfrastructures: this.props.getInfrastructures}}
           documentGateway={this.props.documentGateway}
           formData={this.state.formData}
           schema={this.state.formSchema}

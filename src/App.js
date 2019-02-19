@@ -27,6 +27,7 @@ import SubmitProject from "./UseCase/SubmitProject";
 import UpdateProject from "./UseCase/UpdateProject";
 import GenerateDisabledUISchema from "./UseCase/GenerateDisabledUISchema";
 import GenerateUISchema from "./UseCase/GenerateUISchema";
+import GetInfrastructures from "./UseCase/GetInfrastructures"
 import GetBaseReturn from "./UseCase/GetBaseReturn";
 import CanAccessProject from "./UseCase/CanAccessProject";
 import CanAccessMonitor from "./UseCase/CanAccessMonitor";
@@ -75,6 +76,7 @@ const submitProjectUseCase = new SubmitProject(projectGateway);
 const generateUISchema = new GenerateUISchema(userRoleGateway);
 const generateDisabledUISchema = new GenerateDisabledUISchema(generateUISchema);
 const getBaseReturnUseCase = new GetBaseReturn(returnGateway);
+const getInfrastructuresUseCase = new GetInfrastructures(projectGateway);
 const getProjectUseCase = new GetProject(projectGateway);
 const getReturnUseCase = new GetReturn(returnGateway);
 const getUserProjectsUseCase = new GetUserProjects(userGateway);
@@ -93,6 +95,7 @@ const renderReturnPage = props => (
     {...props}
     validateReturn={validateReturnUseCase}
     getReturn={getReturnUseCase}
+    getInfrastructures={getInfrastructuresUseCase}
     getBaseReturn={getBaseReturnUseCase}
     createReturn={createReturnUseCase}
     submitReturn={submitReturnUseCase}
@@ -144,6 +147,7 @@ const renderNewProjectPage = (props, projectStatus, formData, formSchema, projec
     status={projectStatus}
     schema={formSchema}
     data={formData}
+    getInfrastructures={getInfrastructuresUseCase}
     projectType={projectType}
     getProject={getProjectUseCase}
     submitProject={submitProjectUseCase}

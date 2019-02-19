@@ -928,292 +928,7 @@ describe("<ParentForm>", () => {
     });
   });
 
-  describe("Given a schema with a risk field", () => {
-    it("Displays the risk field component", () => {
-      let parentForm = mount(
-        <ParentForm
-          documentGateway={documentGatewaySpy}
-          getRole={getRoleUseCaseSpy}
-          onChange={jest.fn()}
-          schema={{
-            type: "object",
-            properties: {
-              cat: {
-                type: "object",
-                properties: {
-                  name: {
-                    type: "string"
-                  },
-                  riskAnyChange: {
-                    type: 'string',
-                    title: 'Any Change?',
-                    enum: ["Yes", "No"]
-                  },
-                  riskCurrentReturnLikelihood: {
-                    type: "string",
-                    title: "Current Return Liklihood",
-                    enum: ["1", "2", "3", "4", "5"]
-                  },
-                  riskMet: {
-                    type: "string",
-                    title: "Risk Met?",
-                    enum: ["Yes", "No"]
-                  }
-                }
-              },
-              dog: {
-                type: "object",
-                properties: {
-                  name: {
-                    type: "string"
-                  }
-                }
-              }
-            }
-          }}
-          uiSchema={{
-            cat: {
-              "ui:field": "risk"
-            }
-          }}
-        />
-      );
-      expect(parentForm.find("RiskField").length).toEqual(1);
-    });
-  });
-
-  describe("Given a schema with a periods field", () => {
-    it("Displays the period field component", () => {
-      let uiSchema = {
-        one: {
-          items: {
-            periods: {
-              items: {},
-              "ui:field": "periods",
-              "ui:options": {
-                addable: false,
-                orderables: false,
-                removable: false
-              }
-            }
-          }
-        }
-      };
-
-      let schema = {
-        type: "object",
-        properties: {
-          one: {
-            type: "array",
-            items: {
-              type: "object",
-              properties: {
-                periods: {
-                  type: "array",
-                  items: {
-                    type: "object",
-                    properties: {
-                      period: {
-                        type: "string",
-                        title: "Lizard Type",
-                        readonly: true
-                      },
-                      length: {
-                        type: "string",
-                        title: "How Long",
-                        readonly: true
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      };
-
-      let data = {
-        one: [
-          {
-            periods: [
-              { period: "scaley", length: "200" },
-              { period: "slivery", length: "567" }
-            ]
-          }
-        ]
-      };
-
-      let parentForm = mount(
-        <ParentForm
-          documentGateway={documentGatewaySpy}
-          getRole={getRoleUseCaseSpy}
-          onChange={jest.fn()}
-          formData={data}
-          schema={schema}
-          uiSchema={uiSchema}
-        />
-      );
-      expect(parentForm.find("PeriodsField").length).toEqual(1);
-    });
-  });
-
-  describe("Given a schema with a validated field", () => {
-    it("Displays the validated field component", () => {
-      let uiSchema = {
-        one: {
-          items: {
-            periods: {
-              items: {},
-              "ui:field": "validated",
-              "ui:options": {
-                addable: false,
-                orderables: false,
-                removable: false
-              }
-            }
-          }
-        }
-      };
-
-      let schema = {
-        type: "object",
-        properties: {
-          one: {
-            type: "array",
-            items: {
-              type: "object",
-              properties: {
-                periods: {
-                  type: "array",
-                  items: {
-                    type: "object",
-                    properties: {
-                      period: {
-                        type: "string",
-                        title: "Lizard Type",
-                        readonly: true
-                      },
-                      length: {
-                        type: "string",
-                        title: "How Long",
-                        readonly: true
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      };
-
-      let data = {
-        one: [
-          {
-            periods: [
-              { period: "scaley", length: "200" },
-              { period: "slivery", length: "567" }
-            ]
-          }
-        ]
-      };
-
-      let parentForm = mount(
-        <ParentForm
-          documentGateway={documentGatewaySpy}
-          getRole={getRoleUseCaseSpy}
-          onChange={jest.fn()}
-          formData={data}
-          schema={schema}
-          uiSchema={uiSchema}
-        />
-      );
-      expect(parentForm.find("ValidatedField").length).toEqual(1);
-    });
-  });
-
-  describe("Given a field with currency", () => {
-    it("Displays the currency component", () => {
-      let parentForm = mount(
-        <ParentForm
-          documentGateway={documentGatewaySpy}
-          getRole={getRoleUseCaseSpy}
-          onChange={jest.fn()}
-          schema={{
-            type: "object",
-            properties: {
-              cat: {
-                type: "object",
-                properties: {
-                  name: {
-                    type: "string"
-                  }
-                }
-              },
-              dog: {
-                type: "object",
-                properties: {
-                  name: {
-                    type: "string"
-                  }
-                }
-              }
-            }
-          }}
-          uiSchema={{
-            cat: {
-              name: {
-                "ui:widget": "currency"
-              }
-            }
-          }}
-        />
-      );
-      expect(parentForm.find("CurrencyWidget").length).toEqual(1);
-    });
-  });
-
-  describe("Given a field with uploadFile", () => {
-    it("Displays the file upload component", () => {
-      let parentForm = mount(
-        <ParentForm
-          documentGateway={documentGatewaySpy}
-          getRole={getRoleUseCaseSpy}
-          onChange={jest.fn()}
-          schema={{
-            type: "object",
-            properties: {
-              cat: {
-                type: "object",
-                properties: {
-                  name: {
-                    type: "string"
-                  }
-                }
-              },
-              dog: {
-                type: "object",
-                properties: {
-                  name: {
-                    type: "string"
-                  }
-                }
-              }
-            }
-          }}
-          uiSchema={{
-            cat: {
-              name: {
-                "ui:field": "uploadFile"
-              }
-            }
-          }}
-        />
-      );
-      expect(parentForm.find("UploadFileField").length).toEqual(1);
-    });
-  });
-
+    
   describe("Sharing data accross tabs", () => {
     let wrap;
     describe("Between two simple object tabs", () => {
@@ -1783,6 +1498,341 @@ describe("<ParentForm>", () => {
             }
           }
         });
+      });
+    });
+  });
+
+  describe("Custom Components", () => {
+    describe("Given a schema with a risk field", () => {
+      it("Displays the risk field component", () => {
+        let parentForm = mount(
+          <ParentForm
+            documentGateway={documentGatewaySpy}
+            getRole={getRoleUseCaseSpy}
+            onChange={jest.fn()}
+            schema={{
+              type: "object",
+              properties: {
+                cat: {
+                  type: "object",
+                  properties: {
+                    name: {
+                      type: "string"
+                    },
+                    riskAnyChange: {
+                      type: 'string',
+                      title: 'Any Change?',
+                      enum: ["Yes", "No"]
+                    },
+                    riskCurrentReturnLikelihood: {
+                      type: "string",
+                      title: "Current Return Liklihood",
+                      enum: ["1", "2", "3", "4", "5"]
+                    },
+                    riskMet: {
+                      type: "string",
+                      title: "Risk Met?",
+                      enum: ["Yes", "No"]
+                    }
+                  }
+                },
+                dog: {
+                  type: "object",
+                  properties: {
+                    name: {
+                      type: "string"
+                    }
+                  }
+                }
+              }
+            }}
+            uiSchema={{
+              cat: {
+                "ui:field": "risk"
+              }
+            }}
+          />
+        );
+        expect(parentForm.find("RiskField").length).toEqual(1);
+      });
+    });
+  
+    describe("Given a schema with a periods field", () => {
+      it("Displays the period field component", () => {
+        let uiSchema = {
+          one: {
+            items: {
+              periods: {
+                items: {},
+                "ui:field": "periods",
+                "ui:options": {
+                  addable: false,
+                  orderables: false,
+                  removable: false
+                }
+              }
+            }
+          }
+        };
+  
+        let schema = {
+          type: "object",
+          properties: {
+            one: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  periods: {
+                    type: "array",
+                    items: {
+                      type: "object",
+                      properties: {
+                        period: {
+                          type: "string",
+                          title: "Lizard Type",
+                          readonly: true
+                        },
+                        length: {
+                          type: "string",
+                          title: "How Long",
+                          readonly: true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        };
+  
+        let data = {
+          one: [
+            {
+              periods: [
+                { period: "scaley", length: "200" },
+                { period: "slivery", length: "567" }
+              ]
+            }
+          ]
+        };
+  
+        let parentForm = mount(
+          <ParentForm
+            documentGateway={documentGatewaySpy}
+            getRole={getRoleUseCaseSpy}
+            onChange={jest.fn()}
+            formData={data}
+            schema={schema}
+            uiSchema={uiSchema}
+          />
+        );
+        expect(parentForm.find("PeriodsField").length).toEqual(1);
+      });
+    });
+  
+    describe("Given a schema with a validated field", () => {
+      it("Displays the validated field component", () => {
+        let uiSchema = {
+          one: {
+            items: {
+              periods: {
+                items: {},
+                "ui:field": "validated",
+                "ui:options": {
+                  addable: false,
+                  orderables: false,
+                  removable: false
+                }
+              }
+            }
+          }
+        };
+  
+        let schema = {
+          type: "object",
+          properties: {
+            one: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  periods: {
+                    type: "array",
+                    items: {
+                      type: "object",
+                      properties: {
+                        period: {
+                          type: "string",
+                          title: "Lizard Type",
+                          readonly: true
+                        },
+                        length: {
+                          type: "string",
+                          title: "How Long",
+                          readonly: true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        };
+  
+        let data = {
+          one: [
+            {
+              periods: [
+                { period: "scaley", length: "200" },
+                { period: "slivery", length: "567" }
+              ]
+            }
+          ]
+        };
+  
+        let parentForm = mount(
+          <ParentForm
+            documentGateway={documentGatewaySpy}
+            getRole={getRoleUseCaseSpy}
+            onChange={jest.fn()}
+            formData={data}
+            schema={schema}
+            uiSchema={uiSchema}
+          />
+        );
+        expect(parentForm.find("ValidatedField").length).toEqual(1);
+      });
+    });
+  
+    describe("Given a field with currency", () => {
+      it("Displays the currency component", () => {
+        let parentForm = mount(
+          <ParentForm
+            documentGateway={documentGatewaySpy}
+            getRole={getRoleUseCaseSpy}
+            onChange={jest.fn()}
+            schema={{
+              type: "object",
+              properties: {
+                cat: {
+                  type: "object",
+                  properties: {
+                    name: {
+                      type: "string"
+                    }
+                  }
+                },
+                dog: {
+                  type: "object",
+                  properties: {
+                    name: {
+                      type: "string"
+                    }
+                  }
+                }
+              }
+            }}
+            uiSchema={{
+              cat: {
+                name: {
+                  "ui:widget": "currency"
+                }
+              }
+            }}
+          />
+        );
+        expect(parentForm.find("CurrencyWidget").length).toEqual(1);
+      });
+    });
+  
+    describe("Given a field with uploadFile", () => {
+      it("Displays the file upload component", () => {
+        let parentForm = mount(
+          <ParentForm
+            documentGateway={documentGatewaySpy}
+            getRole={getRoleUseCaseSpy}
+            onChange={jest.fn()}
+            schema={{
+              type: "object",
+              properties: {
+                cat: {
+                  type: "object",
+                  properties: {
+                    name: {
+                      type: "string"
+                    }
+                  }
+                },
+                dog: {
+                  type: "object",
+                  properties: {
+                    name: {
+                      type: "string"
+                    }
+                  }
+                }
+              }
+            }}
+            uiSchema={{
+              cat: {
+                name: {
+                  "ui:field": "uploadFile"
+                }
+              }
+            }}
+          />
+        );
+        expect(parentForm.find("UploadFileField").length).toEqual(1);
+      });
+    });
+
+    describe("Given a schema with an infrastructure picker", () => {
+      it("Displays the infrastructure picker", async () => {
+        let parentForm = mount(
+          <ParentForm
+            documentGateway={documentGatewaySpy}
+            getRole={getRoleUseCaseSpy}
+            onChange={jest.fn()}
+            formContext={{projectId: 2, getInfrastructures: { execute: jest.fn() }}}
+            schema={{
+              type: "object",
+              properties: {
+                cat: {
+                  type: "object",
+                  properties: {
+                    infrastructureId: {
+                      type: "string"
+                    },
+                    name: {
+                      type: "string"
+                    }
+                  }
+                },
+                dog: {
+                  type: "object",
+                  properties: {
+                    name: {
+                      type: "string"
+                    }
+                  }
+                }
+              }
+            }}
+            uiSchema={{
+              cat: {
+                infrastructureId: {
+                  "ui:field": "pickInfrastructure"
+                }
+              }
+            }}
+          />
+        );
+        await wait();
+
+        expect(parentForm.find("PickInfrastructureField").length).toEqual(1);
       });
     });
   });

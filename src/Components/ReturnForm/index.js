@@ -93,7 +93,7 @@ export default class ReturnForm extends React.Component {
         {this.renderActions()}
         <ParentForm
           data-test="return-form"
-          formContext={{projectId: this.props.projectId}}
+          formContext={{projectId: this.props.projectId, getInfrastructures: this.props.getInfrastructures}}
           schema={this.props.schema}
           uiSchema={this.props.uiSchema}
           formData={this.state.formData}

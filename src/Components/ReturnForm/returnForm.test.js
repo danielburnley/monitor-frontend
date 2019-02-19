@@ -126,6 +126,7 @@ describe("<ReturnForm>", () => {
         <ReturnForm
           documentGateway={documentGatewayDummy}
           projectId={3}
+          getInfrastructures={"Infrastruces to pick"}
           data={initialData}
           schema={formSchema}
           onSubmit={() => {}}
@@ -136,7 +137,7 @@ describe("<ReturnForm>", () => {
 
       expect(
         wrapper.find({ "data-test": "return-form" }).props().formContext
-      ).toEqual({projectId: 3});
+      ).toEqual({projectId: 3, getInfrastructures: "Infrastruces to pick"});
     });
 
     it("Example 2", () => {
@@ -145,6 +146,7 @@ describe("<ReturnForm>", () => {
         <ReturnForm
           documentGateway={documentGatewayDummy}
           projectId={6}
+          getInfrastructures="More infrastructures"
           data={initialData}
           schema={formSchema}
           onSubmit={() => {}}
@@ -155,7 +157,7 @@ describe("<ReturnForm>", () => {
 
       expect(
         wrapper.find({ "data-test": "return-form" }).props().formContext
-      ).toEqual({projectId: 6});
+      ).toEqual({projectId: 6, getInfrastructures: "More infrastructures"});
     });
   });
 

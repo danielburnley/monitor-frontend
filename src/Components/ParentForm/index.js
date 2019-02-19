@@ -7,6 +7,7 @@ import HorizontalFields from "../HorizontalFields";
 import VarianceField from "../VarianceField";
 import MilestoneField from "../MilestoneField";
 import CalculatedField from "../CalculatedField";
+import PickInfrastructureField from "../PickInfrastructureField";
 import ValidatedField from "../ValidatedField";
 import GenerateSidebarItems from "../../UseCase/GenerateSidebarItems";
 import RiskField from "../RiskField";
@@ -245,23 +246,24 @@ export default class ParentForm extends React.Component {
 
   renderSubform() {
     const fields = {
-      horizontal: HorizontalFields,
-      variance: VarianceField,
-      risk: RiskField,
-      periods: PeriodsField,
       base: StaticData,
+      calculated: CalculatedField,
+      horizontal: HorizontalFields,
       milestone: MilestoneField,
       numbered: NumberedArrayField,
+      periods: PeriodsField,
+      pickInfrastructure: PickInfrastructureField,
       quarterly: QuarterlyBreakdown,
-      calculated: CalculatedField,
+      risk: RiskField,
+      uploadFile: UploadFileField,
       validated: ValidatedField,
-      uploadFile: UploadFileField
+      variance: VarianceField
     };
 
     const widgets = {
+      britishDate: BritishDate,
       currency: CurrencyWidget,
-      percentage: PercentageWidget,
-      britishDate: BritishDate
+      percentage: PercentageWidget
     };
 
     if (this.selectedSchema().type === "array") {
