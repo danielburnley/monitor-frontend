@@ -1,12 +1,12 @@
 import React from "react";
 import ArraySubform from ".";
-import { shallow } from "enzyme";
+import { mount } from "enzyme";
 
 describe("<ArraySubform>", () => {
-  let subform, onChangeSpy, schema, data, uiSchema, fields;
+  let subform, onChangeSpy, schema, data, uiSchema, fields, noOfInfrasSpy;
 
   function getSubform({ schema, data, uiSchema, index, section }) {
-    return shallow(
+    return mount(
       <ArraySubform
         data={data}
         fields={fields}
@@ -15,6 +15,7 @@ describe("<ArraySubform>", () => {
         selectedIndex={index}
         onChange={onChangeSpy}
         uiSchema={uiSchema}
+        noOfInfras={noOfInfrasSpy}
       />
     );
   }
@@ -25,6 +26,142 @@ describe("<ArraySubform>", () => {
       .props()
       .onChange({ formData });
   }
+
+  function changeInfras(subform, number) {
+    subform
+      .props()
+      .noOfInfras(number);
+  }
+
+  describe("Infras spy", () => {
+    describe("Example 1", () => {
+      beforeEach(() => {
+        schema = {
+          type: "array",
+          title: "Cats",
+          items: {
+            type: "object",
+            title: "Cat",
+            properties: {
+              details: {
+                type: "object",
+                title: "Details",
+                properties: {
+                  firstName: { type: "string" }
+                }
+              },
+              pets: {
+                type: "object",
+                title: "Pets",
+                properties: {
+                  favourite: { type: "string" }
+                }
+              }
+            }
+          }
+        };
+
+        data = [
+          {
+            details: { firstName: "Meowington" },
+            pets: { favourite: "All of them" }
+          },
+          {
+            details: { firstName: "Barkington" },
+            pets: { favourite: "All of them" }
+          }
+        ];
+
+        uiSchema = {
+          details: { firstName: { thing: true } },
+          pets: { favourite: { otherThing: false } }
+        };
+
+        fields = { foo: () => {} };
+
+        onChangeSpy = jest.fn();
+        noOfInfrasSpy = jest.fn();
+      });
+
+      it("Calls the noOfInfras method", () => {
+        let subform = getSubform({
+          schema,
+          data,
+          uiSchema,
+          index: 1,
+          section: "details"
+        });
+
+        changeInfras(subform, 1);
+
+        expect(noOfInfrasSpy).toHaveBeenCalledWith(1);
+      });
+    });
+
+    describe("Example 2", () => {
+      beforeEach(() => {
+        schema = {
+          type: "array",
+          title: "Dogs",
+          items: {
+            type: "object",
+            title: "Dog",
+            properties: {
+              address: {
+                type: "object",
+                title: "Address",
+                properties: {
+                  lineOne: { type: "string" }
+                }
+              },
+              contact: {
+                type: "object",
+                title: "Contact",
+                properties: {
+                  phoneNo: { type: "string" }
+                }
+              }
+            }
+          }
+        };
+
+        data = [
+          {
+            address: { lineOne: "1 Cat Rd" },
+            contact: { phoneNo: "111" }
+          },
+          {
+            address: { lineOne: "1 Dog Rd" },
+            contact: { phoneNo: "222" }
+          }
+        ];
+
+        uiSchema = {
+          address: { lineOne: { this: true } },
+          contact: { phoneNo: { that: false } }
+        };
+
+        fields = { bar: () => {} };
+
+        onChangeSpy = jest.fn();
+        noOfInfrasSpy = jest.fn();
+      });
+
+      it("Calls the noOfInfras method", () => {
+        let subform = getSubform({
+          schema,
+          data,
+          uiSchema,
+          index: 0,
+          section: "address"
+        });
+
+        changeInfras(subform, 12);
+
+        expect(noOfInfrasSpy).toHaveBeenCalledWith(12);
+      });
+    });
+  });
 
   describe("Example one", () => {
     beforeEach(() => {
@@ -72,6 +209,7 @@ describe("<ArraySubform>", () => {
       fields = { foo: () => {} };
 
       onChangeSpy = jest.fn();
+      noOfInfrasSpy = jest.fn();
     });
 
     it("Renders a form", () => {

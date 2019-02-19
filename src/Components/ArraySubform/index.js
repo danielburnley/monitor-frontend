@@ -58,6 +58,5 @@ ArraySubform.propTypes = {
   fields: PropTypes.object.isRequired,
   schema: PropTypes.object.isRequired,
   selectedIndex: PropTypes.number.isRequired,
-  selectedFormSection: PropTypes.string.isRequired,
   uiSchema: PropTypes.object.isRequired
 };
