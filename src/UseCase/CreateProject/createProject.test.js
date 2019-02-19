@@ -13,14 +13,14 @@ describe("CreateProject", () => {
   describe("Calls the project gateway", async () => {
     it("Example 1", async () => {
       let usecase = getUseCase();
-      await usecase.execute(presenterSpy, "name", "type");
-      expect(projectGateway.create).toHaveBeenCalledWith("name", "type");
+      await usecase.execute(presenterSpy, "name", "type", "HYS/DFJ/2538");
+      expect(projectGateway.create).toHaveBeenCalledWith("name", "type", "HYS/DFJ/2538");
     });
 
     it("Example 2", async () => {
       let usecase = getUseCase();
-      await usecase.execute(presenterSpy, "different name", "2");
-      expect(projectGateway.create).toHaveBeenCalledWith("different name","2");
+      await usecase.execute(presenterSpy, "different name", "2", "HYS/DFJ/2538");
+      expect(projectGateway.create).toHaveBeenCalledWith("different name","2", "HYS/DFJ/2538");
     });
   });
 
@@ -29,14 +29,14 @@ describe("CreateProject", () => {
     describe("Calls the presenter", () => {
       it("Example 1", async () => {
         let usecase = getUseCase();
-        await usecase.execute(presenterSpy, "name", "type");
+        await usecase.execute(presenterSpy, "name", "type", "HYS/DFJ/2538");
         expect(presenterSpy.creationSuccess).toHaveBeenCalledWith(1);
         expect(presenterSpy.creationFailure).not.toHaveBeenCalled();
       });
 
       it("Example 2", async () => {
         let usecase = getUseCase(true, 9);
-        await usecase.execute(presenterSpy, "name", "type");
+        await usecase.execute(presenterSpy, "name", "type", "HYS/DFJ/2538");
         expect(presenterSpy.creationSuccess).toHaveBeenCalledWith(9);
         expect(presenterSpy.creationFailure).not.toHaveBeenCalled();
 
