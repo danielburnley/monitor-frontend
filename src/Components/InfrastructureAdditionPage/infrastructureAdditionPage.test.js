@@ -7,11 +7,22 @@ async function wait() {
 }
 
 describe("Infrastructure Addition page", () => {
-  let component, getProjectUseCase, updateProjectUseCase, history;
+  let component, getProjectUseCase, updateProjectUseCase, history, generateInfrastructureUISchemaUseCase;
 
   describe("Example 1", () => {
     beforeEach(async () => {
       history = ["/project/6", "/project/3/infrastructures"];
+      generateInfrastructureUISchemaUseCase = {
+        execute: jest.fn(() => {
+          return {
+            "ui:options": {
+              addable: true,
+              removable: true
+            }
+          }
+        }
+      )};
+
       getProjectUseCase = {
         execute: jest.fn(
           async (presenter) => presenter.presentProject({
@@ -55,6 +66,7 @@ describe("Infrastructure Addition page", () => {
 
       component = mount(<
         InfrastructureAdditionPage
+        generateInfrastructureUISchema={generateInfrastructureUISchemaUseCase}
         history={history}
         getProject={getProjectUseCase}
         updateProject={updateProjectUseCase}
@@ -62,6 +74,19 @@ describe("Infrastructure Addition page", () => {
       />);
 
       await component.update();
+    });
+
+    it("Calls the generateInfrastructureUISchema use case", () => {
+      expect(generateInfrastructureUISchemaUseCase.execute).toHaveBeenCalled();
+    });
+
+    it("Passes the InfrastructureUISchema to the form", () => {
+      expect(component.find("Form").props().uiSchema).toEqual({
+        "ui:options": {
+          addable: true,
+          removable: true
+        }
+      });
     });
 
     it("Displays a form with only infrastructures", () => {
@@ -132,6 +157,17 @@ describe("Infrastructure Addition page", () => {
   describe("Example 2", () => {
     beforeEach(async () => {
       history = ["/project/1/infrastructures"];
+      generateInfrastructureUISchemaUseCase = {
+        execute: jest.fn(() => {
+          return {
+            "ui:options": {
+              addable: true,
+              removable: true
+            }
+          }
+        }
+      )};
+
       getProjectUseCase = {
         execute: jest.fn(
           async (presenter) => await presenter.presentProject({
@@ -179,6 +215,7 @@ describe("Infrastructure Addition page", () => {
 
       component = mount(<
         InfrastructureAdditionPage
+        generateInfrastructureUISchema={generateInfrastructureUISchemaUseCase}
         history={history}
         getProject={getProjectUseCase}
         updateProject={updateProjectUseCase}

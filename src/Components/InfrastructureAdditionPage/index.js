@@ -41,6 +41,7 @@ export default class InfrastructureAdditionPage extends React.Component {
     if (!this.state.loading) {
       return <Form
         onSubmit = {this.submitInfrastructures}
+        uiSchema = {this.props.generateInfrastructureUISchema.execute()}
         schema={this.state.schema.properties.infrastructures}
         formData = {this.state.data.infrastructures}
       />;
