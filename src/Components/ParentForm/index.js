@@ -58,66 +58,79 @@ export default class ParentForm extends React.Component {
     if (toBurrow && toBurrow[nextItemKey]) return toBurrow[nextItemKey];
     if (Number.isInteger(path[nextIndex])) return (toBurrow[nextItemKey] = []);
     if (Array.isArray(toBurrow)) {
-      toBurrow.push({})
-      return toBurrow[nextItemKey]; 
+      toBurrow.push({});
+      return toBurrow[nextItemKey];
     }
-    return toBurrow[nextItemKey] = {}
+    return (toBurrow[nextItemKey] = {});
   }
 
-  shareDataBetweenTabs = (formData)  => {
-    if(!this.props.schema.sharedData ) return null;
-    
-    let sharedDataPaths = this.createPathsInArrays(this.props.schema.sharedData, formData)
-    
+  shareDataBetweenTabs = formData => {
+    if (!this.props.schema.sharedData) return null;
+
+    let sharedDataPaths = this.createPathsInArrays(
+      this.props.schema.sharedData,
+      formData
+    );
+
     sharedDataPaths.forEach(path => {
-      let value = this.getObject(formData, path.from)      
-      let pathToSet = this.setPath(formData, path.to)
+      let value = this.getObject(formData, path.from);
+      let pathToSet = this.setPath(formData, path.to);
 
-      pathToSet[path.to[path.to.length - 1]] = value
+      pathToSet[path.to[path.to.length - 1]] = value;
     });
-  }
-  
+  };
+
   createPathsInArrays(sharedData, formData) {
     let allDataPaths = sharedData.map(value => {
-      if (!value.from.includes('#') && !value.to.includes('#')) return value;
+      if (!value.from.includes("#") && !value.to.includes("#")) return value;
 
-      let arrayHolder = value.from.includes('#') ? value.from : value.to
-      let arrayData = this.getObject(formData, arrayHolder.slice(0, arrayHolder.indexOf('#')))
+      let arrayHolder = value.from.includes("#") ? value.from : value.to;
+      let arrayData = this.getObject(
+        formData,
+        arrayHolder.slice(0, arrayHolder.indexOf("#"))
+      );
 
-      let newPaths = []
+      let newPaths = [];
       for (let i = 0; i < arrayData.length; i++) {
-        let newFromPath = value.from.slice(0, value.from.length)
-        if (value.from.includes('#')) newFromPath[value.from.indexOf('#')] = i;
+        let newFromPath = value.from.slice(0, value.from.length);
+        if (value.from.includes("#")) newFromPath[value.from.indexOf("#")] = i;
 
-        let newToPath = value.to.slice(0, value.to.length)
-        newToPath[value.to.indexOf('#')] = i;
+        let newToPath = value.to.slice(0, value.to.length);
+        newToPath[value.to.indexOf("#")] = i;
 
         newPaths.push({
           from: newFromPath,
           to: newToPath
-        })
+        });
       }
-      return newPaths; 
-    })
+      return newPaths;
+    });
 
-    return allDataPaths.flat()
+    return allDataPaths.flat();
   }
 
   getObject = (formData, path) => {
-    return path
-      .reduce((accumulator, fromPath) => this.getChild(accumulator, fromPath),formData)
-  }
+    return path.reduce(
+      (accumulator, fromPath) => this.getChild(accumulator, fromPath),
+      formData
+    );
+  };
 
   setPath = (formData, path) => {
-    return path.slice(0, path.length -1)
-      .reduce((accumulator, key, index) => this.setChild(accumulator, path, key, index + 1), formData)
-  }
+    return path
+      .slice(0, path.length - 1)
+      .reduce(
+        (accumulator, key, index) =>
+          this.setChild(accumulator, path, key, index + 1),
+        formData
+      );
+  };
 
   subformOnChange = formData => {
     let newFormData = { ...this.state.formData };
     newFormData[this.state.selected] = formData;
-    this.shareDataBetweenTabs(newFormData)
-    
+    this.shareDataBetweenTabs(newFormData);
+
     this.setState({ formData: newFormData }, () =>
       this.props.onChange({ formData: this.state.formData })
     );
@@ -139,21 +152,22 @@ export default class ParentForm extends React.Component {
       return null;
     } else {
       return (
-      <li
-        key={property}
-        role="presentation"
-        className={
-          "nav-item " +
-          (property === this.state.selected ? "active" : "inactive")
-        }
-        data-test={`${property}_property`}
-      >
-      <a role="button" id={property} onClick={this.viewSelectorOnChange}>
-        {value.title}
-      </a>
-    </li>)
+        <li
+          key={property}
+          role="presentation"
+          className={
+            "nav-item " +
+            (property === this.state.selected ? "active" : "inactive")
+          }
+          data-test={`${property}_property`}
+        >
+          <a role="button" id={property} onClick={this.viewSelectorOnChange}>
+            {value.title}
+          </a>
+        </li>
+      );
     }
-  }
+  };
 
   renderNavigationTabs() {
     return Object.entries(this.props.schema.properties).map(this.renderTab);
@@ -166,15 +180,17 @@ export default class ParentForm extends React.Component {
     ).items;
     return (
       <Sidebar
-        userRole = {this.state.userRole}
+        userRole={this.state.userRole}
         addable={this.selectedSchema().addable}
         section={this.state.selected}
         linkedArray={this.selectedSchema().linkedArray}
         formData={this.state.formData}
         // onChange={data => this.subformOnChange(data)}
-        onChange={data => this.setState({ formData: data }, () =>
-        this.props.onChange({ formData: this.state.formData })
-        )}
+        onChange={data =>
+          this.setState({ formData: data }, () =>
+            this.props.onChange({ formData: this.state.formData })
+          )
+        }
         items={items}
         selectedFormItemIndex={this.state.selectedFormItemIndex}
         selectedFormSection={this.state.selectedFormSection}
@@ -218,6 +234,15 @@ export default class ParentForm extends React.Component {
     }
   }
 
+  resetSelectedItem(numberOfItems) {
+    this.setState({
+      selectedFormSection: this.getInitialFormSection(
+        this.props.schema.properties[this.state.selected]
+      ),
+      selectedFormItemIndex: numberOfItems-1
+    });
+  }
+
   renderSubform() {
     const fields = {
       horizontal: HorizontalFields,
@@ -247,6 +272,9 @@ export default class ParentForm extends React.Component {
             key={`${this.state.selected}_subform`}
             onChange={formData => {
               this.subformOnChange(formData);
+            }}
+            resetSelectedItem={(numberOfItems) => {
+              this.resetSelectedItem(numberOfItems);
             }}
             data={this.state.formData[this.state.selected]}
             fields={fields}

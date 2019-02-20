@@ -9,6 +9,12 @@ export default class ArraySubform extends React.Component {
   };
 
   formData = () => {
+    const isCurrentInfraDelted =
+      this.props.data[this.props.selectedIndex] === undefined;
+    if (isCurrentInfraDelted) {
+      this.props.resetSelectedItem(this.props.data.length);
+      return this.props.data[this.props.data.length-1][this.props.selectedFormSection];
+    }
     return this.props.data[this.props.selectedIndex][
       this.props.selectedFormSection
     ];
@@ -52,6 +58,5 @@ ArraySubform.propTypes = {
   fields: PropTypes.object.isRequired,
   schema: PropTypes.object.isRequired,
   selectedIndex: PropTypes.number.isRequired,
-  selectedFormSection: PropTypes.string.isRequired,
   uiSchema: PropTypes.object.isRequired
 };
