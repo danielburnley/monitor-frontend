@@ -7,10 +7,11 @@ async function wait() {
 }
 
 describe("Infrastructure Addition page", () => {
-  let component, getProjectUseCase, updateProjectUseCase;
+  let component, getProjectUseCase, updateProjectUseCase, history;
 
   describe("Example 1", () => {
     beforeEach(async () => {
+      history = ["/project/6", "/project/3/infrastructures"];
       getProjectUseCase = {
         execute: jest.fn(
           async (presenter) => presenter.presentProject({
@@ -50,10 +51,11 @@ describe("Infrastructure Addition page", () => {
         )
       };
 
-      updateProjectUseCase= {execute: jest.fn(async (presenter, id) => { await presenter.projectUpdated(id) })}
+      updateProjectUseCase= {execute: jest.fn(async (presenter, id) => { await presenter.projectUpdated("", 13) })}
 
       component = mount(<
         InfrastructureAdditionPage
+        history={history}
         getProject={getProjectUseCase}
         updateProject={updateProjectUseCase}
         match={{ params: { id: 3, type: 'ff' } }}
@@ -87,10 +89,49 @@ describe("Infrastructure Addition page", () => {
     it("Calls the getProject use case", () => {
       expect(getProjectUseCase.execute).toHaveBeenCalledWith(expect.anything(), {id: 3});
     });
+
+    it("Navigates away when submitted", async () => {
+      component.find("Form").simulate("submit");
+      await wait();
+      await component.update();
+      expect(history).toEqual(["/project/6", "/project/3/infrastructures", "/project/3/new"]);
+    });
+
+    it("Calls the updateProject use case when submitted", async () => {
+      component.find("Form").simulate("submit");
+      await wait();
+      await component.update();
+
+      expect(updateProjectUseCase.execute).toHaveBeenCalledWith(expect.anything(), 3, {
+        infrastructures: [
+          {information: "Value"}
+        ],
+        other: {
+          value: "data"
+        }
+      }, 0);
+    });
+
+    it("Calls the updateProject use case with the correct data when edited", async () => {
+      component.find("input").at(0).simulate("change", {target: {value: "cat"}});
+      component.find("Form").simulate("submit");
+      await wait();
+      await component.update();
+
+      expect(updateProjectUseCase.execute).toHaveBeenCalledWith(expect.anything(), 3, {
+        infrastructures: [
+          {information: "cat"}
+        ],
+        other: {
+          value: "data"
+        }
+      }, 0);
+    });
   });
 
   describe("Example 2", () => {
     beforeEach(async () => {
+      history = ["/project/1/infrastructures"];
       getProjectUseCase = {
         execute: jest.fn(
           async (presenter) => await presenter.presentProject({
@@ -134,10 +175,11 @@ describe("Infrastructure Addition page", () => {
         )
       };
 
-      updateProjectUseCase= {execute: jest.fn((presenter, id) => { presenter.projectUpdated(id) })}
+      updateProjectUseCase= {execute: jest.fn(async (presenter, id) => { await presenter.projectUpdated("", 15) })}
 
       component = mount(<
         InfrastructureAdditionPage
+        history={history}
         getProject={getProjectUseCase}
         updateProject={updateProjectUseCase}
         match={{ params: { id: 1, type: 'ff' } }}
@@ -174,6 +216,46 @@ describe("Infrastructure Addition page", () => {
 
     it("Calls the getProject use case", () => {
       expect(getProjectUseCase.execute).toHaveBeenCalledWith(expect.anything(), {id: 1});
+    });
+
+    it("Navigates away when submitted", async () => {
+      component.find("Form").simulate("submit");
+      await wait();
+      await component.update();
+      expect(history).toEqual(["/project/1/infrastructures", "/project/1/new"]);
+    });
+
+    it("Calls the updateProject use case when submitted", async () => {
+      component.find("Form").simulate("submit");
+      await wait();
+      await component.update();
+
+      expect(updateProjectUseCase.execute).toHaveBeenCalledWith(expect.anything(), 1, {
+        infrastructures: [
+          {name: "Alex"},
+          {information: "Extra"}
+        ],
+        extra: {
+          misc: "Some data"
+        }
+      }, 0);
+    });
+
+    it("Calls the updateProject use case with the correct data when edited", async () => {
+      component.find("input").at(0).simulate("change", {target: {value: "dog"}});
+      component.find("Form").simulate("submit");
+      await wait();
+      await component.update();
+
+      expect(updateProjectUseCase.execute).toHaveBeenCalledWith(expect.anything(), 1, {
+        infrastructures: [
+          {name: "dog"},
+          {information: "Extra"}
+        ],
+        extra: {
+          misc: "Some data"
+        }
+      }, 0);
     });
   });
 });
