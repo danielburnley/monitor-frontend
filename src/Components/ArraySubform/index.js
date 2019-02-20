@@ -13,7 +13,7 @@ export default class ArraySubform extends React.Component {
       this.props.data[this.props.selectedIndex] === undefined;
     if (isCurrentInfraDelted) {
       this.props.resetSelectedItem(this.props.data.length);
-      return this.props.data[0][this.props.selectedFormSection];
+      return this.props.data[this.props.data.length-1][this.props.selectedFormSection];
     }
     return this.props.data[this.props.selectedIndex][
       this.props.selectedFormSection
