@@ -3,7 +3,7 @@ import ArraySubform from ".";
 import { mount } from "enzyme";
 
 describe("<ArraySubform>", () => {
-  let subform, onChangeSpy, schema, data, uiSchema, fields, noOfInfrasSpy;
+  let subform, onChangeSpy, schema, data, uiSchema, fields, resetSelectedItemSpy;
 
   function getSubform({ schema, data, uiSchema, index, section }) {
     return mount(
@@ -15,7 +15,7 @@ describe("<ArraySubform>", () => {
         selectedIndex={index}
         onChange={onChangeSpy}
         uiSchema={uiSchema}
-        noOfInfras={noOfInfrasSpy}
+        resetSelectedItem={resetSelectedItemSpy}
       />
     );
   }
@@ -27,10 +27,10 @@ describe("<ArraySubform>", () => {
       .onChange({ formData });
   }
 
-  function changeInfras(subform, number) {
+  function resetSelected(subform, number) {
     subform
       .props()
-      .noOfInfras(number);
+      .resetSelectedItem(number);
   }
 
   describe("Infras spy", () => {
@@ -80,10 +80,10 @@ describe("<ArraySubform>", () => {
         fields = { foo: () => {} };
 
         onChangeSpy = jest.fn();
-        noOfInfrasSpy = jest.fn();
+        resetSelectedItemSpy = jest.fn();
       });
 
-      it("Calls the noOfInfras method", () => {
+      it("Calls the resetSelectedItem method", () => {
         let subform = getSubform({
           schema,
           data,
@@ -92,9 +92,9 @@ describe("<ArraySubform>", () => {
           section: "details"
         });
 
-        changeInfras(subform, 1);
+        resetSelected(subform, 1);
 
-        expect(noOfInfrasSpy).toHaveBeenCalledWith(1);
+        expect(resetSelectedItemSpy).toHaveBeenCalledWith(1);
       });
     });
 
@@ -144,10 +144,10 @@ describe("<ArraySubform>", () => {
         fields = { bar: () => {} };
 
         onChangeSpy = jest.fn();
-        noOfInfrasSpy = jest.fn();
+        resetSelectedItemSpy = jest.fn();
       });
 
-      it("Calls the noOfInfras method", () => {
+      it("Calls the resetSelectedItem method", () => {
         let subform = getSubform({
           schema,
           data,
@@ -156,9 +156,9 @@ describe("<ArraySubform>", () => {
           section: "address"
         });
 
-        changeInfras(subform, 12);
+        resetSelected(subform, 12);
 
-        expect(noOfInfrasSpy).toHaveBeenCalledWith(12);
+        expect(resetSelectedItemSpy).toHaveBeenCalledWith(12);
       });
     });
   });
@@ -209,7 +209,7 @@ describe("<ArraySubform>", () => {
       fields = { foo: () => {} };
 
       onChangeSpy = jest.fn();
-      noOfInfrasSpy = jest.fn();
+      resetSelectedItemSpy = jest.fn();
     });
 
     it("Renders a form", () => {

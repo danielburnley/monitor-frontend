@@ -34,8 +34,7 @@ export default class ParentForm extends React.Component {
       selectedFormSection: this.getInitialFormSection(
         props.schema.properties[first_property]
       ),
-      selectedFormItemIndex: 0,
-      infras: 0
+      selectedFormItemIndex: 0
     };
   }
 
@@ -235,14 +234,12 @@ export default class ParentForm extends React.Component {
     }
   }
 
-  noOfInfras(number) {
+  resetSelectedItem(numberOfItems) {
     this.setState({
-      infras: number,
-      selected: "infrastructures",
       selectedFormSection: this.getInitialFormSection(
-        this.props.schema.properties["infrastructures"]
+        this.props.schema.properties[this.state.selected]
       ),
-      selectedFormItemIndex: 0
+      selectedFormItemIndex: numberOfItems-1
     });
   }
 
@@ -276,8 +273,8 @@ export default class ParentForm extends React.Component {
             onChange={formData => {
               this.subformOnChange(formData);
             }}
-            noOfInfras={number => {
-              this.noOfInfras(number);
+            resetSelectedItem={(numberOfItems) => {
+              this.resetSelectedItem(numberOfItems);
             }}
             data={this.state.formData[this.state.selected]}
             fields={fields}
