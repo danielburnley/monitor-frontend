@@ -6,6 +6,7 @@ import StaticData from "./Components/StaticData";
 import Homepage from "./Components/Homepage";
 import Footer from "./Components/Footer";
 import Header from "./Components/Header";
+import InfrastructureAdditionPage from "./Components/InfrastructureAdditionPage";
 import NewProjectPage from "./Components/NewProjectPage";
 import ProjectPage from "./Components/ProjectPage";
 import ProjectSummary from "./Components/ProjectPage/ProjectSummary";
@@ -25,6 +26,7 @@ import CreateReturn from "./UseCase/CreateReturn";
 import CreateProject from "./UseCase/CreateProject";
 import SubmitProject from "./UseCase/SubmitProject";
 import UpdateProject from "./UseCase/UpdateProject";
+import GenerateInfrastructureUISchema from "./UseCase/GenerateInfrastructureUISchema";
 import GenerateDisabledUISchema from "./UseCase/GenerateDisabledUISchema";
 import GenerateUISchema from "./UseCase/GenerateUISchema";
 import GetBaseReturn from "./UseCase/GetBaseReturn";
@@ -67,6 +69,7 @@ const returnGateway = new ReturnGateway(apiKeyGateway, locationGateway);
 const documentGateway = new DocumentGateway(document)
 const userGateway = new UserGateway(apiKeyGateway);
 const getRole = new GetRole(userRoleGateway);
+const generateInfrastructureUISchemaUseCase = new GenerateInfrastructureUISchema();
 const validateReturnUseCase = new ValidateReturn(returnGateway);
 const validateProjectUseCase = new ValidateProject(projectGateway);
 const createReturnUseCase = new CreateReturn(returnGateway);
@@ -136,7 +139,12 @@ const BackToProjectOverviewButton = props => (
     Back to project overview
   </button>
 );
-
+const renderInfrastructuresPage = (props) => (
+  <InfrastructureAdditionPage
+    {...props}
+    generateInfrastructureUISchema={generateInfrastructureUISchemaUseCase}
+  />
+)
 const renderNewProjectPage = (props, projectStatus, formData, formSchema, projectType, formUiSchema, timestamp) => (
   <NewProjectPage
     {...props}
@@ -249,7 +257,7 @@ const App = () => (
                 canAccessMonitor={canAccessMonitorUseCase}
               >
                 <Switch>
-                  <Route 
+                  <Route
                     exact
                     path="/"
                     render={renderhomepage}
@@ -265,6 +273,11 @@ const App = () => (
 
                       >
                         <Route exact path="/project/:id" render={renderProjectPage} />
+                        <Route
+                          exact
+                          path="/project/:id/infrastructures"
+                          render={renderInfrastructuresPage}
+                        />
                         <Route
                           exact
                           path="/project/:id/new"
