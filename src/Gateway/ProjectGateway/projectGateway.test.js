@@ -435,10 +435,11 @@ describe("Project Gateway", () => {
           .matchHeader("Content-Type", "application/json")
           .post("/project/create", {
             type: "mvf",
-            name: "my first project"
+            name: "my first project",
+            bidId: "HID/DHS/324678"
           })
           .reply(200, {projectId: 4});
-        await gateway.create("my first project", "mvf");
+        await gateway.create("my first project", "mvf", "HID/DHS/324678");
 
         expect(updateProjectRequest.isDone()).toBeTruthy();
       });
@@ -448,10 +449,11 @@ describe("Project Gateway", () => {
           .matchHeader("Content-Type", "application/json")
           .post("/project/create", {
             type: "mvf",
-            name: "my first project"
+            name: "my first project",
+            bidId: "HID/DHS/324678"
           })
           .reply(200, {projectId: 4});
-        let response = await gateway.create("my first project", "mvf");
+        let response = await gateway.create("my first project", "mvf", "HID/DHS/324678");
 
         expect(response).toEqual({ success: true, id: 4 });
       });
@@ -461,10 +463,11 @@ describe("Project Gateway", () => {
           .matchHeader("Content-Type", "application/json")
           .post("/project/create", {
             type: "mvf",
-            name: "my first project"
+            name: "my first project",
+            bidId: "HID/DHS/324678"
           })
           .reply(403, {projectId: 4});
-        let response = await gateway.create("my first project", "mvf");
+        let response = await gateway.create("my first project", "mvf", "HID/DHS/324678");
 
         expect(response).toEqual({ success: false});
       });
@@ -486,10 +489,11 @@ describe("Project Gateway", () => {
           .matchHeader("Content-Type", "application/json")
           .post("/project/create", {
             type: "ff",
-            name: "my second project"
+            name: "my second project",
+            bidId: "DHW/FHY/4623"
           })
           .reply(200, { projectId: 67});
-        await gateway.create("my second project", "ff");
+        await gateway.create("my second project", "ff", "DHW/FHY/4623");
 
         expect(updateProjectRequest.isDone()).toBeTruthy();
       });
@@ -499,10 +503,11 @@ describe("Project Gateway", () => {
           .matchHeader("Content-Type", "application/json")
           .post("/project/create", {
             type: "ff",
-            name: "my second project"
+            name: "my second project",
+            bidId: "DHW/FHY/4623"
           })
           .reply(200, { projectId: 67});
-        let response = await gateway.create("my second project", "ff");
+        let response = await gateway.create("my second project", "ff", "DHW/FHY/4623");
 
         expect(response).toEqual({ success: true, id: 67 });
       });
@@ -512,10 +517,11 @@ describe("Project Gateway", () => {
           .matchHeader("Content-Type", "application/json")
           .post("/project/create", {
             type: "ff",
-            name: "my second project"
+            name: "my second project",
+            bidId: "DHW/FHY/4623"
           })
           .reply(403, { projectId: 67});
-        let response = await gateway.create("my second project", "ff");
+        let response = await gateway.create("my second project", "ff", "DHW/FHY/4623");
 
         expect(response).toEqual({ success: false});
       });
