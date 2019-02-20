@@ -13,52 +13,54 @@ describe("Infrastructure Addition page", () => {
     beforeEach(async () => {
       history = ["/project/6", "/project/3/infrastructures"];
       generateInfrastructureUISchemaUseCase = {
-        execute: jest.fn(() => {
-          return {
+        execute: jest.fn(() => (
+          {
             "ui:options": {
               addable: true,
               removable: true
             }
           }
-        }
+        )
       )};
 
       getProjectUseCase = {
         execute: jest.fn(
-          async (presenter) => presenter.presentProject({
-            schema: {
-              type: "object",
-              properties: {
-                infrastructures: {
-                  type: "array",
-                  items: {
+          async (presenter) => {
+            presenter.presentProject({
+              schema: {
+                type: "object",
+                properties: {
+                  infrastructures: {
+                    type: "array",
+                    items: {
+                      type: "object",
+                      properties: {
+                        information: {
+                          type: "string"
+                        }
+                      }
+                    }
+                  },
+                  other: {
                     type: "object",
                     properties: {
-                      information: {
+                      value: {
                         type: "string"
                       }
                     }
                   }
-                },
+                }
+              },
+              data: {
+                infrastructures: [
+                  {information: "Value"}
+                ],
                 other: {
-                  type: "object",
-                  properties: {
-                    value: {
-                      type: "string"
-                    }
-                  }
+                  value: "data"
                 }
               }
-            },
-            data: {
-              infrastructures: [
-                {information: "Value"}
-              ],
-              other: {
-                value: "data"
-              }
-            }
-          })
+            })
+          }
         )
       };
 
@@ -172,44 +174,48 @@ describe("Infrastructure Addition page", () => {
 
       getProjectUseCase = {
         execute: jest.fn(
-          async (presenter) => await presenter.presentProject({
-            schema: {
-              type: 'object',
-              properties: {
-                infrastructures: {
-                  type: "array",
-                  items: {
-                    type: "object",
-                    properties: {
-                      name: {
-                        type: "string"
-                      },
-                      information: {
-                        type: "string"
+          async (presenter) => {
+            await presenter.presentProject(
+              {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    infrastructures: {
+                      type: "array",
+                      items: {
+                        type: "object",
+                        properties: {
+                          name: {
+                            type: "string"
+                          },
+                          information: {
+                            type: "string"
+                          }
+                        }
+                      }
+                    },
+                    extra: {
+                      type: "object",
+                      properties: {
+                        misc: {
+                          type: "string"
+                        }
                       }
                     }
                   }
                 },
-                extra: {
-                  type: "object",
-                  properties: {
-                    misc: {
-                      type: "string"
-                    }
+                data: {
+                  infrastructures: [
+                    {name: "Alex"},
+                    {information: "Extra"}
+                  ],
+                  extra: {
+                    misc: "Some data"
                   }
                 }
               }
-            },
-            data: {
-              infrastructures: [
-                {name: "Alex"},
-                {information: "Extra"}
-              ],
-              extra: {
-                misc: "Some data"
-              }
-            }
-          })
+            )
+          }
         )
       };
 
