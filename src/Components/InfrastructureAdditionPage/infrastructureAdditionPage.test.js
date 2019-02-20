@@ -115,42 +115,44 @@ describe("Infrastructure Addition page", () => {
       expect(getProjectUseCase.execute).toHaveBeenCalledWith(expect.anything(), {id: 3});
     });
 
-    it("Navigates away when submitted", async () => {
-      component.find("Form").simulate("submit");
-      await wait();
-      await component.update();
-      expect(history).toEqual(["/project/6", "/project/3/infrastructures", "/project/3/new"]);
-    });
+    describe("When submitted", () => {
+      it("Navigates away", async () => {
+        component.find("Form").simulate("submit");
+        await wait();
+        await component.update();
+        expect(history).toEqual(["/project/6", "/project/3/infrastructures", "/project/3"]);
+      });
 
-    it("Calls the updateProject use case when submitted", async () => {
-      component.find("Form").simulate("submit");
-      await wait();
-      await component.update();
+      it("Calls the updateProject", async () => {
+        component.find("Form").simulate("submit");
+        await wait();
+        await component.update();
 
-      expect(updateProjectUseCase.execute).toHaveBeenCalledWith(expect.anything(), 3, {
-        infrastructures: [
-          {information: "Value"}
-        ],
-        other: {
-          value: "data"
-        }
-      }, 0);
-    });
+        expect(updateProjectUseCase.execute).toHaveBeenCalledWith(expect.anything(), 3, {
+          infrastructures: [
+            {information: "Value"}
+          ],
+          other: {
+            value: "data"
+          }
+        }, 0);
+      });
 
-    it("Calls the updateProject use case with the correct data when edited", async () => {
-      component.find("input").at(0).simulate("change", {target: {value: "cat"}});
-      component.find("Form").simulate("submit");
-      await wait();
-      await component.update();
+      it("With edited data", async () => {
+        component.find("input").at(0).simulate("change", {target: {value: "cat"}});
+        component.find("Form").simulate("submit");
+        await wait();
+        await component.update();
 
-      expect(updateProjectUseCase.execute).toHaveBeenCalledWith(expect.anything(), 3, {
-        infrastructures: [
-          {information: "cat"}
-        ],
-        other: {
-          value: "data"
-        }
-      }, 0);
+        expect(updateProjectUseCase.execute).toHaveBeenCalledWith(expect.anything(), 3, {
+          infrastructures: [
+            {information: "cat"}
+          ],
+          other: {
+            value: "data"
+          }
+        }, 0);
+      });
     });
   });
 
@@ -255,44 +257,47 @@ describe("Infrastructure Addition page", () => {
       expect(getProjectUseCase.execute).toHaveBeenCalledWith(expect.anything(), {id: 1});
     });
 
-    it("Navigates away when submitted", async () => {
-      component.find("Form").simulate("submit");
-      await wait();
-      await component.update();
-      expect(history).toEqual(["/project/1/infrastructures", "/project/1/new"]);
-    });
 
-    it("Calls the updateProject use case when submitted", async () => {
-      component.find("Form").simulate("submit");
-      await wait();
-      await component.update();
+    describe("When submitted", () => {
+      it("Navigates away", async () => {
+        component.find("Form").simulate("submit");
+        await wait();
+        await component.update();
+        expect(history).toEqual(["/project/1/infrastructures", "/project/1"]);
+      });
 
-      expect(updateProjectUseCase.execute).toHaveBeenCalledWith(expect.anything(), 1, {
-        infrastructures: [
-          {name: "Alex"},
-          {information: "Extra"}
-        ],
-        extra: {
-          misc: "Some data"
-        }
-      }, 0);
-    });
+      it("Calls the updateProject", async () => {
+        component.find("Form").simulate("submit");
+        await wait();
+        await component.update();
 
-    it("Calls the updateProject use case with the correct data when edited", async () => {
-      component.find("input").at(0).simulate("change", {target: {value: "dog"}});
-      component.find("Form").simulate("submit");
-      await wait();
-      await component.update();
+        expect(updateProjectUseCase.execute).toHaveBeenCalledWith(expect.anything(), 1, {
+          infrastructures: [
+            {name: "Alex"},
+            {information: "Extra"}
+          ],
+          extra: {
+            misc: "Some data"
+          }
+        }, 0);
+      });
 
-      expect(updateProjectUseCase.execute).toHaveBeenCalledWith(expect.anything(), 1, {
-        infrastructures: [
-          {name: "dog"},
-          {information: "Extra"}
-        ],
-        extra: {
-          misc: "Some data"
-        }
-      }, 0);
+      it("With edited data", async () => {
+        component.find("input").at(0).simulate("change", {target: {value: "dog"}});
+        component.find("Form").simulate("submit");
+        await wait();
+        await component.update();
+
+        expect(updateProjectUseCase.execute).toHaveBeenCalledWith(expect.anything(), 1, {
+          infrastructures: [
+            {name: "dog"},
+            {information: "Extra"}
+          ],
+          extra: {
+            misc: "Some data"
+          }
+        }, 0);
+      });
     });
   });
 });

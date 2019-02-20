@@ -139,12 +139,16 @@ const BackToProjectOverviewButton = props => (
     Back to project overview
   </button>
 );
+
 const renderInfrastructuresPage = (props) => (
   <InfrastructureAdditionPage
     {...props}
+    updateProject={updateProjectUseCase}
+    getProject={getProjectUseCase}
     generateInfrastructureUISchema={generateInfrastructureUISchemaUseCase}
   />
-)
+);
+
 const renderNewProjectPage = (props, projectStatus, formData, formSchema, projectType, formUiSchema, timestamp) => (
   <NewProjectPage
     {...props}

@@ -24,7 +24,7 @@ export default class InfrastructureAdditionPage extends React.Component {
   }
 
   projectUpdated = async () => {
-    this.props.history.push(`/project/${this.getProjectId()}/new`)
+    this.props.history.push(`/project/${this.getProjectId()}`)
   }
 
   getProjectId = () => this.props.match.params.id
