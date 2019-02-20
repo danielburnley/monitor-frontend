@@ -298,6 +298,7 @@ export default class ParentForm extends React.Component {
             onChange={({ formData }) => {
               this.subformOnChange(formData);
             }}
+            formContext={this.props.formContext}
             formData={this.state.formData[this.state.selected]}
             widgets={widgets}
             fields={fields}

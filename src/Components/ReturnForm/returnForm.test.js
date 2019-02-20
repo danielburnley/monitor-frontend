@@ -137,7 +137,7 @@ describe("<ReturnForm>", () => {
 
       expect(
         wrapper.find({ "data-test": "return-form" }).props().formContext
-      ).toEqual({projectId: 3, getInfrastructures: "Infrastruces to pick"});
+      ).toEqual({projectId: 3, getInfrastructures: "Infrastruces to pick", returnStatus: "Draft"});
     });
 
     it("Example 2", () => {
@@ -157,7 +157,7 @@ describe("<ReturnForm>", () => {
 
       expect(
         wrapper.find({ "data-test": "return-form" }).props().formContext
-      ).toEqual({projectId: 6, getInfrastructures: "More infrastructures"});
+      ).toEqual({projectId: 6, getInfrastructures: "More infrastructures", returnStatus: "Draft"});
     });
   });
 

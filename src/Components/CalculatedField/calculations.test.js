@@ -18,7 +18,8 @@ import {
   subtract,
   add,
   filterForNos,
-  setArrayField
+  setArrayField,
+  setInPreviousQuarter
 } from ".";
 
 describe("setArrayField", () => {
@@ -178,20 +179,39 @@ describe("parseMoney()", () => {
 });
 
 describe("accumulateMoney()", () => {
-  describe("Sums up the values in an array with properties", () => {
+  describe("Sums up the values in an array with properties to 2 dp", () => {
     it("Example 1", () => {
       expect(
         accumulateMoney(
           [{ operand: "2" }, { operand: "4" }, { operand: "8" }],
-          "operand"
+          "operand",
+          2
         )
       ).toEqual("14.00");
     });
 
     it("Example 1", () => {
       expect(
-        accumulateMoney([{ operand: "0.1" }, { operand: "0.2" }], "operand")
+        accumulateMoney([{ operand: "0.1" }, { operand: "0.2" }], "operand", 2)
       ).toEqual("0.30");
+    });
+  });
+
+  describe("Sums up the values in an array with properties to 0 dp", () => {
+    it("Example 1", () => {
+      expect(
+        accumulateMoney(
+          [{ operand: "2" }, { operand: "4" }, { operand: "8" }],
+          "operand",
+          0
+        )
+      ).toEqual("14");
+    });
+
+    it("Example 1", () => {
+      expect(
+        accumulateMoney([{ operand: "12345" }, { operand: "12345" }], "operand", 0)
+      ).toEqual("24690");
     });
   });
 });
@@ -544,6 +564,74 @@ describe("setArrayVariance()", () => {
 
     it("Example 2", () => {
       setArrayVariance(undefined, []);
+    });
+  });
+});
+
+describe("setInPreviousQuarter", () => {
+
+  describe("Unsubmitted return data", () => {
+    let RealDate
+    beforeEach(() => {
+      RealDate = Date
+    });
+    
+    afterEach(() => {
+      global.Date = RealDate
+    });
+  
+    describe("Example 1", () => {    
+      it("sets the value into the correct quarter", () => {
+        let fakeDate = new Date('03/01/2018')
+        global.Date = jest.fn(() => fakeDate)
+        let formData = {}
+        setInPreviousQuarter(formData, {returnStatus: "Draft"}, 'cats', '456')
+  
+        expect(formData).toEqual({cats: {quarter3: '456' }})
+      });
+    });
+  
+    describe("Example 2", () => {    
+      it("sets the value into the correct quarter", () => {
+        let fakeDate = new Date('11/01/2018')
+        global.Date = jest.fn(() => fakeDate)
+        let formData = {}
+        setInPreviousQuarter(formData, {returnStatus: "Draft"}, 'cats', '456')
+  
+        expect(formData).toEqual({cats: {quarter2: '456' }})
+      });
+    });
+  
+    describe("Example 3", () => {    
+      it("sets the value into the correct quarter", () => {
+        let fakeDate = new Date('07/01/2018')
+        global.Date = jest.fn(() => fakeDate)
+        let formData = {}
+        setInPreviousQuarter(formData, {returnStatus: "Draft"}, 'cats', '456')
+  
+        expect(formData).toEqual({cats: {quarter1: '456' }})
+      });
+    });
+  
+    describe("Example 4", () => {    
+      it("sets the value into the correct quarter", () => {
+        let fakeDate = new Date('04/01/2018')
+        global.Date = jest.fn(() => fakeDate)
+        let formData = {}
+        setInPreviousQuarter(formData, {returnStatus: "Draft"}, 'cats', '456')
+  
+        expect(formData).toEqual({cats: {quarter4: '456' }})
+      });
+    });
+  });
+
+  describe("Submitted return data", () => {
+    it("Wont change the formdata", () => {
+      let formData = {}
+      
+      setInPreviousQuarter(formData, {returnStatus: "Submitted"}, "cats", "456")
+
+      expect(formData).toEqual({})
     });
   });
 });
