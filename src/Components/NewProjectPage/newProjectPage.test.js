@@ -566,7 +566,6 @@ describe("NewProjectPage", () => {
       wrap.find('[data-test="update-project-button"]').simulate("click");
       await wait();
       expect(updateProjectSpy.execute).toBeCalledWith(expect.anything(), 9, {}, "12345");
-      expect(wrap.state().timestamp).toEqual("45")
     });
 
     it("example 2", async () => {
@@ -601,7 +600,6 @@ describe("NewProjectPage", () => {
       await wait();
       expect(updateProjectSpy.execute).toBeCalledWith(expect.anything(), 1, {
         cat: { catA: { catB: "cashews" }  } }, "now");
-      expect(wrap.state().timestamp).toEqual("65")
     });
   });
 

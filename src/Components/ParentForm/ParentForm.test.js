@@ -301,12 +301,12 @@ describe("<ParentForm>", () => {
           expect(elementSpy.scrollIntoView).toHaveBeenCalled();
         });
 
-        it("Sets the selected form section to the one chosen", () => {
-          expect(parentForm.state().selectedFormSection).toEqual("name");
+        it("Passes sidebar the correct selected form section", () => {
+          expect(parentForm.find('Sidebar').props().selectedFormSection).toEqual("name");
         });
 
         it("Sets the selected form section to the index chosen", () => {
-          expect(parentForm.state().selectedFormItemIndex).toEqual(1);
+          expect(parentForm.find('Sidebar').props().selectedFormItemIndex).toEqual(1);
         });
       });
 
@@ -330,12 +330,12 @@ describe("<ParentForm>", () => {
           expect(elementSpy.scrollIntoView).toHaveBeenCalled();
         });
 
-        it("Sets the selected form section to the one chosen", () => {
-          expect(parentForm.state().selectedFormSection).toEqual("noise");
+        it("Passes Sidebar the correct selected form section", () => {
+          expect(parentForm.find('Sidebar').props().selectedFormSection).toEqual("noise");
         });
 
         it("Sets the selected form section to the index chosen", () => {
-          expect(parentForm.state().selectedFormItemIndex).toEqual(2);
+          expect(parentForm.find('Sidebar').props().selectedFormItemIndex).toEqual(2);
         });
       });
 
@@ -353,12 +353,12 @@ describe("<ParentForm>", () => {
               .onClick({ target: { id: "cats" } });
           });
 
-          it("Sets the state to the first property of the selected section", () => {
-            expect(parentForm.state().selectedFormSection).toEqual("name");
+          it("Passes the sidebar the first property of the selected section", () => {
+            expect(parentForm.find("Sidebar").props().selectedFormSection).toEqual("name");
           });
 
           it("Sets the selected index to 0", () => {
-            expect(parentForm.state().selectedFormItemIndex).toEqual(0);
+            expect(parentForm.find("Sidebar").props().selectedFormItemIndex).toEqual(0);
           });
         });
 
@@ -375,12 +375,12 @@ describe("<ParentForm>", () => {
               .onClick({ target: { id: "cats" } });
           });
 
-          it("Sets the state to the first property of the selected section", () => {
-            expect(parentForm.state().selectedFormSection).toEqual("name");
+          it("Passes the first property of the selected section to the sideabr", () => {
+            expect(parentForm.find("Sidebar").props().selectedFormSection).toEqual("name");
           });
 
           it("Sets the selected index to 0", () => {
-            expect(parentForm.state().selectedFormItemIndex).toEqual(0);
+            expect(parentForm.find("Sidebar").props().selectedFormItemIndex).toEqual(0);
           });
         });
       });
@@ -512,7 +512,7 @@ describe("<ParentForm>", () => {
       });
 
       it("Defaults the selected form section to the first property in the object", () => {
-        expect(parentForm.state().selectedFormSection).toEqual("name");
+        expect(parentForm.find("Sidebar").props().selectedFormSection).toEqual("name");
       });
 
       it("Passes through the formContext", () => {
@@ -562,7 +562,7 @@ describe("<ParentForm>", () => {
       });
 
       it("Defaults the selected form section to the first property in the object", () => {
-        expect(parentForm.state().selectedFormSection).toEqual("farm");
+        expect(parentForm.find("Sidebar").props().selectedFormSection).toEqual("farm");
       });
 
       it("Passes through the formContext", () => {
@@ -640,11 +640,11 @@ describe("<ParentForm>", () => {
       });
 
       it("Defaults the selected form section to the first property in the object", () => {
-        expect(parentForm.state().selectedFormSection).toEqual("details");
+        expect(parentForm.find("Sidebar").props().selectedFormSection).toEqual("details");
       });
 
       it("Defaults the selected form index to 0", () => {
-        expect(parentForm.state().selectedFormItemIndex).toEqual(0);
+        expect(parentForm.find("Sidebar").props().selectedFormItemIndex).toEqual(0);
       });
 
       describe("Passes the selected details into the subform", () => {
@@ -803,7 +803,7 @@ describe("<ParentForm>", () => {
       });
 
       it("Defaults the selected form section to the first property in the object", () => {
-        expect(parentForm.state().selectedFormSection).toEqual("noise");
+        expect(parentForm.find("Sidebar").props().selectedFormSection).toEqual("noise");
       });
 
       describe("Updates the parent formdata when changing", () => {

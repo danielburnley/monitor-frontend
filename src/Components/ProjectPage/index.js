@@ -40,10 +40,6 @@ export default class ProjectPage extends React.Component {
   };
 
   renderForm() {
-    if (this.state.loading) {
-      return <div />;
-    }
-
     return (
       <div>
         {this.props.children({
@@ -59,11 +55,15 @@ export default class ProjectPage extends React.Component {
   }
 
   render() {
-    return (
-      <div>
-        {this.renderForm()}
-      </div>
-    );
+    if (this.state.loading) {
+      return <div data-test="loading"/>;
+    } else {
+      return (
+        <div>
+          {this.renderForm()}
+        </div>
+      );
+    }
   }
 }
 
