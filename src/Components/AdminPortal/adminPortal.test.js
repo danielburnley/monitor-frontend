@@ -59,8 +59,7 @@ describe("AdminPortal", () => {
         expect(addUsersToProjectSpy.execute).toHaveBeenCalledWith(expect.anything(), 1, [{ email: "email", role: "Local Authority" }])
       });
 
-      it("Will save the new project id to state and displays success message", async () => {
-        expect(adminPortal.state().id).toEqual(1)
+      it("Will display a success message", async () => {
         expect(adminPortal.find('[data-test="project-created-message"]').length).toEqual(1)
       });
     });
@@ -89,7 +88,6 @@ describe("AdminPortal", () => {
       });
 
       it("displays a success message", async () => {
-        expect(adminPortal.state().id).toEqual(2)
         expect(adminPortal.find('[data-test="user-added"]').length).toEqual(1)
       });
     });

@@ -560,7 +560,7 @@ describe('ReturnPage', () => {
 
   describe('When editing a form', () => {
     describe('Before creation', () => {
-      it('Does keeps the state as "Draft"', async () => {
+      it('Passes the return form a status of Draft"', async () => {
         let generateUISchema = new GenerateUISchema({ getUserRole: () => ({userRole: ""}) });
         let generateDisabledUISchema = new GenerateDisabledUISchema(generateUISchema);
 
@@ -581,12 +581,12 @@ describe('ReturnPage', () => {
 
         wrap.find('ReturnForm').props().onChange({})
 
-        expect(wrap.state().status).toEqual("Draft")
+        expect(wrap.find('ReturnForm').props().status).toEqual("Draft")
       });
     });
 
     describe('After creation', () => {
-      it('Updates the state to editing', async () => {
+      it('Passes the return form an updated status of Editting', async () => {
         let generateUISchema = new GenerateUISchema({ getUserRole: () => ({userRole: ""}) });
         let generateDisabledUISchema = new GenerateDisabledUISchema(generateUISchema);
 
@@ -606,8 +606,9 @@ describe('ReturnPage', () => {
         await wait();
 
         wrap.find('ReturnForm').props().onChange({})
+        await wrap.update();
 
-        expect(wrap.state().status).toEqual("Editing")
+        expect(wrap.find('ReturnForm').props().status).toEqual("Editing")
       });
     });
   });

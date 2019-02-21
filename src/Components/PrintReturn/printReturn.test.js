@@ -37,15 +37,7 @@ describe("Print Return", () => {
       });
     });
 
-    it("Holds the data when the return is presented", () => {
-      expect(page.state().data).toEqual({ kitty: "purrr" });
-    });
-
-    it("Holds the schmea when the return is presented", () => {
-      expect(page.state().schema).toEqual({ type: "cat", title: "Kitty" });
-    });
-
-    it("Call its children with the correct props", ()=> {
+    it("Call its children with the correct data and schema from the usecase", ()=> {
       expect(childrenSpy).toHaveBeenCalledWith({
         schema: { type: "cat", title: "Kitty" },
         data: { kitty: "purrr" }
@@ -86,15 +78,7 @@ describe("Print Return", () => {
       });
     });
 
-    it("Holds the data when the return is presented", () => {
-      expect(page.state().data).toEqual({ doggy: "woofy" });
-    });
-
-    it("Holds the schmea when the return is presented", () => {
-      expect(page.state().schema).toEqual({ type: "dog", title: "Woof" });
-    });
-
-    it("Call its children with the correct props", ()=> {
+    it("Calla its children with the correct schema and data from the use case", ()=> {
       expect(childrenSpy).toHaveBeenCalledWith({
         schema: { type: "dog", title: "Woof" },
         data: { doggy: "woofy" }
