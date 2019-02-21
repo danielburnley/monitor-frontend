@@ -7,7 +7,7 @@ import HorizontalFields from "../HorizontalFields";
 import VarianceField from "../VarianceField";
 import MilestoneField from "../MilestoneField";
 import CalculatedField from "../CalculatedField";
-import PickInfrastructureField from "../PickInfrastructureField";
+import PickInfrastructureWidget from "../PickInfrastructureWidget";
 import ValidatedField from "../ValidatedField";
 import GenerateSidebarItems from "../../UseCase/GenerateSidebarItems";
 import RiskField from "../RiskField";
@@ -252,7 +252,6 @@ export default class ParentForm extends React.Component {
       milestone: MilestoneField,
       numbered: NumberedArrayField,
       periods: PeriodsField,
-      pickInfrastructure: PickInfrastructureField,
       quarterly: QuarterlyBreakdown,
       risk: RiskField,
       uploadFile: UploadFileField,
@@ -263,7 +262,8 @@ export default class ParentForm extends React.Component {
     const widgets = {
       britishDate: BritishDate,
       currency: CurrencyWidget,
-      percentage: PercentageWidget
+      percentage: PercentageWidget,
+      pickInfrastructure: PickInfrastructureWidget
     };
 
     if (this.selectedSchema().type === "array") {

@@ -1138,7 +1138,7 @@ describe("GenerateUISchema", () => {
       expect(response).toEqual({
         a: {
           infraId: {
-            "ui:field": "pickInfrastructure"
+            "ui:widget": "pickInfrastructure"
           }
         }
       });

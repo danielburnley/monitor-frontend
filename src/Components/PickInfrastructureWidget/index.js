@@ -1,6 +1,6 @@
 import React from "react";
 
-export default class PickInfrastrutureField extends React.Component {
+export default class PickInfrastructureWidget extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -13,8 +13,7 @@ export default class PickInfrastrutureField extends React.Component {
     await this.props.formContext.getInfrastructures.execute(this, this.props.formContext.projectId)
   }
 
-  presentInfrastructures = async (infrastructuresData) => {
-    let infrastructures = infrastructuresData.map(infrastructure => infrastructure.data)
+  presentInfrastructures = async (infrastructures) => {
     await this.setState({
       infrastructures,
       loading: false

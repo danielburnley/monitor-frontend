@@ -1,5 +1,4 @@
-import PickInfrastructureField from ".";
-import Infrastructure from "../../Domain/Infrastructure";
+import PickInfrastructureWidget from ".";
 import React from "react";
 import { shallow } from "enzyme";
 
@@ -7,30 +6,21 @@ async function wait() {
   await new Promise(resolve => setTimeout(resolve, 100));
 }
 
-async function waitForRequestToFinish() {
-  await new Promise(resolve => setTimeout(resolve, 100));
-}
-
-async function load(page) {
-  await waitForRequestToFinish();
-  page.update();
-}
-
-describe("PickInfrastructureField", () => {
+describe("PickInfrastructureWidget", () => {
   describe("Project is found", () => {
     let getInfrastructuresSpy, pickInfras, infrastructures, onChangeSpy;
       describe("Example 1", () => {
         beforeEach(() => {
           infrastructures = [
-            new Infrastructure({id: 1, name: "A big house", description: "One day I will build a really big hosue"}),
-            new Infrastructure({id: 3, name: "A long road", description: "I need a road to drive to my big house"}),
-            new Infrastructure({id: 5, name: "A small library", description: "This is where all my books go"}),
-            new Infrastructure({id: 7, name: "A diverse farm", description: "Somewhere to keep all of the tomatoes"})
+            {id: 1, name: "A big house", description: "One day I will build a really big hosue"},
+            {id: 3, name: "A long road", description: "I need a road to drive to my big house"},
+            {id: 5, name: "A small library", description: "This is where all my books go"},
+            {id: 7, name: "A diverse farm", description: "Somewhere to keep all of the tomatoes"}
           ]
           getInfrastructuresSpy = {execute: jest.fn((presenter, id) => (presenter.presentInfrastructures(infrastructures)))}
           onChangeSpy = jest.fn();
           pickInfras = shallow (
-            <PickInfrastructureField
+            <PickInfrastructureWidget
               formContext={{projectId: 1, getInfrastructures: getInfrastructuresSpy}}
               onChange={onChangeSpy}
             />
@@ -71,16 +61,16 @@ describe("PickInfrastructureField", () => {
       describe("Example 2", () => {
         beforeEach(() => {
           infrastructures = [
-            new Infrastructure({id: 4, name: "A blue house", description: "blue inside and out"}),
-            new Infrastructure({id: 67, name: "A blue street", description: "all the trees are blue too"}),
-            new Infrastructure({id: 2, name: "A blue window", description: "blue is the colour"}),
-            new Infrastructure({id: 45, name: "A blue corvette", description: "Everything is blue"}),
-            new Infrastructure({id: 102, name: "Blue words", description: "And the people too!"})
+            {id: 4, name: "A blue house", description: "blue inside and out"},
+            {id: 67, name: "A blue street", description: "all the trees are blue too"},
+            {id: 2, name: "A blue window", description: "blue is the colour"},
+            {id: 45, name: "A blue corvette", description: "Everything is blue"},
+            {id: 102, name: "Blue words", description: "And the people too!"}
           ]
           getInfrastructuresSpy = {execute: jest.fn((presenter, id) => (presenter.presentInfrastructures(infrastructures)))}
           onChangeSpy = jest.fn();
           pickInfras = shallow (
-            <PickInfrastructureField
+            <PickInfrastructureWidget
               formContext={{projectId: 78, getInfrastructures: getInfrastructuresSpy}}
               onChange={onChangeSpy}
             />
@@ -126,7 +116,7 @@ describe("PickInfrastructureField", () => {
     beforeEach(() => {
       let getInfrastructuresSpy = {execute: jest.fn((presenter, id) => (presenter.presentProjectNotFound()))}
       pickInfras = shallow (
-        <PickInfrastructureField
+        <PickInfrastructureWidget
           formContext={{projectId: 1, getInfrastructures: getInfrastructuresSpy}}
           onChange={jest.fn()}
         />

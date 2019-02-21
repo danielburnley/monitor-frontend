@@ -1824,7 +1824,7 @@ describe("<ParentForm>", () => {
             uiSchema={{
               cat: {
                 infrastructureId: {
-                  "ui:field": "pickInfrastructure"
+                  "ui:widget": "pickInfrastructure"
                 }
               }
             }}
@@ -1834,7 +1834,7 @@ describe("<ParentForm>", () => {
         await parentForm.update();
         await wait();
 
-        expect(parentForm.find("PickInfrastrutureField").length).toEqual(1);
+        expect(parentForm.find("PickInfrastructureWidget").length).toEqual(1);
       });
     });
   });
