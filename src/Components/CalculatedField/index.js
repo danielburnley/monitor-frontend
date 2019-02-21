@@ -57,10 +57,6 @@ export function subtract(value1, value2) {
   return (value1 - value2).toString();
 }
 
-export function sumArray(array) {
-  // return array.reduce((accumulator))
-}
-
 export function periodTotal(object, totalPath, property, ...keys) {
   if (!object[property]) return;
   return object[property].forEach((value, index) => {
