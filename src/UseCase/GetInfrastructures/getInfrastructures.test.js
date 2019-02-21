@@ -35,7 +35,11 @@ describe('GetInfrastructures', () => {
       it('Presents the infrastructures', async () => {
         let presenterSpy = {presentInfrastructures: jest.fn()};
         await useCase.execute(presenterSpy, 1);
-        expect(presenterSpy.presentInfrastructures).toBeCalledWith(infrastructures);
+        expect(presenterSpy.presentInfrastructures).toBeCalledWith(
+            [
+              { someData: "about cats", moreData: "about dogs" }
+            ]
+          );
       });
     });
 
@@ -64,7 +68,10 @@ describe('GetInfrastructures', () => {
       it('Presents the project', async () => {
         let presenterSpy = {presentInfrastructures: jest.fn()};
         await useCase.execute(presenterSpy, 5);
-        expect(presenterSpy.presentInfrastructures).toBeCalledWith(infrastructures);
+        expect(presenterSpy.presentInfrastructures).toBeCalledWith([
+          {aboutInfra1: "data"},
+          {aboutNumber2: "different data"}
+        ]);
       });
     });
   });
