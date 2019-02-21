@@ -21,6 +21,8 @@ describe("PickInfrastructureWidget", () => {
           onChangeSpy = jest.fn();
           pickInfras = shallow (
             <PickInfrastructureWidget
+              schema={{title: "pick an infrastructure", type: "string"}}
+              name="infrastructureId"
               formContext={{projectId: 1, getInfrastructures: getInfrastructuresSpy}}
               onChange={onChangeSpy}
             />
@@ -33,6 +35,10 @@ describe("PickInfrastructureWidget", () => {
     
         it("Sets loading to false", () => {
           expect(pickInfras.find('[data-test="loading"]').length).toEqual(0);
+        });
+
+        it("Displays the title defined in the schema", () => {
+          expect(pickInfras.find('[data-test="title"]').text()).toEqual("pick an infrastructure")
         });
     
         it("Displays a list of infrastructures to pick from", () => {
@@ -69,6 +75,8 @@ describe("PickInfrastructureWidget", () => {
           onChangeSpy = jest.fn();
           pickInfras = shallow (
             <PickInfrastructureWidget
+              schema={{title: "pick a hif deliverable", type: "string"}}
+              name="whichINfrastructure"
               formContext={{projectId: 78, getInfrastructures: getInfrastructuresSpy}}
               onChange={onChangeSpy}
             />
@@ -78,10 +86,13 @@ describe("PickInfrastructureWidget", () => {
         it("Calls execute on the get infrastructures usecase with the project id", () => {
           expect(getInfrastructuresSpy.execute).toHaveBeenCalledWith(expect.anything(), 78)
         });
-  
-    
+        
         it("It's loading anymore", () => {
           expect(pickInfras.find('[data-test="laoding"]').length).toEqual(0);
+        });
+
+        it("Displays the title defined in the schema", () => {
+          expect(pickInfras.find('[data-test="title"]').text()).toEqual("pick a hif deliverable")
         });
     
         it("Displays a list of infrastructures to pick from", () => {
@@ -103,7 +114,7 @@ describe("PickInfrastructureWidget", () => {
         it("Calls the on change spy with the id when an infrastructure is selected", async () => {
           pickInfras.find('[data-test="infrastructue-picker"]').simulate('change', { target: {value: "45"}})
           await wait()
-          expect(onChangeSpy).toHaveBeenCalledWith({infrastructureId: "45"})
+          expect(onChangeSpy).toHaveBeenCalledWith({whichINfrastructure: "45"})
         });
       });
     });
@@ -114,6 +125,8 @@ describe("PickInfrastructureWidget", () => {
       let getInfrastructuresSpy = {execute: jest.fn((presenter, id) => (presenter.presentProjectNotFound()))}
       pickInfras = shallow (
         <PickInfrastructureWidget
+          schema={{title: "pick an infrastructure", type: "string"}}
+          name="infrastructureId"
           formContext={{projectId: 1, getInfrastructures: getInfrastructuresSpy}}
           onChange={jest.fn()}
         />

@@ -23,7 +23,7 @@ export default class PickInfrastructureWidget extends React.Component {
   presentProjectNotFound = () => {}
 
   onSelection = (id) => {
-    this.props.onChange({infrastructureId: id})
+    this.props.onChange({[this.props.name]: id})
   }
 
   renderInfrastructures = () => {
@@ -46,7 +46,7 @@ export default class PickInfrastructureWidget extends React.Component {
     } else {
       return <div>
         <div className="form-group">
-          <label htmlFor="infrastructurePicker">Please select which infrastructure this relates to.</label>
+          <label htmlFor="infrastructurePicker" data-test="title">{this.props.schema.title}</label>
           <select
             data-test="infrastructue-picker"
             className="form-control"
