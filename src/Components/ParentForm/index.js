@@ -7,6 +7,7 @@ import HorizontalFields from "../HorizontalFields";
 import VarianceField from "../VarianceField";
 import MilestoneField from "../MilestoneField";
 import CalculatedField from "../CalculatedField";
+import PickInfrastructureWidget from "../PickInfrastructureWidget";
 import ValidatedField from "../ValidatedField";
 import GenerateSidebarItems from "../../UseCase/GenerateSidebarItems";
 import RiskField from "../RiskField";
@@ -245,29 +246,31 @@ export default class ParentForm extends React.Component {
 
   renderSubform() {
     const fields = {
-      horizontal: HorizontalFields,
-      variance: VarianceField,
-      risk: RiskField,
-      periods: PeriodsField,
       base: StaticData,
+      calculated: CalculatedField,
+      horizontal: HorizontalFields,
       milestone: MilestoneField,
       numbered: NumberedArrayField,
+      periods: PeriodsField,
       quarterly: QuarterlyBreakdown,
-      calculated: CalculatedField,
+      risk: RiskField,
+      uploadFile: UploadFileField,
       validated: ValidatedField,
-      uploadFile: UploadFileField
+      variance: VarianceField
     };
 
     const widgets = {
+      britishDate: BritishDate,
       currency: CurrencyWidget,
       percentage: PercentageWidget,
-      britishDate: BritishDate
+      pickInfrastructure: PickInfrastructureWidget
     };
 
     if (this.selectedSchema().type === "array") {
       return (
         <div className="col-md-10">
           <ArraySubform
+            formContext={this.props.formContext}
             data-test={`${this.state.selected}_subform`}
             key={`${this.state.selected}_subform`}
             onChange={formData => {
@@ -290,6 +293,7 @@ export default class ParentForm extends React.Component {
       return (
         <div className="col-md-10 subform">
           <Form
+            formContext={this.props.formContext}
             data-test={`${this.state.selected}_subform`}
             onChange={({ formData }) => {
               this.subformOnChange(formData);

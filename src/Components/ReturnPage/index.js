@@ -155,6 +155,8 @@ export default class ReturnPage extends React.Component {
     return (
       <ReturnForm
         data-test="return-form"
+        projectId = { this.projectId() }
+        getInfrastructures={this.props.getInfrastructures}
         documentGateway={this.props.documentGateway}
         onSave={this.onFormSave}
         onSubmit={this.onFormSubmit}

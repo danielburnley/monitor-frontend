@@ -119,6 +119,48 @@ describe("<ReturnForm>", () => {
     ).toEqual(documentGatewayDummy);
   });
 
+  describe("Passes the formContext to the parentForm", () => {
+    it("Example 1", () => {
+      let documentGatewayDummy = jest.fn();
+      let wrapper = shallow(
+        <ReturnForm
+          documentGateway={documentGatewayDummy}
+          projectId={3}
+          getInfrastructures={"Infrastruces to pick"}
+          data={initialData}
+          schema={formSchema}
+          onSubmit={() => {}}
+          status="Draft"
+          getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+        />
+      );
+
+      expect(
+        wrapper.find({ "data-test": "return-form" }).props().formContext
+      ).toEqual({projectId: 3, getInfrastructures: "Infrastruces to pick"});
+    });
+
+    it("Example 2", () => {
+      let documentGatewayDummy = jest.fn();
+      let wrapper = shallow(
+        <ReturnForm
+          documentGateway={documentGatewayDummy}
+          projectId={6}
+          getInfrastructures="More infrastructures"
+          data={initialData}
+          schema={formSchema}
+          onSubmit={() => {}}
+          status="Draft"
+          getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+        />
+      );
+
+      expect(
+        wrapper.find({ "data-test": "return-form" }).props().formContext
+      ).toEqual({projectId: 6, getInfrastructures: "More infrastructures"});
+    });
+  });
+
   it("Calls the onsubmit function with the form data when submitted", () => {
     let submitSpy = jest.fn();
     let wrapper = shallow(

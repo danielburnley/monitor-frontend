@@ -5,9 +5,10 @@ import { mount } from "enzyme";
 describe("<ArraySubform>", () => {
   let subform, onChangeSpy, schema, data, uiSchema, fields, resetSelectedItemSpy;
 
-  function getSubform({ schema, data, uiSchema, index, section }) {
+  function getSubform({ schema, data, uiSchema, index, section, formContext }) {
     return mount(
       <ArraySubform
+        formContext={formContext}
         data={data}
         fields={fields}
         schema={schema}
@@ -248,6 +249,19 @@ describe("<ArraySubform>", () => {
       expect(subform.find("Form").props().fields).toEqual(fields);
     });
 
+    it("Passes the formContext to the form", () => {
+      let subform = getSubform({
+        schema,
+        data,
+        uiSchema,
+        index: 0,
+        section: "details",
+        formContext: {projectId: 11}
+      });
+
+      expect(subform.find("Form").props().formContext).toEqual({projectId: 11});
+    });
+
     describe("Given the first property selected", () => {
       beforeEach(() => {
         subform = getSubform({
@@ -257,6 +271,19 @@ describe("<ArraySubform>", () => {
           index: 0,
           section: "details"
         });
+      });
+
+      it("Passes the formContext to the form", () => {
+        let subform = getSubform({
+          schema,
+          data,
+          uiSchema,
+          index: 0,
+          section: "details",
+          formContext: {projectId: 15}
+        });
+
+        expect(subform.find("Form").props().formContext).toEqual({projectId: 15});
       });
 
       it("Passes the selected schema to the form", () => {

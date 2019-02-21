@@ -176,10 +176,58 @@ describe('ReturnPage', () => {
 
       await wait();
       expect(wrap.find({'data-test': 'return-form'}).props().documentGateway).toEqual(documentGatewayDummy)
-    })
+    });
 
-    describe('nothing has been submitted', () => {
-      it('does not show any messages', async () => {
+    describe("Passes the project id to the return form", () => {
+      it("Example 1", async () => {
+        let documentGatewayDummy = jest.fn()
+        let generateUISchema = new GenerateUISchema({ getUserRole: () => ({userRole: ""}) });
+        let generateDisabledUISchema = new GenerateDisabledUISchema(generateUISchema);
+        let wrap = shallow(<ReturnPage
+                validateReturn={validateReturnSpy}
+                match={{ params: { projectId: 1, returnId: 1 } }}
+                generateUISchema={ generateUISchema }
+                generateSubmittedSchema={generateDisabledUISchema}
+                history={[]}
+                createReturn={createReturnSpy}
+                submitReturn={submitReturnSpy}
+                updateReturn={()=>{}}
+                getReturn={new getReturnStub()}
+                getBaseReturn={new getBaseReturnStub()}
+                documentGateway={documentGatewayDummy}
+                getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+              />);
+
+        await wait();
+        expect(wrap.find({'data-test': 'return-form'}).props().projectId).toEqual(1)
+      });
+
+      it("Example 2", async () => {
+        let documentGatewayDummy = jest.fn()
+        let generateUISchema = new GenerateUISchema({ getUserRole: () => ({userRole: ""}) });
+        let generateDisabledUISchema = new GenerateDisabledUISchema(generateUISchema);
+        let wrap = shallow(<ReturnPage
+                validateReturn={validateReturnSpy}
+                match={{ params: { projectId: 6, returnId: 1 } }}
+                generateUISchema={ generateUISchema }
+                generateSubmittedSchema={generateDisabledUISchema}
+                history={[]}
+                createReturn={createReturnSpy}
+                submitReturn={submitReturnSpy}
+                updateReturn={()=>{}}
+                getReturn={new getReturnStub()}
+                getBaseReturn={new getBaseReturnStub()}
+                documentGateway={documentGatewayDummy}
+                getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+              />);
+
+        await wait();
+        expect(wrap.find({'data-test': 'return-form'}).props().projectId).toEqual(6)
+      });
+    });
+
+    describe("nothing has been submitted", () => {
+      it("does not show any messages", async () => {
         let unresolvingUpdateReturnStub = {execute: jest.fn(() => {execute: async (presenter, request) => {await new Promise(resolve => setTimeout(resolve, 14159265358));}})};
         let generateUISchema = new GenerateUISchema({ getUserRole: () => ({userRole: ""}) });
         let generateDisabledUISchema = new GenerateDisabledUISchema(generateUISchema);

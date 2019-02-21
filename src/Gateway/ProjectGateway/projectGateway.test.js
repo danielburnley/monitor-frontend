@@ -1,6 +1,7 @@
 import nock from "nock";
 import ProjectGateway from ".";
 import Project from "../../Domain/Project";
+import Infrastructure from "../../Domain/Infrastructure";
 
 describe("Project Gateway", () => {
   afterEach(() => {
@@ -87,6 +88,91 @@ describe("Project Gateway", () => {
           .reply(404);
         let gateway = new ProjectGateway(apiKeyGateway);
         let response = await gateway.findById(5);
+        expect(response).toEqual({ success: false });
+      });
+    });
+  });
+
+  describe("#GetInfrastructures", () => {
+    describe("Given a Infrastructures are returned", () => {
+      let request, response, apiKeyGateway;
+
+      describe("Example one", () => {
+        beforeEach(async () => {
+          process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
+          apiKeyGateway = {
+            getApiKey: jest.fn(() => ({ apiKey: "superSecret" }))
+          };
+          request = nock("http://cat.meow")
+            .matchHeader("Content-Type", "application/json")
+            .matchHeader("API_KEY", "superSecret")
+            .get("/project/1/infrastructures")
+            .reply(200, { infrastructures: [ { cow: "moo" } ]});
+          let gateway = new ProjectGateway(apiKeyGateway);
+          response = await gateway.getInfrastructures(1);
+        });
+
+        it("Fetches the project from the API", () => {
+          expect(request.isDone()).toBeTruthy();
+        });
+
+        it("Projects the response from the api", () => {
+          let infrastructure = new Infrastructure({ cow: "moo" })
+          expect(response).toEqual({
+            success: true,
+            infrastructures: [infrastructure]
+          });
+        });
+
+        it("Calls the api key gateway", () => {
+          expect(apiKeyGateway.getApiKey).toHaveBeenCalled();
+        });
+      });
+
+      describe("Example two", () => {
+        let request, response, apiKeyGateway;
+        beforeEach(async () => {
+          process.env.REACT_APP_HIF_API_URL = "http://dog.woof/";
+          apiKeyGateway = {
+            getApiKey: jest.fn(() => ({ apiKey: "extraSecret" }))
+          };
+          request = nock("http://dog.woof")
+            .matchHeader("Content-Type", "application/json")
+            .matchHeader("API_KEY", "extraSecret")
+            .get("/project/5/infrastructures")
+            .reply(200, { infrastructures: [{ dogs: "woof" }]});
+          let gateway = new ProjectGateway(apiKeyGateway);
+          response = await gateway.getInfrastructures(5);
+        });
+
+        it("Fetches the project from the API", () => {
+          expect(request.isDone()).toBeTruthy();
+        });
+
+        it("Projects the response from the api", () => {
+          let infrastructure = new Infrastructure({ dogs: "woof" });
+          expect(response).toEqual({
+            success: true,
+            infrastructures: [infrastructure]
+          });
+        });
+
+        it("Calls the api key gateway", () => {
+          expect(apiKeyGateway.getApiKey).toHaveBeenCalled();
+        });
+      });
+    });
+
+    describe("Given the project doesnt exist", () => {
+      it("Projects unsuccessful", async () => {
+        let apiKeyGateway = { getApiKey: () => ({ apiKey: "extraSecret" }) };
+        process.env.REACT_APP_HIF_API_URL = "http://dog.woof/";
+        let projectRequest = nock("http://dog.woof")
+          .matchHeader("Content-Type", "application/json")
+          .get("/project/5/infrastructures")
+          .reply(404);
+        let gateway = new ProjectGateway(apiKeyGateway);
+        let response = await gateway.getInfrastructures(5);
         expect(response).toEqual({ success: false });
       });
     });

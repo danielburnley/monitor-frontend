@@ -1,4 +1,5 @@
 import Project from "../../Domain/Project";
+import Infrastructure from "../../Domain/Infrastructure";
 import fetch from "isomorphic-fetch";
 import runtimeEnv from "@mars/heroku-js-runtime-env";
 
@@ -29,6 +30,27 @@ export default class ProjectGateway {
         projectResponse.timestamp
       );
       return { success: true, foundProject };
+    } else {
+      return { success: false };
+    }
+  }
+
+  async getInfrastructures(projectId) {
+    let rawResponse = await fetch(
+      `${this.env.REACT_APP_HIF_API_URL}project/${projectId}/infrastructures`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          API_KEY: this.apiKeyGateway.getApiKey().apiKey
+        }
+      }
+    );
+    if (rawResponse.ok) {
+      let response = await rawResponse.json();
+      let infrastructures = response.infrastructures.map(infrastructure => (
+        new Infrastructure(infrastructure)
+      ))
+      return { success: true, infrastructures: infrastructures};
     } else {
       return { success: false };
     }
