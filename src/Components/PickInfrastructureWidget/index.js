@@ -42,7 +42,7 @@ export default class PickInfrastructureWidget extends React.Component {
 
   render() {
     if(this.state.loading) {
-      return <div />
+      return <div data-test="loading" />
     } else {
       return <div>
         <div className="form-group">

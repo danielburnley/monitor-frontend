@@ -31,17 +31,8 @@ describe("PickInfrastructureWidget", () => {
           expect(getInfrastructuresSpy.execute).toHaveBeenCalledWith(expect.anything(), 1)
         });
     
-        it("Saves the infrastructures returned by the use case to state", () => {
-          expect(pickInfras.state().infrastructures).toEqual([
-            {id: 1, name: "A big house", description: "One day I will build a really big hosue"},
-            {id: 3, name: "A long road", description: "I need a road to drive to my big house"},
-            {id: 5, name: "A small library", description: "This is where all my books go"},
-            {id: 7, name: "A diverse farm", description: "Somewhere to keep all of the tomatoes"}
-          ])
-        });
-    
         it("Sets loading to false", () => {
-          expect(pickInfras.state().loading).toEqual(false);
+          expect(pickInfras.find('[data-test="loading"]').length).toEqual(0);
         });
     
         it("Displays a list of infrastructures to pick from", () => {
@@ -49,6 +40,13 @@ describe("PickInfrastructureWidget", () => {
           expect(pickInfras.find('[data-test="infrastructure-3"]').length).toEqual(1)
           expect(pickInfras.find('[data-test="infrastructure-5"]').length).toEqual(1)
           expect(pickInfras.find('[data-test="infrastructure-7"]').length).toEqual(1)
+        });
+
+        it("Displays details from the use case", () => {
+          expect(pickInfras.find('[data-test="infrastructure-1"]').text()).toEqual("One day I will build a really big hosue")
+          expect(pickInfras.find('[data-test="infrastructure-3"]').text()).toEqual("I need a road to drive to my big house")
+          expect(pickInfras.find('[data-test="infrastructure-5"]').text()).toEqual("This is where all my books go")
+          expect(pickInfras.find('[data-test="infrastructure-7"]').text()).toEqual("Somewhere to keep all of the tomatoes")
         });
     
         it("Calls the on change spy with the id when an infrastructure is selected", async () => {
@@ -80,19 +78,10 @@ describe("PickInfrastructureWidget", () => {
         it("Calls execute on the get infrastructures usecase with the project id", () => {
           expect(getInfrastructuresSpy.execute).toHaveBeenCalledWith(expect.anything(), 78)
         });
+  
     
-        it("Saves the infrastructures returned by the use case to state", () => {
-          expect(pickInfras.state().infrastructures).toEqual([
-            {id: 4, name: "A blue house", description: "blue inside and out"},
-            {id: 67, name: "A blue street", description: "all the trees are blue too"},
-            {id: 2, name: "A blue window", description: "blue is the colour"},
-            {id: 45, name: "A blue corvette", description: "Everything is blue"},
-            {id: 102, name: "Blue words", description: "And the people too!"}
-          ])
-        });
-    
-        it("Sets loading to false", () => {
-          expect(pickInfras.state().loading).toEqual(false);
+        it("It's loading anymore", () => {
+          expect(pickInfras.find('[data-test="laoding"]').length).toEqual(0);
         });
     
         it("Displays a list of infrastructures to pick from", () => {
@@ -101,6 +90,14 @@ describe("PickInfrastructureWidget", () => {
           expect(pickInfras.find('[data-test="infrastructure-2"]').length).toEqual(1)
           expect(pickInfras.find('[data-test="infrastructure-45"]').length).toEqual(1)
           expect(pickInfras.find('[data-test="infrastructure-102"]').length).toEqual(1)
+        });
+
+        it("Displays the details passed from the use case", () => {
+          expect(pickInfras.find('[data-test="infrastructure-4"]').text()).toEqual("blue inside and out")
+          expect(pickInfras.find('[data-test="infrastructure-67"]').text()).toEqual("all the trees are blue too")
+          expect(pickInfras.find('[data-test="infrastructure-2"]').text()).toEqual("blue is the colour")
+          expect(pickInfras.find('[data-test="infrastructure-45"]').text()).toEqual("Everything is blue")
+          expect(pickInfras.find('[data-test="infrastructure-102"]').text()).toEqual("And the people too!")
         });
     
         it("Calls the on change spy with the id when an infrastructure is selected", async () => {
@@ -125,7 +122,7 @@ describe("PickInfrastructureWidget", () => {
 
     it("doesn't load", async () => {
       await wait();
-      expect(pickInfras.state().loading).toEqual(true);
+      expect(pickInfras.find('[data-test="loading"]').length).toEqual(1);
     });
   });  
 });
