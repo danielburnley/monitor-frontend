@@ -6,7 +6,6 @@ describe("<ProjectPage>", () => {
   let page, getProjectSpy, childrenSpy, generateNewProjectUISchemaSpy, UISchema;
 
   describe("Example one", () => {
-
     describe("When loading the project", () => {
       beforeEach(() => {
         getProjectSpy = { execute: jest.fn() };
@@ -29,8 +28,8 @@ describe("<ProjectPage>", () => {
         });
       });
 
-      it("Sets loading to true when first mounted", () => {
-        expect(page.state().loading).toEqual(true);
+      it("Sets loading to true when first mounted", async () => {
+        expect(page.find('[data-test="loading"]').length).toEqual(1);
       });
     });
 
@@ -65,34 +64,10 @@ describe("<ProjectPage>", () => {
       });
 
       it("Sets loading to false when the project is presented", () => {
-        expect(page.state().loading).toEqual(false);
+        expect(page.find('[data-test="loading"]').length).toEqual(0);
       });
 
-      it("Holds the formData when the project is presented", () => {
-        expect(page.state().formData).toEqual({ meow: true });
-      });
-
-      it("Holds the formSchema when the project is presented", () => {
-        expect(page.state().formSchema).toEqual({ hello: "hi" });
-      });
-
-      it("Holds the projectStatus when the project is presented", () => {
-        expect(page.state().projectStatus).toEqual("Draft");
-      });
-
-      it("Holds the timestamp when the project is presented", () => {
-        expect(page.state().timestamp).toEqual("56789")
-      });
-
-      it("Holds th uischema as an empty hash", () => {
-        expect(page.state().formUiSchema).toEqual({});
-      });
-
-      it("Holds the type when the project is presented", () => {
-        expect(page.state().projectType).toEqual('hif');
-      });
-
-      it("Renders null", () => {
+      it("Passes the data, schema, status, timestamp and type from the use case", () => {
         expect(childrenSpy).toHaveBeenCalledWith({
           projectStatus: "Draft",
           formData: { meow: true },
@@ -131,8 +106,8 @@ describe("<ProjectPage>", () => {
         });
       });
 
-      it("Sets loading to true when first mounted", () => {
-        expect(page.state().loading).toEqual(true);
+      it("Sets loading to true when first mounted", async () => {
+        expect(page.find('[data-test="loading"]').length).toEqual(1);
       });
     });
 
@@ -167,30 +142,10 @@ describe("<ProjectPage>", () => {
       });
 
       it("Sets loading to false when the project is presented", () => {
-        expect(page.state().loading).toEqual(false);
+        expect(page.find('[data-test="loading"]').length).toEqual(0);
       });
 
-      it("Holds the formData when the project is presented", () => {
-        expect(page.state().formData).toEqual({ woof: false });
-      });
-
-      it("Holds the formSchema when the project is presented", () => {
-        expect(page.state().formSchema).toEqual({ goodbye: "see ya" });
-      });
-
-      it("Holds the projectStatus when the project is presented", () => {
-        expect(page.state().projectStatus).toEqual("Submitted");
-      });
-
-      it("Holds the projectType when the project is presented", () => {
-        expect(page.state().projectType).toEqual('ac');
-      });
-
-      it("Holds the timestamp when the project is presented", () => {
-        expect(page.state().timestamp).toEqual("0345")
-      });
-
-      it("Renders the children with the formData and schema populated from the state", () => {
+      it("Passes the data, schema, status, timestamp and type from the use case", () => {
         expect(childrenSpy).toHaveBeenCalledWith({
           projectStatus: "Submitted",
           formData: { woof: false },
@@ -218,7 +173,7 @@ describe("<ProjectPage>", () => {
         generateNewProjectUISchemaSpy = {
           execute: (data, flag) => ({ heya: { "ui:disabled": true } })
         };
-        
+
 
         childrenSpy = jest.fn();
 
@@ -233,13 +188,7 @@ describe("<ProjectPage>", () => {
         );
       });
 
-      it("Holds the Ui Schema for read only objects", () => {
-        expect(page.state().formUiSchema).toEqual({
-          heya: { "ui:disabled": true }
-        });
-      });
-
-      it("Renders the children with the Ui schema populated from the state", () => {
+      it("Renders the children with the Ui schema returned from the usecase", () => {
         expect(childrenSpy).toHaveBeenCalledWith({
           projectStatus: "LA Draft",
           formData: { heya: "Bye" },
@@ -279,13 +228,8 @@ describe("<ProjectPage>", () => {
           </ProjectPage>
         );
       });
-      it("Holds the UI Schema for read only objects", () => {
-        expect(page.state().formUiSchema).toEqual({
-          bye: { "ui:disabled": true }
-        });
-      });
 
-      it("Renders the children with the Ui schema populated from the state", () => {
+      it("Renders the children with the Ui schema returned from the usecase", () => {
         expect(childrenSpy).toHaveBeenCalledWith({
           projectStatus: "LA Draft",
           formData: { hi: "Bye" },

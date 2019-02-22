@@ -76,6 +76,52 @@ describe("NewProjectPage", () => {
     ).toEqual(documentGatewayDummy);
   });
 
+  describe("Passes the project id", () => {
+    it("Example 1", () => {
+      let documentGatewayDummy = jest.fn();
+      let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
+      let wrap = shallow(
+        <NewProjectPage
+          documentGateway={documentGatewayDummy}
+          match={{ params: { id: 6 } }}
+          getInfrastructures={"get me some infrastructures"}
+          updateProject={{}}
+          submitProject={{}}
+          validateProject={ { execute: () => null } }
+          data={{}}
+          schema={schema}
+          getRole={userRoleUseCaseSpy}
+        />
+      );
+
+      expect(
+        wrap.find({ "data-test": "project-form" }).props().formContext
+      ).toEqual({projectId: 6, getInfrastructures: "get me some infrastructures"});
+    });
+
+    it("Example 2", () => {
+      let documentGatewayDummy = jest.fn();
+      let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
+      let wrap = shallow(
+        <NewProjectPage
+          documentGateway={documentGatewayDummy}
+          match={{ params: { id: 8 } }}
+          updateProject={{}}
+          getInfrastructures={"infras"}
+          submitProject={{}}
+          validateProject={ { execute: () => null } }
+          data={{}}
+          schema={schema}
+          getRole={userRoleUseCaseSpy}
+        />
+      );
+
+      expect(
+        wrap.find({ "data-test": "project-form" }).props().formContext
+      ).toEqual({projectId: 8, getInfrastructures: "infras"});
+    });
+  });
+
   describe("disables buttons while project updating hasnt completed", () => {
     describe("In Homes England draft mode", () => {
       let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"})) };
@@ -520,7 +566,6 @@ describe("NewProjectPage", () => {
       wrap.find('[data-test="update-project-button"]').simulate("click");
       await wait();
       expect(updateProjectSpy.execute).toBeCalledWith(expect.anything(), 9, {}, "12345");
-      expect(wrap.state().timestamp).toEqual("45")
     });
 
     it("example 2", async () => {
@@ -555,7 +600,6 @@ describe("NewProjectPage", () => {
       await wait();
       expect(updateProjectSpy.execute).toBeCalledWith(expect.anything(), 1, {
         cat: { catA: { catB: "cashews" }  } }, "now");
-      expect(wrap.state().timestamp).toEqual("65")
     });
   });
 

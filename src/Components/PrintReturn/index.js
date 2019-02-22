@@ -50,7 +50,7 @@ export default class PrintReturn extends React.Component {
   
   render = () => {
     if (this.state.loading) {
-      return <div />;
+      return <div data-test="loading"/>;
     } else {
       return (
         <div >

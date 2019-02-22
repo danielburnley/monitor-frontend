@@ -339,12 +339,12 @@ describe("<ParentForm>", () => {
           expect(elementSpy.scrollIntoView).toHaveBeenCalled();
         });
 
-        it("Sets the selected form section to the one chosen", () => {
-          expect(parentForm.state().selectedFormSection).toEqual("name");
+        it("Passes sidebar the correct selected form section", () => {
+          expect(parentForm.find('Sidebar').props().selectedFormSection).toEqual("name");
         });
 
         it("Sets the selected form section to the index chosen", () => {
-          expect(parentForm.state().selectedFormItemIndex).toEqual(1);
+          expect(parentForm.find('Sidebar').props().selectedFormItemIndex).toEqual(1);
         });
       });
 
@@ -368,12 +368,12 @@ describe("<ParentForm>", () => {
           expect(elementSpy.scrollIntoView).toHaveBeenCalled();
         });
 
-        it("Sets the selected form section to the one chosen", () => {
-          expect(parentForm.state().selectedFormSection).toEqual("noise");
+        it("Passes Sidebar the correct selected form section", () => {
+          expect(parentForm.find('Sidebar').props().selectedFormSection).toEqual("noise");
         });
 
         it("Sets the selected form section to the index chosen", () => {
-          expect(parentForm.state().selectedFormItemIndex).toEqual(2);
+          expect(parentForm.find('Sidebar').props().selectedFormItemIndex).toEqual(2);
         });
       });
 
@@ -391,12 +391,12 @@ describe("<ParentForm>", () => {
               .onClick({ target: { id: "cats" } });
           });
 
-          it("Sets the state to the first property of the selected section", () => {
-            expect(parentForm.state().selectedFormSection).toEqual("name");
+          it("Passes the sidebar the first property of the selected section", () => {
+            expect(parentForm.find("Sidebar").props().selectedFormSection).toEqual("name");
           });
 
           it("Sets the selected index to 0", () => {
-            expect(parentForm.state().selectedFormItemIndex).toEqual(0);
+            expect(parentForm.find("Sidebar").props().selectedFormItemIndex).toEqual(0);
           });
         });
 
@@ -413,12 +413,12 @@ describe("<ParentForm>", () => {
               .onClick({ target: { id: "cats" } });
           });
 
-          it("Sets the state to the first property of the selected section", () => {
-            expect(parentForm.state().selectedFormSection).toEqual("name");
+          it("Passes the first property of the selected section to the sideabr", () => {
+            expect(parentForm.find("Sidebar").props().selectedFormSection).toEqual("name");
           });
 
           it("Sets the selected index to 0", () => {
-            expect(parentForm.state().selectedFormItemIndex).toEqual(0);
+            expect(parentForm.find("Sidebar").props().selectedFormItemIndex).toEqual(0);
           });
         });
       });
@@ -514,6 +514,7 @@ describe("<ParentForm>", () => {
       beforeEach(() => {
         parentForm = shallow(
           <ParentForm
+            formContext={{projectId: 3}}
             documentGateway={documentGatewaySpy}
             getRole={getRoleUseCaseSpy}
             onChange={jest.fn()}
@@ -549,7 +550,11 @@ describe("<ParentForm>", () => {
       });
 
       it("Defaults the selected form section to the first property in the object", () => {
-        expect(parentForm.state().selectedFormSection).toEqual("name");
+        expect(parentForm.find("Sidebar").props().selectedFormSection).toEqual("name");
+      });
+
+      it("Passes through the formContext", () => {
+        expect(parentForm.find("Form").props().formContext).toEqual({projectId: 3});
       });
     });
 
@@ -559,6 +564,7 @@ describe("<ParentForm>", () => {
       beforeEach(() => {
         parentForm = shallow(
           <ParentForm
+            formContext={{projectId: 6}}
             documentGateway={documentGatewaySpy}
             getRole={getRoleUseCaseSpy}
             onChange={jest.fn()}
@@ -594,7 +600,11 @@ describe("<ParentForm>", () => {
       });
 
       it("Defaults the selected form section to the first property in the object", () => {
-        expect(parentForm.state().selectedFormSection).toEqual("farm");
+        expect(parentForm.find("Sidebar").props().selectedFormSection).toEqual("farm");
+      });
+
+      it("Passes through the formContext", () => {
+        expect(parentForm.find("Form").props().formContext).toEqual({projectId: 6});
       });
     });
   });
@@ -607,6 +617,7 @@ describe("<ParentForm>", () => {
         onChangeSpy = jest.fn();
         parentForm = shallow(
           <ParentForm
+            formContext={{projectId: 1}}
             documentGateway={documentGatewaySpy}
             getRole={getRoleUseCaseSpy}
             onChange={jest.fn()}
@@ -663,14 +674,15 @@ describe("<ParentForm>", () => {
         expect(subform.props().schema).toEqual(expectedSchema);
         expect(subform.props().data).toEqual([{ details: { name: "Meow" } }]);
         expect(subform.props().uiSchema).toEqual({ a: "b" });
+        expect(subform.props().formContext).toEqual({ projectId: 1 });
       });
 
       it("Defaults the selected form section to the first property in the object", () => {
-        expect(parentForm.state().selectedFormSection).toEqual("details");
+        expect(parentForm.find("Sidebar").props().selectedFormSection).toEqual("details");
       });
 
       it("Defaults the selected form index to 0", () => {
-        expect(parentForm.state().selectedFormItemIndex).toEqual(0);
+        expect(parentForm.find("Sidebar").props().selectedFormItemIndex).toEqual(0);
       });
 
       describe("Passes the selected details into the subform", () => {
@@ -766,6 +778,7 @@ describe("<ParentForm>", () => {
         onChangeSpy = jest.fn();
         parentForm = shallow(
           <ParentForm
+            formContext={{projectId: 6}}
             documentGateway={documentGatewaySpy}
             getRole={getRoleUseCaseSpy}
             onChange={jest.fn()}
@@ -824,10 +837,11 @@ describe("<ParentForm>", () => {
         expect(subform.props().schema).toEqual(expectedSchema);
         expect(subform.props().data).toEqual([{ noise: { bark: "woof" } }]);
         expect(subform.props().uiSchema).toEqual({ noise: { bark: "meow" } });
+        expect(subform.props().formContext).toEqual({ projectId: 6 });
       });
 
       it("Defaults the selected form section to the first property in the object", () => {
-        expect(parentForm.state().selectedFormSection).toEqual("noise");
+        expect(parentForm.find("Sidebar").props().selectedFormSection).toEqual("noise");
       });
 
       describe("Updates the parent formdata when changing", () => {
@@ -952,291 +966,6 @@ describe("<ParentForm>", () => {
     });
   });
 
-  describe("Given a schema with a risk field", () => {
-    it("Displays the risk field component", () => {
-      let parentForm = mount(
-        <ParentForm
-          documentGateway={documentGatewaySpy}
-          getRole={getRoleUseCaseSpy}
-          onChange={jest.fn()}
-          schema={{
-            type: "object",
-            properties: {
-              cat: {
-                type: "object",
-                properties: {
-                  name: {
-                    type: "string"
-                  },
-                  riskAnyChange: {
-                    type: 'string',
-                    title: 'Any Change?',
-                    enum: ["Yes", "No"]
-                  },
-                  riskCurrentReturnLikelihood: {
-                    type: "string",
-                    title: "Current Return Liklihood",
-                    enum: ["1", "2", "3", "4", "5"]
-                  },
-                  riskMet: {
-                    type: "string",
-                    title: "Risk Met?",
-                    enum: ["Yes", "No"]
-                  }
-                }
-              },
-              dog: {
-                type: "object",
-                properties: {
-                  name: {
-                    type: "string"
-                  }
-                }
-              }
-            }
-          }}
-          uiSchema={{
-            cat: {
-              "ui:field": "risk"
-            }
-          }}
-        />
-      );
-      expect(parentForm.find("RiskField").length).toEqual(1);
-    });
-  });
-
-  describe("Given a schema with a periods field", () => {
-    it("Displays the period field component", () => {
-      let uiSchema = {
-        one: {
-          items: {
-            periods: {
-              items: {},
-              "ui:field": "periods",
-              "ui:options": {
-                addable: false,
-                orderables: false,
-                removable: false
-              }
-            }
-          }
-        }
-      };
-
-      let schema = {
-        type: "object",
-        properties: {
-          one: {
-            type: "array",
-            items: {
-              type: "object",
-              properties: {
-                periods: {
-                  type: "array",
-                  items: {
-                    type: "object",
-                    properties: {
-                      period: {
-                        type: "string",
-                        title: "Lizard Type",
-                        readonly: true
-                      },
-                      length: {
-                        type: "string",
-                        title: "How Long",
-                        readonly: true
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      };
-
-      let data = {
-        one: [
-          {
-            periods: [
-              { period: "scaley", length: "200" },
-              { period: "slivery", length: "567" }
-            ]
-          }
-        ]
-      };
-
-      let parentForm = mount(
-        <ParentForm
-          documentGateway={documentGatewaySpy}
-          getRole={getRoleUseCaseSpy}
-          onChange={jest.fn()}
-          formData={data}
-          schema={schema}
-          uiSchema={uiSchema}
-        />
-      );
-      expect(parentForm.find("PeriodsField").length).toEqual(1);
-    });
-  });
-
-  describe("Given a schema with a validated field", () => {
-    it("Displays the validated field component", () => {
-      let uiSchema = {
-        one: {
-          items: {
-            periods: {
-              items: {},
-              "ui:field": "validated",
-              "ui:options": {
-                addable: false,
-                orderables: false,
-                removable: false
-              }
-            }
-          }
-        }
-      };
-
-      let schema = {
-        type: "object",
-        properties: {
-          one: {
-            type: "array",
-            items: {
-              type: "object",
-              properties: {
-                periods: {
-                  type: "array",
-                  items: {
-                    type: "object",
-                    properties: {
-                      period: {
-                        type: "string",
-                        title: "Lizard Type",
-                        readonly: true
-                      },
-                      length: {
-                        type: "string",
-                        title: "How Long",
-                        readonly: true
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      };
-
-      let data = {
-        one: [
-          {
-            periods: [
-              { period: "scaley", length: "200" },
-              { period: "slivery", length: "567" }
-            ]
-          }
-        ]
-      };
-
-      let parentForm = mount(
-        <ParentForm
-          documentGateway={documentGatewaySpy}
-          getRole={getRoleUseCaseSpy}
-          onChange={jest.fn()}
-          formData={data}
-          schema={schema}
-          uiSchema={uiSchema}
-        />
-      );
-      expect(parentForm.find("ValidatedField").length).toEqual(1);
-    });
-  });
-
-  describe("Given a field with currency", () => {
-    it("Displays the currency component", () => {
-      let parentForm = mount(
-        <ParentForm
-          documentGateway={documentGatewaySpy}
-          getRole={getRoleUseCaseSpy}
-          onChange={jest.fn()}
-          schema={{
-            type: "object",
-            properties: {
-              cat: {
-                type: "object",
-                properties: {
-                  name: {
-                    type: "string"
-                  }
-                }
-              },
-              dog: {
-                type: "object",
-                properties: {
-                  name: {
-                    type: "string"
-                  }
-                }
-              }
-            }
-          }}
-          uiSchema={{
-            cat: {
-              name: {
-                "ui:widget": "currency"
-              }
-            }
-          }}
-        />
-      );
-      expect(parentForm.find("CurrencyWidget").length).toEqual(1);
-    });
-  });
-
-  describe("Given a field with uploadFile", () => {
-    it("Displays the file upload component", () => {
-      let parentForm = mount(
-        <ParentForm
-          documentGateway={documentGatewaySpy}
-          getRole={getRoleUseCaseSpy}
-          onChange={jest.fn()}
-          schema={{
-            type: "object",
-            properties: {
-              cat: {
-                type: "object",
-                properties: {
-                  name: {
-                    type: "string"
-                  }
-                }
-              },
-              dog: {
-                type: "object",
-                properties: {
-                  name: {
-                    type: "string"
-                  }
-                }
-              }
-            }
-          }}
-          uiSchema={{
-            cat: {
-              name: {
-                "ui:field": "uploadFile"
-              }
-            }
-          }}
-        />
-      );
-      expect(parentForm.find("UploadFileField").length).toEqual(1);
-    });
-  });
 
   describe("Sharing data accross tabs", () => {
     let wrap;
@@ -1807,6 +1536,343 @@ describe("<ParentForm>", () => {
             }
           }
         });
+      });
+    });
+  });
+
+  describe("Custom Components", () => {
+    describe("Given a schema with a risk field", () => {
+      it("Displays the risk field component", () => {
+        let parentForm = mount(
+          <ParentForm
+            documentGateway={documentGatewaySpy}
+            getRole={getRoleUseCaseSpy}
+            onChange={jest.fn()}
+            schema={{
+              type: "object",
+              properties: {
+                cat: {
+                  type: "object",
+                  properties: {
+                    name: {
+                      type: "string"
+                    },
+                    riskAnyChange: {
+                      type: 'string',
+                      title: 'Any Change?',
+                      enum: ["Yes", "No"]
+                    },
+                    riskCurrentReturnLikelihood: {
+                      type: "string",
+                      title: "Current Return Liklihood",
+                      enum: ["1", "2", "3", "4", "5"]
+                    },
+                    riskMet: {
+                      type: "string",
+                      title: "Risk Met?",
+                      enum: ["Yes", "No"]
+                    }
+                  }
+                },
+                dog: {
+                  type: "object",
+                  properties: {
+                    name: {
+                      type: "string"
+                    }
+                  }
+                }
+              }
+            }}
+            uiSchema={{
+              cat: {
+                "ui:field": "risk"
+              }
+            }}
+          />
+        );
+        expect(parentForm.find("RiskField").length).toEqual(1);
+      });
+    });
+
+    describe("Given a schema with a periods field", () => {
+      it("Displays the period field component", () => {
+        let uiSchema = {
+          one: {
+            items: {
+              periods: {
+                items: {},
+                "ui:field": "periods",
+                "ui:options": {
+                  addable: false,
+                  orderables: false,
+                  removable: false
+                }
+              }
+            }
+          }
+        };
+
+        let schema = {
+          type: "object",
+          properties: {
+            one: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  periods: {
+                    type: "array",
+                    items: {
+                      type: "object",
+                      properties: {
+                        period: {
+                          type: "string",
+                          title: "Lizard Type",
+                          readonly: true
+                        },
+                        length: {
+                          type: "string",
+                          title: "How Long",
+                          readonly: true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        };
+
+        let data = {
+          one: [
+            {
+              periods: [
+                { period: "scaley", length: "200" },
+                { period: "slivery", length: "567" }
+              ]
+            }
+          ]
+        };
+
+        let parentForm = mount(
+          <ParentForm
+            documentGateway={documentGatewaySpy}
+            getRole={getRoleUseCaseSpy}
+            onChange={jest.fn()}
+            formData={data}
+            schema={schema}
+            uiSchema={uiSchema}
+          />
+        );
+        expect(parentForm.find("PeriodsField").length).toEqual(1);
+      });
+    });
+
+    describe("Given a schema with a validated field", () => {
+      it("Displays the validated field component", () => {
+        let uiSchema = {
+          one: {
+            items: {
+              periods: {
+                items: {},
+                "ui:field": "validated",
+                "ui:options": {
+                  addable: false,
+                  orderables: false,
+                  removable: false
+                }
+              }
+            }
+          }
+        };
+
+        let schema = {
+          type: "object",
+          properties: {
+            one: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  periods: {
+                    type: "array",
+                    items: {
+                      type: "object",
+                      properties: {
+                        period: {
+                          type: "string",
+                          title: "Lizard Type",
+                          readonly: true
+                        },
+                        length: {
+                          type: "string",
+                          title: "How Long",
+                          readonly: true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        };
+
+        let data = {
+          one: [
+            {
+              periods: [
+                { period: "scaley", length: "200" },
+                { period: "slivery", length: "567" }
+              ]
+            }
+          ]
+        };
+
+        let parentForm = mount(
+          <ParentForm
+            documentGateway={documentGatewaySpy}
+            getRole={getRoleUseCaseSpy}
+            onChange={jest.fn()}
+            formData={data}
+            schema={schema}
+            uiSchema={uiSchema}
+          />
+        );
+        expect(parentForm.find("ValidatedField").length).toEqual(1);
+      });
+    });
+
+    describe("Given a field with currency", () => {
+      it("Displays the currency component", () => {
+        let parentForm = mount(
+          <ParentForm
+            documentGateway={documentGatewaySpy}
+            getRole={getRoleUseCaseSpy}
+            onChange={jest.fn()}
+            schema={{
+              type: "object",
+              properties: {
+                cat: {
+                  type: "object",
+                  properties: {
+                    name: {
+                      type: "string"
+                    }
+                  }
+                },
+                dog: {
+                  type: "object",
+                  properties: {
+                    name: {
+                      type: "string"
+                    }
+                  }
+                }
+              }
+            }}
+            uiSchema={{
+              cat: {
+                name: {
+                  "ui:widget": "currency"
+                }
+              }
+            }}
+          />
+        );
+        expect(parentForm.find("CurrencyWidget").length).toEqual(1);
+      });
+    });
+
+    describe("Given a field with uploadFile", () => {
+      it("Displays the file upload component", () => {
+        let parentForm = mount(
+          <ParentForm
+            documentGateway={documentGatewaySpy}
+            getRole={getRoleUseCaseSpy}
+            onChange={jest.fn()}
+            schema={{
+              type: "object",
+              properties: {
+                cat: {
+                  type: "object",
+                  properties: {
+                    name: {
+                      type: "string"
+                    }
+                  }
+                },
+                dog: {
+                  type: "object",
+                  properties: {
+                    name: {
+                      type: "string"
+                    }
+                  }
+                }
+              }
+            }}
+            uiSchema={{
+              cat: {
+                name: {
+                  "ui:field": "uploadFile"
+                }
+              }
+            }}
+          />
+        );
+        expect(parentForm.find("UploadFileField").length).toEqual(1);
+      });
+    });
+
+    describe("Given a schema with an infrastructure picker", () => {
+      it("Displays the infrastructure picker", async () => {
+        let parentForm = mount(
+          <ParentForm
+            documentGateway={documentGatewaySpy}
+            getRole={getRoleUseCaseSpy}
+            onChange={jest.fn()}
+            formContext={{projectId: 2, getInfrastructures: {execute: jest.fn()}} }
+            schema={{
+              type: "object",
+              properties: {
+                cat: {
+                  type: "object",
+                  properties: {
+                    infrastructureId: {
+                      type: "string"
+                    },
+                    name: {
+                      type: "string"
+                    }
+                  }
+                },
+                dog: {
+                  type: "object",
+                  properties: {
+                    name: {
+                      type: "string"
+                    }
+                  }
+                }
+              }
+            }}
+            uiSchema={{
+              cat: {
+                infrastructureId: {
+                  "ui:widget": "pickInfrastructure"
+                }
+              }
+            }}
+          />
+        );
+
+        await parentForm.update();
+        await wait();
+
+        expect(parentForm.find("PickInfrastructureWidget").length).toEqual(1);
       });
     });
   });

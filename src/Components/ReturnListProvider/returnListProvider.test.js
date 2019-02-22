@@ -40,11 +40,7 @@ describe("<ReturnListProvider/>", () => {
         );
       });
 
-      it("Holds the formData when the return list is presented", () => {
-        expect(page.state().returns).toEqual(data);
-      });
-
-      it("Renders the children with the formData populated from the state", () => {
+      it("Renders the children with the formData passed from the use case", () => {
         expect(childrenSpy).toHaveBeenCalledWith({
           returns: data
         });
@@ -95,11 +91,7 @@ describe("<ReturnListProvider/>", () => {
         );
       });
 
-      it("Holds the formData when the return list is presented", () => {
-        expect(page.state().returns).toEqual(data);
-      });
-
-      it("Renders the children with the formData populated from the state", () => {
+      it("Renders the children with the formData passed from the usecase", () => {
         expect(childrenSpy).toHaveBeenCalledWith({
           returns: data
         });

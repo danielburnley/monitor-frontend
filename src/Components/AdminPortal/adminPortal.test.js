@@ -2,20 +2,6 @@ import React from "react";
 import AdminPortal from ".";
 import { shallow } from "enzyme";
 
-
-async function wait() {
-  await new Promise(resolve => setTimeout(resolve, 100));
-}
-
-async function waitForRequestToFinish() {
-  await new Promise(resolve => setTimeout(resolve, 100));
-}
-
-async function load(page) {
-  await waitForRequestToFinish();
-  page.update();
-}
-
 describe("AdminPortal", () => {
   describe("A Superuser", () => {
     let adminPortal, userGatewaySpy, createProjectUseCaseSpy, addUsersToProjectSpy;
@@ -39,30 +25,18 @@ describe("AdminPortal", () => {
     });
 
     describe("Creating a new project", () => {
-      it("Will call the create project use case with details upon submit", () => {
+      beforeEach(() => {
         adminPortal
           .find("[data-test='create-project-name']")
           .simulate("change", { target: { value: "name" } });
-
+  
         adminPortal
           .find("[data-test='create-project-type']")
           .simulate("change", { target: { value: "type" } });
-
+  
         adminPortal
-          .find('[data-test="create-project-submit"]')
-          .simulate("click")
-
-        expect(createProjectUseCaseSpy.execute).toHaveBeenCalledWith(expect.anything(), "name", "type")
-      });
-
-      it("Will call the add users use case", async () => {
-        adminPortal
-          .find("[data-test='create-project-name']")
-          .simulate("change", { target: { value: "name" } });
-
-        adminPortal
-          .find("[data-test='create-project-type']")
-          .simulate("change", { target: { value: "type" } });
+          .find("[data-test='create-project-bidId']")
+          .simulate("change", { target: { value: "HUA/DHA/63278" } });
 
         adminPortal
           .find("[data-test='user-email']").at(0)
@@ -75,83 +49,45 @@ describe("AdminPortal", () => {
         adminPortal
           .find('[data-test="create-project-submit"]')
           .simulate("click")
+      });
 
-        await load(adminPortal)
-        
+      it("Will call the create project use case with details upon submit", () => {
+        expect(createProjectUseCaseSpy.execute).toHaveBeenCalledWith(expect.anything(), "name", "type", "HUA/DHA/63278")
+      });
+
+      it("Will call the add users use case", async () => {        
         expect(addUsersToProjectSpy.execute).toHaveBeenCalledWith(expect.anything(), 1, [{ email: "email", role: "Local Authority" }])
       });
 
-      it("Will save the new project id to state and displays success message", async () => {
-        adminPortal
-          .find("[data-test='create-project-name']")
-          .simulate("change", { target: { value: "name" } });
-
-        adminPortal
-          .find("[data-test='create-project-type']")
-          .simulate("change", { target: { value: "type" } });
-
-        adminPortal
-          .find("[data-test='user-email']").at(0)
-          .simulate("change", { target: { value: "email" } });
-
-        adminPortal
-          .find("[data-test='user-role-la']").at(0)
-          .simulate("change", { target: { value: "Local Authority" } });
-
-        adminPortal
-          .find('[data-test="create-project-submit"]')
-          .simulate("click")
-
-        await load(adminPortal)
-
-        expect(adminPortal.state().id).toEqual(1)
+      it("Will display a success message", async () => {
         expect(adminPortal.find('[data-test="project-created-message"]').length).toEqual(1)
       });
     });
 
     describe("Adding a user to a project", () => {
-      it("Will call the add users use case", async () => {
+      beforeEach(() => {
         adminPortal
           .find("[data-test='project-id']")
           .simulate("change", { target: { value: 2 } });
-
+  
         adminPortal
           .find("[data-test='user-email']").at(1)
           .simulate("change", { target: { value: "email" } });
-
+  
         adminPortal
           .find("[data-test='user-role-la']").at(1)
           .simulate("change", { target: { value: "Local Authority" } });
-
+  
         adminPortal
           .find('[data-test="add-user-submit"]')
           .simulate("click")
+      });
 
-        await load(adminPortal)
-        
+      it("Will call the add users use case", async () => {        
         expect(addUsersToProjectSpy.execute).toHaveBeenCalledWith(expect.anything(), 2, [{ email: "email", role: "Local Authority" }])
       });
 
       it("displays a success message", async () => {
-        adminPortal
-          .find("[data-test='project-id']")
-          .simulate("change", { target: { value: 2 } });
-
-        adminPortal
-          .find("[data-test='user-email']").at(1)
-          .simulate("change", { target: { value: "email" } });
-
-        adminPortal
-          .find("[data-test='user-role-la']").at(1)
-          .simulate("change", { target: { value: "Local Authority" } });
-
-        adminPortal
-          .find('[data-test="add-user-submit"]')
-          .simulate("click")
-
-        await load(adminPortal)
-
-        expect(adminPortal.state().id).toEqual(2)
         expect(adminPortal.find('[data-test="user-added"]').length).toEqual(1)
       });
     });

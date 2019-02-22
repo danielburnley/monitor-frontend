@@ -16,11 +16,28 @@ export function parseMoney(value) {
   return 0;
 }
 
-export function accumulateMoney(array, property) {
+export function setInPreviousQuarter(formData, formContext, quarterObject, value) {
+  if (formContext.returnStatus === "Submitted") return;
+  let date = new Date
+  let month = date.getMonth()
+  let quarter
+  if(month < 3) {
+    quarter = 3
+  } else if (month < 6) {
+    quarter = 4
+  } else if (month < 9) {
+    quarter = 1
+  } else {
+    quarter = 2
+  }
+  setCreate(formData, [quarterObject, `quarter${quarter}`], value)
+}
+
+export function accumulateMoney(array, property, decimalPlaces) {
   if (!array) return null;
   return array
     .reduce((total, object) => parseMoney(object[property]) + total, 0)
-    .toFixed(2);
+    .toFixed(decimalPlaces);
 }
 
 export function sum(data, ...keys) {
@@ -199,11 +216,13 @@ export default class CalculatedField extends React.Component {
     };
 
     let formData = this.state.formData;
+    let formContext = this.props.formContext
     eval(this.props.schema.calculation);
     this.state.formData = formData;
   }
 
   onChange = formData => {
+    let formContext = this.props.formContext
     eval(this.props.schema.calculation);
     this.setState({ formData });
     this.props.onChange(formData);

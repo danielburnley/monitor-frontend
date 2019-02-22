@@ -615,7 +615,7 @@ describe("GenerateUISchema", () => {
     });
   });
 
-  describe("Addable arrays", () => {
+  describe("Arrays", () => {
     describe("Given an array that is addable", () => {
       it("Marks them as addable", () => {
         let useCase = new GenerateUISchema(userRoleCookieGateway);
@@ -644,6 +644,39 @@ describe("GenerateUISchema", () => {
               removable: true
             },
             items: {}
+          }
+        });
+      });
+    });
+
+    describe("Given an array with simple items", () => {
+      it("Generate a UI Schema", () => {
+        let useCase = new GenerateUISchema(userRoleCookieGateway);
+        let schema = {
+          type: "object",
+          properties: {
+            a: {
+              type: "array",
+              addable: true,
+              items: {
+                type: "string",
+                extendedText: true,
+                title: "my array of strings"
+              }
+            }
+          }
+        };
+        let response = useCase.execute(schema);
+        expect(response).toEqual({
+          a: {
+            "ui:options": {
+              addable: true,
+              orderable: false,
+              removable: true
+            },
+            items: {
+              "ui:widget": "textarea"
+            }
           }
         });
       });
@@ -1112,6 +1145,35 @@ describe("GenerateUISchema", () => {
             });
           });
         });
+      });
+    });
+  });
+
+  describe("Picking an infrastructure fiels", () => {
+    it("Sets the UI field to pickInfrastructure", () => {
+      let schema = {
+        type: "object",
+        properties: {
+          a: {
+            type: "object",
+            properties: {
+              infraId: {
+                linkToInfra: true,
+                type: "string"
+              }
+            }
+          }
+        }
+      };
+
+      let response = useCase.execute(schema);
+
+      expect(response).toEqual({
+        a: {
+          infraId: {
+            "ui:widget": "pickInfrastructure"
+          }
+        }
       });
     });
   });

@@ -32,7 +32,7 @@ export default class Homepage extends React.Component {
 
   render() {
     if (this.state.loading) {
-      return <div />;
+      return <div data-test="loading" />;
     }
     return (
       <div className="homepage">

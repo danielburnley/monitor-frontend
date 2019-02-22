@@ -12,7 +12,6 @@ export default class GenerateUISchema {
 
   generateUISchema(data, role, noOfPreviousReturns) {
     let ret = {};
-
     Object.entries(data).forEach(([key, value]) => {
       if (value.type === "object") {
         ret[key] = this.generateSchemaForObject(value, role, noOfPreviousReturns);
@@ -52,7 +51,12 @@ export default class GenerateUISchema {
       removable: this.isAddableArray(value)
     };
 
-    ret["items"] = this.generateSchemaForObject(value.items, role, noOfPreviousReturns);
+    if (value.items.type === "object") {
+      ret["items"] = this.generateSchemaForObject(value.items, role, noOfPreviousReturns);
+    } else {
+      ret["items"] = this.generateSchemaForProperties(value.items, role, noOfPreviousReturns)
+    }
+
 
     if (value.items.horizontal) {
       ret["items"]["ui:field"] = "horizontal";
@@ -131,6 +135,10 @@ export default class GenerateUISchema {
 
     if (item.base) {
       schema["ui:field"] = "base"
+    }
+
+    if(item.linkToInfra) {
+      schema["ui:widget"] = "pickInfrastructure"
     }
 
     if(item.periods) {

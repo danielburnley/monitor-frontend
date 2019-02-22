@@ -20,7 +20,7 @@ describe("<Homepage>", () => {
       });
 
       it("Sets loading to true", () => {
-        expect(homepage.state().loading).toEqual(true);
+        expect(homepage.find('[data-test="loading"]').length).toEqual(1);
       });
 
       it("Calls the getUserProjects use case", () => {
@@ -45,14 +45,10 @@ describe("<Homepage>", () => {
       });
 
       it("Sets loading to false", () => {
-        expect(homepage.state().loading).toEqual(false);
+        expect(homepage.find('[data-test="loading"]').length).toEqual(0);
       });
 
-      it("Holds the project list", () => {
-        expect(homepage.state().projectList).toEqual([{aproject: "yes"}])
-      });
-
-      it("Renders its children", () => {
+      it("Passes its children the project list from the use case", () => {
         expect(childrenSpy).toHaveBeenCalledWith({
           projectList: [{aproject: "yes"}]
         });
@@ -77,7 +73,7 @@ describe("<Homepage>", () => {
       });
 
       it("Sets loading to true", () => {
-        expect(homepage.state().loading).toEqual(true);
+        expect(homepage.find('[data-test="loading"]').length).toEqual(1);
       });
 
       it("Calls the getUserProjects use case", () => {
@@ -102,14 +98,10 @@ describe("<Homepage>", () => {
       });
 
       it("Sets loading to false", () => {
-        expect(homepage.state().loading).toEqual(false);
+        expect(homepage.find('[data-test="loading"]').length).toEqual(0);
       });
 
-      it("Holds the project list", () => {
-        expect(homepage.state().projectList).toEqual([{project1: "yes"}, {project2: "NO"}])
-      });
-
-      it("Renders its children", () => {
+      it("Passes its children the project list from the use case", () => {
         expect(childrenSpy).toHaveBeenCalledWith({
           projectList: [{project1: "yes"}, {project2: "NO"}]
         });
