@@ -19,8 +19,8 @@ export default class InfrastructureAdditionPage extends React.Component {
     });
   };
 
-  presentProject = async ({schema, data}) => {
-    await this.setState({schema, data, loading: false})
+  presentProject = async ({schema, data, timestamp}) => {
+    await this.setState({schema, data, loading: false, timestamp})
   }
 
   projectUpdated = async () => {
@@ -33,7 +33,7 @@ export default class InfrastructureAdditionPage extends React.Component {
     await this.props.updateProject.execute(
       this, this.getProjectId(),
       {...this.state.data, infrastructures: formData},
-      0
+      this.state.timestamp
     )
   }
 

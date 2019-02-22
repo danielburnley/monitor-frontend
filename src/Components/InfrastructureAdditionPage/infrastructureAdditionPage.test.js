@@ -27,6 +27,7 @@ describe("Infrastructure Addition page", () => {
         execute: jest.fn(
           async (presenter) => {
             presenter.presentProject({
+              timestamp: 746841600,
               schema: {
                 type: "object",
                 properties: {
@@ -137,7 +138,7 @@ describe("Infrastructure Addition page", () => {
           other: {
             value: "data"
           }
-        }, 0);
+        }, 746841600);
       });
 
       it("With edited data", async () => {
@@ -153,7 +154,7 @@ describe("Infrastructure Addition page", () => {
           other: {
             value: "data"
           }
-        }, 0);
+        }, 746841600);
       });
     });
   });
@@ -177,6 +178,7 @@ describe("Infrastructure Addition page", () => {
           async (presenter) => {
             await presenter.presentProject(
               {
+                timestamp: 1119003331,
                 schema: {
                   type: 'object',
                   properties: {
@@ -285,7 +287,7 @@ describe("Infrastructure Addition page", () => {
           extra: {
             misc: "Some data"
           }
-        }, 0);
+        }, 1119003331);
       });
 
       it("With edited data", async () => {
@@ -302,7 +304,7 @@ describe("Infrastructure Addition page", () => {
           extra: {
             misc: "Some data"
           }
-        }, 0);
+        }, 1119003331);
       });
     });
   });
