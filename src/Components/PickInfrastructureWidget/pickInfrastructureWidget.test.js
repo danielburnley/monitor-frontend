@@ -37,10 +37,6 @@ describe("PickInfrastructureWidget", () => {
           expect(pickInfras.find('[data-test="loading"]').length).toEqual(0);
         });
 
-        it("Displays the title defined in the schema", () => {
-          expect(pickInfras.find('[data-test="title"]').text()).toEqual("pick an infrastructure")
-        });
-    
         it("Displays a list of infrastructures to pick from", () => {
           expect(pickInfras.find('[data-test="infrastructure-1"]').length).toEqual(1)
           expect(pickInfras.find('[data-test="infrastructure-3"]').length).toEqual(1)
@@ -91,10 +87,6 @@ describe("PickInfrastructureWidget", () => {
           expect(pickInfras.find('[data-test="laoding"]').length).toEqual(0);
         });
 
-        it("Displays the title defined in the schema", () => {
-          expect(pickInfras.find('[data-test="title"]').text()).toEqual("pick a hif deliverable")
-        });
-    
         it("Displays a list of infrastructures to pick from", () => {
           expect(pickInfras.find('[data-test="infrastructure-4"]').length).toEqual(1)
           expect(pickInfras.find('[data-test="infrastructure-67"]').length).toEqual(1)
