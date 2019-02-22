@@ -79,7 +79,7 @@ export default class ParentForm extends React.Component {
 
       pathToSet[path.to[path.to.length - 1]] = value;
     });
-  };
+  }
 
   createPathsInArrays(sharedData, formData) {
     let allDataPaths = sharedData.map(value => {
@@ -149,7 +149,7 @@ export default class ParentForm extends React.Component {
   };
 
   renderTab = ([property, value]) => {
-    if (value.laHidden && this.state.userRole === "Local Authority") {
+    if (value.hidden || (value.laHidden && this.state.userRole === "Local Authority")) {
       return null;
     } else {
       return (

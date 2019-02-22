@@ -94,6 +94,44 @@ describe("<ParentForm>", () => {
     });
 
     describe("Hidden tabs", () => {
+      it("Hides tabs that are always hidden", () => {
+        let getRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"}))}
+        wrap = mount(
+          <ParentForm
+            documentGateway={documentGatewaySpy}
+            onChange={onChangeSpy}
+            getRole={getRoleUseCaseSpy}
+            schema={{
+              type: "object",
+              properties: {
+                cat: {
+                  type: "object",
+                  hidden: true,
+                  properties: {
+                    name: {
+                      type: "string"
+                    }
+                  }
+                },
+                dog: {
+                  type: "object",
+                  properties: {
+                    name: {
+                      type: "string"
+                    }
+                  }
+                }
+              }
+            }}
+          />
+        );
+
+        wrap.update();
+
+        expect(wrap.find('[data-test="cat_property"]').length).toEqual(0);
+        expect(wrap.find('[data-test="dog_property"]').length).toEqual(1);
+      });
+
       describe("As Homes England", () => {
         let getRoleUseCaseSpy;
 
@@ -928,7 +966,7 @@ describe("<ParentForm>", () => {
     });
   });
 
-    
+
   describe("Sharing data accross tabs", () => {
     let wrap;
     describe("Between two simple object tabs", () => {
@@ -1556,7 +1594,7 @@ describe("<ParentForm>", () => {
         expect(parentForm.find("RiskField").length).toEqual(1);
       });
     });
-  
+
     describe("Given a schema with a periods field", () => {
       it("Displays the period field component", () => {
         let uiSchema = {
@@ -1574,7 +1612,7 @@ describe("<ParentForm>", () => {
             }
           }
         };
-  
+
         let schema = {
           type: "object",
           properties: {
@@ -1606,7 +1644,7 @@ describe("<ParentForm>", () => {
             }
           }
         };
-  
+
         let data = {
           one: [
             {
@@ -1617,7 +1655,7 @@ describe("<ParentForm>", () => {
             }
           ]
         };
-  
+
         let parentForm = mount(
           <ParentForm
             documentGateway={documentGatewaySpy}
@@ -1631,7 +1669,7 @@ describe("<ParentForm>", () => {
         expect(parentForm.find("PeriodsField").length).toEqual(1);
       });
     });
-  
+
     describe("Given a schema with a validated field", () => {
       it("Displays the validated field component", () => {
         let uiSchema = {
@@ -1649,7 +1687,7 @@ describe("<ParentForm>", () => {
             }
           }
         };
-  
+
         let schema = {
           type: "object",
           properties: {
@@ -1681,7 +1719,7 @@ describe("<ParentForm>", () => {
             }
           }
         };
-  
+
         let data = {
           one: [
             {
@@ -1692,7 +1730,7 @@ describe("<ParentForm>", () => {
             }
           ]
         };
-  
+
         let parentForm = mount(
           <ParentForm
             documentGateway={documentGatewaySpy}
@@ -1706,7 +1744,7 @@ describe("<ParentForm>", () => {
         expect(parentForm.find("ValidatedField").length).toEqual(1);
       });
     });
-  
+
     describe("Given a field with currency", () => {
       it("Displays the currency component", () => {
         let parentForm = mount(
@@ -1747,7 +1785,7 @@ describe("<ParentForm>", () => {
         expect(parentForm.find("CurrencyWidget").length).toEqual(1);
       });
     });
-  
+
     describe("Given a field with uploadFile", () => {
       it("Displays the file upload component", () => {
         let parentForm = mount(
