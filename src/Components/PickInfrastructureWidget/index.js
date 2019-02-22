@@ -46,7 +46,6 @@ export default class PickInfrastructureWidget extends React.Component {
     } else {
       return <div>
         <div className="form-group">
-          <label htmlFor="infrastructurePicker" data-test="title">{this.props.schema.title}</label>
           <select
             data-test="infrastructue-picker"
             className="form-control"
