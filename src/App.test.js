@@ -225,6 +225,34 @@ describe("Viewing a project", () => {
       expect(page.find("ProjectPage").length).toEqual(1);
     });
 
+    describe("Project Status is draft", () => {
+      it("Displays the fill in baseline button", async () => {
+        api.getProject(projectSchema, projectData, "Draft", projectType).successfully();
+        let page = new AppPage("/project/0?token=Cats");
+        await page.load();
+        expect(page.find("FillInBaselineButton").length).toEqual(1)
+      });
+
+
+      describe("A project with type other than ff", () => {        
+        it("Doesn't display the edit infrastructures button", async () => {
+          api.getProject(projectSchema, projectData, "Draft", projectType).successfully();
+          let page = new AppPage("/project/0?token=Cats");
+          await page.load();
+          expect(page.find('[data-test="edit-infrastructures-button"]').length).toEqual(0)
+        });
+      });
+
+      describe("An ff project", () => {
+        it("Displays the edit infrastructures button", async () => {
+          api.getProject(projectSchema, projectData, "Draft", "ff").successfully();
+          let page = new AppPage("/project/0?token=Cats");
+          await page.load();
+          expect(page.find('[data-test="edit-infrastructures-button"]').length).toEqual(1)
+        });
+      });
+    });
+
     describe("Project Status is submitted", () => {
       it("Renders the project summary with information from the API", async () => {
         api.getProject(projectSchema, projectData, projectStatus, projectType).successfully();
@@ -372,7 +400,7 @@ describe('Submitting a draft project', () => {
   });
 
   it('Allows you to edit, save and submit a draft project', async () => {
-    let page = new AppPage("/project/0?token=Hello");
+    let page = new AppPage("/project/0/baseline?token=Hello");
     let response = {
       valid: true,
       invalidPaths: [],
@@ -404,7 +432,7 @@ describe('Submitting a draft project', () => {
   });
 
   it('Presents you with validation when you attempt to save and submit an invalid draft project', async () => {
-    let page = new AppPage("/project/0?token=Hello");
+    let page = new AppPage("/project/0/baseline?token=Hello");
     let response = {
       valid: false,
       invalidPaths: [['cats'], ['meow']],
@@ -439,7 +467,7 @@ describe('Submitting a draft project', () => {
 
   it('Present you with an error when you attempt to save over data which has been previously saved', async () => {
     Cookies.remove('userrole');
-    let page = new AppPage("/project/0");
+    let page = new AppPage("/project/0/baseline");
     let response = {
       valid: true,
       invalidPaths: [],
