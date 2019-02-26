@@ -135,30 +135,34 @@ const ViewBaselineButton = props => (
 );
 
 const FillInBaselineButton = props => (
-  <button
-    data-test="fill-in-baseline-button"
-    className="btn btn-secondary"
-    onClick={() =>
-      props.history.push(`/project/${props.match.params.id}/new`)
-    }
-  >
-    Fill in baseline
-  </button>
+  <div>
+    <p>Add the baseline information for your project here.</p>
+    <button
+      data-test="fill-in-baseline-button"
+      className="btn btn-link"
+      onClick={() =>
+        props.history.push(`/project/${props.match.params.id}/baseline`)
+      }
+      >
+      Fill in Baseline
+    </button>
+  </div>
 );
 
 const EditInfrastructuresButton = (props) => {
   if (props.type === "ff") {
-    return (
+    return <div>
+      <p>Add information about the deliverables on this project here.</p>
       <button
-        data-test="fill-in-baseline-button"
-        className="btn btn-secondary"
+        data-test="edit-infrastructures-button"
+        className="btn btn-link"
         onClick={() =>
           props.history.push(`/project/${props.match.params.id}/infrastructures`)
         }
       >
         View/Edit Deliverables
       </button>
-    )
+      </div>
   } else {
     return null;
   }
@@ -189,45 +193,48 @@ const renderInfrastructuresPage = (props) => (
   </div>
 );
 
-const renderBaselineEditorPage = props => (
-  <ProjectPage {...props} getProject={getProjectUseCase} generateUISchema={generateUISchema} >
-    {({ projectStatus, formData, formSchema, projectType, formUiSchema, timestamp }) => {
-      return <div className="col-md-10">
-        <div className="row">
-          <BackToProjectOverviewButton {...props} />
-        </div>
-        <div className="row">
-          <NewProjectPage
-            {...props}
-            uiSchema={formUiSchema}
-            status={projectStatus}
-            schema={formSchema}
-            data={formData}
-            getInfrastructures={getInfrastructuresUseCase}
-            projectType={projectType}
-            getProject={getProjectUseCase}
-            submitProject={submitProjectUseCase}
-            updateProject={updateProjectUseCase}
-            validateProject={validateProjectUseCase}
-            documentGateway={documentGateway}
-            getRole={getRole}
-            timestamp={timestamp}
-          />
-        </div>
-      </div>
-    }}
-  </ProjectPage>
+const renderBaselineEditorPage = (props, projectStatus, formData, formSchema, projectType, formUiSchema, timestamp  ) => (
+  <div className="col-md-10">
+    <div className="row">
+      <BackToProjectOverviewButton {...props} />
+    </div>
+    <div className="row">
+      <NewProjectPage
+        {...props}
+        uiSchema={formUiSchema}
+        status={projectStatus}
+        schema={formSchema}
+        data={formData}
+        getInfrastructures={getInfrastructuresUseCase}
+        projectType={projectType}
+        getProject={getProjectUseCase}
+        submitProject={submitProjectUseCase}
+        updateProject={updateProjectUseCase}
+        validateProject={validateProjectUseCase}
+        documentGateway={documentGateway}
+        getRole={getRole}
+        timestamp={timestamp}
+      />
+    </div>
+  </div>
   );
 
 const renderNewProjectPageOverview = (props, projectStatus, formData, formSchema, projectType, formUiSchema, timestamp) => (
   <div className="col-md-10 col-md-offset-1">
     <div className="row">
-      Welcome to your new project!! 
+      <h1>{projectType === "ac" && "Accelerated Construction"}</h1>
+      <h1>{projectType === "hif" && "Marginal Viability Fund"}</h1>
+      <h1>{projectType === "ff" && "Forward Funding"}</h1>
     </div>
-    <div className="row form-section-link">
+    <div className="row">
+      <h4>This is where we will create the primary profile for your project.</h4>
+    </div>
+    <div className="row">
+
       <EditInfrastructuresButton {...props} type={projectType} />
     </div>
-    <div className="row form-section-link">
+
+    <div className="row">
       <FillInBaselineButton {...props} />
     </div>
   </div>
@@ -258,7 +265,7 @@ const renderSubmittedProjectPage = (props, formData, formSchema) => (
 const renderProjectPage = props => (
     <ProjectPage {...props} getProject={getProjectUseCase} generateUISchema={generateUISchema} >
     {({ projectStatus, formData, formSchema, projectType, formUiSchema, timestamp }) => {
-      if (projectStatus === "Draft" || projectStatus === "LA Draft") {
+      if (projectStatus === "Draft") {
         return renderNewProjectPageOverview(props, projectStatus, formData, formSchema, projectType, formUiSchema, timestamp);
       }
       if (projectStatus === "Submitted") {
@@ -270,15 +277,20 @@ const renderProjectPage = props => (
 
 const renderBaselinePage = props => (
   <ProjectPage {...props} getProject={getProjectUseCase} generateUISchema={generateUISchema}>
-    {({ formData, formSchema }) => (
-      <div className="col-md-10 col-md-offset-1">
-        <BackToProjectOverviewButton {...props} />
-        <StaticData formData={formData} schema={formSchema} />
-        <div className="col-md-2">
-          <CreateReturnButton {...props} />
+    {({ projectStatus, formData, formSchema, projectType, formUiSchema, timestamp  }) => {
+      if (projectStatus === "Submitted") {
+        return <div className="col-md-10 col-md-offset-1">
+          <BackToProjectOverviewButton {...props} />
+          <StaticData formData={formData} schema={formSchema} />
+          <div className="col-md-2">
+            <CreateReturnButton {...props} />
+          </div>
         </div>
-      </div>
-    )}
+      }
+      if (projectStatus === "Draft") {
+        return renderBaselineEditorPage(props, projectStatus, formData, formSchema, projectType, formUiSchema, timestamp  )
+      }
+    }}
   </ProjectPage>
 );
 
@@ -348,11 +360,6 @@ const App = () => (
                           exact
                           path="/project/:id/infrastructures"
                           render={renderInfrastructuresPage}
-                        />
-                        <Route
-                          exact
-                          path="/project/:id/new"
-                          render={renderBaselineEditorPage}
                         />
                         <Route
                           exact
