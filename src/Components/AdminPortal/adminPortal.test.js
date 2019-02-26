@@ -31,7 +31,7 @@ describe("AdminPortal", () => {
           .simulate("change", { target: { value: "name" } });
   
         adminPortal
-          .find("[data-test='create-project-type']")
+          .find("[data-test='create-project-type']").at(0)
           .simulate("change", { target: { value: "type" } });
   
         adminPortal
