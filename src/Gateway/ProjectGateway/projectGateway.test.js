@@ -522,7 +522,7 @@ describe("Project Gateway", () => {
           .post("/project/create", {
             type: "mvf",
             name: "my first project",
-            bidId: "HID/DHS/324678"
+            bid_id: "HID/DHS/324678"
           })
           .reply(200, {projectId: 4});
         await gateway.create("my first project", "mvf", "HID/DHS/324678");
@@ -536,7 +536,7 @@ describe("Project Gateway", () => {
           .post("/project/create", {
             type: "mvf",
             name: "my first project",
-            bidId: "HID/DHS/324678"
+            bid_id: "HID/DHS/324678"
           })
           .reply(200, {projectId: 4});
         let response = await gateway.create("my first project", "mvf", "HID/DHS/324678");
@@ -550,7 +550,7 @@ describe("Project Gateway", () => {
           .post("/project/create", {
             type: "mvf",
             name: "my first project",
-            bidId: "HID/DHS/324678"
+            bid_id: "HID/DHS/324678"
           })
           .reply(403, {projectId: 4});
         let response = await gateway.create("my first project", "mvf", "HID/DHS/324678");
@@ -576,7 +576,7 @@ describe("Project Gateway", () => {
           .post("/project/create", {
             type: "ff",
             name: "my second project",
-            bidId: "DHW/FHY/4623"
+            bid_id: "DHW/FHY/4623"
           })
           .reply(200, { projectId: 67});
         await gateway.create("my second project", "ff", "DHW/FHY/4623");
@@ -590,7 +590,7 @@ describe("Project Gateway", () => {
           .post("/project/create", {
             type: "ff",
             name: "my second project",
-            bidId: "DHW/FHY/4623"
+            bid_id: "DHW/FHY/4623"
           })
           .reply(200, { projectId: 67});
         let response = await gateway.create("my second project", "ff", "DHW/FHY/4623");
@@ -604,7 +604,7 @@ describe("Project Gateway", () => {
           .post("/project/create", {
             type: "ff",
             name: "my second project",
-            bidId: "DHW/FHY/4623"
+            bid_id: "DHW/FHY/4623"
           })
           .reply(403, { projectId: 67});
         let response = await gateway.create("my second project", "ff", "DHW/FHY/4623");
