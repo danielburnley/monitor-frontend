@@ -25,42 +25,80 @@ describe("AdminPortal", () => {
     });
 
     describe("Creating a new project", () => {
-      beforeEach(() => {
-        adminPortal
-          .find("[data-test='create-project-name']")
-          .simulate("change", { target: { value: "name" } });
-  
-        adminPortal
-          .find("[data-test='create-project-type']")
-          .simulate("change", { target: { value: "type" } });
-  
-        adminPortal
-          .find("[data-test='create-project-bidId']")
-          .simulate("change", { target: { value: "HUA/DHA/63278" } });
+      describe("With the default type", () => {
+        beforeEach(() => {
+          adminPortal
+            .find("[data-test='create-project-name']")
+            .simulate("change", { target: { value: "project 1" } });
 
-        adminPortal
-          .find("[data-test='user-email']").at(0)
-          .simulate("change", { target: { value: "email" } });
+          adminPortal
+            .find("[data-test='create-project-bidId']")
+            .simulate("change", { target: { value: "EAX/EBX/ECX" } });
 
-        adminPortal
-          .find("[data-test='user-role-la']").at(0)
-          .simulate("change", { target: { value: "Local Authority" } });
+          adminPortal
+            .find("[data-test='user-email']").at(0)
+            .simulate("change", { target: { value: "my_email@email.net" } });
 
-        adminPortal
-          .find('[data-test="create-project-submit"]')
-          .simulate("click")
+          adminPortal
+            .find("[data-test='user-role-la']").at(0)
+            .simulate("change", { target: { value: "Homes England" } });
+
+          adminPortal
+            .find('[data-test="create-project-submit"]')
+            .simulate("click")
+        });
+
+        it("Will call the create project use case with details upon submit", () => {
+          expect(createProjectUseCaseSpy.execute).toHaveBeenCalledWith(expect.anything(), "project 1", "ac", "EAX/EBX/ECX")
+        });
+
+        it("Will call the add users use case", async () => {
+          expect(addUsersToProjectSpy.execute).toHaveBeenCalledWith(expect.anything(), 1, [{ email: "my_email@email.net", role: "Homes England" }])
+        });
+
+        it("Will display a success message", async () => {
+          expect(adminPortal.find('[data-test="project-created-message"]').length).toEqual(1)
+        });
       });
 
-      it("Will call the create project use case with details upon submit", () => {
-        expect(createProjectUseCaseSpy.execute).toHaveBeenCalledWith(expect.anything(), "name", "type", "HUA/DHA/63278")
-      });
+      describe("With a set type", () => {
+        beforeEach(() => {
+          adminPortal
+            .find("[data-test='create-project-name']")
+            .simulate("change", { target: { value: "name" } });
 
-      it("Will call the add users use case", async () => {        
-        expect(addUsersToProjectSpy.execute).toHaveBeenCalledWith(expect.anything(), 1, [{ email: "email", role: "Local Authority" }])
-      });
+          adminPortal
+            .find("[data-test='create-project-type']")
+            .simulate("change", { target: { value: "type" } });
 
-      it("Will display a success message", async () => {
-        expect(adminPortal.find('[data-test="project-created-message"]').length).toEqual(1)
+          adminPortal
+            .find("[data-test='create-project-bidId']")
+            .simulate("change", { target: { value: "HUA/DHA/63278" } });
+
+          adminPortal
+            .find("[data-test='user-email']").at(0)
+            .simulate("change", { target: { value: "email" } });
+
+          adminPortal
+            .find("[data-test='user-role-la']").at(0)
+            .simulate("change", { target: { value: "Local Authority" } });
+
+          adminPortal
+            .find('[data-test="create-project-submit"]')
+            .simulate("click")
+        });
+
+        it("Will call the create project use case with details upon submit", () => {
+          expect(createProjectUseCaseSpy.execute).toHaveBeenCalledWith(expect.anything(), "name", "type", "HUA/DHA/63278")
+        });
+
+        it("Will call the add users use case", async () => {
+          expect(addUsersToProjectSpy.execute).toHaveBeenCalledWith(expect.anything(), 1, [{ email: "email", role: "Local Authority" }])
+        });
+
+        it("Will display a success message", async () => {
+          expect(adminPortal.find('[data-test="project-created-message"]').length).toEqual(1)
+        });
       });
     });
 
@@ -69,21 +107,21 @@ describe("AdminPortal", () => {
         adminPortal
           .find("[data-test='project-id']")
           .simulate("change", { target: { value: 2 } });
-  
+
         adminPortal
           .find("[data-test='user-email']").at(1)
           .simulate("change", { target: { value: "email" } });
-  
+
         adminPortal
           .find("[data-test='user-role-la']").at(1)
           .simulate("change", { target: { value: "Local Authority" } });
-  
+
         adminPortal
           .find('[data-test="add-user-submit"]')
           .simulate("click")
       });
 
-      it("Will call the add users use case", async () => {        
+      it("Will call the add users use case", async () => {
         expect(addUsersToProjectSpy.execute).toHaveBeenCalledWith(expect.anything(), 2, [{ email: "email", role: "Local Authority" }])
       });
 

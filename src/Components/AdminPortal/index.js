@@ -3,10 +3,11 @@ import Cookies from "js-cookie";
 
 export default class AdminPortal extends React.Component {
   constructor(props) {
-    super(props) 
+    super(props)
 
     this.state = {
       projectCreated: false,
+      type: 'ac'
     }
   }
 
@@ -42,7 +43,7 @@ export default class AdminPortal extends React.Component {
       window.location.reload();
     }
   }
-  
+
   addUser = async () => {
     await this.props.addUsersToProject.execute(this, this.state.id,[{email: this.state.email, role: this.state.role}])
   }
@@ -65,8 +66,8 @@ export default class AdminPortal extends React.Component {
     } else {
       return null;
     }
-  } 
-  
+  }
+
   renderProjectDetails = () => {
     return <div>
       <div className="form-group">
@@ -89,7 +90,7 @@ export default class AdminPortal extends React.Component {
         >
           <option value="ac">Accelerated Construction</option>
           <option value="hif">Marginal Viability Fund</option>
-          
+
         </select>
       </div>
       <div className="form-group">
@@ -109,7 +110,7 @@ export default class AdminPortal extends React.Component {
     return <div>
       <div className="form-group">
         <label htmlFor="userEmail">Enter the user's email here.</label>
-        <input 
+        <input
           className="form-control"
           data-test="user-email"
           id="userEmail"
@@ -199,7 +200,7 @@ export default class AdminPortal extends React.Component {
         </button>
     </div>
   }
-  
+
   renderProjectForm = () => {
     return <div>
         {this.renderProjectDetails()}
@@ -221,7 +222,7 @@ export default class AdminPortal extends React.Component {
 
   render() {
     if (this.props.getRole.execute().role === "Superuser") {
-      return <div data-test="admin" > 
+      return <div data-test="admin" >
       <div className="row">
       {this.renderSuccessMessage()}
       </div>
@@ -235,4 +236,3 @@ export default class AdminPortal extends React.Component {
     return null;
   }
 }
-
