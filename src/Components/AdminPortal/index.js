@@ -82,16 +82,28 @@ export default class AdminPortal extends React.Component {
       </div>
       <div className="form-group">
         <label htmlFor="projectType">Please select the scheme for this project</label>
-        <select
-          data-test="create-project-type"
-          className="form-control"
-          id="projectType"
-          onChange={e => this.onFieldChange(e.target.value, "type")}
-        >
-          <option value="ac">Accelerated Construction</option>
-          <option value="hif">Marginal Viability Fund</option>
-
-        </select>
+        <div className="radio">
+          <label>
+            <input
+              type="radio"
+              value="ac"
+              name="projectType"
+              data-test="create-project-ac"
+              onChange={e => this.onFieldChange(e.target.value, "type")}
+            />Accelerated Construction
+          </label>
+        </div>
+        <div className="radio">
+          <label>
+            <input
+              type="radio"
+              value="hif"
+              name="projectType"
+              data-test="create-project-hif"
+              onChange={e => this.onFieldChange(e.target.value, "type")}
+            />Marginal Viability Fund
+          </label>
+        </div>
       </div>
       <div className="form-group">
         <label htmlFor="projectBidId">Enter Bid Reference for the project</label>
