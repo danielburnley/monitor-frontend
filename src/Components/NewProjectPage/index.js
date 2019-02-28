@@ -221,7 +221,9 @@ export default class NewProjectPage extends React.Component {
 
   getProjectURL() {
     let path = window.location.href;
-    let endChar = path.includes("?") ? path.indexOf("?") : path.length;
+    let currentPathLength = path.includes("?") ? path.indexOf("?") : path.length;
+    let endChar = currentPathLength - 9
+
     return path.substr(0, endChar);
   }
 
