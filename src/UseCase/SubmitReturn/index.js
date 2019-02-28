@@ -6,7 +6,7 @@ export default class SubmitReturn {
   async execute(presenter, request) {
     let { success, returnId } = await this.returnGateway.submit(
       request.projectId,
-      request.returnId,
+      request.id,
       request.data
     );
 
