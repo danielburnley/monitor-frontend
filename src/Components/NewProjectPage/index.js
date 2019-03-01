@@ -215,16 +215,12 @@ export default class NewProjectPage extends React.Component {
     }
   }
 
-  getProjectLink() {
-    return <a href={this.getProjectURL()}>{this.getProjectURL()}</a>;
+  projectLink() {
+    return <a href={this.getProjectURL()} data-test="project-url">{this.getProjectURL()}</a>;
   }
 
-  getProjectURL() {
-    let path = window.location.href;
-    let currentPathLength = path.includes("?") ? path.indexOf("?") : path.length;
-    let endChar = currentPathLength - 9
-
-    return path.substr(0, endChar);
+  getProjectURL =  () => {
+    return this.props.projectURL.execute();
   }
 
   getEmailSubject() {
@@ -241,7 +237,7 @@ export default class NewProjectPage extends React.Component {
       <div data-test="project-create-success">
         Project created!
         <p>
-          View your project or submit a return here {this.getProjectLink()}
+          View your project or submit a return here {this.projectLink()}
         </p>
       </div>
     );
