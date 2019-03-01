@@ -28,19 +28,6 @@ describe('Location Gateway', () => {
   });
 
   describe("getProjectURL", () => {
-    describe("Not in a project", () => {
-      describe('Returns the landing page', () => {
-        beforeEach(async () => {
-          let window_location_stub = {origin: "https://frontend.net", pathname: "/" }
-          gateway = new LocationGateway(window_location_stub);
-        });
-    
-        it('gets the project url', async () => {
-          expect(await gateway.getProjectURL()).toEqual("https://frontend.net/")
-        });
-      });
-    });
-
     describe("In a project", () => {
       describe('Example 1', () => {
         beforeEach(async () => {
@@ -49,7 +36,7 @@ describe('Location Gateway', () => {
         });
     
         it('gets the project url', async () => {
-          expect(await gateway.getProjectURL()).toEqual("https://frontend.net/project/4")
+          expect(await gateway.getProjectURL(12)).toEqual("https://frontend.net/project/12")
         });
       });
     
@@ -60,7 +47,7 @@ describe('Location Gateway', () => {
         });
     
         it('gets the project url', async () => {
-          expect(await gateway.getProjectURL()).toEqual("http://origin.space/project/5")
+          expect(await gateway.getProjectURL(5)).toEqual("http://origin.space/project/5")
         });
       });
     });

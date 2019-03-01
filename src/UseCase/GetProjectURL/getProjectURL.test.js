@@ -6,11 +6,11 @@ describe("GetProjectURL", () => {
     beforeEach(() => {
       locationGatewayStub = { 
         origin: jest.fn(() => "https://myurl"),
-        getProjectURL: jest.fn( () => "https://myurl/this/is/a/project/3")
+        getProjectURL: jest.fn( (projectId) => "https://myurl/this/is/a/project/3")
       }
 
       getProjectURL = new GetProjectURL(locationGatewayStub)
-      response = getProjectURL.execute()
+      response = getProjectURL.execute(3)
     });
 
     it("Calls the get Location gateway", () => {
@@ -27,11 +27,11 @@ describe("GetProjectURL", () => {
     beforeEach(() => {
       locationGatewayStub = { 
         origin: jest.fn( () => "https://mysecondurl"),
-        getProjectURL: jest.fn( () => "https://another/this/is/a/project/7")
+        getProjectURL: jest.fn( (projectId) => "https://another/this/is/a/project/7")
       }
 
       getProjectURL = new GetProjectURL(locationGatewayStub)
-      response = getProjectURL.execute()
+      response = getProjectURL.execute(7)
     });
 
     it("Calls the get Location gateway", () => {

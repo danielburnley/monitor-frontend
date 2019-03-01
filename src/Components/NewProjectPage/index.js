@@ -220,7 +220,7 @@ export default class NewProjectPage extends React.Component {
   }
 
   getProjectURL =  () => {
-    return this.props.projectURL.execute();
+    return this.props.projectURL.execute(this.props.match.params.id);
   }
 
   getEmailSubject() {

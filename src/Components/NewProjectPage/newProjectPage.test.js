@@ -12,7 +12,7 @@ async function updateFormField(input, value) {
 }
 
 describe("NewProjectPage", () => {
-  let getProjectURLUsecase = { execute: jest.fn(() => "https:/mydomain/project/5") }
+  let getProjectURLUsecase = { execute: jest.fn((projectId) => "https:/mydomain/project/5") }
   let data = {
     cat: {
       catA: {

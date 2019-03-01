@@ -3,7 +3,7 @@ export default class GetProjectURL {
     this.locationGateway = locationGateway
   }
 
-  execute = () => {
-    return this.locationGateway.getProjectURL()
+  execute = (projectID) => {
+    return this.locationGateway.getProjectURL(projectID)
   }
 }
