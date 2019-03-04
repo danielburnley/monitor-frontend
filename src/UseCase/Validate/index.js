@@ -1,4 +1,4 @@
-export default class ValidateProject {
+export default class Validate {
   constructor(validationGateway) {
     this.validationGateway = validationGateway;
   }
