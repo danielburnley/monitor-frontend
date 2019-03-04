@@ -112,7 +112,7 @@ export default class ProjectGateway {
         body: JSON.stringify({ project_id, project_data, timestamp })
       }
     );
-    
+
     if (response.ok) {
       let rawResponse  = await response.json();
       return { success: true, errors: rawResponse.errors, new_timestamp: rawResponse.timestamp};
@@ -144,7 +144,7 @@ export default class ProjectGateway {
     }
   }
 
-  async create(name, type, bidId) {
+  async create(name, type, bid_id) {
     let response = await fetch(
       `${this.env.REACT_APP_HIF_API_URL}project/create`,
       {
@@ -153,7 +153,7 @@ export default class ProjectGateway {
           "Content-Type": "application/json",
           API_KEY: this.apiKeyGateway.getApiKey().apiKey
         },
-        body: JSON.stringify({name, type, bidId})
+        body: JSON.stringify({name, type, bid_id})
       }
     );
 
