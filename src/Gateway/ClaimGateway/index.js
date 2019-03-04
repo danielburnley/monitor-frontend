@@ -24,6 +24,22 @@ export default class ClaimGateway {
     }
   }
 
+  async getBaseClaimFor(projectId) {
+    let rawResponse = await fetch(
+      `${this.env.REACT_APP_HIF_API_URL}project/${projectId}/claim`,
+      {
+        headers: {'Content-Type': 'application/json',
+          'API_KEY': this.apiKeyGateway.getApiKey().apiKey},
+      },
+    );
+    if (rawResponse.ok) {
+      let response = await rawResponse.json();
+      return {success: true, baseClaim: response.baseClaim};
+    } else {
+      return {success: false};
+    }
+  }
+
   async create(project_id, data) {
     let rawResponse = await fetch(
       `${this.env.REACT_APP_HIF_API_URL}claim/create`,

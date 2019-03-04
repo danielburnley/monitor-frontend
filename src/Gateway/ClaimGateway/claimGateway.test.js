@@ -8,7 +8,7 @@ describe("Claim Gateway", () => {
 
   let apiKeyGateway, locationGateway;
 
-  describe("validation", () => {
+  describe("#validate", () => {
     describe("Example 1", () => {
       let validationRequest, response;
       let data = {
@@ -353,6 +353,77 @@ describe("Claim Gateway", () => {
         let response = await gateway.update(12, 2, { dogs: "woof" });
 
         expect(response.success).toBeFalsy();
+      });
+    });
+  });
+
+  describe("#getBaseClaimFor", () => {
+    describe("Given a claim is returned", () => {
+      let request, response;
+
+      describe("Example one", () => {
+        beforeEach(async () => {
+          apiKeyGateway = {getApiKey: () => ({apiKey: 'catz'})};
+          process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
+          request = nock("http://cat.meow")
+            .matchHeader("Content-Type", "application/json")
+            .matchHeader('API_KEY', 'catz')
+            .get("/project/1/claim")
+            .reply(200, {
+              baseClaim: { data: { some: "data" }, schema: { some: "schema" }}
+            });
+          let gateway = new ClaimGateway(apiKeyGateway, locationGateway);
+          response = await gateway.getBaseClaimFor(1);
+        });
+
+        it("Fetches the claim from the API", () => {
+          expect(request.isDone()).toBeTruthy();
+        });
+
+        it("Returns the response from the api", () => {
+          expect(response.success).toEqual(true);
+          expect(response.baseClaim.data).toEqual({ some: "data" });
+          expect(response.baseClaim.schema).toEqual({ some: "schema" });
+        });
+      });
+
+      describe("Example two", () => {
+        beforeEach(async () => {
+          process.env.REACT_APP_HIF_API_URL = "http://dog.woof/";
+          apiKeyGateway = {getApiKey: () => ({apiKey: 'doggy'})};
+          request = nock("http://dog.woof")
+            .matchHeader("Content-Type", "application/json")
+            .matchHeader('API_KEY', 'doggy')
+            .get("/project/5/claim")
+            .reply(200, {
+              baseClaim: { data: { cats: "meow" }, schema: { dogs: "woof" } }
+            });
+          let gateway = new ClaimGateway(apiKeyGateway, locationGateway);
+          response = await gateway.getBaseClaimFor(5);
+        });
+
+        it("Fetches the claim from the API", () => {
+          expect(request.isDone()).toBeTruthy();
+        });
+
+        it("Returns the response from the api", () => {
+          expect(response.success).toEqual(true);
+          expect(response.baseClaim.data).toEqual({ cats: "meow" });
+          expect(response.baseClaim.schema).toEqual({ dogs: "woof" });
+        });
+      });
+    });
+
+    describe("Given a claim is not returned", () => {
+      it("Returns unsuccessful", async () => {
+        process.env.REACT_APP_HIF_API_URL = "http://dog.woof/";
+        nock("http://dog.woof")
+          .matchHeader("Content-Type", "application/json")
+          .get("/project/5/claim")
+          .reply(404);
+        let gateway = new ClaimGateway(apiKeyGateway, locationGateway);
+        let response = await gateway.getBaseClaimFor(5);
+        expect(response).toEqual({ success: false });
       });
     });
   });

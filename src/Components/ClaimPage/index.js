@@ -9,6 +9,8 @@ export default class ClaimPage extends React.Component {
     }
   }
 
+  presentClaimNotFound = () => {}; 
+
   presentClaim = claimData => {
     let uiSchema;
     if (claimData.status === "Submitted") {
@@ -30,14 +32,16 @@ export default class ClaimPage extends React.Component {
   componentDidMount = () => {
     if (this.props.match.params.claimId) {
       this.props.getClaim.execute(
-        this,
-        this.props.match.params.claimId,
-        this.props.match.params.projectId
+        this, {
+          id: this.props.match.params.claimId,
+          projectId: this.props.match.params.projectId
+        }
       )
     } else {
       this.props.getBaseClaim.execute(
-        this,
-        this.props.match.params.projectId
+        this, {
+          projectId: this.props.match.params.projectId
+        }
       )
     }
   }

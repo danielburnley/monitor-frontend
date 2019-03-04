@@ -48,7 +48,7 @@ describe("ClaimPage", () => {
             }
           }
         }
-        getClaimSpy = {execute: jest.fn((presenter, id, projectId) => presenter.presentClaim(claimData))};
+        getClaimSpy = {execute: jest.fn((presenter, request) => presenter.presentClaim(claimData))};
 
         wrap = mount(
         <ClaimPage
@@ -68,7 +68,7 @@ describe("ClaimPage", () => {
       });
 
       it("calls the get claim usecase", () => {
-        expect(getClaimSpy.execute).toHaveBeenCalledWith(expect.anything(), 1, 6)
+        expect(getClaimSpy.execute).toHaveBeenCalledWith(expect.anything(), { id: 1, projectId: 6})
       });
   
       it("passes it's children the data returned form the use case", () => {
@@ -128,7 +128,7 @@ describe("ClaimPage", () => {
       });
 
       it("calls the get base claim usecase with the projectId", () => {
-        expect(getBaseClaimSpy.execute).toHaveBeenCalledWith(expect.anything(), 5)
+        expect(getBaseClaimSpy.execute).toHaveBeenCalledWith(expect.anything(), { projectId: 5 })
       });
   
       it("passes it's children the data returned form the get base claim use case", () => {
@@ -165,7 +165,7 @@ describe("ClaimPage", () => {
           }
         }
         generateUISchemaSpy = {execute: jest.fn((data) => ({uischema: "some ui things"}))}
-        getClaimSpy = {execute: jest.fn((presenter, id, projectId) => presenter.presentClaim(claimData))};
+        getClaimSpy = {execute: jest.fn((presenter, request) => presenter.presentClaim(claimData))};
         mount(
         <ClaimPage
           match = {{params: { claimId: 1, projectId: 6 }}}
