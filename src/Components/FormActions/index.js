@@ -210,6 +210,12 @@ export default class FormActions extends React.Component {
       </div>
     )
   };
+    
+  backToProject = e => {
+    this.props.history.push(`/project/${this.props.match.params.projectId}`);
+    e.preventDefault();
+  };
+
 
   onFormChange = async ({formData}) => {
     if(this.id()) {

@@ -54,12 +54,6 @@ export default class ReturnPage extends React.Component {
     await this.fetchData();
   }
 
-  
-  backToProject = e => {
-    this.props.history.push(`/project/${this.projectId()}`);
-    e.preventDefault();
-  };
-
   render() {
     if (this.state.loading) {
       return <div data-test="loading"/>;
