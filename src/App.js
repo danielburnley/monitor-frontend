@@ -34,6 +34,7 @@ import GetBaseReturn from "./UseCase/GetBaseReturn";
 import CanAccessProject from "./UseCase/CanAccessProject";
 import CanAccessMonitor from "./UseCase/CanAccessMonitor";
 import GetProject from "./UseCase/GetProject";
+import GetProjectURL from "./UseCase/GetProjectURL";
 import GetReturn from "./UseCase/GetReturn";
 import GetReturns from "./UseCase/GetReturns"
 import GetUserProjects from "./UseCase/GetUserProjects";
@@ -81,6 +82,7 @@ const generateDisabledUISchema = new GenerateDisabledUISchema(generateUISchema);
 const getBaseReturnUseCase = new GetBaseReturn(returnGateway);
 const getInfrastructuresUseCase = new GetInfrastructures(projectGateway);
 const getProjectUseCase = new GetProject(projectGateway);
+const getProjectURL = new GetProjectURL(locationGateway);
 const getReturnUseCase = new GetReturn(returnGateway);
 const getUserProjectsUseCase = new GetUserProjects(userGateway);
 const canAccessProjectUseCase = new CanAccessProject(tokenGateway, apiKeyGateway, userRoleGateway, projectGateway);
@@ -201,6 +203,7 @@ const renderBaselineEditorPage = (props, projectStatus, formData, formSchema, pr
     <div className="row">
       <NewProjectPage
         {...props}
+        projectURL={getProjectURL}
         uiSchema={formUiSchema}
         status={projectStatus}
         schema={formSchema}

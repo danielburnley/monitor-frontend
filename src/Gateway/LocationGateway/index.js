@@ -3,7 +3,13 @@ export default class LocationGateway {
     this.window_location = window_location;
   }
 
-  async getRoot() {
+  getRoot() {
     return this.window_location.origin;
+  }
+
+  getProjectURL(projectId) {
+    let path = `/project/${projectId}`
+
+    return this.window_location.origin + path
   }
 };

@@ -12,6 +12,7 @@ async function updateFormField(input, value) {
 }
 
 describe("NewProjectPage", () => {
+  let getProjectURLUsecase = { execute: jest.fn((projectId) => "https:/mydomain/project/5") }
   let data = {
     cat: {
       catA: {
@@ -40,8 +41,9 @@ describe("NewProjectPage", () => {
 
   it("Calls the get user role use case", () => {
     let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"})) };
-    let wrap = mount(
+    mount(
       <NewProjectPage
+        projectURL={getProjectURLUsecase}
         documentGateway={jest.fn()}
         match={{ params: { id: 1 } }}
         updateProject={{}}
@@ -60,6 +62,7 @@ describe("NewProjectPage", () => {
     let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
     let wrap = shallow(
       <NewProjectPage
+        projectURL={getProjectURLUsecase}
         documentGateway={documentGatewayDummy}
         match={{ params: { id: 1 } }}
         updateProject={{}}
@@ -82,6 +85,7 @@ describe("NewProjectPage", () => {
       let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
       let wrap = shallow(
         <NewProjectPage
+          projectURL={getProjectURLUsecase}
           documentGateway={documentGatewayDummy}
           match={{ params: { id: 6 } }}
           getInfrastructures={"get me some infrastructures"}
@@ -104,6 +108,7 @@ describe("NewProjectPage", () => {
       let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
       let wrap = shallow(
         <NewProjectPage
+          projectURL={getProjectURLUsecase}
           documentGateway={documentGatewayDummy}
           match={{ params: { id: 8 } }}
           updateProject={{}}
@@ -135,6 +140,7 @@ describe("NewProjectPage", () => {
 
         let wrap = mount(
           <NewProjectPage
+            projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
             match={{ params: { id: 1 } }}
             updateProject={updateProjectSpy}
@@ -167,6 +173,7 @@ describe("NewProjectPage", () => {
 
         let wrap = mount(
           <NewProjectPage
+            projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
             match={{ params: { id: 1 } }}
             updateProject={updateProjectSpy}
@@ -205,6 +212,7 @@ describe("NewProjectPage", () => {
 
         let wrap = mount(
           <NewProjectPage
+            projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
             match={{ params: { id: 1 } }}
             updateProject={updateProjectSpy}
@@ -237,6 +245,7 @@ describe("NewProjectPage", () => {
 
         let wrap = mount(
           <NewProjectPage
+            projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
             match={{ params: { id: 1 } }}
             updateProject={updateProjectSpy}
@@ -275,6 +284,7 @@ describe("NewProjectPage", () => {
 
         let wrap = mount(
           <NewProjectPage
+            projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
             match={{ params: { id: 1 } }}
             updateProject={updateProjectSpy}
@@ -307,6 +317,7 @@ describe("NewProjectPage", () => {
 
         let wrap = mount(
           <NewProjectPage
+            projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
             match={{ params: { id: 1 } }}
             updateProject={updateProjectSpy}
@@ -347,6 +358,7 @@ describe("NewProjectPage", () => {
 
         let wrap = mount(
           <NewProjectPage
+            projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
             match={{ params: { id: 1 } }}
             updateProject={updateProjectSpy}
@@ -378,6 +390,7 @@ describe("NewProjectPage", () => {
 
         let wrap = mount(
           <NewProjectPage
+            projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
             match={{ params: { id: 1 } }}
             updateProject={updateProjectSpy}
@@ -415,6 +428,7 @@ describe("NewProjectPage", () => {
 
         let wrap = mount(
           <NewProjectPage
+            projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
             match={{ params: { id: 1 } }}
             updateProject={updateProjectSpy}
@@ -446,6 +460,7 @@ describe("NewProjectPage", () => {
 
         let wrap = mount(
           <NewProjectPage
+            projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
             match={{ params: { id: 1 } }}
             updateProject={updateProjectSpy}
@@ -487,6 +502,7 @@ describe("NewProjectPage", () => {
 
       let wrap = mount(
         <NewProjectPage
+          projectURL={getProjectURLUsecase}
           match={{ params: { id: 1 } }}
           updateProject={updateProjectSpy}
           submitProject={submitProjectSpy}
@@ -517,6 +533,7 @@ describe("NewProjectPage", () => {
 
       let wrap = mount(
         <NewProjectPage
+          projectURL={getProjectURLUsecase}
           match={{ params: { id: 9 } }}
           updateProject={updateProjectSpy}
           submitProject={submitProjectSpy}
@@ -551,6 +568,7 @@ describe("NewProjectPage", () => {
 
       let wrap = mount(
         <NewProjectPage
+          projectURL={getProjectURLUsecase}
           match={{ params: { id: 9 } }}
           updateProject={updateProjectSpy}
           submitProject={submitProjectSpy}
@@ -582,6 +600,7 @@ describe("NewProjectPage", () => {
 
       let wrap = mount(
         <NewProjectPage
+          projectURL={getProjectURLUsecase}
           match={{ params: { id: 1 } }}
           updateProject={updateProjectSpy}
           submitProject={submitProjectSpy}
@@ -619,6 +638,7 @@ describe("NewProjectPage", () => {
 
         let wrap = mount(
           <NewProjectPage
+            projectURL={getProjectURLUsecase}
             projectType={"hif"}
             match={{ params: { id: 1 } }}
             updateProject={updateProjectSpy}
@@ -658,6 +678,7 @@ describe("NewProjectPage", () => {
 
         let wrap = mount(
           <NewProjectPage
+            projectURL={getProjectURLUsecase}
             projectType={"ac"}
             match={{ params: { id: 6 } }}
             updateProject={updateProjectSpy}
@@ -699,6 +720,7 @@ describe("NewProjectPage", () => {
 
         let wrap = mount(
           <NewProjectPage
+            projectURL={getProjectURLUsecase}
             projectType={"hif"}
             match={{ params: { id: 1 } }}
             updateProject={updateProjectSpy}
@@ -738,6 +760,7 @@ describe("NewProjectPage", () => {
 
         let wrap = mount(
           <NewProjectPage
+            projectURL={getProjectURLUsecase}
             projectType={"ac"}
             match={{ params: { id: 6 } }}
             updateProject={updateProjectSpy}
@@ -779,6 +802,7 @@ describe("NewProjectPage", () => {
       it("shows warning upon update if in draft state", async () => {
         let wrap = mount(
           <NewProjectPage
+            projectURL={getProjectURLUsecase}
             match={{ params: { id: 1 } }}
             projectType={"hey"}
             updateProject={updateProjectSpy}
@@ -824,6 +848,7 @@ describe("NewProjectPage", () => {
 
         let wrap = mount(
           <NewProjectPage
+            projectURL={getProjectURLUsecase}
             match={{ params: { id: 1 } }}
             projectType={"hey"}
             updateProject={updateProjectSpy}
@@ -865,6 +890,7 @@ describe("NewProjectPage", () => {
 
       let wrap = mount(
         <NewProjectPage
+          projectURL={getProjectURLUsecase}
           match={{ params: { id: 1 } }}
           updateProject={updateProjectSpy}
           submitProject={submitProjectSpy}
@@ -885,6 +911,7 @@ describe("NewProjectPage", () => {
         1
       );
       expect(wrap.find('[data-test="share-project-link"]').length).toEqual(1)
+      expect(wrap.find('[data-test="project-url"]').text()).toEqual("https:/mydomain/project/5")
       expect(wrap.find('[data-test="submit-project-button"]').length).toEqual(
         0
       );
@@ -909,6 +936,7 @@ describe("NewProjectPage", () => {
 
       let wrap = mount(
         <NewProjectPage
+          projectURL={getProjectURLUsecase}
           match={{ params: { id: 1 } }}
           updateProject={updateProjectSpy}
           submitProject={submitProjectSpy}
@@ -952,6 +980,7 @@ describe("NewProjectPage", () => {
 
       let wrap = mount(
         <NewProjectPage
+          projectURL={getProjectURLUsecase}
           match={{ params: { id: 1 } }}
           submitProject={submitProjectSpy}
           validateProject={validateProjectSpy}
@@ -985,6 +1014,7 @@ describe("NewProjectPage", () => {
 
       let wrap = mount(
         <NewProjectPage
+          projectURL={getProjectURLUsecase}
           match={{ params: { id: 1 } }}
           updateProject={updateProjectSpy}
           submitProject={submitProjectSpy}
@@ -1019,6 +1049,7 @@ describe("NewProjectPage", () => {
 
       let wrap = mount(
         <NewProjectPage
+          projectURL={getProjectURLUsecase}
           match={{ params: { id: 1 } }}
           submitProject={submitProjectSpy}
           updateProject={updateProjectSpy}
@@ -1050,6 +1081,7 @@ describe("NewProjectPage", () => {
 
       let wrap = mount(
         <NewProjectPage
+          projectURL={getProjectURLUsecase}
           match={{ params: { id: 1 } }}
           submitProject={submitProjectSpy}
           updateProject={updateProjectSpy}
@@ -1086,6 +1118,7 @@ describe("NewProjectPage", () => {
       let updateProjectSpy = { execute: jest.fn(async (presenter, id) => presenter.projectUpdated(errors)) };
       let wrap = mount(
         <NewProjectPage
+          projectURL={getProjectURLUsecase}
           match={{ params: { id: 1 } }}
           projectType={"hey"}
           updateProject={updateProjectSpy}
@@ -1113,6 +1146,7 @@ describe("NewProjectPage", () => {
       let updateProjectSpy = { execute: jest.fn(async (presenter, id) => presenter.projectUpdated(errors, 11)) };
       let wrap = mount(
         <NewProjectPage
+          projectURL={getProjectURLUsecase}
           match={{ params: { id: 1 } }}
           projectType={"hey"}
           updateProject={updateProjectSpy}
@@ -1158,6 +1192,7 @@ describe("NewProjectPage", () => {
 
     let wrap = mount(
       <NewProjectPage
+        projectURL={getProjectURLUsecase}
         match={{ params: { id: 1 } }}
         submitProject={submitProjectSpy}
         updateProject={updateProjectSpy}
