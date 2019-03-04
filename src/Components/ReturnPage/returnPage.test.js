@@ -1,5 +1,4 @@
 import GenerateDisabledUISchema from '../../UseCase/GenerateDisabledUISchema';
-import GenerateUISchema from '../../UseCase/GenerateUISchema';
 import React from "react";
 import ReturnPage from ".";
 import { mount } from "enzyme";
@@ -27,6 +26,7 @@ class getReturnStub {
     });
   }
 }
+
 class getBaseReturnStub {
   constructor(type='ac', data = {}, schema) {
     this.type = type;
