@@ -73,6 +73,41 @@ let returnData = {
   }
 };
 
+let claimSchema = {
+  title: "Cat claim",
+  type: "object",
+  properties: {
+    claimSummary: {
+      type: "object",
+      title: "Claim your cat here",
+      properties: {
+        name: {
+          type: "string",
+          title: "name"
+        },
+        age: {
+          type: "string",
+          title: "cat years"
+        },
+        fluffyness: {
+          type: "string",
+          title: "How fluffy?"
+        }
+      }
+    }
+  }
+};
+
+let emptyClaimData = {};
+
+let filledClaimData = {
+  claimSummary: {
+    name: "Mr sparkles",
+    age: "2",
+    fluffyness: "100%"
+  }
+};
+
 let projectType = 'hif';
 
 describe("Authentication against routes", () => {
@@ -347,37 +382,72 @@ describe("Viewing a project", () => {
         expect(page.find('StaticData').length).toEqual(1)
       });
 
-      it("Renders the return with information from the API when creating a new return", async () => {
-        api.getProject(projectSchema, projectData, projectStatus, projectType).successfully();
-        api.getBaseReturn(returnSchema, returnData).successfully();
-        api.getReturns({returns: []}).successfully();
-
-        let page = new AppPage("/project/0?token=Cats");
-        await page.load();
-        await page.createNewReturn();
-
-        let expectedInputValues = [
-          "16",
-          "Fluffy balls of friendship",
-          "Beans",
-          ""
-        ];
-
-        expect(page.getFormInputs()).toEqual(expectedInputValues);
+      describe("Returns", () => {
+        it("Renders the return with information from the API when creating a new return", async () => {
+          api.getProject(projectSchema, projectData, projectStatus, projectType).successfully();
+          api.getBaseReturn(returnSchema, returnData).successfully();
+          api.getReturns({returns: []}).successfully();
+  
+          let page = new AppPage("/project/0?token=Cats");
+          await page.load();
+          await page.createNewReturn();
+  
+          let expectedInputValues = [
+            "16",
+            "Fluffy balls of friendship",
+            "Beans",
+            ""
+          ];
+  
+          expect(page.getFormInputs()).toEqual(expectedInputValues);
+        });
+  
+        it("Renders the return with information from the API", async () => {
+          api.getReturn(returnSchema, returnData).successfully();
+          let page = new AppPage("/project/0/return/1?token=Cats");
+          await page.load();
+  
+          let expectedInputValues = [
+            "16",
+            "Fluffy balls of friendship",
+            "Beans",
+            ""
+          ];
+          expect(page.getFormInputs()).toEqual(expectedInputValues);
+        });
       });
 
-      it("Renders the return with information from the API", async () => {
-        api.getReturn(returnSchema, returnData).successfully();
-        let page = new AppPage("/project/0/return/1?token=Cats");
-        await page.load();
-
-        let expectedInputValues = [
-          "16",
-          "Fluffy balls of friendship",
-          "Beans",
-          ""
-        ];
-        expect(page.getFormInputs()).toEqual(expectedInputValues);
+      describe("Claims", () => {
+        it("Renders a blank claim form when creating a new claim", async () => {
+          api.getProject(projectSchema, projectData, projectStatus, projectType).successfully();
+          api.getReturns({returns: []}).successfully();          
+          api.getBaseClaim(claimSchema, emptyClaimData).successfully();
+  
+          let page = new AppPage("/project/0?token=Cats");
+          await page.load();
+          await page.createNewClaim();
+  
+          let expectedInputValues = [
+            "",
+            "",
+            ""
+          ];
+  
+          expect(page.getFormInputs()).toEqual(expectedInputValues);
+        });
+  
+        it("Renders the return with information from the API", async () => {
+          api.getClaim(claimSchema, filledClaimData).successfully();
+          let page = new AppPage("/project/0/claim/1?token=Cats");
+          await page.load();
+  
+          let expectedInputValues = [
+            "Mr sparkles",
+            "2",
+            "100%"
+          ];
+          expect(page.getFormInputs()).toEqual(expectedInputValues);
+        });
       });
     });
   });

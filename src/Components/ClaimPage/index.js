@@ -52,11 +52,11 @@ export default class ClaimPage extends React.Component {
     } else {
       return <div>
         {this.props.children({
-          type: this.state.type,
-          status: this.state.status,
+          formData: this.state.formData,
           schema: this.state.schema,
+          type: this.state.type,
           uiSchema: this.state.uiSchema,
-          formData: this.state.formData
+          status: this.state.status
         })}
       </div>
     }

@@ -47,6 +47,13 @@ export default class AppPage {
     await this.load();
   }
 
+  async createNewClaim() {
+    let button = this.page.find('[data-test="new-claim-button"]');
+    button.simulate("click");
+
+    await this.load();
+  }
+
   async viewBaseline() {
     let button = this.page.find('[data-test="view-baseline-button"]');
     button.simulate("click");

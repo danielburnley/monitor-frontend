@@ -14,6 +14,7 @@ import ProjectList from "./Components/ProjectList";
 import ReturnList from "./Components/ReturnList";
 import ReturnListProvider from "./Components/ReturnListProvider";
 import ReturnPage from "./Components/ReturnPage";
+import ClaimPage from "./Components/ClaimPage";
 import FormActions from "./Components/FormActions";
 import Portal from "./Components/Portal";
 import ProjectPortal from "./Components/ProjectPortal";
@@ -35,6 +36,7 @@ import GenerateDisabledUISchema from "./UseCase/GenerateDisabledUISchema";
 import GenerateUISchema from "./UseCase/GenerateUISchema";
 import GetInfrastructures from "./UseCase/GetInfrastructures"
 import GetBaseReturn from "./UseCase/GetBaseReturn";
+import GetBaseClaim from "./UseCase/GetBaseClaim";
 import CanAccessProject from "./UseCase/CanAccessProject";
 import CanAccessMonitor from "./UseCase/CanAccessMonitor";
 import GetProject from "./UseCase/GetProject";
@@ -89,6 +91,7 @@ const submitClaimUseCase = new SubmitClaim(claimGateway);
 const generateUISchema = new GenerateUISchema(userRoleGateway);
 const generateDisabledUISchema = new GenerateDisabledUISchema(generateUISchema);
 const getBaseReturnUseCase = new GetBaseReturn(returnGateway);
+const getBaseClaimUseCase = new GetBaseClaim(claimGateway);
 const getInfrastructuresUseCase = new GetInfrastructures(projectGateway);
 const getProjectUseCase = new GetProject(projectGateway);
 const getProjectURL = new GetProjectURL(locationGateway);
@@ -136,6 +139,36 @@ const renderReturnPage = props => (
   </ReturnPage>
 );
 
+const renderClaimPage = props => (
+  <ClaimPage
+    {...props}
+    getClaim={getClaimUseCase}
+    generateSubmittedUiSchema={generateDisabledUISchema}
+    generateUiSchema={generateUISchema}
+    getBaseClaim={getBaseClaimUseCase}
+    >
+    {({formData, schema, type, uiSchema, status}) => {
+    return <FormActions
+      {...props}
+      validate={validateClaimUseCase}
+      create={createClaimUseCase}
+      submit={submitClaimUseCase}
+      update={updateClaimUseCase}
+      documentGateway={documentGateway}
+      data={formData}
+      schema={schema}
+      type={type}
+      uiSchema={uiSchema}
+      getRole={getRole}
+      status={status}
+      formType="claim"
+    />
+    }
+  }
+    </ClaimPage>
+    
+    )
+
 const CreateReturnButton = props => (
   <button
     data-test="new-return-button"
@@ -145,6 +178,18 @@ const CreateReturnButton = props => (
     }
   >
     Create new return
+  </button>
+);
+
+const CreateClaimButton = props => (
+  <button
+    data-test="new-claim-button"
+    className="btn btn-primary"
+    onClick={() =>
+      props.history.push(`/project/${props.match.params.id}/claim`)
+    }
+  >
+    Create new claim
   </button>
 );
 
@@ -274,6 +319,9 @@ const renderSubmittedProjectPage = (props, formData, formSchema) => (
     <div className="row">
       <div className="col-md-2">
         <CreateReturnButton {...props} />
+      </div>
+      <div className="col-md-2">
+        <CreateClaimButton {...props} />
       </div>
       <div className="col-md-2">
         <ViewBaselineButton {...props} />
@@ -407,6 +455,16 @@ const App = () => (
                           exact
                           path="/project/:projectId/return/:returnId/print"
                           render={renderPrintPage}
+                        />
+                        <Route
+                          exact
+                          path="/project/:projectId/claim"
+                          render={renderClaimPage}
+                        />
+                        <Route
+                          exact
+                          path="/project/:projectId/claim/:claimId"
+                          render={renderClaimPage}
                         />
                       </ProjectPortal>
                     )}
