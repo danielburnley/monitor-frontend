@@ -26,7 +26,7 @@ describe("UpdateReturn", () => {
         useCase = getUseCase(true, 1, 9);
         await useCase.execute(presenterSpy, {
           projectId: 9,
-          returnId: 1,
+          id: 1,
           data: { cats: "meow" },
           schema: { ducks: "quack"}
         });
@@ -58,7 +58,7 @@ describe("UpdateReturn", () => {
         useCase = getUseCase(true, 2, 3);
         await useCase.execute(presenterSpy, {
           projectId: 3,
-          returnId: 2,
+          id: 2,
           data: { dogs: "woof" },
           schema: { cow: "moo"}
         });

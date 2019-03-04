@@ -14,6 +14,7 @@ import ProjectList from "./Components/ProjectList";
 import ReturnList from "./Components/ReturnList";
 import ReturnListProvider from "./Components/ReturnListProvider";
 import ReturnPage from "./Components/ReturnPage";
+import FormActions from "./Components/FormActions";
 import Portal from "./Components/Portal";
 import ProjectPortal from "./Components/ProjectPortal";
 import NotFound from "./Components/NotFound";
@@ -108,18 +109,31 @@ const addUsersToProject = new AddUsersToProject(projectGateway);
 const renderReturnPage = props => (
   <ReturnPage
     {...props}
-    validateReturn={validateReturnUseCase}
     getReturn={getReturnUseCase}
-    getInfrastructures={getInfrastructuresUseCase}
     getBaseReturn={getBaseReturnUseCase}
-    createReturn={createReturnUseCase}
-    submitReturn={submitReturnUseCase}
-    updateReturn={updateReturnUseCase}
     generateUISchema={generateUISchema}
-    getRole={getRole}
     generateSubmittedSchema={generateDisabledUISchema}
-    documentGateway={documentGateway}
-  />
+    >
+  {({data, schema, type, uiSchema, status}) => {
+    return <FormActions
+      {...props}
+      validate={validateReturnUseCase}
+      create={createReturnUseCase}
+      submit={submitReturnUseCase}
+      update={updateReturnUseCase}
+      getInfrastructures={getInfrastructuresUseCase}
+      documentGateway={documentGateway}
+      data={data}
+      schema={schema}
+      type={type}
+      uiSchema={uiSchema}
+      getRole={getRole}
+      status={status}
+      formType="return"
+    />
+    }
+  }
+  </ReturnPage>
 );
 
 const CreateReturnButton = props => (
