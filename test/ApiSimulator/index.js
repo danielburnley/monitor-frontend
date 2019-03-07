@@ -80,6 +80,22 @@ class APISimulator {
     return new APIResponse(returnRequest, response);
   }
 
+  getBaseClaim(schema = {}, data = {}) {
+    let response = { baseClaim: { schema, data } };
+    let claimRequest = nock(this.url)
+      .matchHeader("Content-Type", "application/json")
+      .get("/project/0/claim");
+    return new APIResponse(claimRequest, response);
+  }
+
+  getClaim(schema = {}, data = {}) {
+    let response = { schema, data };
+    let claimRequest = nock(this.url)
+      .matchHeader("Content-Type", "application/json")
+      .get("/claim/get?id=0&claimId=1");
+    return new APIResponse(claimRequest, response);
+  }
+
   getUserProjects(project_list = []) {
     let response = { project_list } ;
     let returnRequest = nock(this.url)
