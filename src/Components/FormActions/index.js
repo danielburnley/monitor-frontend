@@ -17,6 +17,9 @@ export default class FormActions extends React.Component {
     };
   }
 
+  submissionUnsuccessful = async () => {
+    this.setState({ status: "SubmissionFailure" });
+  };
 
   submissionSuccessful = async () => {
     this.setState({ status: "Submitted"});
@@ -210,7 +213,7 @@ export default class FormActions extends React.Component {
       </div>
     )
   };
-    
+
   backToProject = e => {
     this.props.history.push(`/project/${this.props.match.params.projectId}`);
     e.preventDefault();
@@ -259,6 +262,10 @@ export default class FormActions extends React.Component {
           </div>
         </div>
         <div className="row">
+          {
+            this.state.status === "SubmissionFailure" ?
+              <div data-test="submitted-button-error"/>: null
+          }
           <div className="col-md-4">{this.renderMandatoryWarning()}</div>
         </div>
         <div className="row">
