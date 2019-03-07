@@ -480,7 +480,7 @@ describe("<FormActions>", () => {
       });
     });
 
-    it('it disables the save button until it finishes saving', async () => {
+    it('disables the save button until it finishes saving', async () => {
       let wrap = mount(
         <FormActions
           formType="return"
@@ -505,6 +505,36 @@ describe("<FormActions>", () => {
 
       expect(wrap.find("[data-test='disabled-save-button']").length).toEqual(1);
       expect(wrap.find("[data-test='disabled-submit-button']").length).toEqual(1);
+
+      expect(wrap.find("[data-test='save-button-error']").length).toEqual(0);
+    });
+
+    it('reenables the save button if saving fails', async () => {
+      let unsuccessfulUpdateSpy = { execute: jest.fn((presenter, id, returnId, data) => presenter.updateUnsuccessful() )}
+      let wrap = mount(
+        <FormActions
+          formType="return"
+          data={initialData}
+          schema={formSchema}
+          validate = {validateSpyValid}
+          update={unsuccessfulUpdateSpy}
+          type="ac"
+          match={{params: {projectId: 1, returnId: 3}}}
+          status="Draft"
+          getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+        />
+      );
+
+      await save(wrap);
+      await wait();
+
+      expect(wrap.find("[data-test='save-button']").length).toEqual(1);
+      expect(wrap.find("[data-test='submit-button']").length).toEqual(1);
+
+      expect(wrap.find("[data-test='disabled-save-button']").length).toEqual(0);
+      expect(wrap.find("[data-test='disabled-submit-button']").length).toEqual(0);
+
+      expect(wrap.find("[data-test='save-button-error']").length).toEqual(1);
     });
 
     describe('an invalid response', () => {

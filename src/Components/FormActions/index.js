@@ -33,7 +33,9 @@ export default class FormActions extends React.Component {
     this.setState({ status: "Updated" });
   };
 
-  updateUnsuccessful = async () => {};
+  updateUnsuccessful = async () => {
+    this.setState({ status: "UpdateFailure" });
+  };
 
 
   invalidateFields = async pathList => {
@@ -265,6 +267,10 @@ export default class FormActions extends React.Component {
           {
             this.state.status === "SubmissionFailure" ?
               <div data-test="submitted-button-error"/>: null
+          }
+          {
+            this.state.status === "UpdateFailure" ?
+              <div data-test="save-button-error"/>: null
           }
           <div className="col-md-4">{this.renderMandatoryWarning()}</div>
         </div>
