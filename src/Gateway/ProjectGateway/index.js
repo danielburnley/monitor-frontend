@@ -47,10 +47,15 @@ export default class ProjectGateway {
     );
     if (rawResponse.ok) {
       let response = await rawResponse.json();
-      let infrastructures = response.infrastructures.map(infrastructure => (
-        new Infrastructure(infrastructure)
-      ))
-      return { success: true, infrastructures: infrastructures};
+      let infrastructures = response.infrastructures
+      let compiled_infras = []
+      Object.values(infrastructures).forEach(infrastructures => {
+        infrastructures.forEach(infrastructure => (
+          compiled_infras.push(new Infrastructure(infrastructure))
+        ))
+      })
+
+      return { success: true, infrastructures: compiled_infras};
     } else {
       return { success: false };
     }

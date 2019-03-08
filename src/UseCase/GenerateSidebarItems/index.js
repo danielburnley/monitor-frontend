@@ -13,7 +13,6 @@ export default class GenerateSidebarItems {
 
   generateItemsForArray(schema, data) {
     let items = {};
-    
     data.forEach((_, i) => {
       items[i] = {
         title: this.generateTitle(schema.items.title, i),

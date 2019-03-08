@@ -22,7 +22,6 @@ describe("PickInfrastructureWidget", () => {
           pickInfras = shallow (
             <PickInfrastructureWidget
               schema={{title: "pick an infrastructure", type: "string"}}
-              name="infrastructureId"
               formContext={{projectId: 1, getInfrastructures: getInfrastructuresSpy}}
               onChange={onChangeSpy}
             />
@@ -54,7 +53,7 @@ describe("PickInfrastructureWidget", () => {
         it("Calls the on change spy with the id when an infrastructure is selected", async () => {
           pickInfras.find('[data-test="infrastructue-picker"]').simulate('change', { target: {value: "1"}})
           await wait()
-          expect(onChangeSpy).toHaveBeenCalledWith({infrastructureId: "1"})
+          expect(onChangeSpy).toHaveBeenCalledWith("1")
         });
       });
 
@@ -72,7 +71,6 @@ describe("PickInfrastructureWidget", () => {
           pickInfras = shallow (
             <PickInfrastructureWidget
               schema={{title: "pick a hif deliverable", type: "string"}}
-              name="whichINfrastructure"
               formContext={{projectId: 78, getInfrastructures: getInfrastructuresSpy}}
               onChange={onChangeSpy}
             />
@@ -106,7 +104,7 @@ describe("PickInfrastructureWidget", () => {
         it("Calls the on change spy with the id when an infrastructure is selected", async () => {
           pickInfras.find('[data-test="infrastructue-picker"]').simulate('change', { target: {value: "45"}})
           await wait()
-          expect(onChangeSpy).toHaveBeenCalledWith({whichINfrastructure: "45"})
+          expect(onChangeSpy).toHaveBeenCalledWith("45")
         });
       });
     });
@@ -118,7 +116,6 @@ describe("PickInfrastructureWidget", () => {
       pickInfras = shallow (
         <PickInfrastructureWidget
           schema={{title: "pick an infrastructure", type: "string"}}
-          name="infrastructureId"
           formContext={{projectId: 1, getInfrastructures: getInfrastructuresSpy}}
           onChange={jest.fn()}
         />

@@ -23,7 +23,7 @@ export default class PickInfrastructureWidget extends React.Component {
   presentProjectNotFound = () => {}
 
   onSelection = (id) => {
-    this.props.onChange({[this.props.name]: id})
+    this.props.onChange(id)
   }
 
   renderInfrastructures = () => {

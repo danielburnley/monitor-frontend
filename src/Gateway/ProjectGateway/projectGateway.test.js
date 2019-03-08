@@ -107,7 +107,7 @@ describe("Project Gateway", () => {
             .matchHeader("Content-Type", "application/json")
             .matchHeader("API_KEY", "superSecret")
             .get("/project/1/infrastructures")
-            .reply(200, { infrastructures: [ { cow: "moo" } ]});
+            .reply(200, { infrastructures: {hif: [ { cow: "moo" } ]}});
           let gateway = new ProjectGateway(apiKeyGateway);
           response = await gateway.getInfrastructures(1);
         });
@@ -140,7 +140,7 @@ describe("Project Gateway", () => {
             .matchHeader("Content-Type", "application/json")
             .matchHeader("API_KEY", "extraSecret")
             .get("/project/5/infrastructures")
-            .reply(200, { infrastructures: [{ dogs: "woof" }]});
+            .reply(200, { infrastructures: {other: [{ dogs: "woof" }]}});
           let gateway = new ProjectGateway(apiKeyGateway);
           response = await gateway.getInfrastructures(5);
         });
