@@ -266,11 +266,21 @@ export default class FormActions extends React.Component {
         <div className="row">
           {
             this.state.status === "SubmissionFailure" ?
-              <div data-test="submitted-button-error"/>: null
+              <div
+                className="alert alert-danger"
+                role="alert"
+                data-test="submitted-button-error">
+                <strong>Error:</strong> Failed to submit, please ensure that you are connected to the internet.
+              </div>: null
           }
           {
             this.state.status === "UpdateFailure" ?
-              <div data-test="save-button-error"/>: null
+              <div
+                className="alert alert-danger"
+                role="alert"
+                data-test="save-button-error">
+                <strong>Error:</strong> Failed to save, please ensure that you are connected to the internet.
+              </div>: null
           }
           <div className="col-md-4">{this.renderMandatoryWarning()}</div>
         </div>

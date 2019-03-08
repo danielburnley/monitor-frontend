@@ -615,7 +615,7 @@ describe("<FormActions>", () => {
     });
   });
 
-  describe("Editting", () => {
+  describe("Editing", () => {
     it("does not show any messages", async () => {
       let wrap = mount(<FormActions
         formType="return"

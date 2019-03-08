@@ -19,7 +19,8 @@ export default class ProjectGateway {
           API_KEY: this.apiKeyGateway.getApiKey().apiKey
         }
       }
-    );
+    ).catch(() => { return { success: false }});
+
     if (rawResponse.ok) {
       let projectResponse = await rawResponse.json();
       let foundProject = new Project(
@@ -44,7 +45,8 @@ export default class ProjectGateway {
           API_KEY: this.apiKeyGateway.getApiKey().apiKey
         }
       }
-    );
+    ).catch(() => { return { success: false }});
+
     if (rawResponse.ok) {
       let response = await rawResponse.json();
       let infrastructures = response.infrastructures.map(infrastructure => (
@@ -70,7 +72,8 @@ export default class ProjectGateway {
           project_id
         })
       }
-    );
+    ).catch(() => { return { success: false }});
+
     if (response.ok) {
       return { success: true };
     } else {
@@ -111,7 +114,7 @@ export default class ProjectGateway {
         },
         body: JSON.stringify({ project_id, project_data, timestamp })
       }
-    );
+    ).catch(() => { return { success: false }});
 
     if (response.ok) {
       let rawResponse  = await response.json();
@@ -132,7 +135,7 @@ export default class ProjectGateway {
         },
         body: JSON.stringify({project_id, type, data })
       }
-    );
+    ).catch(() => { return { success: false }});
 
     if (response.ok) {
       let response_json = await response.json();
@@ -141,6 +144,8 @@ export default class ProjectGateway {
         prettyInvalidPaths: response_json.prettyInvalidPaths,
         invalidPaths: response_json.invalidPaths,
       };
+    } else {
+      return { success: false}
     }
   }
 
@@ -155,7 +160,7 @@ export default class ProjectGateway {
         },
         body: JSON.stringify({name, type, bid_id})
       }
-    );
+    ).catch(() => { return { success: false }});
 
     if (response.ok) {
       let response_json = await response.json();
@@ -179,7 +184,7 @@ export default class ProjectGateway {
         },
         body: JSON.stringify({users})
       }
-    );
+    ).catch(() => { return { success: false }});
 
     if (response.ok) return { success: true };
     return { success: false }
