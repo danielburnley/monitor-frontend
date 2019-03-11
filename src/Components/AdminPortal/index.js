@@ -104,6 +104,17 @@ export default class AdminPortal extends React.Component {
             />Marginal Viability Fund
           </label>
         </div>
+        <div className="radio">
+          <label>
+            <input
+              type="radio"
+              value="ff"
+              name="projectType"
+              data-test="create-project-ff"
+              onChange={e => this.onFieldChange(e.target.value, "type")}
+            />Forward Funding
+          </label>
+        </div>
       </div>
       <div className="form-group">
         <label htmlFor="projectBidId">Enter Bid Reference for the project</label>
