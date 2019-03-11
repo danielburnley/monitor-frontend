@@ -16,7 +16,8 @@ export default class ReturnGateway {
         headers: {'Content-Type': 'application/json',
           'API_KEY': this.apiKeyGateway.getApiKey().apiKey},
       },
-    );
+    ).catch(() => { return { success: false }});
+
     if (!rawResponse.ok) return {success: false};
 
     let response = await rawResponse.json();
@@ -32,7 +33,7 @@ export default class ReturnGateway {
         headers: {'Content-Type': 'application/json',
           'API_KEY': this.apiKeyGateway.getApiKey().apiKey},
       },
-    );
+    ).catch(() => { return { success: false }});
 
     if (rawResponse.ok) {
       let jsonResponse = await rawResponse.json();
@@ -50,7 +51,8 @@ export default class ReturnGateway {
         headers: {'Content-Type': 'application/json',
           'API_KEY': this.apiKeyGateway.getApiKey().apiKey},
       },
-    );
+    ).catch(() => { return { success: false }});
+
     if (rawResponse.ok) {
       let foundReturn = await rawResponse.json();
       return {success: true, foundReturn};
@@ -68,7 +70,7 @@ export default class ReturnGateway {
           'API_KEY': this.apiKeyGateway.getApiKey().apiKey},
         body: JSON.stringify({project_id, data}),
       },
-    );
+    ).catch(() => { return { success: false }});
 
     if (rawResponse.ok) {
       let jsonResponse = await rawResponse.json();
@@ -87,7 +89,7 @@ export default class ReturnGateway {
           'API_KEY': this.apiKeyGateway.getApiKey().apiKey},
         body: JSON.stringify({project_id, return_id, return_data}),
       },
-    );
+    ).catch(() => { return { success: false }});
 
     if (response.ok) {
       return {success: true};
@@ -110,7 +112,7 @@ export default class ReturnGateway {
           url: `${await this.locationGateway.getRoot()}/project/${project_id}/return/${return_id}`
         }),
       },
-    );
+    ).catch(() => { return { success: false }});
 
     if (response.ok) {
       return {success: true};
@@ -128,7 +130,7 @@ export default class ReturnGateway {
           'API_KEY': this.apiKeyGateway.getApiKey().apiKey},
         body: JSON.stringify({type, project_id, data}),
       },
-    );
+    ).catch(() => { return { success: false }});
 
     if (response.ok) {
       let response_json = await response.json();
@@ -137,6 +139,8 @@ export default class ReturnGateway {
         invalidPaths: response_json.invalidPaths,
         prettyInvalidPaths: response_json.prettyInvalidPaths
       }
+    } else {
+      return { success: false };
     }
   }
 }
