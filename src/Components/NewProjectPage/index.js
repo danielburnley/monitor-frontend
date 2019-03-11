@@ -61,6 +61,8 @@ export default class NewProjectPage extends React.Component {
     );
   };
 
+  validationUnsuccessful = async () => {}
+
   submitProject = async e => {
     this.setState({
       status: "submitting",

@@ -140,6 +140,7 @@ export default class ProjectGateway {
     if (response.ok) {
       let response_json = await response.json();
       return {
+        success: true,
         valid: response_json.valid,
         prettyInvalidPaths: response_json.prettyInvalidPaths,
         invalidPaths: response_json.invalidPaths,

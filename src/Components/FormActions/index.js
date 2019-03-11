@@ -42,6 +42,8 @@ export default class FormActions extends React.Component {
     this.setState({ valid: false, invalidPaths: pathList });
   };
 
+  validationUnsuccessful = async () => {}
+
   id = () => {
     return this.props.match.params[`${this.props.formType}Id`]
   }
@@ -84,7 +86,8 @@ export default class FormActions extends React.Component {
       invalidPaths: [],
       lastAction: "Save"
     });
-    this.props.update.execute(this, {
+
+    await this.props.update.execute(this, {
       projectId: this.props.match.params.projectId,
       id: this.id(),
       data: formData
@@ -96,7 +99,6 @@ export default class FormActions extends React.Component {
       formData,
       this.props.type
     );
-    this.setState({ status: "Updated" });
   };
 
   onFormCreate = async formData => {

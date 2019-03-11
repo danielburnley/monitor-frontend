@@ -478,6 +478,7 @@ describe("Project Gateway", () => {
             let response = await gateway.validate(1, "cat", "Some data stuffs");
 
             expect(response).toEqual({
+              success: true,
               invalidPaths: [],
               prettyInvalidPaths: [],
               valid: true
@@ -512,6 +513,7 @@ describe("Project Gateway", () => {
 
           it("returns an empty list", async () => {
             expect(response).toEqual({
+              success: true,
               invalidPaths: [],
               prettyInvalidPaths: [],
               valid: true
@@ -544,6 +546,7 @@ describe("Project Gateway", () => {
 
           it("returns details of missing fields", async () => {
             expect(response).toEqual({
+              success: true,
               invalidPaths: [ 'dogHouses', 'location'],
               prettyInvalidPaths: ['Dog Houses', 'Location'],
               valid: false
@@ -574,6 +577,7 @@ describe("Project Gateway", () => {
 
           it("returns details of missing fields", async () => {
             expect(response).toEqual({
+              success: true,
               invalidPaths: [ 'catHouses', 'timezone'],
               prettyInvalidPaths: ['Cat Houses', 'Time Zone'],
               valid: false

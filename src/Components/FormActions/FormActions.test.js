@@ -527,6 +527,7 @@ describe("<FormActions>", () => {
 
       await save(wrap);
       await wait();
+      await wrap.update();
 
       expect(wrap.find("[data-test='save-button']").length).toEqual(1);
       expect(wrap.find("[data-test='submit-button']").length).toEqual(1);
@@ -554,6 +555,7 @@ describe("<FormActions>", () => {
           />);
 
         await save(wrap);
+        await wrap.update();
         await wait();
         expect(validateSpyInvalid.execute).toHaveBeenCalledWith(expect.anything(), 1, initialData, 'ac');
         expect(wrap.find("[data-test='saveSuccess']").length).toEqual(1);
@@ -563,7 +565,7 @@ describe("<FormActions>", () => {
     });
 
     describe("A valid response", () => {
-      it('shows a success messaged', async () => {
+      it('shows a success message', async () => {
         let wrap = mount(
           <FormActions
             formType="return"

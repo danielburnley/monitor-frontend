@@ -40,6 +40,7 @@ describe("ReturnGateway", () => {
 
         it("returns a list of paths that were invalid", () => {
           expect(response).toEqual({
+            success: true,
             invalidPaths: [],
             prettyInvalidPaths: [],
             valid: true
@@ -91,7 +92,7 @@ describe("ReturnGateway", () => {
           .matchHeader('Content-Type', 'application/json')
           .matchHeader('API_KEY', 'megaSecret')
           .post('/return/validate',{type, project_id, data})
-          .reply(200, {valid: false, invalidPaths: ['cats']});
+          .reply(200, {valid: false, invalidPaths: ['cats'], prettyInvalidPaths: ['Cats']});
         let gateway = new ReturnGateway(apiKeyGateway, locationGateway);
 
         response = await gateway.validate(project_id, data, type);
@@ -102,7 +103,7 @@ describe("ReturnGateway", () => {
       });
 
       it('returns a list of paths that were invalid', () => {
-        expect(response).toEqual({invalidPaths: ['cats'], valid: false});
+        expect(response).toEqual({invalidPaths: ['cats'], prettyInvalidPaths: ['Cats'], valid: false, success: true});
       });
     });
   });
