@@ -1178,7 +1178,93 @@ describe("NewProjectPage", () => {
     });
   });
 
-  it("clear the draft saved message after something is submitted", async () => {
+  describe("Unsuccessful message", () => {
+    let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"})) };
+
+    it("Reenables the save and submit buttons if submission failed", async () => {
+      let submitProjectSpy = {
+        execute: jest.fn(async (presenter, id) => { await presenter.creationFailure() })
+      };
+      let updateProjectSpy = {
+        execute: jest.fn(async (presenter, id) => {})
+      };
+      let validateProjectSpy = { execute: jest.fn(async () => {}) };
+
+      let wrap = mount(
+        <NewProjectPage
+          projectURL={getProjectURLUsecase}
+          getRole={userRoleUseCaseSpy}
+          match={{ params: { id: 1 } }}
+          updateProject={updateProjectSpy}
+          submitProject={submitProjectSpy}
+          validateProject={validateProjectSpy}
+          data={{}}
+          schema={schema}
+        />
+      );
+
+      await wrap.find('[data-test="submit-project-button"]').simulate('click');
+      await wait();
+      await wrap.update();
+
+      expect(
+        wrap.find('[data-test="disabled-update-project-button"]').length
+      ).toEqual(0);
+      expect(
+        wrap.find('[data-test="disabled-submit-project-button"]').length
+      ).toEqual(0);
+      expect(wrap.find('[data-test="submit-project-button"]').length).toEqual(
+        1
+      );
+      expect(wrap.find('[data-test="update-project-button"]').length).toEqual(
+        1
+      );
+      expect(wrap.find("[data-test='submitted-button-error']").length).toEqual(1);
+    });
+
+    it("Reenables the save and submit buttons if saving failed", async () => {
+      let submitProjectSpy = {
+        execute: jest.fn(async (presenter, id) => {})
+      };
+      let updateProjectSpy = {
+        execute: jest.fn(async (presenter, id) => { await presenter.projectNotUpdated() })
+      };
+      let validateProjectSpy = { execute: jest.fn(async () => {}) };
+
+      let wrap = mount(
+        <NewProjectPage
+          projectURL={getProjectURLUsecase}
+          getRole={userRoleUseCaseSpy}
+          match={{ params: { id: 1 } }}
+          updateProject={updateProjectSpy}
+          submitProject={submitProjectSpy}
+          validateProject={validateProjectSpy}
+          data={{}}
+          schema={schema}
+        />
+      );
+
+      await wrap.find('[data-test="update-project-button"]').simulate('click');
+      await wait();
+      await wrap.update();
+
+      expect(
+        wrap.find('[data-test="disabled-update-project-button"]').length
+      ).toEqual(0);
+      expect(
+        wrap.find('[data-test="disabled-submit-project-button"]').length
+      ).toEqual(0);
+      expect(wrap.find('[data-test="submit-project-button"]').length).toEqual(
+        1
+      );
+      expect(wrap.find('[data-test="update-project-button"]').length).toEqual(
+        1
+      );
+      expect(wrap.find("[data-test='save-button-error']").length).toEqual(1);
+    });
+  });
+
+  it("clears the draft saved message after something is submitted", async () => {
     let submitProjectSpy = {
       execute: jest.fn((presenter, id) => {
         presenter.creationSuccess(id);
