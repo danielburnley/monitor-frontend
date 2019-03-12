@@ -1,6 +1,6 @@
 import React from "react";
 import AdminPortal from ".";
-import { shallow, mount } from "enzyme";
+import { shallow } from "enzyme";
 
 describe("AdminPortal", () => {
   describe("A Superuser", () => {
@@ -144,7 +144,7 @@ describe("AdminPortal", () => {
       userGatewaySpy = { execute: jest.fn(() => ({role: "Superuser"})) }
       process.env.REACT_APP_FF_OPTION_ENABLED = undefined
 
-      adminPortal = mount(
+      adminPortal = shallow(
         <AdminPortal
           getRole={userGatewaySpy}
           projectId={1}

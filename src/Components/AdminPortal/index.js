@@ -292,7 +292,6 @@ export default class AdminPortal extends React.Component {
   };
 
   render() {
-    console.log(this.env.REACT_APP_FF_OPTION_ENABLED)
     if (this.props.getRole.execute().role === "Superuser") {
       return (
         <div data-test="admin">
