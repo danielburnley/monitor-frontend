@@ -29,7 +29,9 @@ export default class NewProjectPage extends React.Component {
     this.setState({ status: "submitted" });
   }
 
-  creationFailure() {}
+  creationFailure() {
+    this.setState({ status: "SubmissionFailure" });
+  }
 
   projectUpdated(errors, timestamp) {
     if(timestamp) {
@@ -50,7 +52,9 @@ export default class NewProjectPage extends React.Component {
     }
   }
 
-  projectNotUpdated() {}
+  projectNotUpdated() {
+    this.setState({ status: "UpdateFailure"})
+  }
 
   validateProject = async () => {
     await this.props.validateProject.execute(
@@ -60,6 +64,8 @@ export default class NewProjectPage extends React.Component {
       this.state.formData
     );
   };
+
+  validationUnsuccessful = async () => {}
 
   submitProject = async e => {
     this.setState({
@@ -167,6 +173,30 @@ export default class NewProjectPage extends React.Component {
     return null;
   }
 
+  renderSubmissionFailure = () => {
+    if (this.state.status === "SubmissionFailure")
+    {
+      return <div
+        className="alert alert-danger"
+        role="alert"
+        data-test="submitted-button-error">
+        <strong>Error:</strong> Failed to submit, please ensure that you are connected to the internet.
+      </div>
+    }
+  }
+
+  renderSaveFailure = () => {
+    if (this.state.status === "UpdateFailure")
+    {
+      return <div
+        className="alert alert-danger"
+        role="alert"
+        data-test="save-button-error">
+        <strong>Error:</strong> Failed to save, please ensure that you are connected to the internet.
+      </div>
+    }
+  }
+
   renderSuccessOrForm() {
     if (this.state.status === "submitted") {
       return this.renderSubmitSuccess();
@@ -192,6 +222,8 @@ export default class NewProjectPage extends React.Component {
             invalidPaths={this.state.prettyInvalidPaths}
             errors={this.state.errors}
           />
+          { this.renderSubmissionFailure() }
+          { this.renderSaveFailure() }
           { this.renderSaveSuccess() }
           <div className="row">
             { this.renderSubmitButton() }

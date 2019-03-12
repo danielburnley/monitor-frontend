@@ -17,6 +17,9 @@ export default class FormActions extends React.Component {
     };
   }
 
+  submissionUnsuccessful = async () => {
+    this.setState({ status: "SubmissionFailure" });
+  };
 
   submissionSuccessful = async () => {
     this.setState({ status: "Submitted"});
@@ -30,12 +33,16 @@ export default class FormActions extends React.Component {
     this.setState({ status: "Updated" });
   };
 
-  updateUnsuccessful = async () => {};
+  updateUnsuccessful = async () => {
+    this.setState({ status: "UpdateFailure" });
+  };
 
 
   invalidateFields = async pathList => {
     this.setState({ valid: false, invalidPaths: pathList });
   };
+
+  validationUnsuccessful = async () => {}
 
   id = () => {
     return this.props.match.params[`${this.props.formType}Id`]
@@ -79,7 +86,8 @@ export default class FormActions extends React.Component {
       invalidPaths: [],
       lastAction: "Save"
     });
-    this.props.update.execute(this, {
+
+    await this.props.update.execute(this, {
       projectId: this.props.match.params.projectId,
       id: this.id(),
       data: formData
@@ -91,7 +99,6 @@ export default class FormActions extends React.Component {
       formData,
       this.props.type
     );
-    this.setState({ status: "Updated" });
   };
 
   onFormCreate = async formData => {
@@ -210,7 +217,7 @@ export default class FormActions extends React.Component {
       </div>
     )
   };
-    
+
   backToProject = e => {
     this.props.history.push(`/project/${this.props.match.params.projectId}`);
     e.preventDefault();
@@ -245,6 +252,30 @@ export default class FormActions extends React.Component {
     </div>
   )
 
+  renderSubmissionFailure = () => {
+    if (this.state.status === "SubmissionFailure")
+    {
+      return <div
+        className="alert alert-danger"
+        role="alert"
+        data-test="submitted-button-error">
+        <strong>Error:</strong> Failed to submit, please ensure that you are connected to the internet.
+      </div>
+    }
+  }
+
+  renderSaveFailure = () => {
+    if (this.state.status === "UpdateFailure")
+    {
+      return <div
+        className="alert alert-danger"
+        role="alert"
+        data-test="save-button-error">
+        <strong>Error:</strong> Failed to save, please ensure that you are connected to the internet.
+      </div>
+    }
+  }
+
   render() {
     return (
       <div>
@@ -259,6 +290,8 @@ export default class FormActions extends React.Component {
           </div>
         </div>
         <div className="row">
+          { this.renderSubmissionFailure() }
+          { this.renderSaveFailure() }
           <div className="col-md-4">{this.renderMandatoryWarning()}</div>
         </div>
         <div className="row">
