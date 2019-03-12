@@ -4,8 +4,9 @@ import { shallow } from "enzyme";
 
 describe("AdminPortal", () => {
   describe("A Superuser", () => {
-    let adminPortal, userGatewaySpy, createProjectUseCaseSpy, addUsersToProjectSpy;
+    let adminPortal, userGatewaySpy, createProjectUseCaseSpy, addUsersToProjectSpy, ffEnabled;
     beforeEach(() => {
+      ffEnabled = process.env.REACT_APP_FF_OPTION_ENABLED
       createProjectUseCaseSpy = { execute: jest.fn((presenter, request) => { presenter.creationSuccess(1)})}
       addUsersToProjectSpy = { execute: jest.fn((presenter, request) => { presenter.userAddedSuccess()})}
       userGatewaySpy = { execute: jest.fn(() => ({role: "Superuser"})) }
@@ -20,6 +21,10 @@ describe("AdminPortal", () => {
         />
       )
     });
+
+    afterEach(() => {
+      process.env.REACT_APP_FF_OPTION_ENABLED = undefined
+    })
 
     it("Will display the admin portal", () => {
       expect(adminPortal.find('[data-test="admin"]').length).toEqual(1);
@@ -142,7 +147,6 @@ describe("AdminPortal", () => {
       createProjectUseCaseSpy = { execute: jest.fn((presenter, request) => { presenter.creationSuccess(1)})}
       addUsersToProjectSpy = { execute: jest.fn((presenter, request) => { presenter.userAddedSuccess()})}
       userGatewaySpy = { execute: jest.fn(() => ({role: "Superuser"})) }
-      process.env.REACT_APP_FF_OPTION_ENABLED = undefined
 
       adminPortal = shallow(
         <AdminPortal
