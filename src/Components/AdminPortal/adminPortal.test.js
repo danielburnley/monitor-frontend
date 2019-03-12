@@ -1,6 +1,6 @@
 import React from "react";
 import AdminPortal from ".";
-import { shallow } from "enzyme";
+import { shallow, mount } from "enzyme";
 
 describe("AdminPortal", () => {
   describe("A Superuser", () => {
@@ -9,6 +9,7 @@ describe("AdminPortal", () => {
       createProjectUseCaseSpy = { execute: jest.fn((presenter, request) => { presenter.creationSuccess(1)})}
       addUsersToProjectSpy = { execute: jest.fn((presenter, request) => { presenter.userAddedSuccess()})}
       userGatewaySpy = { execute: jest.fn(() => ({role: "Superuser"})) }
+      process.env.REACT_APP_FF_OPTION_ENABLED = 'yes'
 
       adminPortal = shallow(
         <AdminPortal
@@ -88,6 +89,10 @@ describe("AdminPortal", () => {
             .simulate("click")
         });
 
+        it("Will find the ff option", () => {
+          expect(adminPortal.find('[data-test="create-project-ff"]').length).toEqual(1)
+        })
+
         it("Will call the create project use case with details upon submit", () => {
           expect(createProjectUseCaseSpy.execute).toHaveBeenCalledWith(expect.anything(), "name", "type", "HUA/DHA/63278")
         });
@@ -131,11 +136,35 @@ describe("AdminPortal", () => {
     });
   });
 
+  describe("Environment flag disabled", () => {
+    let adminPortal, userGatewaySpy, createProjectUseCaseSpy, addUsersToProjectSpy;
+    beforeEach(() => {
+      createProjectUseCaseSpy = { execute: jest.fn((presenter, request) => { presenter.creationSuccess(1)})}
+      addUsersToProjectSpy = { execute: jest.fn((presenter, request) => { presenter.userAddedSuccess()})}
+      userGatewaySpy = { execute: jest.fn(() => ({role: "Superuser"})) }
+      process.env.REACT_APP_FF_OPTION_ENABLED = undefined
+
+      adminPortal = mount(
+        <AdminPortal
+          getRole={userGatewaySpy}
+          projectId={1}
+          createProject={createProjectUseCaseSpy}
+          addUsersToProject={addUsersToProjectSpy}
+        />
+      )
+    });
+
+    it("Will not find the ff option", () => {
+      expect(adminPortal.find('[data-test="create-project-ff"]').length).toEqual(0)
+    })
+  });
+
   describe("Another User", () => {
     let adminPortal, userGatewaySpy, createProjectUseCaseSpy;
     beforeEach(() => {
       createProjectUseCaseSpy = { execute: jest.fn((presenter, request) => { presenter.creationSuccess(1)})}
       userGatewaySpy = { execute: jest.fn(() => ({role: "Local"})) }
+      process.env.REACT_APP_FF_OPTION_ENABLED = 'yes'
 
       adminPortal = shallow(
         <AdminPortal

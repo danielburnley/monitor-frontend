@@ -1,6 +1,6 @@
 version: "3"
 services:
-  storybook: 
+  storybook:
     build: .
     volumes:
       - ./:/app
@@ -22,3 +22,4 @@ services:
     privileged: true
     environment:
       REACT_APP_HIF_API_URL: http://localhost:4567/
+      REACT_APP_FF_OPTION_ENABLED: 'yes'
