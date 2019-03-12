@@ -252,6 +252,30 @@ export default class FormActions extends React.Component {
     </div>
   )
 
+  renderSubmissionFailure = () => {
+    if (this.state.status === "SubmissionFailure")
+    {
+      return <div
+        className="alert alert-danger"
+        role="alert"
+        data-test="submitted-button-error">
+        <strong>Error:</strong> Failed to submit, please ensure that you are connected to the internet.
+      </div>
+    }
+  }
+
+  renderSaveFailure = () => {
+    if (this.state.status === "UpdateFailure")
+    {
+      return <div
+        className="alert alert-danger"
+        role="alert"
+        data-test="save-button-error">
+        <strong>Error:</strong> Failed to save, please ensure that you are connected to the internet.
+      </div>
+    }
+  }
+
   render() {
     return (
       <div>
@@ -266,24 +290,8 @@ export default class FormActions extends React.Component {
           </div>
         </div>
         <div className="row">
-          {
-            this.state.status === "SubmissionFailure" ?
-              <div
-                className="alert alert-danger"
-                role="alert"
-                data-test="submitted-button-error">
-                <strong>Error:</strong> Failed to submit, please ensure that you are connected to the internet.
-              </div>: null
-          }
-          {
-            this.state.status === "UpdateFailure" ?
-              <div
-                className="alert alert-danger"
-                role="alert"
-                data-test="save-button-error">
-                <strong>Error:</strong> Failed to save, please ensure that you are connected to the internet.
-              </div>: null
-          }
+          { this.renderSubmissionFailure() }
+          { this.renderSaveFailure() }
           <div className="col-md-4">{this.renderMandatoryWarning()}</div>
         </div>
         <div className="row">
