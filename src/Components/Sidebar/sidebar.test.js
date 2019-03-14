@@ -15,7 +15,7 @@ describe("<Sidebar>", () => {
       .find('[data-test="sidebar-item-child"]');
   }
 
-  describe("Given no data", () => {
+  describe("Given no items", () => {
     beforeEach(() => {
       let itemClickSpy = jest.fn();
       sidebar = mount(<Sidebar items={{}} onItemClick={itemClickSpy}/>);
@@ -23,6 +23,23 @@ describe("<Sidebar>", () => {
 
     it("Renders an empty sidebar given no data", () => {
       expect(sidebarItems().length).toEqual(0);
+    });
+
+    describe("Given it is addable", () => {
+      let itemClickSpy;
+
+      beforeEach(() => {
+        itemClickSpy = jest.fn();
+        sidebar = mount(
+          <Sidebar addable={true} items={{}} onItemClick={itemClickSpy} userRole="Homes England"/>
+        );
+      });
+
+      it("Renders only the add button", async () => {
+        expect(sidebar.find("[data-test='sidebar-item']").length).toEqual(0);
+        expect(sidebar.find("[data-test='remove-button']").length).toEqual(0);
+        expect(sidebar.find("[data-test='add-button']").length).toEqual(1);
+      });
     });
   });
 
@@ -291,14 +308,14 @@ describe("<Sidebar>", () => {
     let onChangeSpy
     describe("As a Home England or Superuser", () => {
       beforeEach(() => {
-        let onItemClickSpy = jest.fn();     
+        let onItemClickSpy = jest.fn();
         let formData = {
           "mainSection": [
             {data1: "somedate"},
             {more: "moredata"},
             {andanother: "lotsofdata"}
           ]
-        } 
+        }
         onChangeSpy = jest.fn();
         sidebar = mount(
           <Sidebar
@@ -316,11 +333,11 @@ describe("<Sidebar>", () => {
           />
         );
       });
-  
+
       it("displays an add button", () => {
         expect(sidebar.find('[data-test="add-button"]').length).toEqual(1)
       });
-  
+
       it("clicking the add button calls on onchange prop with an extra array item", () => {
         sidebar.find('[data-test="add-button"]').simulate('click')
         expect(onChangeSpy).toHaveBeenCalledWith({"mainSection": [
@@ -330,27 +347,27 @@ describe("<Sidebar>", () => {
           {}
         ]})
       });
-  
+
       it("displays a remove button", () => {
         expect(sidebar.find('[data-test="remove-button"]').length).toEqual(1)
       });
-  
+
       describe("Accpeting the confirm message", () => {
         beforeEach(() => {
           global.confirm = jest.fn(message => true)
         });
-  
+
         it("clicking the remove button calls on onchange prop with an item removed", () => {
           sidebar.find('[data-test="remove-button"]').simulate('click')
           expect(onChangeSpy).toHaveBeenCalledWith({"mainSection":[{data1: "somedate"},{more: "moredata"}]})
         });
       });
-  
+
       describe("Declining the confirm message", () => {
         beforeEach(() => {
           global.confirm = jest.fn(message => false)
         });
-  
+
         it("clicking the remove button calls on onchange prop with an item removed", () => {
           sidebar.find('[data-test="remove-button"]').simulate('click')
           expect(onChangeSpy).not.toHaveBeenCalled()
@@ -404,7 +421,7 @@ describe("<Sidebar>", () => {
                 {},
                 {}
               ]
-            } 
+            }
           )
         });
 
@@ -419,7 +436,7 @@ describe("<Sidebar>", () => {
               "anotherSection": [
                 {}
               ]
-            } 
+            }
           )
         });
       });
@@ -428,7 +445,7 @@ describe("<Sidebar>", () => {
 
     describe("As other users", () => {
       beforeEach(() => {
-        let onItemClickSpy = jest.fn();      
+        let onItemClickSpy = jest.fn();
         onChangeSpy = jest.fn();
         sidebar = mount(
           <Sidebar
@@ -464,7 +481,7 @@ describe("<Sidebar>", () => {
   describe("Given something that is non addable", () => {
     let onChangeSpy
     beforeEach(() => {
-      let onItemClickSpy = jest.fn();      
+      let onItemClickSpy = jest.fn();
       onChangeSpy = jest.fn();
       sidebar = mount(
         <Sidebar
