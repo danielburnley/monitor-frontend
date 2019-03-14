@@ -174,7 +174,7 @@ const CreateReturnButton = props => (
     data-test="new-return-button"
     className="btn btn-primary"
     onClick={() =>
-      props.history.push(`/project/${props.match.params.id}/return`)
+      props.history.push(`/project/${props.match.params.projectId}/return`)
     }
   >
     Create new return
@@ -186,7 +186,7 @@ const CreateClaimButton = props => (
     data-test="new-claim-button"
     className="btn btn-primary"
     onClick={() =>
-      props.history.push(`/project/${props.match.params.id}/claim`)
+      props.history.push(`/project/${props.match.params.projectId}/claim`)
     }
   >
     Create new claim
@@ -198,7 +198,7 @@ const ViewBaselineButton = props => (
     data-test="view-baseline-button"
     className="btn btn-secondary"
     onClick={() =>
-      props.history.push(`/project/${props.match.params.id}/baseline`)
+      props.history.push(`/project/${props.match.params.projectId}/baseline`)
     }
   >
     View baseline information
@@ -212,7 +212,7 @@ const FillInBaselineButton = props => (
       data-test="fill-in-baseline-button"
       className="btn btn-link"
       onClick={() =>
-        props.history.push(`/project/${props.match.params.id}/baseline`)
+        props.history.push(`/project/${props.match.params.projectId}/baseline`)
       }
       >
       Fill in Baseline
@@ -228,7 +228,7 @@ const EditInfrastructuresButton = (props) => {
         data-test="edit-infrastructures-button"
         className="btn btn-link"
         onClick={() =>
-          props.history.push(`/project/${props.match.params.id}/infrastructures`)
+          props.history.push(`/project/${props.match.params.projectId}/infrastructures`)
         }
       >
         View/Edit Deliverables
@@ -242,7 +242,7 @@ const EditInfrastructuresButton = (props) => {
 const BackToProjectOverviewButton = props => (
   <button
     className="btn btn-link btn-lg"
-    onClick={() => props.history.push(`/project/${props.match.params.id}`)}
+    onClick={() => props.history.push(`/project/${props.match.params.projectId}`)}
   >
     Back to project overview
   </button>
@@ -264,7 +264,7 @@ const renderInfrastructuresPage = (props) => (
   </div>
 );
 
-const renderBaselineEditorPage = (props, projectStatus, formData, formSchema, projectType, formUiSchema, timestamp  ) => (
+const renderBaselineEditorPage = (props, projectStatus, formData, formSchema, projectType, formUiSchema, timestamp) => (
   <div className="col-md-10">
     <div className="row">
       <BackToProjectOverviewButton {...props} />
@@ -272,6 +272,7 @@ const renderBaselineEditorPage = (props, projectStatus, formData, formSchema, pr
     <div className="row">
       <NewProjectPage
         {...props}
+        projectId={props.match.params.projectId}
         projectURL={getProjectURL}
         uiSchema={formUiSchema}
         status={projectStatus}
@@ -315,7 +316,7 @@ const renderNewProjectPageOverview = (props, projectStatus, formData, formSchema
 
 const renderSubmittedProjectPage = (props, formData, formSchema) => (
   <div className="col-md-10 col-md-offset-1">
-    <ProjectSummary data={formData} schema={formSchema}  unsubmitProject={unsubmitProject} projectId={props.match.params.id}/>
+    <ProjectSummary data={formData} schema={formSchema}  unsubmitProject={unsubmitProject} projectId={props.match.params.projectId}/>
     <div className="row">
       <div className="col-md-2">
         <CreateReturnButton {...props} />
@@ -328,7 +329,7 @@ const renderSubmittedProjectPage = (props, formData, formSchema) => (
       </div>
     </div>
     <div className="row">
-      <ReturnListProvider projectId={props.match.params.id} getReturns={getReturnsUseCase}>
+      <ReturnListProvider projectId={props.match.params.projectId} getReturns={getReturnsUseCase}>
         {({ returns }) => (
           <ReturnList {...props} returns={returns} />
         )}
@@ -421,24 +422,24 @@ const App = () => (
                     render={renderhomepage}
                   />
                   <Route
-                    path="/project/:id"
+                    path="/project/:projectId"
                     render={props => (
                       <ProjectPortal
                       {...props}
                       url={props.match.url}
-                      projectId={props.match.params.id}
+                      projectId={props.match.params.projectId}
                       canAccessProject={canAccessProjectUseCase}
 
                       >
-                        <Route exact path="/project/:id" render={renderProjectPage} />
+                        <Route exact path="/project/:projectId" render={renderProjectPage} />
                         <Route
                           exact
-                          path="/project/:id/infrastructures"
+                          path="/project/:projectId/infrastructures"
                           render={renderInfrastructuresPage}
                         />
                         <Route
                           exact
-                          path="/project/:id/baseline"
+                          path="/project/:projectId/baseline"
                           render={renderBaselinePage}
                         />
                         <Route

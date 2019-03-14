@@ -73,7 +73,7 @@ describe("Infrastructure Addition page", () => {
         history={history}
         getProject={getProjectUseCase}
         updateProject={updateProjectUseCase}
-        match={{ params: { id: 3, type: 'ff' } }}
+        match={{ params: { projectId: 3, type: 'ff' } }}
       />);
 
       await component.update();
@@ -229,7 +229,7 @@ describe("Infrastructure Addition page", () => {
         history={history}
         getProject={getProjectUseCase}
         updateProject={updateProjectUseCase}
-        match={{ params: { id: 1, type: 'ff' } }}
+        match={{ params: { projectId: 1, type: 'ff' } }}
       />);
 
       await component.update();

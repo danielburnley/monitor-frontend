@@ -45,7 +45,7 @@ describe("NewProjectPage", () => {
       <NewProjectPage
         projectURL={getProjectURLUsecase}
         documentGateway={jest.fn()}
-        match={{ params: { id: 1 } }}
+        projectId = {1}
         updateProject={{}}
         submitProject={{}}
         validateProject={ { execute: () => null } }
@@ -64,7 +64,7 @@ describe("NewProjectPage", () => {
       <NewProjectPage
         projectURL={getProjectURLUsecase}
         documentGateway={documentGatewayDummy}
-        match={{ params: { id: 1 } }}
+        projectId={1}
         updateProject={{}}
         submitProject={{}}
         validateProject={ { execute: () => null } }
@@ -87,7 +87,7 @@ describe("NewProjectPage", () => {
         <NewProjectPage
           projectURL={getProjectURLUsecase}
           documentGateway={documentGatewayDummy}
-          match={{ params: { id: 6 } }}
+          projectId={6}
           getInfrastructures={"get me some infrastructures"}
           updateProject={{}}
           submitProject={{}}
@@ -110,7 +110,7 @@ describe("NewProjectPage", () => {
         <NewProjectPage
           projectURL={getProjectURLUsecase}
           documentGateway={documentGatewayDummy}
-          match={{ params: { id: 8 } }}
+          projectId={8}
           updateProject={{}}
           getInfrastructures={"infras"}
           submitProject={{}}
@@ -142,7 +142,7 @@ describe("NewProjectPage", () => {
           <NewProjectPage
             projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
-            match={{ params: { id: 1 } }}
+            projectId={1}
             updateProject={updateProjectSpy}
             submitProject={submitProjectSpy}
             validateProject={validateProjectSpy}
@@ -175,7 +175,7 @@ describe("NewProjectPage", () => {
           <NewProjectPage
             projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
-            match={{ params: { id: 1 } }}
+            projectId={1}
             updateProject={updateProjectSpy}
             submitProject={submitProjectSpy}
             validateProject={validateProjectSpy}
@@ -214,7 +214,7 @@ describe("NewProjectPage", () => {
           <NewProjectPage
             projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
-            match={{ params: { id: 1 } }}
+            projectId={1}
             updateProject={updateProjectSpy}
             submitProject={submitProjectSpy}
             validateProject={validateProjectSpy}
@@ -247,7 +247,7 @@ describe("NewProjectPage", () => {
           <NewProjectPage
             projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
-            match={{ params: { id: 1 } }}
+            projectId={1}
             updateProject={updateProjectSpy}
             submitProject={submitProjectSpy}
             validateProject={validateProjectSpy}
@@ -286,7 +286,7 @@ describe("NewProjectPage", () => {
           <NewProjectPage
             projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
-            match={{ params: { id: 1 } }}
+            projectId={1}
             updateProject={updateProjectSpy}
             submitProject={submitProjectSpy}
             validateProject={validateProjectSpy}
@@ -319,7 +319,7 @@ describe("NewProjectPage", () => {
           <NewProjectPage
             projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
-            match={{ params: { id: 1 } }}
+            projectId={1}          
             updateProject={updateProjectSpy}
             submitProject={submitProjectSpy}
             validateProject={validateProjectSpy}
@@ -360,7 +360,7 @@ describe("NewProjectPage", () => {
           <NewProjectPage
             projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
-            match={{ params: { id: 1 } }}
+            projectId={1}
             updateProject={updateProjectSpy}
             submitProject={submitProjectSpy}
             validateProject={validateProjectSpy}
@@ -392,7 +392,7 @@ describe("NewProjectPage", () => {
           <NewProjectPage
             projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
-            match={{ params: { id: 1 } }}
+            projectId={1}
             updateProject={updateProjectSpy}
             submitProject={submitProjectSpy}
             validateProject={validateProjectSpy}
@@ -430,7 +430,7 @@ describe("NewProjectPage", () => {
           <NewProjectPage
             projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
-            match={{ params: { id: 1 } }}
+            projectId={1}
             updateProject={updateProjectSpy}
             submitProject={submitProjectSpy}
             validateProject={validateProjectSpy}
@@ -462,7 +462,7 @@ describe("NewProjectPage", () => {
           <NewProjectPage
             projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
-            match={{ params: { id: 1 } }}
+            projectId={1}
             updateProject={updateProjectSpy}
             submitProject={submitProjectSpy}
             validateProject={validateProjectSpy}
@@ -503,7 +503,7 @@ describe("NewProjectPage", () => {
       let wrap = mount(
         <NewProjectPage
           projectURL={getProjectURLUsecase}
-          match={{ params: { id: 1 } }}
+          projectId={1}
           updateProject={updateProjectSpy}
           submitProject={submitProjectSpy}
           validateProject={validateProjectSpy}
@@ -534,7 +534,7 @@ describe("NewProjectPage", () => {
       let wrap = mount(
         <NewProjectPage
           projectURL={getProjectURLUsecase}
-          match={{ params: { id: 9 } }}
+          projectId={9}
           updateProject={updateProjectSpy}
           submitProject={submitProjectSpy}
           validateProject={validateProjectSpy}
@@ -569,7 +569,7 @@ describe("NewProjectPage", () => {
       let wrap = mount(
         <NewProjectPage
           projectURL={getProjectURLUsecase}
-          match={{ params: { id: 9 } }}
+          projectId={9}
           updateProject={updateProjectSpy}
           submitProject={submitProjectSpy}
           validateProject={validateProjectSpy}
@@ -601,7 +601,7 @@ describe("NewProjectPage", () => {
       let wrap = mount(
         <NewProjectPage
           projectURL={getProjectURLUsecase}
-          match={{ params: { id: 1 } }}
+          projectId={1}
           updateProject={updateProjectSpy}
           submitProject={submitProjectSpy}
           validateProject={validateProjectSpy}
@@ -640,7 +640,7 @@ describe("NewProjectPage", () => {
           <NewProjectPage
             projectURL={getProjectURLUsecase}
             projectType={"hif"}
-            match={{ params: { id: 1 } }}
+            projectId={1}
             updateProject={updateProjectSpy}
             submitProject={submitProjectSpy}
             validateProject={validateProjectSpy}
@@ -680,7 +680,7 @@ describe("NewProjectPage", () => {
           <NewProjectPage
             projectURL={getProjectURLUsecase}
             projectType={"ac"}
-            match={{ params: { id: 6 } }}
+            projectId={6}
             updateProject={updateProjectSpy}
             submitProject={submitProjectSpy}
             validateProject={validateProjectSpy}
@@ -722,7 +722,7 @@ describe("NewProjectPage", () => {
           <NewProjectPage
             projectURL={getProjectURLUsecase}
             projectType={"hif"}
-            match={{ params: { id: 1 } }}
+            projectId={1}
             updateProject={updateProjectSpy}
             submitProject={submitProjectSpy}
             validateProject={validateProjectSpy}
@@ -762,7 +762,7 @@ describe("NewProjectPage", () => {
           <NewProjectPage
             projectURL={getProjectURLUsecase}
             projectType={"ac"}
-            match={{ params: { id: 6 } }}
+            projectId={6}
             updateProject={updateProjectSpy}
             submitProject={submitProjectSpy}
             validateProject={validateProjectSpy}
@@ -803,7 +803,7 @@ describe("NewProjectPage", () => {
         let wrap = mount(
           <NewProjectPage
             projectURL={getProjectURLUsecase}
-            match={{ params: { id: 1 } }}
+            projectId={1}
             projectType={"hey"}
             updateProject={updateProjectSpy}
             submitProject={submitProjectSpy}
@@ -849,7 +849,7 @@ describe("NewProjectPage", () => {
         let wrap = mount(
           <NewProjectPage
             projectURL={getProjectURLUsecase}
-            match={{ params: { id: 1 } }}
+            projectId={1}
             projectType={"hey"}
             updateProject={updateProjectSpy}
             submitProject={submitProjectSpy}
@@ -891,7 +891,7 @@ describe("NewProjectPage", () => {
       let wrap = mount(
         <NewProjectPage
           projectURL={getProjectURLUsecase}
-          match={{ params: { id: 1 } }}
+          projectId={1}
           updateProject={updateProjectSpy}
           submitProject={submitProjectSpy}
           validateProject={validateProjectSpy}
@@ -937,7 +937,7 @@ describe("NewProjectPage", () => {
       let wrap = mount(
         <NewProjectPage
           projectURL={getProjectURLUsecase}
-          match={{ params: { id: 1 } }}
+          projectId={1}
           updateProject={updateProjectSpy}
           submitProject={submitProjectSpy}
           validateProject={validateProjectSpy}
@@ -981,7 +981,7 @@ describe("NewProjectPage", () => {
       let wrap = mount(
         <NewProjectPage
           projectURL={getProjectURLUsecase}
-          match={{ params: { id: 1 } }}
+          projectId={1}
           submitProject={submitProjectSpy}
           validateProject={validateProjectSpy}
           data={data}
@@ -1015,7 +1015,7 @@ describe("NewProjectPage", () => {
       let wrap = mount(
         <NewProjectPage
           projectURL={getProjectURLUsecase}
-          match={{ params: { id: 1 } }}
+          projectId={1}
           updateProject={updateProjectSpy}
           submitProject={submitProjectSpy}
           validateProject={validateProjectSpy}
@@ -1050,7 +1050,7 @@ describe("NewProjectPage", () => {
       let wrap = mount(
         <NewProjectPage
           projectURL={getProjectURLUsecase}
-          match={{ params: { id: 1 } }}
+          projectId={1}
           submitProject={submitProjectSpy}
           updateProject={updateProjectSpy}
           validateProject={validateProjectSpy}
@@ -1082,7 +1082,7 @@ describe("NewProjectPage", () => {
       let wrap = mount(
         <NewProjectPage
           projectURL={getProjectURLUsecase}
-          match={{ params: { id: 1 } }}
+          projectId={1}
           submitProject={submitProjectSpy}
           updateProject={updateProjectSpy}
           validateProject={validateProjectSpy}
@@ -1119,7 +1119,7 @@ describe("NewProjectPage", () => {
       let wrap = mount(
         <NewProjectPage
           projectURL={getProjectURLUsecase}
-          match={{ params: { id: 1 } }}
+          projectId={1}
           projectType={"hey"}
           updateProject={updateProjectSpy}
           submitProject={submitProjectSpy}
@@ -1147,7 +1147,7 @@ describe("NewProjectPage", () => {
       let wrap = mount(
         <NewProjectPage
           projectURL={getProjectURLUsecase}
-          match={{ params: { id: 1 } }}
+          projectId={1}
           projectType={"hey"}
           updateProject={updateProjectSpy}
           submitProject={submitProjectSpy}
@@ -1279,7 +1279,7 @@ describe("NewProjectPage", () => {
     let wrap = mount(
       <NewProjectPage
         projectURL={getProjectURLUsecase}
-        match={{ params: { id: 1 } }}
+        projectId={1}
         submitProject={submitProjectSpy}
         updateProject={updateProjectSpy}
         validateProject={validateProjectSpy}

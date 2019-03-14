@@ -59,7 +59,7 @@ export default class NewProjectPage extends React.Component {
   validateProject = async () => {
     await this.props.validateProject.execute(
       this,
-      this.props.match.params.id,
+      this.props.projectId,
       this.props.projectType,
       this.state.formData
     );
@@ -77,7 +77,7 @@ export default class NewProjectPage extends React.Component {
 
     await this.props.updateProject.execute(
       this,
-      this.props.match.params.id,
+      this.props.projectId,
       this.state.formData,
       this.state.timestamp
     );
@@ -85,7 +85,7 @@ export default class NewProjectPage extends React.Component {
     await this.validateProject();
 
     if (this.state.valid) {
-      await this.props.submitProject.execute(this, this.props.match.params.id);
+      await this.props.submitProject.execute(this, this.props.projectId);
     } else {
       this.setState({ status: "ready" });
     }
@@ -104,7 +104,7 @@ export default class NewProjectPage extends React.Component {
 
     await this.props.updateProject.execute(
       this,
-      this.props.match.params.id,
+      this.props.projectId,
       this.state.formData,
       this.state.timestamp
     );
@@ -127,7 +127,7 @@ export default class NewProjectPage extends React.Component {
       <div>
         <ParentForm
           data-test="project-form"
-          formContext = {{projectId: this.props.match.params.id, getInfrastructures: this.props.getInfrastructures}}
+          formContext = {{projectId: this.props.projectId, getInfrastructures: this.props.getInfrastructures}}
           documentGateway={this.props.documentGateway}
           formData={this.state.formData}
           schema={this.state.formSchema}
@@ -252,7 +252,7 @@ export default class NewProjectPage extends React.Component {
   }
 
   getProjectURL =  () => {
-    return this.props.projectURL.execute(this.props.match.params.id);
+    return this.props.projectURL.execute(this.props.projectId);
   }
 
   getEmailSubject() {
