@@ -19,7 +19,8 @@ export default class ProjectGateway {
           API_KEY: this.apiKeyGateway.getApiKey().apiKey
         }
       }
-    );
+    ).catch(() => ({ ok: false }));
+
     if (rawResponse.ok) {
       let projectResponse = await rawResponse.json();
       let foundProject = new Project(
@@ -44,7 +45,8 @@ export default class ProjectGateway {
           API_KEY: this.apiKeyGateway.getApiKey().apiKey
         }
       }
-    );
+    ).catch(() => ({ ok: false }));
+
     if (rawResponse.ok) {
       let response = await rawResponse.json();
       let infrastructures = response.infrastructures
@@ -75,7 +77,8 @@ export default class ProjectGateway {
           project_id
         })
       }
-    );
+    ).catch(() => ({ ok: false }));
+
     if (response.ok) {
       return { success: true };
     } else {
@@ -116,7 +119,7 @@ export default class ProjectGateway {
         },
         body: JSON.stringify({ project_id, project_data, timestamp })
       }
-    );
+    ).catch(() => ({ ok: false }));
 
     if (response.ok) {
       let rawResponse  = await response.json();
@@ -137,15 +140,18 @@ export default class ProjectGateway {
         },
         body: JSON.stringify({project_id, type, data })
       }
-    );
+    ).catch(() => ({ ok: false }));
 
     if (response.ok) {
       let response_json = await response.json();
       return {
+        success: true,
         valid: response_json.valid,
         prettyInvalidPaths: response_json.prettyInvalidPaths,
         invalidPaths: response_json.invalidPaths,
       };
+    } else {
+      return { success: false}
     }
   }
 
@@ -160,7 +166,7 @@ export default class ProjectGateway {
         },
         body: JSON.stringify({name, type, bid_id})
       }
-    );
+    ).catch(() => ({ ok: false }));
 
     if (response.ok) {
       let response_json = await response.json();
@@ -184,7 +190,7 @@ export default class ProjectGateway {
         },
         body: JSON.stringify({users})
       }
-    );
+    ).catch(() => ({ ok: false }));
 
     if (response.ok) return { success: true };
     return { success: false }

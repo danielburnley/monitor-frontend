@@ -1,27 +1,91 @@
-import ValidateProject from ".";
+import Validate from ".";
 
-describe("ValidateProject", () => {
+describe("Validate", () => {
   let validationGatewaySpy, presenterSpy, useCase;
 
   const getUseCase = (valid, invalidPaths, prettyInvalidPaths) => {
     validationGatewaySpy = {
       validate: jest.fn(() => ({
+        success: true,
         invalidPaths: invalidPaths,
         prettyInvalidPaths: prettyInvalidPaths,
         valid: valid
       }))
     };
 
-    return new ValidateProject(validationGatewaySpy);
+    return new Validate(validationGatewaySpy);
   };
 
   beforeEach(() => {
     presenterSpy = {
-      invalidateFields: jest.fn()
+      invalidateFields: jest.fn(),
+      validationUnsuccessful: jest.fn()
     };
   });
 
   describe("Example 1", () => {
+    describe("Unsuccessful", () => {
+      describe("Example 1", () => {
+        let response, unsuccessfulValidationGateway, usecase, project_id, type, data;
+        beforeEach(async () => {
+          unsuccessfulValidationGateway = {
+            validate: jest.fn(() => ({
+              success: false
+            }))
+          };
+
+          project_id = 1;
+          type = 'hif';
+          data = {};
+
+          usecase = new Validate(unsuccessfulValidationGateway);
+          response = await usecase.execute(presenterSpy, project_id, type, data);
+        });
+
+        it("calls the validation gateway", async () => {
+          expect(unsuccessfulValidationGateway.validate).toBeCalledWith(project_id, type,  data);
+        });
+
+        it("Calls validationUnsuccessful on the presenter", async () => {
+          expect(presenterSpy.validationUnsuccessful).toBeCalled();
+        });
+
+        it("Does not call invalidateFields on the presenter", async () => {
+          expect(presenterSpy.invalidateFields).not.toBeCalled();
+        });
+      });
+
+      describe("Example 2", () => {
+        let response, unsuccessfulValidationGateway, usecase, project_id, type, data;
+        beforeEach(async () => {
+          unsuccessfulValidationGateway = {
+            validate: jest.fn(() => ({
+              success: false
+            }))
+          };
+
+          project_id = 3;
+          type = "ac";
+          data = { someData: "data" };
+
+          usecase = new Validate(unsuccessfulValidationGateway);
+          response = await usecase.execute(presenterSpy, project_id, type, data);
+        });
+
+        it("calls the validation gateway", async () => {
+          expect(unsuccessfulValidationGateway.validate).toBeCalledWith(project_id, type,  data);
+        });
+
+        it("Calls validationUnsuccessful on the presenter", async () => {
+          expect(presenterSpy.validationUnsuccessful).toBeCalled();
+        });
+
+        it("Does not call invalidateFields on the presenter", async () => {
+          expect(presenterSpy.invalidateFields).not.toBeCalled();
+        });
+      });
+    });
+
     describe("Given valid data", async () => {
       let data = {
         cats: "meow"
