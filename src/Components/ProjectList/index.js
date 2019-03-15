@@ -2,7 +2,7 @@ import React from "react";
 import "./style.css";
 
 export default class ProjectList extends React.Component {
-  
+
   renderProjectLine = (id, name, type, status) => {
     return <tr data-test={`project-${id}`} key={`project-${id}`}>
       <td className="project-details" data-test={`project-id-${id}`}>{id}</td>
@@ -37,21 +37,23 @@ export default class ProjectList extends React.Component {
     )
   }
 
-  renderTitles = () => {
-    return <tr>
+  renderHeader = () => (
+    <thead>
+      <tr>
         <th>ID</th>
         <th>Project Name</th>
         <th>Scheme</th>
         <th>Status of Project</th>
         <th></th>
-    </tr>
-  }
-  
+      </tr>
+    </thead>
+  )
+
   render() {
     return (
       <table className="table table-striped table-bordered">
+        {this.renderHeader()}
       <tbody>
-      {this.renderTitles()}
       {this.renderList()}
       </tbody>
       </table>

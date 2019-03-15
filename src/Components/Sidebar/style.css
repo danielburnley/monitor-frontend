@@ -10,6 +10,13 @@
 .sidebar-item {
   color: black;
   cursor: pointer;
+  display: flex;
+}
+
+.sidebar-item-child {
+  border-left: medium solid transparent;
+  padding: 4px;
+  list-style: none;
 }
 
 .selected-header {
@@ -18,7 +25,13 @@
 }
 
 .selected-item {
-  color: #005ea5;
+  border-left-width: medium;
+  border-left-style: solid;
+  padding: 4px;
+  background-color: #F8F8F8F8;
+  display: flex;
+  border-color: #005EA5;
+  color: #005EA5;
   font-weight: bold;
 }
 

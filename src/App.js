@@ -166,7 +166,7 @@ const renderClaimPage = props => (
     }
   }
     </ClaimPage>
-    
+
     )
 
 const CreateReturnButton = props => (
@@ -240,12 +240,12 @@ const EditInfrastructuresButton = (props) => {
 };
 
 const BackToProjectOverviewButton = props => (
-  <button
+  <a
     className="btn btn-link btn-lg"
     onClick={() => props.history.push(`/project/${props.match.params.id}`)}
   >
     Back to project overview
-  </button>
+  </a>
 );
 
 const renderInfrastructuresPage = (props) => (

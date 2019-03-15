@@ -42,12 +42,52 @@ html {
 }
 
 .disabled {
-  color: #7c7878 !important;
   cursor: not-allowed;
 }
 
-input[type="button"] .disabled {
-  background-color: #eeeeee;
+thead {
+  color: white !important;
+}
+
+th {
+  background-color: #000000 !important;
+  border-color: #000000 !important;
+}
+
+tr:nth-child(even) {
+  background-color: #ECEBEC !important;
+}
+
+tr:nth-child(odd) {
+  background-color: #FFFFFF !important;
+}
+
+input[type="text"]:not([disabled]), input[type="email"]:not([disabled]), select, textarea {
+  border-radius: 0px !important;
+  border-style: solid !important;
+  border-width: 2px !important;
+  border-color: black !important;
+}
+
+.input-group > * {
+  border-width: 0px !important;
+  border-radius: 0px !important;
+  background-color: transparent !important;
+}
+
+input[type="button"], button {
+  color: #FFFFFF !important;
+  background-color: #00823B !important;
+  border-bottom-width: medium !important;
+  border-bottom-style: solid !important;
+  border-bottom-color: #809B8C !important;
+  border-radius: 0px !important;
+}
+
+input[type="button"], button .disabled {
+  background-color: #80C19D !important;
+  color: #FFFFFF !important;
+  border-color: #809B8C !important;
 }
 
 .form-button {

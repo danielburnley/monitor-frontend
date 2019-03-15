@@ -3,8 +3,9 @@ textarea {
 }
 
 .subform-selectors {
-  background: white;
-  border-bottom: 1px solid black;
+  background: #F8F8F8;
+  margin: 32px;
+  display: inline-block;
 }
 
 .nav-tabs {
@@ -12,24 +13,37 @@ textarea {
 }
 
 .nav-item {
-  border-bottom: 0px solid black;
-  margin-bottom: -2px;
+  border-style: none;
+  border-radius: 0;
 }
 
 
 .nav-item.active > a {
-  border-color: #0e0e0e !important;
+  background-color: transparent !important;
+  border-top-style: none !important;
+  border-left-style: none !important;
+  border-right-style: none !important;
+  border-bottom: 4px solid transparent !important;
+  border-color: #005EA5 !important;
   color: #005ea8 !important;
   border-radius: 0;
 }
 
 .nav-item.inactive > a:hover {
+  border-top-style: none !important;
+  border-left-style: none !important;
+  border-right-style: none !important;
+  border-bottom: 4px solid transparent !important;
   border-color: #787878 !important;
   border-radius: 0;
+  background-color: transparent !important;
 }
 
 .nav-item > a {
-  border-bottom: transparent !important;
+  border-top-style: none !important;
+  border-left-style: none !important;
+  border-right-style: none !important;
+  border-bottom: 4px solid transparent !important;
   color: #787878;
   cursor: pointer !important;
   font-size: 18px;
@@ -38,10 +52,6 @@ textarea {
 
 .nav-item > a:hover {
   border-color: #dddddd !important;
-}
-
-.sidebar-column {
-  background-color: #e5eef6;
 }
 
 .parent-form-body {
