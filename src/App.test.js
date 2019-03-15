@@ -559,6 +559,54 @@ describe('Submitting a draft project', () => {
   });
 });
 
+describe("Amending a submitted baseline", () => {
+  let api;
+  beforeEach(() => {
+    process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
+    api = new APISimulator("http://cat.meow");
+    api.expendToken("Hello", "Homes England").successfully();
+    api.getProject(projectSchema, submittedProjectData, "Submitted", projectType, "5").successfully();
+    api.getProject(projectSchema, submittedProjectData, "Submitted", projectType, "5").successfully();
+  });
+
+  afterEach(() => {
+    nock.cleanAll();
+  })
+
+  it("Renders the existing baseline", () => {
+    let page = new AppPage("/project/0?token=Cats");
+    await page.load();
+    await page.viewBaseline();
+
+    expect(page.find('GetToken').length).toEqual(0)
+    expect(page.find('StaticData').length).toEqual(1)
+    expect(page.find('AmendBaselineButton').length).toEqual(1)
+
+  });
+
+  it("Takes you to draft mode when selecting Amend Basline", () => {
+    api.amendBaseline(2, 0, 56)
+
+    let page = new AppPage("/project/0?token=Cats");
+    await page.load();
+    await page.viewBaseline()
+    await page.load();
+    await page.amendBaseline()
+    
+
+    let expectedInputValues = [
+      "16",
+      "cat",
+      "cat",
+      "cat"
+    ];
+
+    expect(page.find('BaselineEditor').length).toEqual(1)
+    expect(page.getFormInputs()).toEqual(expectedInputValues);
+
+  });
+});
+
 describe("Printing a return", () => {
   let api;
   beforeEach(() => {

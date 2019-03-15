@@ -60,6 +60,13 @@ export default class AppPage {
 
     await this.load();
   }
+  
+  async amendBaseline() {
+    let button = this.page.find('[data-test="amend-baseline-button"]');
+    button.simulate("click");
+
+    await this.load();
+  }
 
   getInputs() {
     return this.page.find("input").map(node => {

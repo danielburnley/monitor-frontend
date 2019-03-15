@@ -220,6 +220,7 @@ const FillInBaselineButton = props => (
   </div>
 );
 
+
 const EditInfrastructuresButton = (props) => {
   if (props.type === "ff") {
     return <div>
