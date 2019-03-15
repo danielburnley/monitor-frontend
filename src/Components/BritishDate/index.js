@@ -2,6 +2,13 @@ import React from "react";
 import "./style.css";
 
 export default class BritishDate extends React.Component {
+  constructor(props) {
+    super(props)
+    this.dayInputRef = React.createRef();
+    this.monthInputRef = React.createRef();
+    this.yearInputRef = React.createRef();
+  }
+
   parseDate = (isoDate) => {
     if (isoDate) {
       isoDate = this.convertToIsoDate(isoDate)
@@ -66,7 +73,21 @@ export default class BritishDate extends React.Component {
     return currentYear.padStart(4, "0");
   }
 
+  moveInputFocus = (dateChangeObject) => {
+    if (dateChangeObject.day && dateChangeObject.day.length > 2)
+    {
+      this.monthInputRef.current.focus()
+    }
+
+    if (dateChangeObject.month && dateChangeObject.month.length > 2)
+    {
+      this.yearInputRef.current.focus()
+    }
+  }
+
   onDateChanged = (dateChangeObject) => {
+    this.moveInputFocus(dateChangeObject)
+
     let parsedDate = this.parseDate(this.props.value);
     let newDate = this.composeDate({
       day: this.formatDay(dateChangeObject.day, parsedDate.day),
@@ -90,6 +111,7 @@ export default class BritishDate extends React.Component {
     <div className="form-group BritishDate">
       <input
         type="text"
+        ref={this.dayInputRef}
         className="form-control day"
         data-test="date-day"
         placeholder="dd"
@@ -99,6 +121,7 @@ export default class BritishDate extends React.Component {
       />
       <input
         type="text"
+        ref={this.monthInputRef}
         className="form-control month"
         data-test="date-month"
         placeholder="mm"
@@ -108,6 +131,7 @@ export default class BritishDate extends React.Component {
       />
       <input
         type="text"
+        ref={this.yearInputRef}
         className="form-control year"
         data-test="date-year"
         placeholder="yyyy"
