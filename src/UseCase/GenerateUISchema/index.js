@@ -129,7 +129,7 @@ export default class GenerateUISchema {
       schema["ui:disabled"] = true
     }
 
-    if (item.s151WriteOnly && (role !== "S151" && role !== "Superuser")) {
+    if (item.s151WriteOnly && (role !== "Local Authority" && role !== "Superuser")) {
       schema["ui:disabled"] = true
     }
 
