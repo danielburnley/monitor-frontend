@@ -26,87 +26,35 @@ describe("<ParentForm>", () => {
   });
 
   describe("Using the navbar", () => {
-    let wrap;
+    describe("Example 1", () => {
+      let wrap;
 
-    beforeEach(() => {
-      wrap = mount(
-        <ParentForm
-          documentGateway={documentGatewaySpy}
-          getRole={getRoleUseCaseSpy}
-          onChange={onChangeSpy}
-          schema={{
-            type: "object",
-            properties: {
-              cat: {
-                type: "object",
-                properties: {
-                  name: {
-                    type: "string"
-                  }
-                }
-              },
-              dog: {
-                type: "object",
-                properties: {
-                  name: {
-                    type: "string"
-                  }
-                }
-              }
-            }
-          }}
-        />
-      );
-    });
-
-    it("takes formData", async () => {
-      let input = wrap.find("input").first();
-      await updateFormField(input, "Meowwwww");
-      expect(wrap.state("formData")).toEqual({ cat: { name: "Meowwwww" } }, 1);
-    });
-
-    it("compiles a form from the children", async () => {
-      let input = wrap.find('[data-test="cat_subform"] input');
-      await updateFormField(input, "Tabby");
-      expect(wrap.state("formData")).toEqual({ cat: { name: "Tabby" } }, 1);
-    });
-
-    it("triggers the onChange prop it is given", async () => {
-      let input = wrap.find(".form-control").first();
-
-      await updateFormField(input, "Tabby");
-
-      expect(onChangeSpy).toHaveBeenCalledWith({
-        formData: { cat: { name: "Tabby" } }
-      });
-    });
-
-    it("displays buttons to change the current view", async () => {
-      let cat_label = wrap.find("#cat");
-      cat_label.simulate("change", { target: { checked: true } });
-      wrap.update();
-      expect(wrap.find('[data-test="cat_subform"]').length).toEqual(1);
-      expect(wrap.find('[data-test="dog_subform"]').length).toEqual(0);
-    });
-
-    it("displays no submit buttons", async () => {
-      expect(wrap.find("button").length).toEqual(0);
-    });
-
-    describe("Hidden tabs", () => {
-      it("Hides tabs that are always hidden", () => {
-        let getRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"}))}
+      beforeEach(() => {
         wrap = mount(
           <ParentForm
             documentGateway={documentGatewaySpy}
-            onChange={onChangeSpy}
             getRole={getRoleUseCaseSpy}
+            onChange={onChangeSpy}
             schema={{
               type: "object",
+              workflow: [
+                {
+                  title: "Getting started",
+                  steps: [
+                    {
+                      title: "Cats",
+                      section: "cat"
+                    },
+                    {
+                      title: "Dogs",
+                      section: "dog"
+                    }
+                  ]
+                }
+              ],
               properties: {
                 cat: {
                   type: "object",
-                  hidden: true,
                   properties: {
                     name: {
                       type: "string"
@@ -125,18 +73,96 @@ describe("<ParentForm>", () => {
             }}
           />
         );
+      });
 
+      it("Shows the getting started tab when clicked", async () => {
+        wrap.find("[data-test='cat_property_link']").simulate("click");
+        await wrap.update();
+
+        wrap.find("[data-test='workflow-tab']").simulate("click");
+        await wrap.update();
+        expect(wrap.find("WorkflowViewer").props().workflow).toEqual([
+          {
+            title: "Getting started",
+            steps: [
+              {
+                title: "Cats",
+                section: "cat"
+              },
+              {
+                title: "Dogs",
+                section: "dog"
+              }
+            ]
+          }
+        ]);
+      });
+
+
+      xit("Clicking on items in the workflow will jump to the corresponding tab", async () => {
+        wrap.find("[data-test='workflowStep']").at(0).simulate("click");
+        await wrap.update();
+        expect(wrap.find("[data-test='cat_subform']").props().schema).toEqual(
+          {
+            type: "object",
+            properties: {
+              name: {
+                type: "string"
+              }
+            }
+          }
+        )
+      });
+
+      it("takes formData", async () => {
+        wrap.find("[data-test='cat_property_link']").simulate("click");
+        await wrap.update();
+
+        let input = wrap.find("input").first();
+        await updateFormField(input, "Meowwwww");
+        expect(wrap.state("formData")).toEqual({ cat: { name: "Meowwwww" } }, 1);
+      });
+
+      it("compiles a form from the children", async () => {
+        wrap.find("[data-test='cat_property_link']").simulate("click");
+        await wrap.update();
+
+        let input = wrap.find('[data-test="cat_subform"] input');
+        await updateFormField(input, "Tabby");
+        expect(wrap.state("formData")).toEqual({ cat: { name: "Tabby" } }, 1);
+      });
+
+      it("triggers the onChange prop it is given", async () => {
+        wrap.find("[data-test='cat_property_link']").simulate("click");
+        await wrap.update();
+
+        let input = wrap.find(".form-control").first();
+
+        await updateFormField(input, "Tabby");
+
+        expect(onChangeSpy).toHaveBeenCalledWith({
+          formData: { cat: { name: "Tabby" } }
+        });
+      });
+
+      it("displays buttons to change the current view", async () => {
+        wrap.find("[data-test='cat_property_link']").simulate("click");
+        await wrap.update();
+
+        let cat_label = wrap.find("#cat");
+        cat_label.simulate("change", { target: { checked: true } });
         wrap.update();
-
-        expect(wrap.find('[data-test="cat_property"]').length).toEqual(0);
-        expect(wrap.find('[data-test="dog_property"]').length).toEqual(1);
+        expect(wrap.find('[data-test="cat_subform"]').length).toEqual(1);
+        expect(wrap.find('[data-test="dog_subform"]').length).toEqual(0);
       });
 
-      describe("As Homes England", () => {
-        let getRoleUseCaseSpy;
+      it("displays no submit buttons", async () => {
+        expect(wrap.find("button").length).toEqual(0);
+      });
 
-        beforeEach(() => {
-          getRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"}))}
+      describe("Hidden tabs", () => {
+        it("Hides tabs that are always hidden", () => {
+          let getRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"}))}
           wrap = mount(
             <ParentForm
               documentGateway={documentGatewaySpy}
@@ -147,7 +173,7 @@ describe("<ParentForm>", () => {
                 properties: {
                   cat: {
                     type: "object",
-                    laHidden: true,
+                    hidden: true,
                     properties: {
                       name: {
                         type: "string"
@@ -166,107 +192,218 @@ describe("<ParentForm>", () => {
               }}
             />
           );
-        });
 
-        it("Does display a hidden tab if user is Homes England", () => {
-          wrap.update()
-
-          expect(wrap.find('[data-test="cat_property"]').length).toEqual(1)
-          expect(wrap.find('[data-test="dog_property"]').length).toEqual(1)
-        });
-      });
-
-      describe("As Superuser", () => {
-        let getRoleUseCaseSpy;
-
-        beforeEach(() => {
-          getRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Superuser"}))}
-          wrap = mount(
-            <ParentForm
-              documentGateway={documentGatewaySpy}
-              onChange={onChangeSpy}
-              getRole={getRoleUseCaseSpy}
-              schema={{
-                type: "object",
-                properties: {
-                  cat: {
-                    type: "object",
-                    laHidden: true,
-                    properties: {
-                      name: {
-                        type: "string"
-                      }
-                    }
-                  },
-                  dog: {
-                    type: "object",
-                    properties: {
-                      name: {
-                        type: "string"
-                      }
-                    }
-                  }
-                }
-              }}
-            />
-          );
-        });
-
-        it("Does display a hidden tab if user is Homes England", () => {
-          wrap.update()
-
-          expect(wrap.find('[data-test="cat_property"]').length).toEqual(1)
-          expect(wrap.find('[data-test="dog_property"]').length).toEqual(1)
-        });
-      });
-
-      describe("As an LA", () => {
-        let getRoleUseCaseSpy;
-
-        beforeEach(() => {
-          getRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"}))}
-          wrap = mount(
-            <ParentForm
-              documentGateway={documentGatewaySpy}
-              onChange={onChangeSpy}
-              getRole={getRoleUseCaseSpy}
-              schema={{
-                type: "object",
-                properties: {
-                  cat: {
-                    type: "object",
-                    laHidden: true,
-                    properties: {
-                      name: {
-                        type: "string"
-                      }
-                    }
-                  },
-                  dog: {
-                    type: "object",
-                    properties: {
-                      name: {
-                        type: "string"
-                      }
-                    }
-                  }
-                }
-              }}
-            />
-          );
-        });
-
-        it("Calls the getRole usecase", () => {
-          wrap.update();
-          expect(getRoleUseCaseSpy.execute).toHaveBeenCalled()
-        });
-
-        it("Doesn't display a hidden tab if user is an LA", () => {
           wrap.update();
 
-          expect(wrap.find('[data-test="cat_property"]').length).toEqual(0)
-          expect(wrap.find('[data-test="dog_property"]').length).toEqual(1)
+          expect(wrap.find('[data-test="cat_property"]').length).toEqual(0);
+          expect(wrap.find('[data-test="dog_property"]').length).toEqual(1);
         });
+
+        describe("As Homes England", () => {
+          let getRoleUseCaseSpy;
+
+          beforeEach(() => {
+            getRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"}))}
+            wrap = mount(
+              <ParentForm
+                documentGateway={documentGatewaySpy}
+                onChange={onChangeSpy}
+                getRole={getRoleUseCaseSpy}
+                schema={{
+                  type: "object",
+                  properties: {
+                    cat: {
+                      type: "object",
+                      laHidden: true,
+                      properties: {
+                        name: {
+                          type: "string"
+                        }
+                      }
+                    },
+                    dog: {
+                      type: "object",
+                      properties: {
+                        name: {
+                          type: "string"
+                        }
+                      }
+                    }
+                  }
+                }}
+              />
+            );
+          });
+
+          it("Does display a hidden tab if user is Homes England", () => {
+            wrap.update()
+
+            expect(wrap.find('[data-test="cat_property"]').length).toEqual(1)
+            expect(wrap.find('[data-test="dog_property"]').length).toEqual(1)
+          });
+        });
+
+        describe("As Superuser", () => {
+          let getRoleUseCaseSpy;
+
+          beforeEach(() => {
+            getRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Superuser"}))}
+            wrap = mount(
+              <ParentForm
+                documentGateway={documentGatewaySpy}
+                onChange={onChangeSpy}
+                getRole={getRoleUseCaseSpy}
+                schema={{
+                  type: "object",
+                  properties: {
+                    cat: {
+                      type: "object",
+                      laHidden: true,
+                      properties: {
+                        name: {
+                          type: "string"
+                        }
+                      }
+                    },
+                    dog: {
+                      type: "object",
+                      properties: {
+                        name: {
+                          type: "string"
+                        }
+                      }
+                    }
+                  }
+                }}
+              />
+            );
+          });
+
+          it("Does display a hidden tab if user is Homes England", () => {
+            wrap.update()
+
+            expect(wrap.find('[data-test="cat_property"]').length).toEqual(1)
+            expect(wrap.find('[data-test="dog_property"]').length).toEqual(1)
+          });
+        });
+
+        describe("As an LA", () => {
+          let getRoleUseCaseSpy;
+
+          beforeEach(() => {
+            getRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"}))}
+            wrap = mount(
+              <ParentForm
+                documentGateway={documentGatewaySpy}
+                onChange={onChangeSpy}
+                getRole={getRoleUseCaseSpy}
+                schema={{
+                  type: "object",
+                  properties: {
+                    cat: {
+                      type: "object",
+                      laHidden: true,
+                      properties: {
+                        name: {
+                          type: "string"
+                        }
+                      }
+                    },
+                    dog: {
+                      type: "object",
+                      properties: {
+                        name: {
+                          type: "string"
+                        }
+                      }
+                    }
+                  }
+                }}
+              />
+            );
+          });
+
+          it("Calls the getRole usecase", () => {
+            wrap.update();
+            expect(getRoleUseCaseSpy.execute).toHaveBeenCalled()
+          });
+
+          it("Doesn't display a hidden tab if user is an LA", () => {
+            wrap.update();
+
+            expect(wrap.find('[data-test="cat_property"]').length).toEqual(0)
+            expect(wrap.find('[data-test="dog_property"]').length).toEqual(1)
+          });
+        });
+      });
+    });
+
+    describe("Example 2", () => {
+      let wrap;
+
+      beforeEach(() => {
+        wrap = mount(
+          <ParentForm
+            documentGateway={documentGatewaySpy}
+            getRole={getRoleUseCaseSpy}
+            onChange={onChangeSpy}
+            schema={{
+              type: "object",
+              workflow: [
+                {
+                  title: "My steps",
+                  steps: [
+                    {
+                      title: "Dog step",
+                      section: "dog"
+                    }
+                  ]
+                }
+              ],
+              properties: {
+                duck: {
+                  type: "object",
+                  properties: {
+                    name: {
+                      type: "string"
+                    }
+                  }
+                },
+                lemonade: {
+                  type: "object",
+                  properties: {
+                    name: {
+                      type: "string"
+                    }
+                  }
+                }
+              }
+            }}
+          />
+        );
+      });
+
+      it("Shows the getting started tab by default", async () => {
+        expect(wrap.find("WorkflowViewer").length).toEqual(1);
+      });
+
+      it("Shows the getting started tab when clicked", async () => {
+        wrap.find("[data-test='duck_property_link']").simulate("click");
+        await wrap.update();
+
+        wrap.find("[data-test='workflow-tab']").simulate('click');
+        await wrap.update();
+        expect(wrap.find("WorkflowViewer").props().workflow).toEqual([
+          {
+            title: "My steps",
+            steps: [
+              {
+                title: "Dog step",
+                section: "dog"
+              }
+            ]
+          }
+        ]);
       });
     });
   });
@@ -965,7 +1102,6 @@ describe("<ParentForm>", () => {
       });
     });
   });
-
 
   describe("Sharing data accross tabs", () => {
     let wrap;

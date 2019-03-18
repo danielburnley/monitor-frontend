@@ -18,6 +18,7 @@ import QuarterlyBreakdown from "../QuarterlyBreakdown";
 import CurrencyWidget from "../CurrencyWidget";
 import PercentageWidget from "../PercentageWidget";
 import BritishDate from "../BritishDate";
+import WorkflowViewer from "../WorkflowViewer";
 import "./style.css";
 import UploadFileField from "../UploadFileField";
 
@@ -32,22 +33,31 @@ export default class ParentForm extends React.Component {
       uiSchema: this.props.uiSchema ? this.props.uiSchema : {},
       formData: this.props.formData ? this.props.formData : {},
       selected: first_property,
-      selectedFormSection: this.getInitialFormSection(
-        props.schema.properties[first_property]
-      ),
+      selectedFormSection: this.getInitialFormSection(props.schema, first_property),
       selectedFormItemIndex: 0
     };
   }
 
   getFirstProperty(schema) {
-    return Object.keys(schema.properties)[0];
-  }
-
-  getInitialFormSection(schema) {
-    if (schema.type === "array") {
-      return Object.keys(schema.items.properties)[0];
+    if (schema.workflow)
+    {
+      return "WORKFLOW";
     } else {
       return Object.keys(schema.properties)[0];
+    }
+  }
+
+  getInitialFormSection(schema, first_property) {
+    if (first_property === "WORKFLOW")
+    {
+      return null;
+    } else
+    {
+      if (schema.properties[first_property].type === "array") {
+        return Object.keys(schema.properties[first_property].items.properties)[0];
+      } else {
+        return Object.keys(schema.properties[first_property].properties)[0];
+      }
     }
   }
 
@@ -142,7 +152,7 @@ export default class ParentForm extends React.Component {
     this.setState({
       selected: selectedSection,
       selectedFormSection: this.getInitialFormSection(
-        this.props.schema.properties[selectedSection]
+        this.props.schema, selectedSection
       ),
       selectedFormItemIndex: 0
     });
@@ -162,7 +172,7 @@ export default class ParentForm extends React.Component {
           }
           data-test={`${property}_property`}
         >
-          <a role="button" id={property} onClick={this.viewSelectorOnChange}>
+          <a data-test={`${property}_property_link`} role="button" id={property} onClick={this.viewSelectorOnChange}>
             {value.title}
           </a>
         </li>
@@ -312,21 +322,34 @@ export default class ParentForm extends React.Component {
     }
   }
 
+  renderForm = () =>
+    <div className="parent-form-body">
+      <div className="col-md-2 sidebar-column">{this.renderSidebar()}</div>
+      <div className="col-md-10">
+        {this.renderSubform()}
+        {this.props.children}
+      </div>
+    </div>
+
+  renderWorkflow = () =>
+    <WorkflowViewer workflow={this.props.schema.workflow} onClick={() => {}}/>
+
   render() {
     return (
       <div className="ParentForm" data-test="parent-form" role="navigation">
         <div className="subform-selectors">
           <ul className="col-md-offset-2 form-selection nav nav-tabs">
+            <li data-test="workflow-tab" onClick={() => {
+                this.setState({selected: "WORKFLOW"})
+              }}>Getting started</li>
             {this.renderNavigationTabs()}
           </ul>
         </div>
-        <div className="parent-form-body">
-          <div className="col-md-2 sidebar-column">{this.renderSidebar()}</div>
-          <div className="col-md-10">
-            {this.renderSubform()}
-            {this.props.children}
-          </div>
-        </div>
+
+        {
+            this.state.selected === "WORKFLOW"?
+              this.renderWorkflow():this.renderForm()
+        }
       </div>
     );
   }
