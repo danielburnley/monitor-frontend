@@ -128,9 +128,9 @@ describe("GenerateUISchema", () => {
       });
     });
 
-    describe("S151 user role", () => {
+    describe("Local authority can edit S151 fields", () => {
       let userRoleCookieGateway = {
-        getUserRole: jest.fn(() => ({userRole: "S151"}))
+        getUserRole: jest.fn(() => ({userRole: "Local Authority"}))
       };
       let useCase = new GenerateUISchema(userRoleCookieGateway);
       let schema = {
