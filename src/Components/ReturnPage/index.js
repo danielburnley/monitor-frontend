@@ -65,7 +65,7 @@ export default class ReturnPage extends React.Component {
           type: this.state.type,
           uiSchema: this.state.formUISchema,
           status: this.state.status
-        })};
+        })}
       </div>
       )
     }

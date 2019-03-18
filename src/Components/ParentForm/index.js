@@ -51,13 +51,10 @@ export default class ParentForm extends React.Component {
     if (selected_tab === "workflow")
     {
       return null;
-    } else
-    {
-      if (schema.properties[selected_tab].type === "array") {
-        return Object.keys(schema.properties[selected_tab].items.properties)[0];
-      } else {
-        return Object.keys(schema.properties[selected_tab].properties)[0];
-      }
+    } else if (schema.properties[selected_tab].type === "array") {
+      return Object.keys(schema.properties[selected_tab].items.properties)[0];
+    } else {
+      return Object.keys(schema.properties[selected_tab].properties)[0];
     }
   }
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import './style.css';
 
 export default class WorkflowViewer extends React.Component {
   renderStep = (step, index) =>
@@ -13,19 +14,24 @@ export default class WorkflowViewer extends React.Component {
     </li>
 
   renderSection = (section, index) =>
-    <div key={index}>
-      <div data-test="workflowTitle">{section.title}</div>
-      <div data-test='workflowDescription'>{section.description}</div>
+    <li class="workflow-section" key={index}>
+      <div data-test="workflowTitle"><h2>{section.title}</h2></div>
+      <div data-test='workflowDescription'><h3>{section.description}</h3></div>
       <ol>
       {
         section.steps.map(this.renderStep)
       }
       </ol>
-    </div>
+      <hr/>
+    </li>
 
   renderWorkflow = (workflow) =>
-    workflow.map(this.renderSection)
+    <ol class="workflow-items">
+      {workflow.map(this.renderSection)}
+    </ol>
 
   render = () =>
-    this.renderWorkflow(this.props.workflow)
+    <div class="col-md-offset-2 col-md-10">
+      {this.renderWorkflow(this.props.workflow)}
+    </div>
 }
