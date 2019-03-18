@@ -26,14 +26,14 @@ export default class ParentForm extends React.Component {
   constructor(props) {
     super(props);
 
-    let first_property = this.getFirstProperty(props.schema);
+    let first_tab = this.getFirstProperty(props.schema);
 
     this.state = {
       userRole: this.props.getRole.execute().role,
       uiSchema: this.props.uiSchema ? this.props.uiSchema : {},
       formData: this.props.formData ? this.props.formData : {},
-      selected: first_property,
-      selectedFormSection: this.getInitialFormSection(props.schema, first_property),
+      selected: first_tab,
+      selectedFormSection: this.getInitialFormSection(props.schema, first_tab),
       selectedFormItemIndex: 0
     };
   }
@@ -41,22 +41,22 @@ export default class ParentForm extends React.Component {
   getFirstProperty(schema) {
     if (schema.workflow)
     {
-      return "WORKFLOW";
+      return "workflow";
     } else {
       return Object.keys(schema.properties)[0];
     }
   }
 
-  getInitialFormSection(schema, first_property) {
-    if (first_property === "WORKFLOW")
+  getInitialFormSection(schema, selected_tab) {
+    if (selected_tab === "workflow")
     {
       return null;
     } else
     {
-      if (schema.properties[first_property].type === "array") {
-        return Object.keys(schema.properties[first_property].items.properties)[0];
+      if (schema.properties[selected_tab].type === "array") {
+        return Object.keys(schema.properties[selected_tab].items.properties)[0];
       } else {
-        return Object.keys(schema.properties[first_property].properties)[0];
+        return Object.keys(schema.properties[selected_tab].properties)[0];
       }
     }
   }
@@ -147,41 +147,49 @@ export default class ParentForm extends React.Component {
     );
   };
 
-  viewSelectorOnChange = changeEvent => {
-    let selectedSection = changeEvent.target.id;
+  changeSelection(newSection) {
     this.setState({
-      selected: selectedSection,
+      selected: newSection,
       selectedFormSection: this.getInitialFormSection(
-        this.props.schema, selectedSection
+        this.props.schema, newSection
       ),
       selectedFormItemIndex: 0
     });
+  }
+
+  viewSelectorOnChange = changeEvent => {
+    let selectedSection = changeEvent.target.id;
+    this.changeSelection(selectedSection)
   };
 
-  renderTab = ([property, value]) => {
+  renderTab = (tab, value) => {
+    return (
+      <li
+        key={tab}
+        role="presentation"
+        className={
+          "nav-item " +
+          (tab === this.state.selected ? "active" : "inactive")
+        }
+        data-test={`${tab}_tab`}
+      >
+        <a data-test={`${tab}_tab_link`} role="button" id={tab} onClick={this.viewSelectorOnChange}>
+          {value.title}
+        </a>
+      </li>
+    );
+  }
+
+  renderPropertyTab = ([property, value]) => {
     if (value.hidden || (value.laHidden && this.state.userRole === "Local Authority")) {
       return null;
     } else {
-      return (
-        <li
-          key={property}
-          role="presentation"
-          className={
-            "nav-item " +
-            (property === this.state.selected ? "active" : "inactive")
-          }
-          data-test={`${property}_property`}
-        >
-          <a data-test={`${property}_property_link`} role="button" id={property} onClick={this.viewSelectorOnChange}>
-            {value.title}
-          </a>
-        </li>
-      );
+      return this.renderTab(property, value);
     }
   };
 
   renderNavigationTabs() {
-    return Object.entries(this.props.schema.properties).map(this.renderTab);
+    return Object.entries(this.props.schema.properties).map(this.renderPropertyTab);
   }
 
   renderSidebar() {
@@ -332,22 +340,20 @@ export default class ParentForm extends React.Component {
     </div>
 
   renderWorkflow = () =>
-    <WorkflowViewer workflow={this.props.schema.workflow} onClick={() => {}}/>
+    <WorkflowViewer workflow={this.props.schema.workflow} onClick={(selection) => {this.changeSelection(selection)}}/>
 
   render() {
     return (
       <div className="ParentForm" data-test="parent-form" role="navigation">
         <div className="subform-selectors">
           <ul className="col-md-offset-2 form-selection nav nav-tabs">
-            <li data-test="workflow-tab" onClick={() => {
-                this.setState({selected: "WORKFLOW"})
-              }}>Getting started</li>
+            {this.renderTab("workflow", {title: "Getting started"})}
             {this.renderNavigationTabs()}
           </ul>
         </div>
 
         {
-            this.state.selected === "WORKFLOW"?
+            this.state.selected === "workflow"?
               this.renderWorkflow():this.renderForm()
         }
       </div>

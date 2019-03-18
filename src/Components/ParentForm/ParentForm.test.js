@@ -76,10 +76,10 @@ describe("<ParentForm>", () => {
       });
 
       it("Shows the getting started tab when clicked", async () => {
-        wrap.find("[data-test='cat_property_link']").simulate("click");
+        wrap.find("[data-test='cat_tab_link']").simulate("click");
         await wrap.update();
 
-        wrap.find("[data-test='workflow-tab']").simulate("click");
+        wrap.find("[data-test='workflow_tab_link']").simulate("click");
         await wrap.update();
         expect(wrap.find("WorkflowViewer").props().workflow).toEqual([
           {
@@ -99,7 +99,7 @@ describe("<ParentForm>", () => {
       });
 
 
-      xit("Clicking on items in the workflow will jump to the corresponding tab", async () => {
+      it("Clicking on items in the workflow will jump to the corresponding tab", async () => {
         wrap.find("[data-test='workflowStep']").at(0).simulate("click");
         await wrap.update();
         expect(wrap.find("[data-test='cat_subform']").props().schema).toEqual(
@@ -115,7 +115,7 @@ describe("<ParentForm>", () => {
       });
 
       it("takes formData", async () => {
-        wrap.find("[data-test='cat_property_link']").simulate("click");
+        wrap.find("[data-test='cat_tab_link']").simulate("click");
         await wrap.update();
 
         let input = wrap.find("input").first();
@@ -124,7 +124,7 @@ describe("<ParentForm>", () => {
       });
 
       it("compiles a form from the children", async () => {
-        wrap.find("[data-test='cat_property_link']").simulate("click");
+        wrap.find("[data-test='cat_tab_link']").simulate("click");
         await wrap.update();
 
         let input = wrap.find('[data-test="cat_subform"] input');
@@ -133,7 +133,7 @@ describe("<ParentForm>", () => {
       });
 
       it("triggers the onChange prop it is given", async () => {
-        wrap.find("[data-test='cat_property_link']").simulate("click");
+        wrap.find("[data-test='cat_tab_link']").simulate("click");
         await wrap.update();
 
         let input = wrap.find(".form-control").first();
@@ -146,7 +146,7 @@ describe("<ParentForm>", () => {
       });
 
       it("displays buttons to change the current view", async () => {
-        wrap.find("[data-test='cat_property_link']").simulate("click");
+        wrap.find("[data-test='cat_tab_link']").simulate("click");
         await wrap.update();
 
         let cat_label = wrap.find("#cat");
@@ -195,8 +195,8 @@ describe("<ParentForm>", () => {
 
           wrap.update();
 
-          expect(wrap.find('[data-test="cat_property"]').length).toEqual(0);
-          expect(wrap.find('[data-test="dog_property"]').length).toEqual(1);
+          expect(wrap.find('[data-test="cat_tab"]').length).toEqual(0);
+          expect(wrap.find('[data-test="dog_tab"]').length).toEqual(1);
         });
 
         describe("As Homes England", () => {
@@ -238,8 +238,8 @@ describe("<ParentForm>", () => {
           it("Does display a hidden tab if user is Homes England", () => {
             wrap.update()
 
-            expect(wrap.find('[data-test="cat_property"]').length).toEqual(1)
-            expect(wrap.find('[data-test="dog_property"]').length).toEqual(1)
+            expect(wrap.find('[data-test="cat_tab"]').length).toEqual(1)
+            expect(wrap.find('[data-test="dog_tab"]').length).toEqual(1)
           });
         });
 
@@ -282,8 +282,8 @@ describe("<ParentForm>", () => {
           it("Does display a hidden tab if user is Homes England", () => {
             wrap.update()
 
-            expect(wrap.find('[data-test="cat_property"]').length).toEqual(1)
-            expect(wrap.find('[data-test="dog_property"]').length).toEqual(1)
+            expect(wrap.find('[data-test="cat_tab"]').length).toEqual(1)
+            expect(wrap.find('[data-test="dog_tab"]').length).toEqual(1)
           });
         });
 
@@ -331,8 +331,8 @@ describe("<ParentForm>", () => {
           it("Doesn't display a hidden tab if user is an LA", () => {
             wrap.update();
 
-            expect(wrap.find('[data-test="cat_property"]').length).toEqual(0)
-            expect(wrap.find('[data-test="dog_property"]').length).toEqual(1)
+            expect(wrap.find('[data-test="cat_tab"]').length).toEqual(0)
+            expect(wrap.find('[data-test="dog_tab"]').length).toEqual(1)
           });
         });
       });
@@ -354,8 +354,8 @@ describe("<ParentForm>", () => {
                   title: "My steps",
                   steps: [
                     {
-                      title: "Dog step",
-                      section: "dog"
+                      title: "Duck step",
+                      section: "duck"
                     }
                   ]
                 }
@@ -388,22 +388,37 @@ describe("<ParentForm>", () => {
       });
 
       it("Shows the getting started tab when clicked", async () => {
-        wrap.find("[data-test='duck_property_link']").simulate("click");
+        wrap.find("[data-test='duck_tab_link']").simulate("click");
         await wrap.update();
 
-        wrap.find("[data-test='workflow-tab']").simulate('click');
+        wrap.find("[data-test='workflow_tab_link']").simulate('click');
         await wrap.update();
         expect(wrap.find("WorkflowViewer").props().workflow).toEqual([
           {
             title: "My steps",
             steps: [
               {
-                title: "Dog step",
-                section: "dog"
+                title: "Duck step",
+                section: "duck"
               }
             ]
           }
         ]);
+      });
+
+      it("Clicking on items in the workflow will jump to the corresponding tab", async () => {
+        wrap.find("[data-test='workflowStep']").at(0).simulate("click");
+        await wrap.update();
+        expect(wrap.find("[data-test='duck_subform']").props().schema).toEqual(
+          {
+            type: "object",
+            properties: {
+              name: {
+                type: "string"
+              }
+            }
+          }
+        )
       });
     });
   });
