@@ -14,7 +14,7 @@ export default class WorkflowViewer extends React.Component {
     </li>
 
   renderSection = (section, index) =>
-    <li class="workflow-section" key={index}>
+    <li className="workflow-section" key={index}>
       <div data-test="workflowTitle"><h2>{section.title}</h2></div>
       <div data-test='workflowDescription'><h3>{section.description}</h3></div>
       <ol>
@@ -26,12 +26,12 @@ export default class WorkflowViewer extends React.Component {
     </li>
 
   renderWorkflow = (workflow) =>
-    <ol class="workflow-items">
+    <ol className="workflow-items">
       {workflow.map(this.renderSection)}
     </ol>
 
   render = () =>
-    <div class="col-md-offset-2 col-md-10">
+    <div className="col-md-offset-2 col-md-10">
       {this.renderWorkflow(this.props.workflow)}
     </div>
 }

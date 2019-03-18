@@ -343,8 +343,11 @@ export default class ParentForm extends React.Component {
     return (
       <div className="ParentForm" data-test="parent-form" role="navigation">
         <div className="subform-selectors">
-          <ul className="col-md-offset-2 form-selection nav nav-tabs">
-            {this.renderTab("workflow", {title: "Getting started"})}
+          <ul className="form-selection nav nav-tabs">
+            {
+              this.props.schema.workflow?
+              this.renderTab("workflow", {title: "Getting started"}):null
+            }
             {this.renderNavigationTabs()}
           </ul>
         </div>
