@@ -2,7 +2,15 @@ import React from 'react';
 
 export default class WorkflowViewer extends React.Component {
   renderStep = (step, index) =>
-    <li key={index} data-test='workflowStep'>{step.title}</li>
+    <li
+      key={index}>
+      <a
+        data-test='workflowStep'
+        onClick={() => this.props.onClick(step.section)}
+      >
+      {step.title}
+      </a>
+    </li>
 
   renderSection = (section, index) =>
     <div key={index}>

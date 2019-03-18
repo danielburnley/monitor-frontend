@@ -6,6 +6,7 @@ import WorkflowViewer from ".";
 storiesOf("<WorkflowViewer>", module)
 .add("Default", () => (
   <WorkflowViewer
+    onClick={(section) => {console.log(section)}}
     workflow={
      [
        {

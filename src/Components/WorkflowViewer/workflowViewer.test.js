@@ -4,8 +4,10 @@ import { shallow, mount } from "enzyme";
 
 describe("<WorkflowViewer>", () => {
   describe("Example 1", () => {
-    it("Renders based on the provided workflow", () => {
-      let wrap = mount(<WorkflowViewer workflow={
+    let wrap, onClickSpy;
+    beforeEach(() => {
+      onClickSpy = jest.fn();
+      wrap = mount(<WorkflowViewer onClick={onClickSpy} workflow={
         [
           {
             title: "Tell us about your scheme",
@@ -33,7 +35,14 @@ describe("<WorkflowViewer>", () => {
           }
         ]
       }/>);
+    });
 
+    it("Clicking on a step calls the onClick event", () => {
+      wrap.find("[data-test='workflowStep']").at(2).simulate('click');
+      expect(onClickSpy).toHaveBeenCalledWith("landOwnership");
+    });
+
+    it("Renders based on the provided workflow", () => {
       expect(wrap.find("[data-test='workflowTitle']").at(0).text()).toEqual("Tell us about your scheme")
       expect(wrap.find("[data-test='workflowDescription']").at(0).text()).toEqual("This is where we will create the primary profile for your project.")
       expect(wrap.find("[data-test='workflowStep']").at(0).text()).toEqual("Deliverables")
@@ -46,8 +55,12 @@ describe("<WorkflowViewer>", () => {
   });
 
   describe("Example 2", () => {
-    it("Renders based on the provided workflow", () => {
-      let wrap = mount(<WorkflowViewer workflow={
+    let wrap, onClickSpy;
+
+    beforeEach(() => {
+      onClickSpy = jest.fn();
+
+      wrap = mount(<WorkflowViewer onClick={onClickSpy} workflow={
         [
           {
             title: "a title",
@@ -61,10 +74,17 @@ describe("<WorkflowViewer>", () => {
           }
         ]
       }/>);
+    });
 
+    it("Renders based on the provided workflow", () => {
       expect(wrap.find("[data-test='workflowTitle']").at(0).text()).toEqual("a title")
       expect(wrap.find("[data-test='workflowDescription']").at(0).text()).toEqual("A description")
       expect(wrap.find("[data-test='workflowStep']").at(0).text()).toEqual("Step 1")
+    });
+
+    it("Clicking on a step calls the onClick event", () => {
+      wrap.find("[data-test='workflowStep']").at(0).simulate('click');
+      expect(onClickSpy).toHaveBeenCalledWith("section");
     });
   });
 });
