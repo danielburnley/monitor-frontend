@@ -5,7 +5,7 @@ import ErrorMessage from "../ErrorMessage";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import "./style.css";
 
-export default class NewProjectPage extends React.Component {
+export default class AmendProjectPage extends React.Component {
   constructor(props) {
     super(props);
 
@@ -33,7 +33,7 @@ export default class NewProjectPage extends React.Component {
     this.setState({ status: "SubmissionFailure" });
   }
 
-  projectUpdated(errors, timestamp) {
+  amendBaselineSuccess({errors, timestamp}) {
     if (timestamp) {
       this.setState({
         timestamp: timestamp
@@ -75,7 +75,7 @@ export default class NewProjectPage extends React.Component {
       prettyInvalidPaths: [[]]
     });
 
-    await this.props.updateProject.execute(this, {
+    await this.props.amendBaseline.execute(this, {
       projectId: this.props.projectId,
       data: this.state.formData,
       timestamp: this.state.timestamp
@@ -91,7 +91,7 @@ export default class NewProjectPage extends React.Component {
     e.preventDefault();
   };
 
-  updateProject = async e => {
+  amendBaseline = async e => {
     await this.setState({
       status: "updating",
       valid: true,
@@ -101,7 +101,7 @@ export default class NewProjectPage extends React.Component {
 
     await this.validateProject();
 
-    await this.props.updateProject.execute(this, {
+    await this.props.amendBaseline.execute(this, {
       projectId: this.props.projectId,
       data: this.state.formData,
       timestamp: this.state.timestamp
@@ -245,7 +245,7 @@ export default class NewProjectPage extends React.Component {
             <button
               data-test="update-project-button"
               className="btn form-button btn-primary"
-              onClick={this.updateProject}
+              onClick={this.amendBaseline}
             >
               Save draft
             </button>
@@ -339,9 +339,9 @@ export default class NewProjectPage extends React.Component {
   }
 }
 
-NewProjectPage.propTypes = {
+AmendProjectPage.propTypes = {
   data: PropTypes.object.isRequired,
   schema: PropTypes.object.isRequired,
   submitProject: PropTypes.object.isRequired,
-  updateProject: PropTypes.object.isRequired
+  amendBaseline: PropTypes.object.isRequired
 };

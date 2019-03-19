@@ -30,7 +30,7 @@ describe("AmendBaseline", () => {
     });
 
     it("calls the presenter with the id, errors and timestamp passed from the gateway", () => {
-      amendBaseline.execute(presenterSpy,{
+      amendBaseline.execute(presenterSpy, {
         projectId: 3,
         data: {},
         timestamp: 3

@@ -37,7 +37,7 @@ export default class AppPage {
 
   async load() {
     await this.waitForRequestToFinish();
-    this.page.update();
+    await this.page.update();
   }
 
   async createNewReturn() {
@@ -60,9 +60,9 @@ export default class AppPage {
 
     await this.load();
   }
-  
-  async amendBaseline() {
-    let button = this.page.find('[data-test="amend-baseline-button"]');
+
+  async goToAmendBaseline() {
+    let button = this.page.find('[data-test="amend-button"]');
     button.simulate("click");
 
     await this.load();

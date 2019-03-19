@@ -56,11 +56,11 @@ class APISimulator {
     return new APIResponse(projectRequest, response);
   }
 
-  amendBaseline(baselineId, projectId, timestamp = 0) {
+  amendBaseline(baselineId, projectId, data, timestamp = 0) {
     let response = {baselineId, timestamp}
     let request = nock(this.url)
       .matchHeader("Content-Type", "application/json")
-      .post("/baseline/amend", {project_id: ""+projectId, project_data, timestamp});
+      .post("/baseline/amend", {project_id: ""+projectId, data, timestamp});
 
     return new APIResponse(request, response);
   }
