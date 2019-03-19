@@ -144,14 +144,27 @@ export default class ParentForm extends React.Component {
     );
   };
 
-  changeSelection(newSection) {
-    this.setState({
+  async changeSelection(newSection, newSubsection) {
+    let jump_to_id;
+    await this.setState({
       selected: newSection,
-      selectedFormSection: this.getInitialFormSection(
+      selectedFormSection: newSubsection || this.getInitialFormSection(
         this.props.schema, newSection
       ),
       selectedFormItemIndex: 0
     });
+
+    if (this.state.selected !== "workflow") {
+      if (this.selectedSchema().type === "object") {
+        jump_to_id = `root_${newSubsection}__title`;
+      } else {
+        jump_to_id = "subform";
+      }
+      let documentObject = this.props.documentGateway.getDocument();
+      if (documentObject.getElementById(jump_to_id)) {
+        documentObject.getElementById(jump_to_id).scrollIntoView();
+      }
+    }
   }
 
   viewSelectorOnChange = changeEvent => {
@@ -189,6 +202,23 @@ export default class ParentForm extends React.Component {
     return Object.entries(this.props.schema.properties).map(this.renderPropertyTab);
   }
 
+  jumpToSubsection = (subsection, index) => {
+    let jump_to_id;
+    if (this.selectedSchema().type === "object") {
+      jump_to_id = `root_${subsection}__title`;
+    } else {
+      jump_to_id = "subform";
+      this.setState({
+        selectedFormSection: subsection,
+        selectedFormItemIndex: index
+      });
+    }
+    let documentObject = this.props.documentGateway.getDocument();
+    if (documentObject.getElementById(jump_to_id)) {
+      documentObject.getElementById(jump_to_id).scrollIntoView();
+    }
+  }
+
   renderSidebar() {
     let items = new GenerateSidebarItems().execute(
       this.props.schema.properties[this.state.selected],
@@ -210,22 +240,7 @@ export default class ParentForm extends React.Component {
         items={items}
         selectedFormItemIndex={this.state.selectedFormItemIndex}
         selectedFormSection={this.state.selectedFormSection}
-        onItemClick={(section, index) => {
-          let jump_to_id;
-          if (this.selectedSchema().type === "object") {
-            jump_to_id = `root_${section}__title`;
-          } else {
-            jump_to_id = "subform";
-            this.setState({
-              selectedFormSection: section,
-              selectedFormItemIndex: index
-            });
-          }
-          let documentObject = this.props.documentGateway.getDocument();
-          if (documentObject.getElementById(jump_to_id)) {
-            documentObject.getElementById(jump_to_id).scrollIntoView();
-          }
-        }}
+        onItemClick={this.jumpToSubsection}
       />
     );
   }
@@ -337,7 +352,7 @@ export default class ParentForm extends React.Component {
     </div>
 
   renderWorkflow = () =>
-    <WorkflowViewer workflow={this.props.schema.workflow} onClick={(selection) => {this.changeSelection(selection)}}/>
+    <WorkflowViewer workflow={this.props.schema.workflow} onClick={(selection, subsection) => {this.changeSelection(selection, subsection)}}/>
 
   render() {
     return (

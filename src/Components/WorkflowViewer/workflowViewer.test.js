@@ -29,7 +29,8 @@ describe("<WorkflowViewer>", () => {
             steps: [
               {
                 title: "Land ownership",
-                section: "landOwnership"
+                section: "landOwnership",
+                subsection: "sublandownership"
               }
             ]
           }
@@ -39,7 +40,7 @@ describe("<WorkflowViewer>", () => {
 
     it("Clicking on a step calls the onClick event", () => {
       wrap.find("[data-test='workflowStep']").at(2).simulate('click');
-      expect(onClickSpy).toHaveBeenCalledWith("landOwnership");
+      expect(onClickSpy).toHaveBeenCalledWith("landOwnership", "sublandownership");
     });
 
     it("Renders based on the provided workflow", () => {
@@ -68,7 +69,8 @@ describe("<WorkflowViewer>", () => {
             steps: [
               {
                 title: "Step 1",
-                section: "section"
+                section: "section",
+                subsection: "subsection"
               }
             ]
           }
@@ -84,7 +86,7 @@ describe("<WorkflowViewer>", () => {
 
     it("Clicking on a step calls the onClick event", () => {
       wrap.find("[data-test='workflowStep']").at(0).simulate('click');
-      expect(onClickSpy).toHaveBeenCalledWith("section");
+      expect(onClickSpy).toHaveBeenCalledWith("section", "subsection");
     });
   });
 });

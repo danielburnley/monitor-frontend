@@ -75,6 +75,9 @@ describe("<ParentForm>", () => {
               documentGateway={documentGatewaySpy}
               getRole={getRoleUseCaseSpy}
               onChange={onChangeSpy}
+              formData={{
+                dog: [{summary: {name: "Dog"}}]
+              }}
               schema={{
                 type: "object",
                 workflow: [
@@ -87,7 +90,8 @@ describe("<ParentForm>", () => {
                       },
                       {
                         title: "Dogs",
-                        section: "dog"
+                        section: "dog",
+                        subsection: "summary"
                       }
                     ]
                   }
@@ -102,10 +106,26 @@ describe("<ParentForm>", () => {
                     }
                   },
                   dog: {
-                    type: "object",
-                    properties: {
-                      name: {
-                        type: "string"
+                    type: "array",
+                    items: {
+                      type: "object",
+                      properties: {
+                        description: {
+                          type: "object",
+                          properties: {
+                            desc: {
+                              type: "string"
+                            }
+                          }
+                        },
+                        summary: {
+                          type: "object",
+                          properties: {
+                            name: {
+                              type: "string"
+                            }
+                          }
+                        }
                       }
                     }
                   }
@@ -131,7 +151,8 @@ describe("<ParentForm>", () => {
                 },
                 {
                   title: "Dogs",
-                  section: "dog"
+                  section: "dog",
+                  subsection: "summary"
                 }
               ]
             }
@@ -140,14 +161,31 @@ describe("<ParentForm>", () => {
 
 
         it("Clicking on items in the workflow will jump to the corresponding tab", async () => {
-          wrap.find("[data-test='workflowStep']").at(0).simulate("click");
+          wrap.find("[data-test='workflowStep']").at(1).simulate("click");
           await wrap.update();
-          expect(wrap.find("[data-test='cat_subform']").props().schema).toEqual(
+          expect(wrap.find("[data-test='dog_subform']").props().selectedFormSection).toEqual("summary")
+          expect(wrap.find("[data-test='dog_subform']").props().schema).toEqual(
             {
-              type: "object",
-              properties: {
-                name: {
-                  type: "string"
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  description: {
+                    type: "object",
+                    properties: {
+                      desc: {
+                        type: "string"
+                      }
+                    }
+                  },
+                  summary: {
+                    type: "object",
+                    properties: {
+                      name: {
+                        type: "string"
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -160,7 +198,7 @@ describe("<ParentForm>", () => {
 
           let input = wrap.find("input").first();
           await updateFormField(input, "Meowwwww");
-          expect(wrap.state("formData")).toEqual({ cat: { name: "Meowwwww" } }, 1);
+          expect(wrap.state("formData")).toEqual({cat: {name: "Meowwwww"}, dog: [{summary: {"name": "Dog"}}]}, 1);
         });
 
         it("compiles a form from the children", async () => {
@@ -169,7 +207,7 @@ describe("<ParentForm>", () => {
 
           let input = wrap.find('[data-test="cat_subform"] input');
           await updateFormField(input, "Tabby");
-          expect(wrap.state("formData")).toEqual({ cat: { name: "Tabby" } }, 1);
+          expect(wrap.state("formData")).toEqual({cat: {name: "Tabby"}, dog: [{summary: {"name": "Dog"}}]}, 1);
         });
 
         it("triggers the onChange prop it is given", async () => {
@@ -181,7 +219,7 @@ describe("<ParentForm>", () => {
           await updateFormField(input, "Tabby");
 
           expect(onChangeSpy).toHaveBeenCalledWith({
-            formData: { cat: { name: "Tabby" } }
+            formData: {cat: {name: "Tabby"}, dog: [{summary: {"name": "Dog"}}]}
           });
         });
 

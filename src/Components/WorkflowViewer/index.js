@@ -7,7 +7,7 @@ export default class WorkflowViewer extends React.Component {
       key={index}>
       <a
         data-test='workflowStep'
-        onClick={() => this.props.onClick(step.section)}
+        onClick={() => this.props.onClick(step.section, step.subsection)}
       >
       {step.title}
       </a>
