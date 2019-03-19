@@ -1,10 +1,9 @@
 .sidebar {
-  margin-top: 15px;
+  margin: 15px;
 }
 
 .sidebar-parent {
-  font-size: 1.2em;
-  font-weight: bolder;
+  color: #6F777B;
 }
 
 .sidebar-item {
@@ -13,15 +12,15 @@
   display: flex;
 }
 
+.sidebar-item-children {
+  margin-bottom: 1em;
+  padding: 0;
+}
+
 .sidebar-item-child {
   border-left: medium solid transparent;
   padding: 4px;
   list-style: none;
-}
-
-.selected-header {
-  color: #005ea5;
-  text-decoration: underline;
 }
 
 .selected-item {

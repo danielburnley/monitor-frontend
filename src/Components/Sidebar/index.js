@@ -38,7 +38,7 @@ export default class Sidebar extends React.Component {
           >
             {item.title}
           </span>
-          <ul data-test="sidebar-item-children">
+          <ul data-test="sidebar-item-children" className="sidebar-item-children">
             {this.renderChildren(
               item.children,
               this.props.selectedFormItemIndex
@@ -52,7 +52,7 @@ export default class Sidebar extends React.Component {
           <span className="sidebar-parent" data-test="sidebar-item-button">
             {item.title}
           </span>
-          <ul data-test="sidebar-item-children">
+          <ul data-test="sidebar-item-children" className="sidebar-item-children">
             {this.renderChildren(item.children)}
           </ul>
         </React.Fragment>

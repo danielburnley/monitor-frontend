@@ -2,35 +2,3 @@
     padding-left: 15px;
     margin-top: -1px;
 }
-.workflow-section {
-    padding-left: 33px;
-    margin-bottom: 2.5em;
-}
-
-.workflow-section {
-    position:relative;
-    margin-bottom: 0;
-}
-
-.workflow-section:after {
-    position: absolute;
-    left: -26px;
-    top: 0px;
-}
-
-.workflow-section:before {
-    content: "";
-    position: absolute;
-    left: -16px;
-    border-left: 1px solid black;
-    height: 100%;
-    width: 1px;
-}
-
-.workflow-section:first-child:before {
-   top: 30px;
-}
-
-.workflow-section:last-child:before {
-   height: 6px;
-}
