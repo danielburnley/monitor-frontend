@@ -281,12 +281,13 @@ export default class FormActions extends React.Component {
       <div>
         <div className="row">
           <div className="col-md-2 back-to-project">
-            <button
+            <a
+              data-test="back-to-overview"
               className="btn btn-link btn-lg btn-block"
               onClick={this.backToProject}
             >
               Back to project overview
-            </button>
+            </a>
           </div>
         </div>
         <div className="row">

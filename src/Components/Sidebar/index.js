@@ -5,7 +5,7 @@ import "./style.css";
 export default class Sidebar extends React.Component {
   renderChildren(children, selectedIndex) {
     return Object.entries(children).map(([key, value]) => (
-      <li key={key} data-test="sidebar-item-child">
+      <li key={key} data-test="sidebar-item-child" className="sidebar-item-child">
         <a
           className={this.selectedChildStyling(key, selectedIndex)}
           onClick={_ => this.props.onItemClick(value.subSection, value.index)}
@@ -38,7 +38,7 @@ export default class Sidebar extends React.Component {
           >
             {item.title}
           </span>
-          <ul data-test="sidebar-item-children">
+          <ul data-test="sidebar-item-children" className="sidebar-item-children">
             {this.renderChildren(
               item.children,
               this.props.selectedFormItemIndex
@@ -52,7 +52,7 @@ export default class Sidebar extends React.Component {
           <span className="sidebar-parent" data-test="sidebar-item-button">
             {item.title}
           </span>
-          <ul data-test="sidebar-item-children">
+          <ul data-test="sidebar-item-children" className="sidebar-item-children">
             {this.renderChildren(item.children)}
           </ul>
         </React.Fragment>

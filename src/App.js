@@ -247,12 +247,12 @@ const EditInfrastructuresButton = (props) => {
 };
 
 const BackToProjectOverviewButton = props => (
-  <button
+  <a
     className="btn btn-link btn-lg"
     onClick={() => props.history.push(`/project/${props.match.params.projectId}`)}
   >
     Back to project overview
-  </button>
+  </a>
 );
 
 const renderInfrastructuresPage = (props) => (
