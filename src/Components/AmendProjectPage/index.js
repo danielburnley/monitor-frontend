@@ -157,7 +157,7 @@ export default class AmendProjectPage extends React.Component {
           data-test="disabled-submit-project-button"
           className="btn form-button disabled"
         >
-          Create this project
+          Create new baseline version
         </button>
       );
     }
@@ -175,7 +175,7 @@ export default class AmendProjectPage extends React.Component {
           className="btn form-button btn-primary"
           onClick={this.submitProject}
         >
-          Create this project
+          Create new baseline version
         </button>
       );
     }
@@ -325,6 +325,7 @@ export default class AmendProjectPage extends React.Component {
   }
 
   render() {
+    console.log(this.props)
     return (
       <div>
         <div className="title-container">
