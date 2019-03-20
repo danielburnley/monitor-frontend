@@ -78,6 +78,7 @@ export default class CurrencyWidget extends React.Component {
             value={this.formatNumber(''+this.props.value)}
             onChange={e => this.onFieldChange(e)}
             disabled={this.isInputDisabled()}
+            type="text"
             id="moneyLabel"
           />
         </div>

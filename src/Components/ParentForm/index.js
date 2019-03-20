@@ -18,6 +18,7 @@ import QuarterlyBreakdown from "../QuarterlyBreakdown";
 import CurrencyWidget from "../CurrencyWidget";
 import PercentageWidget from "../PercentageWidget";
 import BritishDate from "../BritishDate";
+import WorkflowViewer from "../WorkflowViewer";
 import "./style.css";
 import UploadFileField from "../UploadFileField";
 
@@ -25,29 +26,35 @@ export default class ParentForm extends React.Component {
   constructor(props) {
     super(props);
 
-    let first_property = this.getFirstProperty(props.schema);
+    let first_tab = this.getFirstProperty(props.schema);
 
     this.state = {
       userRole: this.props.getRole.execute().role,
       uiSchema: this.props.uiSchema ? this.props.uiSchema : {},
       formData: this.props.formData ? this.props.formData : {},
-      selected: first_property,
-      selectedFormSection: this.getInitialFormSection(
-        props.schema.properties[first_property]
-      ),
+      selected: first_tab,
+      selectedFormSection: this.getInitialFormSection(props.schema, first_tab),
       selectedFormItemIndex: 0
     };
   }
 
   getFirstProperty(schema) {
-    return Object.keys(schema.properties)[0];
-  }
-
-  getInitialFormSection(schema) {
-    if (schema.type === "array") {
-      return Object.keys(schema.items.properties)[0];
+    if (schema.workflow)
+    {
+      return "workflow";
     } else {
       return Object.keys(schema.properties)[0];
+    }
+  }
+
+  getInitialFormSection(schema, selected_tab) {
+    if (selected_tab === "workflow")
+    {
+      return null;
+    } else if (schema.properties[selected_tab].type === "array") {
+      return Object.keys(schema.properties[selected_tab].items.properties)[0];
+    } else {
+      return Object.keys(schema.properties[selected_tab].properties)[0];
     }
   }
 
@@ -137,41 +144,79 @@ export default class ParentForm extends React.Component {
     );
   };
 
-  viewSelectorOnChange = changeEvent => {
-    let selectedSection = changeEvent.target.id;
-    this.setState({
-      selected: selectedSection,
-      selectedFormSection: this.getInitialFormSection(
-        this.props.schema.properties[selectedSection]
+  async changeSelection(newSection, newSubsection) {
+    let jump_to_id;
+    await this.setState({
+      selected: newSection,
+      selectedFormSection: newSubsection || this.getInitialFormSection(
+        this.props.schema, newSection
       ),
       selectedFormItemIndex: 0
     });
+
+    if (this.state.selected !== "workflow") {
+      if (this.selectedSchema().type === "object") {
+        jump_to_id = `root_${newSubsection}__title`;
+      } else {
+        jump_to_id = "subform";
+      }
+      let documentObject = this.props.documentGateway.getDocument();
+      if (documentObject.getElementById(jump_to_id)) {
+        documentObject.getElementById(jump_to_id).scrollIntoView();
+      }
+    }
+  }
+
+  viewSelectorOnChange = changeEvent => {
+    let selectedSection = changeEvent.target.id;
+    this.changeSelection(selectedSection)
   };
 
-  renderTab = ([property, value]) => {
+  renderTab = (tab, value) => {
+    return (
+      <li
+        key={tab}
+        role="presentation"
+        className={
+          "nav-item " +
+          (tab === this.state.selected ? "active" : "inactive")
+        }
+        data-test={`${tab}_tab`}
+      >
+        <a data-test={`${tab}_tab_link`} role="button" id={tab} onClick={this.viewSelectorOnChange}>
+          {value.title}
+        </a>
+      </li>
+    );
+  }
+
+  renderPropertyTab = ([property, value]) => {
     if (value.hidden || (value.laHidden && this.state.userRole === "Local Authority")) {
       return null;
     } else {
-      return (
-        <li
-          key={property}
-          role="presentation"
-          className={
-            "nav-item " +
-            (property === this.state.selected ? "active" : "inactive")
-          }
-          data-test={`${property}_property`}
-        >
-          <a role="button" id={property} onClick={this.viewSelectorOnChange}>
-            {value.title}
-          </a>
-        </li>
-      );
+      return this.renderTab(property, value);
     }
   };
 
   renderNavigationTabs() {
-    return Object.entries(this.props.schema.properties).map(this.renderTab);
+    return Object.entries(this.props.schema.properties).map(this.renderPropertyTab);
+  }
+
+  jumpToSubsection = (subsection, index) => {
+    let jump_to_id;
+    if (this.selectedSchema().type === "object") {
+      jump_to_id = `root_${subsection}__title`;
+    } else {
+      jump_to_id = "subform";
+      this.setState({
+        selectedFormSection: subsection,
+        selectedFormItemIndex: index
+      });
+    }
+    let documentObject = this.props.documentGateway.getDocument();
+    if (documentObject.getElementById(jump_to_id)) {
+      documentObject.getElementById(jump_to_id).scrollIntoView();
+    }
   }
 
   renderSidebar() {
@@ -195,22 +240,7 @@ export default class ParentForm extends React.Component {
         items={items}
         selectedFormItemIndex={this.state.selectedFormItemIndex}
         selectedFormSection={this.state.selectedFormSection}
-        onItemClick={(section, index) => {
-          let jump_to_id;
-          if (this.selectedSchema().type === "object") {
-            jump_to_id = `root_${section}__title`;
-          } else {
-            jump_to_id = "subform";
-            this.setState({
-              selectedFormSection: section,
-              selectedFormItemIndex: index
-            });
-          }
-          let documentObject = this.props.documentGateway.getDocument();
-          if (documentObject.getElementById(jump_to_id)) {
-            documentObject.getElementById(jump_to_id).scrollIntoView();
-          }
-        }}
+        onItemClick={this.jumpToSubsection}
       />
     );
   }
@@ -312,21 +342,35 @@ export default class ParentForm extends React.Component {
     }
   }
 
+  renderForm = () =>
+    <div className="parent-form-body">
+      <div className="col-md-2 sidebar-column">{this.renderSidebar()}</div>
+      <div className="col-md-10">
+        {this.renderSubform()}
+        {this.props.children}
+      </div>
+    </div>
+
+  renderWorkflow = () =>
+    <WorkflowViewer workflow={this.props.schema.workflow} onClick={(selection, subsection) => {this.changeSelection(selection, subsection)}}/>
+
   render() {
     return (
       <div className="ParentForm" data-test="parent-form" role="navigation">
         <div className="subform-selectors">
-          <ul className="col-md-offset-2 form-selection nav nav-tabs">
+          <ul className="form-selection nav nav-tabs">
+            {
+              this.props.schema.workflow?
+              this.renderTab("workflow", {title: "Getting started"}):null
+            }
             {this.renderNavigationTabs()}
           </ul>
         </div>
-        <div className="parent-form-body">
-          <div className="col-md-2 sidebar-column">{this.renderSidebar()}</div>
-          <div className="col-md-10">
-            {this.renderSubform()}
-            {this.props.children}
-          </div>
-        </div>
+
+        {
+            this.state.selected === "workflow"?
+              this.renderWorkflow():this.renderForm()
+        }
       </div>
     );
   }

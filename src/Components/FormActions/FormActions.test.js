@@ -131,7 +131,7 @@ describe("<FormActions>", () => {
   });
 
 
-  it("Only shows the back to overview button if the is submitted", () => {
+  it("Only shows the back to overview button if the form is submitted", () => {
     let wrapper = mount(
       <FormActions
         formType="return"
@@ -143,7 +143,7 @@ describe("<FormActions>", () => {
       />
     );
 
-    let actions = wrapper.find("button");
+    let actions = wrapper.find("[data-test='back-to-overview']");
 
     expect(actions.length).toEqual(1);
   });
