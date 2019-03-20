@@ -108,41 +108,52 @@ export default class Sidebar extends React.Component {
     }
   }
 
-  isCorrectUser() {
+  userCanChangeArraySize() {
     return (this.props.userRole === "Homes England") || (this.props.userRole === "Superuser")
   }
 
-  renderButtons() {
-    if(this.props.addable && this.isCorrectUser()) {
-      return (
-        <span>
-          <button
-            type="button"
-            className="btn btn-default btn-lg sidebar-button"
-            data-test="add-button"
-            onClick={this.addEntry}
-          >
-            +
-          </button>
-          <button
-            type="button"
-            className="btn btn-default btn-lg sidebar-button"
-            data-test="remove-button"
-            onClick={this.removeEntry}
-          >
-          -
-          </button>
-        </span>
-      );
-    } else {
-      return null;
+  renderRemoveButton() {
+    if (
+      Object.keys(this.props.items).length !== 0 &&
+      this.props.addable &&
+      this.userCanChangeArraySize()
+    ) {
+      return <button
+        type="button"
+        className="btn btn-default btn-lg sidebar-button"
+        data-test="remove-button"
+        onClick={this.removeEntry}
+      >
+        -
+      </button>
     }
   }
 
-  render() {
-    if (Object.keys(this.props.items).length === 0) {
-      return <ul data-test="sidebar" />;
+  renderAddButton() {
+    if (
+      this.props.addable &&
+      this.userCanChangeArraySize()
+    ) {
+      return <button
+        type="button"
+        className="btn btn-default btn-lg sidebar-button"
+        data-test="add-button"
+        onClick={this.addEntry}
+      >
+      +
+      </button>
     }
+  }
+  renderButtons() {
+    return (
+      <span>
+        {this.renderAddButton()}
+        {this.renderRemoveButton()}
+      </span>
+    )
+  }
+
+  render() {
     return (
       <div>
         <ul data-test="sidebar" className="sidebar list-unstyled">

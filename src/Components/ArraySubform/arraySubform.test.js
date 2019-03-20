@@ -213,6 +213,18 @@ describe("<ArraySubform>", () => {
       resetSelectedItemSpy = jest.fn();
     });
 
+    it("Renders nothing if empty", () => {
+      let subform = getSubform({
+        schema,
+        data: [],
+        uiSchema,
+        index: 0,
+        section: "details"
+      });
+
+      expect(subform.find("Form").length).toEqual(0);
+    });
+
     it("Renders a form", () => {
       let subform = getSubform({
         schema,
