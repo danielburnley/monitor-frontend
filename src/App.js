@@ -363,7 +363,7 @@ const renderSubmittedProjectPage = (props, formData, formSchema) => (
       <div className="col-md-2">
         <CreateClaimButton {...props} />
       </div>
-      <div>
+      <div className="col-md-2">
         <AmendBaselineButton {...props}/>
       </div>
       <div className="col-md-2">

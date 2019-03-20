@@ -5,6 +5,7 @@ export default class AmendBaselineButton extends React.Component {
     return (
       <button
         data-test="amend-button"
+        className="btn btn-primary"
         onClick={() => {
           this.props.history.push(
             `/project/${this.props.match.params.projectId}/baseline/amend`
