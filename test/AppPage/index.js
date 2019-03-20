@@ -37,7 +37,7 @@ export default class AppPage {
 
   async load() {
     await this.waitForRequestToFinish();
-    this.page.update();
+    await this.page.update();
   }
 
   async createNewReturn() {

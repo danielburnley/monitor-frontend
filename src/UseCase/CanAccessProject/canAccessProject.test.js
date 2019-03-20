@@ -3,16 +3,16 @@ import CanAccessProject from ".";
 describe("CanAccessProject", () => {
   describe('Given a valid saved api key', () => {
     describe('example 1', () => {
-      let apiKeyGatewaySpy = { getApiKey: jest.fn(() => ({apiKey: 'apikey'})), setApiKey: jest.fn()};
+      let apiKeyCookieGatewaySpy = { getApiKey: jest.fn(() => ({apiKey: 'apikey'})), setApiKey: jest.fn()};
       let tokenGatewaySpy = {
         getAccess: jest.fn(() => ({apiKey: {apiKey: 'Cats'}, userRole: {userRole: '3'}}))
       };
-      let userRoleGatewaySpy = { getUserRole: jest.fn(()=> ({userRole: '3'})) }
-      let projectGatewaySpy = { findById:  jest.fn(async () => ({ success: true })) };
-      let useCase = new CanAccessProject(tokenGatewaySpy, apiKeyGatewaySpy, userRoleGatewaySpy, projectGatewaySpy);
+      let userRoleGatewaySpy = { getUserRole: jest.fn(() => ({userRole: '3'})) }
+      let apiKeyGatewaySpy = { check:  jest.fn(async () => ({ valid: true })) };
+      let useCase = new CanAccessProject(tokenGatewaySpy, apiKeyCookieGatewaySpy, userRoleGatewaySpy, apiKeyGatewaySpy);
       it('calls the api key gateway', async () => {
         await useCase.execute("", 1);
-        expect(apiKeyGatewaySpy.getApiKey).toHaveBeenCalled();
+        expect(apiKeyCookieGatewaySpy.getApiKey).toHaveBeenCalled();
         expect(tokenGatewaySpy.getAccess).not.toHaveBeenCalled();
       });
 
@@ -23,7 +23,7 @@ describe("CanAccessProject", () => {
 
       it('calls the project gateway', async () => {
         await useCase.execute("", 1);
-        expect(projectGatewaySpy.findById).toBeCalledWith(1);
+        expect(apiKeyGatewaySpy.check).toBeCalledWith(1);
         expect(tokenGatewaySpy.getAccess).not.toHaveBeenCalled();
       });
 
@@ -36,22 +36,22 @@ describe("CanAccessProject", () => {
       });
     });
     describe('example 2', () => {
-      let apiKeyGatewaySpy = { getApiKey: jest.fn(() => ({apiKey: 'key'})), setApiKey: jest.fn()};
+      let apiKeyCookieGatewaySpy = { getApiKey: jest.fn(() => ({apiKey: 'key'})), setApiKey: jest.fn()};
       let tokenGatewaySpy = {
         getAccess: jest.fn(() => ({apiKey: {apiKey: 'Cats'}, userRole: {userRole: '5'}}))
       };
       let userRoleGatewaySpy = { getUserRole: jest.fn(()=> ({userRole: '5'})) }
-      let projectGatewaySpy = { findById:  jest.fn(async () => ({ success: true })) };
-      let useCase = new CanAccessProject(tokenGatewaySpy, apiKeyGatewaySpy, userRoleGatewaySpy, projectGatewaySpy);
+      let apiKeyGatewaySpy = { check:  jest.fn(async () => ({ valid: true })) };
+      let useCase = new CanAccessProject(tokenGatewaySpy, apiKeyCookieGatewaySpy, userRoleGatewaySpy, apiKeyGatewaySpy);
       it('calls the api key gateway', async () => {
         await useCase.execute("", 6);
-        expect(apiKeyGatewaySpy.getApiKey).toHaveBeenCalled();
+        expect(apiKeyCookieGatewaySpy.getApiKey).toHaveBeenCalled();
         expect(tokenGatewaySpy.getAccess).not.toHaveBeenCalled();
       });
 
       it('calls the project gateway', async () => {
         await useCase.execute("", 6);
-        expect(projectGatewaySpy.findById).toBeCalledWith(6);
+        expect(apiKeyGatewaySpy.check).toBeCalledWith(6);
         expect(tokenGatewaySpy.getAccess).not.toHaveBeenCalled();
       });
 
@@ -62,17 +62,17 @@ describe("CanAccessProject", () => {
   });
 
   describe('Given a valid token', () => {
-    let apiKeyGatewaySpy = { getApiKey: jest.fn(() => ({apiKey: 'apikey'})), setApiKey: jest.fn()};
+    let apiKeyCookieGatewaySpy = { getApiKey: jest.fn(() => ({apiKey: 'apikey'})), setApiKey: jest.fn()};
     let userRoleGatewaySpy = { getUserRole: jest.fn(() => ({userRole: 'he'})), setUserRole: jest.fn()}
     let tokenGatewaySpy = {
       getAccess: jest.fn(() => ({apiKey: { apiKey: 'Cats'}, userRole: {userRole: 'he'}}))
     };
-    let projectGatewaySpy = { findById:  jest.fn(async () => ({ success: false })) };
-    let useCase = new CanAccessProject(tokenGatewaySpy, apiKeyGatewaySpy, userRoleGatewaySpy, projectGatewaySpy);
+    let apiKeyGatewaySpy = { check:  jest.fn(async () => ({ valid: false })) };
+    let useCase = new CanAccessProject(tokenGatewaySpy, apiKeyCookieGatewaySpy, userRoleGatewaySpy, apiKeyGatewaySpy);
 
     it('Saves the new api key', async () => {
       await useCase.execute("", 1);
-      expect(apiKeyGatewaySpy.setApiKey).toBeCalledWith('Cats');
+      expect(apiKeyCookieGatewaySpy.setApiKey).toBeCalledWith('Cats');
     });
 
     it('Saves the user role', async () => {
@@ -104,10 +104,10 @@ describe("CanAccessProject", () => {
     let tokenGatewaySpy = {
       getAccess: jest.fn(() => (null))
     };
-    let apiKeyGatewaySpy = { getApiKey: jest.fn(() => ({apiKey: ''})), setApiKey: jest.fn()};
+    let apiKeyCookieGatewaySpy = { getApiKey: jest.fn(() => ({apiKey: ''})), setApiKey: jest.fn()};
     let userRoleGatewaySpy = jest.fn()
-    let projectGatewaySpy = { findById:  jest.fn(async () => ({ success: false })) };
-    let useCase = new CanAccessProject(tokenGatewaySpy, apiKeyGatewaySpy, userRoleGatewaySpy, projectGatewaySpy);
+    let apiKeyGatewaySpy = { check:  jest.fn(async () => ({ valid: false })) };
+    let useCase = new CanAccessProject(tokenGatewaySpy, apiKeyCookieGatewaySpy, userRoleGatewaySpy, apiKeyGatewaySpy);
 
     it('Given empty string as access token it returns false', async () => {
       expect((await useCase.execute("", 6)).valid).toEqual(false)

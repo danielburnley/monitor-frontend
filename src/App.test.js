@@ -177,6 +177,8 @@ describe("Viewing the Homepage", () => {
   });
 
   it("will not show get token", async () => {
+    api.checkApiKey(0).successfully();
+
     api.getUserProjects().successfully();
 
 
@@ -190,6 +192,7 @@ describe("Viewing the Homepage", () => {
   });
 
   it("will show the Project list from the api.", async () => {
+    api.checkApiKey(0).successfully();
     api.getUserProjects().successfully();
 
     let page = new AppPage("/?token=Cats");
@@ -203,6 +206,7 @@ describe("Viewing the Homepage", () => {
   });
 
   it("Will show the Admin Portal", async () => {
+    api.checkApiKey(0).successfully();
     api.getUserProjects().successfully();
 
     let page = new AppPage("/?token=Cats");
@@ -219,7 +223,6 @@ describe("Viewing a project", () => {
   beforeEach(() => {
     process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
     api = new APISimulator("http://cat.meow");
-    api.getProject({}, 0).unsuccessfully();
   });
 
   afterEach(() => {
@@ -227,6 +230,7 @@ describe("Viewing a project", () => {
   });
 
   it("Given invalid token project page is not shown", async () => {
+    api.checkApiKey(0, false).unsuccessfully();
     api.getProject({}, 0).unsuccessfully();
     api.expendEmptyTokenForProject().unauthorised();
     api.expendToken("Hello").unauthorised();
@@ -248,13 +252,12 @@ describe("Viewing a project", () => {
     });
 
     it("will not show GetToken", async () => {
+      api.checkApiKey(0).successfully();
       api.getProject(projectSchema, projectData).successfully();
       api.getReturns({returns: []}).successfully();
 
       let page = new AppPage("/project/0/?token=Cats");
       await page.load();
-      await page.load();
-
 
       expect(page.find("GetToken").length).toEqual(0);
       expect(page.find("ProjectPage").length).toEqual(1);
@@ -262,15 +265,16 @@ describe("Viewing a project", () => {
 
     describe("Project Status is draft", () => {
       it("Displays the fill in baseline button", async () => {
+        api.checkApiKey(0).successfully();
         api.getProject(projectSchema, projectData, "Draft", projectType).successfully();
         let page = new AppPage("/project/0?token=Cats");
         await page.load();
         expect(page.find("FillInBaselineButton").length).toEqual(1)
       });
 
-
-      describe("A project with type other than ff", () => {        
+      describe("A project with type other than ff", () => {
         it("Doesn't display the edit infrastructures button", async () => {
+          api.checkApiKey(0).successfully();
           api.getProject(projectSchema, projectData, "Draft", projectType).successfully();
           let page = new AppPage("/project/0?token=Cats");
           await page.load();
@@ -280,6 +284,7 @@ describe("Viewing a project", () => {
 
       describe("An ff project", () => {
         it("Displays the edit infrastructures button", async () => {
+          api.checkApiKey(0).successfully();
           api.getProject(projectSchema, projectData, "Draft", "ff").successfully();
           let page = new AppPage("/project/0?token=Cats");
           await page.load();
@@ -290,6 +295,7 @@ describe("Viewing a project", () => {
 
     describe("Project Status is submitted", () => {
       it("Renders the project summary with information from the API", async () => {
+        api.checkApiKey(0).successfully();
         api.getProject(projectSchema, projectData, projectStatus, projectType).successfully();
         api.getReturns({returns: []}).successfully();
 
@@ -355,6 +361,7 @@ describe("Viewing a project", () => {
             }
           ]
         };
+        api.checkApiKey(0).successfully();
         api.getProject(projectSchema, projectData, projectStatus, projectType).successfully();
         api.getReturns(data).successfully();
 
@@ -370,6 +377,7 @@ describe("Viewing a project", () => {
 
 
       it("Renders the project baseline page", async () => {
+        api.checkApiKey(0).successfully();
         api.getProject(projectSchema, projectData, projectStatus, projectType).successfully();
         api.getReturns({returns: []}).successfully();
 
@@ -384,29 +392,31 @@ describe("Viewing a project", () => {
 
       describe("Returns", () => {
         it("Renders the return with information from the API when creating a new return", async () => {
+          api.checkApiKey(0).successfully();
           api.getProject(projectSchema, projectData, projectStatus, projectType).successfully();
           api.getBaseReturn(returnSchema, returnData).successfully();
           api.getReturns({returns: []}).successfully();
-  
+
           let page = new AppPage("/project/0?token=Cats");
           await page.load();
           await page.createNewReturn();
-  
+
           let expectedInputValues = [
             "16",
             "Fluffy balls of friendship",
             "Beans",
             ""
           ];
-  
+
           expect(page.getFormInputs()).toEqual(expectedInputValues);
         });
-  
+
         it("Renders the return with information from the API", async () => {
+          api.checkApiKey(0).successfully();
           api.getReturn(returnSchema, returnData).successfully();
           let page = new AppPage("/project/0/return/1?token=Cats");
           await page.load();
-  
+
           let expectedInputValues = [
             "16",
             "Fluffy balls of friendship",
@@ -419,28 +429,30 @@ describe("Viewing a project", () => {
 
       describe("Claims", () => {
         it("Renders a blank claim form when creating a new claim", async () => {
+          api.checkApiKey(0).successfully();
           api.getProject(projectSchema, projectData, projectStatus, projectType).successfully();
-          api.getReturns({returns: []}).successfully();          
+          api.getReturns({returns: []}).successfully();
           api.getBaseClaim(claimSchema, emptyClaimData).successfully();
-  
+
           let page = new AppPage("/project/0?token=Cats");
           await page.load();
           await page.createNewClaim();
-  
+
           let expectedInputValues = [
             "",
             "",
             ""
           ];
-  
+
           expect(page.getFormInputs()).toEqual(expectedInputValues);
         });
-  
+
         it("Renders the return with information from the API", async () => {
+          api.checkApiKey(0).successfully();
           api.getClaim(claimSchema, filledClaimData).successfully();
           let page = new AppPage("/project/0/claim/1?token=Cats");
           await page.load();
-  
+
           let expectedInputValues = [
             "Mr sparkles",
             "2",
@@ -460,8 +472,7 @@ describe('Submitting a draft project', () => {
     api = new APISimulator("http://cat.meow");
     api.expendToken("Hello", "Homes England").successfully();
     api.getProject(projectSchema, draftProjectData, "Draft", projectType, "5").successfully();
-    api.getProject(projectSchema, draftProjectData, "Draft", projectType, "8").successfully();
-    api.updateProject(submittedProjectData, 0, {errors: []}, "8").successfully();
+    api.updateProject(submittedProjectData, 0, {errors: []}, "5").successfully();
     api.submitProject(0).successfully();
   });
 
@@ -470,6 +481,8 @@ describe('Submitting a draft project', () => {
   });
 
   it('Allows you to edit, save and submit a draft project', async () => {
+    api.checkApiKey(0).successfully();
+
     let page = new AppPage("/project/0/baseline?token=Hello");
     let response = {
       valid: true,
@@ -492,8 +505,8 @@ describe('Submitting a draft project', () => {
 
     page.find('[data-test="update-project-button"]').simulate("click");
     await page.load();
-    expect(page.find('[data-test="project-update-success"]').length).toEqual(1);
 
+    expect(page.find('[data-test="project-update-success"]').length).toEqual(1);
     api.validateProject(0, projectType, submittedProjectData, response).successfully();
 
     page.find('[data-test="submit-project-button"]').simulate("click");
@@ -502,6 +515,7 @@ describe('Submitting a draft project', () => {
   });
 
   it('Presents you with validation when you attempt to save and submit an invalid draft project', async () => {
+    api.checkApiKey(0).successfully();
     let page = new AppPage("/project/0/baseline?token=Hello");
     let response = {
       valid: false,
@@ -537,6 +551,8 @@ describe('Submitting a draft project', () => {
 
   it('Present you with an error when you attempt to save over data which has been previously saved', async () => {
     Cookies.remove('userrole');
+    api.checkApiKey(0).successfully();
+
     let page = new AppPage("/project/0/baseline");
     let response = {
       valid: true,
@@ -546,7 +562,7 @@ describe('Submitting a draft project', () => {
 
     api.validateProject(0, projectType, returnData, response).successfully();
 
-    api.updateProject(returnData, 0, {successful: false, errors: ["incomplete_timestamp"]}, "8").successfully();
+    api.updateProject(returnData, 0, {successful: false, errors: ["incomplete_timestamp"]}, "5").successfully();
 
     await page.load();
 
@@ -571,6 +587,7 @@ describe("Printing a return", () => {
   })
 
   it("Renders the return data", async () => {
+    api.checkApiKey(0).successfully();
     let data = {
       cat: "meow",
       dog: "woof"
@@ -604,6 +621,7 @@ describe("Page not found", () => {
   });
 
   it("Renders a 404 page", async () => {
+    api.checkApiKey(0).successfully();
     let page = new AppPage("/non-existent");
     await page.load();
 
@@ -624,6 +642,7 @@ describe("Cookie consent", () => {
 
   it("Renders a cookie notice once", async () => {
     Cookies.remove('consent');
+    api.checkApiKey(0).successfully();
     let page = new AppPage("/");
     await page.load();
 

@@ -58,6 +58,7 @@ import ClaimGateway from "./Gateway/ClaimGateway";
 import LocationGateway from "./Gateway/LocationGateway";
 import UserGateway from "./Gateway/UserGateway";
 import CookieApiKey from "./Gateway/CookieApiKey";
+import ApiKeyGateway from "./Gateway/ApiKeyGateway";
 import TokenGateway from "./Gateway/TokenGateway";
 import DocumentGateway from "./Gateway/DocumentGateway";
 import CookieConsentGateway from "./Gateway/CookieConsent";
@@ -71,13 +72,14 @@ const locationGateway = new LocationGateway(window.location);
 const tokenGateway = new TokenGateway();
 const cookieConsentGateway = new CookieConsentGateway();
 const showCookieConsent = new ShowCookieConsent(cookieConsentGateway);
-const apiKeyGateway = new CookieApiKey();
+const apiKeyCookieGateway = new CookieApiKey();
+const apiKeyGateway = new ApiKeyGateway(apiKeyCookieGateway);
 const userRoleGateway = new CookieUserRole();
-const projectGateway = new ProjectGateway(apiKeyGateway, locationGateway);
-const returnGateway = new ReturnGateway(apiKeyGateway, locationGateway);
-const claimGateway = new ClaimGateway(apiKeyGateway, locationGateway);
+const projectGateway = new ProjectGateway(apiKeyCookieGateway, locationGateway);
+const returnGateway = new ReturnGateway(apiKeyCookieGateway, locationGateway);
+const claimGateway = new ClaimGateway(apiKeyCookieGateway, locationGateway);
 const documentGateway = new DocumentGateway(document)
-const userGateway = new UserGateway(apiKeyGateway);
+const userGateway = new UserGateway(apiKeyCookieGateway);
 const getRole = new GetRole(userRoleGateway);
 const generateInfrastructureUISchemaUseCase = new GenerateInfrastructureUISchema();
 const validateReturnUseCase = new Validate(returnGateway);
@@ -98,8 +100,8 @@ const getProjectURL = new GetProjectURL(locationGateway);
 const getReturnUseCase = new GetReturn(returnGateway);
 const getClaimUseCase = new GetClaim(claimGateway);
 const getUserProjectsUseCase = new GetUserProjects(userGateway);
-const canAccessProjectUseCase = new CanAccessProject(tokenGateway, apiKeyGateway, userRoleGateway, projectGateway);
-const canAccessMonitorUseCase = new CanAccessMonitor(tokenGateway, apiKeyGateway, userRoleGateway);
+const canAccessProjectUseCase = new CanAccessProject(tokenGateway, apiKeyCookieGateway, userRoleGateway, apiKeyGateway);
+const canAccessMonitorUseCase = new CanAccessMonitor(tokenGateway, apiKeyCookieGateway, userRoleGateway);
 const getReturnsUseCase = new GetReturns(returnGateway);
 const requestTokenUseCase = new RequestToken(tokenGateway);
 const submitReturnUseCase = new SubmitReturn(returnGateway);
@@ -166,7 +168,7 @@ const renderClaimPage = props => (
     }
   }
     </ClaimPage>
-    
+
     )
 
 const CreateReturnButton = props => (

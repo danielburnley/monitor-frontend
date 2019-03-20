@@ -20,7 +20,7 @@ export default class Homepage extends React.Component {
 
   presentProjectListNotFound = async () => {};
 
-  
+
   fetchData = () => {
     this.props.getUserProjects.execute(this);
   }
@@ -32,7 +32,7 @@ export default class Homepage extends React.Component {
 
   render() {
     if (this.state.loading) {
-      return <div data-test="loading" />;
+      return <div data-test="loading"/>;
     }
     return (
       <div className="homepage">

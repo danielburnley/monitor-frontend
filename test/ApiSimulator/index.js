@@ -117,7 +117,15 @@ class APISimulator {
       .matchHeader("Content-Type", "application/json")
       .post("/token/expend", { access_token });
 
-    return new APIResponse(request, { apiKey: "abc", role: "Homes England" });
+    return new APIResponse(request, { apiKey: "abc", role });
+  }
+
+  checkApiKey(project_id, valid = true, role = "Homes England") {
+    let request = nock(this.url)
+      .matchHeader("Content-Type", "application/json")
+      .post("/apikey/check", { project_id });
+
+    return new APIResponse(request, { success: true, valid, role });
   }
 }
 

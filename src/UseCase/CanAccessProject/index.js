@@ -1,18 +1,18 @@
 export default class CanAccessProject {
-  constructor(tokenGateway, apiKeyGateway, userRoleGateway, projectGateway) {
+  constructor(tokenGateway, apiKeyCookieGateway, userRoleGateway, apiKeyGateway) {
     this.tokenGateway = tokenGateway;
-    this.apiKeyGateway = apiKeyGateway;
+    this.apiKeyCookieGateway = apiKeyCookieGateway;
     this.userRoleGateway = userRoleGateway;
-    this.projectGateway = projectGateway;
+    this.apiKeyGateway = apiKeyGateway;
   }
 
   async execute(access_token, project_id) {
-    let project = await this.projectGateway.findById(project_id);
+    let apikey_info = await this.apiKeyGateway.check(project_id);
 
-    if (project.success) {
+    if (apikey_info.valid) {
       return {
         valid: true,
-        apiKey: this.apiKeyGateway.getApiKey().apiKey,
+        apiKey: this.apiKeyCookieGateway.getApiKey().apiKey,
         userRole: this.userRoleGateway.getUserRole().userRole
       };
     } else {
@@ -20,7 +20,7 @@ export default class CanAccessProject {
       if (receivedApiKey === null) {
         return { valid: false }
       } else {
-        this.apiKeyGateway.setApiKey(receivedApiKey.apiKey.apiKey);
+        this.apiKeyCookieGateway.setApiKey(receivedApiKey.apiKey.apiKey);
         this.userRoleGateway.setUserRole(receivedApiKey.userRole.userRole);
         return {
           valid: true,
