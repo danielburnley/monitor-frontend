@@ -66,7 +66,7 @@ import ShowCookieConsent from "./UseCase/ShowCookieConsent";
 
 import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import CookieUserRole from "./Gateway/CookieUserRole";
+import UserRoleGateway from "./Gateway/UserRoleGateway";
 
 const locationGateway = new LocationGateway(window.location);
 const tokenGateway = new TokenGateway();
@@ -74,7 +74,7 @@ const cookieConsentGateway = new CookieConsentGateway();
 const showCookieConsent = new ShowCookieConsent(cookieConsentGateway);
 const apiKeyCookieGateway = new CookieApiKey();
 const apiKeyGateway = new ApiKeyGateway(apiKeyCookieGateway);
-const userRoleGateway = new CookieUserRole();
+const userRoleGateway = new UserRoleGateway();
 const projectGateway = new ProjectGateway(apiKeyCookieGateway, locationGateway);
 const returnGateway = new ReturnGateway(apiKeyCookieGateway, locationGateway);
 const claimGateway = new ClaimGateway(apiKeyCookieGateway, locationGateway);

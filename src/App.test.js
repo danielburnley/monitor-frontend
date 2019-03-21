@@ -550,7 +550,6 @@ describe('Submitting a draft project', () => {
   });
 
   it('Present you with an error when you attempt to save over data which has been previously saved', async () => {
-    Cookies.remove('userrole');
     api.checkApiKey(0).successfully();
 
     let page = new AppPage("/project/0/baseline");

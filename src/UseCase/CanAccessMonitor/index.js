@@ -6,6 +6,7 @@ export default class CanAccessProject {
   }
 
   async execute(access_token) {
+    console.log(this.apiKeyGateway.getApiKey())
     if(this.apiKeyGateway.getApiKey().apiKey) {
       return {
         valid: true,

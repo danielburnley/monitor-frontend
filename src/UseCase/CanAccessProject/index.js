@@ -10,10 +10,13 @@ export default class CanAccessProject {
     let apikey_info = await this.apiKeyGateway.check(project_id);
 
     if (apikey_info.valid) {
+      let userRole = apikey_info.role;
+      this.userRoleGateway.setUserRole(userRole);
+
       return {
         valid: true,
         apiKey: this.apiKeyCookieGateway.getApiKey().apiKey,
-        userRole: this.userRoleGateway.getUserRole().userRole
+        userRole
       };
     } else {
       let receivedApiKey = await this.tokenGateway.getAccess(access_token);

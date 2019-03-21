@@ -18,9 +18,10 @@ export default class ApiKeyGateway {
           'API_KEY': apikey},
         body: JSON.stringify({project_id}),
       }
-    ).catch((e) => {
+    )
+    /*.catch((e) => {
       return { ok: false, timedout: true };
-    });
+    });*/
 
     if (rawResponse.ok) {
       let response = await rawResponse.json();

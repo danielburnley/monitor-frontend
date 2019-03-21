@@ -62,7 +62,7 @@ export default class Portal extends React.Component {
             .
           </p>
           <p>If you believe you have already been added to project {this.props.projectId}, you can try refreshing your login: {this.renderRefreshCookiesButton()}</p>
-          
+
           {this.renderBackToHomepageButton()}
         </div>
         <div className="col-md-2" />
