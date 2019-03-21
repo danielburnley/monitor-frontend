@@ -29,12 +29,13 @@ describe("AmendBaseline", () => {
       expect(baselineGatewaySpy.amend).toHaveBeenCalledWith(3, {}, 3);
     });
 
-    it("calls the presenter with the id, errors and timestamp passed from the gateway", () => {
-      amendBaseline.execute(presenterSpy, {
+    it("calls the presenter with the id, errors and timestamp passed from the gateway", async () => {
+      await amendBaseline.execute(presenterSpy, {
         projectId: 3,
         data: {},
         timestamp: 3
-      })
+      });
+
       expect(presenterSpy.amendBaselineSuccess).toHaveBeenCalledWith({
         baselineId: 5,
         errors: [],
@@ -66,12 +67,13 @@ describe("AmendBaseline", () => {
       expect(baselineGatewaySpy.amend).toHaveBeenCalledWith(3, {}, 3);
     });
 
-    it("calls the presenter with the id passed from the gateway", () => {
-      amendBaseline.execute(presenterSpy, {
+    it("calls the presenter with the id passed from the gateway", async () => {
+      await amendBaseline.execute(presenterSpy, {
         projectId: 3,
         data: {},
         timestamp: 3
-      })
+      });
+
       expect(presenterSpy.amendBaselineSuccess).toHaveBeenCalledWith({
         baselineId: 7,
         errors: ['incorrect_timestamp'],
@@ -91,8 +93,12 @@ describe("AmendBaseline", () => {
       amendBaseline = new AmendBaseline(baselineGatewaySpy)
     });
 
-    it("Calls the failure function on the presenter", () => {
-      amendBaseline.execute(presenterSpy, { projectId: 1, data: {}, timestamp: 1})
+    it("Calls the failure function on the presenter", async () => {
+      await amendBaseline.execute(presenterSpy, {
+        projectId: 1,
+        data: {},
+        timestamp: 1
+      });
       expect(presenterSpy.amendBaselineFailure).toHaveBeenCalled();
     });
   });

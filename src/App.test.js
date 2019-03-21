@@ -581,15 +581,6 @@ describe("Amending a submitted baseline", () => {
     expect(page.find('GetToken').length).toEqual(0)
     expect(page.find('AmendBaselineButton').length).toEqual(1)
   });
-
-  xit("Takes you to draft mode when selecting Amend Baseline", async () => {
-    let page = new AppPage("/project/0?token=Cats");
-    await page.load();
-    await page.goToAmendBaseline();
-    await page.load();
-
-    expect(page.find('AmendProjectPage').length).toEqual(1)
-  });
 });
 
 describe("Printing a return", () => {
