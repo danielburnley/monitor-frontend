@@ -4,7 +4,7 @@ import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 import { storiesOf } from '@storybook/react';
 
-storiesOf('NewProjectPage', module)
+storiesOf('AmendProjectPage', module)
   .add('Immediate resolution', () => {
     let schema = {
       type: 'object',
