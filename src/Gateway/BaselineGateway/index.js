@@ -1,4 +1,3 @@
-import Project from "../../Domain/Project";
 import fetch from "isomorphic-fetch";
 import runtimeEnv from "@mars/heroku-js-runtime-env";
 
