@@ -3,13 +3,13 @@ export default class AmendBaseline {
     this.baselineGateway = baselineGateway
   }
 
-  execute(presenter, request) {
-    let { success, baselineId, errors, timestamp } = this.baselineGateway.amend(request.projectId, request.data, request.timestamp)
+  async execute(presenter, request) {
+    let { success, baselineId, errors, timestamp } = await this.baselineGateway.amend(request.projectId, request.data, request.timestamp)
 
     if(success) {
-      presenter.amendProjectSuccess({ baselineId, errors, timestamp });
+      presenter.amendBaselineSuccess({ baselineId, errors, timestamp });
     } else {
-      presenter.amendProjectFailure();
+      presenter.amendBaselineFailure();
     }
   }
 }

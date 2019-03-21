@@ -1230,7 +1230,7 @@ describe("AmendProjectPage", () => {
         execute: jest.fn(async (presenter, id) => {})
       };
       let amendBaselineSpy = {
-        execute: jest.fn(async (presenter, request) => { await presenter.projectNotUpdated() })
+        execute: jest.fn(async (presenter, request) => { await presenter.amendBaselineFailure() })
       };
       let validateProjectSpy = { execute: jest.fn(async () => {}) };
 

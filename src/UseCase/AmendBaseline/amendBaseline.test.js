@@ -3,7 +3,7 @@ import AmendBaseline from ".";
 describe("AmendBaseline", () => {
   let presenterSpy;
   beforeEach(() => {
-    presenterSpy = { amendProjectSuccess: jest.fn(), amendProjectFailure: jest.fn() }
+    presenterSpy = { amendBaselineSuccess: jest.fn(), amendBaselineFailure: jest.fn() }
   });
 
   describe("example one", () => {
@@ -35,7 +35,7 @@ describe("AmendBaseline", () => {
         data: {},
         timestamp: 3
       })
-      expect(presenterSpy.amendProjectSuccess).toHaveBeenCalledWith({
+      expect(presenterSpy.amendBaselineSuccess).toHaveBeenCalledWith({
         baselineId: 5,
         errors: [],
         timestamp: 45656
@@ -72,7 +72,7 @@ describe("AmendBaseline", () => {
         data: {},
         timestamp: 3
       })
-      expect(presenterSpy.amendProjectSuccess).toHaveBeenCalledWith({
+      expect(presenterSpy.amendBaselineSuccess).toHaveBeenCalledWith({
         baselineId: 7,
         errors: ['incorrect_timestamp'],
         timestamp: 12345
@@ -93,7 +93,7 @@ describe("AmendBaseline", () => {
 
     it("Calls the failure function on the presenter", () => {
       amendBaseline.execute(presenterSpy, { projectId: 1, data: {}, timestamp: 1})
-      expect(presenterSpy.amendProjectFailure).toHaveBeenCalled();
+      expect(presenterSpy.amendBaselineFailure).toHaveBeenCalled();
     });
   });
 });

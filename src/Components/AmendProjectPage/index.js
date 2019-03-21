@@ -52,7 +52,7 @@ export default class AmendProjectPage extends React.Component {
     }
   }
 
-  projectNotUpdated() {
+  amendBaselineFailure() {
     this.setState({ status: "UpdateFailure" });
   }
 
@@ -325,7 +325,6 @@ export default class AmendProjectPage extends React.Component {
   }
 
   render() {
-    console.log(this.props)
     return (
       <div>
         <div className="title-container">
