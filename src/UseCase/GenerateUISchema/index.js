@@ -46,9 +46,9 @@ export default class GenerateUISchema {
   generateSchemaForArray(value, role, noOfPreviousReturns) {
     let ret = {};
     ret["ui:options"] = {
-      addable: this.isAddableArray(value),
+      addable: this.isAdjustableArray(value, role),
       orderable: false,
-      removable: this.isAddableArray(value)
+      removable: this.isAdjustableArray(value, role)
     };
 
     if (value.items.type === "object") {
@@ -160,8 +160,19 @@ export default class GenerateUISchema {
     return schema;
   }
 
-  isAddableArray(arr) {
-    return arr.addable ? true : false;
+  isAdjustableArray(arr, role) {
+    if (
+      arr.addable ||
+      (
+        arr.heAdjustableOnly && (
+          role === "Homes England" ||
+          role === "Superuser"
+        )
+      )
+    ) {
+      return true;
+    }
+    return false;
   }
 
   getUIFieldForObject(obj) {

@@ -616,6 +616,76 @@ describe("GenerateUISchema", () => {
   });
 
   describe("Arrays", () => {
+    describe("Given an array that heAdjustableOnly", () => {
+      it("Marks them as non-adjustable if Local Authority", () => {
+        let userRoleCookieGateway = {
+          getUserRole: jest.fn(() => ({userRole: "Local Authority"}))
+        };
+        let useCase = new GenerateUISchema(userRoleCookieGateway);
+        let schema = {
+          type: "object",
+          properties: {
+            a: {
+              type: "array",
+              heAdjustableOnly: true,
+              items: {
+                type: "object",
+                properties: {
+                  b: { type: "string" },
+                  c: { type: "string" }
+                }
+              }
+            }
+          }
+        };
+        let response = useCase.execute(schema);
+        expect(response).toEqual({
+          a: {
+            "ui:options": {
+              addable: false,
+              orderable: false,
+              removable: false
+            },
+            items: {}
+          }
+        });
+      });
+
+      it("Marks them as adjustable if Homes England", () => {
+        let userRoleCookieGateway = {
+          getUserRole: jest.fn(() => ({userRole: "Homes England"}))
+        };
+        let useCase = new GenerateUISchema(userRoleCookieGateway);
+        let schema = {
+          type: "object",
+          properties: {
+            a: {
+              type: "array",
+              heAdjustableOnly: true,
+              items: {
+                type: "object",
+                properties: {
+                  b: { type: "string" },
+                  c: { type: "string" }
+                }
+              }
+            }
+          }
+        };
+        let response = useCase.execute(schema);
+        expect(response).toEqual({
+          a: {
+            "ui:options": {
+              addable: true,
+              orderable: false,
+              removable: true
+            },
+            items: {}
+          }
+        });
+      });
+    });
+
     describe("Given an array that is addable", () => {
       it("Marks them as addable", () => {
         let useCase = new GenerateUISchema(userRoleCookieGateway);
