@@ -7,7 +7,7 @@ export default class ApiKeyGateway {
     this.apiKeyGateway = apiKeyGateway;
   }
 
-  async check(project_id) {
+  async check(project_id = null) {
     let apikey = this.apiKeyGateway.getApiKey().apiKey;
 
     let rawResponse = await fetch(

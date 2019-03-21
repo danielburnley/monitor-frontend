@@ -10,16 +10,16 @@ describe("CanAccessProject", () => {
       let userRoleGatewaySpy = { getUserRole: jest.fn(() => ({userRole: "Homes England"})), setUserRole: jest.fn() }
       let apiKeyGatewaySpy = { check:  jest.fn(async () => ({ valid: true, role: "Homes England" })) };
       let useCase = new CanAccessProject(tokenGatewaySpy, apiKeyCookieGatewaySpy, userRoleGatewaySpy, apiKeyGatewaySpy);
-      it('calls the api key gateway', async () => {
+
+      it('calls the api key storage gateway', async () => {
         await useCase.execute("", 1);
         expect(apiKeyCookieGatewaySpy.getApiKey).toHaveBeenCalled();
         expect(tokenGatewaySpy.getAccess).not.toHaveBeenCalled();
       });
 
-      it('calls the project gateway', async () => {
+      it('calls the api key gateway', async () => {
         await useCase.execute("", 1);
         expect(apiKeyGatewaySpy.check).toBeCalledWith(1);
-        expect(tokenGatewaySpy.getAccess).not.toHaveBeenCalled();
       });
 
 
@@ -44,7 +44,8 @@ describe("CanAccessProject", () => {
       let userRoleGatewaySpy = { getUserRole: jest.fn(()=> ({userRole: "Local Authority"})), setUserRole: jest.fn() }
       let apiKeyGatewaySpy = { check:  jest.fn(async () => ({ valid: true, role: "Local Authority" })) };
       let useCase = new CanAccessProject(tokenGatewaySpy, apiKeyCookieGatewaySpy, userRoleGatewaySpy, apiKeyGatewaySpy);
-      it('calls the api key gateway', async () => {
+
+      it('calls the api key storage gateway', async () => {
         await useCase.execute("", 6);
         expect(apiKeyCookieGatewaySpy.getApiKey).toHaveBeenCalled();
         expect(tokenGatewaySpy.getAccess).not.toHaveBeenCalled();
@@ -55,10 +56,9 @@ describe("CanAccessProject", () => {
         expect(userRoleGatewaySpy.setUserRole).toBeCalledWith("Local Authority")
       });
 
-      it('calls the project gateway', async () => {
+      it('calls the api key gateway', async () => {
         await useCase.execute("", 6);
         expect(apiKeyGatewaySpy.check).toBeCalledWith(6);
-        expect(tokenGatewaySpy.getAccess).not.toHaveBeenCalled();
       });
 
       it('returns the api key', async () => {
