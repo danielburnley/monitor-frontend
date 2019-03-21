@@ -10,14 +10,12 @@ export default class Portal extends React.Component {
   }
 
   componentDidMount() {
-    console.log(this.props.canAccessMonitor);
     this.props.canAccessMonitor.execute(this.props.token).then(apiKey => this.setState({apiKey}))
   }
 
   render() {
     if (this.state.apiKey === null) {
-      //Show loading thing
-      return <div>Loading</div>
+      return <div>Loading...</div>
     } else {
       if (this.state.apiKey.valid) {
         return this.props.children
