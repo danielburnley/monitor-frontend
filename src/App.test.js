@@ -269,7 +269,7 @@ describe("Viewing a project", () => {
       });
 
 
-      describe("A project with type other than ff", () => {        
+      describe("A project with type other than ff", () => {
         it("Doesn't display the edit infrastructures button", async () => {
           api.getProject(projectSchema, projectData, "Draft", projectType).successfully();
           let page = new AppPage("/project/0?token=Cats");
@@ -387,26 +387,26 @@ describe("Viewing a project", () => {
           api.getProject(projectSchema, projectData, projectStatus, projectType).successfully();
           api.getBaseReturn(returnSchema, returnData).successfully();
           api.getReturns({returns: []}).successfully();
-  
+
           let page = new AppPage("/project/0?token=Cats");
           await page.load();
           await page.createNewReturn();
-  
+
           let expectedInputValues = [
             "16",
             "Fluffy balls of friendship",
             "Beans",
             ""
           ];
-  
+
           expect(page.getFormInputs()).toEqual(expectedInputValues);
         });
-  
+
         it("Renders the return with information from the API", async () => {
           api.getReturn(returnSchema, returnData).successfully();
           let page = new AppPage("/project/0/return/1?token=Cats");
           await page.load();
-  
+
           let expectedInputValues = [
             "16",
             "Fluffy balls of friendship",
@@ -420,27 +420,27 @@ describe("Viewing a project", () => {
       describe("Claims", () => {
         it("Renders a blank claim form when creating a new claim", async () => {
           api.getProject(projectSchema, projectData, projectStatus, projectType).successfully();
-          api.getReturns({returns: []}).successfully();          
+          api.getReturns({returns: []}).successfully();
           api.getBaseClaim(claimSchema, emptyClaimData).successfully();
-  
+
           let page = new AppPage("/project/0?token=Cats");
           await page.load();
           await page.createNewClaim();
-  
+
           let expectedInputValues = [
             "",
             "",
             ""
           ];
-  
+
           expect(page.getFormInputs()).toEqual(expectedInputValues);
         });
-  
+
         it("Renders the return with information from the API", async () => {
           api.getClaim(claimSchema, filledClaimData).successfully();
           let page = new AppPage("/project/0/claim/1?token=Cats");
           await page.load();
-  
+
           let expectedInputValues = [
             "Mr sparkles",
             "2",
@@ -556,6 +556,30 @@ describe('Submitting a draft project', () => {
     await page.load();
 
     expect(page.find('[data-test="overwriting-error"]').length).toEqual(1);
+  });
+});
+
+describe("Amending a submitted baseline", () => {
+  let api;
+  beforeEach(() => {
+    process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
+    api = new APISimulator("http://cat.meow");
+    api.expendToken("Hello", "Homes England").successfully();
+    api.getProject(projectSchema, submittedProjectData, "Submitted", projectType, "5").successfully();
+    api.getReturns({returns: []}).successfully();
+    api.getProject(projectSchema, submittedProjectData, "Submitted", projectType, "5").successfully();
+  });
+
+  afterEach(() => {
+    nock.cleanAll();
+  })
+
+  it("Renders the project overview page with a button to amend the baseline", async () => {
+    let page = new AppPage("/project/0?token=Cats");
+    await page.load();
+
+    expect(page.find('GetToken').length).toEqual(0)
+    expect(page.find('AmendBaselineButton').length).toEqual(1)
   });
 });
 

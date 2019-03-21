@@ -32,7 +32,7 @@ storiesOf("Print Return", module).add("Default", () => {
   return (
     <PrintReturn 
       getReturn={getReturnUseCase}
-      match={{params: {id: "3", projectId: "5" }}}
+      match={{params: {projectId: "5" }}}
     >
   
       {({data, schema}) => {

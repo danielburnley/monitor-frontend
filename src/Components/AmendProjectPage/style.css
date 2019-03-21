@@ -1,0 +1,21 @@
+#root__title {
+  font-size: 2em;
+  font-weight: bolder;
+}
+
+.field-description {
+  font-style: italic;
+  color: #a9a9a9;
+}
+
+.margin-left {
+  margin-left: 10px;
+}
+
+.no-edge {
+  margin: 0px;
+}
+
+.title-container {
+  padding-left: 30px;
+}

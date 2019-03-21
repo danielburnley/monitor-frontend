@@ -10,7 +10,7 @@ export default class ProjectSummary extends React.Component {
       className="btn btn-danger"
       onClick={this.onUnsubmit}
         >
-      Click here to go back to the basleine Editor. <br/>
+      Click here to go back to the baseline Editor. <br/>
       WARNING: This will delete any returns made.
     </button>
     )
@@ -26,7 +26,7 @@ export default class ProjectSummary extends React.Component {
   unsubmitSuccess = (e) => {
     window.location.reload()
   }
-  
+
   unsubmitFailure = () => {}
 
   render() {

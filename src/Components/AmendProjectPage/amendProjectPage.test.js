@@ -1,4 +1,4 @@
-import NewProjectPage from ".";
+import AmendProjectPage from ".";
 import React from "react";
 import { mount, shallow } from "enzyme";
 
@@ -11,7 +11,7 @@ async function updateFormField(input, value) {
   await wait();
 }
 
-describe("NewProjectPage", () => {
+describe("AmendProjectPage", () => {
   let getProjectURLUsecase = { execute: jest.fn((projectId) => "https:/mydomain/project/5") }
   let data = {
     cat: {
@@ -42,11 +42,11 @@ describe("NewProjectPage", () => {
   it("Calls the get user role use case", () => {
     let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"})) };
     mount(
-      <NewProjectPage
+      <AmendProjectPage
         projectURL={getProjectURLUsecase}
         documentGateway={jest.fn()}
         projectId = {1}
-        updateProject={{}}
+        amendBaseline={{}}
         submitProject={{}}
         validateProject={ { execute: () => null } }
         data={{}}
@@ -61,11 +61,11 @@ describe("NewProjectPage", () => {
     let documentGatewayDummy = jest.fn();
     let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
     let wrap = shallow(
-      <NewProjectPage
+      <AmendProjectPage
         projectURL={getProjectURLUsecase}
         documentGateway={documentGatewayDummy}
         projectId={1}
-        updateProject={{}}
+        amendBaseline={{}}
         submitProject={{}}
         validateProject={ { execute: () => null } }
         data={{}}
@@ -84,12 +84,12 @@ describe("NewProjectPage", () => {
       let documentGatewayDummy = jest.fn();
       let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
       let wrap = shallow(
-        <NewProjectPage
+        <AmendProjectPage
           projectURL={getProjectURLUsecase}
           documentGateway={documentGatewayDummy}
           projectId={6}
           getInfrastructures={"get me some infrastructures"}
-          updateProject={{}}
+          amendBaseline={{}}
           submitProject={{}}
           validateProject={ { execute: () => null } }
           data={{}}
@@ -107,11 +107,11 @@ describe("NewProjectPage", () => {
       let documentGatewayDummy = jest.fn();
       let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
       let wrap = shallow(
-        <NewProjectPage
+        <AmendProjectPage
           projectURL={getProjectURLUsecase}
           documentGateway={documentGatewayDummy}
           projectId={8}
-          updateProject={{}}
+          amendBaseline={{}}
           getInfrastructures={"infras"}
           submitProject={{}}
           validateProject={ { execute: () => null } }
@@ -133,17 +133,17 @@ describe("NewProjectPage", () => {
 
       it("example 1", async () => {
         let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {presenter.creationSuccess(id)}) };
-        let updateProjectSpy = {
-          execute: jest.fn(async (presenter, request) => {presenter.projectUpdated([])})
+        let amendBaselineSpy = {
+          execute: jest.fn(async (presenter, request) => {presenter.amendBaselineSuccess({errors: []})})
         };
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
         let wrap = mount(
-          <NewProjectPage
+          <AmendProjectPage
             projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
             projectId={1}
-            updateProject={updateProjectSpy}
+            amendBaseline={amendBaselineSpy}
             submitProject={submitProjectSpy}
             validateProject={validateProjectSpy}
             data={{}}
@@ -168,15 +168,15 @@ describe("NewProjectPage", () => {
 
       it("example 2", async () => {
         let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {}) };
-        let updateProjectSpy = { execute: jest.fn(async (presenter, request) => {}) };
+        let amendBaselineSpy = { execute: jest.fn(async (presenter, request) => {}) };
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
         let wrap = mount(
-          <NewProjectPage
+          <AmendProjectPage
             projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
             projectId={1}
-            updateProject={updateProjectSpy}
+            amendBaseline={amendBaselineSpy}
             submitProject={submitProjectSpy}
             validateProject={validateProjectSpy}
             data={{}}
@@ -205,17 +205,17 @@ describe("NewProjectPage", () => {
 
       it("example 1", async () => {
         let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {presenter.creationSuccess(id)}) };
-        let updateProjectSpy = {
-          execute: jest.fn(async (presenter, request) => {presenter.projectUpdated([])})
+        let amendBaselineSpy = {
+          execute: jest.fn(async (presenter, request) => {presenter.amendBaselineSuccess({errors: []})})
         };
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
         let wrap = mount(
-          <NewProjectPage
+          <AmendProjectPage
             projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
             projectId={1}
-            updateProject={updateProjectSpy}
+            amendBaseline={amendBaselineSpy}
             submitProject={submitProjectSpy}
             validateProject={validateProjectSpy}
             data={{}}
@@ -240,15 +240,15 @@ describe("NewProjectPage", () => {
 
       it("example 2", async () => {
         let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {}) };
-        let updateProjectSpy = { execute: jest.fn(async (presenter, request) => {}) };
+        let amendBaselineSpy = { execute: jest.fn(async (presenter, request) => {}) };
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
         let wrap = mount(
-          <NewProjectPage
+          <AmendProjectPage
             projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
             projectId={1}
-            updateProject={updateProjectSpy}
+            amendBaseline={amendBaselineSpy}
             submitProject={submitProjectSpy}
             validateProject={validateProjectSpy}
             data={{}}
@@ -277,17 +277,17 @@ describe("NewProjectPage", () => {
 
       it("example 1", async () => {
         let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {presenter.creationSuccess(id)}) };
-        let updateProjectSpy = {
-          execute: jest.fn(async (presenter, request) => {presenter.projectUpdated([])})
+        let amendBaselineSpy = {
+          execute: jest.fn(async (presenter, request) => {presenter.amendBaselineSuccess({errors: []})})
         };
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
         let wrap = mount(
-          <NewProjectPage
+          <AmendProjectPage
             projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
             projectId={1}
-            updateProject={updateProjectSpy}
+            amendBaseline={amendBaselineSpy}
             submitProject={submitProjectSpy}
             validateProject={validateProjectSpy}
             data={{}}
@@ -312,15 +312,15 @@ describe("NewProjectPage", () => {
 
       it("example 2", async () => {
         let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {}) };
-        let updateProjectSpy = { execute: jest.fn(async (presenter, request) => {}) };
+        let amendBaselineSpy = { execute: jest.fn(async (presenter, request) => {}) };
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
         let wrap = mount(
-          <NewProjectPage
+          <AmendProjectPage
             projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
             projectId={1}
-            updateProject={updateProjectSpy}
+            amendBaseline={amendBaselineSpy}
             submitProject={submitProjectSpy}
             validateProject={validateProjectSpy}
             data={{}}
@@ -351,17 +351,17 @@ describe("NewProjectPage", () => {
 
       it("example 1", async () => {
         let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {presenter.creationSuccess(id)}) };
-        let updateProjectSpy = {
-          execute: jest.fn(async (presenter, request) => {presenter.projectUpdated([])})
+        let amendBaselineSpy = {
+          execute: jest.fn(async (presenter, request) => {presenter.amendBaselineSuccess({errors: []})})
         };
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
         let wrap = mount(
-          <NewProjectPage
+          <AmendProjectPage
             projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
             projectId={1}
-            updateProject={updateProjectSpy}
+            amendBaseline={amendBaselineSpy}
             submitProject={submitProjectSpy}
             validateProject={validateProjectSpy}
             data={{}}
@@ -385,15 +385,15 @@ describe("NewProjectPage", () => {
 
       it("example 2", async () => {
         let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {}) };
-        let updateProjectSpy = { execute: jest.fn(async (presenter, request) => {}) };
+        let amendBaselineSpy = { execute: jest.fn(async (presenter, request) => {}) };
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
         let wrap = mount(
-          <NewProjectPage
+          <AmendProjectPage
             projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
             projectId={1}
-            updateProject={updateProjectSpy}
+            amendBaseline={amendBaselineSpy}
             submitProject={submitProjectSpy}
             validateProject={validateProjectSpy}
             data={{}}
@@ -421,17 +421,17 @@ describe("NewProjectPage", () => {
 
       it("example 1", async () => {
         let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {presenter.creationSuccess(id)}) };
-        let updateProjectSpy = {
-          execute: jest.fn(async (presenter, request) => {presenter.projectUpdated({errors: request.projectId})})
+        let amendBaselineSpy = {
+          execute: jest.fn(async (presenter, request) => {presenter.amendBaselineSuccess({baselineId: request.projectId})})
         };
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
         let wrap = mount(
-          <NewProjectPage
+          <AmendProjectPage
             projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
             projectId={1}
-            updateProject={updateProjectSpy}
+            amendBaseline={amendBaselineSpy}
             submitProject={submitProjectSpy}
             validateProject={validateProjectSpy}
             data={{}}
@@ -455,15 +455,15 @@ describe("NewProjectPage", () => {
 
       it("example 2", async () => {
         let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {}) };
-        let updateProjectSpy = { execute: jest.fn(async (presenter, request) => {}) };
+        let amendBaselineSpy = { execute: jest.fn(async (presenter, request) => {}) };
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
         let wrap = mount(
-          <NewProjectPage
+          <AmendProjectPage
             projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
             projectId={1}
-            updateProject={updateProjectSpy}
+            amendBaseline={amendBaselineSpy}
             submitProject={submitProjectSpy}
             validateProject={validateProjectSpy}
             data={{}}
@@ -495,16 +495,16 @@ describe("NewProjectPage", () => {
           presenter.creationSuccess(id);
         })
       };
-      let updateProjectSpy = {
-        execute: jest.fn(async (presenter, request) => presenter.projectUpdated({errors: request.projectId}))
+      let amendBaselineSpy = {
+        execute: jest.fn(async (presenter, request) => presenter.amendBaselineSuccess({baselineId: request.projectId}))
       };
       let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
       let wrap = mount(
-        <NewProjectPage
+        <AmendProjectPage
           projectURL={getProjectURLUsecase}
           projectId={1}
-          updateProject={updateProjectSpy}
+          amendBaseline={amendBaselineSpy}
           submitProject={submitProjectSpy}
           validateProject={validateProjectSpy}
           data={{}}
@@ -516,7 +516,7 @@ describe("NewProjectPage", () => {
       let request = {projectId: 1, data: {}, timestamp: "1234"}
       wrap.find('[data-test="submit-project-button"]').simulate("click");
       await wait();
-      expect(updateProjectSpy.execute).toBeCalledWith(expect.anything(), request);
+      expect(amendBaselineSpy.execute).toBeCalledWith(expect.anything(), request);
       expect(submitProjectSpy.execute).toBeCalledWith(expect.anything(), 1);
     });
 
@@ -527,16 +527,16 @@ describe("NewProjectPage", () => {
         })
       };
       let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"})) };
-      let updateProjectSpy = {
-        execute: jest.fn(async (presenter, request) => presenter.projectUpdated([]))
+      let amendBaselineSpy = {
+        execute: jest.fn(async (presenter, request) => presenter.amendBaselineSuccess({errors: []}))
       };
       let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
       let wrap = mount(
-        <NewProjectPage
+        <AmendProjectPage
           projectURL={getProjectURLUsecase}
           projectId={9}
-          updateProject={updateProjectSpy}
+          amendBaseline={amendBaselineSpy}
           submitProject={submitProjectSpy}
           validateProject={validateProjectSpy}
           data={data}
@@ -550,7 +550,7 @@ describe("NewProjectPage", () => {
       wrap.find('[data-test="submit-project-button"]').simulate("click");
       await wait();
       let request = { projectId: 9, data: {"cat": {"catA": {"catB": "cashews"}}}, timestamp: "789"}
-      expect(updateProjectSpy.execute).toBeCalledWith(expect.anything(), request);
+      expect(amendBaselineSpy.execute).toBeCalledWith(expect.anything(), request);
       expect(submitProjectSpy.execute).toBeCalledWith(expect.anything(), 9);
     });
   });
@@ -562,17 +562,17 @@ describe("NewProjectPage", () => {
           presenter.creationSuccess(id);
         })
       };
-      let updateProjectSpy = {
-        execute: jest.fn(async (presenter, request) => presenter.projectUpdated([], "45"))
+      let amendBaselineSpy = {
+        execute: jest.fn(async (presenter, request) => presenter.amendBaselineSuccess({errors: [], timestamp: "45"}))
       };
       let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
       let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
       let wrap = mount(
-        <NewProjectPage
+        <AmendProjectPage
           projectURL={getProjectURLUsecase}
           projectId={9}
-          updateProject={updateProjectSpy}
+          amendBaseline={amendBaselineSpy}
           submitProject={submitProjectSpy}
           validateProject={validateProjectSpy}
           data={{}}
@@ -586,7 +586,7 @@ describe("NewProjectPage", () => {
       wrap.find('[data-test="update-project-button"]').simulate("click");
       await wait();
       let request = {projectId: 9, data: {}, timestamp: "12345"}
-      expect(updateProjectSpy.execute).toBeCalledWith(expect.anything(), request);
+      expect(amendBaselineSpy.execute).toBeCalledWith(expect.anything(), request);
     });
 
     it("example 2", async () => {
@@ -595,17 +595,17 @@ describe("NewProjectPage", () => {
           presenter.creationSuccess(id);
         })
       };
-      let updateProjectSpy = {
-        execute: jest.fn(async (presenter, request) => presenter.projectUpdated([], "65"))
+      let amendBaselineSpy = {
+        execute: jest.fn(async (presenter, request) => presenter.amendBaselineSuccess({errors: [], timestamp: "65"}))
       };
       let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
       let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
       let wrap = mount(
-        <NewProjectPage
+        <AmendProjectPage
           projectURL={getProjectURLUsecase}
           projectId={1}
-          updateProject={updateProjectSpy}
+          amendBaseline={amendBaselineSpy}
           submitProject={submitProjectSpy}
           validateProject={validateProjectSpy}
           data={data}
@@ -621,7 +621,7 @@ describe("NewProjectPage", () => {
       wrap.find('[data-test="update-project-button"]').simulate("click");
       await wait();
       let request = {projectId: 1, data: { cat: { catA: { catB: "cashews" }  } }, timestamp:"now"}
-      expect(updateProjectSpy.execute).toBeCalledWith(expect.anything(), request);
+      expect(amendBaselineSpy.execute).toBeCalledWith(expect.anything(), request);
     });
   });
 
@@ -634,17 +634,17 @@ describe("NewProjectPage", () => {
           })
         };
         let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
-        let updateProjectSpy = {
-          execute: jest.fn(async (presenter, request) => presenter.projectUpdated([]))
+        let amendBaselineSpy = {
+          execute: jest.fn(async (presenter, request) => presenter.amendBaselineSuccess({errors: []}))
         };
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
         let wrap = mount(
-          <NewProjectPage
+          <AmendProjectPage
             projectURL={getProjectURLUsecase}
             projectType={"hif"}
             projectId={1}
-            updateProject={updateProjectSpy}
+            amendBaseline={amendBaselineSpy}
             submitProject={submitProjectSpy}
             validateProject={validateProjectSpy}
             data={data}
@@ -674,17 +674,17 @@ describe("NewProjectPage", () => {
           })
         };
         let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
-        let updateProjectSpy = {
-          execute: jest.fn(async (presenter, request) => presenter.projectUpdated([]))
+        let amendBaselineSpy = {
+          execute: jest.fn(async (presenter, request) => presenter.amendBaselineSuccess({errors: []}))
         };
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
         let wrap = mount(
-          <NewProjectPage
+          <AmendProjectPage
             projectURL={getProjectURLUsecase}
             projectType={"ac"}
             projectId={6}
-            updateProject={updateProjectSpy}
+            amendBaseline={amendBaselineSpy}
             submitProject={submitProjectSpy}
             validateProject={validateProjectSpy}
             data={data}
@@ -716,17 +716,17 @@ describe("NewProjectPage", () => {
           })
         };
         let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"})) };
-        let updateProjectSpy = {
-          execute: jest.fn(async (presenter, request) => presenter.projectUpdated([]))
+        let amendBaselineSpy = {
+          execute: jest.fn(async (presenter, request) => presenter.amendBaselineSuccess({errors: []}))
         };
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
         let wrap = mount(
-          <NewProjectPage
+          <AmendProjectPage
             projectURL={getProjectURLUsecase}
             projectType={"hif"}
             projectId={1}
-            updateProject={updateProjectSpy}
+            amendBaseline={amendBaselineSpy}
             submitProject={submitProjectSpy}
             validateProject={validateProjectSpy}
             data={data}
@@ -756,17 +756,17 @@ describe("NewProjectPage", () => {
           })
         };
         let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"})) };
-        let updateProjectSpy = {
-          execute: jest.fn(async (presenter, request) => presenter.projectUpdated([]))
+        let amendBaselineSpy = {
+          execute: jest.fn(async (presenter, request) => presenter.amendBaselineSuccess({errors: []}))
         };
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
         let wrap = mount(
-          <NewProjectPage
+          <AmendProjectPage
             projectURL={getProjectURLUsecase}
             projectType={"ac"}
             projectId={6}
-            updateProject={updateProjectSpy}
+            amendBaseline={amendBaselineSpy}
             submitProject={submitProjectSpy}
             validateProject={validateProjectSpy}
             data={data}
@@ -794,7 +794,7 @@ describe("NewProjectPage", () => {
   describe("validation warning message", () => {
     describe("Example 1", () => {
       let submitProjectSpy = { execute: jest.fn(async () => {}) };
-      let updateProjectSpy = { execute: jest.fn(async (presenter, request) => presenter.projectUpdated([])) };
+      let amendBaselineSpy = { execute: jest.fn(async (presenter, request) => presenter.amendBaselineSuccess({errors: []})) };
       let validateProjectSpy = {
         execute: jest.fn(async presenter => {
           await presenter.invalidateFields([["less", "cats"]]);
@@ -804,11 +804,11 @@ describe("NewProjectPage", () => {
 
       it("shows warning upon update if in draft state", async () => {
         let wrap = mount(
-          <NewProjectPage
+          <AmendProjectPage
             projectURL={getProjectURLUsecase}
             projectId={1}
             projectType={"hey"}
-            updateProject={updateProjectSpy}
+            amendBaseline={amendBaselineSpy}
             submitProject={submitProjectSpy}
             validateProject={validateProjectSpy}
             data={data}
@@ -835,9 +835,9 @@ describe("NewProjectPage", () => {
     describe("Example 2", () => {
       it("shows warning upon update", async () => {
         let submitProjectSpy = { execute: jest.fn(async () => {}) };
-        let updateProjectSpy = {
+        let amendBaselineSpy = {
           execute: jest.fn(async (presenter, request) =>
-            presenter.projectUpdated([])
+            presenter.amendBaselineSuccess({errors: []})
           )
         };
       let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
@@ -850,11 +850,11 @@ describe("NewProjectPage", () => {
         };
 
         let wrap = mount(
-          <NewProjectPage
+          <AmendProjectPage
             projectURL={getProjectURLUsecase}
             projectId={1}
             projectType={"hey"}
-            updateProject={updateProjectSpy}
+            amendBaseline={amendBaselineSpy}
             submitProject={submitProjectSpy}
             validateProject={validateProjectSpy}
             data={data}
@@ -886,16 +886,16 @@ describe("NewProjectPage", () => {
         })
       };
       let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"})) };
-      let updateProjectSpy = {
-        execute: jest.fn(async (presenter, request) => presenter.projectUpdated([]))
+      let amendBaselineSpy = {
+        execute: jest.fn(async (presenter, request) => presenter.amendBaselineSuccess({errors: []}))
       };
       let validateProjectSpy = { execute: jest.fn(async presenter => {}) };
 
       let wrap = mount(
-        <NewProjectPage
+        <AmendProjectPage
           projectURL={getProjectURLUsecase}
           projectId={1}
-          updateProject={updateProjectSpy}
+          amendBaseline={amendBaselineSpy}
           submitProject={submitProjectSpy}
           validateProject={validateProjectSpy}
           data={data}
@@ -931,17 +931,17 @@ describe("NewProjectPage", () => {
           presenter.creationSuccess(id);
         })
       };
-      let updateProjectSpy = {
-        execute: jest.fn(async (presenter, request) => presenter.projectUpdated([]))
+      let amendBaselineSpy = {
+        execute: jest.fn(async (presenter, request) => presenter.amendBaselineSuccess({errors: []}))
       };
       let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"})) };
       let validateProjectSpy = { execute: jest.fn(async presenter => {}) };
 
       let wrap = mount(
-        <NewProjectPage
+        <AmendProjectPage
           projectURL={getProjectURLUsecase}
           projectId={1}
-          updateProject={updateProjectSpy}
+          amendBaseline={amendBaselineSpy}
           submitProject={submitProjectSpy}
           validateProject={validateProjectSpy}
           data={data}
@@ -976,13 +976,13 @@ describe("NewProjectPage", () => {
         })
       };
       let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
-      let updateProjectSpy = {
-        execute: jest.fn(async (presenter, request) => presenter.projectUpdated([]))
+      let amendBaselineSpy = {
+        execute: jest.fn(async (presenter, request) => presenter.amendBaselineSuccess({errors: []}))
       };
       let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
       let wrap = mount(
-        <NewProjectPage
+        <AmendProjectPage
           projectURL={getProjectURLUsecase}
           projectId={1}
           submitProject={submitProjectSpy}
@@ -990,7 +990,7 @@ describe("NewProjectPage", () => {
           data={data}
           schema={schema}
           getRole={userRoleUseCaseSpy}
-          updateProject={updateProjectSpy}
+          amendBaseline={amendBaselineSpy}
         />
       );
 
@@ -1010,16 +1010,16 @@ describe("NewProjectPage", () => {
         })
       };
       let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
-      let updateProjectSpy = {
-        execute: jest.fn(async (presenter, request) => presenter.projectUpdated([]))
+      let amendBaselineSpy = {
+        execute: jest.fn(async (presenter, request) => presenter.amendBaselineSuccess({errors: []}))
       };
       let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
       let wrap = mount(
-        <NewProjectPage
+        <AmendProjectPage
           projectURL={getProjectURLUsecase}
           projectId={1}
-          updateProject={updateProjectSpy}
+          amendBaseline={amendBaselineSpy}
           submitProject={submitProjectSpy}
           validateProject={validateProjectSpy}
           data={data}
@@ -1045,17 +1045,17 @@ describe("NewProjectPage", () => {
         })
       };
       let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
-      let updateProjectSpy = {
-        execute: jest.fn(async (presenter, request) => presenter.projectUpdated([]))
+      let amendBaselineSpy = {
+        execute: jest.fn(async (presenter, request) => presenter.amendBaselineSuccess({errors: []}))
       };
       let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
       let wrap = mount(
-        <NewProjectPage
+        <AmendProjectPage
           projectURL={getProjectURLUsecase}
           projectId={1}
           submitProject={submitProjectSpy}
-          updateProject={updateProjectSpy}
+          amendBaseline={amendBaselineSpy}
           validateProject={validateProjectSpy}
           data={data}
           schema={schema}
@@ -1077,17 +1077,17 @@ describe("NewProjectPage", () => {
         })
       };
       let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
-      let updateProjectSpy = {
-        execute: jest.fn(async (presenter, request) => await presenter.projectUpdated([]))
+      let amendBaselineSpy = {
+        execute: jest.fn(async (presenter, request) => await presenter.amendBaselineSuccess({errors: []}))
       };
       let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
       let wrap = mount(
-        <NewProjectPage
+        <AmendProjectPage
           projectURL={getProjectURLUsecase}
           projectId={1}
           submitProject={submitProjectSpy}
-          updateProject={updateProjectSpy}
+          amendBaseline={amendBaselineSpy}
           validateProject={validateProjectSpy}
           data={data}
           getRole={userRoleUseCaseSpy}
@@ -1117,14 +1117,13 @@ describe("NewProjectPage", () => {
     let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"})) };
 
     it("shows warning upon update if in draft state", async () => {
-      let errors = "incorrect_timestamp"
-      let updateProjectSpy = { execute: jest.fn(async (presenter, request) => presenter.projectUpdated(errors)) };
+      let amendBaselineSpy = { execute: jest.fn(async (presenter, request) => presenter.amendBaselineSuccess({errors: ["incorrect_timestamp"]})) };
       let wrap = mount(
-        <NewProjectPage
+        <AmendProjectPage
           projectURL={getProjectURLUsecase}
           projectId={1}
           projectType={"hey"}
-          updateProject={updateProjectSpy}
+          amendBaseline={amendBaselineSpy}
           submitProject={submitProjectSpy}
           validateProject={validateProjectSpy}
           data={data}
@@ -1145,14 +1144,13 @@ describe("NewProjectPage", () => {
     });
 
     it("Does not show warning upon submission after being updated", async () => {
-      let errors = ""
-      let updateProjectSpy = { execute: jest.fn(async (presenter, request) => presenter.projectUpdated(errors, 11)) };
+      let amendBaselineSpy = { execute: jest.fn(async (presenter, request) => presenter.amendBaselineSuccess({errors: [""], timestamp: 11})) };
       let wrap = mount(
-        <NewProjectPage
+        <AmendProjectPage
           projectURL={getProjectURLUsecase}
           projectId={1}
           projectType={"hey"}
-          updateProject={updateProjectSpy}
+          amendBaseline={amendBaselineSpy}
           submitProject={submitProjectSpy}
           validateProject={validateProjectSpy}
           data={data}
@@ -1171,7 +1169,7 @@ describe("NewProjectPage", () => {
       await wait();
       await wrap.update();
       let request = {projectId: 1, data: data, timestamp: 10}
-      expect(updateProjectSpy.execute).toBeCalledWith(expect.anything(), request);
+      expect(amendBaselineSpy.execute).toBeCalledWith(expect.anything(), request);
 
       await wrap
         .find('[data-test="submit-project-button"]')
@@ -1179,7 +1177,7 @@ describe("NewProjectPage", () => {
       await wait();
       await wrap.update();
       request = {projectId: 1, data: data, timestamp: 11}
-      expect(updateProjectSpy.execute).toBeCalledWith(expect.anything(), request);
+      expect(amendBaselineSpy.execute).toBeCalledWith(expect.anything(), request);
     });
   });
 
@@ -1190,17 +1188,17 @@ describe("NewProjectPage", () => {
       let submitProjectSpy = {
         execute: jest.fn(async (presenter, id) => { await presenter.creationFailure() })
       };
-      let updateProjectSpy = {
+      let amendBaselineSpy = {
         execute: jest.fn(async (presenter, request) => {})
       };
       let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
       let wrap = mount(
-        <NewProjectPage
+        <AmendProjectPage
           projectURL={getProjectURLUsecase}
           getRole={userRoleUseCaseSpy}
           match={{ params: { id: 1 } }}
-          updateProject={updateProjectSpy}
+          amendBaseline={amendBaselineSpy}
           submitProject={submitProjectSpy}
           validateProject={validateProjectSpy}
           data={{}}
@@ -1231,17 +1229,17 @@ describe("NewProjectPage", () => {
       let submitProjectSpy = {
         execute: jest.fn(async (presenter, id) => {})
       };
-      let updateProjectSpy = {
-        execute: jest.fn(async (presenter, request) => { await presenter.projectNotUpdated() })
+      let amendBaselineSpy = {
+        execute: jest.fn(async (presenter, request) => { await presenter.amendBaselineFailure() })
       };
       let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
       let wrap = mount(
-        <NewProjectPage
+        <AmendProjectPage
           projectURL={getProjectURLUsecase}
           getRole={userRoleUseCaseSpy}
           match={{ params: { id: 1 } }}
-          updateProject={updateProjectSpy}
+          amendBaseline={amendBaselineSpy}
           submitProject={submitProjectSpy}
           validateProject={validateProjectSpy}
           data={{}}
@@ -1276,17 +1274,17 @@ describe("NewProjectPage", () => {
       })
     };
     let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"})) };
-    let updateProjectSpy = {
-      execute: jest.fn((presenter, request) => presenter.projectUpdated([]))
+    let amendBaselineSpy = {
+      execute: jest.fn((presenter, request) => presenter.amendBaselineSuccess({errors: []}))
     };
     let validateProjectSpy = { execute: jest.fn(() => {}) };
 
     let wrap = mount(
-      <NewProjectPage
+      <AmendProjectPage
         projectURL={getProjectURLUsecase}
         projectId={1}
         submitProject={submitProjectSpy}
-        updateProject={updateProjectSpy}
+        amendBaseline={amendBaselineSpy}
         validateProject={validateProjectSpy}
         data={data}
         getRole={userRoleUseCaseSpy}

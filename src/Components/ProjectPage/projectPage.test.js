@@ -14,7 +14,7 @@ describe("<ProjectPage>", () => {
         }
         page = shallow(
           <ProjectPage
-            match={{ params: { id: "1" } }}
+            match={{ params: { projectId: "1" } }}
             getProject={getProjectSpy}
           >
             {() => {}}
@@ -54,7 +54,7 @@ describe("<ProjectPage>", () => {
 
         page = shallow(
           <ProjectPage
-            match={{ params: { id: "2" } }}
+            match={{ params: { projectId: "2" } }}
             getProject={getProjectSpy}
             generateUISchema={generateNewProjectUISchemaSpy}
           >
@@ -92,7 +92,7 @@ describe("<ProjectPage>", () => {
 
         page = shallow(
           <ProjectPage
-            match={{ params: { id: "2" } }}
+            match={{ params: { projectId: "2" } }}
             getProject={getProjectSpy}
             generateUISchema={generateNewProjectUISchemaSpy}
           >
@@ -132,7 +132,7 @@ describe("<ProjectPage>", () => {
 
         page = shallow(
           <ProjectPage
-            match={{ params: { id: "2" } }}
+            match={{ params: { projectId: "2" } }}
             getProject={getProjectSpy}
             generateUISchema={generateNewProjectUISchemaSpy}
           >
@@ -179,7 +179,7 @@ describe("<ProjectPage>", () => {
 
         page = shallow(
           <ProjectPage
-            match={{ params: { id: "2" } }}
+            match={{ params: { projectId: "2" } }}
             generateUISchema={generateNewProjectUISchemaSpy}
             getProject={getProjectSpy}
           >
@@ -220,7 +220,7 @@ describe("<ProjectPage>", () => {
 
         page = shallow(
           <ProjectPage
-            match={{ params: { id: "2" } }}
+            match={{ params: { projectId: "2" } }}
             generateUISchema={generateNewProjectUISchemaSpy}
             getProject={getProjectSpy}
           >
