@@ -574,6 +574,31 @@ describe('Submitting a draft project', () => {
   });
 });
 
+describe("Amending a submitted baseline", () => {
+  let api;
+  beforeEach(() => {
+    process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
+    api = new APISimulator("http://cat.meow");
+    api.expendToken("Hello", "Homes England").successfully();
+    api.getProject(projectSchema, submittedProjectData, "Submitted", projectType, "5").successfully();
+    api.getReturns({returns: []}).successfully();
+    api.getProject(projectSchema, submittedProjectData, "Submitted", projectType, "5").successfully();
+  });
+
+  afterEach(() => {
+    nock.cleanAll();
+  })
+
+  it("Renders the project overview page with a button to amend the baseline", async () => {
+    api.checkApiKey(0).successfully();
+    let page = new AppPage("/project/0?token=Cats");
+    await page.load();
+
+    expect(page.find('GetToken').length).toEqual(0)
+    expect(page.find('AmendBaselineButton').length).toEqual(1)
+  });
+});
+
 describe("Printing a return", () => {
   let api;
   beforeEach(() => {

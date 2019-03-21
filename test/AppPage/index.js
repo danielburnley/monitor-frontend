@@ -61,6 +61,13 @@ export default class AppPage {
     await this.load();
   }
 
+  async goToAmendBaseline() {
+    let button = this.page.find('[data-test="amend-button"]');
+    button.simulate("click");
+
+    await this.load();
+  }
+
   getInputs() {
     return this.page.find("input").map(node => {
       if (node.getDOMNode().type === "checkbox") {

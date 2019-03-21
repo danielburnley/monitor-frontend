@@ -26,7 +26,7 @@ export default class ProjectPage extends React.Component {
 
   fetchData = async () => {
     await this.props.getProject.execute(this, {
-      id: this.props.match.params.id
+      id: this.props.match.params.projectId
     });
   };
 
@@ -36,7 +36,7 @@ export default class ProjectPage extends React.Component {
   }
 
   createReturn = async e => {
-    this.props.history.push(`/project/${this.props.match.params.id}/return`);
+    this.props.history.push(`/project/${this.props.match.params.projectId}/return`);
     e.preventDefault();
   };
 
@@ -73,7 +73,7 @@ ProjectPage.propTypes = {
   children: PropTypes.func.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
-      id: PropTypes.string.isRequired
+      projectId: PropTypes.string.isRequired
     })
   })
 };

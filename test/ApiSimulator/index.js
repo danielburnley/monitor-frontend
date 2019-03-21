@@ -56,6 +56,15 @@ class APISimulator {
     return new APIResponse(projectRequest, response);
   }
 
+  amendBaseline(baselineId, projectId, data, timestamp = 0) {
+    let response = {baselineId, timestamp}
+    let request = nock(this.url)
+      .matchHeader("Content-Type", "application/json")
+      .post("/baseline/amend", {project_id: ""+projectId, data, timestamp});
+
+    return new APIResponse(request, response);
+  }
+
   getBaseReturn(schema = {}, data = {}) {
     let response = { baseReturn: { schema, data } };
     let returnRequest = nock(this.url)

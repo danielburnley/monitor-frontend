@@ -12,7 +12,7 @@ describe("<Homepage>", () => {
         homepage = mount(
           <Homepage
             getUserProjects={getUserProjectsSpy}
-            match={{params: {id: 2}}}
+            match={{params: {projectId: 2}}}
           >
             {() => {}}
           </Homepage>
@@ -37,7 +37,7 @@ describe("<Homepage>", () => {
         homepage = mount(
           <Homepage
             getUserProjects={getUserProjectsSpy}
-            match={{params: {id: 2}}}
+            match={{params: {projectId: 2}}}
           >
             {childrenSpy}
           </Homepage>
@@ -65,7 +65,7 @@ describe("<Homepage>", () => {
         homepage = mount(
           <Homepage
             getUserProjects={getUserProjectsSpy}
-            match={{params: {id: 4}}}
+            match={{params: {projectId: 4}}}
           >
             {() => {}}
           </Homepage>
@@ -90,7 +90,7 @@ describe("<Homepage>", () => {
         homepage = mount(
           <Homepage
             getUserProjects={getUserProjectsSpy}
-            match={{params: {id: 4}}}
+            match={{params: {projectId: 4}}}
           >
             {childrenSpy}
           </Homepage>

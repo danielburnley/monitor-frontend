@@ -22,6 +22,8 @@ import NotFound from "./Components/NotFound";
 import CookieConsent from "./Components/CookieConsent";
 import PrintReturn from "./Components/PrintReturn";
 import AdminPortal from "./Components/AdminPortal";
+import AmendBaselineButton from "./Components/AmendBaselineButton";
+import AmendProjectPage from "./Components/AmendProjectPage";
 
 import AddUsersToProject from "./UseCase/AddUsersToProject";
 import CreateReturn from "./UseCase/CreateReturn";
@@ -51,6 +53,7 @@ import UpdateReturn from "./UseCase/UpdateReturn";
 import UnsubmitProject from "./UseCase/UnsubmitProject";
 import RequestToken from "./UseCase/RequestToken";
 import Validate from "./UseCase/Validate";
+import AmendBaseline from "./UseCase/AmendBaseline";
 
 import ProjectGateway from "./Gateway/ProjectGateway";
 import ReturnGateway from "./Gateway/ReturnGateway";
@@ -63,6 +66,7 @@ import TokenGateway from "./Gateway/TokenGateway";
 import DocumentGateway from "./Gateway/DocumentGateway";
 import CookieConsentGateway from "./Gateway/CookieConsent";
 import ShowCookieConsent from "./UseCase/ShowCookieConsent";
+import BaselineGateway from "./Gateway/BaselineGateway";
 
 import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
@@ -80,6 +84,7 @@ const returnGateway = new ReturnGateway(apiKeyCookieGateway, locationGateway);
 const claimGateway = new ClaimGateway(apiKeyCookieGateway, locationGateway);
 const documentGateway = new DocumentGateway(document)
 const userGateway = new UserGateway(apiKeyCookieGateway);
+const baselineGateway = new BaselineGateway(apiKeyCookieGateway);
 const getRole = new GetRole(userRoleGateway);
 const generateInfrastructureUISchemaUseCase = new GenerateInfrastructureUISchema();
 const validateReturnUseCase = new Validate(returnGateway);
@@ -110,6 +115,7 @@ const updateReturnUseCase = new UpdateReturn(returnGateway);
 const updateClaimUseCase = new UpdateClaim(claimGateway);
 const updateProjectUseCase = new UpdateProject(projectGateway);
 const addUsersToProject = new AddUsersToProject(projectGateway);
+const amendBaseline = new AmendBaseline(baselineGateway);
 
 const renderReturnPage = props => (
   <ReturnPage
@@ -176,7 +182,7 @@ const CreateReturnButton = props => (
     data-test="new-return-button"
     className="btn btn-primary"
     onClick={() =>
-      props.history.push(`/project/${props.match.params.id}/return`)
+      props.history.push(`/project/${props.match.params.projectId}/return`)
     }
   >
     Create new return
@@ -188,7 +194,7 @@ const CreateClaimButton = props => (
     data-test="new-claim-button"
     className="btn btn-primary"
     onClick={() =>
-      props.history.push(`/project/${props.match.params.id}/claim`)
+      props.history.push(`/project/${props.match.params.projectId}/claim`)
     }
   >
     Create new claim
@@ -200,7 +206,7 @@ const ViewBaselineButton = props => (
     data-test="view-baseline-button"
     className="btn btn-secondary"
     onClick={() =>
-      props.history.push(`/project/${props.match.params.id}/baseline`)
+      props.history.push(`/project/${props.match.params.projectId}/baseline`)
     }
   >
     View baseline information
@@ -214,13 +220,14 @@ const FillInBaselineButton = props => (
       data-test="fill-in-baseline-button"
       className="btn btn-link"
       onClick={() =>
-        props.history.push(`/project/${props.match.params.id}/baseline`)
+        props.history.push(`/project/${props.match.params.projectId}/baseline`)
       }
       >
       Fill in Baseline
     </button>
   </div>
 );
+
 
 const EditInfrastructuresButton = (props) => {
   if (props.type === "ff") {
@@ -230,7 +237,7 @@ const EditInfrastructuresButton = (props) => {
         data-test="edit-infrastructures-button"
         className="btn btn-link"
         onClick={() =>
-          props.history.push(`/project/${props.match.params.id}/infrastructures`)
+          props.history.push(`/project/${props.match.params.projectId}/infrastructures`)
         }
       >
         View/Edit Deliverables
@@ -242,12 +249,12 @@ const EditInfrastructuresButton = (props) => {
 };
 
 const BackToProjectOverviewButton = props => (
-  <button
+  <a
     className="btn btn-link btn-lg"
-    onClick={() => props.history.push(`/project/${props.match.params.id}`)}
+    onClick={() => props.history.push(`/project/${props.match.params.projectId}`)}
   >
     Back to project overview
-  </button>
+  </a>
 );
 
 const renderInfrastructuresPage = (props) => (
@@ -266,7 +273,39 @@ const renderInfrastructuresPage = (props) => (
   </div>
 );
 
-const renderBaselineEditorPage = (props, projectStatus, formData, formSchema, projectType, formUiSchema, timestamp  ) => (
+const renderAmendBaselinePage = props => (
+  <ProjectPage {...props} getProject={getProjectUseCase} generateUISchema={generateUISchema}>
+    {({projectStatus, formData, formSchema, projectType, formUiSchema, timestamp}) => (
+    <div className="col-md-10">
+      <div className="row">
+        <BackToProjectOverviewButton {...props} />
+      </div>
+      <div className="row">
+        <AmendProjectPage
+          {...props}
+          projectId={props.match.params.projectId}
+          projectURL={getProjectURL}
+          uiSchema={formUiSchema}
+          status={projectStatus}
+          schema={formSchema}
+          data={formData}
+          getInfrastructures={getInfrastructuresUseCase}
+          projectType={projectType}
+          getProject={getProjectUseCase}
+          submitProject={submitProjectUseCase}
+          amendBaseline={amendBaseline}
+          validateProject={validateProjectUseCase}
+          documentGateway={documentGateway}
+          getRole={getRole}
+          timestamp={timestamp}
+        />
+      </div>
+    </div>
+  )}
+  </ProjectPage>
+);
+
+const renderBaselineEditorPage = (props, projectStatus, formData, formSchema, projectType, formUiSchema, timestamp) => (
   <div className="col-md-10">
     <div className="row">
       <BackToProjectOverviewButton {...props} />
@@ -274,6 +313,7 @@ const renderBaselineEditorPage = (props, projectStatus, formData, formSchema, pr
     <div className="row">
       <NewProjectPage
         {...props}
+        projectId={props.match.params.projectId}
         projectURL={getProjectURL}
         uiSchema={formUiSchema}
         status={projectStatus}
@@ -317,7 +357,7 @@ const renderNewProjectPageOverview = (props, projectStatus, formData, formSchema
 
 const renderSubmittedProjectPage = (props, formData, formSchema) => (
   <div className="col-md-10 col-md-offset-1">
-    <ProjectSummary data={formData} schema={formSchema}  unsubmitProject={unsubmitProject} projectId={props.match.params.id}/>
+    <ProjectSummary data={formData} schema={formSchema}  unsubmitProject={unsubmitProject} projectId={props.match.params.projectId}/>
     <div className="row">
       <div className="col-md-2">
         <CreateReturnButton {...props} />
@@ -326,11 +366,14 @@ const renderSubmittedProjectPage = (props, formData, formSchema) => (
         <CreateClaimButton {...props} />
       </div>
       <div className="col-md-2">
+        <AmendBaselineButton {...props}/>
+      </div>
+      <div className="col-md-2">
         <ViewBaselineButton {...props} />
       </div>
     </div>
     <div className="row">
-      <ReturnListProvider projectId={props.match.params.id} getReturns={getReturnsUseCase}>
+      <ReturnListProvider projectId={props.match.params.projectId} getReturns={getReturnsUseCase}>
         {({ returns }) => (
           <ReturnList {...props} returns={returns} />
         )}
@@ -423,25 +466,30 @@ const App = () => (
                     render={renderhomepage}
                   />
                   <Route
-                    path="/project/:id"
+                    path="/project/:projectId"
                     render={props => (
                       <ProjectPortal
                       {...props}
                       url={props.match.url}
-                      projectId={props.match.params.id}
+                      projectId={props.match.params.projectId}
                       canAccessProject={canAccessProjectUseCase}
 
                       >
-                        <Route exact path="/project/:id" render={renderProjectPage} />
+                        <Route exact path="/project/:projectId" render={renderProjectPage} />
                         <Route
                           exact
-                          path="/project/:id/infrastructures"
+                          path="/project/:projectId/infrastructures"
                           render={renderInfrastructuresPage}
                         />
                         <Route
                           exact
-                          path="/project/:id/baseline"
+                          path="/project/:projectId/baseline"
                           render={renderBaselinePage}
+                        />
+                        <Route
+                          exact
+                          path="/project/:projectId/baseline/amend"
+                          render={renderAmendBaselinePage}
                         />
                         <Route
                           exact
