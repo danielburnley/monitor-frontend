@@ -21,10 +21,11 @@ export default class ProjectPage extends React.Component {
     });
   };
 
-  presentProjectNotFound = async () => {};
+  presentProjectNotFound = async () => {
+  };
 
-  fetchData = () => {
-    this.props.getProject.execute(this, {
+  fetchData = async () => {
+    await this.props.getProject.execute(this, {
       id: this.props.match.params.projectId
     });
   };
@@ -56,7 +57,7 @@ export default class ProjectPage extends React.Component {
 
   render() {
     if (this.state.loading) {
-      return <div data-test="loading"/>;
+      return <div data-test="loading">Loading project homepage...</div>;
     } else {
       return (
         <div>

@@ -15,8 +15,7 @@ export default class Portal extends React.Component {
 
   render() {
     if (this.state.apiKey === null) {
-      //Show loading thing
-      return <div>Loading</div>
+      return <div>Loading...</div>
     } else {
       if (this.state.apiKey.valid) {
         return this.props.children
