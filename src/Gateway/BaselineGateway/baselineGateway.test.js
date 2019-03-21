@@ -14,10 +14,10 @@ describe("BaselineGateway", () => {
         apiKeyGateway = {
           getApiKey: jest.fn(() => ({ apiKey: "superSecret" }))
         };
-  
+
         process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
         gateway = new BaselineGateway(apiKeyGateway);
-        
+
         amendBaselineRequest = nock("http://cat.meow")
         .matchHeader("Content-Type", "application/json")
         .post("/baseline/amend", { project_id: 1, data: {}, timestamp: 0 })
@@ -63,10 +63,10 @@ describe("BaselineGateway", () => {
         apiKeyGateway = {
           getApiKey: jest.fn(() => ({ apiKey: "superSecret" }))
         };
-  
+
         process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
         gateway = new BaselineGateway(apiKeyGateway);
-        
+
         amendBaselineRequest = nock("http://cat.meow")
         .matchHeader("Content-Type", "application/json")
         .post("/baseline/amend", { project_id: 4, data: {blah: 'data'}, timestamp: 4 })
@@ -114,15 +114,15 @@ describe("BaselineGateway", () => {
         apiKeyGateway = {
           getApiKey: jest.fn(() => ({ apiKey: "superSecret" }))
         };
-  
+
         process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
         gateway = new BaselineGateway(apiKeyGateway);
 
-        
+
         getAllBaselinesRequest = nock("http://cat.meow")
         .matchHeader("Content-Type", "application/json")
         .get("/project/1/baselines")
-        .reply(200, {baselines: [{data: {}, id: 5}]});
+        .reply(200, {baselines: [{data: {cats: "meow"}, id: 5}]});
       });
 
       describe("Connection successful", () => {
@@ -133,7 +133,7 @@ describe("BaselineGateway", () => {
 
         it("Returns the baselines from the api", async () => {
           let response = await gateway.getAllBaselines(1)
-          expect(response.baselines).toEqual([{data: {}, id: 5}])
+          expect(response.baselines).toEqual([{data: {cats: "meow"}, id: 5}])
         });
       });
 
@@ -156,14 +156,14 @@ describe("BaselineGateway", () => {
         apiKeyGateway = {
           getApiKey: jest.fn(() => ({ apiKey: "superSecret" }))
         };
-  
+
         process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
         gateway = new BaselineGateway(apiKeyGateway);
-        
+
         getAllBaselinesRequest = nock("http://cat.meow")
         .matchHeader("Content-Type", "application/json")
         .get("/project/4/baselines")
-        .reply(200, {baselines: [{data: {}, id: 8}, {data: {}, id: 12}]});
+        .reply(200, {baselines: [{data: {dogs: "woof"}, id: 8}, {data: {}, id: 12}]});
       });
 
       describe("Connection successful", () => {
@@ -174,7 +174,7 @@ describe("BaselineGateway", () => {
 
         it("Returns the baselines from the api", async () => {
           let response = await gateway.getAllBaselines(4)
-          expect(response.baselines).toEqual([{data: {}, id: 8}, {data: {}, id: 12}])
+          expect(response.baselines).toEqual([{data: {dogs: "woof"}, id: 8}, {data: {}, id: 12}])
         });
       });
 

@@ -23,16 +23,16 @@ describe("AmendBaseline", () => {
     it("Calls the baseline gateway with the project id, data and timestamp", () => {
       amendBaseline.execute(presenterSpy, {
         projectId: 3,
-        data: {},
+        data: {cat: "meowmeowmeow"},
         timestamp: 3
       })
-      expect(baselineGatewaySpy.amend).toHaveBeenCalledWith(3, {}, 3);
+      expect(baselineGatewaySpy.amend).toHaveBeenCalledWith(3, {cat: "meowmeowmeow"}, 3);
     });
 
     it("calls the presenter with the id, errors and timestamp passed from the gateway", async () => {
       await amendBaseline.execute(presenterSpy, {
         projectId: 3,
-        data: {},
+        data: {cow: "moooo"},
         timestamp: 3
       });
 
@@ -61,16 +61,16 @@ describe("AmendBaseline", () => {
     it("Calls the baseline gateway with the project id, data and timestamp", () => {
       amendBaseline.execute(presenterSpy,{
         projectId: 3,
-        data: {},
+        data: {duck: "quackity quack"},
         timestamp: 3
       })
-      expect(baselineGatewaySpy.amend).toHaveBeenCalledWith(3, {}, 3);
+      expect(baselineGatewaySpy.amend).toHaveBeenCalledWith(3, {duck: "quackity quack"}, 3);
     });
 
     it("calls the presenter with the id passed from the gateway", async () => {
       await amendBaseline.execute(presenterSpy, {
         projectId: 3,
-        data: {},
+        data: {snake: "hsssssss"},
         timestamp: 3
       });
 
@@ -96,7 +96,7 @@ describe("AmendBaseline", () => {
     it("Calls the failure function on the presenter", async () => {
       await amendBaseline.execute(presenterSpy, {
         projectId: 1,
-        data: {},
+        data: {failure: "failed info"},
         timestamp: 1
       });
       expect(presenterSpy.amendBaselineFailure).toHaveBeenCalled();
