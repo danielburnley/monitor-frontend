@@ -97,6 +97,10 @@ export default class GenerateUISchema {
   generateSchemaForProperties(item, role, noOfPreviousReturns) {
     let schema = {}
 
+    if (item.downloadURI) {
+      schema["ui:widget"] = "downloadable"
+    }
+    
     if (item.extendedText) {
       schema["ui:widget"] = "textarea"
     }
