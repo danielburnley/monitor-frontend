@@ -341,7 +341,6 @@ export default class BaselinePage extends React.Component {
   render() {
     return (
       <div>
-
         {this.renderMandatoryWarning()}
         {this.renderSuccessOrForm()}
       </div>

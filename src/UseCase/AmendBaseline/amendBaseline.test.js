@@ -81,25 +81,4 @@ describe("AmendBaseline", () => {
       });
     });
   });
-
-  describe("Gateway returns unsuccessful", () => {
-    let amendBaseline, baselineGatewaySpy;
-    beforeEach(() => {
-      baselineGatewaySpy = {
-        amend: jest.fn((project_id, data, timestamp) => ({
-          success: false
-        }))
-      }
-      amendBaseline = new AmendBaseline(baselineGatewaySpy)
-    });
-
-    it("Calls the failure function on the presenter", async () => {
-      await amendBaseline.execute(presenterSpy, {
-        projectId: 1,
-        data: {failure: "failed info"},
-        timestamp: 1
-      });
-      expect(presenterSpy.amendBaselineFailure).toHaveBeenCalled();
-    });
-  });
 });

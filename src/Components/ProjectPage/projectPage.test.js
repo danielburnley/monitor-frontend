@@ -3,15 +3,23 @@ import ProjectPage from ".";
 import { shallow } from "enzyme";
 
 describe("<ProjectPage>", () => {
-  let page, getProjectSpy, childrenSpy, generateNewProjectUISchemaSpy, UISchema;
+  let page, getProjectSpy, childrenSpy, generateNewProjectUISchemaSpy, generateDisabledUISchemaSpy, UISchema;
+
+  beforeEach(() => {
+    generateNewProjectUISchemaSpy = {
+      execute: (data, flag) => ({})
+    }
+
+    generateDisabledUISchemaSpy = {
+      execute: (data, flag) => ({})
+    }
+  })
 
   describe("Example one", () => {
     describe("When loading the project", () => {
       beforeEach(() => {
         getProjectSpy = { execute: jest.fn() };
-        generateNewProjectUISchemaSpy = {
-          execute: (data, flag) => ({})
-        }
+        
         page = shallow(
           <ProjectPage
             match={{ params: { projectId: "1" } }}
@@ -36,10 +44,6 @@ describe("<ProjectPage>", () => {
     describe("When the project is loaded and is of status draft", () => {
       beforeEach(() => {
         UISchema = {};
-        generateNewProjectUISchemaSpy = {
-          execute: (data, flag) => ({})
-        }
-
         getProjectSpy = {
           execute: (presenter, _) =>
             presenter.presentProject({
@@ -57,6 +61,7 @@ describe("<ProjectPage>", () => {
             match={{ params: { projectId: "2" } }}
             getProject={getProjectSpy}
             generateUISchema={generateNewProjectUISchemaSpy}
+            generateSubmittedUiSchema={generateDisabledUISchemaSpy}
           >
             {childrenSpy}
           </ProjectPage>
@@ -71,6 +76,7 @@ describe("<ProjectPage>", () => {
         expect(childrenSpy).toHaveBeenCalledWith({
           projectStatus: "Draft",
           formData: { meow: true },
+          disabledUiSchema: {},
           formSchema: { hello: "hi" },
           formUiSchema: UISchema,
           projectType: 'hif',
@@ -87,15 +93,12 @@ describe("<ProjectPage>", () => {
         UISchema = {};
         getProjectSpy = { execute: jest.fn() };
 
-        generateNewProjectUISchemaSpy = {
-          execute: jest.fn()
-        };
-
         page = shallow(
           <ProjectPage
             match={{ params: { projectId: "2" } }}
             getProject={getProjectSpy}
             generateUISchema={generateNewProjectUISchemaSpy}
+            generateSubmittedUiSchema={generateDisabledUISchemaSpy}
           >
             {() => {}}
           </ProjectPage>
@@ -136,6 +139,7 @@ describe("<ProjectPage>", () => {
             match={{ params: { projectId: "2" } }}
             getProject={getProjectSpy}
             generateUISchema={generateNewProjectUISchemaSpy}
+            generateSubmittedUiSchema={generateDisabledUISchemaSpy}
           >
             {childrenSpy}
           </ProjectPage>
@@ -149,6 +153,7 @@ describe("<ProjectPage>", () => {
       it("Passes the data, schema, status, timestamp and type from the use case", () => {
         expect(childrenSpy).toHaveBeenCalledWith({
           projectStatus: "Draft",
+          disabledUiSchema: {},
           formData: { woof: false },
           formSchema: { goodbye: "see ya" },
           projectType: 'ac',
@@ -156,49 +161,6 @@ describe("<ProjectPage>", () => {
           timestamp: "0345"
         });
       });
-    });
-  });
-  
-  describe("When project status is submitted", () => {
-    let generateSubmittedUiSchemaSpy;
-    beforeEach(() => {
-      UISchema = {};
-      generateSubmittedUiSchemaSpy = {
-        execute: (data) => ({readonly: true})
-      }
-
-      getProjectSpy = {
-        execute: (presenter, _) =>
-          presenter.presentProject({
-            data: { meow: true },
-            schema: { hello: "hi" },
-            status: 'Submitted',
-            type: 'hif',
-            timestamp: "56789"
-          })
-      };
-      childrenSpy = jest.fn();
-
-      page = shallow(
-        <ProjectPage
-          match={{ params: { projectId: "2" } }}
-          getProject={getProjectSpy}
-          generateSubmittedUiSchema={generateSubmittedUiSchemaSpy}
-        >
-          {childrenSpy}
-        </ProjectPage>
-      );
-    });
-    
-    it("passes the correct uischema to it's children ", () => {
-      expect(childrenSpy).toHaveBeenCalledWith({
-        projectStatus: "Submitted",
-        formData: { meow: true },
-        formSchema: { hello: "hi" },
-        formUiSchema: {readonly: true},
-        projectType: 'hif',
-        timestamp: "56789"
-      });        
     });
   });
 
@@ -218,6 +180,10 @@ describe("<ProjectPage>", () => {
           execute: (data, flag) => ({ heya: { "ui:disabled": true } })
         };
 
+        generateDisabledUISchemaSpy = {
+          execute: (data, flag) => ({ heya: { "ui:disabled": true } })
+        };
+
 
         childrenSpy = jest.fn();
 
@@ -225,6 +191,7 @@ describe("<ProjectPage>", () => {
           <ProjectPage
             match={{ params: { projectId: "2" } }}
             generateUISchema={generateNewProjectUISchemaSpy}
+            generateSubmittedUiSchema={generateDisabledUISchemaSpy}
             getProject={getProjectSpy}
           >
             {childrenSpy}
@@ -237,6 +204,7 @@ describe("<ProjectPage>", () => {
           projectStatus: "LA Draft",
           formData: { heya: "Bye" },
           formSchema: { laReadOnly: true, title: "Heya" },
+          disabledUiSchema: {heya: { "ui:disabled": true }},
           formUiSchema: { heya: { "ui:disabled": true } }
         });
       });
@@ -256,6 +224,10 @@ describe("<ProjectPage>", () => {
             })
         };
 
+        generateDisabledUISchemaSpy = {
+          execute: (data, flag) => ({ heya: { "ui:disabled": true } })
+        };
+
         generateNewProjectUISchemaSpy = {
           execute: (data, flag) => ({ bye: { "ui:disabled": true } })
         };
@@ -266,6 +238,7 @@ describe("<ProjectPage>", () => {
           <ProjectPage
             match={{ params: { projectId: "2" } }}
             generateUISchema={generateNewProjectUISchemaSpy}
+            generateSubmittedUiSchema={generateDisabledUISchemaSpy}
             getProject={getProjectSpy}
           >
             {childrenSpy}
@@ -281,6 +254,7 @@ describe("<ProjectPage>", () => {
             hi: { laReadOnly: true, title: "Heya" },
             bye: { title: "Boo" }
           },
+          disabledUiSchema: { heya: { "ui:disabled": true }},
           formUiSchema: { bye: { "ui:disabled": true } }
         });
       });

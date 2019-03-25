@@ -589,14 +589,14 @@ describe("Amending a submitted baseline", () => {
     nock.cleanAll();
   })
 
-  // it("Renders the project overview page with a button to amend the baseline", async () => {
-  //   api.checkApiKey(0).successfully();
-  //   let page = new AppPage("/project/0?token=Cats");
-  //   await page.load();
+  it("Renders the baseline page with a button to amend the baseline", async () => {
+    api.checkApiKey(0).successfully();
+    let page = new AppPage("/project/0/baseline?token=Cats");
+    await page.load();
 
-  //   expect(page.find('GetToken').length).toEqual(0)
-  //   expect(page.find('AmendBaselineButton').length).toEqual(1)
-  // });
+    expect(page.find('GetToken').length).toEqual(0)
+    expect(page.find('AmendBaselineButton').length).toEqual(1)
+  });
 });
 
 describe("Printing a return", () => {

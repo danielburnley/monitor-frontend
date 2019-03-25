@@ -8,8 +8,6 @@ export default class AmendBaseline {
 
     if(success) {
       presenter.amendBaselineSuccess({ baselineId, errors, timestamp });
-    } else {
-      presenter.amendBaselineFailure();
     }
   }
 }

@@ -12,6 +12,8 @@ export default class ReturnListProvider extends React.Component {
     });
   };
 
+  presentReturnsNotFound = () => {};
+
   fetchData = () => {
     this.props.getReturns.execute(this, {
       projectId: this.props.projectId
