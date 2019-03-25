@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import AmendBaselineButton from '../AmendBaselineButton';
 
 export default class ProjectPage extends React.Component {
   constructor(props) {

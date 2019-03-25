@@ -209,7 +209,7 @@ const ViewBaselineButton = props => (
       props.history.push(`/project/${props.match.params.projectId}/baseline`)
     }
   >
-    View baseline information
+    View baseline
   </button>
 );
 
@@ -337,9 +337,7 @@ const renderSubmittedProjectPage = (props, formData, formSchema) => (
       <div className="col-md-2">
         <CreateClaimButton {...props} />
       </div>
-      <div className="col-md-2">
-        <AmendBaselineButton {...props}/>
-      </div>
+
       <div className="col-md-2">
         <ViewBaselineButton {...props} />
       </div>
@@ -373,6 +371,17 @@ const renderBaseline = props => (
       return <div className="col-md-10">
         <div className="row">
           <BackToProjectOverviewButton {...props} />
+        </div>
+        <div className="row">
+          <div className="col-md-10">
+            <h2>Baseline</h2>
+          </div>
+          </div>
+          <div className="row">
+          <div className="col-md-10"></div>
+          <div className="col-md-2">
+            <AmendBaselineButton {...props}/>
+          </div>
         </div>
         <div className="row">
           <BaselinePage

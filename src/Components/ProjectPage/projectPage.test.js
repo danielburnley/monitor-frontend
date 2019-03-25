@@ -79,48 +79,6 @@ describe("<ProjectPage>", () => {
       });
     });
 
-    describe("When project status is submitted", () => {
-      let generateSubmittedUiSchemaSpy;
-      beforeEach(() => {
-        UISchema = {};
-        generateSubmittedUiSchemaSpy = {
-          execute: (data) => ({readonly: true})
-        }
-
-        getProjectSpy = {
-          execute: (presenter, _) =>
-            presenter.presentProject({
-              data: { meow: true },
-              schema: { hello: "hi" },
-              status: 'Submitted',
-              type: 'hif',
-              timestamp: "56789"
-            })
-        };
-        childrenSpy = jest.fn();
-
-        page = shallow(
-          <ProjectPage
-            match={{ params: { projectId: "2" } }}
-            getProject={getProjectSpy}
-            generateSubmittedUiSchema={generateSubmittedUiSchemaSpy}
-          >
-            {childrenSpy}
-          </ProjectPage>
-        );
-      });
-      
-      it("passes the correct uischema to it's children ", () => {
-        expect(childrenSpy).toHaveBeenCalledWith({
-          projectStatus: "Submitted",
-          formData: { meow: true },
-          formSchema: { hello: "hi" },
-          formUiSchema: {readonly: true},
-          projectType: 'hif',
-          timestamp: "56789"
-        });        
-      });
-    });
   });
 
   describe("Example two", () => {
@@ -198,6 +156,49 @@ describe("<ProjectPage>", () => {
           timestamp: "0345"
         });
       });
+    });
+  });
+  
+  describe("When project status is submitted", () => {
+    let generateSubmittedUiSchemaSpy;
+    beforeEach(() => {
+      UISchema = {};
+      generateSubmittedUiSchemaSpy = {
+        execute: (data) => ({readonly: true})
+      }
+
+      getProjectSpy = {
+        execute: (presenter, _) =>
+          presenter.presentProject({
+            data: { meow: true },
+            schema: { hello: "hi" },
+            status: 'Submitted',
+            type: 'hif',
+            timestamp: "56789"
+          })
+      };
+      childrenSpy = jest.fn();
+
+      page = shallow(
+        <ProjectPage
+          match={{ params: { projectId: "2" } }}
+          getProject={getProjectSpy}
+          generateSubmittedUiSchema={generateSubmittedUiSchemaSpy}
+        >
+          {childrenSpy}
+        </ProjectPage>
+      );
+    });
+    
+    it("passes the correct uischema to it's children ", () => {
+      expect(childrenSpy).toHaveBeenCalledWith({
+        projectStatus: "Submitted",
+        formData: { meow: true },
+        formSchema: { hello: "hi" },
+        formUiSchema: {readonly: true},
+        projectType: 'hif',
+        timestamp: "56789"
+      });        
     });
   });
 

@@ -341,11 +341,7 @@ export default class BaselinePage extends React.Component {
   render() {
     return (
       <div>
-        <div className="title-container">
-          <div className="row">
-            <h2>Baseline</h2>
-          </div>
-        </div>
+
         {this.renderMandatoryWarning()}
         {this.renderSuccessOrForm()}
       </div>
@@ -353,7 +349,7 @@ export default class BaselinePage extends React.Component {
   }
 }
 
-NewProjectPage.propTypes = {
+BaselinePage.propTypes = {
   data: PropTypes.object.isRequired,
   schema: PropTypes.object.isRequired,
   submitProject: PropTypes.object.isRequired,
