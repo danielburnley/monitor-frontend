@@ -387,7 +387,7 @@ describe("Viewing a project", () => {
         api.getProject(projectSchema, projectData, projectStatus, projectType).successfully();
         await page.viewBaseline();
 
-        expect(page.find('StaticData').length).toEqual(1)
+        expect(page.find('ProjectPage').length).toEqual(1)
       });
 
       describe("Returns", () => {

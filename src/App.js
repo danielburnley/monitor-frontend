@@ -7,7 +7,7 @@ import Homepage from "./Components/Homepage";
 import Footer from "./Components/Footer";
 import Header from "./Components/Header";
 import InfrastructureAdditionPage from "./Components/InfrastructureAdditionPage";
-import NewProjectPage from "./Components/NewProjectPage";
+import BaselinePage from "./Components/BaselinePage";
 import ProjectPage from "./Components/ProjectPage";
 import ProjectSummary from "./Components/ProjectPage/ProjectSummary";
 import ProjectList from "./Components/ProjectList";
@@ -274,7 +274,7 @@ const renderInfrastructuresPage = (props) => (
 );
 
 const renderAmendBaselinePage = props => (
-  <ProjectPage {...props} getProject={getProjectUseCase} generateUISchema={generateUISchema}>
+  <ProjectPage {...props} getProject={getProjectUseCase} generateUISchema={generateUISchema} generateSubmittedUiSchema={generateDisabledUISchema}>
     {({projectStatus, formData, formSchema, projectType, formUiSchema, timestamp}) => (
     <div className="col-md-10">
       <div className="row">
@@ -304,34 +304,6 @@ const renderAmendBaselinePage = props => (
   )}
   </ProjectPage>
 );
-
-const renderBaselineEditorPage = (props, projectStatus, formData, formSchema, projectType, formUiSchema, timestamp) => (
-  <div className="col-md-10">
-    <div className="row">
-      <BackToProjectOverviewButton {...props} />
-    </div>
-    <div className="row">
-      <NewProjectPage
-        {...props}
-        projectId={props.match.params.projectId}
-        projectURL={getProjectURL}
-        uiSchema={formUiSchema}
-        status={projectStatus}
-        schema={formSchema}
-        data={formData}
-        getInfrastructures={getInfrastructuresUseCase}
-        projectType={projectType}
-        getProject={getProjectUseCase}
-        submitProject={submitProjectUseCase}
-        updateProject={updateProjectUseCase}
-        validateProject={validateProjectUseCase}
-        documentGateway={documentGateway}
-        getRole={getRole}
-        timestamp={timestamp}
-      />
-    </div>
-  </div>
-  );
 
 const renderNewProjectPageOverview = (props, projectStatus, formData, formSchema, projectType, formUiSchema, timestamp) => (
   <div className="col-md-10 col-md-offset-1">
@@ -383,7 +355,7 @@ const renderSubmittedProjectPage = (props, formData, formSchema) => (
 );
 
 const renderProjectPage = props => (
-    <ProjectPage {...props} getProject={getProjectUseCase} generateUISchema={generateUISchema} >
+    <ProjectPage {...props} getProject={getProjectUseCase} generateUISchema={generateUISchema} generateSubmittedUiSchema={generateDisabledUISchema}>
     {({ projectStatus, formData, formSchema, projectType, formUiSchema, timestamp }) => {
       if (projectStatus === "Draft") {
         return renderNewProjectPageOverview(props, projectStatus, formData, formSchema, projectType, formUiSchema, timestamp);
@@ -395,21 +367,34 @@ const renderProjectPage = props => (
   </ProjectPage>
 );
 
-const renderBaselinePage = props => (
-  <ProjectPage {...props} getProject={getProjectUseCase} generateUISchema={generateUISchema}>
+const renderBaseline = props => (
+  <ProjectPage {...props} getProject={getProjectUseCase} generateUISchema={generateUISchema} generateSubmittedUiSchema={generateDisabledUISchema}>
     {({ projectStatus, formData, formSchema, projectType, formUiSchema, timestamp  }) => {
-      if (projectStatus === "Submitted") {
-        return <div className="col-md-10 col-md-offset-1">
+      return <div className="col-md-10">
+        <div className="row">
           <BackToProjectOverviewButton {...props} />
-          <StaticData formData={formData} schema={formSchema} />
-          <div className="col-md-2">
-            <CreateReturnButton {...props} />
-          </div>
         </div>
-      }
-      if (projectStatus === "Draft") {
-        return renderBaselineEditorPage(props, projectStatus, formData, formSchema, projectType, formUiSchema, timestamp  )
-      }
+        <div className="row">
+          <BaselinePage
+            {...props}
+            projectId={props.match.params.projectId}
+            projectURL={getProjectURL}
+            uiSchema={formUiSchema}
+            status={projectStatus}
+            schema={formSchema}
+            data={formData}
+            getInfrastructures={getInfrastructuresUseCase}
+            projectType={projectType}
+            getProject={getProjectUseCase}
+            submitProject={submitProjectUseCase}
+            updateProject={updateProjectUseCase}
+            validateProject={validateProjectUseCase}
+            documentGateway={documentGateway}
+            getRole={getRole}
+            timestamp={timestamp}
+          />
+        </div>
+      </div>
     }}
   </ProjectPage>
 );
@@ -484,7 +469,7 @@ const App = () => (
                         <Route
                           exact
                           path="/project/:projectId/baseline"
-                          render={renderBaselinePage}
+                          render={renderBaseline}
                         />
                         <Route
                           exact
