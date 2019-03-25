@@ -368,7 +368,7 @@ describe("Viewing a project", () => {
         let page = new AppPage("/project/0?token=Cats");
         await page.load();
 
-        let returnList = page.find("ReturnList")
+        let returnList = page.find("List")
 
         expect(returnList.length).toEqual(1);
 

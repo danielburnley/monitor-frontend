@@ -1,9 +1,9 @@
 import React from "react";
 import "./style.css";
 
-export default class ReturnList extends React.Component {
-  displayDate(returns) {
-    let unix = returns.timestamp;
+export default class List extends React.Component {
+  displayDate(items) {
+    let unix = items.timestamp;
     let timestamp = new Date(unix * 1000);
     let date = timestamp.getDate();
     let month = timestamp.getMonth() + 1;
@@ -11,27 +11,29 @@ export default class ReturnList extends React.Component {
     return `${date}/${month}/${year}`;
   }
 
-  renderLink(returns, index) {
+  renderLink(items, index) {
     return (
       <a
-        href={`/project/${returns.project_id}/return/${returns.id}`}
+        href={`/project/${items.project_id}/${this.props.listType}/${items.id}`}
         className="list-group-item"
-        data-test={`url-${returns.id}`}
+        data-test={`url-${items.id}`}
       >
-        <span data-test={`return-${returns.id}`}>Return {index + 1}</span>
-        <div className="pull-right">{this.renderStatus(returns)}</div>
+        <span data-test={`${this.props.listType}-${items.id}`}>
+          {`${this.props.prettyListType}`} {index + 1}
+        </span>
+        <div className="pull-right">{this.renderStatus(items)}</div>
         <span className="pull-right date">
-          {this.renderSubmission(returns)}
+          {this.renderSubmission(items)}
         </span>
       </a>
     );
   }
 
-  renderStatus(returns) {
-    let status = returns.status;
+  renderStatus(items) {
+    let status = items.status;
     if (status === "Draft") {
       return (
-        <span className="badge" data-test={`status-${returns.id}`}>
+        <span className="badge" data-test={`status-${items.id}`}>
           {status}
         </span>
       );
@@ -39,7 +41,7 @@ export default class ReturnList extends React.Component {
       return (
         <span
           className="badge badge-success"
-          data-test={`status-${returns.id}`}
+          data-test={`status-${items.id}`}
         >
           {status}
         </span>
@@ -47,39 +49,36 @@ export default class ReturnList extends React.Component {
     }
   }
 
-  renderSubmission(returns) {
-    let fullDate = this.displayDate(returns);
+  renderSubmission(items) {
+    let fullDate = this.displayDate(items);
     if (fullDate === "1/1/1970") {
       return null;
     } else {
-      return <span data-test={`timestamp-${returns.id}`}>{fullDate}</span>;
+      return <span data-test={`timestamp-${items.id}`}>{fullDate}</span>;
     }
   }
 
-  renderReturn(returns, index) {
+  renderItem(items, index) {
     return (
-      <div className="row padding" key={returns.id.toString()}>
-        {this.renderLink(returns, index)}
+      <div className="row padding" key={items.id.toString()}>
+        {this.renderLink(items, index)}
       </div>
     );
   }
 
   renderListItems() {
-    const returns = this.props.returns;
-    return returns.map((returns, index) => this.renderReturn(returns, index));
+    const items = this.props.items;
+    return items.map((items, index) => this.renderItem(items, index));
   }
 
   render() {
-    if (this.props.returns.length === 0) {
+    if (this.props.items.length === 0) {
       return <div />;
     } else {
       return (
         <div className="row padding-top">
           <div className="col-md-6">
             <div className="panel panel-default">
-              <div className="panel-heading" data-test="schema-title">
-                Returns
-              </div>
               <div className="panel-body">
                 <ul className="list-group">{this.renderListItems()}</ul>
               </div>

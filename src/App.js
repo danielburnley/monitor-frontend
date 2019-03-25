@@ -355,7 +355,12 @@ const renderSubmittedProjectPage = (props, formData, formSchema) => (
     <div className="row">
       <ReturnListProvider projectId={props.match.params.projectId} getReturns={getReturnsUseCase}>
         {({ returns }) => (
-          <ReturnList {...props} returns={returns} />
+          <ReturnList
+            {...props}
+            items={returns}
+            listType={"return"}
+            prettyListType={"Return"}
+          />
         )}
       </ReturnListProvider>
     </div>
