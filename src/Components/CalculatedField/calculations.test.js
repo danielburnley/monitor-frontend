@@ -19,10 +19,23 @@ import {
   add,
   filterForNos,
   setArrayField,
-  setInPreviousQuarter
+  setInPreviousQuarter,
+  path
 } from ".";
 
-describe("setArrayField", () => {
+describe("path()", () => {
+  describe("Returns a list of path nodes", () => {
+    it("Example 1", () => {
+      expect(path("A","B","C","D")).toEqual(["A","B","C","D"]);
+    });
+
+    it("Example 2", () => {
+      expect(path("A node", "Another node")).toEqual(["A node", "Another node"]);
+    });
+  });
+});
+
+describe("setArrayField()", () => {
   describe("Passes items which aren't arrays", () => {
     it("Returns null", () => {
       let newArray;
@@ -575,51 +588,51 @@ describe("setInPreviousQuarter", () => {
     beforeEach(() => {
       RealDate = Date
     });
-    
+
     afterEach(() => {
       global.Date = RealDate
     });
-  
-    describe("Example 1", () => {    
+
+    describe("Example 1", () => {
       it("sets the value into the correct quarter", () => {
         let fakeDate = new Date('03/01/2018')
         global.Date = jest.fn(() => fakeDate)
         let formData = {}
         setInPreviousQuarter(formData, {returnStatus: "Draft"}, 'cats', '456')
-  
+
         expect(formData).toEqual({cats: {quarter3: '456' }})
       });
     });
-  
-    describe("Example 2", () => {    
+
+    describe("Example 2", () => {
       it("sets the value into the correct quarter", () => {
         let fakeDate = new Date('11/01/2018')
         global.Date = jest.fn(() => fakeDate)
         let formData = {}
         setInPreviousQuarter(formData, {returnStatus: "Draft"}, 'cats', '456')
-  
+
         expect(formData).toEqual({cats: {quarter2: '456' }})
       });
     });
-  
-    describe("Example 3", () => {    
+
+    describe("Example 3", () => {
       it("sets the value into the correct quarter", () => {
         let fakeDate = new Date('07/01/2018')
         global.Date = jest.fn(() => fakeDate)
         let formData = {}
         setInPreviousQuarter(formData, {returnStatus: "Draft"}, 'cats', '456')
-  
+
         expect(formData).toEqual({cats: {quarter1: '456' }})
       });
     });
-  
-    describe("Example 4", () => {    
+
+    describe("Example 4", () => {
       it("sets the value into the correct quarter", () => {
         let fakeDate = new Date('04/01/2018')
         global.Date = jest.fn(() => fakeDate)
         let formData = {}
         setInPreviousQuarter(formData, {returnStatus: "Draft"}, 'cats', '456')
-  
+
         expect(formData).toEqual({cats: {quarter4: '456' }})
       });
     });
@@ -628,7 +641,7 @@ describe("setInPreviousQuarter", () => {
   describe("Submitted return data", () => {
     it("Wont change the formdata", () => {
       let formData = {}
-      
+
       setInPreviousQuarter(formData, {returnStatus: "Submitted"}, "cats", "456")
 
       expect(formData).toEqual({})

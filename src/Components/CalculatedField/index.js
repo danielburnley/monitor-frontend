@@ -1,6 +1,10 @@
 import "../../Polyfills/Array/flat";
 import React from "react";
 
+export function path(...args) {
+  return args;
+}
+
 export function filterForNos(array, path) {
   if (array) {
     return array.filter(i => get(i, ...path) === "No");
