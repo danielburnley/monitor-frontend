@@ -37,6 +37,10 @@ export default class FormActions extends React.Component {
     this.setState({ status: "Submitted" });
   };
 
+  updateSubmittedUnsuccessful = async () => {
+    this.setState({ status: "SaveSubmittedFailure" });
+  };
+
   updateUnsuccessful = async () => {
     this.setState({ status: "UpdateFailure" });
   };
@@ -301,8 +305,7 @@ export default class FormActions extends React.Component {
   )
 
   renderSubmissionFailure = () => {
-    if (this.state.status === "SubmissionFailure")
-    {
+    if (this.state.status === "SubmissionFailure") {
       return <div
         className="alert alert-danger"
         role="alert"
@@ -312,9 +315,19 @@ export default class FormActions extends React.Component {
     }
   }
 
+  renderSaveSubmittedFailure = () => {
+    if (this.state.status === "SaveSubmittedFailure") {
+      return <div
+        className="alert alert-danger"
+        role="alert"
+        data-test="save-submitted-button-error">
+        <strong>Error:</strong> Failed to save, please ensure that you are connected to the internet.
+      </div>
+    }
+  }
+
   renderSaveFailure = () => {
-    if (this.state.status === "UpdateFailure")
-    {
+    if (this.state.status === "UpdateFailure") {
       return <div
         className="alert alert-danger"
         role="alert"
@@ -339,6 +352,7 @@ export default class FormActions extends React.Component {
           </div>
         </div>
         <div className="row">
+          { this.renderSaveSubmittedFailure() }
           { this.renderSubmissionFailure() }
           { this.renderSaveFailure() }
           <div className="col-md-4">{this.renderMandatoryWarning()}</div>

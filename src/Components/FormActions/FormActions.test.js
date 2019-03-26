@@ -55,6 +55,7 @@ describe("<FormActions>", () => {
 
   let updateSpy = { execute: jest.fn((presenter, id, returnId, data) => presenter.updateSuccessful() )}
   let updateSubmittedSpy = { execute: jest.fn((presenter, id, returnId, data) => presenter.updateSubmittedSuccessful() )}
+  let failingUpdateSubmittedSpy = { execute: jest.fn((presenter, id, returnId, data) => presenter.updateSubmittedUnsuccessful() )}
   let unresolvingUpdateSubmittedStub = { execute: jest.fn((presenter, id, returnId, data) => {} )}
   let submitSpy = { execute: jest.fn((presenter, id, returnId, data) => presenter.submissionSuccessful() )}
   let createSpy = { execute: jest.fn((presenter, id, returnId, data) => presenter.creationSuccessful(7) )}
@@ -216,6 +217,27 @@ describe("<FormActions>", () => {
           await saveSubmitted(wrap);
           await wrap.update();
           expect(wrap.find("[data-test='save-submitted-button']").length).toEqual(1);
+        });
+
+        it("Displays the failure message button after saving", async () => {
+          let wrap = shallow(
+            <FormActions
+              formType="return"
+              data={initialData}
+              schema={formSchema}
+              validate = {validateSpyValid}
+              updateSubmitted={failingUpdateSubmittedSpy}
+              submit={submitSpy}
+              match={{params: {projectId: 1, returnId: 3}}}
+              status="Submitted"
+              type="ac"
+              getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+            />
+          );
+
+          await saveSubmitted(wrap);
+          await wrap.update();
+          expect(wrap.find("[data-test='save-submitted-button-error']").length).toEqual(1);
         });
 
         it("Displays the disabled save submit button when saving", () => {
