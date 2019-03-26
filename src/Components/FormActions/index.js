@@ -33,6 +33,10 @@ export default class FormActions extends React.Component {
     this.setState({ status: "Updated" });
   };
 
+  updateSubmittedSuccessful = async () => {
+    this.setState({ status: "Submitted" });
+  };
+
   updateUnsuccessful = async () => {
     this.setState({ status: "UpdateFailure" });
   };
@@ -78,6 +82,28 @@ export default class FormActions extends React.Component {
       });
     }
   };
+
+  onFormSaveSubmitted = async formData => {
+      this.setState({
+        status: "SavingSubmitted",
+        valid: true,
+        invalidPaths: [],
+        lastAction: "SaveSubmitted"
+      });
+
+      await this.props.updateSubmitted.execute(this, {
+        projectId: this.props.match.params.projectId,
+        id: this.id(),
+        data: formData
+      });
+
+      await this.props.validate.execute(
+        this,
+        this.props.match.params.projectId,
+        formData,
+        this.props.type
+      );
+    };
 
   onFormSave = async formData => {
     this.setState({
@@ -175,8 +201,19 @@ export default class FormActions extends React.Component {
   };
 
   renderActions = () => {
-    if (this.state.status === 'Submitted') {
-      return <div />;
+    if (this.state.status === "Submitted") {
+      if (this.state.userRole === "Homes England") {
+        return <div className="col-md-offset-3 col-md-9 return-actions">
+          <button
+            className="btn btn-primary form-button"
+            data-test="save-submitted-button"
+            onClick={() => this.onFormSaveSubmitted(this.state.formData)}>
+            Save Changes
+          </button>
+        </div>
+      } else {
+        return <div/>;
+      }
     }
 
     if (this.state.status === 'New') {
@@ -202,6 +239,18 @@ export default class FormActions extends React.Component {
           {this.renderDisabledSubmitButton()}
         </div>
       );
+    }
+
+    if (this.state.status === 'SavingSubmitted') {
+      return (
+        <div className="col-md-offset-3 col-md-9 return-actions">
+          <button
+            className="btn form-button disabled"
+            data-test="disabled-save-submitted-button">
+            Save Draft
+          </button>
+        </div>
+      )
     }
 
 
