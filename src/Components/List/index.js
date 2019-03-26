@@ -53,11 +53,7 @@ export default class List extends React.Component {
 
   renderSubmission(item) {
     let fullDate = this.displayDate(item);
-    if (fullDate === "1/1/1970") {
-      return null;
-    } else {
-      return <span data-test={`timestamp-${item.id}`}>{fullDate}</span>;
-    }
+    return <span data-test={`timestamp-${item.id}`}>{fullDate}</span>;
   }
 
   renderItem(item, index) {

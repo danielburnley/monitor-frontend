@@ -90,7 +90,7 @@ describe("<List>", () => {
       });
 
       it("does not display the timestamp", () => {
-        expect(claimList.timestampExists(7)).toEqual(0);
+        expect(claimList.timestamp(7)).toEqual("");
       });
     });
   });
@@ -140,7 +140,7 @@ describe("<List>", () => {
 
       it("shows the timestamp when relevant", () => {
         expect(returnList.timestamp(1)).toEqual("20/12/2018");
-        expect(returnList.timestampExists(2)).toEqual(0);
+        expect(returnList.timestamp(2)).toEqual("");
       });
     });
 
