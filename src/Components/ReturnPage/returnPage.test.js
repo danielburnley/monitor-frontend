@@ -97,7 +97,7 @@ describe('ReturnPage', () => {
                   getReturn={new getReturnStub("ac", data, schema)}
                   getBaseReturn={new getBaseReturnStub()}
                   documentGateway={documentGatewayDummy}
-                  getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+                  getRole={{execute: jest.fn(()=> ({role: "Local Authority"}))}}
                 >{childrenSpy}</ReturnPage>);
   
           await wait();
@@ -141,7 +141,7 @@ describe('ReturnPage', () => {
                   getReturn={new getReturnStub("hif", data, schema)}
                   getBaseReturn={new getBaseReturnStub()}
                   documentGateway={documentGatewayDummy}
-                  getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+                  getRole={{execute: jest.fn(()=> ({role: "Local Authority"}))}}
                 >
                 {childrenSpy}
                 </ReturnPage>
@@ -189,7 +189,7 @@ describe('ReturnPage', () => {
                   getReturn={new getReturnStub("ac", data, schema, "Submitted")}
                   getBaseReturn={new getBaseReturnStub()}
                   documentGateway={documentGatewayDummy}
-                  getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+                  getRole={{execute: jest.fn(()=> ({role: "Local Authority"}))}}
                 >{childrenSpy}</ReturnPage>);
   
           await wait();
@@ -233,7 +233,7 @@ describe('ReturnPage', () => {
                   getReturn={new getReturnStub("hif", data, schema, "Submitted")}
                   getBaseReturn={new getBaseReturnStub()}
                   documentGateway={documentGatewayDummy}
-                  getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+                  getRole={{execute: jest.fn(()=> ({role: "Local Authority"}))}}
                 >
                 {childrenSpy}
                 </ReturnPage>
@@ -246,6 +246,98 @@ describe('ReturnPage', () => {
             type: "hif",
             uiSchema: {iAmAlsoSubmitted: "Mayb eyou can change me"},
             status: "Submitted"
+          })
+        });
+      });
+    });
+
+    describe("A Homes England User", () => {
+      describe("Example 1", () => {
+        it("Passes data from the get return use case and generate submitted ui schema", async () => {
+          let documentGatewayDummy = jest.fn()
+          let data = {cathouse: {cathouse: 'cat'}};
+          let schema = {
+            type: 'object',
+            properties: {
+              cathouse: {
+                type: 'object',
+                title: 'cathouse',
+                properties: {
+                  cathouse: {
+                    type: 'string',
+                    readonly: true
+                  }
+                }
+              }
+            }
+          };
+          let generateUISchemaSpy = {execute: jest.fn((data, no_of_previous_returns) => ({myUiSchema: "UI"}))};
+          let generateSubmittedSchemaSpy = { execute: jest.fn(schema => ({IamHE: "You'll never change me now"}))};
+          let wrap = mount(<ReturnPage
+                  match={{ params: { projectId: 1, returnId: 1 } }}
+                  generateUISchema={ generateUISchemaSpy }
+                  generateSubmittedSchema={generateSubmittedSchemaSpy}
+                  history={[]}
+                  getReturn={new getReturnStub("ac", data, schema, "Draft")}
+                  getBaseReturn={new getBaseReturnStub()}
+                  documentGateway={documentGatewayDummy}
+                  getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+                >{childrenSpy}</ReturnPage>);
+  
+          await wait();
+          expect(childrenSpy).toHaveBeenCalledWith({
+            data: data,
+            schema: schema,
+            type: "ac",
+            uiSchema: {IamHE: "You'll never change me now"},
+            status: "Draft"
+          })
+        });
+      })
+
+      describe("Example 2", () => {
+        it("Passes data from the get return use case and generate submitted ui schema", async () => {
+          let documentGatewayDummy = jest.fn()
+          let data = {doghouse: {doghouse: 'dog'}};
+          let schema = {
+            type: 'object',
+            properties: {
+              doghouse: {
+                type: 'object',
+                title: 'doghouse',
+                properties: {
+                  dogs: {
+                    type: 'string',
+                    readonly: true
+                  }
+                }
+              }
+            }
+          };
+          let childrenSpy = jest.fn()
+          let generateUISchemaSpy = {execute: jest.fn((data, no_of_previous_returns) => ({anotherUiSchema: "UI v.2"}))};
+          let generateDisabledUISchemaSpy = { execute: jest.fn(schema => ({iamaheuser: "not allowed to edit"}))};
+          let wrap = mount(<ReturnPage
+                  match={{ params: { projectId: 6, returnId: 1 } }}
+                  generateUISchema={ generateUISchemaSpy }
+                  generateSubmittedSchema={generateDisabledUISchemaSpy}
+                  history={[]}
+                  getReturn={new getReturnStub("hif", data, schema, "Draft")}
+                  getBaseReturn={new getBaseReturnStub()}
+                  documentGateway={documentGatewayDummy}
+                  getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+                >
+                {childrenSpy}
+                </ReturnPage>
+                );
+  
+          await wait();
+          expect(childrenSpy).toHaveBeenCalledWith({
+            data: data,
+            schema: schema,
+            type: "hif",
+            uiSchema: {iamaheuser: "not allowed to edit"},
+            status: "Draft"
           })
         });
       });
@@ -280,7 +372,7 @@ describe('ReturnPage', () => {
                 getReturn={jest.fn()}
                 getBaseReturn={new getBaseReturnStub("ac", data, schema)}
                 documentGateway={documentGatewayDummy}
-                getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+                getRole={{execute: jest.fn(()=> ({role: "Local Authority"}))}}
               >{childrenSpy}
               </ReturnPage>);
 
@@ -323,7 +415,7 @@ describe('ReturnPage', () => {
                 getReturn={jest.fn()}
                 getBaseReturn={new getBaseReturnStub("hif", data, schema)}
                 documentGateway={documentGatewayDummy}
-                getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+                getRole={{execute: jest.fn(()=> ({role: "Local Authority"}))}}
               >
               {childrenSpy}
               </ReturnPage>
