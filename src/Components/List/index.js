@@ -14,7 +14,7 @@ export default class List extends React.Component {
   renderLink(items, index) {
     return (
       <a
-        href={`/project/${items.project_id}/${this.props.listType}/${items.id}`}
+        href={`/project/${this.props.match.params.projectId}/${this.props.listType}/${items.id}`}
         className="list-group-item"
         data-test={`url-${items.id}`}
       >
@@ -76,13 +76,11 @@ export default class List extends React.Component {
       return <div />;
     } else {
       return (
-        <div className="row padding-top">
-          <div className="col-md-6">
+        <div className="padding-top">
             <div className="panel panel-default">
               <div className="panel-body">
                 <ul className="list-group">{this.renderListItems()}</ul>
               </div>
-            </div>
           </div>
         </div>
       );

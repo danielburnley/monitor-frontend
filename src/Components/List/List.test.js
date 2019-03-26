@@ -9,6 +9,7 @@ class ListComponent {
     <List
       items={items}
       listType={type}
+      match={{params: {projectId: 1}}}
       prettyListType={prettyType}
     />
     );

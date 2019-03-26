@@ -12,8 +12,9 @@ import EditBaselinePage from "./Components/EditBaselinePage";
 import ProjectPage from "./Components/ProjectPage";
 import ProjectSummary from "./Components/ProjectPage/ProjectSummary";
 import ProjectList from "./Components/ProjectList";
-import ReturnList from "./Components/ReturnList";
+import List from "./Components/List";
 import ReturnListProvider from "./Components/ReturnListProvider";
+import BaselineListProvider from "./Components/BaselineListProvider";
 import ReturnPage from "./Components/ReturnPage";
 import ClaimPage from "./Components/ClaimPage";
 import FormActions from "./Components/FormActions";
@@ -353,16 +354,33 @@ const renderSubmittedProjectPage = (props, formData, formSchema) => (
       </div>
     </div>
     <div className="row">
-      <ReturnListProvider projectId={props.match.params.projectId} getReturns={getReturnsUseCase}>
-        {({ returns }) => (
-          <ReturnList
+      <div className="col-md-6">
+        <ReturnListProvider projectId={props.match.params.projectId} getReturns={getReturnsUseCase}>
+          {({ returns }) => (
+            <List
+              {...props}
+              items={returns}
+              listType={"return"}
+              prettyListType={"Return"}
+            />
+          )}
+        </ReturnListProvider>
+      </div>
+      <div className="col-md-6">
+        <BaselineListProvider 
             {...props}
-            items={returns}
-            listType={"return"}
-            prettyListType={"Return"}
-          />
-        )}
-      </ReturnListProvider>
+            getBaselines={getBaselines}
+          >
+            {({baselines}) => (
+              <List
+                {...props}
+                items={baselines}
+                listType={"baseline"}
+                prettyListType={"Baseline Version"}
+              />
+            )}
+        </BaselineListProvider>
+      </div>
     </div>
   </div>
 );
@@ -394,17 +412,12 @@ const renderBaseline = props => (
           <div className="col-md-10">
             <h2>Baseline</h2>
           </div>
-          </div>
-          <div className="row">
-          <div className="col-md-10"></div>
-          <div className="col-md-2">
-            <AmendBaselineButton
-              {...props}
-              status={projectStatus}
-              amendBaseline={amendBaseline}
-            />
-          </div>
         </div>
+        <AmendBaselineButton
+          {...props}
+          status={projectStatus}
+          amendBaseline={amendBaseline}
+        />
         <div className="row">
           <BaselinePage
             {...props}
