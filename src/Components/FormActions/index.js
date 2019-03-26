@@ -251,7 +251,11 @@ export default class FormActions extends React.Component {
     </button>
 
   renderActions = () => {
-    if (this.state.status === "Submitted" || this.state.status === "SaveSubmittedFailure") {
+    if (
+      this.state.status === "Submitted" ||
+      this.state.status === "SaveSubmittedFailure" ||
+      this.state.status === "SubmittedEditing"
+    ) {
       if (this.state.userRole === "Homes England" && this.props.updateSubmitted) {
         return <div className="col-md-offset-3 col-md-9 return-actions">
           {this.renderSaveSubmittedButton()}
@@ -294,10 +298,17 @@ export default class FormActions extends React.Component {
 
   onFormChange = async ({formData}) => {
     if(this.id()) {
-      await this.setState({
-        status: "Editing",
-        lastAction: "Change"
-      })
+      if (this.state.status === "Submitted") {
+        await this.setState({
+          status: "SubmittedEditing",
+          lastAction: "Change"
+        })
+      } else {
+        await this.setState({
+          status: "Editing",
+          lastAction: "Change"
+        })
+      }
     }
 
     this.setState({formData});
