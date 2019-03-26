@@ -203,11 +203,11 @@ describe("<BritishDate>", () => {
 
   describe("Readonly", () => {
     describe("Can be made readonly", async () => {
-      it("When disabled with ui:disabled uiSchema property", async () => {
+      it("When disabled with disabled property", async () => {
         let wrapper = mount(<BritishDate
           value="2007/06/29"
           onChange={onChangeSpy}
-          uiSchema={{ "ui:disabled": true }}
+          disabled={true}
         />);
 
         await wrapper.update();
@@ -216,42 +216,22 @@ describe("<BritishDate>", () => {
         expect(wrapper.find("[data-test='date-year']").props().readOnly).toEqual(true);
       });
 
-      describe("When disabled with .readonly schema property", () => {
-        it("With an empty uiSchema", async () => {
-          let wrapper = mount(<BritishDate
-              value="2007/06/29"
-              onChange={onChangeSpy}
-              uiSchema={{}}
-              schema={
-                {
-                  readonly: true
-                }
-              }
-            />);
+      it("When disabled with .readonly schema property", async () => {
+        let wrapper = mount(<BritishDate
+          value="2007/06/29"
+          onChange={onChangeSpy}
+          schema={
+            {
+              readonly: true
+            }
+          }
+          />
+        );
 
-            await wrapper.update();
-            expect(wrapper.find("[data-test='date-day']").props().readOnly).toEqual(true);
-            expect(wrapper.find("[data-test='date-month']").props().readOnly).toEqual(true);
-            expect(wrapper.find("[data-test='date-year']").props().readOnly).toEqual(true);
-          });
-
-          it("With no uiSchema", async () => {
-            let wrapper = mount(<BritishDate
-              value="2007/06/29"
-              onChange={onChangeSpy}
-              schema={
-                {
-                  readonly: true
-                }
-              }
-              />
-            );
-
-            await wrapper.update();
-            expect(wrapper.find("[data-test='date-day']").props().readOnly).toEqual(true);
-            expect(wrapper.find("[data-test='date-month']").props().readOnly).toEqual(true);
-            expect(wrapper.find("[data-test='date-year']").props().readOnly).toEqual(true);
-          });
+        await wrapper.update();
+        expect(wrapper.find("[data-test='date-day']").props().readOnly).toEqual(true);
+        expect(wrapper.find("[data-test='date-month']").props().readOnly).toEqual(true);
+        expect(wrapper.find("[data-test='date-year']").props().readOnly).toEqual(true);
       });
 
 
@@ -259,7 +239,7 @@ describe("<BritishDate>", () => {
         let wrapper = mount(<BritishDate
           value="2007/06/29"
           onChange={onChangeSpy}
-          uiSchema={{}}
+          disabled={false}
         />);
 
         await wrapper.update();
