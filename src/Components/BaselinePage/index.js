@@ -5,7 +5,7 @@ import ErrorMessage from "../ErrorMessage";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import "./style.css";
 
-export default class NewProjectPage extends React.Component {
+export default class BaselinePage extends React.Component {
   constructor(props) {
     super(props);
 
@@ -164,10 +164,24 @@ export default class NewProjectPage extends React.Component {
     return null;
   }
 
+  renderButtons() {
+    if (this.props.status === "Submitted") return null;
+    return <div>
+      {this.renderSubmitButton()}
+      <button
+        data-test="update-project-button"
+        className="btn form-button btn-primary"
+        onClick={this.updateProject}
+      >
+        Save draft
+      </button>
+    </div>
+  }
+
   renderSubmitButton() {
     if (
       this.state.userRole === "Homes England" ||
-      this.state.userRole === "Superuser"
+      this.state.userRole === "Superuser" 
     ) {
       return (
         <button
@@ -180,6 +194,19 @@ export default class NewProjectPage extends React.Component {
       );
     }
     return null;
+  }
+
+  renderDisabledButtons() {
+    if (this.props.status === "Submitted") return null;
+    return <div>  
+      {this.renderDisabledSubmitButton()}
+      <button
+        data-test="disabled-update-project-button"
+        className="btn form-button disabled"
+      >
+        Save draft
+      </button>
+    </div>
   }
 
   renderSubmissionFailure = () => {
@@ -218,13 +245,7 @@ export default class NewProjectPage extends React.Component {
     } else if (this.isLoading()) {
       return (
         <div>
-          {this.renderDisabledSubmitButton()}
-          <button
-            data-test="disabled-update-project-button"
-            className="btn form-button disabled"
-          >
-            Save draft
-          </button>
+          {this.renderDisabledButtons()}
           <div className="col-md-10 col-md-offset-1">{this.renderForm()}</div>
         </div>
       );
@@ -241,14 +262,7 @@ export default class NewProjectPage extends React.Component {
           {this.renderSaveFailure()}
           {this.renderSaveSuccess()}
           <div className="row">
-            {this.renderSubmitButton()}
-            <button
-              data-test="update-project-button"
-              className="btn form-button btn-primary"
-              onClick={this.updateProject}
-            >
-              Save draft
-            </button>
+            {this.renderButtons()}
           </div>
           <div className="row no-edge">{this.renderForm()}</div>
         </div>
@@ -327,11 +341,6 @@ export default class NewProjectPage extends React.Component {
   render() {
     return (
       <div>
-        <div className="title-container">
-          <div className="row">
-            <h2>Baseline Editor</h2>
-          </div>
-        </div>
         {this.renderMandatoryWarning()}
         {this.renderSuccessOrForm()}
       </div>
@@ -339,7 +348,7 @@ export default class NewProjectPage extends React.Component {
   }
 }
 
-NewProjectPage.propTypes = {
+BaselinePage.propTypes = {
   data: PropTypes.object.isRequired,
   schema: PropTypes.object.isRequired,
   submitProject: PropTypes.object.isRequired,

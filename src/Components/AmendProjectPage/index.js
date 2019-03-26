@@ -25,15 +25,15 @@ export default class AmendProjectPage extends React.Component {
     document.title = "Project - Homes England Monitor";
   }
 
-  creationSuccess() {
+  submissionSuccessful() {
     this.setState({ status: "submitted" });
   }
 
-  creationFailure() {
+  submissionUnsuccessful() {
     this.setState({ status: "SubmissionFailure" });
   }
 
-  amendBaselineSuccess({errors, timestamp}) {
+  projectUpdated({errors, timestamp}) {
     if (timestamp) {
       this.setState({
         timestamp: timestamp
@@ -52,7 +52,7 @@ export default class AmendProjectPage extends React.Component {
     }
   }
 
-  amendBaselineFailure() {
+  projectNotUpdated() {
     this.setState({ status: "UpdateFailure" });
   }
 
@@ -67,7 +67,7 @@ export default class AmendProjectPage extends React.Component {
 
   validationUnsuccessful = async () => {};
 
-  submitProject = async e => {
+  submitBaseline = async e => {
     this.setState({
       status: "submitting",
       action: "Submit",
@@ -75,7 +75,7 @@ export default class AmendProjectPage extends React.Component {
       prettyInvalidPaths: [[]]
     });
 
-    await this.props.amendBaseline.execute(this, {
+    await this.props.updateProject.execute(this, {
       projectId: this.props.projectId,
       data: this.state.formData,
       timestamp: this.state.timestamp
@@ -84,14 +84,14 @@ export default class AmendProjectPage extends React.Component {
     await this.validateProject();
 
     if (this.state.valid) {
-      await this.props.submitProject.execute(this, this.props.projectId);
+      await this.props.submitBaseline.execute(this, this.props.match.params.baselineId);
     } else {
       this.setState({ status: "ready" });
     }
     e.preventDefault();
   };
 
-  amendBaseline = async e => {
+  updateBaseline = async e => {
     await this.setState({
       status: "updating",
       valid: true,
@@ -101,7 +101,7 @@ export default class AmendProjectPage extends React.Component {
 
     await this.validateProject();
 
-    await this.props.amendBaseline.execute(this, {
+    await this.props.updateProject.execute(this, {
       projectId: this.props.projectId,
       data: this.state.formData,
       timestamp: this.state.timestamp
@@ -157,7 +157,7 @@ export default class AmendProjectPage extends React.Component {
           data-test="disabled-submit-project-button"
           className="btn form-button disabled"
         >
-          Create new baseline version
+          Submit
         </button>
       );
     }
@@ -173,9 +173,9 @@ export default class AmendProjectPage extends React.Component {
         <button
           data-test="submit-project-button"
           className="btn form-button btn-primary"
-          onClick={this.submitProject}
+          onClick={this.submitBaseline}
         >
-          Create new baseline version
+          Submit
         </button>
       );
     }
@@ -245,7 +245,7 @@ export default class AmendProjectPage extends React.Component {
             <button
               data-test="update-project-button"
               className="btn form-button btn-primary"
-              onClick={this.amendBaseline}
+              onClick={this.updateBaseline}
             >
               Save draft
             </button>
@@ -258,7 +258,7 @@ export default class AmendProjectPage extends React.Component {
 
   renderSaveSuccess() {
     if (this.state.status === "saved") {
-      return <div data-test="project-update-success">Project updated!</div>;
+      return <div data-test="project-update-success">Updated!</div>;
     }
   }
 
@@ -342,6 +342,6 @@ export default class AmendProjectPage extends React.Component {
 AmendProjectPage.propTypes = {
   data: PropTypes.object.isRequired,
   schema: PropTypes.object.isRequired,
-  submitProject: PropTypes.object.isRequired,
-  amendBaseline: PropTypes.object.isRequired
+  submitBaseline: PropTypes.object.isRequired,
+  updateProject: PropTypes.object.isRequired
 };

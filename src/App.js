@@ -7,7 +7,8 @@ import Homepage from "./Components/Homepage";
 import Footer from "./Components/Footer";
 import Header from "./Components/Header";
 import InfrastructureAdditionPage from "./Components/InfrastructureAdditionPage";
-import NewProjectPage from "./Components/NewProjectPage";
+import BaselinePage from "./Components/BaselinePage";
+import EditBaselinePage from "./Components/EditBaselinePage";
 import ProjectPage from "./Components/ProjectPage";
 import ProjectSummary from "./Components/ProjectPage/ProjectSummary";
 import ProjectList from "./Components/ProjectList";
@@ -54,6 +55,8 @@ import UnsubmitProject from "./UseCase/UnsubmitProject";
 import RequestToken from "./UseCase/RequestToken";
 import Validate from "./UseCase/Validate";
 import AmendBaseline from "./UseCase/AmendBaseline";
+import GetBaselines from "./UseCase/GetBaselines";
+import SubmitBaseline from "./UseCase/SubmitBaseline";
 
 import ProjectGateway from "./Gateway/ProjectGateway";
 import ReturnGateway from "./Gateway/ReturnGateway";
@@ -116,6 +119,8 @@ const updateClaimUseCase = new UpdateClaim(claimGateway);
 const updateProjectUseCase = new UpdateProject(projectGateway);
 const addUsersToProject = new AddUsersToProject(projectGateway);
 const amendBaseline = new AmendBaseline(baselineGateway);
+const getBaselines = new GetBaselines(baselineGateway);
+const submitBaseline = new SubmitBaseline(baselineGateway);
 
 const renderReturnPage = props => (
   <ReturnPage
@@ -209,7 +214,7 @@ const ViewBaselineButton = props => (
       props.history.push(`/project/${props.match.params.projectId}/baseline`)
     }
   >
-    View baseline information
+    View baseline
   </button>
 );
 
@@ -274,8 +279,14 @@ const renderInfrastructuresPage = (props) => (
 );
 
 const renderAmendBaselinePage = props => (
-  <ProjectPage {...props} getProject={getProjectUseCase} generateUISchema={generateUISchema}>
-    {({projectStatus, formData, formSchema, projectType, formUiSchema, timestamp}) => (
+  <EditBaselinePage
+    {...props}
+    getProject={getProjectUseCase}
+    getBaselines={getBaselines}
+    generateUISchema={generateUISchema}
+    generateSubmittedUiSchema={generateDisabledUISchema}
+  >
+    {({baselineStatus, formData, formSchema, projectType, formUiSchema, timestamp}) => (
     <div className="col-md-10">
       <div className="row">
         <BackToProjectOverviewButton {...props} />
@@ -286,14 +297,13 @@ const renderAmendBaselinePage = props => (
           projectId={props.match.params.projectId}
           projectURL={getProjectURL}
           uiSchema={formUiSchema}
-          status={projectStatus}
+          status={baselineStatus}
           schema={formSchema}
           data={formData}
-          getInfrastructures={getInfrastructuresUseCase}
           projectType={projectType}
           getProject={getProjectUseCase}
-          submitProject={submitProjectUseCase}
-          amendBaseline={amendBaseline}
+          submitBaseline={submitBaseline}
+          updateProject={updateProjectUseCase}
           validateProject={validateProjectUseCase}
           documentGateway={documentGateway}
           getRole={getRole}
@@ -302,36 +312,8 @@ const renderAmendBaselinePage = props => (
       </div>
     </div>
   )}
-  </ProjectPage>
+  </EditBaselinePage>
 );
-
-const renderBaselineEditorPage = (props, projectStatus, formData, formSchema, projectType, formUiSchema, timestamp) => (
-  <div className="col-md-10">
-    <div className="row">
-      <BackToProjectOverviewButton {...props} />
-    </div>
-    <div className="row">
-      <NewProjectPage
-        {...props}
-        projectId={props.match.params.projectId}
-        projectURL={getProjectURL}
-        uiSchema={formUiSchema}
-        status={projectStatus}
-        schema={formSchema}
-        data={formData}
-        getInfrastructures={getInfrastructuresUseCase}
-        projectType={projectType}
-        getProject={getProjectUseCase}
-        submitProject={submitProjectUseCase}
-        updateProject={updateProjectUseCase}
-        validateProject={validateProjectUseCase}
-        documentGateway={documentGateway}
-        getRole={getRole}
-        timestamp={timestamp}
-      />
-    </div>
-  </div>
-  );
 
 const renderNewProjectPageOverview = (props, projectStatus, formData, formSchema, projectType, formUiSchema, timestamp) => (
   <div className="col-md-10 col-md-offset-1">
@@ -365,9 +347,7 @@ const renderSubmittedProjectPage = (props, formData, formSchema) => (
       <div className="col-md-2">
         <CreateClaimButton {...props} />
       </div>
-      <div className="col-md-2">
-        <AmendBaselineButton {...props}/>
-      </div>
+
       <div className="col-md-2">
         <ViewBaselineButton {...props} />
       </div>
@@ -383,7 +363,7 @@ const renderSubmittedProjectPage = (props, formData, formSchema) => (
 );
 
 const renderProjectPage = props => (
-    <ProjectPage {...props} getProject={getProjectUseCase} generateUISchema={generateUISchema} >
+    <ProjectPage {...props} getProject={getProjectUseCase} generateUISchema={generateUISchema} generateSubmittedUiSchema={generateDisabledUISchema}>
     {({ projectStatus, formData, formSchema, projectType, formUiSchema, timestamp }) => {
       if (projectStatus === "Draft") {
         return renderNewProjectPageOverview(props, projectStatus, formData, formSchema, projectType, formUiSchema, timestamp);
@@ -395,21 +375,52 @@ const renderProjectPage = props => (
   </ProjectPage>
 );
 
-const renderBaselinePage = props => (
-  <ProjectPage {...props} getProject={getProjectUseCase} generateUISchema={generateUISchema}>
-    {({ projectStatus, formData, formSchema, projectType, formUiSchema, timestamp  }) => {
-      if (projectStatus === "Submitted") {
-        return <div className="col-md-10 col-md-offset-1">
+const renderBaseline = props => (
+  <ProjectPage {...props} getProject={getProjectUseCase} generateUISchema={generateUISchema} generateSubmittedUiSchema={generateDisabledUISchema}>
+    {({ projectStatus, formData, formSchema, disabledUiSchema, projectType, formUiSchema, timestamp  }) => {
+      if (projectStatus === 'Submitted') {
+        formUiSchema = disabledUiSchema
+      }
+      return <div className="col-md-10">
+        <div className="row">
           <BackToProjectOverviewButton {...props} />
-          <StaticData formData={formData} schema={formSchema} />
+        </div>
+        <div className="row">
+          <div className="col-md-10">
+            <h2>Baseline</h2>
+          </div>
+          </div>
+          <div className="row">
+          <div className="col-md-10"></div>
           <div className="col-md-2">
-            <CreateReturnButton {...props} />
+            <AmendBaselineButton
+              {...props}
+              status={projectStatus}
+              amendBaseline={amendBaseline}
+            />
           </div>
         </div>
-      }
-      if (projectStatus === "Draft") {
-        return renderBaselineEditorPage(props, projectStatus, formData, formSchema, projectType, formUiSchema, timestamp  )
-      }
+        <div className="row">
+          <BaselinePage
+            {...props}
+            projectId={props.match.params.projectId}
+            projectURL={getProjectURL}
+            uiSchema={formUiSchema}
+            status={projectStatus}
+            schema={formSchema}
+            data={formData}
+            getInfrastructures={getInfrastructuresUseCase}
+            projectType={projectType}
+            getProject={getProjectUseCase}
+            submitProject={submitProjectUseCase}
+            updateProject={updateProjectUseCase}
+            validateProject={validateProjectUseCase}
+            documentGateway={documentGateway}
+            getRole={getRole}
+            timestamp={timestamp}
+          />
+        </div>
+      </div>
     }}
   </ProjectPage>
 );
@@ -484,11 +495,11 @@ const App = () => (
                         <Route
                           exact
                           path="/project/:projectId/baseline"
-                          render={renderBaselinePage}
+                          render={renderBaseline}
                         />
                         <Route
                           exact
-                          path="/project/:projectId/baseline/amend"
+                          path="/project/:projectId/baseline/:baselineId"
                           render={renderAmendBaselinePage}
                         />
                         <Route

@@ -20,7 +20,7 @@ describe("BaselineGateway", () => {
 
         amendBaselineRequest = nock("http://cat.meow")
         .matchHeader("Content-Type", "application/json")
-        .post("/baseline/amend", { project_id: 1, data: {}, timestamp: 0 })
+        .post("/baseline/amend", { project_id: 1 })
         .reply(200, {baselineId: 3, errors: ['error']});
       });
 
@@ -69,7 +69,7 @@ describe("BaselineGateway", () => {
 
         amendBaselineRequest = nock("http://cat.meow")
         .matchHeader("Content-Type", "application/json")
-        .post("/baseline/amend", { project_id: 4, data: {blah: 'data'}, timestamp: 4 })
+        .post("/baseline/amend", { project_id: 4 })
         .reply(200, {baselineId: 7, errors: []});
       });
 
@@ -97,9 +97,9 @@ describe("BaselineGateway", () => {
         it("Returns success as false", async () => {
           nock("http://cat.meow")
           .matchHeader("Content-Type", "application/json")
-          .post("/baseline/amend", { baseline_id: 7 })
+          .post("/baseline/amend", { baseline_id: 7, blah: 'blah' })
           .socketDelay(2000);
-          let response = await gateway.amend(4);
+          let response = await gateway.amend(7);
 
           expect(response).toEqual({ success: false });
         });

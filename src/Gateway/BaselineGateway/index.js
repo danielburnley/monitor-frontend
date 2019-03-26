@@ -29,7 +29,7 @@ export default class BaselineGateway {
     }
   }
 
-  async amend(project_id, data, timestamp) {
+  async amend(project_id) {
     let response = await fetch(
       `${this.env.REACT_APP_HIF_API_URL}baseline/amend`,
       {
@@ -39,9 +39,7 @@ export default class BaselineGateway {
           API_KEY: this.apiKeyGateway.getApiKey().apiKey
         },
         body: JSON.stringify({
-          project_id,
-          data,
-          timestamp
+          project_id
         })
       }
     ).catch(() => ({ ok: false }))

@@ -387,7 +387,7 @@ describe("Viewing a project", () => {
         api.getProject(projectSchema, projectData, projectStatus, projectType).successfully();
         await page.viewBaseline();
 
-        expect(page.find('StaticData').length).toEqual(1)
+        expect(page.find('ProjectPage').length).toEqual(1)
       });
 
       describe("Returns", () => {
@@ -589,9 +589,9 @@ describe("Amending a submitted baseline", () => {
     nock.cleanAll();
   })
 
-  it("Renders the project overview page with a button to amend the baseline", async () => {
+  it("Renders the baseline page with a button to amend the baseline", async () => {
     api.checkApiKey(0).successfully();
-    let page = new AppPage("/project/0?token=Cats");
+    let page = new AppPage("/project/0/baseline?token=Cats");
     await page.load();
 
     expect(page.find('GetToken').length).toEqual(0)

@@ -1,4 +1,4 @@
-import NewProjectPage from ".";
+import BaselinePage from ".";
 import React from "react";
 import { mount, shallow } from "enzyme";
 
@@ -11,7 +11,7 @@ async function updateFormField(input, value) {
   await wait();
 }
 
-describe("NewProjectPage", () => {
+describe("BaselinePage", () => {
   let getProjectURLUsecase = { execute: jest.fn((projectId) => "https:/mydomain/project/5") }
   let data = {
     cat: {
@@ -42,7 +42,7 @@ describe("NewProjectPage", () => {
   it("Calls the get user role use case", () => {
     let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"})) };
     mount(
-      <NewProjectPage
+      <BaselinePage
         projectURL={getProjectURLUsecase}
         documentGateway={jest.fn()}
         projectId = {1}
@@ -61,7 +61,7 @@ describe("NewProjectPage", () => {
     let documentGatewayDummy = jest.fn();
     let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
     let wrap = shallow(
-      <NewProjectPage
+      <BaselinePage
         projectURL={getProjectURLUsecase}
         documentGateway={documentGatewayDummy}
         projectId={1}
@@ -84,7 +84,7 @@ describe("NewProjectPage", () => {
       let documentGatewayDummy = jest.fn();
       let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
       let wrap = shallow(
-        <NewProjectPage
+        <BaselinePage
           projectURL={getProjectURLUsecase}
           documentGateway={documentGatewayDummy}
           projectId={6}
@@ -107,7 +107,7 @@ describe("NewProjectPage", () => {
       let documentGatewayDummy = jest.fn();
       let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
       let wrap = shallow(
-        <NewProjectPage
+        <BaselinePage
           projectURL={getProjectURLUsecase}
           documentGateway={documentGatewayDummy}
           projectId={8}
@@ -139,7 +139,7 @@ describe("NewProjectPage", () => {
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
         let wrap = mount(
-          <NewProjectPage
+          <BaselinePage
             projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
             projectId={1}
@@ -172,7 +172,7 @@ describe("NewProjectPage", () => {
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
         let wrap = mount(
-          <NewProjectPage
+          <BaselinePage
             projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
             projectId={1}
@@ -211,7 +211,7 @@ describe("NewProjectPage", () => {
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
         let wrap = mount(
-          <NewProjectPage
+          <BaselinePage
             projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
             projectId={1}
@@ -244,7 +244,7 @@ describe("NewProjectPage", () => {
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
         let wrap = mount(
-          <NewProjectPage
+          <BaselinePage
             projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
             projectId={1}
@@ -283,7 +283,7 @@ describe("NewProjectPage", () => {
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
         let wrap = mount(
-          <NewProjectPage
+          <BaselinePage
             projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
             projectId={1}
@@ -316,7 +316,7 @@ describe("NewProjectPage", () => {
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
         let wrap = mount(
-          <NewProjectPage
+          <BaselinePage
             projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
             projectId={1}
@@ -345,6 +345,79 @@ describe("NewProjectPage", () => {
     });
   });
 
+  describe("Submitted Project", () => {
+    describe("Hides the save and submitted buttons", () => {
+      let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"})) };
+  
+        it("example 1", async () => {
+          let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {presenter.creationSuccess(id)}) };
+          let updateProjectSpy = {
+            execute: jest.fn(async (presenter, request) => {presenter.projectUpdated([])})
+          };
+          let validateProjectSpy = { execute: jest.fn(async () => {}) };
+  
+          let wrap = mount(
+            <BaselinePage
+              projectURL={getProjectURLUsecase}
+              getRole={userRoleUseCaseSpy}
+              projectId={1}
+              status={"Submitted"}
+              updateProject={updateProjectSpy}
+              submitProject={submitProjectSpy}
+              validateProject={validateProjectSpy}
+              data={{}}
+              schema={schema}
+            />
+          );
+          expect(
+            wrap.find('[data-test="disabled-submit-project-button"]').length
+          ).toEqual(0);
+          expect(
+            wrap.find('[data-test="disabled-update-project-button"]').length
+          ).toEqual(0);
+          expect(wrap.find('[data-test="submit-project-button"]').length).toEqual(
+            0
+          );
+          expect(wrap.find('[data-test="update-project-button"]').length).toEqual(
+            0
+          );
+        });
+  
+        it("example 2", async () => {
+          let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {}) };
+          let updateProjectSpy = { execute: jest.fn(async (presenter, request) => {}) };
+          let validateProjectSpy = { execute: jest.fn(async () => {}) };
+  
+          let wrap = mount(
+            <BaselinePage
+              projectURL={getProjectURLUsecase}
+              getRole={userRoleUseCaseSpy}
+              projectId={1}
+              updateProject={updateProjectSpy}
+              submitProject={submitProjectSpy}
+              validateProject={validateProjectSpy}
+              data={{}}
+              schema={schema}
+            />
+          );
+          wrap.find('[data-test="update-project-button"]').simulate("click");
+          await wait();
+          expect(
+            wrap.find('[data-test="disabled-submit-project-button"]').length
+          ).toEqual(1);
+          expect(
+            wrap.find('[data-test="disabled-update-project-button"]').length
+          ).toEqual(1);
+          expect(wrap.find('[data-test="submit-project-button"]').length).toEqual(
+            0
+          );
+          expect(wrap.find('[data-test="update-project-button"]').length).toEqual(
+            0
+          );
+        });
+    });
+  });
+
   describe("shows the buttons", () => {
     describe("In Homes England draft mode", () => {
       let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"})) };
@@ -357,7 +430,7 @@ describe("NewProjectPage", () => {
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
         let wrap = mount(
-          <NewProjectPage
+          <BaselinePage
             projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
             projectId={1}
@@ -389,7 +462,7 @@ describe("NewProjectPage", () => {
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
         let wrap = mount(
-          <NewProjectPage
+          <BaselinePage
             projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
             projectId={1}
@@ -427,7 +500,7 @@ describe("NewProjectPage", () => {
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
         let wrap = mount(
-          <NewProjectPage
+          <BaselinePage
             projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
             projectId={1}
@@ -459,7 +532,7 @@ describe("NewProjectPage", () => {
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
         let wrap = mount(
-          <NewProjectPage
+          <BaselinePage
             projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
             projectId={1}
@@ -501,7 +574,7 @@ describe("NewProjectPage", () => {
       let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
       let wrap = mount(
-        <NewProjectPage
+        <BaselinePage
           projectURL={getProjectURLUsecase}
           projectId={1}
           updateProject={updateProjectSpy}
@@ -533,7 +606,7 @@ describe("NewProjectPage", () => {
       let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
       let wrap = mount(
-        <NewProjectPage
+        <BaselinePage
           projectURL={getProjectURLUsecase}
           projectId={9}
           updateProject={updateProjectSpy}
@@ -569,7 +642,7 @@ describe("NewProjectPage", () => {
       let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
       let wrap = mount(
-        <NewProjectPage
+        <BaselinePage
           projectURL={getProjectURLUsecase}
           projectId={9}
           updateProject={updateProjectSpy}
@@ -602,7 +675,7 @@ describe("NewProjectPage", () => {
       let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
       let wrap = mount(
-        <NewProjectPage
+        <BaselinePage
           projectURL={getProjectURLUsecase}
           projectId={1}
           updateProject={updateProjectSpy}
@@ -640,7 +713,7 @@ describe("NewProjectPage", () => {
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
         let wrap = mount(
-          <NewProjectPage
+          <BaselinePage
             projectURL={getProjectURLUsecase}
             projectType={"hif"}
             projectId={1}
@@ -680,7 +753,7 @@ describe("NewProjectPage", () => {
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
         let wrap = mount(
-          <NewProjectPage
+          <BaselinePage
             projectURL={getProjectURLUsecase}
             projectType={"ac"}
             projectId={6}
@@ -722,7 +795,7 @@ describe("NewProjectPage", () => {
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
         let wrap = mount(
-          <NewProjectPage
+          <BaselinePage
             projectURL={getProjectURLUsecase}
             projectType={"hif"}
             projectId={1}
@@ -762,7 +835,7 @@ describe("NewProjectPage", () => {
         let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
         let wrap = mount(
-          <NewProjectPage
+          <BaselinePage
             projectURL={getProjectURLUsecase}
             projectType={"ac"}
             projectId={6}
@@ -804,7 +877,7 @@ describe("NewProjectPage", () => {
 
       it("shows warning upon update if in draft state", async () => {
         let wrap = mount(
-          <NewProjectPage
+          <BaselinePage
             projectURL={getProjectURLUsecase}
             projectId={1}
             projectType={"hey"}
@@ -850,7 +923,7 @@ describe("NewProjectPage", () => {
         };
 
         let wrap = mount(
-          <NewProjectPage
+          <BaselinePage
             projectURL={getProjectURLUsecase}
             projectId={1}
             projectType={"hey"}
@@ -892,7 +965,7 @@ describe("NewProjectPage", () => {
       let validateProjectSpy = { execute: jest.fn(async presenter => {}) };
 
       let wrap = mount(
-        <NewProjectPage
+        <BaselinePage
           projectURL={getProjectURLUsecase}
           projectId={1}
           updateProject={updateProjectSpy}
@@ -938,7 +1011,7 @@ describe("NewProjectPage", () => {
       let validateProjectSpy = { execute: jest.fn(async presenter => {}) };
 
       let wrap = mount(
-        <NewProjectPage
+        <BaselinePage
           projectURL={getProjectURLUsecase}
           projectId={1}
           updateProject={updateProjectSpy}
@@ -982,7 +1055,7 @@ describe("NewProjectPage", () => {
       let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
       let wrap = mount(
-        <NewProjectPage
+        <BaselinePage
           projectURL={getProjectURLUsecase}
           projectId={1}
           submitProject={submitProjectSpy}
@@ -1016,7 +1089,7 @@ describe("NewProjectPage", () => {
       let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
       let wrap = mount(
-        <NewProjectPage
+        <BaselinePage
           projectURL={getProjectURLUsecase}
           projectId={1}
           updateProject={updateProjectSpy}
@@ -1051,7 +1124,7 @@ describe("NewProjectPage", () => {
       let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
       let wrap = mount(
-        <NewProjectPage
+        <BaselinePage
           projectURL={getProjectURLUsecase}
           projectId={1}
           submitProject={submitProjectSpy}
@@ -1083,7 +1156,7 @@ describe("NewProjectPage", () => {
       let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
       let wrap = mount(
-        <NewProjectPage
+        <BaselinePage
           projectURL={getProjectURLUsecase}
           projectId={1}
           submitProject={submitProjectSpy}
@@ -1120,7 +1193,7 @@ describe("NewProjectPage", () => {
       let errors = "incorrect_timestamp"
       let updateProjectSpy = { execute: jest.fn(async (presenter, request) => presenter.projectUpdated(errors)) };
       let wrap = mount(
-        <NewProjectPage
+        <BaselinePage
           projectURL={getProjectURLUsecase}
           projectId={1}
           projectType={"hey"}
@@ -1148,7 +1221,7 @@ describe("NewProjectPage", () => {
       let errors = ""
       let updateProjectSpy = { execute: jest.fn(async (presenter, request) => presenter.projectUpdated(errors, 11)) };
       let wrap = mount(
-        <NewProjectPage
+        <BaselinePage
           projectURL={getProjectURLUsecase}
           projectId={1}
           projectType={"hey"}
@@ -1196,7 +1269,7 @@ describe("NewProjectPage", () => {
       let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
       let wrap = mount(
-        <NewProjectPage
+        <BaselinePage
           projectURL={getProjectURLUsecase}
           getRole={userRoleUseCaseSpy}
           match={{ params: { id: 1 } }}
@@ -1237,7 +1310,7 @@ describe("NewProjectPage", () => {
       let validateProjectSpy = { execute: jest.fn(async () => {}) };
 
       let wrap = mount(
-        <NewProjectPage
+        <BaselinePage
           projectURL={getProjectURLUsecase}
           getRole={userRoleUseCaseSpy}
           match={{ params: { id: 1 } }}
@@ -1282,7 +1355,7 @@ describe("NewProjectPage", () => {
     let validateProjectSpy = { execute: jest.fn(() => {}) };
 
     let wrap = mount(
-      <NewProjectPage
+      <BaselinePage
         projectURL={getProjectURLUsecase}
         projectId={1}
         submitProject={submitProjectSpy}
