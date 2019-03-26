@@ -198,7 +198,7 @@ describe("<FormActions>", () => {
           expect(updateSubmittedSpy.execute).toHaveBeenCalledWith(expect.anything(), {projectId: 1, id: 3, data: {cats: { details: { noise: "Meow" } }}});
         });
 
-        it("Displays the save button after saving", async () => {
+        it("Displays the save message & button after saving", async () => {
           let wrap = shallow(
             <FormActions
               formType="return"
@@ -217,6 +217,7 @@ describe("<FormActions>", () => {
           await saveSubmitted(wrap);
           await wrap.update();
           expect(wrap.find("[data-test='save-submitted-button']").length).toEqual(1);
+          expect(wrap.find("[data-test='save-submitted-success']").length).toEqual(1);
         });
 
         it("Displays the failure message & button after saving", async () => {

@@ -149,20 +149,29 @@ export default class FormActions extends React.Component {
         </div>
       );
     }
-    if (
-      this.state.status === "Submitted" &&
-      this.state.lastAction === "Submit"
-    ) {
-      return (
-        <div data-test="submitSuccess" role="alert" className="submit-success">
-          <h3 className="checkmark">✔</h3>
-          <h3>{`${this.capitalise(this.props.formType)}`} submitted!</h3>
-          <h4 className="subheading">
-            All members of this project have been sent an email with a link to
-            view this {`${this.props.formType}`}
-          </h4>
-        </div>
-      );
+    if (this.state.status === "Submitted") {
+      if (this.state.lastAction === "Submit") {
+        return (
+          <div data-test="submitSuccess" role="alert" className="submit-success">
+            <h3 className="checkmark">✔</h3>
+            <h3>{`${this.capitalise(this.props.formType)}`} submitted!</h3>
+            <h4 className="subheading">
+              All members of this project have been sent an email with a link to
+              view this {`${this.props.formType}`}
+            </h4>
+          </div>
+        );
+      } else if (this.state.lastAction === "SaveSubmitted") {
+        return (
+          <div
+            data-test="save-submitted-success"
+            role="alert"
+            className="alert alert-success"
+          >
+            Changes saved!
+          </div>
+        );
+      }
     }
   }
 
@@ -250,7 +259,7 @@ export default class FormActions extends React.Component {
           <button
             className="btn form-button disabled"
             data-test="disabled-save-submitted-button">
-            Save Draft
+            Save Changes
           </button>
         </div>
       )
