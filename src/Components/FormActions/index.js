@@ -12,6 +12,7 @@ export default class FormActions extends React.Component {
       userRole: this.props.getRole.execute().role,
       valid: true,
       invalidPaths: [],
+      submitted: this.props.status === "Submitted",
       lastAction: "Create",
       status: this.props.status
     };
@@ -22,7 +23,7 @@ export default class FormActions extends React.Component {
   };
 
   submissionSuccessful = async () => {
-    this.setState({ status: "Submitted"});
+    this.setState({ status: "Submitted", submitted: true});
   };
 
   creationSuccessful = async Id => {
@@ -88,7 +89,7 @@ export default class FormActions extends React.Component {
 
   onFormSaveSubmitted = async formData => {
       this.setState({
-        status: "SavingSubmitted",
+        status: "Saving",
         valid: true,
         invalidPaths: [],
         lastAction: "SaveSubmitted"
@@ -251,24 +252,20 @@ export default class FormActions extends React.Component {
     </button>
 
   renderActions = () => {
-    if (
-      this.state.status === "Submitted" ||
-      this.state.status === "SaveSubmittedFailure" ||
-      this.state.status === "SubmittedEditing"
-    ) {
-      if (this.state.userRole === "Homes England" && this.props.updateSubmitted) {
+    if (this.state.submitted && this.state.userRole === "Homes England") {
+      if (this.state.status === 'Saving') {
+        return <div className="col-md-offset-3 col-md-9 return-actions">
+          {this.renderDisabledSaveSubmittedButton()}
+        </div>;
+      }
+
+      if (this.props.updateSubmitted) {
         return <div className="col-md-offset-3 col-md-9 return-actions">
           {this.renderSaveSubmittedButton()}
         </div>;
-      } else {
-        return <div/>;
       }
-    }
 
-    if (this.state.status === 'SavingSubmitted') {
-      return <div className="col-md-offset-3 col-md-9 return-actions">
-        {this.renderDisabledSaveSubmittedButton()}
-      </div>;
+      return <div/>;
     }
 
     if (this.state.status === 'New') {
@@ -282,7 +279,6 @@ export default class FormActions extends React.Component {
           {this.renderDisabledSubmitButton()}
       </div>;
     }
-
 
     return <div className="col-md-offset-3 col-md-9 return-actions">
       {this.renderSaveButton()}
@@ -298,17 +294,10 @@ export default class FormActions extends React.Component {
 
   onFormChange = async ({formData}) => {
     if(this.id()) {
-      if (this.state.status === "Submitted") {
-        await this.setState({
-          status: "SubmittedEditing",
-          lastAction: "Change"
-        })
-      } else {
-        await this.setState({
-          status: "Editing",
-          lastAction: "Change"
-        })
-      }
+      await this.setState({
+        status: "Editing",
+        lastAction: "Change"
+      });
     }
 
     this.setState({formData});
