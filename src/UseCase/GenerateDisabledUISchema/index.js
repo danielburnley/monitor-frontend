@@ -1,10 +1,13 @@
 import merge from "utils-merge2";
 
 export default class GenerateDisabledUISchema {
-  constructor(generateUISchemaUseCase) {
+  constructor(generateUISchemaUseCase, userRoleStorageGateway) {
     this.generateUISchemaUseCase = generateUISchemaUseCase;
+    this.userRoleStorageGateway = userRoleStorageGateway;
   }
+
   execute(data) {
+    this.role = this.userRoleStorageGateway.getUserRole().userRole;
     let generatedUISchema = this.generateUISchemaUseCase.execute(data);
     let generatedDisabledUISchema = this.generateUISchema(data.properties);
     return merge(generatedUISchema, generatedDisabledUISchema);
@@ -33,22 +36,27 @@ export default class GenerateDisabledUISchema {
   }
 
   generateSchemaForArray(value) {
-    let schema = {
-      "ui:options": {
-        addable: false,
-        orderable: false,
-        removable: false
-      }
-    };
+    let schema;
+
+    if (value.heAlwaysWritable && this.role === "Homes England") {
+      schema = {};
+    } else {
+      schema = {
+        "ui:options": {
+          addable: false,
+          orderable: false,
+          removable: false
+        }
+      };
+    }
 
     schema.items = this.generateUISchema(value.items.properties);
-
     return schema;
   }
 
   generateDependencySchema(value) {
     if(!value.dependencies) {
-      return {}
+      return {};
     }
 
     let reducer = (acc, dependency) =>
@@ -59,6 +67,8 @@ export default class GenerateDisabledUISchema {
   }
 
   generateSchemaForItem(item) {
+    if (item.heAlwaysWritable && this.role === "Homes England") return {};
+
     if (item.hidden) {
       return { "ui:widget": "hidden" };
     } else {
