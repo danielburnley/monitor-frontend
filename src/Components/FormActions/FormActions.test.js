@@ -219,7 +219,7 @@ describe("<FormActions>", () => {
           expect(wrap.find("[data-test='save-submitted-button']").length).toEqual(1);
         });
 
-        it("Displays the failure message button after saving", async () => {
+        it("Displays the failure message & button after saving", async () => {
           let wrap = shallow(
             <FormActions
               formType="return"
@@ -238,27 +238,28 @@ describe("<FormActions>", () => {
           await saveSubmitted(wrap);
           await wrap.update();
           expect(wrap.find("[data-test='save-submitted-button-error']").length).toEqual(1);
+          expect(wrap.find("[data-test='save-submitted-button']").length).toEqual(1);
         });
 
         it("Displays the disabled save submit button when saving", () => {
-        let wrap = mount(
-          <FormActions
-            formType="return"
-            data={initialData}
-            schema={formSchema}
-            validate = {validateSpyValid}
-            updateSubmitted={unresolvingUpdateSubmittedStub}
-            submit={submitSpy}
-            match={{params: {projectId: 1, returnId: 3}}}
-            status="Submitted"
-            type="ac"
-            getRole={{execute: jest.fn(() => ({role: "Homes England"}))}}
-          />
-        );
+          let wrap = mount(
+            <FormActions
+              formType="return"
+              data={initialData}
+              schema={formSchema}
+              validate = {validateSpyValid}
+              updateSubmitted={unresolvingUpdateSubmittedStub}
+              submit={submitSpy}
+              match={{params: {projectId: 1, returnId: 3}}}
+              status="Submitted"
+              type="ac"
+              getRole={{execute: jest.fn(() => ({role: "Homes England"}))}}
+            />
+          );
 
-        saveSubmitted(wrap);
-        expect(wrap.find("[data-test='disabled-save-submitted-button']").length).toEqual(1);
-      });
+          saveSubmitted(wrap);
+          expect(wrap.find("[data-test='disabled-save-submitted-button']").length).toEqual(1);
+        });
       });
 
       describe("Without a specified updateSubmitted use case", () => {
