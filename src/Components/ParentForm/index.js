@@ -19,8 +19,9 @@ import CurrencyWidget from "../CurrencyWidget";
 import PercentageWidget from "../PercentageWidget";
 import BritishDate from "../BritishDate";
 import WorkflowViewer from "../WorkflowViewer";
-import "./style.css";
+import DownloadPseudoWidget from "../DownloadPseudoWidget";
 import UploadFileField from "../UploadFileField";
+import "./style.css";
 
 export default class ParentForm extends React.Component {
   constructor(props) {
@@ -293,7 +294,8 @@ export default class ParentForm extends React.Component {
       britishDate: BritishDate,
       currency: CurrencyWidget,
       percentage: PercentageWidget,
-      pickInfrastructure: PickInfrastructureWidget
+      pickInfrastructure: PickInfrastructureWidget,
+      downloadable: DownloadPseudoWidget
     };
 
     if (this.selectedSchema().type === "array") {

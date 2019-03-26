@@ -147,9 +147,38 @@ describe("GenerateUISchema", () => {
     });
   });
 
+  describe("Downloadable", () => {
+    it("Sets the UI field to downloadable", () => {
+      let schema = {
+        type: "object",
+        properties: {
+          a: {
+            type: "object",
+            properties: {
+              infraId: {
+                downloadURI: "https://localhost/overview.md",
+                type: "null"
+              }
+            }
+          }
+        }
+      };
+
+      let response = useCase.execute(schema);
+
+      expect(response).toEqual({
+        a: {
+          infraId: {
+            "ui:widget": "downloadable"
+          }
+        }
+      });
+    });
+  });
+
   describe("Readonly", () => {
     describe("Example one", () => {
-        it("Generates a ui schema from a single field", () => {
+      it("Generates a ui schema from a single field", () => {
         let useCase = new GenerateUISchema(userRoleCookieGateway);
         let schema = {
           type: "object",
@@ -1219,7 +1248,7 @@ describe("GenerateUISchema", () => {
     });
   });
 
-  describe("Picking an infrastructure fiels", () => {
+  describe("Picking an infrastructure fields", () => {
     it("Sets the UI field to pickInfrastructure", () => {
       let schema = {
         type: "object",
