@@ -2,8 +2,10 @@ import React from "react";
 import "./style.css";
 
 export default class List extends React.Component {
-  displayDate(items) {
-    let unix = items.timestamp;
+  displayDate(item) {
+    if (!item.timestamp) return null;
+
+    let unix = item.timestamp;
     let timestamp = new Date(unix * 1000);
     let date = timestamp.getDate();
     let month = timestamp.getMonth() + 1;
@@ -11,29 +13,29 @@ export default class List extends React.Component {
     return `${date}/${month}/${year}`;
   }
 
-  renderLink(items, index) {
+  renderLink(item, index) {
     return (
       <a
-        href={`/project/${this.props.match.params.projectId}/${this.props.listType}/${items.id}`}
+        href={`/project/${this.props.match.params.projectId}/${this.props.listType}/${item.id}`}
         className="list-group-item"
-        data-test={`url-${items.id}`}
+        data-test={`url-${item.id}`}
       >
-        <span data-test={`${this.props.listType}-${items.id}`}>
+        <span data-test={`${this.props.listType}-${item.id}`}>
           {`${this.props.prettyListType}`} {index + 1}
         </span>
-        <div className="pull-right">{this.renderStatus(items)}</div>
+        <div className="pull-right">{this.renderStatus(item)}</div>
         <span className="pull-right date">
-          {this.renderSubmission(items)}
+          {this.renderSubmission(item)}
         </span>
       </a>
     );
   }
 
-  renderStatus(items) {
-    let status = items.status;
+  renderStatus(item) {
+    let status = item.status;
     if (status === "Draft") {
       return (
-        <span className="badge" data-test={`status-${items.id}`}>
+        <span className="badge" data-test={`status-${item.id}`}>
           {status}
         </span>
       );
@@ -41,7 +43,7 @@ export default class List extends React.Component {
       return (
         <span
           className="badge badge-success"
-          data-test={`status-${items.id}`}
+          data-test={`status-${item.id}`}
         >
           {status}
         </span>
@@ -49,26 +51,26 @@ export default class List extends React.Component {
     }
   }
 
-  renderSubmission(items) {
-    let fullDate = this.displayDate(items);
+  renderSubmission(item) {
+    let fullDate = this.displayDate(item);
     if (fullDate === "1/1/1970") {
       return null;
     } else {
-      return <span data-test={`timestamp-${items.id}`}>{fullDate}</span>;
+      return <span data-test={`timestamp-${item.id}`}>{fullDate}</span>;
     }
   }
 
-  renderItem(items, index) {
+  renderItem(item, index) {
     return (
-      <div className="row padding" key={items.id.toString()}>
-        {this.renderLink(items, index)}
+      <div className="row padding" key={item.id.toString()}>
+        {this.renderLink(item, index)}
       </div>
     );
   }
 
   renderListItems() {
     const items = this.props.items;
-    return items.map((items, index) => this.renderItem(items, index));
+    return items.map((item, index) => this.renderItem(item, index));
   }
 
   render() {
