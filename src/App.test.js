@@ -368,13 +368,12 @@ describe("Viewing a project", () => {
         let page = new AppPage("/project/0?token=Cats");
         await page.load();
 
-        let returnList = page.find("List")
+        let returnList = page.find('[data-test="return-list"]')
 
         expect(returnList.length).toEqual(1);
 
         expect(returnList.find("[data-test='return-1']").text()).toEqual("Return 1");
       });
-
 
       it("Renders the project baseline page", async () => {
         api.checkApiKey(0).successfully();

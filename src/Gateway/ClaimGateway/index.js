@@ -8,6 +8,23 @@ export default class ClaimGateway {
     this.env = runtimeEnv();
   }
 
+  async getClaims(projectId) {
+    let rawResponse = await fetch(
+      `${this.env.REACT_APP_HIF_API_URL}project/${projectId}/claims`,
+      {
+        headers: {'Content-Type': 'application/json',
+          'API_KEY': this.apiKeyGateway.getApiKey().apiKey},
+      },
+    ).catch(() => ({ ok: false }));
+
+    if (!rawResponse.ok) return {success: false};
+
+    let response = await rawResponse.json();
+    let claims = response.claims;
+
+    return {success: true, claims: claims};
+  }
+
   async findById(id, projectId) {
     let rawResponse = await fetch(
       `${this.env.REACT_APP_HIF_API_URL}claim/get?id=${projectId}&claimId=${id}`,
