@@ -50,6 +50,7 @@ import GetUserProjects from "./UseCase/GetUserProjects";
 import SubmitReturn from "./UseCase/SubmitReturn";
 import GetRole from "./UseCase/GetRole";
 import UpdateReturn from "./UseCase/UpdateReturn";
+import UpdateSubmittedReturn from "./UseCase/UpdateSubmittedReturn";
 import UnsubmitProject from "./UseCase/UnsubmitProject";
 import RequestToken from "./UseCase/RequestToken";
 import Validate from "./UseCase/Validate";
@@ -112,6 +113,7 @@ const requestTokenUseCase = new RequestToken(tokenGateway);
 const submitReturnUseCase = new SubmitReturn(returnGateway);
 const unsubmitProject = new UnsubmitProject(projectGateway)
 const updateReturnUseCase = new UpdateReturn(returnGateway);
+const updateSubmittedReturnUseCase = new UpdateSubmittedReturn(returnGateway);
 const updateClaimUseCase = new UpdateClaim(claimGateway);
 const updateProjectUseCase = new UpdateProject(projectGateway);
 const addUsersToProject = new AddUsersToProject(projectGateway);
@@ -132,6 +134,7 @@ const renderReturnPage = props => (
       create={createReturnUseCase}
       submit={submitReturnUseCase}
       update={updateReturnUseCase}
+      updateSubmitted={updateSubmittedReturnUseCase}
       getInfrastructures={getInfrastructuresUseCase}
       documentGateway={documentGateway}
       data={data}

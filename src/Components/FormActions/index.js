@@ -41,7 +41,6 @@ export default class FormActions extends React.Component {
     this.setState({ status: "UpdateFailure" });
   };
 
-
   invalidateFields = async pathList => {
     this.setState({ valid: false, invalidPaths: pathList });
   };
@@ -202,7 +201,7 @@ export default class FormActions extends React.Component {
 
   renderActions = () => {
     if (this.state.status === "Submitted") {
-      if (this.state.userRole === "Homes England") {
+      if (this.state.userRole === "Homes England" && this.props.updateSubmitted) {
         return <div className="col-md-offset-3 col-md-9 return-actions">
           <button
             className="btn btn-primary form-button"

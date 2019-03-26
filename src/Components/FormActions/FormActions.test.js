@@ -157,67 +157,68 @@ describe("<FormActions>", () => {
 
   describe("Submitted", () => {
     describe("As a Homes England user", () => {
-      it("Shows the save submitted button", () => {
-        let wrap = shallow(
-          <FormActions
-            formType="return"
-            data={initialData}
-            schema={formSchema}
-            validate = {validateSpyValid}
-            updateSubmitted={updateSubmittedSpy}
-            submit={submitSpy}
-            match={{params: {projectId: 1, returnId: 3}}}
-            status="Submitted"
-            type="ac"
-            getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
-          />
-        );
+      describe("With a specified updateSubmitted use case", () => {
+        it("Shows the save submitted button", () => {
+          let wrap = shallow(
+            <FormActions
+              formType="return"
+              data={initialData}
+              schema={formSchema}
+              validate = {validateSpyValid}
+              updateSubmitted={updateSubmittedSpy}
+              submit={submitSpy}
+              match={{params: {projectId: 1, returnId: 3}}}
+              status="Submitted"
+              type="ac"
+              getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+              />
+          );
 
-        expect(wrap.find("[data-test='save-submitted-button']").length).toEqual(1);
-      });
+          expect(wrap.find("[data-test='save-submitted-button']").length).toEqual(1);
+        });
 
-      it("Allows the user to save", () => {
-        let wrap = shallow(
-          <FormActions
-            formType="return"
-            data={initialData}
-            schema={formSchema}
-            validate = {validateSpyValid}
-            updateSubmitted={updateSubmittedSpy}
-            submit={submitSpy}
-            match={{params: {projectId: 1, returnId: 3}}}
-            status="Submitted"
-            type="ac"
-            getRole={{execute: jest.fn(() => ({role: "Homes England"}))}}
-          />
-        );
+        it("Allows the user to save", () => {
+          let wrap = shallow(
+            <FormActions
+              formType="return"
+              data={initialData}
+              schema={formSchema}
+              validate = {validateSpyValid}
+              updateSubmitted={updateSubmittedSpy}
+              submit={submitSpy}
+              match={{params: {projectId: 1, returnId: 3}}}
+              status="Submitted"
+              type="ac"
+              getRole={{execute: jest.fn(() => ({role: "Homes England"}))}}
+              />
+          );
 
-        saveSubmitted(wrap);
-        expect(updateSubmittedSpy.execute).toHaveBeenCalledWith(expect.anything(), {projectId: 1, id: 3, data: {cats: { details: { noise: "Meow" } }}});
-      });
+          saveSubmitted(wrap);
+          expect(updateSubmittedSpy.execute).toHaveBeenCalledWith(expect.anything(), {projectId: 1, id: 3, data: {cats: { details: { noise: "Meow" } }}});
+        });
 
-      it("Displays the save button after saving", async () => {
-        let wrap = shallow(
-          <FormActions
-            formType="return"
-            data={initialData}
-            schema={formSchema}
-            validate = {validateSpyValid}
-            updateSubmitted={updateSubmittedSpy}
-            submit={submitSpy}
-            match={{params: {projectId: 1, returnId: 3}}}
-            status="Submitted"
-            type="ac"
-            getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
-          />
-        );
+        it("Displays the save button after saving", async () => {
+          let wrap = shallow(
+            <FormActions
+              formType="return"
+              data={initialData}
+              schema={formSchema}
+              validate = {validateSpyValid}
+              updateSubmitted={updateSubmittedSpy}
+              submit={submitSpy}
+              match={{params: {projectId: 1, returnId: 3}}}
+              status="Submitted"
+              type="ac"
+              getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+              />
+          );
 
-        await saveSubmitted(wrap);
-        await wrap.update();
-        expect(wrap.find("[data-test='save-submitted-button']").length).toEqual(1);
-      });
+          await saveSubmitted(wrap);
+          await wrap.update();
+          expect(wrap.find("[data-test='save-submitted-button']").length).toEqual(1);
+        });
 
-      it("Displays the disabled save submit button when saving", () => {
+        it("Displays the disabled save submit button when saving", () => {
         let wrap = mount(
           <FormActions
             formType="return"
@@ -236,25 +237,44 @@ describe("<FormActions>", () => {
         saveSubmitted(wrap);
         expect(wrap.find("[data-test='disabled-save-submitted-button']").length).toEqual(1);
       });
+      });
+
+      describe("Without a specified updateSubmitted use case", () => {
+        let wrap = shallow(
+          <FormActions
+            formType="return"
+            data={initialData}
+            schema={formSchema}
+            validate = {validateSpyValid}
+            submit={submitSpy}
+            match={{params: {projectId: 1, returnId: 3}}}
+            status="Submitted"
+            type="ac"
+            getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+          />
+        );
+        expect(wrap.find("[data-test='save-submitted-button']").length).toEqual(0);
+      });
     });
 
     describe("As a Local Authority user", () => {
-      let wrap = shallow(
-        <FormActions
-          formType="return"
-          data={initialData}
-          schema={formSchema}
-          validate = {validateSpyValid}
-          updateSubmitted={updateSubmittedSpy}
-          submit={submitSpy}
-          match={{params: {projectId: 1, returnId: 3}}}
-          status="Submitted"
-          type="ac"
-          getRole={{execute: jest.fn(()=> ({role: "Local Authority"}))}}
-        />
-      );
-
-      expect(wrap.find("[data-test='save-submitted-button']").length).toEqual(0);
+      it ("Doesn't display the save submitted button", () => {
+        let wrap = shallow(
+          <FormActions
+            formType="return"
+            data={initialData}
+            schema={formSchema}
+            validate = {validateSpyValid}
+            updateSubmitted={updateSubmittedSpy}
+            submit={submitSpy}
+            match={{params: {projectId: 1, returnId: 3}}}
+            status="Submitted"
+            type="ac"
+            getRole={{execute: jest.fn(()=> ({role: "Local Authority"}))}}
+          />
+        );
+        expect(wrap.find("[data-test='save-submitted-button']").length).toEqual(0);
+      });
     });
   });
 
