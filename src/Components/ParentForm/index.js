@@ -49,8 +49,7 @@ export default class ParentForm extends React.Component {
   }
 
   getInitialFormSection(schema, selected_tab) {
-    if (selected_tab === "workflow")
-    {
+    if (selected_tab === "workflow") {
       return null;
     } else if (schema.properties[selected_tab].type === "array") {
       return Object.keys(schema.properties[selected_tab].items.properties)[0];
@@ -269,7 +268,7 @@ export default class ParentForm extends React.Component {
   resetSelectedItem(numberOfItems) {
     this.setState({
       selectedFormSection: this.getInitialFormSection(
-        this.props.schema.properties[this.state.selected]
+        this.props.schema, this.state.selected
       ),
       selectedFormItemIndex: numberOfItems-1
     });
