@@ -12,6 +12,7 @@ export default class FormActions extends React.Component {
       userRole: this.props.getRole.execute().role,
       valid: true,
       invalidPaths: [],
+      submitted: this.props.status === "Submitted",
       lastAction: "Create",
       status: this.props.status
     };
@@ -22,7 +23,7 @@ export default class FormActions extends React.Component {
   };
 
   submissionSuccessful = async () => {
-    this.setState({ status: "Submitted"});
+    this.setState({ status: "Submitted", submitted: true});
   };
 
   creationSuccessful = async Id => {
@@ -33,10 +34,17 @@ export default class FormActions extends React.Component {
     this.setState({ status: "Updated" });
   };
 
+  updateSubmittedSuccessful = async () => {
+    this.setState({ status: "Submitted" });
+  };
+
+  updateSubmittedUnsuccessful = async () => {
+    this.setState({ status: "SaveSubmittedFailure" });
+  };
+
   updateUnsuccessful = async () => {
     this.setState({ status: "UpdateFailure" });
   };
-
 
   invalidateFields = async pathList => {
     this.setState({ valid: false, invalidPaths: pathList });
@@ -79,6 +87,28 @@ export default class FormActions extends React.Component {
     }
   };
 
+  onFormSaveSubmitted = async formData => {
+      this.setState({
+        status: "Saving",
+        valid: true,
+        invalidPaths: [],
+        lastAction: "SaveSubmitted"
+      });
+
+      await this.props.updateSubmitted.execute(this, {
+        projectId: this.props.match.params.projectId,
+        id: this.id(),
+        data: formData
+      });
+
+      await this.props.validate.execute(
+        this,
+        this.props.match.params.projectId,
+        formData,
+        this.props.type
+      );
+    };
+
   onFormSave = async formData => {
     this.setState({
       status: "Updating",
@@ -108,7 +138,7 @@ export default class FormActions extends React.Component {
     });
   };
 
-  renderSaveSuccessAlert() {
+  renderSuccessAlert() {
     if (this.state.status === "Updated") {
       return (
         <div
@@ -120,20 +150,29 @@ export default class FormActions extends React.Component {
         </div>
       );
     }
-    if (
-      this.state.status === "Submitted" &&
-      this.state.lastAction === "Submit"
-    ) {
-      return (
-        <div data-test="submitSuccess" role="alert" className="submit-success">
-          <h3 className="checkmark">✔</h3>
-          <h3>{`${this.capitalise(this.props.formType)}`} submitted!</h3>
-          <h4 className="subheading">
-            All members of this project have been sent an email with a link to
-            view this {`${this.props.formType}`}
-          </h4>
-        </div>
-      );
+    if (this.state.status === "Submitted") {
+      if (this.state.lastAction === "Submit") {
+        return (
+          <div data-test="submitSuccess" role="alert" className="submit-success">
+            <h3 className="checkmark">✔</h3>
+            <h3>{`${this.capitalise(this.props.formType)}`} submitted!</h3>
+            <h4 className="subheading">
+              All members of this project have been sent an email with a link to
+              view this {`${this.props.formType}`}
+            </h4>
+          </div>
+        );
+      } else if (this.state.lastAction === "SaveSubmitted") {
+        return (
+          <div
+            data-test="save-submitted-success"
+            role="alert"
+            className="alert alert-success"
+          >
+            Changes saved!
+          </div>
+        );
+      }
     }
   }
 
@@ -174,48 +213,77 @@ export default class FormActions extends React.Component {
     </button>);
   };
 
+  renderSaveSubmittedButton = () =>
+    <button
+      className="btn btn-primary form-button"
+      data-test="save-submitted-button"
+      onClick={() => this.onFormSaveSubmitted(this.state.formData)}>
+      Save Changes
+    </button>
+
+  renderCreateButton = () =>
+    <button
+      className="btn btn-primary form-button"
+      data-test="create-button"
+      onClick={() => this.onFormCreate(this.state.formData)}>
+      Create Draft
+    </button>
+
+  renderDisabledSaveButton = () =>
+    <button
+      className="btn form-button disabled"
+      data-test="disabled-save-button">
+      Save Draft
+    </button>
+
+  renderDisabledSaveSubmittedButton = () =>
+    <button
+      className="btn form-button disabled"
+      data-test="disabled-save-submitted-button">
+      Save Changes
+    </button>
+
+  renderSaveButton = () =>
+    <button
+      className="btn btn-secondary form-button"
+      data-test="save-button"
+      onClick={() => this.onFormSave(this.state.formData)}>
+      Save Draft
+    </button>
+
   renderActions = () => {
-    if (this.state.status === 'Submitted') {
-      return <div />;
+    if (this.state.submitted && this.state.userRole === "Homes England") {
+      if (this.state.status === 'Saving') {
+        return <div className="col-md-offset-3 col-md-9 return-actions">
+          {this.renderDisabledSaveSubmittedButton()}
+        </div>;
+      }
+
+      if (this.props.updateSubmitted) {
+        return <div className="col-md-offset-3 col-md-9 return-actions">
+          {this.renderSaveSubmittedButton()}
+        </div>;
+      }
+
+      return <div/>;
     }
 
     if (this.state.status === 'New') {
-      return (
-        <div className="col-md-offset-3 col-md-9 return-actions">
-          <button
-            className="btn btn-primary form-button"
-            data-test="create-button"
-            onClick={() => this.onFormCreate(this.state.formData)}>
-            Create Draft
-          </button>
-        </div>
-      );
+      return <div className="col-md-offset-3 col-md-9 return-actions">
+          {this.renderCreateButton()}
+      </div>;
     }
     if (this.state.status === 'Updating') {
-      return (
-        <div className="col-md-offset-3 col-md-9 return-actions">
-          <button
-            className="btn form-button disabled"
-            data-test="disabled-save-button">
-            Save Draft
-          </button>
+      return <div className="col-md-offset-3 col-md-9 return-actions">
+          {this.renderDisabledSaveButton()}
           {this.renderDisabledSubmitButton()}
-        </div>
-      );
+      </div>;
     }
 
-
-    return (
-      <div className="col-md-offset-3 col-md-9 return-actions">
-        <button
-          className="btn btn-secondary form-button"
-          data-test="save-button"
-          onClick={() => this.onFormSave(this.state.formData)}>
-          Save Draft
-        </button>
-        {this.renderSubmitButton()}
-      </div>
-    )
+    return <div className="col-md-offset-3 col-md-9 return-actions">
+      {this.renderSaveButton()}
+      {this.renderSubmitButton()}
+    </div>;
   };
 
   backToProject = e => {
@@ -229,7 +297,7 @@ export default class FormActions extends React.Component {
       await this.setState({
         status: "Editing",
         lastAction: "Change"
-      })
+      });
     }
 
     this.setState({formData});
@@ -253,8 +321,7 @@ export default class FormActions extends React.Component {
   )
 
   renderSubmissionFailure = () => {
-    if (this.state.status === "SubmissionFailure")
-    {
+    if (this.state.status === "SubmissionFailure") {
       return <div
         className="alert alert-danger"
         role="alert"
@@ -264,9 +331,19 @@ export default class FormActions extends React.Component {
     }
   }
 
+  renderSaveSubmittedFailure = () => {
+    if (this.state.status === "SaveSubmittedFailure") {
+      return <div
+        className="alert alert-danger"
+        role="alert"
+        data-test="save-submitted-button-error">
+        <strong>Error:</strong> Failed to save, please ensure that you are connected to the internet.
+      </div>
+    }
+  }
+
   renderSaveFailure = () => {
-    if (this.state.status === "UpdateFailure")
-    {
+    if (this.state.status === "UpdateFailure") {
       return <div
         className="alert alert-danger"
         role="alert"
@@ -275,6 +352,14 @@ export default class FormActions extends React.Component {
       </div>
     }
   }
+
+  renderFailures = () =>
+    <div className="col-md-4">
+      { this.renderSaveSubmittedFailure() }
+      { this.renderSubmissionFailure() }
+      { this.renderSaveFailure() }
+      { this.renderMandatoryWarning() }
+    </div>
 
   render() {
     return (
@@ -291,9 +376,7 @@ export default class FormActions extends React.Component {
           </div>
         </div>
         <div className="row">
-          { this.renderSubmissionFailure() }
-          { this.renderSaveFailure() }
-          <div className="col-md-4">{this.renderMandatoryWarning()}</div>
+          {this.renderFailures()}
         </div>
         <div className="row">
           <ErrorMessage
@@ -301,7 +384,7 @@ export default class FormActions extends React.Component {
             invalidPaths={this.state.invalidPaths}
             type={this.state.lastAction}
           />
-          {this.renderSaveSuccessAlert()}
+          {this.renderSuccessAlert()}
         </div>
         <div className="row no-edge">
           {(this.state.status !== "Submitted" ||

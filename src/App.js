@@ -51,6 +51,7 @@ import GetUserProjects from "./UseCase/GetUserProjects";
 import SubmitReturn from "./UseCase/SubmitReturn";
 import GetRole from "./UseCase/GetRole";
 import UpdateReturn from "./UseCase/UpdateReturn";
+import UpdateSubmittedReturn from "./UseCase/UpdateSubmittedReturn";
 import UnsubmitProject from "./UseCase/UnsubmitProject";
 import RequestToken from "./UseCase/RequestToken";
 import Validate from "./UseCase/Validate";
@@ -99,7 +100,7 @@ const createProjectUseCase = new CreateProject(projectGateway);
 const submitProjectUseCase = new SubmitProject(projectGateway);
 const submitClaimUseCase = new SubmitClaim(claimGateway);
 const generateUISchema = new GenerateUISchema(userRoleGateway);
-const generateDisabledUISchema = new GenerateDisabledUISchema(generateUISchema);
+const generateDisabledUISchema = new GenerateDisabledUISchema(generateUISchema, userRoleGateway);
 const getBaseReturnUseCase = new GetBaseReturn(returnGateway);
 const getBaseClaimUseCase = new GetBaseClaim(claimGateway);
 const getInfrastructuresUseCase = new GetInfrastructures(projectGateway);
@@ -115,6 +116,7 @@ const requestTokenUseCase = new RequestToken(tokenGateway);
 const submitReturnUseCase = new SubmitReturn(returnGateway);
 const unsubmitProject = new UnsubmitProject(projectGateway)
 const updateReturnUseCase = new UpdateReturn(returnGateway);
+const updateSubmittedReturnUseCase = new UpdateSubmittedReturn(returnGateway);
 const updateClaimUseCase = new UpdateClaim(claimGateway);
 const updateProjectUseCase = new UpdateProject(projectGateway);
 const addUsersToProject = new AddUsersToProject(projectGateway);
@@ -138,6 +140,7 @@ const renderReturnPage = props => (
       create={createReturnUseCase}
       submit={submitReturnUseCase}
       update={updateReturnUseCase}
+      updateSubmitted={updateSubmittedReturnUseCase}
       getInfrastructures={getInfrastructuresUseCase}
       documentGateway={documentGateway}
       data={data}
