@@ -36,6 +36,12 @@
 
 .sidebar-button {
   margin: 5px;
-  background-color: transparent;
-  width: 30%;
+}
+
+.sidebar-button-remove {
+  width: 35%;
+}
+
+.sidebar-button-add {
+  width: 60%;  
 }
