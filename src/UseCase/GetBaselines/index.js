@@ -5,6 +5,7 @@ export default class GetBaselines {
 
   async execute(presenter, request) {
     let {success, baselines} = await this.baselineGateway.getAllBaselines(request.id)
+
     if(success) {
       presenter.presentBaselines(baselines)
     } else {

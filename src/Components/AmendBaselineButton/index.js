@@ -16,13 +16,18 @@ export default class AmendBaselineButton extends React.Component {
   render = () => {
     if (this.props.status === 'Submitted') {
       return (
-        <button
-          data-test="amend-button"
-          className="btn btn-primary"
-          onClick={this.amendBaseline}
-        >
-          Amend Baseline
-        </button>
+        <div className="row">
+          <div className="col-md-10"></div>
+          <div className="col-md-2">
+          <button
+            data-test="amend-button"
+            className="btn btn-primary"
+            onClick={this.amendBaseline}
+          >
+            Amend Baseline
+          </button>
+          </div>
+        </div>
       );
     } else {
       return null;

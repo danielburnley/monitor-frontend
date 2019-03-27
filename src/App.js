@@ -12,8 +12,10 @@ import EditBaselinePage from "./Components/EditBaselinePage";
 import ProjectPage from "./Components/ProjectPage";
 import ProjectSummary from "./Components/ProjectPage/ProjectSummary";
 import ProjectList from "./Components/ProjectList";
-import ReturnList from "./Components/ReturnList";
+import List from "./Components/List";
 import ReturnListProvider from "./Components/ReturnListProvider";
+import BaselineListProvider from "./Components/BaselineListProvider";
+import ClaimListProvider from "./Components/ClaimListProvider";
 import ReturnPage from "./Components/ReturnPage";
 import ClaimPage from "./Components/ClaimPage";
 import FormActions from "./Components/FormActions";
@@ -46,6 +48,7 @@ import GetProject from "./UseCase/GetProject";
 import GetProjectURL from "./UseCase/GetProjectURL";
 import GetReturn from "./UseCase/GetReturn";
 import GetClaim from "./UseCase/GetClaim";
+import GetClaims from "./UseCase/GetClaims";
 import GetReturns from "./UseCase/GetReturns"
 import GetUserProjects from "./UseCase/GetUserProjects";
 import SubmitReturn from "./UseCase/SubmitReturn";
@@ -108,6 +111,7 @@ const getProjectUseCase = new GetProject(projectGateway);
 const getProjectURL = new GetProjectURL(locationGateway);
 const getReturnUseCase = new GetReturn(returnGateway);
 const getClaimUseCase = new GetClaim(claimGateway);
+const getClaims = new GetClaims(claimGateway);
 const getUserProjectsUseCase = new GetUserProjects(userGateway);
 const canAccessProjectUseCase = new CanAccessProject(tokenGateway, apiKeyCookieGateway, userRoleGateway, apiKeyGateway);
 const canAccessMonitorUseCase = new CanAccessMonitor(tokenGateway, apiKeyCookieGateway, userRoleGateway, apiKeyGateway);
@@ -357,11 +361,49 @@ const renderSubmittedProjectPage = (props, formData, formSchema) => (
       </div>
     </div>
     <div className="row">
-      <ReturnListProvider projectId={props.match.params.projectId} getReturns={getReturnsUseCase}>
-        {({ returns }) => (
-          <ReturnList {...props} returns={returns} />
-        )}
-      </ReturnListProvider>
+      <div className="col-md-4">
+        <BaselineListProvider 
+            {...props}
+            getBaselines={getBaselines}
+          >
+            {({baselines}) => (
+              <List
+                {...props}
+                items={baselines}
+                listType={"baseline"}
+                prettyListType={"Baseline Version"}
+              />
+            )}
+        </BaselineListProvider>
+      </div>
+      <div className="col-md-4">
+        <ReturnListProvider projectId={props.match.params.projectId} getReturns={getReturnsUseCase}>
+          {({ returns }) => (
+            <List
+              {...props}
+              data-test="return-list"
+              items={returns}
+              listType={"return"}
+              prettyListType={"Return"}
+            />
+          )}
+        </ReturnListProvider>
+      </div>
+      <div className="col-md-4">
+        <ClaimListProvider 
+            {...props}
+            getClaims={getClaims}
+          >
+            {({claims}) => (
+              <List
+                {...props}
+                items={claims}
+                listType={"claim"}
+                prettyListType={"Claim"}
+              />
+            )}
+        </ClaimListProvider>
+      </div>
     </div>
   </div>
 );
@@ -393,17 +435,12 @@ const renderBaseline = props => (
           <div className="col-md-10">
             <h2>Baseline</h2>
           </div>
-          </div>
-          <div className="row">
-          <div className="col-md-10"></div>
-          <div className="col-md-2">
-            <AmendBaselineButton
-              {...props}
-              status={projectStatus}
-              amendBaseline={amendBaseline}
-            />
-          </div>
         </div>
+        <AmendBaselineButton
+          {...props}
+          status={projectStatus}
+          amendBaseline={amendBaseline}
+        />
         <div className="row">
           <BaselinePage
             {...props}

@@ -427,4 +427,86 @@ describe("Claim Gateway", () => {
       });
     });
   });
+
+  describe("#getClaims", () => {
+    describe("Given at least one claim is found", () => {
+      describe("Example one", () => {
+        describe("Connection successful", () => {
+          let returnRequest, response;
+          beforeEach(async () => {
+            process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
+            returnRequest = nock("http://cat.meow")
+              .matchHeader("Content-Type", "application/json")
+              .get("/project/1/claims")
+              .reply(200, {
+                claims: [
+                  {
+                    id: 3,
+                    project_id: 1,
+                    updates: [{ cats: "meow" }],
+                    status: "Submitted"
+                  },
+                  {
+                    id: 4,
+                    project_id: 1,
+                    updates: [{ dogs: "woof" }],
+                    status: "Draft"
+                  }
+                ]
+              });
+
+            let gateway = new ClaimGateway(apiKeyGateway);
+            response = await gateway.getClaims(1);
+          });
+
+          it("Fetches the return from the API", () => {
+            expect(returnRequest.isDone()).toBeTruthy();
+          });
+
+          it("Returns a response from the api", () => {
+            expect(response.success).toEqual(true)
+            expect(response.claims[0].id).toEqual(3)
+            expect(response.claims[0].project_id).toEqual(1)
+            expect(response.claims[0].updates).toEqual([{ cats: "meow" }])
+            expect(response.claims[0].status).toEqual("Submitted")
+            expect(response.claims[1].id).toEqual(4)
+            expect(response.claims[1].project_id).toEqual(1)
+            expect(response.claims[1].updates).toEqual([{ dogs: "woof" }])
+            expect(response.claims[1].status).toEqual("Draft")
+          });
+        });
+
+        describe("Connection unsuccessful", () => {
+          let response;
+          beforeEach(async () => {
+            process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
+            nock("http://cat.meow")
+              .matchHeader("Content-Type", "application/json")
+              .get("/project/1/claims")
+              .socketDelay(2000);
+
+            let gateway = new ClaimGateway(apiKeyGateway);
+            response = await gateway.getClaims(1);
+          });
+
+          it("Returns success as false", () => {
+            expect(response).toEqual({success: false});
+          });
+        });
+      });
+
+      describe("Given no claims are found", () => {
+        it("Returns unsuccessful", async () => {
+          process.env.REACT_APP_HIF_API_URL = "http://dog.woof/";
+          let returnRequest = nock("http://dog.woof")
+            .matchHeader("Content-Type", "application/json")
+            .get("/project/5/claims")
+            .reply(404);
+          let gateway = new ClaimGateway(apiKeyGateway);
+          let response = await gateway.getClaims(5);
+          expect(response).toEqual({ success: false });
+        });
+      });
+    });
+  });
 });

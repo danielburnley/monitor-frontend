@@ -1,28 +1,35 @@
-import ReturnList from ".";
+import List from ".";
 import React from "react";
 import { shallow } from "enzyme";
 
-class ReturnListComponent {
-  constructor(returns) {
-    this.returnList = shallow(<ReturnList returns={returns} />);
+class ListComponent {
+  constructor(items, type, prettyType) {
+    this.type = type
+    this.list = shallow(
+    <List
+      items={items}
+      listType={type}
+      match={{params: {projectId: 1}}}
+      prettyListType={prettyType}
+    />
+    );
   }
-  title = () => this.returnList.find("[data-test='schema-title']").text();
   listItem = number =>
-    this.returnList.find(`[data-test='return-${number}']`).text();
+    this.list.find(`[data-test='${this.type}-${number}']`).text();
   status = number =>
-    this.returnList.find(`[data-test='status-${number}']`).text();
+    this.list.find(`[data-test='status-${number}']`).text();
   urlTarget = number =>
-    this.returnList.find(`[data-test='url-${number}']`).prop("href");
+    this.list.find(`[data-test='url-${number}']`).prop("href");
   timestamp = number =>
-    this.returnList.find(`[data-test='timestamp-${number}']`).text();
+    this.list.find(`[data-test='timestamp-${number}']`).text();
   timestampExists = number =>
-    this.returnList.find(`[data-test='timestamp-${number}']`).length;
+    this.list.find(`[data-test='timestamp-${number}']`).length;
 }
 
-describe("<ReturnList", () => {
-  describe("Given one return", () => {
+describe("<List>", () => {
+  describe("Given one item", () => {
     describe("Example 1", () => {
-      let returns = [
+      let items = [
         {
           id: 7,
           project_id: 1,
@@ -35,11 +42,7 @@ describe("<ReturnList", () => {
           timestamp: 1545739200
         }
       ];
-      let returnList = new ReturnListComponent(returns);
-
-      it("displays this schema title", () => {
-        expect(returnList.title()).toEqual("Returns");
-      });
+      let returnList = new ListComponent(items, "return", "Return");
 
       it("displays a list item for the return", () => {
         expect(returnList.listItem(7)).toEqual("Return 1");
@@ -59,7 +62,7 @@ describe("<ReturnList", () => {
     });
 
     describe("Example 2", () => {
-      let returns = [
+      let items = [
         {
           id: 7,
           project_id: 1,
@@ -72,26 +75,22 @@ describe("<ReturnList", () => {
           timestamp: 0
         }
       ];
-      let returnList = new ReturnListComponent(returns);
-
-      it("displays this schema title", () => {
-        expect(returnList.title()).toEqual("Returns");
-      });
+      let claimList = new ListComponent(items, "claim", "Claim");
 
       it("displays a list item for the return", () => {
-        expect(returnList.listItem(7)).toEqual("Return 1");
+        expect(claimList.listItem(7)).toEqual("Claim 1");
       });
 
       it("creates a link to the correct location", () => {
-        expect(returnList.urlTarget(7)).toEqual("/project/1/return/7");
+        expect(claimList.urlTarget(7)).toEqual("/project/1/claim/7");
       });
 
-      it("shows the current status of the return", () => {
-        expect(returnList.status(7)).toEqual("Saved");
+      it("shows the current status of the claim", () => {
+        expect(claimList.status(7)).toEqual("Saved");
       });
 
       it("does not display the timestamp", () => {
-        expect(returnList.timestampExists(7)).toEqual(0);
+        expect(claimList.timestamp(7)).toEqual("");
       });
     });
   });
@@ -122,11 +121,7 @@ describe("<ReturnList", () => {
           timestamp: 0
         }
       ];
-      let returnList = new ReturnListComponent(returns);
-
-      it("displays this schema title", () => {
-        expect(returnList.title()).toEqual("Returns");
-      });
+      let returnList = new ListComponent(returns, "return", "Return");
 
       it("displays multiple list items for the returns", () => {
         expect(returnList.listItem(1)).toEqual("Return 1");
@@ -145,12 +140,12 @@ describe("<ReturnList", () => {
 
       it("shows the timestamp when relevant", () => {
         expect(returnList.timestamp(1)).toEqual("20/12/2018");
-        expect(returnList.timestampExists(2)).toEqual(0);
+        expect(returnList.timestamp(2)).toEqual("");
       });
     });
 
     describe("Example 2", () => {
-      let returns = [
+      let claims = [
         {
           id: 7,
           project_id: 1,
@@ -174,30 +169,26 @@ describe("<ReturnList", () => {
           timestamp: 1514808000
         }
       ];
-      let returnList = new ReturnListComponent(returns);
+      let claimList = new ListComponent(claims, "claim", "Claim");
 
-      it("displays this schema title", () => {
-        expect(returnList.title()).toEqual("Returns");
-      });
-
-      it("displays multiple list items for the returns", () => {
-        expect(returnList.listItem(7)).toEqual("Return 1");
-        expect(returnList.listItem(6)).toEqual("Return 2");
+      it("displays multiple list items for the claims", () => {
+        expect(claimList.listItem(7)).toEqual("Claim 1");
+        expect(claimList.listItem(6)).toEqual("Claim 2");
       });
 
       it("creates a link to the correct location", () => {
-        expect(returnList.urlTarget(7)).toEqual("/project/1/return/7");
-        expect(returnList.urlTarget(6)).toEqual("/project/1/return/6");
+        expect(claimList.urlTarget(7)).toEqual("/project/1/claim/7");
+        expect(claimList.urlTarget(6)).toEqual("/project/1/claim/6");
       });
 
-      it("shows the current status of the return", () => {
-        expect(returnList.status(7)).toEqual("Saved");
-        expect(returnList.status(6)).toEqual("Woof");
+      it("shows the current status of the claim", () => {
+        expect(claimList.status(7)).toEqual("Saved");
+        expect(claimList.status(6)).toEqual("Woof");
       });
 
       it("shows the timestamp", () => {
-        expect(returnList.timestamp(7)).toEqual("1/1/2019");
-        expect(returnList.timestamp(6)).toEqual("1/1/2018");
+        expect(claimList.timestamp(7)).toEqual("1/1/2019");
+        expect(claimList.timestamp(6)).toEqual("1/1/2018");
       });
     });
   });
