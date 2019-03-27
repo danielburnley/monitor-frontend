@@ -129,18 +129,14 @@ describe("GenerateDisabledUISchema", () => {
         });
       });
 
-      it("Generates a ui schema from an array of items", () => {
+      it("Generates a ui schema from an array of simple items", () => {
         let schema = {
           type: "object",
           properties: {
             a: {
               type: "array",
               items: {
-                type: "object",
-                properties: {
-                  b: { type: "string" },
-                  c: { type: "string" }
-                }
+                type: "string"
               }
             }
           }
@@ -150,7 +146,7 @@ describe("GenerateDisabledUISchema", () => {
           a: {
             "ui:field": "field",
             "ui:options": { addable: false, orderable: false, removable: false },
-            items: { b: { "ui:disabled": true }, c: { "ui:disabled": true } }
+            items: {"ui:disabled": true}
           }
         });
       });

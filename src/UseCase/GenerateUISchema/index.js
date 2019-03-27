@@ -44,6 +44,10 @@ export default class GenerateUISchema {
   }
 
   generateSchemaForArray(value, role, noOfPreviousReturns) {
+    if (value.uploadFile) {
+      return {"ui:field": "uploadFile"}
+    }
+
     let ret = {};
     ret["ui:options"] = {
       addable: this.isAdjustableArray(value, role),
