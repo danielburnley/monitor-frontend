@@ -509,9 +509,9 @@ describe("<ParentForm>", () => {
       beforeEach(() => {
         parentForm = shallow(
           <ParentForm
-            getRole={getRoleUseCaseSpy}
             documentGateway={documentGatewaySpy}
-            onChange={jest.fn()}
+            getRole={getRoleUseCaseSpy}
+            onChange={onChangeSpy}
             formData={{ cats: [{ name: "Mittens", noise: "Meow" }] }}
             schema={{
               type: "object",
@@ -650,6 +650,127 @@ describe("<ParentForm>", () => {
 
           it("Sets the selected index to 0", () => {
             expect(parentForm.find("Sidebar").props().selectedFormItemIndex).toEqual(0);
+          });
+        });
+      });
+
+      describe("Resets the selected item", () => {
+
+        describe("Example 1", () => {
+          beforeEach(() => {
+            parentForm = mount(
+              <ParentForm
+                documentGateway={documentGatewaySpy}
+                getRole={getRoleUseCaseSpy}
+                onChange={onChangeSpy}
+                formData={
+                  {
+                    cats: [
+                      { name: "Mittens", noise: "Meow" }
+                    ]
+                  }
+                }
+                schema={{
+                  type: "object",
+                  properties: {
+                    cats: {
+                      type: "array",
+                      addable: true,
+                      items: {
+                        type: "object",
+                        properties: {
+                          name: {
+                            title: "Cat Name",
+                            type: "string"
+                          },
+                          noise: {
+                            title: "Noise.",
+                            type: "string"
+                          }
+                        }
+                      }
+                    },
+                    dogs: {
+                      type: "array",
+                      addable: true,
+                      items: {
+                        type: "object",
+                        properties: {
+                          name: {
+                            type: "string"
+                          },
+                          bark: {
+                            type: "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }}
+              />
+            );
+          });
+
+          it("Resets the selected item correctly", () => {
+            parentForm
+              .find("Sidebar")
+              .props()
+              .onItemClick("noise", 1);
+
+            parentForm.find("[data-test='remove-button']").simulate("click");
+            expect(parentForm.find(".selected-item").text()).toEqual("Cat Name")
+          });
+        });
+
+        describe("Example 2", () => {
+          beforeEach(() => {
+            parentForm = mount(
+              <ParentForm
+                documentGateway={documentGatewaySpy}
+                getRole={getRoleUseCaseSpy}
+                onChange={onChangeSpy}
+                formData={
+                  {
+                    dogs: [
+                      { name: "Shibe", noise: "Woof" },
+                      { name: "Baxter", noise: "None" }
+                    ]
+                  }
+                }
+                schema={{
+                  type: "object",
+                  properties: {
+                    dogs: {
+                      type: "array",
+                      addable: true,
+                      items: {
+                        type: "object",
+                        properties: {
+                          name: {
+                            title: "Dog Name",
+                            type: "string"
+                          },
+                          sound: {
+                            title: "The Sound",
+                            type: "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }}
+              />
+            );
+          });
+
+          it("Resets the selected item correctly", () => {
+            parentForm
+            .find("Sidebar")
+            .props()
+            .onItemClick("sound", 2);
+
+            parentForm.find("[data-test='remove-button']").simulate("click");
+            expect(parentForm.find(".selected-item").text()).toEqual("Dog Name");
           });
         });
       });

@@ -6,7 +6,8 @@ describe("AmendBaseline", () => {
     presenterSpy = { amendBaselineSuccess: jest.fn(), amendBaselineFailure: jest.fn() }
   });
 
-  describe("example one", () => {
+  describe("Amendment succesful", () => {
+    describe("example one", () => {
     let amendBaseline, baselineGatewaySpy;
     beforeEach(() => {
       baselineGatewaySpy = {
@@ -44,7 +45,7 @@ describe("AmendBaseline", () => {
     });
   });
 
-  describe("example two", () => {
+    describe("example two", () => {
     let amendBaseline, baselineGatewaySpy;
     beforeEach(() => {
       baselineGatewaySpy = {
@@ -79,6 +80,29 @@ describe("AmendBaseline", () => {
         errors: ['incorrect_timestamp'],
         timestamp: 12345
       });
+    });
+  });
+  });
+
+  it("Amendment unsuccessful", () => {
+    let amendBaseline, baselineGatewaySpy;
+    beforeEach(() => {
+      baselineGatewaySpy = {
+        amend: jest.fn((project_id, data, timestamp) => ({
+          success: false
+        }))
+      }
+      amendBaseline = new AmendBaseline(baselineGatewaySpy)
+    });
+
+    it("does not call the presenter", async () => {
+      await amendBaseline.execute(presenterSpy, {
+        projectId: 3,
+        data: {cow: "moooo"},
+        timestamp: 3
+      });
+
+      expect(presenterSpy.amendBaselineSuccess).not.toHaveBeenCalled();
     });
   });
 });
