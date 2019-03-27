@@ -134,23 +134,26 @@ const renderReturnPage = props => (
     generateSubmittedSchema={generateDisabledUISchema}
     >
   {({data, schema, type, uiSchema, status}) => {
-    return <FormActions
-      {...props}
-      validate={validateReturnUseCase}
-      create={createReturnUseCase}
-      submit={submitReturnUseCase}
-      update={updateReturnUseCase}
-      updateSubmitted={updateSubmittedReturnUseCase}
-      getInfrastructures={getInfrastructuresUseCase}
-      documentGateway={documentGateway}
-      data={data}
-      schema={schema}
-      type={type}
-      uiSchema={uiSchema}
-      getRole={getRole}
-      status={status}
-      formType="return"
-    />
+    return <div>
+      <BackToProjectOverviewButton {...props} />
+      <FormActions
+        {...props}
+        validate={validateReturnUseCase}
+        create={createReturnUseCase}
+        submit={submitReturnUseCase}
+        update={updateReturnUseCase}
+        updateSubmitted={updateSubmittedReturnUseCase}
+        getInfrastructures={getInfrastructuresUseCase}
+        documentGateway={documentGateway}
+        data={data}
+        schema={schema}
+        type={type}
+        uiSchema={uiSchema}
+        getRole={getRole}
+        status={status}
+        formType="return"
+      />
+    </div> 
     }
   }
   </ReturnPage>
@@ -165,21 +168,24 @@ const renderClaimPage = props => (
     getBaseClaim={getBaseClaimUseCase}
     >
     {({formData, schema, type, uiSchema, status}) => {
-    return <FormActions
-      {...props}
-      validate={validateClaimUseCase}
-      create={createClaimUseCase}
-      submit={submitClaimUseCase}
-      update={updateClaimUseCase}
-      documentGateway={documentGateway}
-      data={formData}
-      schema={schema}
-      type={type}
-      uiSchema={uiSchema}
-      getRole={getRole}
-      status={status}
-      formType="claim"
-    />
+    return <div>
+      <BackToProjectOverviewButton {...props} />
+      <FormActions
+        {...props}
+        validate={validateClaimUseCase}
+        create={createClaimUseCase}
+        submit={submitClaimUseCase}
+        update={updateClaimUseCase}
+        documentGateway={documentGateway}
+        data={formData}
+        schema={schema}
+        type={type}
+        uiSchema={uiSchema}
+        getRole={getRole}
+        status={status}
+        formType="claim"
+      />
+    </div>
     }
   }
     </ClaimPage>
@@ -291,10 +297,9 @@ const renderAmendBaselinePage = props => (
     generateSubmittedUiSchema={generateDisabledUISchema}
   >
     {({baselineStatus, formData, formSchema, projectType, formUiSchema, timestamp}) => (
-    <div className="col-md-10">
-      <div className="row">
-        <BackToProjectOverviewButton {...props} />
-      </div>
+      <div>
+      <BackToProjectOverviewButton {...props} />
+      <div className="col-md-10 col-offset-1">
       <div className="row">
         <AmendProjectPage
           {...props}
@@ -313,6 +318,7 @@ const renderAmendBaselinePage = props => (
           getRole={getRole}
           timestamp={timestamp}
         />
+        </div>
       </div>
     </div>
   )}
@@ -385,10 +391,8 @@ const renderBaseline = props => (
       if (projectStatus === 'Submitted') {
         formUiSchema = disabledUiSchema
       }
-      return <div className="col-md-10">
-        <div className="row">
+      return <div>
           <BackToProjectOverviewButton {...props} />
-        </div>
         <div className="row">
           <div className="col-md-10">
             <h2>Baseline</h2>

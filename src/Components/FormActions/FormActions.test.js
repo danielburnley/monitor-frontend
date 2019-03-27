@@ -122,7 +122,7 @@ describe("<FormActions>", () => {
     });
   });
 
-  it("Displays the create button if the is new", () => {
+  it("Displays the create button if the status is new", () => {
     let wrapper = mount(
       <FormActions
         formType="return"
@@ -135,23 +135,6 @@ describe("<FormActions>", () => {
     );
 
     let actions = wrapper.find('[data-test="create-button"]');
-
-    expect(actions.length).toEqual(1);
-  });
-
-  it("Only shows the back to overview button if the form is submitted", () => {
-    let wrapper = mount(
-      <FormActions
-        formType="return"
-        match={{params: {projectId: 1}}}
-        data={initialData}
-        schema={formSchema}
-        status="Submitted"
-        getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
-      />
-    );
-
-    let actions = wrapper.find("[data-test='back-to-overview']");
 
     expect(actions.length).toEqual(1);
   });

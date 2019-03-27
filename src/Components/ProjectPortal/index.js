@@ -1,9 +1,9 @@
 import React from 'react';
-import "../Homepage/style.css";
+import "./style.css";
 import Cookies from 'js-cookie';
 import runtimeEnv from "@mars/heroku-js-runtime-env";
 
-export default class Portal extends React.Component {
+export default class ProjectPortal extends React.Component {
   constructor(props) {
     super(props)
     this.env = runtimeEnv();
@@ -17,13 +17,13 @@ export default class Portal extends React.Component {
   }
 
   renderBackToHomepageButton() {
-    return <button
+    return <a
       data-test="back-to-homepage"
-      className="btn btn-link btn-lg"
+      className="btn btn-link btn-lg back-to-homepage"
       onClick={() => this.props.history.push(`/`)}
     >
-      Take me back to the Homepage
-    </button>
+      Back to the Homepage
+    </a>
   }
 
   refreshCookies = () => {
@@ -41,12 +41,14 @@ export default class Portal extends React.Component {
     </button>
   }
 
-  render() {
+  renderPageContent() {
     if (this.state.apiKey === null) {
       return <div>Loading</div>
     } else {
       if (this.state.apiKey.valid) {
-        return this.props.children
+        return <div>
+          {this.props.children}
+        </div> 
       } else {
         return <div>
           <div className="row homepage">
@@ -61,14 +63,19 @@ export default class Portal extends React.Component {
             </a>
             .
           </p>
-          <p>If you believe you have already been added to project {this.props.projectId}, you can try refreshing your login: {this.renderRefreshCookiesButton()}</p>
-
-          {this.renderBackToHomepageButton()}
+          <p>If you believe you have already been added to project {this.props.projectId}, you can try refreshing your login: {this.renderRefreshCookiesButton()}</p>  
         </div>
         <div className="col-md-2" />
       </div>
       </div>
       }
     }
+  }
+
+  render() { 
+  return <div>
+      {this.renderBackToHomepageButton()} 
+      {this.renderPageContent()}
+    </div>
   }
 }
