@@ -10,7 +10,7 @@ function fileUploadField(formData, multiple, onChangeSpy, readonly, title = "Fil
     <FileUpload
       onChange = { onChangeSpy }
       registry = { {fields: {SchemaField: FieldFake, extraField: FieldFake}}}
-      schema = {{uploadFile: fileSchema, readonly: readonly, title: title}}
+      schema = {{type: "array", uploadFile: fileSchema, readonly: readonly, title: title}}
       formData = { formData }
       uiSchema = { uiSchema }
     />
@@ -36,8 +36,13 @@ describe("FileUpload", () => {
       beforeEach(() => {
         fileUpload = fileUploadField([], false, onChangeSpy)
       });
+
       it("Renders the schemfield", () => {
         expect(fileUpload.find("FieldFake").length).toEqual(1)
+      });
+
+      it("Passes a schema of type string to the schema field", () => {
+        expect(fileUpload.find("FieldFake").props().schema).toEqual({type: "string", title: "File Uploader"})
       });
 
       it("Passes a file widget ui schema to the schema field", () => {

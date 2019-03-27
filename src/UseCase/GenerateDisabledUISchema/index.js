@@ -15,7 +15,6 @@ export default class GenerateDisabledUISchema {
 
   generateUISchema(data) {
     let ret = {};
-
     Object.entries(data).forEach(([key, value]) => {
       if (value.type === "object") {
         ret[key] = this.generateSchemaForObject(value)
@@ -47,10 +46,14 @@ export default class GenerateDisabledUISchema {
           orderable: false,
           removable: false
         }
-      };
+      }
+    };
+    if (value.items.type === "string") {
+      schema.items = this.generateSchemaForItem(value.items)
+    } else {
+      schema.items = this.generateUISchema(value.items.properties); 
     }
 
-    schema.items = this.generateUISchema(value.items.properties);
     return schema;
   }
 

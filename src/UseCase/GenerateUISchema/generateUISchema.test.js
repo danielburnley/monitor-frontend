@@ -2063,14 +2063,17 @@ describe("GenerateUISchema", () => {
 
   describe("File Uploads", () => {
     describe("Example one", () => {
-      it("Marks the field as a file upload", () => {
+      it("Marks the array as a file upload", () => {
         let schema = {
           type: "object",
           properties: {
             a: {
               type: "object",
               properties: {
-                b: { type: "string", uploadFile: true }
+                b: {
+                  type: "array",
+                  uploadFile: true
+                }
               }
             }
           }

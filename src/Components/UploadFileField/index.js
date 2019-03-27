@@ -60,7 +60,7 @@ export default class UploadFileField extends React.Component {
 
     return <this.props.registry.fields.SchemaField
       onChange={e => this.onChange(e)}
-      schema = { this.props.schema }
+      schema = { {type: "string", title: this.props.schema.title} }
       uiSchema = {{"ui:widget": "file"}}
       registry = { this.props.registry }
       data-test = {"file-upload"}
