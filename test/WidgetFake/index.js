@@ -5,7 +5,7 @@ export default class WidgetFake extends React.Component {
     <input
       data-test={this.datatest || this.props["rendered-data-test"] || "widget-stub"}
       value={this.props.value || ""}
-      onChange={e => this.props.onChange(e.target.value)}
+      onChange={async e => {await this.props.onChange(e.target.value)}}
     />
   )
 }
