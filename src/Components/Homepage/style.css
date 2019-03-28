@@ -2,3 +2,8 @@
   height: 100%;
   vertical-align: middle;
 }
+
+.back-to-homepage {
+  margin-right: 10%;
+  float: right
+}

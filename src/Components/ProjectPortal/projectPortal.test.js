@@ -63,24 +63,36 @@ describe("ProjectPortal", () => {
     });
   });
 
+  describe("Use Case returns true", () => {
+    let wrapper;
+    beforeEach(() => {
+      let CanAccessProjectSpy = {
+        execute: jest.fn(async () => {
+          return {
+            valid: true,
+            apiKey: "Cows"
+          };
+        })
+      };
+  
+      wrapper = mount(
+        <ProjectPortal projectId="1" token="Cats" canAccessProject={CanAccessProjectSpy}>
+          <h1>Hiya!</h1>
+        </ProjectPortal>
+      );
+    });
 
-  it("renders children if the use case returns true", async () => {
-    CanAccessProjectSpy = {
-      execute: jest.fn(async () => {
-        return {
-          valid: true,
-          apiKey: "Cows"
-        };
-      })
-    };
+    it("renders children if the use case returns true", async () => {
+      await wait();
+      wrapper.update();
+      expect(wrapper.find("GetToken").length).toEqual(0);
+    });
 
-    let wrapper = mount(
-      <ProjectPortal projectId="1" token="Cats" canAccessProject={CanAccessProjectSpy}>
-        <h1>Hiya!</h1>
-      </ProjectPortal>
-    );
-    await wait();
-    wrapper.update();
-    expect(wrapper.find("GetToken").length).toEqual(0);
+    it("Renders a button to go back to homepage ", async () => {
+      await wait();
+      wrapper.update();
+      expect(wrapper.find('[data-test="back-to-homepage"]').length).toEqual(1);
+    });
   });
+
 });

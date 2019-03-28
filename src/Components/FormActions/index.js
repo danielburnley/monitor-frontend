@@ -286,11 +286,6 @@ export default class FormActions extends React.Component {
     </div>;
   };
 
-  backToProject = e => {
-    this.props.history.push(`/project/${this.props.match.params.projectId}`);
-    e.preventDefault();
-  };
-
 
   onFormChange = async ({formData}) => {
     if(this.id()) {
@@ -364,17 +359,6 @@ export default class FormActions extends React.Component {
   render() {
     return (
       <div>
-        <div className="row">
-          <div className="col-md-2 back-to-project">
-            <a
-              data-test="back-to-overview"
-              className="btn btn-link btn-lg btn-block"
-              onClick={this.backToProject}
-            >
-              Back to project overview
-            </a>
-          </div>
-        </div>
         <div className="row">
           {this.renderFailures()}
         </div>
