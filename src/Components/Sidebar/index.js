@@ -71,15 +71,15 @@ export default class Sidebar extends React.Component {
   }
 
   renderItems() {
-    return Object.entries(this.props.items).map(([key, value]) => {
-      return <div key={key}>
-      <li data-test="sidebar-item">
-        {this.renderSidebarItem(value, key)}
-      
-      </li>
-      {this.renderRemoveButton(key)}
+    return Object.entries(this.props.items).map(([key, value]) => (
+      <div key={key}>
+        <li data-test="sidebar-item">
+          {this.renderSidebarItem(value, key)}
+        
+        </li>
+        {this.renderRemoveButton(key)}
       </div>
-    });
+    ))
   }
 
   addEntry = () => {
