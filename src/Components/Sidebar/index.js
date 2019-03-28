@@ -72,10 +72,14 @@ export default class Sidebar extends React.Component {
 
   renderItems() {
     return Object.entries(this.props.items).map(([key, value]) => (
-      <li data-test="sidebar-item" key={key}>
-        {this.renderSidebarItem(value, key)}
-      </li>
-    ));
+      <div key={key}>
+        <li data-test="sidebar-item">
+          {this.renderSidebarItem(value, key)}
+        
+        </li>
+        {this.renderRemoveButton(key)}
+      </div>
+    ))
   }
 
   addEntry = () => {
@@ -89,19 +93,19 @@ export default class Sidebar extends React.Component {
     this.props.onChange(extraFormData)
   }
 
-  confirmDeletion = () => {
-    let itemToDelete = this.props.items[this.props.formData[this.props.section].length - 1].title
+  confirmDeletion = (key) => {
+    let itemToDelete = this.props.items[key].title
     let confirmationText = `Are you sure you want to remove ${itemToDelete}. This will delete any data it contains.`
     return window.confirm(confirmationText)
   }
 
-  removeEntry = () => {
-    if (this.confirmDeletion()) {
+  removeEntry = (key) => {
+    if (this.confirmDeletion(key)) {
       let smallerFormData = this.props.formData
-      smallerFormData[this.props.section].pop()
+      smallerFormData[this.props.section].splice(key, 1)
       if(this.props.linkedArray) {
         this.props.linkedArray.forEach(section => {
-          smallerFormData[section].pop({})
+          smallerFormData[section].splice(key, 1)
         });
       }
       this.props.onChange(smallerFormData)
@@ -112,7 +116,7 @@ export default class Sidebar extends React.Component {
     return (this.props.userRole === "Homes England") || (this.props.userRole === "Superuser")
   }
 
-  renderRemoveButton() {
+  renderRemoveButton(key) {
     if (
       Object.keys(this.props.items).length !== 0 &&
       this.props.addable &&
@@ -120,9 +124,10 @@ export default class Sidebar extends React.Component {
     ) {
       return <button
         type="button"
-        className="btn btn-default btn-lg sidebar-button"
-        data-test="remove-button"
-        onClick={this.removeEntry}
+        value={key}
+        className="btn btn-default btn-sml sidebar-button sidebar-button-remove"
+        data-test={`remove-button-${key}`}
+        onClick={e => this.removeEntry(e.target.value)}
       >
         -
       </button>
@@ -136,7 +141,7 @@ export default class Sidebar extends React.Component {
     ) {
       return <button
         type="button"
-        className="btn btn-default btn-lg sidebar-button"
+        className="btn btn-default btn-lg sidebar-button sidebar-button-add"
         data-test="add-button"
         onClick={this.addEntry}
       >
@@ -144,14 +149,7 @@ export default class Sidebar extends React.Component {
       </button>
     }
   }
-  renderButtons() {
-    return (
-      <span>
-        {this.renderAddButton()}
-        {this.renderRemoveButton()}
-      </span>
-    )
-  }
+
 
   render() {
     return (
@@ -159,7 +157,7 @@ export default class Sidebar extends React.Component {
         <ul data-test="sidebar" className="sidebar list-unstyled">
           {this.renderItems()}
         </ul>
-          {this.renderButtons()}
+          {this.renderAddButton()}
       </div>
     );
   }

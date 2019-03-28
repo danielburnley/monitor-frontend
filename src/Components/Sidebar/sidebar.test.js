@@ -348,8 +348,10 @@ describe("<Sidebar>", () => {
         ]})
       });
 
-      it("displays a remove button", () => {
-        expect(sidebar.find('[data-test="remove-button"]').length).toEqual(1)
+      it("displays a remove button for each array item", () => {
+        expect(sidebar.find('[data-test="remove-button-0"]').length).toEqual(1)
+        expect(sidebar.find('[data-test="remove-button-1"]').length).toEqual(1)
+        expect(sidebar.find('[data-test="remove-button-2"]').length).toEqual(1)
       });
 
       describe("Accpeting the confirm message", () => {
@@ -358,8 +360,13 @@ describe("<Sidebar>", () => {
         });
 
         it("clicking the remove button calls on onchange prop with an item removed", () => {
-          sidebar.find('[data-test="remove-button"]').simulate('click')
+          sidebar.find('[data-test="remove-button-2"]').simulate('click')
           expect(onChangeSpy).toHaveBeenCalledWith({"mainSection":[{data1: "somedate"},{more: "moredata"}]})
+        });
+
+        it("clicking the remove button calls on onchange prop with any item removed", () => {
+          sidebar.find('[data-test="remove-button-0"]').simulate('click')
+          expect(onChangeSpy).toHaveBeenCalledWith({"mainSection":[{more: "moredata"}, {andanother: "lotsofdata"}]})
         });
       });
 
@@ -369,7 +376,7 @@ describe("<Sidebar>", () => {
         });
 
         it("clicking the remove button calls on onchange prop with an item removed", () => {
-          sidebar.find('[data-test="remove-button"]').simulate('click')
+          sidebar.find('[data-test="remove-button-0"]').simulate('click')
           expect(onChangeSpy).not.toHaveBeenCalled()
         });
       });
@@ -426,12 +433,12 @@ describe("<Sidebar>", () => {
         });
 
         it("calls the onchange with one less section extra section in both arrays when removing", () => {
-          sidebar.find('[data-test="remove-button"]').simulate('click')
+          sidebar.find('[data-test="remove-button-1"]').simulate('click')
           expect(onChangeSpy).toHaveBeenCalledWith(
             {
               "mainSection": [
                 {data1: "somedate"},
-                {more: "moredata"}
+                {andanother: "lotsofdata"}
               ],
               "anotherSection": [
                 {}
@@ -507,8 +514,10 @@ describe("<Sidebar>", () => {
       expect(sidebar.find('[data-test="add-button"]').length).toEqual(0)
     });
 
-    it("doesn't display a remove button", () => {
+    it("doesn't display any remove buttons", () => {
       expect(sidebar.find('[data-test="remove-button"]').length).toEqual(0)
+      expect(sidebar.find('[data-test="remove-button-1"]').length).toEqual(0)
+      expect(sidebar.find('[data-test="remove-button-2"]').length).toEqual(0)
     });
   });
 });
