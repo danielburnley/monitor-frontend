@@ -691,15 +691,13 @@ describe("VarianceField", () => {
 
         it("Enables the reason for variance", () => {
           expect(
-            field.find("[data-test='current-date']").props().uiSchema &&
-            field.find("[data-test='current-date']").props().uiSchema["ui:disabled"]
+            field.find("[data-test='current-date']").props().disabled
           ).toBeFalsy();
         });
 
         it("Enables the percentage", () => {
           expect(
-            field.find("[data-test='variance-percentage']").props().uiSchema &&
-            field.find("[data-test='variance-percentage']").props().uiSchema["ui:disabled"]
+            field.find("[data-test='variance-percentage']").props().disabled
           ).toBeFalsy();
         });
 
@@ -1049,8 +1047,7 @@ describe("VarianceField", () => {
 
         it("Enables variance completed", () => {
           expect(
-            field.find("[data-test='variance-completed']").props().uiSchema &&
-            field.find("[data-test='variance-completed']").props().uiSchema["ui:disabled"]
+            field.find("[data-test='variance-completed']").props().disabled
           ).toBeFalsy();
         });
       });
@@ -1637,15 +1634,13 @@ describe("VarianceField", () => {
 
       it("Disables current date", () => {
         expect(
-          field.find("[data-test='current-date']").props().uiSchema &&
-          field.find("[data-test='current-date']").props().uiSchema["ui:disabled"]
+          field.find("[data-test='current-date']").props().disabled
         ).toBeTruthy();
       });
 
       it("Disables percent complete", () => {
         expect(
-          field.find("[data-test='variance-percentage']").props().uiSchema &&
-          field.find("[data-test='variance-percentage']").props().uiSchema["ui:disabled"]
+          field.find("[data-test='variance-percentage']").props().disabled
         ).toBeTruthy();
       });
     });
@@ -1670,8 +1665,7 @@ describe("VarianceField", () => {
 
       it("Disables variance completed", () => {
         expect(
-          field.find("[data-test='variance-completed']").props().uiSchema &&
-          field.find("[data-test='variance-completed']").props().uiSchema["ui:disabled"]
+          field.find("[data-test='variance-completed']").props().disabled
         ).toBeTruthy();
       });
     });
