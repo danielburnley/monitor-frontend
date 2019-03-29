@@ -717,7 +717,7 @@ describe("<ParentForm>", () => {
               .props()
               .onItemClick("noise", 1);
 
-            parentForm.find("[data-test='remove-button']").simulate("click");
+            parentForm.find("[data-test='remove-button-0']").simulate("click");
             expect(parentForm.find(".selected-item").text()).toEqual("Cat Name")
           });
         });
@@ -769,7 +769,7 @@ describe("<ParentForm>", () => {
             .props()
             .onItemClick("sound", 2);
 
-            parentForm.find("[data-test='remove-button']").simulate("click");
+            parentForm.find("[data-test='remove-button-1']").simulate("click");
             expect(parentForm.find(".selected-item").text()).toEqual("Dog Name");
           });
         });
