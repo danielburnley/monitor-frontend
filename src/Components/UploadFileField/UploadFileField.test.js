@@ -102,6 +102,11 @@ describe("FileUpload", () => {
           expect(fileUpload.find("FieldFake").length).toEqual(0)
         });
 
+        it("Doesn't render the remove button", () => {
+          let fileUpload = fileUploadField([file1], true, onChangeSpy, true)
+          expect(fileUpload.find("[data-test='remove-file-0']").length).toEqual(0)
+        });
+
         describe("Example 1", () => {
           it("Displays the schema title", () => {
             let fileUpload = fileUploadField([], true, onChangeSpy, true)
@@ -122,6 +127,11 @@ describe("FileUpload", () => {
         it("Doesn't render the file widget", () => {
           let fileUpload = fileUploadField([], true, onChangeSpy, false, "File Uploader", {"ui:disabled": true})
           expect(fileUpload.find("FieldFake").length).toEqual(0)
+        });
+
+        it("Doesn't render the remove button", () => {
+          let fileUpload = fileUploadField([file2], true, onChangeSpy, true)
+          expect(fileUpload.find("[data-test='remove-file-0']").length).toEqual(0)
         });
 
         describe("Example 1", () => {
@@ -188,6 +198,16 @@ describe("FileUpload", () => {
           expect(fileUpload.find("[data-test='file_1']").length).toEqual(1)
         });
 
+        it("Renders a button to remove the saved file", () => {
+          expect(fileUpload.find("[data-test='remove-file_0']").length).toEqual(1)
+          expect(fileUpload.find("[data-test='remove-file_1']").length).toEqual(1)
+        });
+
+        it("When clicking the remove button it calls the onchange method with the file removed", () => {
+          fileUpload.find("[data-test='remove-file_0']").simulate('click')
+          expect(onChangeSpy).toHaveBeenCalledWith([file2])
+        });
+
         it("Displays the file names for all the files", () => {
           expect(fileUpload.find("[data-test='file_0']").text()).toEqual("file one")
           expect(fileUpload.find("[data-test='file_1']").text()).toEqual("file two")
@@ -205,6 +225,16 @@ describe("FileUpload", () => {
 
           expect(fileUpload.find("[data-test='file_0']").length).toEqual(1)
           expect(fileUpload.find("[data-test='file_1']").length).toEqual(1)
+        });
+
+        it("Renders a button to remove the saved file", () => {
+          expect(fileUpload.find("[data-test='remove-file_0']").length).toEqual(1)
+          expect(fileUpload.find("[data-test='remove-file_1']").length).toEqual(1)
+        });
+
+        it("When clicking the remove button it calls the onchange method with the file removed", () => {
+          fileUpload.find("[data-test='remove-file_1']").simulate('click')
+          expect(onChangeSpy).toHaveBeenCalledWith([file3])
         });
 
         it("Displays the file names for all the files", () => {

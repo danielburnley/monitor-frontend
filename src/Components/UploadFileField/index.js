@@ -82,7 +82,10 @@ export default class UploadFileField extends React.Component {
 
   renderFileLinks = () => {
     return this.state.files.map((file, index) => {
-      return <div key={`${index}`}>{this.renderFileDownloadLink(file, index)}</div>
+      return <div key={`${index}`}>
+        {this.renderFileDownloadLink(file, index)}
+        {this.renderRemoveButton(index)}
+      </div>
     })
   }
 
@@ -93,6 +96,26 @@ export default class UploadFileField extends React.Component {
     <a data-test={`file_${index}`} href={link} target="_blank">{fileInfo.name}</a>
     </div>
   }
+
+  removeFile(index) {
+    let newFiles = this.state.files
+    newFiles.splice(index, 1)
+
+    this.setState({ files: newFiles }, () => {
+      this.props.onChange(this.state.files)
+    })
+  }
+
+  renderRemoveButton = (index) => (
+    <button
+      className="btn btn-sm btn-link"
+      data-test={`remove-file_${index}`}
+      value={index}
+      onClick={e => this.removeFile(e.target.value)}
+    >
+      Remove this file
+    </button>
+  )
 
   render = () => {
       return <div>
