@@ -33,8 +33,8 @@ export default class VarianceField extends React.Component {
     };
   }
 
-  onFieldChange = (name, newValue) => {
-    this.setState({ [name]: newValue }, () => {
+  onFieldChange = async (name, newValue) => {
+    await this.setState({ [name]: newValue }, () => {
       this.props.onChange(this.state);
     });
   };
@@ -213,7 +213,7 @@ export default class VarianceField extends React.Component {
       <this.props.registry.widgets.britishDate
         className="form-control"
         uiSchema={{"ui:disabled": true}}
-        onChange={e => this.onFieldChange("targetDate", e.target.value)}
+        onChange={async e => { await this.onFieldChange("baseline", e);}}
         data-test="target-date"
         value={this.state.baseline}
       />

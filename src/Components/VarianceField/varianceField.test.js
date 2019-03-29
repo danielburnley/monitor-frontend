@@ -89,6 +89,20 @@ describe("VarianceField", () => {
         expect(targetDate).toEqual("2019-01-01");
       });
 
+      it("Can edit the target date", async () => {
+        let targetDate = field
+          .find("[data-test='target-date'] [data-test='britishDate-fake']")
+          .simulate("change", { target: { value: "1970-01-01" } });
+
+        await field.update();
+
+        expect(
+          field
+            .find("[data-test='target-date'] [data-test='britishDate-fake']")
+            .props().value
+        ).toEqual("1970-01-01");
+      });
+
       it("Renders the status selector defaulting to on schedule and title", () => {
         let status = field.find("[data-test='variance-status']").props().value;
         let title = field.find("[data-test='variance-status-title']").text();
