@@ -116,7 +116,7 @@ class RiskComponent {
   riskCompletedDate = () => this.risk.find(`[data-test='risk-completed-date']`).props().value;
 
   riskCompletedDateIsDisabled = () =>
-    this.widgetIsDisabled("risk-completed-date")
+    this.inputIsDisabled("risk-completed-date")
 
   currentReturnLikelihoodIsDisabled = () =>
     this.widgetIsDisabled("current-return-likelihood")

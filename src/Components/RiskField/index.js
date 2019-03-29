@@ -145,7 +145,11 @@ export default class RiskField extends React.Component {
             <this.props.registry.widgets.britishDate
               onChange={e => this.onFieldChange("riskCompletionDate", e)}
               data-test="risk-completed-date"
-              uiSchema={this.props.uiSchema && this.props.uiSchema.riskCompletionDate}
+              disabled={
+                this.props.uiSchema &&
+                this.props.uiSchema.riskCompletionDate &&
+                this.props.uiSchema.riskCompletionDate["ui:disabled"]
+              }
               value={this.state.riskCompletionDate}
               className="form-control"
               id="completionDate"
