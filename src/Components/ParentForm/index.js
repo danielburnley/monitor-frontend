@@ -96,7 +96,7 @@ export default class ParentForm extends React.Component {
       let arrayData = this.getObject(
         formData,
         arrayHolder.slice(0, arrayHolder.indexOf("#"))
-      );
+      ) || [];
 
       let newPaths = [];
       for (let i = 0; i < arrayData.length; i++) {
