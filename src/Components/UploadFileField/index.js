@@ -53,10 +53,23 @@ export default class UploadFileField extends React.Component {
   }
 
   renderNewFileUpload = () => {
-    if (this.props.schema.readonly || (this.props.uiSchema && this.props.uiSchema["ui:disabled"]))
+    if (this.props.schema.readonly ||
+      (
+        this.props.uiSchema &&
+        (
+          this.props.uiSchema["ui:disabled"] ||
+          (
+            this.props.uiSchema["ui:options"] &&
+            !this.props.uiSchema["ui:options"].addable
+          )
+        )
+      )
+    )
+    {
       return <p data-test="title">
         <b>{this.props.schema.title}</b>
       </p>;
+    }
 
     return <this.props.registry.fields.SchemaField
       onChange={e => this.onChange(e)}
@@ -106,16 +119,23 @@ export default class UploadFileField extends React.Component {
     })
   }
 
-  renderRemoveButton = (index) => (
-    <button
+  renderRemoveButton = (index) => {
+    if (
+      this.props.schema.readonly || (
+        this.props.uiSchema &&
+        this.props.uiSchema["ui:options"] &&
+        !this.props.uiSchema["ui:options"].removable
+      )
+    ) return null;
+    return <button
       className="btn btn-sm btn-link"
       data-test={`remove-file_${index}`}
       value={index}
       onClick={e => this.removeFile(e.target.value)}
-    >
+      >
       Remove this file
     </button>
-  )
+  }
 
   render = () => {
       return <div>
