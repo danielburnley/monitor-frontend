@@ -79,7 +79,7 @@ export default class MilestoneField extends React.Component {
           onChange={e => {
             this.onCurrentReturnChange(e);
           }}
-          uiSchema={{"ui:disabled": true}}
+          disabled={true}
           data-test="milestone-baseline-completion"
           value={this.state.milestoneBaselineCompletion}
           id="milestoneBaselineCompletion"
@@ -151,9 +151,10 @@ export default class MilestoneField extends React.Component {
             this.onCurrentReturnChange(e);
           }}
           data-test="milestone-current-return"
-          uiSchema = {
+          disabled = {
             this.props.uiSchema &&
-            this.props.uiSchema.currentReturn
+            this.props.uiSchema.currentReturn &&
+            this.props.uiSchema.currentReturn["ui:disabled"]
           }
           value={this.state.currentReturn}
           id="currentReturn"
@@ -172,9 +173,10 @@ export default class MilestoneField extends React.Component {
             this.onFieldChange("milestoneCompletedDate", e);
           }}
           data-test="milestone-completed-date"
-          uiSchema = {
+          disabled = {
             this.props.uiSchema &&
-            this.props.uiSchema.milestoneCompletedDate
+            this.props.uiSchema.milestoneCompletedDate &&
+            this.props.uiSchema.milestoneCompletedDate["ui:disabled"]
           }
           value={this.state.milestoneCompletedDate || ""}
           id="milestoneCompletedDate"

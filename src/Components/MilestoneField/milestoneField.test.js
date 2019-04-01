@@ -500,6 +500,10 @@ describe("<MilestoneField>", () => {
       expect(milestone.milestonePercentCompletedIsDisabled()).toBeTruthy();
     });
 
+    it("Disables Baseline value", () => {
+      expect(milestone.milestoneBaselineIsDisabled()).toBeTruthy();
+    });
+
     describe("If completed", () => {
       beforeEach(() => {
         milestone.simulateStatusAgainstLastReturn("Completed")

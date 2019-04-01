@@ -101,9 +101,10 @@ export default class VarianceField extends React.Component {
       <this.props.registry.widgets.britishDate
         className="form-control"
         data-test="current-date"
-        uiSchema={
+        disabled={
           this.props.uiSchema &&
-          this.props.uiSchema.current
+          this.props.uiSchema.current &&
+          this.props.uiSchema.current["ui:disabled"]
         }
         id="current"
         onChange={e => {this.onFieldChange("current", e)}}
@@ -183,7 +184,11 @@ export default class VarianceField extends React.Component {
           className="form-control"
           data-test="variance-completed"
           id="completed"
-          uiSchema={ this.props.uiSchema && this.props.uiSchema.completedDate }
+          disabled={
+            this.props.uiSchema &&
+            this.props.uiSchema.completedDate &&
+            this.props.uiSchema.completedDate["ui:disabled"]
+          }
           onChange={e => {this.onFieldChange("completedDate", e)}}
           value={this.state.completedDate || ""}
         />
@@ -212,7 +217,7 @@ export default class VarianceField extends React.Component {
       </label>
       <this.props.registry.widgets.britishDate
         className="form-control"
-        uiSchema={{"ui:disabled": true}}
+        disabled={true}
         onChange={async e => { await this.onFieldChange("baseline", e);}}
         data-test="target-date"
         value={this.state.baseline}
@@ -252,9 +257,10 @@ export default class VarianceField extends React.Component {
       <this.props.registry.widgets.percentage
         className="form-control"
         data-test="variance-percentage"
-        uiSchema={
+        disabled={
           this.props.uiSchema &&
-          this.props.uiSchema.reason
+          this.props.uiSchema.reason &&
+          this.props.uiSchema.reason["ui:disabled"]
         }
         id="percent-complete"
         onChange={e => this.onFieldChange("percentComplete", e)}

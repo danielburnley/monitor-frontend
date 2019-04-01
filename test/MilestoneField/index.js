@@ -93,6 +93,12 @@ export default class MilestoneComponent {
       .props()
       .value
 
+  milestoneBaselineIsDisabled = () =>
+    this.milestone
+      .find("[data-test='milestone-baseline-completion']")
+      .props()
+      .disabled
+
   summary = () => this.milestone.find("[data-test='milestone-summary']").text();
 
   varianceAgainstLastReturndata = () =>
@@ -110,26 +116,22 @@ export default class MilestoneComponent {
     .find("[data-test='milestone-completed-date'] [data-test='britishDate-fake']")
     .length;
 
-  milestoneCompletedDateIsDisabled = () => {
-    let uiSchema = this.milestone
+  milestoneCompletedDateIsDisabled = () =>
+    this.milestone
       .find("[data-test='milestone-completed-date']")
       .props()
-      .uiSchema;
-    return uiSchema && uiSchema["ui:disabled"];
-  }
+      .disabled;
 
   currentReturn = () =>
     this.milestone
     .find("[data-test='milestone-current-return'] [data-test='britishDate-fake']")
     .length;
 
-  currentReturnIsDisabled = () => {
-    let uiSchema = this.milestone
+  currentReturnIsDisabled = () =>
+    this.milestone
       .find("[data-test='milestone-current-return']")
       .props()
-      .uiSchema;
-    return uiSchema && uiSchema["ui:disabled"];
-  }
+      .disabled;
 
   reasonForVariance = () =>
     this.milestone
