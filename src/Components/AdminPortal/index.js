@@ -126,13 +126,13 @@ export default class AdminPortal extends React.Component {
         </div>
         <div className="form-group">
           <label htmlFor="projectBidId">
-            Enter Bid Reference for the project
+            Enter PCS reference for the project
           </label>
           <input
             className="form-control"
             id="projectBidId"
             data-test="create-project-bidId"
-            placeholder="Bid Reference"
+            placeholder="PCS reference"
             onChange={e => this.onFieldChange(e.target.value, "bidId")}
           />
         </div>

@@ -164,7 +164,7 @@ describe("Baseline Data", () => {
               properties: {
                 bidReference: {
                   type: "string",
-                  title: "Bid Reference"
+                  title: "PCS reference"
                 },
                 projectTitle: {
                   type: "string",
@@ -202,7 +202,7 @@ describe("Baseline Data", () => {
               properties: {
                 hifFundingAmount: {
                   type: "string",
-                  title: "Bid Reference"
+                  title: "PCS reference"
                 },
                 descriptionOfInfrastructure: {
                   type: "string",
@@ -253,7 +253,7 @@ describe("Baseline Data", () => {
             properties: {
               bidReference: {
                 type: "string",
-                title: "Bid Reference"
+                title: "PCS reference"
               },
               projectTitle: {
                 type: "string",
@@ -412,7 +412,7 @@ describe("Baseline Data", () => {
               properties: {
                 bidReference: {
                   type: "string",
-                  title: "Bid Reference"
+                  title: "PCS reference"
                 },
                 projectTitle: {
                   type: "string",
