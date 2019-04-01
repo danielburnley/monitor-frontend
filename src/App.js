@@ -38,6 +38,7 @@ import UpdateProject from "./UseCase/UpdateProject";
 import UpdateClaim from "./UseCase/UpdateClaim";
 import GenerateInfrastructureUISchema from "./UseCase/GenerateInfrastructureUISchema";
 import GenerateDisabledUISchema from "./UseCase/GenerateDisabledUISchema";
+import GenerateHEReturnUISchema from "./UseCase/GenerateHEReturnUISchema";
 import GenerateUISchema from "./UseCase/GenerateUISchema";
 import GetInfrastructures from "./UseCase/GetInfrastructures"
 import GetBaseReturn from "./UseCase/GetBaseReturn";
@@ -104,6 +105,7 @@ const submitProjectUseCase = new SubmitProject(projectGateway);
 const submitClaimUseCase = new SubmitClaim(claimGateway);
 const generateUISchema = new GenerateUISchema(userRoleGateway);
 const generateDisabledUISchema = new GenerateDisabledUISchema(generateUISchema, userRoleGateway);
+const generateHEReturnUISchema = new GenerateHEReturnUISchema(generateUISchema);
 const getBaseReturnUseCase = new GetBaseReturn(returnGateway);
 const getBaseClaimUseCase = new GetBaseClaim(claimGateway);
 const getInfrastructuresUseCase = new GetInfrastructures(projectGateway);
@@ -136,6 +138,7 @@ const renderReturnPage = props => (
     generateUISchema={generateUISchema}
     getRole={getRole}
     generateSubmittedSchema={generateDisabledUISchema}
+    generateHEReturnUISchema={generateHEReturnUISchema}
     >
   {({data, schema, type, uiSchema, status}) => {
     return <div>
@@ -157,7 +160,7 @@ const renderReturnPage = props => (
         status={status}
         formType="return"
       />
-    </div> 
+    </div>
     }
   }
   </ReturnPage>
@@ -368,7 +371,7 @@ const renderSubmittedProjectPage = (props, formData, formSchema) => (
     </div>
     <div className="row">
       <div className="col-md-4">
-        <BaselineListProvider 
+        <BaselineListProvider
             {...props}
             getBaselines={getBaselines}
           >
@@ -396,7 +399,7 @@ const renderSubmittedProjectPage = (props, formData, formSchema) => (
         </ReturnListProvider>
       </div>
       <div className="col-md-4">
-        <ClaimListProvider 
+        <ClaimListProvider
             {...props}
             getClaims={getClaims}
           >

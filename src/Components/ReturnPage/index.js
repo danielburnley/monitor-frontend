@@ -21,11 +21,13 @@ export default class ReturnPage extends React.Component {
 
   presentReturn = async returnData => {
     let uiSchema = {};
-    
+
     let role = await this.props.getRole.execute().role
 
-    if (returnData.status === "Submitted" || role === "Homes England") {
+    if (returnData.status === "Submitted") {
       uiSchema = this.props.generateSubmittedSchema.execute(returnData.schema);
+    } else if (role === "Homes England") {
+      uiSchema = this.props.generateHEReturnUISchema.execute(returnData.schema);
     } else {
       uiSchema = this.props.generateUISchema.execute(returnData.schema, returnData.no_of_previous_returns);
     }
