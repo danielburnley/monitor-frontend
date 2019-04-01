@@ -99,7 +99,7 @@ describe('ReturnPage', () => {
                   documentGateway={documentGatewayDummy}
                   getRole={{execute: jest.fn(()=> ({role: "Local Authority"}))}}
                 >{childrenSpy}</ReturnPage>);
-  
+
           await wait();
           expect(childrenSpy).toHaveBeenCalledWith({
             data: data,
@@ -146,7 +146,7 @@ describe('ReturnPage', () => {
                 {childrenSpy}
                 </ReturnPage>
                 );
-  
+
           await wait();
           expect(childrenSpy).toHaveBeenCalledWith({
             data: data,
@@ -191,7 +191,7 @@ describe('ReturnPage', () => {
                   documentGateway={documentGatewayDummy}
                   getRole={{execute: jest.fn(()=> ({role: "Local Authority"}))}}
                 >{childrenSpy}</ReturnPage>);
-  
+
           await wait();
           expect(childrenSpy).toHaveBeenCalledWith({
             data: data,
@@ -238,7 +238,7 @@ describe('ReturnPage', () => {
                 {childrenSpy}
                 </ReturnPage>
                 );
-  
+
           await wait();
           expect(childrenSpy).toHaveBeenCalledWith({
             data: data,
@@ -253,7 +253,7 @@ describe('ReturnPage', () => {
 
     describe("A Homes England User", () => {
       describe("Example 1", () => {
-        it("Passes data from the get return use case and generate submitted ui schema", async () => {
+        it("Passes data from the get return use case and generate Homes England return UI schema use case", async () => {
           let documentGatewayDummy = jest.fn()
           let data = {cathouse: {cathouse: 'cat'}};
           let schema = {
@@ -272,18 +272,20 @@ describe('ReturnPage', () => {
             }
           };
           let generateUISchemaSpy = {execute: jest.fn((data, no_of_previous_returns) => ({myUiSchema: "UI"}))};
-          let generateSubmittedSchemaSpy = { execute: jest.fn(schema => ({IamHE: "You'll never change me now"}))};
+          let generateSubmittedSchemaSpy = { execute: jest.fn(schema => ({myUiSchema: "UI"}))};
+          let generateHEReturnUISchema = { execute: jest.fn(schema => ({IamHE: "You'll never change me now"}))};
           let wrap = mount(<ReturnPage
                   match={{ params: { projectId: 1, returnId: 1 } }}
                   generateUISchema={ generateUISchemaSpy }
                   generateSubmittedSchema={generateSubmittedSchemaSpy}
+                  generateHEReturnUISchema={generateHEReturnUISchema}
                   history={[]}
                   getReturn={new getReturnStub("ac", data, schema, "Draft")}
                   getBaseReturn={new getBaseReturnStub()}
                   documentGateway={documentGatewayDummy}
                   getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
                 >{childrenSpy}</ReturnPage>);
-  
+
           await wait();
           expect(childrenSpy).toHaveBeenCalledWith({
             data: data,
@@ -296,7 +298,7 @@ describe('ReturnPage', () => {
       })
 
       describe("Example 2", () => {
-        it("Passes data from the get return use case and generate submitted ui schema", async () => {
+        it("Passes data from the get return use case and generate Homes England return UI schema use case", async () => {
           let documentGatewayDummy = jest.fn()
           let data = {doghouse: {doghouse: 'dog'}};
           let schema = {
@@ -316,11 +318,13 @@ describe('ReturnPage', () => {
           };
           let childrenSpy = jest.fn()
           let generateUISchemaSpy = {execute: jest.fn((data, no_of_previous_returns) => ({anotherUiSchema: "UI v.2"}))};
-          let generateDisabledUISchemaSpy = { execute: jest.fn(schema => ({iamaheuser: "not allowed to edit"}))};
+          let generateDisabledUISchemaSpy = { execute: jest.fn(schema => ({anotherUiSchema: "UI v.2"}))};
+          let generateHEReturnUISchema = { execute: jest.fn(schema => ({iamaheuser: "not allowed to edit"}))};
           let wrap = mount(<ReturnPage
                   match={{ params: { projectId: 6, returnId: 1 } }}
                   generateUISchema={ generateUISchemaSpy }
                   generateSubmittedSchema={generateDisabledUISchemaSpy}
+                  generateHEReturnUISchema={generateHEReturnUISchema}
                   history={[]}
                   getReturn={new getReturnStub("hif", data, schema, "Draft")}
                   getBaseReturn={new getBaseReturnStub()}
@@ -330,7 +334,7 @@ describe('ReturnPage', () => {
                 {childrenSpy}
                 </ReturnPage>
                 );
-  
+
           await wait();
           expect(childrenSpy).toHaveBeenCalledWith({
             data: data,

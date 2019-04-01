@@ -1,13 +1,11 @@
 import merge from "utils-merge2";
 
-export default class GenerateDisabledUISchema {
-  constructor(generateUISchemaUseCase, userRoleStorageGateway) {
+export default class GenerateHEReturnUISchema {
+  constructor(generateUISchemaUseCase) {
     this.generateUISchemaUseCase = generateUISchemaUseCase;
-    this.userRoleStorageGateway = userRoleStorageGateway;
   }
 
   execute(data) {
-    this.role = this.userRoleStorageGateway.getUserRole().userRole;
     let generatedUISchema = this.generateUISchemaUseCase.execute(data);
     let generatedDisabledUISchema = this.generateUISchema(data.properties);
     return merge(generatedUISchema, generatedDisabledUISchema);
@@ -37,7 +35,7 @@ export default class GenerateDisabledUISchema {
   generateSchemaForArray(value) {
     let schema;
 
-    if (value.heAlwaysWritable && this.role === "Homes England") {
+    if (value.heAlwaysWritable || value.heWritable) {
       schema = {};
     } else {
       schema = {
@@ -70,7 +68,7 @@ export default class GenerateDisabledUISchema {
   }
 
   generateSchemaForItem(item) {
-    if (item.heAlwaysWritable && this.role === "Homes England") return {};
+    if (item.heAlwaysWritable || item.heWritable) return {};
 
     if (item.hidden) {
       return { "ui:widget": "hidden" };
