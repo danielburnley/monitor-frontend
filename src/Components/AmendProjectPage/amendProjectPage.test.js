@@ -39,6 +39,67 @@ describe("AmendProjectPage", () => {
     }
   };
 
+  describe("Submitted project", () => {
+    describe("As a Homes England User", () => {
+      it("Does not show the submission buttons", () => {
+        let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"})) };
+        let amendButtonSpy = jest.fn();
+        let wrap = mount(
+            <AmendProjectPage
+              projectURL={getProjectURLUsecase}
+              match={{params: {baselineId: 6}}}
+              documentGateway={jest.fn()}
+              projectId={1}
+              updateProject={{}}
+              submitBaseline={{}}
+              validateProject={ { execute: () => null } }
+              data={{}}
+              schema={schema}
+              status="Submitted"
+              getRole={userRoleUseCaseSpy}
+            >
+            {amendButtonSpy}
+          </AmendProjectPage>
+        );
+        expect(wrap.find("[data-test='submit-project-button']").length).toEqual(0);
+        expect(wrap.find("[data-test='disabled-submit-project-button']").length).toEqual(0);
+        expect(wrap.find("[data-test='update-project-button']").length).toEqual(0);
+        expect(wrap.find("[data-test='disabled-update-project-button']").length).toEqual(0);
+        expect(amendButtonSpy).toBeCalledWith({status: "Submitted"});
+      });
+    });
+
+    describe("As a Local Authority User", () => {
+      it("Does not show the submission buttons", () => {
+        let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"})) };
+        let amendButtonSpy = jest.fn();
+
+        let wrap = mount(
+            <AmendProjectPage
+              projectURL={getProjectURLUsecase}
+              match={{params: {baselineId: 6}}}
+              documentGateway={jest.fn()}
+              projectId={1}
+              updateProject={{}}
+              submitBaseline={{}}
+              validateProject={ { execute: () => null } }
+              data={{}}
+              schema={schema}
+              status="Submitted"
+              getRole={userRoleUseCaseSpy}
+            >
+            {amendButtonSpy}
+          </AmendProjectPage>
+        );
+        expect(wrap.find("[data-test='submit-project-button']").length).toEqual(0);
+        expect(wrap.find("[data-test='disabled-submit-project-button']").length).toEqual(0);
+        expect(wrap.find("[data-test='update-project-button']").length).toEqual(0);
+        expect(wrap.find("[data-test='disabled-update-project-button']").length).toEqual(0);
+        expect(amendButtonSpy).toBeCalledWith({status: "Submitted"});
+      });
+    });
+  });
+
   it("Calls the get user role use case", () => {
     let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"})) };
     mount(
@@ -221,7 +282,7 @@ describe("AmendProjectPage", () => {
             projectURL={getProjectURLUsecase}
             getRole={userRoleUseCaseSpy}
             projectId={1}
-            match={{params: {baselineId: 8}}}            
+            match={{params: {baselineId: 8}}}
             updateProject={updateProjectSpy}
             submitBaseline={submitBaselineSpy}
             validateProject={validateProjectSpy}

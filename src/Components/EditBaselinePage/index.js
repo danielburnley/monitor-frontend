@@ -24,7 +24,6 @@ export default class EditBaselinePage extends React.Component {
       uiSchema = this.props.generateUISchema.execute(this.state.formSchema, baselineData.status)
     }
 
-    
     await this.setState({
       loading: false,
       formData: baselineData.data,
@@ -51,6 +50,12 @@ export default class EditBaselinePage extends React.Component {
   componentDidMount() {
     document.title = "Project - Homes England Monitor";
     this.fetchData();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.location != prevProps.location) {
+      this.fetchData();
+    }
   }
 
   renderForm() {

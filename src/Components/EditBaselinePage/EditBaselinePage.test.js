@@ -20,7 +20,7 @@ describe("<EditBaselinePage>", () => {
       beforeEach(() => {
         getBaselinesSpy = { execute: jest.fn() };
         getProjectSpy = { execute: jest.fn() };
-        
+
         page = shallow(
           <EditBaselinePage
             match={{ params: { projectId: "1", baselineId: "7" } }}
@@ -32,13 +32,13 @@ describe("<EditBaselinePage>", () => {
         );
       });
 
-      it("Calls the getProject usecase when loaded", () => {
+      it("Calls the getProject usecase", () => {
         expect(getBaselinesSpy.execute).toHaveBeenCalledWith(expect.anything(), {
           id: "1"
         });
       });
 
-      it("Calls the getBaselines usecase when loaded", () => {
+      it("Calls the getBaselines usecase", () => {
         expect(getBaselinesSpy.execute).toHaveBeenCalledWith(expect.anything(), {
           id: "1"
         });
@@ -53,7 +53,7 @@ describe("<EditBaselinePage>", () => {
       beforeEach(() => {
         UISchema = {};
         getProjectSpy = {
-          execute: (presenter, _) => 
+          execute: (presenter, _) =>
             presenter.presentProject({
               schema: { hello: "hi" },
               type: 'hif'
@@ -100,6 +100,41 @@ describe("<EditBaselinePage>", () => {
       });
     });
 
+    describe("When the location changes", () => {
+      describe("When loading the project", () => {
+        beforeEach(() => {
+          getBaselinesSpy = { execute: jest.fn() };
+          getProjectSpy = { execute: jest.fn() };
+
+          page = shallow(
+            <EditBaselinePage
+              match={{ params: { projectId: "1", baselineId: "7" } }}
+              getProject={getProjectSpy}
+              getBaselines={getBaselinesSpy}
+            >
+              {() => {}}
+            </EditBaselinePage>
+          );
+
+          page.setProps({
+            location: "/project/9/baseline/2",
+            match: { params: { projectId: "9", baselineId: "2" } }
+          });
+        });
+
+        it("Calls the getProject usecase", () => {
+          expect(getProjectSpy.execute).toHaveBeenCalledWith(expect.anything(), {
+            id: "9"
+          });
+        });
+
+        it("Calls the getBaseline usecase", () => {
+          expect(getBaselinesSpy.execute).toHaveBeenCalledWith(expect.anything(), {
+            id: "9"
+          });
+        });
+      });
+    });
   });
 
   describe("Example two", () => {
@@ -141,7 +176,7 @@ describe("<EditBaselinePage>", () => {
     describe("When the project is loaded", () => {
       beforeEach(() => {
         getProjectSpy = {
-          execute: (presenter, _) => 
+          execute: (presenter, _) =>
             presenter.presentProject({
               schema: { goodbye: "see ya" },
               type: 'ac'
@@ -189,6 +224,42 @@ describe("<EditBaselinePage>", () => {
           projectType: 'ac',
           timestamp: 45,
           formUiSchema: {hi: "yes"}
+        });
+      });
+    });
+
+    describe("When the location changes", () => {
+      describe("When loading the project", () => {
+        beforeEach(() => {
+          getBaselinesSpy = { execute: jest.fn() };
+          getProjectSpy = { execute: jest.fn() };
+
+          page = shallow(
+            <EditBaselinePage
+              match={{ params: { projectId: "2", baselineId: "9" } }}
+              getProject={getProjectSpy}
+              getBaselines={getBaselinesSpy}
+            >
+              {() => {}}
+            </EditBaselinePage>
+          );
+
+          page.setProps({
+            location: "/project/9/baseline/2",
+            match: { params: { projectId: "3", baselineId: "6" } }
+          });
+        });
+
+        it("Calls the getProject usecase", () => {
+          expect(getProjectSpy.execute).toHaveBeenCalledWith(expect.anything(), {
+            id: "3"
+          });
+        });
+
+        it("Calls the getBaseline usecase", () => {
+          expect(getBaselinesSpy.execute).toHaveBeenCalledWith(expect.anything(), {
+            id: "3"
+          });
         });
       });
     });

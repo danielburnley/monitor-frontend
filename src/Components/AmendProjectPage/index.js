@@ -212,6 +212,34 @@ export default class AmendProjectPage extends React.Component {
     }
   };
 
+  renderSaveButton = () =>
+    <button
+      data-test="update-project-button"
+      className="btn form-button btn-primary"
+      onClick={this.updateBaseline}
+      >
+      Save draft
+    </button>
+
+  renderActiveButtons = () => {
+    if (this.props.status === "Submitted") {
+      return this.props.children({status: "Submitted"})
+    } else {
+      return <div className="row">
+        {this.renderSubmitButton()}
+        {this.renderSaveButton()}
+      </div>
+    }
+  }
+
+  renderDisabledSaveButton = () =>
+    <button
+      data-test="disabled-update-project-button"
+      className="btn form-button disabled"
+    >
+      Save draft
+    </button>
+
   renderSuccessOrForm() {
     if (this.state.status === "submitted") {
       return this.renderSubmitSuccess();
@@ -219,12 +247,7 @@ export default class AmendProjectPage extends React.Component {
       return (
         <div>
           {this.renderDisabledSubmitButton()}
-          <button
-            data-test="disabled-update-project-button"
-            className="btn form-button disabled"
-          >
-            Save draft
-          </button>
+          {this.renderDisabledSaveButton()}
           <div className="col-md-10 col-md-offset-1">{this.renderForm()}</div>
         </div>
       );
@@ -240,16 +263,8 @@ export default class AmendProjectPage extends React.Component {
           {this.renderSubmissionFailure()}
           {this.renderSaveFailure()}
           {this.renderSaveSuccess()}
-          <div className="row">
-            {this.renderSubmitButton()}
-            <button
-              data-test="update-project-button"
-              className="btn form-button btn-primary"
-              onClick={this.updateBaseline}
-            >
-              Save draft
-            </button>
-          </div>
+          {this.renderActiveButtons()}
+
           <div className="row no-edge">{this.renderForm()}</div>
         </div>
       );

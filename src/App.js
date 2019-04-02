@@ -307,24 +307,32 @@ const renderAmendBaselinePage = props => (
       <div>
       <BackToProjectOverviewButton {...props} />
       <div className="col-md-10 col-offset-1">
-      <div className="row">
-        <AmendProjectPage
-          {...props}
-          projectId={props.match.params.projectId}
-          projectURL={getProjectURL}
-          uiSchema={formUiSchema}
-          status={baselineStatus}
-          schema={formSchema}
-          data={formData}
-          projectType={projectType}
-          getProject={getProjectUseCase}
-          submitBaseline={submitBaseline}
-          updateProject={updateProjectUseCase}
-          validateProject={validateProjectUseCase}
-          documentGateway={documentGateway}
-          getRole={getRole}
-          timestamp={timestamp}
-        />
+        <div className="row">
+          <AmendProjectPage
+            {...props}
+            projectId={props.match.params.projectId}
+            projectURL={getProjectURL}
+            uiSchema={formUiSchema}
+            status={baselineStatus}
+            schema={formSchema}
+            data={formData}
+            projectType={projectType}
+            getProject={getProjectUseCase}
+            submitBaseline={submitBaseline}
+            updateProject={updateProjectUseCase}
+            validateProject={validateProjectUseCase}
+            documentGateway={documentGateway}
+            getRole={getRole}
+            timestamp={timestamp}
+          >
+          {({status}) =>
+            <AmendBaselineButton
+              {...props}
+              status={status}
+              amendBaseline={amendBaseline}
+            />
+          }
+          </AmendProjectPage>
         </div>
       </div>
     </div>
