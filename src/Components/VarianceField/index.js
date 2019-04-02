@@ -147,6 +147,11 @@ export default class VarianceField extends React.Component {
             className="form-control"
             data-test="variance-reference"
             id="reference"
+            disabled={
+              this.props.uiSchema &&
+              this.props.uiSchema.onCompletedReference &&
+              this.props.uiSchema.onCompletedReference["ui:disabled"]
+            }
             onChange={e =>
               this.onFieldChange("onCompletedReference", e.target.value)
             }
@@ -166,6 +171,11 @@ export default class VarianceField extends React.Component {
             className="form-control"
             data-test="variance-name"
             id="name"
+            disabled={
+              this.props.uiSchema &&
+              this.props.uiSchema.onCompletedNameOfContractor&&
+              this.props.uiSchema.onCompletedNameOfContractor["ui:disabled"]
+            }
             onChange={e =>
               this.onFieldChange("onCompletedNameOfContractor", e.target.value)
             }

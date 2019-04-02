@@ -1646,27 +1646,58 @@ describe("VarianceField", () => {
     });
 
     describe("Completed", () => {
-      beforeEach(() => {
-        let formData = {
-          baseline: "2020-12-31",
-          status: "Completed",
-          percentComplete: 50
-        };
-        field = mount(
-          <VarianceField
-            schema={schema}
-            formData={formData}
-            uiSchema={uiSchema}
-            onChange={jest.fn()}
-            registry={registryStub}
-          />
-        );
+      describe("name is submitted", () => {
+        beforeEach(() => {
+          let formData = {
+            baseline: "2020-12-31",
+            status: "Completed",
+            percentComplete: 50
+          };
+          field = mount(
+            <VarianceField
+              name="submitted"
+              schema={schema}
+              formData={formData}
+              uiSchema={uiSchema}
+              onChange={jest.fn()}
+              registry={registryStub}
+              />
+          );
+        });
+
+        it("Disables completed reference", () => {
+          expect(field.find("[data-test='variance-reference']").props().disabled).toBeTruthy();
+        });
+
+        it("Disables variance completed", () => {
+          expect(
+            field.find("[data-test='variance-completed']").props().disabled
+          ).toBeTruthy();
+        });
       });
 
-      it("Disables variance completed", () => {
-        expect(
-          field.find("[data-test='variance-completed']").props().disabled
-        ).toBeTruthy();
+      describe("name is procurementStatusAgainstLastReturn", () => {
+        beforeEach(() => {
+          let formData = {
+            baseline: "2020-12-31",
+            status: "Completed",
+            percentComplete: 50
+          };
+          field = mount(
+            <VarianceField
+              name="procurementStatusAgainstLastReturn"
+              schema={schema}
+              formData={formData}
+              uiSchema={uiSchema}
+              onChange={jest.fn()}
+              registry={registryStub}
+              />
+          );
+        });
+
+        it("Disables completed name", () => {
+          expect(field.find("[data-test='variance-name']").props().disabled).toBeTruthy();
+        });
       });
     });
   });
