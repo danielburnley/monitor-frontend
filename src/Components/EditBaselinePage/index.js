@@ -59,6 +59,12 @@ export default class EditBaselinePage extends React.Component {
     this.fetchData();
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.location != prevProps.location) {
+      this.fetchData();
+    }
+  }
+
   renderForm() {
     return (
       <div>
