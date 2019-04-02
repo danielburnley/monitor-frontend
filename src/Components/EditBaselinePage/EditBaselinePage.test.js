@@ -3,18 +3,81 @@ import EditBaselinePage from ".";
 import { shallow } from "enzyme";
 
 describe("<EditBaselinePage>", () => {
-  let page, getProjectSpy, getBaselinesSpy, childrenSpy, generateUISchemaSpy, generateDisabledUISchemaSpy, UISchema;
+  let page,
+    getProjectSpy,
+    getBaselinesSpy,
+    childrenSpy,
+    generateUISchemaSpy,
+    generateDisabledUISchemaSpy,
+    UISchema;
 
   beforeEach(() => {
     generateUISchemaSpy = {
       execute: (data, flag) => ({})
-    }
+    };
 
     generateDisabledUISchemaSpy = {
       execute: (data, flag) => ({})
-    }
-  })
+    };
+  });
 
+  describe("With multiple baselines", () => {
+    beforeEach(() => {
+      UISchema = {};
+      getProjectSpy = {
+        execute: (presenter, _) =>
+          presenter.presentProject({
+            schema: { hello: "hi" },
+            type: "hif"
+          })
+      };
+
+      getBaselinesSpy = {
+        execute: (presenter, _) =>
+          presenter.presentBaselines([
+            {
+              data: { meow: true },
+              version: 3,
+              status: "Submitted",
+              timestamp: 1234,
+              id: 7
+            },
+            {
+              data: { meow: false },
+              version: 4,
+              status: "Draft",
+              timestamp: 1234,
+              id: 8
+            }
+          ])
+      };
+
+      childrenSpy = jest.fn();
+
+      page = shallow(
+        <EditBaselinePage
+          match={{ params: { projectId: "2", baselineId: "8" } }}
+          getProject={getProjectSpy}
+          getBaselines={getBaselinesSpy}
+          generateUISchema={generateUISchemaSpy}
+          generateSubmittedUiSchema={generateDisabledUISchemaSpy}
+        >
+          {childrenSpy}
+        </EditBaselinePage>
+      );
+    });
+
+    it("Passes the correct baseline information to the children", () => {
+      expect(childrenSpy).toHaveBeenCalledWith({
+        formData: { meow: false },
+        formSchema: { hello: "hi" },
+        baselineStatus: "Draft",
+        formUiSchema: UISchema,
+        timestamp: 1234,
+        projectType: "hif"
+      });
+    });
+  });
   describe("Example one", () => {
     describe("When loading the project", () => {
       beforeEach(() => {
@@ -33,15 +96,21 @@ describe("<EditBaselinePage>", () => {
       });
 
       it("Calls the getProject usecase", () => {
-        expect(getBaselinesSpy.execute).toHaveBeenCalledWith(expect.anything(), {
-          id: "1"
-        });
+        expect(getBaselinesSpy.execute).toHaveBeenCalledWith(
+          expect.anything(),
+          {
+            id: "1"
+          }
+        );
       });
 
       it("Calls the getBaselines usecase", () => {
-        expect(getBaselinesSpy.execute).toHaveBeenCalledWith(expect.anything(), {
-          id: "1"
-        });
+        expect(getBaselinesSpy.execute).toHaveBeenCalledWith(
+          expect.anything(),
+          {
+            id: "1"
+          }
+        );
       });
 
       it("Sets loading to true when first mounted", async () => {
@@ -56,18 +125,20 @@ describe("<EditBaselinePage>", () => {
           execute: (presenter, _) =>
             presenter.presentProject({
               schema: { hello: "hi" },
-              type: 'hif'
+              type: "hif"
             })
-        }
+        };
         getBaselinesSpy = {
           execute: (presenter, _) =>
-            presenter.presentBaselines([{
-              data: { meow: true },
-              version: 3,
-              status: 'Draft',
-              timestamp: 1234,
-              id: 7
-            }])
+            presenter.presentBaselines([
+              {
+                data: { meow: true },
+                version: 3,
+                status: "Draft",
+                timestamp: 1234,
+                id: 7
+              }
+            ])
         };
         childrenSpy = jest.fn();
 
@@ -92,10 +163,10 @@ describe("<EditBaselinePage>", () => {
         expect(childrenSpy).toHaveBeenCalledWith({
           formData: { meow: true },
           formSchema: { hello: "hi" },
-          baselineStatus: 'Draft',
+          baselineStatus: "Draft",
           formUiSchema: UISchema,
           timestamp: 1234,
-          projectType: 'hif'
+          projectType: "hif"
         });
       });
     });
@@ -146,7 +217,7 @@ describe("<EditBaselinePage>", () => {
 
         page = shallow(
           <EditBaselinePage
-            match={{ params: { projectId: "2", baselineId: 9 } }}
+            match={{ params: { projectId: "2", baselineId: "9" } }}
             getProject={getProjectSpy}
             getBaselines={getBaselinesSpy}
             generateUISchema={generateUISchemaSpy}
@@ -157,15 +228,21 @@ describe("<EditBaselinePage>", () => {
         );
       });
       it("Calls the getProject usecase when loaded", () => {
-        expect(getBaselinesSpy.execute).toHaveBeenCalledWith(expect.anything(), {
-          id: "2"
-        });
+        expect(getBaselinesSpy.execute).toHaveBeenCalledWith(
+          expect.anything(),
+          {
+            id: "2"
+          }
+        );
       });
 
       it("Calls the getBaselines usecase when loaded", () => {
-        expect(getBaselinesSpy.execute).toHaveBeenCalledWith(expect.anything(), {
-          id: "2"
-        });
+        expect(getBaselinesSpy.execute).toHaveBeenCalledWith(
+          expect.anything(),
+          {
+            id: "2"
+          }
+        );
       });
 
       it("Sets loading to true when first mounted", async () => {
@@ -179,29 +256,31 @@ describe("<EditBaselinePage>", () => {
           execute: (presenter, _) =>
             presenter.presentProject({
               schema: { goodbye: "see ya" },
-              type: 'ac'
+              type: "ac"
             })
-        }
+        };
         getBaselinesSpy = {
           execute: (presenter, _) =>
-            presenter.presentBaselines([{
-              data: { woof: false },
-              version: 5,
-              status: 'Draft',
-              timestamp: 45,
-              id: 9
-            }])
+            presenter.presentBaselines([
+              {
+                data: { woof: false },
+                version: 5,
+                status: "Draft",
+                timestamp: 45,
+                id: 9
+              }
+            ])
         };
 
         childrenSpy = jest.fn();
 
         generateUISchemaSpy = {
-          execute: (data) => ({hi: "yes"})
+          execute: data => ({ hi: "yes" })
         };
 
         page = shallow(
           <EditBaselinePage
-            match={{ params: { projectId: "2", baselineId: '9' } }}
+            match={{ params: { projectId: "2", baselineId: "9" } }}
             getProject={getProjectSpy}
             getBaselines={getBaselinesSpy}
             generateUISchema={generateUISchemaSpy}
@@ -219,11 +298,11 @@ describe("<EditBaselinePage>", () => {
       it("Passes the data, schema, status, timestamp and type from the use case", () => {
         expect(childrenSpy).toHaveBeenCalledWith({
           formData: { woof: false },
-          baselineStatus: 'Draft',
+          baselineStatus: "Draft",
           formSchema: { goodbye: "see ya" },
-          projectType: 'ac',
+          projectType: "ac",
           timestamp: 45,
-          formUiSchema: {hi: "yes"}
+          formUiSchema: { hi: "yes" }
         });
       });
     });
