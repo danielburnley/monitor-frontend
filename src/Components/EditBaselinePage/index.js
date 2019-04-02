@@ -15,24 +15,30 @@ export default class EditBaselinePage extends React.Component {
   };
 
   presentBaselines = async allBaselineData => {
-    let baselineData = allBaselineData.slice(-1)[0]
+    let baselineData = allBaselineData.find(
+      baseline => baseline.id === parseInt(this.props.match.params.baselineId)
+    );
 
-    let uiSchema
+    let uiSchema;
     if (baselineData.status === "Submitted") {
-      uiSchema = this.props.generateSubmittedUiSchema.execute(this.state.formSchema)
+      uiSchema = this.props.generateSubmittedUiSchema.execute(
+        this.state.formSchema
+      );
     } else {
-      uiSchema = this.props.generateUISchema.execute(this.state.formSchema, baselineData.status)
+      uiSchema = this.props.generateUISchema.execute(
+        this.state.formSchema,
+        baselineData.status
+      );
     }
 
-    
     await this.setState({
       loading: false,
       formData: baselineData.data,
       formUiSchema: uiSchema,
       timestamp: baselineData.timestamp,
       status: baselineData.status
-    })
-  }
+    });
+  };
 
   presentProjectNotFound = async () => {};
 
@@ -72,11 +78,7 @@ export default class EditBaselinePage extends React.Component {
     if (this.state.loading) {
       return <div data-test="loading">Loading project homepage...</div>;
     } else {
-      return (
-        <div>
-          {this.renderForm()}
-        </div>
-      );
+      return <div>{this.renderForm()}</div>;
     }
   }
 }
@@ -86,7 +88,8 @@ EditBaselinePage.propTypes = {
   children: PropTypes.func.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
-      projectId: PropTypes.string.isRequired
+      projectId: PropTypes.string.isRequired,
+      baselineId: PropTypes.string.isRequired
     })
   })
 };
