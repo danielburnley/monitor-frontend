@@ -27,6 +27,7 @@ import PrintReturn from "./Components/PrintReturn";
 import AdminPortal from "./Components/AdminPortal";
 import AmendBaselineButton from "./Components/AmendBaselineButton";
 import AmendProjectPage from "./Components/AmendProjectPage";
+import LogoutButton from "./Components/LogoutButton";
 
 import AddUsersToProject from "./UseCase/AddUsersToProject";
 import CreateReturn from "./UseCase/CreateReturn";
@@ -62,6 +63,7 @@ import Validate from "./UseCase/Validate";
 import AmendBaseline from "./UseCase/AmendBaseline";
 import GetBaselines from "./UseCase/GetBaselines";
 import SubmitBaseline from "./UseCase/SubmitBaseline";
+import Logout from "./UseCase/Logout";
 
 import ProjectGateway from "./Gateway/ProjectGateway";
 import ReturnGateway from "./Gateway/ReturnGateway";
@@ -94,6 +96,8 @@ const documentGateway = new DocumentGateway(document)
 const userGateway = new UserGateway(apiKeyCookieGateway);
 const baselineGateway = new BaselineGateway(apiKeyCookieGateway);
 const getRole = new GetRole(userRoleGateway);
+
+const logoutUsecase = new Logout(apiKeyCookieGateway);
 const generateInfrastructureUISchemaUseCase = new GenerateInfrastructureUISchema();
 const validateReturnUseCase = new Validate(returnGateway);
 const validateProjectUseCase = new Validate(projectGateway);
@@ -520,6 +524,7 @@ const App = () => (
               <Portal
                 {...props}
                 requestToken={requestTokenUseCase}
+                logoutUsecase={logoutUsecase}
                 token={
                   qs.parse(props.location.search, { ignoreQueryPrefix: true })
                     .token

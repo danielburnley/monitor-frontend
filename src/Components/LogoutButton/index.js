@@ -6,9 +6,13 @@ export default class LogoutButton extends React.Component {
   }
 
   render = () =>
-    <button onClick={
-      () => {this.props.logoutUsecase.execute(this)}
-    }>
+    <button
+      data-test="logout-button"
+      className="btn btn-link"
+      onClick={
+        () => {this.props.logoutUsecase.execute(this)}
+      }
+    >
       Logout
     </button>
 }
