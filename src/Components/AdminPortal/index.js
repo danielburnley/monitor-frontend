@@ -45,11 +45,14 @@ export default class AdminPortal extends React.Component {
         this.state.bidId
       );
 
-      await this.addUser();
-      Cookies.remove("apikey");
+      await this.addSelf();
       window.location.reload();
     }
   };
+
+  addSelf = async () => {
+    await this.props.addUsersToProject.execute(this, this.state.id);
+  }
 
   addUser = async () => {
     await this.props.addUsersToProject.execute(this, this.state.id, [
@@ -262,12 +265,6 @@ export default class AdminPortal extends React.Component {
     return (
       <div>
         {this.renderProjectDetails()}
-        <div>
-          <p>
-            Please add yourself as a user here (you can add more users later).
-          </p>
-        </div>
-        <div>{this.renderUserDetails()}</div>
         <button
           className="btn btn-primary"
           data-test="create-project-submit"

@@ -42,14 +42,6 @@ describe("AdminPortal", () => {
             .simulate("change", { target: { value: "EAX/EBX/ECX" } });
 
           adminPortal
-            .find("[data-test='user-email']").at(0)
-            .simulate("change", { target: { value: "my_email@email.net" } });
-
-          adminPortal
-            .find("[data-test='user-role-la']").at(0)
-            .simulate("change", { target: { value: "Homes England" } });
-
-          adminPortal
             .find('[data-test="create-project-submit"]')
             .simulate("click")
         });
@@ -59,7 +51,7 @@ describe("AdminPortal", () => {
         });
 
         it("Will call the add users use case", async () => {
-          expect(addUsersToProjectSpy.execute).toHaveBeenCalledWith(expect.anything(), 1, [{ email: "my_email@email.net", role: "Homes England" }])
+          expect(addUsersToProjectSpy.execute).toHaveBeenCalledWith(expect.anything(), 1)
         });
 
         it("Will display a success message", async () => {
@@ -82,14 +74,6 @@ describe("AdminPortal", () => {
             .simulate("change", { target: { value: "HUA/DHA/63278" } });
 
           adminPortal
-            .find("[data-test='user-email']").at(0)
-            .simulate("change", { target: { value: "email" } });
-
-          adminPortal
-            .find("[data-test='user-role-la']").at(0)
-            .simulate("change", { target: { value: "Local Authority" } });
-
-          adminPortal
             .find('[data-test="create-project-submit"]')
             .simulate("click")
         });
@@ -103,7 +87,7 @@ describe("AdminPortal", () => {
         });
 
         it("Will call the add users use case", async () => {
-          expect(addUsersToProjectSpy.execute).toHaveBeenCalledWith(expect.anything(), 1, [{ email: "email", role: "Local Authority" }])
+          expect(addUsersToProjectSpy.execute).toHaveBeenCalledWith(expect.anything(), 1)
         });
 
         it("Will display a success message", async () => {
@@ -119,11 +103,11 @@ describe("AdminPortal", () => {
           .simulate("change", { target: { value: 2 } });
 
         adminPortal
-          .find("[data-test='user-email']").at(1)
+          .find("[data-test='user-email']")
           .simulate("change", { target: { value: "email" } });
 
         adminPortal
-          .find("[data-test='user-role-la']").at(1)
+          .find("[data-test='user-role-la']")
           .simulate("change", { target: { value: "Local Authority" } });
 
         adminPortal

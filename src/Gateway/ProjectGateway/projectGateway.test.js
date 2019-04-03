@@ -748,7 +748,7 @@ describe("Project Gateway", () => {
         gateway = new ProjectGateway(apiKeyGateway);
       });
 
-      it("Submits data to the API", async () => {
+      it("Submits data for adding a specific user to the API", async () => {
         let users = [{
           email: "my_email@email.com",
           role: "Homes England"
@@ -761,6 +761,18 @@ describe("Project Gateway", () => {
           })
           .reply(200);
         await gateway.addUser(1, users);
+
+        expect(updateProjectRequest.isDone()).toBeTruthy();
+      });
+
+      it("Submits data for the current user to the API", async () => {
+        let updateProjectRequest = nock("http://rabbits.jump")
+          .matchHeader("Content-Type", "application/json")
+          .post("/project/1/add_users", {
+            users: [{self: true}]
+          })
+          .reply(200);
+        await gateway.addUser(1);
 
         expect(updateProjectRequest.isDone()).toBeTruthy();
       });
