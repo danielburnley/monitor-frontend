@@ -180,6 +180,14 @@ export default class ProjectGateway {
   }
 
   async addUser(project_id, users) {
+    let users_to_add;
+
+    if (users === undefined) {
+      users_to_add = {users: [{self: true}]};
+    } else {
+      users_to_add = {users};
+    }
+
     let response = await fetch(
       `${this.env.REACT_APP_HIF_API_URL}project/${project_id}/add_users`,
       {
@@ -188,7 +196,7 @@ export default class ProjectGateway {
           "Content-Type": "application/json",
           API_KEY: this.apiKeyGateway.getApiKey().apiKey
         },
-        body: JSON.stringify({users})
+        body: JSON.stringify(users_to_add)
       }
     ).catch(() => ({ ok: false }));
 

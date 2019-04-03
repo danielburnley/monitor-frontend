@@ -2,6 +2,16 @@ html {
   height: 100%;
 }
 
+.homepage {
+  height: 100%;
+  vertical-align: middle;
+}
+
+.back-to-homepage {
+  margin-right: 10%;
+  float: right
+}
+
 .app-container {
   display: flex;
   flex-direction: column;

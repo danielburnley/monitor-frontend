@@ -30,14 +30,14 @@ describe("AddUsersToProject", () => {
       it("Example 1", async () => {
         let usecase = getUseCase();
         await usecase.execute(presenterSpy, 2, "user");
-        expect(presenterSpy.userAddedSuccess).toHaveBeenCalled();
+        expect(presenterSpy.userAddedSuccess).toHaveBeenCalledWith(2);
         expect(presenterSpy.userAddedFailure).not.toHaveBeenCalled();
       });
 
       it("Example 2", async () => {
         let usecase = getUseCase(true);
         await usecase.execute(presenterSpy,3, "using");
-        expect(presenterSpy.userAddedSuccess).toHaveBeenCalled();
+        expect(presenterSpy.userAddedSuccess).toHaveBeenCalledWith(3);
         expect(presenterSpy.userAddedFailure).not.toHaveBeenCalled();
 
       });

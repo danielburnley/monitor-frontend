@@ -6,7 +6,7 @@ export default class AddUsersToProject {
   async execute(presenter, projectId, users) {
     let {success} = await this.projectGateway.addUser(projectId, users);
     if (success) {
-      presenter.userAddedSuccess();
+      presenter.userAddedSuccess(projectId);
     } else {
       presenter.userAddedFailure();
     }

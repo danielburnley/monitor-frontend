@@ -3,7 +3,7 @@ import React from "react";
 import qs from "qs";
 
 import StaticData from "./Components/StaticData";
-import Homepage from "./Components/Homepage";
+import ProjectListProvider from "./Components/ProjectListProvider";
 import Footer from "./Components/Footer";
 import Header from "./Components/Header";
 import InfrastructureAdditionPage from "./Components/InfrastructureAdditionPage";
@@ -492,18 +492,43 @@ const renderPrintPage = props => (
 );
 
 const renderhomepage = props => (
-  <Homepage {...props} getUserProjects={getUserProjectsUseCase} >
-    {({projectList}) => (
-      <div>
-      <ProjectList projectList={projectList} {...props} />
-      <AdminPortal
-        getRole={getRole}
-        createProject={createProjectUseCase}
-        addUsersToProject={addUsersToProject}
-        />
+  <div className="homepage">
+    <div className="row">
+      <div className="col-md-2"/>
+      <div className="col-md-8">
+        <h1>Homes England Monitor</h1>
+        <p>
+          Welcome to the Homes England monitoring system. Here are the projects you are a member of.
+        </p>
       </div>
-    )}
-  </Homepage>
+      <div className="col-md-2" />
+    </div>
+    <div className="row">
+      <div className="col-md-2" />
+      <div className="col-md-8">
+        <AdminPortal
+          {...props}
+          getRole={getRole}
+          createProject={createProjectUseCase}
+          addUsersToProject={addUsersToProject}
+        >
+          {
+            (lastProjectUserAddedTo) =>
+              <ProjectListProvider
+                {...props}
+                getUserProjects={getUserProjectsUseCase}
+                lastProjectUserAddedTo={lastProjectUserAddedTo}
+              >
+                {({projectList}) => (
+                  <ProjectList projectList={projectList} {...props} />
+                )}
+              </ProjectListProvider>
+          }
+        </AdminPortal>
+      </div>
+      <div className="col-md-2" />
+    </div>
+  </div>
 );
 
 
