@@ -11,7 +11,7 @@ import {
   daysPassed,
   secondsPassed,
   setCreate,
-  validateArrayPropertyIsLessThan,
+  validateCumulativeArrayPropertyIsLessThan,
   validateDatesSequential,
   periodTotal,
   setArrayVariance,
@@ -416,31 +416,47 @@ describe("setCreate()", () => {
   });
 });
 
-describe("validateArrayPropertyIsLessThan()", () => {
+describe("validateCumulativeArrayPropertyIsLessThan()", () => {
   describe("Valid", () => {
     it("Example 1", () => {
-      let formData = [{ main: "12" }];
-      validateArrayPropertyIsLessThan(formData, ["main"], 20);
-      expect(formData).toEqual([{ _valid: true, main: "12" }]);
+      let formData = [
+        { main: "12" },
+        { main: "24" },
+        { main: "78" }
+      ];
+      validateCumulativeArrayPropertyIsLessThan(formData, ["main"], 200);
+      expect(formData).toEqual([
+        { _valid: true, main: "12" },
+        { _valid: true, main: "24" },
+        { _valid: true, main: "78" }
+      ]);
     });
 
     it("Example 2", () => {
       let formData = [{ main: "13" }];
-      validateArrayPropertyIsLessThan(formData, ["main"], 20);
+      validateCumulativeArrayPropertyIsLessThan(formData, ["main"], 20);
       expect(formData).toEqual([{ _valid: true, main: "13" }]);
     });
   });
 
   describe("Invalid", () => {
     it("Example 1", () => {
-      let formData = [{ main: "22" }];
-      validateArrayPropertyIsLessThan(formData, ["main"], 19);
-      expect(formData).toEqual([{ _valid: false, main: "22" }]);
+      let formData = [
+        { total: { main: "12" }, value1: 2 },
+        { total: { main: "24" }, value1: 2 },
+        { total: { main: "78" }, value1: 2 }
+      ];
+      validateCumulativeArrayPropertyIsLessThan(formData, ["total", "main"], 80);
+      expect(formData).toEqual([
+        { total: { _valid: false, main: "12" }, value1: 2},
+        { total: { _valid: false, main: "24" }, value1: 2},
+        { total: { _valid: false, main: "78" }, value1: 2}
+      ]);
     });
 
     it("Example 2", () => {
       let formData = [{ main: "24" }];
-      validateArrayPropertyIsLessThan(formData, ["main"], 19);
+      validateCumulativeArrayPropertyIsLessThan(formData, ["main"], 19);
       expect(formData).toEqual([{ _valid: false, main: "24" }]);
     });
   });

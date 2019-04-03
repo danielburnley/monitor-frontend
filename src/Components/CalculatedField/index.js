@@ -108,12 +108,16 @@ export function secondsPassed(originalDate, newDate) {
   return (newDateDatified - originalDateDatified) / 1000;
 }
 
-export function validateArrayPropertyIsLessThan(array, path, value) {
+export function validateCumulativeArrayPropertyIsLessThan(array, path, value) {
+  let grandTotal = array
+  .reduce((total, object) => parseMoney(get(object, ...path)) + total, 0)
+  
+  let validity = value > grandTotal
   array.forEach(object => {
     setCreate(
       object,
       [...path.slice(0, path.length - 1), "_valid"],
-      get(object, ...path) <= value
+      validity
     );
   });
 }
