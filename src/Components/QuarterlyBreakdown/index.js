@@ -117,10 +117,10 @@ export default class QuarterlyBreakdown extends React.Component {
   }
 
   renderAddButton() {
-    if (!this.props.schema.addable) {
-      return null;
+    if(this.isAddable()) {
+      return <div className="data-column"><AddButton onClick={() => this.addEvent()} /></div>;
     }
-    return <div className="data-column"><AddButton onClick={() => this.addEvent()} /></div>;
+    return null;
   }
 
   addEvent() {
@@ -132,11 +132,15 @@ export default class QuarterlyBreakdown extends React.Component {
   }
 
   renderRemoveButton(index) {
-    if (this.props.schema.addable) {
+    if(this.isAddable()) {
       return <div className="remove"><RemoveButton onClick={() => this.removeEvent(index)} index={index}/></div>;
     }
     return null;
   }
+
+  isAddable = () => this.props.uiSchema && this.props.uiSchema['ui:options'] &&
+      this.props.uiSchema['ui:options']['addable']
+  
 
   removeEvent(index) {
     let updatedArray = this.state.data;
@@ -149,7 +153,7 @@ export default class QuarterlyBreakdown extends React.Component {
 
   render() {
     let quarterlyObject = this.props.schema.items.properties;
-    if(this.props.schema.addable) {
+    if(this.isAddable()) {
       quarterlyObject.remove = { title: "Remove", type: "string" };
     }
     return <div>

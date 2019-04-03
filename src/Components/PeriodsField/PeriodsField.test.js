@@ -13,7 +13,6 @@ describe("Period Financials", () => {
           periods: true,
           title: "cats",
           type: "Array",
-          addable: true,
           items: {
             type: "object",
             properties: {
@@ -29,6 +28,9 @@ describe("Period Financials", () => {
           }
         };
         uiSchema = {
+          "ui:options": {
+            "addable": true
+          },
           items: {
             period: {"ui": "readonly"}
           }
@@ -121,6 +123,9 @@ describe("Period Financials", () => {
           }
         };
         uiSchema = {
+          "ui:options": {
+            "addable": false
+          },
           items: { length: {pretty: "long"} }
         }
         periods = new Periods(data, schema, uiSchema);

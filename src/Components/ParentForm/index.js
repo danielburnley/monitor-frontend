@@ -219,6 +219,12 @@ export default class ParentForm extends React.Component {
     }
   }
 
+  isAddable = () => this.props.uiSchema &&
+    this.props.uiSchema[this.state.selected] &&
+    this.props.uiSchema[this.state.selected]["ui:options"] && 
+    this.props.uiSchema[this.state.selected]["ui:options"]["addable"]
+
+
   renderSidebar() {
     let items = new GenerateSidebarItems().execute(
       this.props.schema.properties[this.state.selected],
@@ -227,7 +233,7 @@ export default class ParentForm extends React.Component {
     return (
       <Sidebar
         userRole={this.state.userRole}
-        addable={this.selectedSchema().addable}
+        addable={this.isAddable()}
         section={this.state.selected}
         linkedArray={this.selectedSchema().linkedArray}
         formData={this.state.formData}
