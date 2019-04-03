@@ -219,13 +219,11 @@ export default class ParentForm extends React.Component {
     }
   }
 
-  isAddable = () => {
-    if (!this.props.uiSchema) return false;
-    if (!this.props.uiSchema[this.state.selected]) return false;
-    if (!this.props.uiSchema[this.state.selected]["ui:options"]) return false;    
-    
-    return this.props.uiSchema[this.state.selected]["ui:options"]["addable"]
-  }
+  isAddable = () => this.props.uiSchema &&
+    this.props.uiSchema[this.state.selected] &&
+    this.props.uiSchema[this.state.selected]["ui:options"] && 
+    this.props.uiSchema[this.state.selected]["ui:options"]["addable"]
+
 
   renderSidebar() {
     let items = new GenerateSidebarItems().execute(

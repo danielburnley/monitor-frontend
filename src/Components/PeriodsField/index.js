@@ -75,18 +75,22 @@ export default class PeriodsField extends React.Component {
     })
   }
 
+  isAddable = () => this.props.uiSchema && this.props.uiSchema['ui:options'] &&
+    this.props.uiSchema['ui:options']['addable']
+
+
   renderAddButton() {
-    if (!this.props.schema.addable) {
-      return null;
+    if (this.isAddable()) {
+      return <AddButton onClick={() => this.addEvent()} />;
     }
-    return <AddButton onClick={() => this.addEvent()} />;
+    return null;
   }
 
   renderRemoveButton(index) {
-    if (!this.props.schema.addable) {
-      return null;
+    if (this.isAddable()) {
+      return <RemoveButton onClick={() => this.removeEvent(index)} index={index} />;
     }
-    return <RemoveButton onClick={() => this.removeEvent(index)} index={index} />;
+    return null;
   }
 
   addEvent() {
@@ -106,7 +110,7 @@ export default class PeriodsField extends React.Component {
 
   render() {
     let updatedRows = this.props.schema.items.properties;
-    if (this.props.schema.addable) {
+    if (this.isAddable()) {
       updatedRows.remove = { title: "Remove", type: "string" };
     }
     return (

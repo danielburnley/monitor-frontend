@@ -1074,6 +1074,10 @@ describe("<ParentForm>", () => {
         expect(parentForm.find("Sidebar").props().selectedFormItemIndex).toEqual(0);
       });
 
+      it("Passes not addable to the sidebar", () => {
+        expect(parentForm.find("Sidebar").props().addable).toBeFalsy();
+      });
+
       describe("Passes the selected details into the subform", () => {
         describe("Example one", () => {
           it("Passes the selected form section into the subform", () => {

@@ -273,7 +273,6 @@ describe("Quarterly Breakdown", () => {
         schema = {
           type: "array",
           title: "Dogs Data",
-          addable: true,
           items: {
             type: "object",
             properties: {
@@ -302,6 +301,9 @@ describe("Quarterly Breakdown", () => {
           }
         };
         uiSchema = {
+          "ui:options": {
+            "addable": true
+          },
           items: {
             quarter1: {"anotherprop": "forui"}
           }
@@ -483,13 +485,17 @@ describe("Quarterly Breakdown", () => {
 
   describe("No data", () => {
     describe("Example 1", () => {
-      let schema, data, field, onChangeSpy;
+      let schema, data, field, onChangeSpy, uiSchema;
       beforeEach(() => {
         onChangeSpy = jest.fn();
-
+        uiSchema = {
+          "ui:options": {
+            "addable": true
+          },
+          items: {}
+        }
         schema = {
           type: "array",
-          addable: true,
           title: "Cats Data",
           items: {
             type: "object",
@@ -509,6 +515,7 @@ describe("Quarterly Breakdown", () => {
           <QuarterlyBreakdown
             schema={schema}
             formData={data}
+            uiSchema={uiSchema}
             registry={{fields: {SchemaField: FieldFake}}}
             onChange={onChangeSpy}
           />
@@ -533,13 +540,17 @@ describe("Quarterly Breakdown", () => {
     });
 
     describe("Example 2", () => {
-      let schema, data, field, onChangeSpy;
+      let schema, data, field, onChangeSpy, uiSchema;
       beforeEach(() => {
         onChangeSpy = jest.fn();
-
+        uiSchema = {
+          "ui:options": {
+            "addable": true
+          },
+          items: {}
+        }
         schema = {
           type: "array",
-          addable: true,
           title: "Cats Data",
           items: {
             type: "object",
@@ -558,6 +569,7 @@ describe("Quarterly Breakdown", () => {
         field = mount(
           <QuarterlyBreakdown
             schema={schema}
+            uiSchema={uiSchema}
             formData={data}
             onChange={onChangeSpy}
             registry={{fields: {SchemaField: FieldFake}}}
@@ -577,7 +589,7 @@ describe("Quarterly Breakdown", () => {
         expect(field.find("[data-test='add-button']").length).toEqual(1);
       });
 
-      it("does render a remove button", () => {
+      it("renders a remove button", () => {
         expect(field.find("[data-test='remove-button-0']").length).toEqual(1);
       });
     });
