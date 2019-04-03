@@ -1,8 +1,8 @@
 import React from "react";
-import Homepage from ".";
+import ProjectListProvider from ".";
 import { mount } from "enzyme";
 
-describe("<Homepage>", () => {
+describe("<ProjectListProvider>", () => {
   describe("Example one", () => {
     let getUserProjectsSpy, homepage, childrenSpy;
     describe("When loading the project list", () => {
@@ -10,12 +10,12 @@ describe("<Homepage>", () => {
         getUserProjectsSpy = { execute: jest.fn() }
         childrenSpy = jest.fn()
         homepage = mount(
-          <Homepage
+          <ProjectListProvider
             getUserProjects={getUserProjectsSpy}
             match={{params: {projectId: 2}}}
           >
             {() => {}}
-          </Homepage>
+          </ProjectListProvider>
         )
       });
 
@@ -30,17 +30,17 @@ describe("<Homepage>", () => {
 
     describe("When the project list has loaded", () => {
       beforeEach(() => {
-        getUserProjectsSpy = { execute: (presenter, _) => 
+        getUserProjectsSpy = { execute: (presenter, _) =>
           presenter.presentProjectList ([{aproject: "yes"}])
         }
         childrenSpy = jest.fn()
         homepage = mount(
-          <Homepage
+          <ProjectListProvider
             getUserProjects={getUserProjectsSpy}
             match={{params: {projectId: 2}}}
           >
             {childrenSpy}
-          </Homepage>
+          </ProjectListProvider>
         )
       });
 
@@ -54,6 +54,38 @@ describe("<Homepage>", () => {
         });
       });
     });
+
+    describe("When the lastProjectUserAddedTo prop changes", () => {
+      beforeEach(() => {
+        let getUserProjectCallCount = 0;
+        getUserProjectsSpy = { execute: (presenter, _) => {
+            if (getUserProjectCallCount === 0) {
+              presenter.presentProjectList([{aproject: "yes"}]);
+            } else if (getUserProjectCallCount === 1) {
+              presenter.presentProjectList([{aproject: "yes"}, {anotherproject: "yes"}]);
+            }
+            getUserProjectCallCount += 1;
+          }
+        }
+        childrenSpy = jest.fn()
+        homepage = mount(
+          <ProjectListProvider
+            lastProjectUserAddedTo={null}
+            getUserProjects={getUserProjectsSpy}
+            match={{params: {projectId: 2}}}
+          >
+            {childrenSpy}
+          </ProjectListProvider>
+        )
+      });
+
+      it("Fetches the new projects when lastProjectUserAddedTo is updated", () => {
+        homepage.setProps({lastProjectUserAddedTo: 3});
+        expect(childrenSpy).toHaveBeenCalledWith({
+          projectList: [{aproject: "yes"}, {anotherproject: "yes"}]
+        });
+      });
+    });
   });
 
   describe("Example two", () => {
@@ -63,12 +95,12 @@ describe("<Homepage>", () => {
         getUserProjectsSpy = { execute: jest.fn() }
         childrenSpy = jest.fn()
         homepage = mount(
-          <Homepage
+          <ProjectListProvider
             getUserProjects={getUserProjectsSpy}
             match={{params: {projectId: 4}}}
           >
             {() => {}}
-          </Homepage>
+          </ProjectListProvider>
         )
       });
 
@@ -83,17 +115,17 @@ describe("<Homepage>", () => {
 
     describe("When the project list has loaded", () => {
       beforeEach(() => {
-        getUserProjectsSpy = { execute: (presenter, _) => 
+        getUserProjectsSpy = { execute: (presenter, _) =>
           presenter.presentProjectList ([{project1: "yes"}, {project2: "NO"}])
         }
         childrenSpy = jest.fn()
         homepage = mount(
-          <Homepage
+          <ProjectListProvider
             getUserProjects={getUserProjectsSpy}
             match={{params: {projectId: 4}}}
           >
             {childrenSpy}
-          </Homepage>
+          </ProjectListProvider>
         )
       });
 

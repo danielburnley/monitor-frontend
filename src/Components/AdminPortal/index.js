@@ -8,7 +8,8 @@ export default class AdminPortal extends React.Component {
 
     this.state = {
       projectCreated: false,
-      type: "ac"
+      type: "ac",
+      lastProjectUserAddedTo: null
     };
     this.env = runtimeEnv();
   }
@@ -28,9 +29,10 @@ export default class AdminPortal extends React.Component {
     });
   };
 
-  userAddedSuccess = async () => {
-    this.setState({
-      userAdded: true
+  userAddedSuccess = async (projectId) => {
+    await this.setState({
+      userAdded: true,
+      lastProjectUserAddedTo: projectId
     });
   };
 
@@ -46,7 +48,6 @@ export default class AdminPortal extends React.Component {
       );
 
       await this.addSelf();
-      window.location.reload();
     }
   };
 
@@ -276,7 +277,7 @@ export default class AdminPortal extends React.Component {
     );
   };
 
-  render() {
+  renderAdminUtils = () => {
     if (this.props.getRole.execute().role === "Superuser") {
       return (
         <div data-test="admin">
@@ -291,4 +292,13 @@ export default class AdminPortal extends React.Component {
 
     return null;
   }
+
+  render = () =>
+    <div>
+      {
+        this.props.children &&
+        this.props.children({lastProjectUserAddedTo: this.state.lastProjectUserAddedTo})
+      }
+      {this.renderAdminUtils()}
+    </div>
 }

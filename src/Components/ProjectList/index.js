@@ -2,7 +2,6 @@ import React from "react";
 import "./style.css";
 
 export default class ProjectList extends React.Component {
-
   renderProjectLine = (id, name, type, status) => {
     return <tr data-test={`project-${id}`} key={`project-${id}`}>
       <td className="project-details" data-test={`project-id-${id}`}>{id}</td>

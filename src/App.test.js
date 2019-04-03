@@ -188,7 +188,7 @@ describe("Viewing the Homepage", () => {
 
 
     expect(page.find("GetToken").length).toEqual(0);
-    expect(page.find("Homepage").length).toEqual(1);
+    expect(page.find("ProjectListProvider").length).toEqual(1);
   });
 
   it("will show the Project list from the api.", async () => {
