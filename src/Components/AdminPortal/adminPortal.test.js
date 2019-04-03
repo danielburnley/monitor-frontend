@@ -64,20 +64,24 @@ describe("AdminPortal", () => {
           expect(adminPortal.find('[data-test="project-created-message"]').length).toEqual(1)
         });
 
+        it("Will clear the text in the form", async () => {
+          await adminPortal.update();
+          expect(adminPortal.find('[data-test="create-project-name"]').props().value).toEqual("")
+          expect(adminPortal.find('[data-test="create-project-bidId"]').props().value).toEqual("")
+          expect(adminPortal.find('[data-test="create-project-hif"]').props().checked).toEqual(false)
+          expect(adminPortal.find('[data-test="create-project-ac"]').props().checked).toEqual(false)
+        });
+
         it("Will render children with the correct lastProjectUserAddedTo", async () => {
           expect(childrenSpy).toHaveBeenCalledWith({lastProjectUserAddedTo: 1});
         });
       });
 
-      describe("With a set type", () => {
+      describe("Missing Type", () => {
         beforeEach(() => {
           adminPortal
             .find("[data-test='create-project-name']")
             .simulate("change", { target: { value: "name" } });
-
-          adminPortal
-            .find("[data-test='create-project-ac']")
-            .simulate("change", { target: { value: "type" } });
 
           adminPortal
             .find("[data-test='create-project-bidId']")
@@ -88,24 +92,22 @@ describe("AdminPortal", () => {
             .simulate("click")
         });
 
-        it("Will find the ff option", () => {
-          expect(adminPortal.find('[data-test="create-project-ff"]').length).toEqual(1)
-        })
-
-        it("Will call the create project use case with details upon submit", () => {
-          expect(createProjectUseCaseSpy.execute).toHaveBeenCalledWith(expect.anything(), "name", "type", "HUA/DHA/63278")
+        it("Will nto call the create project use case with details upon submit", () => {
+          expect(createProjectUseCaseSpy.execute).not.toHaveBeenCalled()
         });
 
-        it("Will call the add users use case", async () => {
-          expect(addUsersToProjectSpy.execute).toHaveBeenCalledWith(expect.anything(), 1)
+        it("Will not call the add users use case", async () => {
+          expect(addUsersToProjectSpy.execute).not.toHaveBeenCalledWith(expect.anything(), 1)
         });
 
-        it("Will display a success message", async () => {
-          expect(adminPortal.find('[data-test="project-created-message"]').length).toEqual(1)
+        it("Will display a validation message", async () => {
+          expect(adminPortal.find('[data-test="validation-message"]').length).toEqual(1)
         });
 
-        it("Will render children with the correct lastProjectUserAddedTo", () => {
-          expect(childrenSpy).toHaveBeenCalledWith({lastProjectUserAddedTo: 1});
+        it("Will not clear the text in the form", async () => {
+          await adminPortal.update();
+          expect(adminPortal.find('[data-test="create-project-name"]').props().value).toEqual("name")
+          expect(adminPortal.find('[data-test="create-project-bidId"]').props().value).toEqual("HUA/DHA/63278")
         });
       });
     });
@@ -137,6 +139,15 @@ describe("AdminPortal", () => {
 
       it("displays a success message", async () => {
         expect(adminPortal.find('[data-test="user-added"]').length).toEqual(1)
+      });
+
+      it("clears the text after project created", async () => {
+        await adminPortal.update();
+        expect(adminPortal.find('[data-test="project-id"]').props().value).toEqual("")
+        expect(adminPortal.find('[data-test="user-email"]').props().value).toEqual("")
+        expect(adminPortal.find('[data-test="user-role-la"]').props().checked).toEqual(false)
+        expect(adminPortal.find('[data-test="user-role-he"]').props().checked).toEqual(false)
+        expect(adminPortal.find('[data-test="user-role-su"]').props().checked).toEqual(false)
       });
 
       it("Will render children with the correct lastProjectUserAddedTo", () => {

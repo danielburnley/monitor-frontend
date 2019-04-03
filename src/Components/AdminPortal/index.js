@@ -8,8 +8,11 @@ export default class AdminPortal extends React.Component {
 
     this.state = {
       projectCreated: false,
-      type: "ac",
-      lastProjectUserAddedTo: null
+      lastProjectUserAddedTo: null,
+      bidId: "",
+      name: "",
+      id: "",
+      email: ""
     };
     this.env = runtimeEnv();
   }
@@ -17,7 +20,10 @@ export default class AdminPortal extends React.Component {
   creationSuccess = async id => {
     await this.setState({
       projectCreated: true,
-      id: id
+      id: id,
+      bidId: "",
+      name: "",
+      type: null
     });
   };
 
@@ -32,7 +38,10 @@ export default class AdminPortal extends React.Component {
   userAddedSuccess = async (projectId) => {
     await this.setState({
       userAdded: true,
-      lastProjectUserAddedTo: projectId
+      lastProjectUserAddedTo: projectId,
+      id: "",
+      role: null,
+      email: ""
     });
   };
 
@@ -93,6 +102,7 @@ export default class AdminPortal extends React.Component {
           <input
             className="form-control"
             id="projectName"
+            value={this.state.name}
             data-test="create-project-name"
             placeholder="Project Name"
             onChange={e => this.onFieldChange(e.target.value, "name")}
@@ -108,6 +118,7 @@ export default class AdminPortal extends React.Component {
                 type="radio"
                 value="ac"
                 name="projectType"
+                checked={this.state.type === "ac"}
                 data-test="create-project-ac"
                 onChange={e => this.onFieldChange(e.target.value, "type")}
               />
@@ -120,6 +131,7 @@ export default class AdminPortal extends React.Component {
                 type="radio"
                 value="hif"
                 name="projectType"
+                checked={this.state.type === "hif"}
                 data-test="create-project-hif"
                 onChange={e => this.onFieldChange(e.target.value, "type")}
               />
@@ -135,6 +147,7 @@ export default class AdminPortal extends React.Component {
           <input
             className="form-control"
             id="projectBidId"
+            value={this.state.bidId}
             data-test="create-project-bidId"
             placeholder="BID reference"
             onChange={e => this.onFieldChange(e.target.value, "bidId")}
@@ -174,6 +187,7 @@ export default class AdminPortal extends React.Component {
             className="form-control"
             data-test="user-email"
             id="userEmail"
+            value={this.state.email}
             placeholder="User Email"
             onChange={e => this.onFieldChange(e.target.value, "email")}
           />
@@ -189,6 +203,7 @@ export default class AdminPortal extends React.Component {
                 type="radio"
                 value="Local Authority"
                 name="userRole"
+                checked={this.state.role === "Local Authority"}
                 data-test="user-role-la"
                 onChange={e => this.onFieldChange(e.target.value, "role")}
               />
@@ -202,6 +217,7 @@ export default class AdminPortal extends React.Component {
                 value="Homes England"
                 name="userRole"
                 data-test="user-role-he"
+                checked={this.state.role === "Homes England"}
                 onChange={e => this.onFieldChange(e.target.value, "role")}
               />
               Homes England
@@ -212,6 +228,7 @@ export default class AdminPortal extends React.Component {
               <input
                 type="radio"
                 data-test="user-role-su"
+                checked={this.state.role === "Superuser"}
                 value="Superuser"
                 name="userRole"
                 onChange={e => this.onFieldChange(e.target.value, "role")}
@@ -245,6 +262,7 @@ export default class AdminPortal extends React.Component {
           <input
             className="form-control"
             id="projectId"
+            value={this.state.id}
             data-test="project-id"
             placeholder="Project ID"
             onChange={e => this.onFieldChange(e.target.value, "id")}
