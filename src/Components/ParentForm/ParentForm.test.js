@@ -513,6 +513,16 @@ describe("<ParentForm>", () => {
             getRole={getRoleUseCaseSpy}
             onChange={onChangeSpy}
             formData={{ cats: [{ name: "Mittens", noise: "Meow" }] }}
+            uiSchema={{
+              cats: {
+                "ui:options": {
+                  addable: true,
+                  orderable: false,
+                  removable: true
+                },
+                items: {}
+              }
+            }}
             schema={{
               type: "object",
               properties: {
@@ -572,6 +582,10 @@ describe("<ParentForm>", () => {
 
         it("Passes sidebar the correct selected form section", () => {
           expect(parentForm.find('Sidebar').props().selectedFormSection).toEqual("name");
+        });
+
+        it("Passes sidebar whether addable or not", () => {
+          expect(parentForm.find('Sidebar').props().addable).toEqual(true);
         });
 
         it("Sets the selected form section to the index chosen", () => {
@@ -663,6 +677,21 @@ describe("<ParentForm>", () => {
                 documentGateway={documentGatewaySpy}
                 getRole={getRoleUseCaseSpy}
                 onChange={onChangeSpy}
+                uiSchema={{
+                  cats: {
+                    "ui:options": {
+                      "addable": true
+                    },
+                    items: {}
+                  },
+                  dogs: {
+                    "ui:options": {
+                      "addable": true
+                    },
+                    items: {}
+
+                  }
+                }}
                 formData={
                   {
                     cats: [
@@ -737,6 +766,14 @@ describe("<ParentForm>", () => {
                     ]
                   }
                 }
+                uiSchema={{
+                  dogs: {
+                    "ui:options": {
+                      addable: true
+                    },
+                    items: {}
+                  }
+                }}
                 schema={{
                   type: "object",
                   properties: {
