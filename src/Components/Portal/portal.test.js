@@ -109,4 +109,59 @@ describe("Portal", () => {
     wrapper.update();
     expect(wrapper.find("GetToken").length).toEqual(0);
   });
+
+  describe("When logged in", () => {
+    it("Displays the logout button", async () => {
+      CanAccessMonitorSpy = {
+        execute: jest.fn(async () => {
+          return {
+            valid: true,
+            apiKey: "Cows"
+          };
+        })
+      };
+
+      let wrapper = mount(
+        <Portal
+          canAccessMonitor={CanAccessMonitorSpy}
+          logoutUsecase={{execute: (presenter) => {presenter.userLoggedOut()}}}
+        >
+          <h1>Hiya!</h1>
+        </Portal>
+      );
+      await wait();
+      await wrapper.update();
+      expect(wrapper.find("LogoutButton").length).toEqual(1);
+    });
+
+    it("Check access after logout", async () => {
+      let accessCount = 0;
+      CanAccessMonitorSpy = {
+        execute: jest.fn(async () => {
+          accessCount += 1;
+
+          return {
+            valid: true,
+            apiKey: "Cows"
+          };
+        })
+      };
+
+      let wrapper = mount(
+        <Portal
+          canAccessMonitor={CanAccessMonitorSpy}
+          logoutUsecase={{execute: (presenter) => {presenter.userLoggedOut()}}}
+        >
+          <h1>Hiya!</h1>
+        </Portal>
+      );
+      await wait();
+      await wrapper.update();
+      wrapper.find("[data-test='logout-button']").simulate('click');
+
+      await wait();
+      await wrapper.update();
+      expect(accessCount).toEqual(2);
+    });
+  });
 });
