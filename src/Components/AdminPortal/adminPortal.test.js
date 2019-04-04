@@ -37,11 +37,15 @@ describe("AdminPortal", () => {
       beforeEach(() => {
         userAddedToProject = 1;
       });
-      describe("With the default type", () => {
+      describe("With all information present", () => {
         beforeEach(() => {
           adminPortal
             .find("[data-test='create-project-name']")
             .simulate("change", { target: { value: "project 1" } });
+
+          adminPortal
+            .find("[data-test='create-project-hif']")
+            .simulate("change", { target: { value: "hif" } });
 
           adminPortal
             .find("[data-test='create-project-bidId']")
@@ -53,7 +57,7 @@ describe("AdminPortal", () => {
         });
 
         it("Will call the create project use case with details upon submit", () => {
-          expect(createProjectUseCaseSpy.execute).toHaveBeenCalledWith(expect.anything(), "project 1", "ac", "EAX/EBX/ECX")
+          expect(createProjectUseCaseSpy.execute).toHaveBeenCalledWith(expect.anything(), "project 1", "hif", "EAX/EBX/ECX")
         });
 
         it("Will call the add users use case", async () => {
@@ -77,7 +81,7 @@ describe("AdminPortal", () => {
         });
       });
 
-      describe("Missing Type", () => {
+      describe("Missing project type", () => {
         beforeEach(() => {
           adminPortal
             .find("[data-test='create-project-name']")
@@ -92,7 +96,7 @@ describe("AdminPortal", () => {
             .simulate("click")
         });
 
-        it("Will nto call the create project use case with details upon submit", () => {
+        it("Will not call the create project use case with details upon submit", () => {
           expect(createProjectUseCaseSpy.execute).not.toHaveBeenCalled()
         });
 
@@ -110,48 +114,214 @@ describe("AdminPortal", () => {
           expect(adminPortal.find('[data-test="create-project-bidId"]').props().value).toEqual("HUA/DHA/63278")
         });
       });
+
+      describe("Missing project name", () => {
+        beforeEach(() => {
+          adminPortal
+            .find("[data-test='create-project-ac']")
+            .simulate("change", { target: { value: "ac" } });
+
+          adminPortal
+            .find("[data-test='create-project-bidId']")
+            .simulate("change", { target: { value: "HUA/DHA/63278" } });
+
+          adminPortal
+            .find('[data-test="create-project-submit"]')
+            .simulate("click")
+        });
+
+        it("Will not call the create project use case with details upon submit", () => {
+          expect(createProjectUseCaseSpy.execute).not.toHaveBeenCalled()
+        });
+
+        it("Will not call the add users use case", async () => {
+          expect(addUsersToProjectSpy.execute).not.toHaveBeenCalledWith(expect.anything(), 1)
+        });
+
+        it("Will display a validation message", async () => {
+          expect(adminPortal.find('[data-test="validation-message"]').length).toEqual(1)
+        });
+
+        it("Will not clear the text in the form", async () => {
+          await adminPortal.update();
+          expect(adminPortal.find('[data-test="create-project-ac"]').props().value).toEqual("ac")
+          expect(adminPortal.find('[data-test="create-project-bidId"]').props().value).toEqual("HUA/DHA/63278")
+        });
+      });
+
+      describe("Missing Bid ID", () => {
+        beforeEach(() => {
+          adminPortal
+            .find("[data-test='create-project-ac']")
+            .simulate("change", { target: { value: "ac" } });
+
+          adminPortal
+            .find("[data-test='create-project-name']")
+            .simulate("change", { target: { value: "Name" } });
+
+          adminPortal
+            .find('[data-test="create-project-submit"]')
+            .simulate("click")
+        });
+
+        it("Will not call the create project use case with details upon submit", () => {
+          expect(createProjectUseCaseSpy.execute).not.toHaveBeenCalled()
+        });
+
+        it("Will not call the add users use case", async () => {
+          expect(addUsersToProjectSpy.execute).not.toHaveBeenCalledWith(expect.anything(), 1)
+        });
+
+        it("Will display a validation message", async () => {
+          expect(adminPortal.find('[data-test="validation-message"]').length).toEqual(1)
+        });
+
+        it("Will not clear the text in the form", async () => {
+          await adminPortal.update();
+          expect(adminPortal.find('[data-test="create-project-name"]').props().value).toEqual("Name")
+          expect(adminPortal.find('[data-test="create-project-ac"]').props().value).toEqual("ac")
+        });
+      });
     });
 
     describe("Adding a user to a project", () => {
-      beforeEach(() => {
-        userAddedToProject = 2;
-
-        adminPortal
-          .find("[data-test='project-id']")
-          .simulate("change", { target: { value: 2 } });
-
-        adminPortal
-          .find("[data-test='user-email']")
-          .simulate("change", { target: { value: "email" } });
-
-        adminPortal
-          .find("[data-test='user-role-la']")
-          .simulate("change", { target: { value: "Local Authority" } });
-
-        adminPortal
-          .find('[data-test="add-user-submit"]')
-          .simulate("click")
+      describe("With all inofrmation present", () => {
+        beforeEach(() => {
+          userAddedToProject = 2;
+  
+          adminPortal
+            .find("[data-test='project-id']")
+            .simulate("change", { target: { value: 2 } });
+  
+          adminPortal
+            .find("[data-test='user-email']")
+            .simulate("change", { target: { value: "email" } });
+  
+          adminPortal
+            .find("[data-test='user-role-la']")
+            .simulate("change", { target: { value: "Local Authority" } });
+  
+          adminPortal
+            .find('[data-test="add-user-submit"]')
+            .simulate("click")
+        });
+  
+        it("Will call the add users use case", async () => {
+          expect(addUsersToProjectSpy.execute).toHaveBeenCalledWith(expect.anything(), 2, [{ email: "email", role: "Local Authority" }])
+        });
+  
+        it("displays a success message", async () => {
+          expect(adminPortal.find('[data-test="user-added"]').length).toEqual(1)
+        });
+  
+        it("clears the text after project created", async () => {
+          await adminPortal.update();
+          expect(adminPortal.find('[data-test="project-id"]').props().value).toEqual("")
+          expect(adminPortal.find('[data-test="user-email"]').props().value).toEqual("")
+          expect(adminPortal.find('[data-test="user-role-la"]').props().checked).toEqual(false)
+          expect(adminPortal.find('[data-test="user-role-he"]').props().checked).toEqual(false)
+          expect(adminPortal.find('[data-test="user-role-su"]').props().checked).toEqual(false)
+        });
+  
+        it("Will render children with the correct lastProjectUserAddedTo", () => {
+          expect(childrenSpy).toHaveBeenCalledWith({lastProjectUserAddedTo: 2});
+        });
       });
 
-      it("Will call the add users use case", async () => {
-        expect(addUsersToProjectSpy.execute).toHaveBeenCalledWith(expect.anything(), 2, [{ email: "email", role: "Local Authority" }])
+      describe("Missing project ID", () => {
+        beforeEach(() => {
+          userAddedToProject = 2;
+  
+          adminPortal
+            .find("[data-test='user-email']")
+            .simulate("change", { target: { value: "email" } });
+  
+          adminPortal
+            .find("[data-test='user-role-la']")
+            .simulate("change", { target: { value: "Local Authority" } });
+  
+          adminPortal
+            .find('[data-test="add-user-submit"]')
+            .simulate("click")
+        });
+
+        it("Will not call the add users use case", async () => {
+          expect(addUsersToProjectSpy.execute).not.toHaveBeenCalledWith(expect.anything(), 1)
+        });
+
+        it("Will display a validation message", async () => {
+          expect(adminPortal.find('[data-test="validation-message"]').length).toEqual(1)
+        });
+
+        it("Will not clear the text in the form", async () => {
+          await adminPortal.update();
+          expect(adminPortal.find('[data-test="user-email"]').props().value).toEqual("email")
+          expect(adminPortal.find('[data-test="user-role-la"]').props().value).toEqual("Local Authority")
+        });
       });
 
-      it("displays a success message", async () => {
-        expect(adminPortal.find('[data-test="user-added"]').length).toEqual(1)
+      describe("Missing user role", () => {
+        beforeEach(() => {
+          userAddedToProject = 2;
+  
+          adminPortal
+            .find("[data-test='project-id']")
+            .simulate("change", { target: { value: 2 } });
+  
+          adminPortal
+            .find("[data-test='user-email']")
+            .simulate("change", { target: { value: "email" } });
+  
+          adminPortal
+            .find('[data-test="add-user-submit"]')
+            .simulate("click")
+        });
+
+        it("Will not call the add users use case", async () => {
+          expect(addUsersToProjectSpy.execute).not.toHaveBeenCalledWith(expect.anything(), 1)
+        });
+
+        it("Will display a validation message", async () => {
+          expect(adminPortal.find('[data-test="validation-message"]').length).toEqual(1)
+        });
+
+        it("Will not clear the text in the form", async () => {
+          await adminPortal.update();
+          expect(adminPortal.find('[data-test="project-id"]').props().value).toEqual(2)
+          expect(adminPortal.find('[data-test="user-email"]').props().value).toEqual("email")
+        });
       });
 
-      it("clears the text after project created", async () => {
-        await adminPortal.update();
-        expect(adminPortal.find('[data-test="project-id"]').props().value).toEqual("")
-        expect(adminPortal.find('[data-test="user-email"]').props().value).toEqual("")
-        expect(adminPortal.find('[data-test="user-role-la"]').props().checked).toEqual(false)
-        expect(adminPortal.find('[data-test="user-role-he"]').props().checked).toEqual(false)
-        expect(adminPortal.find('[data-test="user-role-su"]').props().checked).toEqual(false)
-      });
+      describe("Missing user email", () => {
+        beforeEach(() => {
+          userAddedToProject = 2;
+  
+          adminPortal
+            .find("[data-test='project-id']")
+            .simulate("change", { target: { value: 2 } });
+  
+          adminPortal
+            .find("[data-test='user-role-la']")
+            .simulate("change", { target: { value: "Local Authority" } });
+  
+          adminPortal
+            .find('[data-test="add-user-submit"]')
+            .simulate("click")
+        });
 
-      it("Will render children with the correct lastProjectUserAddedTo", () => {
-        expect(childrenSpy).toHaveBeenCalledWith({lastProjectUserAddedTo: 2});
+        it("Will not call the add users use case", async () => {
+          expect(addUsersToProjectSpy.execute).not.toHaveBeenCalledWith(expect.anything(), 1)
+        });
+
+        it("Will display a validation message", async () => {
+          expect(adminPortal.find('[data-test="validation-message"]').length).toEqual(1)
+        });
+
+        it("Will not clear the text in the form", async () => {
+          await adminPortal.update();
+          expect(adminPortal.find('[data-test="project-id"]').props().value).toEqual(2)
+          expect(adminPortal.find('[data-test="user-role-la"]').props().value).toEqual("Local Authority")
+        });
       });
     });
   });

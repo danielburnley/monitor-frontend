@@ -1,0 +1,28 @@
+.is-invalid {
+  border-color: #dc3545;
+}
+
+.is-invalid:focus {
+  border-color: #dc3545;  
+  box-shadow: 0 0 0 0.2rem rgba(220,53,69,.25);
+}
+
+.is-invalid-radio {
+  outline: 2px;
+  outline-color: red;
+  border: 2px !important;
+  border-color: red !important;
+}
+
+.is-invalid-radio:after {
+  border: 2px solid rgba(220,53,69,.75);
+  visibility: visible;
+  width: 13px;
+  height: 13px;
+  border-radius: 15px;
+  top: -2px;
+  left: -1px;
+  content: '';
+  display: inline-block;
+  
+}
