@@ -136,7 +136,7 @@ describe("BaselinePage", () => {
         let updateProjectSpy = {
           execute: jest.fn(async (presenter, request) => {presenter.projectUpdated([])})
         };
-        let validateProjectSpy = { execute: jest.fn(async () => {}) };
+        let validateProjectSpy = { execute: jest.fn(async (presenter) => { presenter.validationSuccessful() }) };
 
         let wrap = mount(
           <BaselinePage
@@ -169,7 +169,7 @@ describe("BaselinePage", () => {
       it("example 2", async () => {
         let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {}) };
         let updateProjectSpy = { execute: jest.fn(async (presenter, request) => {}) };
-        let validateProjectSpy = { execute: jest.fn(async () => {}) };
+        let validateProjectSpy = { execute: jest.fn(async (presenter) => { presenter.validationSuccessful() }) };
 
         let wrap = mount(
           <BaselinePage
@@ -208,7 +208,7 @@ describe("BaselinePage", () => {
         let updateProjectSpy = {
           execute: jest.fn(async (presenter, request) => {presenter.projectUpdated([])})
         };
-        let validateProjectSpy = { execute: jest.fn(async () => {}) };
+        let validateProjectSpy = { execute: jest.fn(async (presenter) => { presenter.validationSuccessful() }) };
 
         let wrap = mount(
           <BaselinePage
@@ -241,7 +241,7 @@ describe("BaselinePage", () => {
       it("example 2", async () => {
         let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {}) };
         let updateProjectSpy = { execute: jest.fn(async (presenter, request) => {}) };
-        let validateProjectSpy = { execute: jest.fn(async () => {}) };
+        let validateProjectSpy = { execute: jest.fn(async (presenter) => { presenter.validationSuccessful() }) };
 
         let wrap = mount(
           <BaselinePage
@@ -280,7 +280,7 @@ describe("BaselinePage", () => {
         let updateProjectSpy = {
           execute: jest.fn(async (presenter, request) => {presenter.projectUpdated([])})
         };
-        let validateProjectSpy = { execute: jest.fn(async () => {}) };
+        let validateProjectSpy = { execute: jest.fn(async (presenter) => { presenter.validationSuccessful() }) };
 
         let wrap = mount(
           <BaselinePage
@@ -313,7 +313,7 @@ describe("BaselinePage", () => {
       it("example 2", async () => {
         let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {}) };
         let updateProjectSpy = { execute: jest.fn(async (presenter, request) => {}) };
-        let validateProjectSpy = { execute: jest.fn(async () => {}) };
+        let validateProjectSpy = { execute: jest.fn(async (presenter) => { presenter.validationSuccessful() }) };
 
         let wrap = mount(
           <BaselinePage
@@ -348,14 +348,14 @@ describe("BaselinePage", () => {
   describe("Submitted Project", () => {
     describe("Hides the save and submitted buttons", () => {
       let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"})) };
-  
+
         it("example 1", async () => {
           let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {presenter.creationSuccess(id)}) };
           let updateProjectSpy = {
             execute: jest.fn(async (presenter, request) => {presenter.projectUpdated([])})
           };
-          let validateProjectSpy = { execute: jest.fn(async () => {}) };
-  
+          let validateProjectSpy = { execute: jest.fn(async (presenter) => { presenter.validationSuccessful() }) };
+
           let wrap = mount(
             <BaselinePage
               projectURL={getProjectURLUsecase}
@@ -382,12 +382,12 @@ describe("BaselinePage", () => {
             0
           );
         });
-  
+
         it("example 2", async () => {
           let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {}) };
           let updateProjectSpy = { execute: jest.fn(async (presenter, request) => {}) };
-          let validateProjectSpy = { execute: jest.fn(async () => {}) };
-  
+          let validateProjectSpy = { execute: jest.fn(async (presenter) => { presenter.validationSuccessful() }) };
+
           let wrap = mount(
             <BaselinePage
               projectURL={getProjectURLUsecase}
@@ -427,7 +427,7 @@ describe("BaselinePage", () => {
         let updateProjectSpy = {
           execute: jest.fn(async (presenter, request) => {presenter.projectUpdated([])})
         };
-        let validateProjectSpy = { execute: jest.fn(async () => {}) };
+        let validateProjectSpy = { execute: jest.fn(async (presenter) => { presenter.validationSuccessful() }) };
 
         let wrap = mount(
           <BaselinePage
@@ -459,7 +459,7 @@ describe("BaselinePage", () => {
       it("example 2", async () => {
         let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {}) };
         let updateProjectSpy = { execute: jest.fn(async (presenter, request) => {}) };
-        let validateProjectSpy = { execute: jest.fn(async () => {}) };
+        let validateProjectSpy = { execute: jest.fn(async (presenter) => { presenter.validationSuccessful() }) };
 
         let wrap = mount(
           <BaselinePage
@@ -497,7 +497,7 @@ describe("BaselinePage", () => {
         let updateProjectSpy = {
           execute: jest.fn(async (presenter, request) => {presenter.projectUpdated({errors: request.projectId})})
         };
-        let validateProjectSpy = { execute: jest.fn(async () => {}) };
+        let validateProjectSpy = { execute: jest.fn(async (presenter) => { presenter.validationSuccessful() }) };
 
         let wrap = mount(
           <BaselinePage
@@ -529,7 +529,7 @@ describe("BaselinePage", () => {
       it("example 2", async () => {
         let submitProjectSpy = { execute: jest.fn(async (presenter, id) => {}) };
         let updateProjectSpy = { execute: jest.fn(async (presenter, request) => {}) };
-        let validateProjectSpy = { execute: jest.fn(async () => {}) };
+        let validateProjectSpy = { execute: jest.fn(async (presenter) => { presenter.validationSuccessful() }) };
 
         let wrap = mount(
           <BaselinePage
@@ -560,7 +560,8 @@ describe("BaselinePage", () => {
     });
   });
 
-  describe("calls the submit and updates project use cases", () => {
+  describe("With succesful validation", () => {
+    describe("calls the submit and updates project use cases", () => {
     it("example 1", async () => {
       let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"})) };
       let submitProjectSpy = {
@@ -571,7 +572,7 @@ describe("BaselinePage", () => {
       let updateProjectSpy = {
         execute: jest.fn(async (presenter, request) => presenter.projectUpdated({errors: request.projectId}))
       };
-      let validateProjectSpy = { execute: jest.fn(async () => {}) };
+      let validateProjectSpy = { execute: jest.fn(async (presenter) => { presenter.validationSuccessful() }) };
 
       let wrap = mount(
         <BaselinePage
@@ -603,7 +604,7 @@ describe("BaselinePage", () => {
       let updateProjectSpy = {
         execute: jest.fn(async (presenter, request) => presenter.projectUpdated([]))
       };
-      let validateProjectSpy = { execute: jest.fn(async () => {}) };
+      let validateProjectSpy = { execute: jest.fn(async (presenter) => { presenter.validationSuccessful() }) };
 
       let wrap = mount(
         <BaselinePage
@@ -628,8 +629,79 @@ describe("BaselinePage", () => {
     });
   });
 
-  describe("calls the update project use case", () => {
-    it("example 1", async () => {
+    describe("calls the update project use case", () => {
+      it("example 1", async () => {
+        let submitProjectSpy = {
+          execute: jest.fn(async (presenter, id) => {
+            presenter.creationSuccess(id);
+          })
+        };
+        let updateProjectSpy = {
+          execute: jest.fn(async (presenter, request) => presenter.projectUpdated([], "45"))
+        };
+        let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
+        let validateProjectSpy = { execute: jest.fn(async (presenter) => { presenter.validationSuccessful() }) };
+
+        let wrap = mount(
+          <BaselinePage
+            projectURL={getProjectURLUsecase}
+            projectId={9}
+            updateProject={updateProjectSpy}
+            submitProject={submitProjectSpy}
+            validateProject={validateProjectSpy}
+            data={{}}
+            schema={schema}
+            getRole={userRoleUseCaseSpy}
+            timestamp={"12345"}
+          />
+        );
+
+        await wait();
+        wrap.find('[data-test="update-project-button"]').simulate("click");
+        await wait();
+        let request = {projectId: 9, data: {}, timestamp: "12345"}
+        expect(updateProjectSpy.execute).toBeCalledWith(expect.anything(), request);
+      });
+
+      it("example 2", async () => {
+        let submitProjectSpy = {
+          execute: jest.fn(async (presenter, id) => {
+            presenter.creationSuccess(id);
+          })
+        };
+        let updateProjectSpy = {
+          execute: jest.fn(async (presenter, request) => presenter.projectUpdated([], "65"))
+        };
+        let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
+        let validateProjectSpy = { execute: jest.fn(async (presenter) => { presenter.validationSuccessful() }) };
+
+        let wrap = mount(
+          <BaselinePage
+            projectURL={getProjectURLUsecase}
+            projectId={1}
+            updateProject={updateProjectSpy}
+            submitProject={submitProjectSpy}
+            validateProject={validateProjectSpy}
+            data={data}
+            schema={schema}
+            getRole={userRoleUseCaseSpy}
+            timestamp={"now"}
+          />
+        );
+
+        await wait();
+        await updateFormField(wrap.find('input[type="text"]'), "cashews");
+        await wrap.update();
+        wrap.find('[data-test="update-project-button"]').simulate("click");
+        await wait();
+        let request = {projectId: 1, data: { cat: { catA: { catB: "cashews" }  } }, timestamp:"now"}
+        expect(updateProjectSpy.execute).toBeCalledWith(expect.anything(), request);
+      });
+    });
+  });
+
+  describe("When validation encounters an error", () => {
+    it("Does not call the submit project use case", async () => {
       let submitProjectSpy = {
         execute: jest.fn(async (presenter, id) => {
           presenter.creationSuccess(id);
@@ -638,8 +710,8 @@ describe("BaselinePage", () => {
       let updateProjectSpy = {
         execute: jest.fn(async (presenter, request) => presenter.projectUpdated([], "45"))
       };
-      let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
-      let validateProjectSpy = { execute: jest.fn(async () => {}) };
+      let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"})) };
+      let validateProjectSpy = { execute: jest.fn(async (presenter) => { await presenter.validationUnsuccessful() }) };
 
       let wrap = mount(
         <BaselinePage
@@ -656,45 +728,42 @@ describe("BaselinePage", () => {
       );
 
       await wait();
-      wrap.find('[data-test="update-project-button"]').simulate("click");
+      wrap.find('[data-test="submit-project-button"]').simulate("click");
       await wait();
-      let request = {projectId: 9, data: {}, timestamp: "12345"}
-      expect(updateProjectSpy.execute).toBeCalledWith(expect.anything(), request);
+      expect(submitProjectSpy.execute).not.toBeCalled();
     });
 
-    it("example 2", async () => {
+    it("Displays a message indicating that the project could not be validated", async () => {
       let submitProjectSpy = {
         execute: jest.fn(async (presenter, id) => {
           presenter.creationSuccess(id);
         })
       };
       let updateProjectSpy = {
-        execute: jest.fn(async (presenter, request) => presenter.projectUpdated([], "65"))
+        execute: jest.fn(async (presenter, request) => presenter.projectUpdated([], "45"))
       };
-      let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Local Authority"})) };
-      let validateProjectSpy = { execute: jest.fn(async () => {}) };
+      let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"})) };
+      let validateProjectSpy = { execute: jest.fn(async (presenter) => { await presenter.validationUnsuccessful() }) };
 
       let wrap = mount(
         <BaselinePage
           projectURL={getProjectURLUsecase}
-          projectId={1}
+          projectId={9}
           updateProject={updateProjectSpy}
           submitProject={submitProjectSpy}
           validateProject={validateProjectSpy}
-          data={data}
+          data={{}}
           schema={schema}
           getRole={userRoleUseCaseSpy}
-          timestamp={"now"}
+          timestamp={"12345"}
         />
       );
 
       await wait();
-      await updateFormField(wrap.find('input[type="text"]'), "cashews");
-      await wrap.update();
-      wrap.find('[data-test="update-project-button"]').simulate("click");
+      wrap.find('[data-test="submit-project-button"]').simulate("click");
       await wait();
-      let request = {projectId: 1, data: { cat: { catA: { catB: "cashews" }  } }, timestamp:"now"}
-      expect(updateProjectSpy.execute).toBeCalledWith(expect.anything(), request);
+      await wrap.update();
+      expect(wrap.find('ErrorMessage').props().validationSuccess).toEqual(false);
     });
   });
 
@@ -710,7 +779,7 @@ describe("BaselinePage", () => {
         let updateProjectSpy = {
           execute: jest.fn(async (presenter, request) => presenter.projectUpdated([]))
         };
-        let validateProjectSpy = { execute: jest.fn(async () => {}) };
+        let validateProjectSpy = { execute: jest.fn(async (presenter) => { presenter.validationSuccessful() }) };
 
         let wrap = mount(
           <BaselinePage
@@ -750,7 +819,7 @@ describe("BaselinePage", () => {
         let updateProjectSpy = {
           execute: jest.fn(async (presenter, request) => presenter.projectUpdated([]))
         };
-        let validateProjectSpy = { execute: jest.fn(async () => {}) };
+        let validateProjectSpy = { execute: jest.fn(async (presenter) => { presenter.validationSuccessful() }) };
 
         let wrap = mount(
           <BaselinePage
@@ -792,7 +861,7 @@ describe("BaselinePage", () => {
         let updateProjectSpy = {
           execute: jest.fn(async (presenter, request) => presenter.projectUpdated([]))
         };
-        let validateProjectSpy = { execute: jest.fn(async () => {}) };
+        let validateProjectSpy = { execute: jest.fn(async (presenter) => { presenter.validationSuccessful() }) };
 
         let wrap = mount(
           <BaselinePage
@@ -832,7 +901,7 @@ describe("BaselinePage", () => {
         let updateProjectSpy = {
           execute: jest.fn(async (presenter, request) => presenter.projectUpdated([]))
         };
-        let validateProjectSpy = { execute: jest.fn(async () => {}) };
+        let validateProjectSpy = { execute: jest.fn(async (presenter) => { presenter.validationSuccessful() }) };
 
         let wrap = mount(
           <BaselinePage
@@ -962,7 +1031,7 @@ describe("BaselinePage", () => {
       let updateProjectSpy = {
         execute: jest.fn(async (presenter, request) => presenter.projectUpdated([]))
       };
-      let validateProjectSpy = { execute: jest.fn(async presenter => {}) };
+      let validateProjectSpy = { execute: jest.fn(async presenter => {await presenter.validationSuccessful()}) };
 
       let wrap = mount(
         <BaselinePage
@@ -1008,7 +1077,7 @@ describe("BaselinePage", () => {
         execute: jest.fn(async (presenter, request) => presenter.projectUpdated([]))
       };
       let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"})) };
-      let validateProjectSpy = { execute: jest.fn(async presenter => {}) };
+      let validateProjectSpy = { execute: jest.fn(async presenter => {await presenter.validationSuccessful()}) };
 
       let wrap = mount(
         <BaselinePage
@@ -1052,7 +1121,7 @@ describe("BaselinePage", () => {
       let updateProjectSpy = {
         execute: jest.fn(async (presenter, request) => presenter.projectUpdated([]))
       };
-      let validateProjectSpy = { execute: jest.fn(async () => {}) };
+      let validateProjectSpy = { execute: jest.fn(async (presenter) => { presenter.validationSuccessful() }) };
 
       let wrap = mount(
         <BaselinePage
@@ -1086,7 +1155,7 @@ describe("BaselinePage", () => {
       let updateProjectSpy = {
         execute: jest.fn(async (presenter, request) => presenter.projectUpdated([]))
       };
-      let validateProjectSpy = { execute: jest.fn(async () => {}) };
+      let validateProjectSpy = { execute: jest.fn(async (presenter) => { presenter.validationSuccessful() }) };
 
       let wrap = mount(
         <BaselinePage
@@ -1121,7 +1190,7 @@ describe("BaselinePage", () => {
       let updateProjectSpy = {
         execute: jest.fn(async (presenter, request) => presenter.projectUpdated([]))
       };
-      let validateProjectSpy = { execute: jest.fn(async () => {}) };
+      let validateProjectSpy = { execute: jest.fn(async (presenter) => { presenter.validationSuccessful() }) };
 
       let wrap = mount(
         <BaselinePage
@@ -1153,7 +1222,7 @@ describe("BaselinePage", () => {
       let updateProjectSpy = {
         execute: jest.fn(async (presenter, request) => await presenter.projectUpdated([]))
       };
-      let validateProjectSpy = { execute: jest.fn(async () => {}) };
+      let validateProjectSpy = { execute: jest.fn(async (presenter) => { presenter.validationSuccessful() }) };
 
       let wrap = mount(
         <BaselinePage
@@ -1266,7 +1335,7 @@ describe("BaselinePage", () => {
       let updateProjectSpy = {
         execute: jest.fn(async (presenter, request) => {})
       };
-      let validateProjectSpy = { execute: jest.fn(async () => {}) };
+      let validateProjectSpy = { execute: jest.fn(async (presenter) => { presenter.validationSuccessful() }) };
 
       let wrap = mount(
         <BaselinePage
@@ -1307,7 +1376,7 @@ describe("BaselinePage", () => {
       let updateProjectSpy = {
         execute: jest.fn(async (presenter, request) => { await presenter.projectNotUpdated() })
       };
-      let validateProjectSpy = { execute: jest.fn(async () => {}) };
+      let validateProjectSpy = { execute: jest.fn(async (presenter) => { presenter.validationSuccessful() }) };
 
       let wrap = mount(
         <BaselinePage

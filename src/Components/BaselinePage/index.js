@@ -65,7 +65,13 @@ export default class BaselinePage extends React.Component {
     );
   };
 
-  validationUnsuccessful = async () => {};
+  validationUnsuccessful = async () => {
+    await this.setState({validationSuccess: false});
+  };
+
+  validationSuccessful = async () => {
+    await this.setState({validationSuccess: true})
+  };
 
   submitProject = async e => {
     this.setState({
@@ -83,10 +89,10 @@ export default class BaselinePage extends React.Component {
 
     await this.validateProject();
 
-    if (this.state.valid) {
+    if (this.state.valid && this.state.validationSuccess) {
       await this.props.submitProject.execute(this, this.props.projectId);
     } else {
-      this.setState({ status: "ready" });
+      await this.setState({ status: "ready" });
     }
     e.preventDefault();
   };
@@ -111,7 +117,7 @@ export default class BaselinePage extends React.Component {
 
   invalidateFields = async prettyInvalidPaths => {
     await this.setState({
-      prettyInvalidPaths: prettyInvalidPaths,
+      prettyInvalidPaths,
       valid: false
     });
   };
@@ -181,7 +187,7 @@ export default class BaselinePage extends React.Component {
   renderSubmitButton() {
     if (
       this.state.userRole === "Homes England" ||
-      this.state.userRole === "Superuser" 
+      this.state.userRole === "Superuser"
     ) {
       return (
         <button
@@ -198,7 +204,7 @@ export default class BaselinePage extends React.Component {
 
   renderDisabledButtons() {
     if (this.props.status === "Submitted") return null;
-    return <div>  
+    return <div>
       {this.renderDisabledSubmitButton()}
       <button
         data-test="disabled-update-project-button"
@@ -253,6 +259,7 @@ export default class BaselinePage extends React.Component {
       return (
         <div>
           <ErrorMessage
+            validationSuccess={this.state.validationSuccess}
             valid={this.state.valid}
             type={this.state.action}
             invalidPaths={this.state.prettyInvalidPaths}

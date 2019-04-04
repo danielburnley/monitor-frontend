@@ -32,7 +32,7 @@ export default class Portal extends React.Component {
     />
 
   renderToolbar = () =>
-    <div class="toolbar">
+    <div className="toolbar">
       {this.renderLogoutButton()}
     </div>
 

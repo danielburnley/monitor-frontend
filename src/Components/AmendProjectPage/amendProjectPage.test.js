@@ -974,7 +974,7 @@ describe("AmendProjectPage", () => {
       let updateProjectSpy = {
         execute: jest.fn(async (presenter, request) => presenter.projectUpdated({errors: []}))
       };
-      let validateProjectSpy = { execute: jest.fn(async presenter => {}) };
+      let validateProjectSpy = { execute: jest.fn(async presenter => {await presenter.validationSuccessful()}) };
 
       let wrap = mount(
         <AmendProjectPage
@@ -1021,7 +1021,7 @@ describe("AmendProjectPage", () => {
         execute: jest.fn(async (presenter, request) => presenter.projectUpdated({errors: []}))
       };
       let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"})) };
-      let validateProjectSpy = { execute: jest.fn(async presenter => {}) };
+      let validateProjectSpy = { execute: jest.fn(async presenter => {await presenter.validationSuccessful()}) };
 
       let wrap = mount(
         <AmendProjectPage

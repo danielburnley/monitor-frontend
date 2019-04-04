@@ -50,7 +50,9 @@ export default class FormActions extends React.Component {
     this.setState({ valid: false, invalidPaths: pathList });
   };
 
-  validationUnsuccessful = async () => {}
+  validationUnsuccessful = async () => {};
+
+  validationSuccessful = async () => {};
 
   id = () => {
     return this.props.match.params[`${this.props.formType}Id`]

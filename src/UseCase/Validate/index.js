@@ -7,16 +7,17 @@ export default class Validate {
     let {success, valid, prettyInvalidPaths } =
       await this.validationGateway.validate(project_id, type, data);
 
-
     if (success)
     {
-      if (!valid) {
-        presenter.invalidateFields(prettyInvalidPaths);
+      if (valid) {
+        await presenter.validationSuccessful();
+      } else {
+        await presenter.invalidateFields(prettyInvalidPaths);
       }
     }
     else
     {
-      presenter.validationUnsuccessful();
+      await presenter.validationUnsuccessful();
     }
   }
 }

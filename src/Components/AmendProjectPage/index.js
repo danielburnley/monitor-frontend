@@ -67,6 +67,8 @@ export default class AmendProjectPage extends React.Component {
 
   validationUnsuccessful = async () => {};
 
+  validationSuccessful = async () => {};
+
   submitBaseline = async e => {
     this.setState({
       status: "submitting",
