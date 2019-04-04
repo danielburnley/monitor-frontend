@@ -117,7 +117,6 @@ export default class AdminPortal extends React.Component {
   };
 
   renderCreateProject = () => {
-    console.log(this.state)
     return (
       <div>
         <h3>Create a new project</h3>
