@@ -560,74 +560,74 @@ describe("BaselinePage", () => {
     });
   });
 
-  describe("With succesful validation", () => {
+  describe("With successful validation", () => {
     describe("calls the submit and updates project use cases", () => {
-    it("example 1", async () => {
-      let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"})) };
-      let submitProjectSpy = {
-        execute: jest.fn(async (presenter, id) => {
-          presenter.creationSuccess(id);
-        })
-      };
-      let updateProjectSpy = {
-        execute: jest.fn(async (presenter, request) => presenter.projectUpdated({errors: request.projectId}))
-      };
-      let validateProjectSpy = { execute: jest.fn(async (presenter) => { presenter.validationSuccessful() }) };
+      it("example 1", async () => {
+        let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"})) };
+        let submitProjectSpy = {
+          execute: jest.fn(async (presenter, id) => {
+            presenter.creationSuccess(id);
+          })
+        };
+        let updateProjectSpy = {
+          execute: jest.fn(async (presenter, request) => presenter.projectUpdated({errors: request.projectId}))
+        };
+        let validateProjectSpy = { execute: jest.fn(async (presenter) => { presenter.validationSuccessful() }) };
 
-      let wrap = mount(
-        <BaselinePage
-          projectURL={getProjectURLUsecase}
-          projectId={1}
-          updateProject={updateProjectSpy}
-          submitProject={submitProjectSpy}
-          validateProject={validateProjectSpy}
-          data={{}}
-          schema={schema}
-          getRole={userRoleUseCaseSpy}
-          timestamp={"1234"}
-        />
-      );
-      let request = {projectId: 1, data: {}, timestamp: "1234"}
-      wrap.find('[data-test="submit-project-button"]').simulate("click");
-      await wait();
-      expect(updateProjectSpy.execute).toBeCalledWith(expect.anything(), request);
-      expect(submitProjectSpy.execute).toBeCalledWith(expect.anything(), 1);
+        let wrap = mount(
+          <BaselinePage
+            projectURL={getProjectURLUsecase}
+            projectId={1}
+            updateProject={updateProjectSpy}
+            submitProject={submitProjectSpy}
+            validateProject={validateProjectSpy}
+            data={{}}
+            schema={schema}
+            getRole={userRoleUseCaseSpy}
+            timestamp={"1234"}
+          />
+        );
+        let request = {projectId: 1, data: {}, timestamp: "1234"}
+        wrap.find('[data-test="submit-project-button"]').simulate("click");
+        await wait();
+        expect(updateProjectSpy.execute).toBeCalledWith(expect.anything(), request);
+        expect(submitProjectSpy.execute).toBeCalledWith(expect.anything(), 1);
+      });
+
+      it("example 2", async () => {
+        let submitProjectSpy = {
+          execute: jest.fn(async (presenter, id) => {
+            presenter.creationSuccess(id);
+          })
+        };
+        let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"})) };
+        let updateProjectSpy = {
+          execute: jest.fn(async (presenter, request) => presenter.projectUpdated([]))
+        };
+        let validateProjectSpy = { execute: jest.fn(async (presenter) => { presenter.validationSuccessful() }) };
+
+        let wrap = mount(
+          <BaselinePage
+            projectURL={getProjectURLUsecase}
+            projectId={9}
+            updateProject={updateProjectSpy}
+            submitProject={submitProjectSpy}
+            validateProject={validateProjectSpy}
+            data={data}
+            schema={schema}
+            getRole={userRoleUseCaseSpy}
+            timestamp={"789"}
+          />
+        );
+
+        await updateFormField(wrap.find('input[type="text"]'), "cashews");
+        wrap.find('[data-test="submit-project-button"]').simulate("click");
+        await wait();
+        let request = { projectId: 9, data: {"cat": {"catA": {"catB": "cashews"}}}, timestamp: "789"}
+        expect(updateProjectSpy.execute).toBeCalledWith(expect.anything(), request);
+        expect(submitProjectSpy.execute).toBeCalledWith(expect.anything(), 9);
+      });
     });
-
-    it("example 2", async () => {
-      let submitProjectSpy = {
-        execute: jest.fn(async (presenter, id) => {
-          presenter.creationSuccess(id);
-        })
-      };
-      let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"})) };
-      let updateProjectSpy = {
-        execute: jest.fn(async (presenter, request) => presenter.projectUpdated([]))
-      };
-      let validateProjectSpy = { execute: jest.fn(async (presenter) => { presenter.validationSuccessful() }) };
-
-      let wrap = mount(
-        <BaselinePage
-          projectURL={getProjectURLUsecase}
-          projectId={9}
-          updateProject={updateProjectSpy}
-          submitProject={submitProjectSpy}
-          validateProject={validateProjectSpy}
-          data={data}
-          schema={schema}
-          getRole={userRoleUseCaseSpy}
-          timestamp={"789"}
-        />
-      );
-
-      await updateFormField(wrap.find('input[type="text"]'), "cashews");
-      wrap.find('[data-test="submit-project-button"]').simulate("click");
-      await wait();
-      let request = { projectId: 9, data: {"cat": {"catA": {"catB": "cashews"}}}, timestamp: "789"}
-      expect(updateProjectSpy.execute).toBeCalledWith(expect.anything(), request);
-      expect(submitProjectSpy.execute).toBeCalledWith(expect.anything(), 9);
-    });
-  });
 
     describe("calls the update project use case", () => {
       it("example 1", async () => {
