@@ -765,6 +765,52 @@ describe("BaselinePage", () => {
       await wrap.update();
       expect(wrap.find('ErrorMessage').props().validationSuccess).toEqual(false);
     });
+
+    it("Allows the project to be submitted after initially not validating", async () => {
+      let callCount = 0;
+      let submitProjectSpy = {
+        execute: jest.fn(async (presenter, id) => {
+          presenter.creationSuccess(id);
+        })
+      };
+      let updateProjectSpy = {
+        execute: jest.fn(async (presenter, request) => {await presenter.projectUpdated([], "45")})
+      };
+      let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"})) };
+      let validateProjectSpy = {
+        execute: jest.fn(async (presenter) => {
+          if (callCount === 0) {
+            await presenter.validationUnsuccessful();
+          } else {
+            await presenter.invalidateFields([["My", "Path"]]);
+          }
+          callCount += 1;
+        })
+      };
+
+      let wrap = mount(
+        <BaselinePage
+          projectURL={getProjectURLUsecase}
+          projectId={9}
+          updateProject={updateProjectSpy}
+          submitProject={submitProjectSpy}
+          validateProject={validateProjectSpy}
+          data={{}}
+          schema={schema}
+          getRole={userRoleUseCaseSpy}
+          timestamp={"12345"}
+        />
+      );
+
+      await wait();
+      wrap.find('[data-test="submit-project-button"]').simulate("click");
+      await wait();
+      await wrap.update();
+      wrap.find('[data-test="submit-project-button"]').simulate("click");
+      await wait();
+      await wrap.update();
+      expect(wrap.find('ErrorMessage').props().validationSuccess).toEqual(true);
+    });
   });
 
   describe("Validating the project", () => {

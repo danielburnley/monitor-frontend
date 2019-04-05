@@ -118,7 +118,8 @@ export default class BaselinePage extends React.Component {
   invalidateFields = async prettyInvalidPaths => {
     await this.setState({
       prettyInvalidPaths,
-      valid: false
+      valid: false,
+      validationSuccess: true
     });
   };
 
