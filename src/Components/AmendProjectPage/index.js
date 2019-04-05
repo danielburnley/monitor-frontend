@@ -65,12 +65,16 @@ export default class AmendProjectPage extends React.Component {
     );
   };
 
-  validationUnsuccessful = async () => {};
+  validationUnsuccessful = async () => {
+    await this.setState({validationSuccess: false});
+  };
 
-  validationSuccessful = async () => {};
+  validationSuccessful = async () => {
+    await this.setState({validationSuccess: true});
+  };
 
   submitBaseline = async e => {
-    this.setState({
+    await this.setState({
       status: "submitting",
       action: "Submit",
       valid: true,
@@ -85,7 +89,7 @@ export default class AmendProjectPage extends React.Component {
 
     await this.validateProject();
 
-    if (this.state.valid) {
+    if (this.state.valid && this.state.validationSuccess) {
       await this.props.submitBaseline.execute(this, this.props.match.params.baselineId);
     } else {
       this.setState({ status: "ready" });
@@ -114,7 +118,8 @@ export default class AmendProjectPage extends React.Component {
   invalidateFields = async prettyInvalidPaths => {
     await this.setState({
       prettyInvalidPaths: prettyInvalidPaths,
-      valid: false
+      valid: false,
+      validationSuccess: true
     });
   };
 
@@ -257,6 +262,7 @@ export default class AmendProjectPage extends React.Component {
       return (
         <div>
           <ErrorMessage
+            validationSuccess={this.state.validationSuccess}
             valid={this.state.valid}
             type={this.state.action}
             invalidPaths={this.state.prettyInvalidPaths}
@@ -300,7 +306,7 @@ export default class AmendProjectPage extends React.Component {
     return `Follow this link to view your project: ${this.getProjectURL()}`;
   }
 
-  renderSubmitSucessMessage() {
+  renderSubmitSuccessMessage() {
     return (
       <div data-test="project-create-success">
         Project created!
@@ -312,7 +318,7 @@ export default class AmendProjectPage extends React.Component {
   renderSubmitSuccess() {
     return (
       <div data-test="share-project-link">
-        {this.renderSubmitSucessMessage()}
+        {this.renderSubmitSuccessMessage()}
         <CopyToClipboard text={this.getProjectURL()}>
           <button className="btn-primary btn">
             {" "}

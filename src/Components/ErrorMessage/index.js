@@ -79,7 +79,7 @@ export default class ErrorMessage extends React.Component {
       return this.renderValidationConnectionError();
     }
     if (this.props.errors && this.props.errors.length > 0) {
-      return this.renderOverWritingError()
+      return this.renderOverWritingError();
     }
 
     return this.renderValidation();
