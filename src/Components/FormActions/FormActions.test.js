@@ -50,8 +50,9 @@ describe("<FormActions>", () => {
     }
   };
   let initialData = { cats: { details: { noise: "Meow" } } };
-  let validateSpyInvalid = {execute: jest.fn((presenter, id, data, type) => (presenter.invalidateFields([['Cat House', 'Cat House']])))}
-  let validateSpyValid = {execute: jest.fn()}
+  let validateSpyInvalid = {execute: jest.fn(async (presenter, id, data, type) => {await presenter.invalidateFields([['Cat House', 'Cat House']])})}
+  let validateSpyValid = {execute: jest.fn(async (presenter) => {await presenter.validationSuccessful()})}
+  let validateSpyUnsuccessful = {execute: jest.fn(async (presenter) => {await presenter.validationUnsuccessful()})}
 
   let updateSpy = { execute: jest.fn((presenter, id, returnId, data) => presenter.updateSuccessful() )}
   let updateSubmittedSpy = { execute: jest.fn((presenter, id, returnId, data) => presenter.updateSubmittedSuccessful() )}
@@ -161,13 +162,13 @@ describe("<FormActions>", () => {
           expect(wrap.find("[data-test='save-submitted-button']").length).toEqual(1);
         });
 
-        it("Allows the user to save", () => {
+        it("Allows the user to save", async () => {
           let wrap = shallow(
             <FormActions
               formType="return"
               data={initialData}
               schema={formSchema}
-              validate = {validateSpyValid}
+              validate={validateSpyValid}
               updateSubmitted={updateSubmittedSpy}
               submit={submitSpy}
               match={{params: {projectId: 1, returnId: 3}}}
@@ -178,6 +179,7 @@ describe("<FormActions>", () => {
           );
 
           saveSubmitted(wrap);
+          await wrap.update();
           expect(updateSubmittedSpy.execute).toHaveBeenCalledWith(expect.anything(), {projectId: 1, id: 3, data: {cats: { details: { noise: "Meow" } }}});
         });
 
@@ -797,6 +799,58 @@ describe("<FormActions>", () => {
       expect(wrap.find("[data-test='validationError']").length).toEqual(0);
       expect(wrap.find("[data-test='saveSuccess']").length).toEqual(0);
       expect(wrap.find("[data-test='submitSuccess']").length).toEqual(0);
+    });
+  });
+
+  describe("When validation encounters an error", () => {
+    it("Does not call the submit project use case", async () => {
+      let documentGatewayDummy = jest.fn();
+      let submitSpy = { execute: jest.fn((presenter, id, returnId, data) => presenter.submissionSuccessful() )}
+      let wrap = mount(
+        <FormActions
+          formType="return"
+          data={initialData}
+          schema={formSchema}
+          validate={validateSpyUnsuccessful}
+          update={updateSpy}
+          submit={submitSpy}
+          match={{params: {projectId: 1, returnId: 3}}}
+          status="Draft"
+          type="ac"
+          getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+        />
+      );
+
+      await wait();
+      wrap.find('[data-test="submit-button"]').simulate("click");
+      await wait();
+      expect(submitSpy.execute).not.toBeCalled();
+    });
+
+    it("Displays a message indicating that the project could not be validated", async () => {
+      let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"})) };
+      let documentGatewayDummy = jest.fn();
+
+      let wrap = mount(
+        <FormActions
+          formType="return"
+          data={initialData}
+          schema={formSchema}
+          validate={validateSpyUnsuccessful}
+          update={updateSpy}
+          submit={submitSpy}
+          match={{params: {projectId: 1, returnId: 3}}}
+          status="Draft"
+          type="ac"
+          getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+        />
+      );
+
+      await wait();
+      wrap.find('[data-test="submit-button"]').simulate("click");
+      await wait();
+      await wrap.update();
+      expect(wrap.find('ErrorMessage').props().validationSuccess).toEqual(false);
     });
   });
 });

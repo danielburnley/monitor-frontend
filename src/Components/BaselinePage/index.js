@@ -33,7 +33,7 @@ export default class BaselinePage extends React.Component {
     this.setState({ status: "SubmissionFailure" });
   }
 
-  projectUpdated(errors, timestamp) {
+  projectUpdated = async (errors, timestamp) => {
     if (timestamp) {
       this.setState({
         timestamp: timestamp
@@ -41,12 +41,12 @@ export default class BaselinePage extends React.Component {
     }
 
     if (errors && errors.length > 0) {
-      this.setState({
+      await this.setState({
         errors: errors,
         status: "ready"
       });
     } else if (this.state.status === "updating") {
-      this.setState({
+      await this.setState({
         status: "saved"
       });
     }
@@ -279,7 +279,7 @@ export default class BaselinePage extends React.Component {
 
   renderSaveSuccess() {
     if (this.state.status === "saved") {
-      return <div data-test="project-update-success">Project updated!</div>;
+      return <div data-test="project-update-success">Baseline updated!</div>;
     }
   }
 

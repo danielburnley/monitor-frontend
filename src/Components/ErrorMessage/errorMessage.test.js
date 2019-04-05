@@ -141,7 +141,7 @@ describe("<ErrorMessage>", () => {
         />
       );
       expect(wrap.text()).toEqual(
-        "Error: There was an error saving, please ensure you are connected to the internet."
+        "Error: There was an error validating, please ensure you are connected to the internet."
       );
     });
   });

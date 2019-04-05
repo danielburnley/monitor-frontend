@@ -740,7 +740,7 @@ describe("BaselinePage", () => {
         })
       };
       let updateProjectSpy = {
-        execute: jest.fn(async (presenter, request) => presenter.projectUpdated([], "45"))
+        execute: jest.fn(async (presenter, request) => {await presenter.projectUpdated([], "45")})
       };
       let userRoleUseCaseSpy = { execute: jest.fn(() => ({role: "Homes England"})) };
       let validateProjectSpy = { execute: jest.fn(async (presenter) => { await presenter.validationUnsuccessful() }) };

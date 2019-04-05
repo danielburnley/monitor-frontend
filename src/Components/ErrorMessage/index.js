@@ -71,7 +71,7 @@ export default class ErrorMessage extends React.Component {
       role="alert"
       data-test="validation-connection-error"
     >
-      <strong>Error:</strong> There was an error saving, please ensure you are connected to the internet.<br />
+      <strong>Error:</strong> There was an error validating, please ensure you are connected to the internet.<br />
     </div>
 
   render() {
