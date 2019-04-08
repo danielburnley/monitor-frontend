@@ -47,7 +47,7 @@ export default class FormActions extends React.Component {
   };
 
   invalidateFields = async pathList => {
-    this.setState({ valid: false, invalidPaths: pathList });
+    await this.setState({ valid: false, invalidPaths: pathList });
   };
 
   validationUnsuccessful = async () => {}

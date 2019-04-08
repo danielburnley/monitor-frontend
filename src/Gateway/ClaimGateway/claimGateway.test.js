@@ -9,69 +9,132 @@ describe("Claim Gateway", () => {
   let apiKeyGateway, locationGateway;
 
   describe("#validate", () => {
-    describe("Example 1", () => {
-      let validationRequest, response;
-      let data = {
-        IamAclaim: "give me money"
-      };
-      let type = "hif";
-      let project_id = 1;
+    describe("Connection successful", () => {
+      describe("Example 1", () => {
+        let validationRequest, response;
+        let data = {
+          IamAclaim: "give me money"
+        };
+        let type = "hif";
+        let project_id = 1;
 
-      beforeEach(async () => {
-        process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
-        locationGateway = {getRoot: () => 'https://example.com'};
-        apiKeyGateway = {getApiKey: () => ({apiKey: 'superSecret'})}
-        validationRequest = nock('http://cat.meow')
+        beforeEach(async () => {
+          process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
+          locationGateway = {getRoot: () => 'https://example.com'};
+          apiKeyGateway = {getApiKey: () => ({apiKey: 'superSecret'})}
+          validationRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
           .matchHeader('API_KEY', 'superSecret')
           .post('/claim/validate', {type, project_id, data})
           .reply(200, {valid: true, invalidPaths: [], prettyInvalidPaths: []});
-        let gateway = new ClaimGateway(apiKeyGateway, locationGateway);
+          let gateway = new ClaimGateway(apiKeyGateway, locationGateway);
 
-        response = await gateway.validate(project_id, data, type);
-      });
+          response = await gateway.validate(project_id, data, type);
+        });
 
-      it("fetches validation from the API", () => {
-        expect(validationRequest.isDone()).toBeTruthy();
-      });
+        it("fetches validation from the API", () => {
+          expect(validationRequest.isDone()).toBeTruthy();
+        });
 
-      it("claims a list of paths that were invalid", () => {
-        expect(response).toEqual({
-          invalidPaths: [],
-          prettyInvalidPaths: [],
-          valid: true
+        it("claims a list of paths that were invalid", () => {
+          expect(response).toEqual({
+            invalidPaths: [],
+            prettyInvalidPaths: [],
+            valid: true,
+            success: true
+          });
         });
       });
-    });
 
-    describe("Example 2", () => {
-      let validationRequest, response;
-      let data = {
-        anotherclaim: "givememoremoney"
-      };
-      let type = "ac";
-      let project_id = 1;
+      describe("Example 2", () => {
+        let validationRequest, response;
+        let data = {
+          anotherclaim: "givememoremoney"
+        };
+        let type = "ac";
+        let project_id = 1;
 
-      beforeEach(async () => {
-        process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
-        locationGateway = {getRoot: () => 'https://example.com'};
-        apiKeyGateway = {getApiKey: () => ({apiKey: 'megaSecret'})}
-        validationRequest = nock('http://cat.meow')
+        beforeEach(async () => {
+          process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
+          locationGateway = {getRoot: () => 'https://example.com'};
+          apiKeyGateway = {getApiKey: () => ({apiKey: 'megaSecret'})}
+          validationRequest = nock('http://cat.meow')
           .matchHeader('Content-Type', 'application/json')
           .matchHeader('API_KEY', 'megaSecret')
           .post('/claim/validate',{type, project_id, data})
           .reply(200, {valid: false, invalidPaths: ['cats']});
-        let gateway = new ClaimGateway(apiKeyGateway, locationGateway);
+          let gateway = new ClaimGateway(apiKeyGateway, locationGateway);
 
-        response = await gateway.validate(project_id, data, type);
+          response = await gateway.validate(project_id, data, type);
+        });
+
+        it("fetches validation from the API", () => {
+          expect(validationRequest.isDone()).toBeTruthy();
+        });
+
+        it('claims a list of paths that were invalid', () => {
+          expect(response).toEqual({invalidPaths: ['cats'], valid: false, success: true});
+        });
+      });
+    });
+
+    describe("Connection unsuccessful", () => {
+      describe("Example 1", () => {
+        let validationRequest, response;
+        let data = {
+          IamAclaim: "give me money"
+        };
+        let type = "hif";
+        let project_id = 1;
+
+        beforeEach(async () => {
+          process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
+          locationGateway = {getRoot: () => 'https://example.com'};
+          apiKeyGateway = {getApiKey: () => ({apiKey: 'superSecret'})}
+          validationRequest = nock('http://cat.meow')
+            .matchHeader('Content-Type', 'application/json')
+            .matchHeader('API_KEY', 'superSecret')
+            .post('/claim/validate', {type, project_id, data})
+            .socketDelay(2000);
+
+          let gateway = new ClaimGateway(apiKeyGateway, locationGateway);
+
+          response = await gateway.validate(project_id, data, type);
+        });
+
+        it("claims a list of paths that were invalid", () => {
+          expect(response).toEqual({
+            success: false
+          });
+        });
       });
 
-      it("fetches validation from the API", () => {
-        expect(validationRequest.isDone()).toBeTruthy();
-      });
+      describe("Example 2", () => {
+        let validationRequest, response;
+        let data = {
+          anotherclaim: "givememoremoney"
+        };
+        let type = "ac";
+        let project_id = 1;
 
-      it('claims a list of paths that were invalid', () => {
-        expect(response).toEqual({invalidPaths: ['cats'], valid: false});
+        beforeEach(async () => {
+          process.env.REACT_APP_HIF_API_URL = 'http://cat.meow/';
+          locationGateway = {getRoot: () => 'https://example.com'};
+          apiKeyGateway = {getApiKey: () => ({apiKey: 'megaSecret'})}
+          validationRequest = nock('http://cat.meow')
+            .matchHeader('Content-Type', 'application/json')
+            .matchHeader('API_KEY', 'megaSecret')
+            .post('/claim/validate',{type, project_id, data})
+            .socketDelay(2000);
+
+          let gateway = new ClaimGateway(apiKeyGateway, locationGateway);
+
+          response = await gateway.validate(project_id, data, type);
+        });
+
+        it('claims a list of paths that were invalid', () => {
+          expect(response).toEqual({success: false});
+        });
       });
     });
   });
