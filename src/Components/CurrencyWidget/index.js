@@ -15,8 +15,11 @@ export default class CurrencyWidget extends React.Component {
     return value;
   }
 
+  formatCurrencyString = (value) =>
+    this.removeLeadingZeroes(this.removeInvalidCharacters(value));
+
   validateString = (value) =>
-    this.clampValue(this.removeLeadingZeroes(this.removeInvalidCharacters(value)));
+    this.clampValue(this.formatCurrencyString(value));
 
   insertCommas = (value) =>
     value.replace(/\B(?=(\d{3})+(?!\d))/g, (digits) => digits+",");
