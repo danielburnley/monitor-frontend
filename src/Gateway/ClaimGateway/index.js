@@ -126,15 +126,18 @@ export default class ClaimGateway {
           'API_KEY': this.apiKeyGateway.getApiKey().apiKey},
         body: JSON.stringify({type, project_id, data}),
       },
-    );
+    ).catch(() => ({ ok: false }));;
 
     if (response.ok) {
       let response_json = await response.json();
       return {
         valid: response_json.valid,
         invalidPaths: response_json.invalidPaths,
-        prettyInvalidPaths: response_json.prettyInvalidPaths
+        prettyInvalidPaths: response_json.prettyInvalidPaths,
+        success: true
       }
+    } else {
+      return {success: false};
     }
   }
 }

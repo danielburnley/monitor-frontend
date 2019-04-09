@@ -5,6 +5,9 @@ export default class CurrencyWidget extends React.Component {
   removeInvalidCharacters = (value) =>
     value.replace(/[^0-9.-]/g, "");
 
+  removeLeadingZeroes = (value) =>
+    value.replace(/^0*(?=0$)|^0+/,"");
+
   clampValue = (value) => {
     if (this.props.schema && Number(value) > Number(this.props.schema.currencyMaximum)) {
       return this.props.schema.currencyMaximum;
@@ -12,8 +15,11 @@ export default class CurrencyWidget extends React.Component {
     return value;
   }
 
+  formatCurrencyString = (value) =>
+    this.removeLeadingZeroes(this.removeInvalidCharacters(value));
+
   validateString = (value) =>
-    this.clampValue(this.removeInvalidCharacters(value));
+    this.clampValue(this.formatCurrencyString(value));
 
   insertCommas = (value) =>
     value.replace(/\B(?=(\d{3})+(?!\d))/g, (digits) => digits+",");
