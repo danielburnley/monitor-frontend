@@ -19,7 +19,8 @@ describe("Validate", () => {
   beforeEach(() => {
     presenterSpy = {
       invalidateFields: jest.fn(),
-      validationUnsuccessful: jest.fn()
+      validationUnsuccessful: jest.fn(),
+      validationSuccessful: jest.fn()
     };
   });
 
@@ -107,9 +108,10 @@ describe("Validate", () => {
         expect(response).toEqual(undefined);
       });
 
-      it("does not call the presenter if valid is true", async () => {
+      it("calls only validationSuccessful on the presenter", async () => {
         useCase = getUseCase(valid, invalidPaths, prettyInvalidPaths);
         await useCase.execute(presenterSpy, project_id, type, data);
+        expect(presenterSpy.validationSuccessful).toHaveBeenCalled();
         expect(presenterSpy.invalidateFields).not.toHaveBeenCalled();
       });
     });

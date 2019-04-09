@@ -3,10 +3,11 @@ import ErrorMessage from ".";
 import { mount } from "enzyme";
 
 describe("<ErrorMessage>", () => {
-  it("is valid", () => {
+  it("is not valid", () => {
     it("example 1", () => {
       let wrap = mount(
         <ErrorMessage
+          validationSuccess={true}
           valid={false}
           type="Submit"
           invalidPaths={[["Cats", 0, "Cat House"], ["Dogs", "Dog House"]]}
@@ -20,6 +21,7 @@ describe("<ErrorMessage>", () => {
     it("example 1", () => {
       let wrap = mount(
         <ErrorMessage
+          validationSuccess={true}
           valid={false}
           type="Submit"
           invalidPaths={[
@@ -35,6 +37,7 @@ describe("<ErrorMessage>", () => {
     it("example 2", () => {
       let wrap = mount(
         <ErrorMessage
+          validationSuccess={true}
           valid={false}
           type="Submit"
           invalidPaths={[["Dogs", "Item 2", "Breed"], ["Cows", "Moo"]]}
@@ -50,6 +53,7 @@ describe("<ErrorMessage>", () => {
     it("example 1", () => {
       let wrap = mount(
         <ErrorMessage
+          validationSuccess={true}
           valid={false}
           type="Save"
           invalidPaths={[
@@ -66,6 +70,7 @@ describe("<ErrorMessage>", () => {
     it("example 2", () => {
       let wrap = mount(
         <ErrorMessage
+          validationSuccess={true}
           valid={false}
           type="Save"
           invalidPaths={[["Dogs", "Item 2", "Breed"], ["Cows", "Moo"]]}
@@ -81,6 +86,7 @@ describe("<ErrorMessage>", () => {
     it("example 1", () => {
       let wrap = mount(
         <ErrorMessage
+          validationSuccess={true}
           valid={false}
           type="Save"
           invalidPaths={[["Cats", "", "Cat House"], ["Dogs", "Dog House"]]}
@@ -94,6 +100,7 @@ describe("<ErrorMessage>", () => {
     it("example 2", () => {
       let wrap = mount(
         <ErrorMessage
+          validationSuccess={true}
           valid={false}
           type="Save"
           invalidPaths={[["Dogs", "Breed"], ["Cows", "", "Moo"]]}
@@ -109,6 +116,7 @@ describe("<ErrorMessage>", () => {
     it("example 1", () => {
       let wrap = mount(
         <ErrorMessage
+          validationSuccess={true}
           valid={true}
           type="Save"
           invalidPaths={[[]]}
@@ -117,6 +125,23 @@ describe("<ErrorMessage>", () => {
       );
       expect(wrap.text()).toEqual(
         "Error: You cannot save as newer data has already been saved to the system."
+      );
+    });
+  });
+
+  describe("Validation connection error", () => {
+    it("example 1", () => {
+      let wrap = mount(
+        <ErrorMessage
+          validationSuccess={false}
+          valid={false}
+          type="Save"
+          invalidPaths={[]}
+          errors={[]}
+        />
+      );
+      expect(wrap.text()).toEqual(
+        "Error: There was an error validating, please ensure you are connected to the internet."
       );
     });
   });

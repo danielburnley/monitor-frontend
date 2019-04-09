@@ -9,7 +9,9 @@ export default class Validate {
 
     if (success)
     {
-      if (!valid) {
+      if (valid) {
+        await presenter.validationSuccessful();
+      } else {
         await presenter.invalidateFields(prettyInvalidPaths);
       }
     }

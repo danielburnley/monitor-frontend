@@ -65,9 +65,21 @@ export default class ErrorMessage extends React.Component {
     );
   }
 
+  renderValidationConnectionError = () =>
+    <div
+      className="alert alert-danger"
+      role="alert"
+      data-test="validation-connection-error"
+    >
+      <strong>Error:</strong> There was an error validating, please ensure you are connected to the internet.<br />
+    </div>
+
   render() {
+    if (this.props.validationSuccess === false) {
+      return this.renderValidationConnectionError();
+    }
     if (this.props.errors && this.props.errors.length > 0) {
-      return this.renderOverWritingError()
+      return this.renderOverWritingError();
     }
 
     return this.renderValidation();
@@ -77,5 +89,6 @@ export default class ErrorMessage extends React.Component {
 ErrorMessage.propTypes = {
   valid: PropTypes.bool.isRequired,
   type: PropTypes.string.isRequired,
-  invalidPaths: PropTypes.arrayOf(PropTypes.array).isRequired
+  invalidPaths: PropTypes.arrayOf(PropTypes.array).isRequired,
+  validationSuccess: PropTypes.bool
 };

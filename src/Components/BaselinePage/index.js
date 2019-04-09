@@ -33,7 +33,7 @@ export default class BaselinePage extends React.Component {
     this.setState({ status: "SubmissionFailure" });
   }
 
-  projectUpdated(errors, timestamp) {
+  projectUpdated = async (errors, timestamp) => {
     if (timestamp) {
       this.setState({
         timestamp: timestamp
@@ -41,12 +41,12 @@ export default class BaselinePage extends React.Component {
     }
 
     if (errors && errors.length > 0) {
-      this.setState({
+      await this.setState({
         errors: errors,
         status: "ready"
       });
     } else if (this.state.status === "updating") {
-      this.setState({
+      await this.setState({
         status: "saved"
       });
     }
@@ -65,7 +65,13 @@ export default class BaselinePage extends React.Component {
     );
   };
 
-  validationUnsuccessful = async () => {};
+  validationUnsuccessful = async () => {
+    await this.setState({validationSuccess: false});
+  };
+
+  validationSuccessful = async () => {
+    await this.setState({validationSuccess: true})
+  };
 
   submitProject = async e => {
     this.setState({
@@ -83,10 +89,10 @@ export default class BaselinePage extends React.Component {
 
     await this.validateProject();
 
-    if (this.state.valid) {
+    if (this.state.valid && this.state.validationSuccess) {
       await this.props.submitProject.execute(this, this.props.projectId);
     } else {
-      this.setState({ status: "ready" });
+      await this.setState({ status: "ready" });
     }
     e.preventDefault();
   };
@@ -111,8 +117,9 @@ export default class BaselinePage extends React.Component {
 
   invalidateFields = async prettyInvalidPaths => {
     await this.setState({
-      prettyInvalidPaths: prettyInvalidPaths,
-      valid: false
+      prettyInvalidPaths,
+      valid: false,
+      validationSuccess: true
     });
   };
 
@@ -181,7 +188,7 @@ export default class BaselinePage extends React.Component {
   renderSubmitButton() {
     if (
       this.state.userRole === "Homes England" ||
-      this.state.userRole === "Superuser" 
+      this.state.userRole === "Superuser"
     ) {
       return (
         <button
@@ -198,7 +205,7 @@ export default class BaselinePage extends React.Component {
 
   renderDisabledButtons() {
     if (this.props.status === "Submitted") return null;
-    return <div>  
+    return <div>
       {this.renderDisabledSubmitButton()}
       <button
         data-test="disabled-update-project-button"
@@ -253,6 +260,7 @@ export default class BaselinePage extends React.Component {
       return (
         <div>
           <ErrorMessage
+            validationSuccess={this.state.validationSuccess}
             valid={this.state.valid}
             type={this.state.action}
             invalidPaths={this.state.prettyInvalidPaths}
@@ -272,7 +280,7 @@ export default class BaselinePage extends React.Component {
 
   renderSaveSuccess() {
     if (this.state.status === "saved") {
-      return <div data-test="project-update-success">Project updated!</div>;
+      return <div data-test="project-update-success">Baseline updated!</div>;
     }
   }
 

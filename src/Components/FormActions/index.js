@@ -47,10 +47,16 @@ export default class FormActions extends React.Component {
   };
 
   invalidateFields = async pathList => {
-    await this.setState({ valid: false, invalidPaths: pathList });
+    await this.setState({ valid: false, invalidPaths: pathList, validationSuccess: true });
   };
 
-  validationUnsuccessful = async () => {}
+  validationUnsuccessful = async () => {
+    await this.setState({validationSuccess: false});
+  };
+
+  validationSuccessful = async () => {
+    await this.setState({validationSuccess: true})
+  };
 
   id = () => {
     return this.props.match.params[`${this.props.formType}Id`]
@@ -78,7 +84,7 @@ export default class FormActions extends React.Component {
       data: formData
     });
 
-    if (this.state.valid) {
+    if (this.state.valid && this.state.validationSuccess) {
       await this.props.submit.execute(this, {
         projectId: this.props.match.params.projectId,
         id: this.id(),
@@ -88,26 +94,26 @@ export default class FormActions extends React.Component {
   };
 
   onFormSaveSubmitted = async formData => {
-      this.setState({
-        status: "Saving",
-        valid: true,
-        invalidPaths: [],
-        lastAction: "SaveSubmitted"
-      });
+    await this.setState({
+      status: "Saving",
+      valid: true,
+      invalidPaths: [],
+      lastAction: "SaveSubmitted"
+    });
 
-      await this.props.updateSubmitted.execute(this, {
-        projectId: this.props.match.params.projectId,
-        id: this.id(),
-        data: formData
-      });
+    await this.props.updateSubmitted.execute(this, {
+      projectId: this.props.match.params.projectId,
+      id: this.id(),
+      data: formData
+    });
 
-      await this.props.validate.execute(
-        this,
-        this.props.match.params.projectId,
-        formData,
-        this.props.type
-      );
-    };
+    await this.props.validate.execute(
+      this,
+      this.props.match.params.projectId,
+      formData,
+      this.props.type
+    );
+  };
 
   onFormSave = async formData => {
     this.setState({
@@ -364,6 +370,7 @@ export default class FormActions extends React.Component {
         </div>
         <div className="row">
           <ErrorMessage
+            validationSuccess={this.state.validationSuccess}
             valid={this.state.valid}
             invalidPaths={this.state.invalidPaths}
             type={this.state.lastAction}
