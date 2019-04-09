@@ -129,6 +129,68 @@ describe("CurrencyWidget", () => {
         });
       });
     });
+
+    describe("Leading zeroes", () => {
+      describe("Example 1", () => {
+        let schema, value, uiSchema, field, currencySymbol, onChangeSpy;
+        beforeEach(() => {
+          schema = {
+            title: "Cats",
+            type: "string",
+            currency: true
+          };
+
+          onChangeSpy = jest.fn();
+          value = "0000";
+          currencySymbol = "btc";
+
+          field = shallow(
+            <CurrencyWidget
+              value={value}
+              schema={schema}
+              onChange={onChangeSpy}
+              currency={currencySymbol}
+            />
+          );
+        });
+
+        it("Inserts commas for preset value", () => {
+          expect(field.find("[data-test='currency-input']").props().value).toEqual(
+            "0"
+          );
+        });
+      });
+
+      describe("Example 1", () => {
+        let schema, value, uiSchema, field, currencySymbol, onChangeSpy;
+        beforeEach(() => {
+          schema = {
+            title: "Dogs",
+            type: "string",
+            currency: true
+          };
+
+          onChangeSpy = jest.fn();
+          value = "00010000";
+          currencySymbol = "xmr";
+
+          field = shallow(
+            <CurrencyWidget
+              value={value}
+              schema={schema}
+              onChange={onChangeSpy}
+              currency={currencySymbol}
+            />
+          );
+        });
+
+        it("Inserts commas for preset value", () => {
+          expect(field.find("[data-test='currency-input']").props().value).toEqual(
+            "10,000"
+          );
+        });
+      });
+    });
   });
 
   describe("Value clamping on initialization", () => {
