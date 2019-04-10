@@ -21,8 +21,10 @@ describe("VarianceField", () => {
 
   describe("Given only baseline data", () => {
     describe("Example one", () => {
+      let schema;
+
       beforeEach(() => {
-        let schema = {
+        schema = {
           title: "Variance One",
           properties: {
             baseline: {
@@ -60,7 +62,9 @@ describe("VarianceField", () => {
             }
           }
         };
-        let formData = { baseline: "2019-01-01" };
+        let formData = {
+          baseline: "2019-01-01"
+        };
         field = mount(
           <VarianceField
             schema={schema}
@@ -254,6 +258,118 @@ describe("VarianceField", () => {
         it("Does not show the return variance field", () => {
           let returnVariance = field.find("[data-test='return-variance']");
           expect(returnVariance.length).toEqual(0);
+        });
+
+        describe("Validation", () => {
+          describe("Doesn't show a validation error", () => {
+            describe("when completed date is set to before targetDateOfAchievingStart", () => {
+              it("Example 1", async () => {
+                let formData = {
+                  targetDateOfAchievingStart: "2019-01-01",
+                  baseline: "2019-01-01"
+                };
+                field = mount(
+                  <VarianceField
+                    schema={schema}
+                    formData={formData}
+                    onChange={jest.fn()}
+                    registry={registryStub}
+                    />
+                );
+
+                field
+                .find("[data-test='variance-status']")
+                .simulate("change", { target: { value: "Completed" } });
+
+                let completedDate = field
+                .find("[data-test='variance-completed']")
+                .simulate("change", {target: {value: "2018-02-01"}});
+
+                expect(field.find(".has-error").length).toEqual(0);
+                expect(field.find("[data-test='validation-error-msg']").length).toEqual(0);
+              });
+
+              it("Example 2", async () => {
+                let formData = {
+                  targetDateOfAchievingStart: "2019-09-08",
+                  baseline: "2019-01-01"
+                };
+                field = mount(
+                  <VarianceField
+                    schema={schema}
+                    formData={formData}
+                    onChange={jest.fn()}
+                    registry={registryStub}
+                  />
+                );
+
+                field
+                  .find("[data-test='variance-status']")
+                  .simulate("change", { target: { value: "Completed" } });
+
+                let completedDate = field
+                  .find("[data-test='variance-completed']")
+                  .simulate("change", {target: {value: "2018-11-01"}});
+
+                  expect(field.find(".has-error").length).toEqual(0);
+                  expect(field.find("[data-test='validation-error-msg']").length).toEqual(0);
+              });
+            });
+          });
+
+          describe("Shows a validation error when completed date is set to after targetDateOfAchievingStart", () => {
+            it("Example 1", async () => {
+              let formData = {
+                targetDateOfAchievingStart: "2019-01-08",
+                baseline: "2019-01-01"
+              };
+              field = mount(
+                <VarianceField
+                  schema={schema}
+                  formData={formData}
+                  onChange={jest.fn()}
+                  registry={registryStub}
+                />
+              );
+
+              field
+                .find("[data-test='variance-status']")
+                .simulate("change", { target: { value: "Completed" } });
+
+              let completedDate = field
+                .find("[data-test='variance-completed']")
+                .simulate("change", {target: {value: "2019-10-22"}});
+
+              expect(field.find(".has-error").length).toEqual(1);
+              expect(field.find("[data-test='validation-error-msg']").length).toEqual(1);
+            });
+
+            it("Example 2", async () => {
+              let formData = {
+                targetDateOfAchievingStart: "2019-03-03",
+                baseline: "2019-01-01"
+              };
+              field = mount(
+                <VarianceField
+                  schema={schema}
+                  formData={formData}
+                  onChange={jest.fn()}
+                  registry={registryStub}
+                />
+              );
+
+              field
+                .find("[data-test='variance-status']")
+                .simulate("change", { target: { value: "Completed" } });
+
+              let completedDate = field
+                .find("[data-test='variance-completed']")
+                .simulate("change", {target: {value: "2019-11-01"}});
+
+              expect(field.find("[data-test='validation-error-msg']").length).toEqual(1);
+              expect(field.find(".has-error").length).toEqual(1);
+            });
+          });
         });
       });
     });
