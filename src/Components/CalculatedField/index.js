@@ -111,7 +111,7 @@ export function secondsPassed(originalDate, newDate) {
 export function validateCumulativeArrayPropertyIsLessThan(array, path, value) {
   let grandTotal = array
   .reduce((total, object) => parseMoney(get(object, ...path)) + total, 0)
-  
+
   let validity = value > grandTotal
   array.forEach(object => {
     setCreate(
@@ -188,8 +188,14 @@ export function set(object, property, value) {
 
 export function get(object, ...properties) {
   return properties.flat().reduce((accumulator, property) => {
-    if (accumulator && accumulator[property]) {
-      return accumulator[property];
+    if (accumulator) {
+      if (accumulator[property]) {
+        return accumulator[property];
+      } else if (accumulator[accumulator.length+property]) {
+        return accumulator[accumulator.length+property];
+      } else {
+        return undefined;
+      }
     } else {
       return undefined;
     }

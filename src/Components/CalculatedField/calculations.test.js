@@ -244,6 +244,29 @@ describe("set()", () => {
 });
 
 describe("get()", () => {
+  describe("With an array index", () => {
+    it("Example 1", () => {
+      let formData = {
+        a: [
+          {a: "value"},
+          {somevalue: "my value"},
+          {anothervalue: "more value"},
+          {finalvalue: "final value"}
+        ]
+      };
+      expect(get(formData, "a", -3)).toEqual({somevalue: "my value"});
+    });
+
+    it("Example 2", () => {
+      let formData = {
+        x: [
+          {b: "First value"}, {b: "Last"}
+        ]
+      };
+      expect(get(formData, "x", -1)).toEqual({b: "Last"});
+    });
+  });
+
   describe("With a non-existent key", () => {
     it("Example 1", () => {
       let formData = {
