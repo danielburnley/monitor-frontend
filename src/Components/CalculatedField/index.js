@@ -1,6 +1,10 @@
 import "../../Polyfills/Array/flat";
 import React from "react";
 
+export function date(dateString) {
+  return new Date(dateString).getTime();
+}
+
 export function path(...args) {
   return args;
 }

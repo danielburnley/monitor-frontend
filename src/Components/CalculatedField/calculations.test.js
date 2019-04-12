@@ -20,8 +20,24 @@ import {
   filterForNos,
   setArrayField,
   setInPreviousQuarter,
-  path
+  path,
+  date
 } from ".";
+
+describe("date()", () => {
+  describe("Returns a date object", () => {
+    //https://stackoverflow.com/questions/55648881/2-identical-dates-in-different-formats-give-different-epoch-times/55648947
+    it("Example 1", () => {
+      let first_january_2019_epoch = new Date(2019, 0, 1).getTime();
+      expect(date("2019")).toEqual(first_january_2019_epoch);
+    });
+
+    it("Example 2", () => {
+      let first_september_1993_epoch = new Date(1993,8,1).getTime();
+      expect(date("1993-09-01")).toEqual(first_september_1993_epoch);
+    });
+  });
+});
 
 describe("path()", () => {
   describe("Returns a list of path nodes", () => {
