@@ -1409,6 +1409,51 @@ describe("<ParentForm>", () => {
       });
     });
 
+    describe("When mounted", () => {
+      beforeEach(() => {
+        wrap = mount(
+          <ParentForm
+            documentGateway={documentGatewaySpy}
+            getRole={getRoleUseCaseSpy}
+            onChange={onChangeSpy}
+            formData={{
+              tab_one: {
+                cat: 'Tabby'
+              }
+            }}
+            schema={{
+              type: "object",
+              sharedData: [{ from: ['tab_one', 'cat'], to: ['tab_two', 'dog'] }],
+              properties: {
+                tab_one: {
+                  type: "object",
+                  properties:{
+                    cat: {
+                      type: "string"
+                    }
+                  }
+                },
+                tab_two: {
+                  type: "object",
+                  properties: {
+                    dog: {
+                      type: "string"
+                    }
+                  }
+                }
+              }
+            }}
+          />
+        );
+      });
+
+      it("calls the onchange spy with data in both fields if one is changed", async () => {
+        wrap.find("[data-test='tab_two_tab_link']").simulate("click");
+
+        expect(wrap.find("Form").props().formData).toEqual({ dog: "Tabby" });
+      });
+    });
+
     describe("With two bits of data to be shared", () => {
       beforeEach(() => {
         wrap = mount(

@@ -37,6 +37,8 @@ export default class ParentForm extends React.Component {
       selectedFormSection: this.getInitialFormSection(props.schema, first_tab),
       selectedFormItemIndex: 0
     };
+
+    this.shareDataBetweenTabs(this.state.formData);
   }
 
   getFirstProperty(schema) {
@@ -221,7 +223,7 @@ export default class ParentForm extends React.Component {
 
   isAddable = () => this.props.uiSchema &&
     this.props.uiSchema[this.state.selected] &&
-    this.props.uiSchema[this.state.selected]["ui:options"] && 
+    this.props.uiSchema[this.state.selected]["ui:options"] &&
     this.props.uiSchema[this.state.selected]["ui:options"]["addable"]
 
 
