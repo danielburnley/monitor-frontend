@@ -1,6 +1,16 @@
 import "../../Polyfills/Array/flat";
 import React from "react";
 
+export function sumArray(array) {
+  if (array === undefined) return;
+  return array.reduce((value, total) => Number(total)+value, 0);
+}
+
+export function select(array, path) {
+  if (array === undefined) return;
+  return array.map((object) => get(object, path));
+}
+
 export function date(dateString) {
   return new Date(dateString).getTime();
 }
@@ -187,6 +197,7 @@ export function setCreate(object, path, value) {
 }
 
 export function set(object, property, value) {
+  console.warn("CalculatedField: set() is deprecated");
   object[property] = value;
 }
 

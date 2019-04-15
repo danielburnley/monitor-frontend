@@ -15,9 +15,9 @@ export default class PeriodsField extends React.Component {
   onChange = (name, index, value) => {
     let newFormData = this.state.formData;
     newFormData[index][name] = value;
-    
+
     this.props.onChange(newFormData)
-    
+
     this.setState({ formData: newFormData })
   };
 
@@ -39,7 +39,7 @@ export default class PeriodsField extends React.Component {
       </div>
     });
   }
-  
+
   renderItem = (key, index, column) => {
     if (key === "remove") {
       return this.renderRemoveButton(index)

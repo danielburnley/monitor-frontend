@@ -21,8 +21,50 @@ import {
   setArrayField,
   setInPreviousQuarter,
   path,
-  date
+  date,
+  select,
+  sumArray
 } from ".";
+
+describe("sumArray()", () => {
+  describe("Gets the sum of every value in an array", () => {
+    it("Example 1", () => {
+      let formData = ["1", "2", "3", "4", "5"];
+
+      expect(sumArray(formData)).toEqual(15);
+    });
+
+    it("Example 2", () => {
+      let formData = [1, 4, 1, 5, 9, 2, 6, 5];
+
+      expect(sumArray(formData)).toEqual(33);
+    });
+  });
+
+  it("Does nothing given undefined", () => {
+    expect(sumArray(undefined)).toEqual(undefined);
+  });
+});
+
+describe("select()", () => {
+  describe("Returns the selected property", () => {
+    it("Example 1", () => {
+      let formData = [{item: 1, otherKey: 3}, {item: 2, otherKey: 3}];
+
+      expect(select(formData, path('item'))).toEqual([1,2]);
+    });
+
+    it("Example 2", () => {
+      let formData = [{myKey: { innerKey: 1 }}, {myKey: {innerKey: 4}}, {myKey: {innerKey: 1}}];
+
+      expect(select(formData, path('myKey', 'innerKey'))).toEqual([1,4,1]);
+    });
+  });
+
+  it("Does nothing given undefined", () => {
+    expect(select(undefined)).toEqual(undefined);
+  });
+});
 
 describe("date()", () => {
   describe("Returns a date object", () => {
