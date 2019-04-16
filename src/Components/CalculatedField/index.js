@@ -197,7 +197,9 @@ export function setCreate(object, path, value) {
 }
 
 export function set(object, property, value) {
-  console.warn("CalculatedField: set() is deprecated");
+  if (process.env.NODE_ENV !== "production") {
+    console.warn("CalculatedField: set() is deprecated, prefer setCreate()");
+  }
   object[property] = value;
 }
 
