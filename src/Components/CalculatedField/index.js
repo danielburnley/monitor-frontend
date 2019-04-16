@@ -1,6 +1,20 @@
 import "../../Polyfills/Array/flat";
 import React from "react";
 
+export function sumArray(array) {
+  if (array === undefined) return;
+  return array.reduce((value, total) => Number(total)+value, 0);
+}
+
+export function select(array, path) {
+  if (array === undefined) return;
+  return array.map((object) => get(object, path));
+}
+
+export function date(dateString) {
+  return new Date(dateString).getTime();
+}
+
 export function path(...args) {
   return args;
 }
@@ -111,7 +125,7 @@ export function secondsPassed(originalDate, newDate) {
 export function validateCumulativeArrayPropertyIsLessThan(array, path, value) {
   let grandTotal = array
   .reduce((total, object) => parseMoney(get(object, ...path)) + total, 0)
-  
+
   let validity = value > grandTotal
   array.forEach(object => {
     setCreate(
@@ -183,13 +197,22 @@ export function setCreate(object, path, value) {
 }
 
 export function set(object, property, value) {
+  if (process.env.NODE_ENV !== "production") {
+    console.warn("CalculatedField: set() is deprecated, prefer setCreate()");
+  }
   object[property] = value;
 }
 
 export function get(object, ...properties) {
   return properties.flat().reduce((accumulator, property) => {
-    if (accumulator && accumulator[property]) {
-      return accumulator[property];
+    if (accumulator) {
+      if (accumulator[property]) {
+        return accumulator[property];
+      } else if (accumulator[accumulator.length+property]) {
+        return accumulator[accumulator.length+property];
+      } else {
+        return undefined;
+      }
     } else {
       return undefined;
     }

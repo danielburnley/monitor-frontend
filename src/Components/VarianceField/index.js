@@ -19,6 +19,7 @@ export default class VarianceField extends React.Component {
       props.formData.varianceAgainstLastReturn;
 
     this.state = {
+      targetDateOfAchievingStart: props.formData.targetDateOfAchievingStart,
       baseline: props.formData.baseline,
       percentComplete: props.formData.percentComplete,
       status: props.formData.status || "On schedule",
@@ -40,7 +41,7 @@ export default class VarianceField extends React.Component {
   };
 
   baselineVarianceSchema = () => {
-    return ( this.props.schema.properties.varianceBaselineFullPlanningPermissionSubmitted
+    return (this.props.schema.properties.varianceBaselineFullPlanningPermissionSubmitted
     || this.props.schema.properties.varianceBaselineFullPlanningPermissionGranted
     || this.props.schema.properties.landAssemblyVarianceAgainstBaseReturn
     || this.props.schema.properties.procurementVarianceAgainstBaseline
@@ -186,9 +187,13 @@ export default class VarianceField extends React.Component {
     }
   };
 
+  dateIsInvalid = () => {
+    return (new Date(this.state.targetDateOfAchievingStart) < new Date(this.state.completedDate));
+  }
+
   renderCompletedDate = () => {
     return (
-      <div className="col-md-3 form-group">
+      <div className={`col-md-3 form-group ${this.dateIsInvalid()?"has-error":""} error-message-no-wrap`}>
         <label htmlFor="completed" data-test="variance-completed-title">{this.props.schema.properties.completedDate.title}*</label>
         <this.props.registry.widgets.britishDate
           className="form-control"
@@ -202,6 +207,12 @@ export default class VarianceField extends React.Component {
           onChange={e => {this.onFieldChange("completedDate", e)}}
           value={this.state.completedDate || ""}
         />
+      {
+        this.dateIsInvalid()?
+          <span className="help-block" data-test="validation-error-msg">
+            Completion date cannot be later than start date
+          </span>:null
+      }
       </div>
     );
   };
@@ -311,6 +322,7 @@ export default class VarianceField extends React.Component {
 
 VarianceField.propTypes = {
   formData: PropTypes.shape({
+    targetDateOfAchievingStart: PropTypes.string,
     baseline: PropTypes.string.isRequired,
     percentComplete: PropTypes.number,
     status: PropTypes.oneOf(["Completed", "On schedule", "Delayed - minimal impact", "Delayed - moderate impact", "Delayed - critical", "Delayed"]),

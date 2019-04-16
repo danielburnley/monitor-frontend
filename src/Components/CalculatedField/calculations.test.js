@@ -20,8 +20,66 @@ import {
   filterForNos,
   setArrayField,
   setInPreviousQuarter,
-  path
+  path,
+  date,
+  select,
+  sumArray
 } from ".";
+
+describe("sumArray()", () => {
+  describe("Gets the sum of every value in an array", () => {
+    it("Example 1", () => {
+      let formData = ["1", "2", "3", "4", "5"];
+
+      expect(sumArray(formData)).toEqual(15);
+    });
+
+    it("Example 2", () => {
+      let formData = [1, 4, 1, 5, 9, 2, 6, 5];
+
+      expect(sumArray(formData)).toEqual(33);
+    });
+  });
+
+  it("Does nothing given undefined", () => {
+    expect(sumArray(undefined)).toEqual(undefined);
+  });
+});
+
+describe("select()", () => {
+  describe("Returns the selected property", () => {
+    it("Example 1", () => {
+      let formData = [{item: 1, otherKey: 3}, {item: 2, otherKey: 3}];
+
+      expect(select(formData, path('item'))).toEqual([1,2]);
+    });
+
+    it("Example 2", () => {
+      let formData = [{myKey: { innerKey: 1 }}, {myKey: {innerKey: 4}}, {myKey: {innerKey: 1}}];
+
+      expect(select(formData, path('myKey', 'innerKey'))).toEqual([1,4,1]);
+    });
+  });
+
+  it("Does nothing given undefined", () => {
+    expect(select(undefined)).toEqual(undefined);
+  });
+});
+
+describe("date()", () => {
+  describe("Returns a date object", () => {
+    //https://stackoverflow.com/questions/55648881/2-identical-dates-in-different-formats-give-different-epoch-times/55648947
+    it("Example 1", () => {
+      let first_january_2019_epoch = new Date(2019, 0, 1).getTime();
+      expect(date("2019")).toEqual(first_january_2019_epoch);
+    });
+
+    it("Example 2", () => {
+      let first_september_1993_epoch = new Date(1993,8,1).getTime();
+      expect(date("1993-09-01")).toEqual(first_september_1993_epoch);
+    });
+  });
+});
 
 describe("path()", () => {
   describe("Returns a list of path nodes", () => {
@@ -244,6 +302,29 @@ describe("set()", () => {
 });
 
 describe("get()", () => {
+  describe("With an array index", () => {
+    it("Example 1", () => {
+      let formData = {
+        a: [
+          {a: "value"},
+          {somevalue: "my value"},
+          {anothervalue: "more value"},
+          {finalvalue: "final value"}
+        ]
+      };
+      expect(get(formData, "a", -3)).toEqual({somevalue: "my value"});
+    });
+
+    it("Example 2", () => {
+      let formData = {
+        x: [
+          {b: "First value"}, {b: "Last"}
+        ]
+      };
+      expect(get(formData, "x", -1)).toEqual({b: "Last"});
+    });
+  });
+
   describe("With a non-existent key", () => {
     it("Example 1", () => {
       let formData = {
