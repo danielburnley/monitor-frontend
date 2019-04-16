@@ -61,7 +61,9 @@ export default class ParentForm extends React.Component {
   }
 
   getChild(path, key) {
-    return path && path[key];
+    if (path) {
+      return path[key] || path[path.length+key];
+    }
   }
 
   setChild(toBurrow, path, nextItemKey, nextIndex) {
