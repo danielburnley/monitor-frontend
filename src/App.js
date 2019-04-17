@@ -57,7 +57,6 @@ import SubmitReturn from "./UseCase/SubmitReturn";
 import GetRole from "./UseCase/GetRole";
 import UpdateReturn from "./UseCase/UpdateReturn";
 import UpdateSubmittedReturn from "./UseCase/UpdateSubmittedReturn";
-import UnsubmitProject from "./UseCase/UnsubmitProject";
 import RequestToken from "./UseCase/RequestToken";
 import Validate from "./UseCase/Validate";
 import AmendBaseline from "./UseCase/AmendBaseline";
@@ -124,7 +123,6 @@ const canAccessMonitorUseCase = new CanAccessMonitor(tokenGateway, apiKeyCookieG
 const getReturnsUseCase = new GetReturns(returnGateway);
 const requestTokenUseCase = new RequestToken(tokenGateway);
 const submitReturnUseCase = new SubmitReturn(returnGateway);
-const unsubmitProject = new UnsubmitProject(projectGateway)
 const updateReturnUseCase = new UpdateReturn(returnGateway);
 const updateSubmittedReturnUseCase = new UpdateSubmittedReturn(returnGateway);
 const updateClaimUseCase = new UpdateClaim(claimGateway);
@@ -368,7 +366,7 @@ const renderNewProjectPageOverview = (props, projectStatus, formData, formSchema
 
 const renderSubmittedProjectPage = (props, formData, formSchema) => (
   <div className="col-md-10 col-md-offset-1">
-    <ProjectSummary data={formData} schema={formSchema}  unsubmitProject={unsubmitProject} projectId={props.match.params.projectId}/>
+    <ProjectSummary data={formData} schema={formSchema} projectId={props.match.params.projectId}/>
     <div className="row">
       <div className="col-md-2">
         <CreateReturnButton {...props} />
