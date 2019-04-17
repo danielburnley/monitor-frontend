@@ -915,4 +915,148 @@ describe("Project Gateway", () => {
       });
     });
   });
+
+  describe("#Overview", () => {
+    describe("Given a Project is found", () => {
+      let projectRequest, response, responseBody, apiKeyGateway;
+
+      describe("Example one", () => {
+        describe("Connection success", () => {
+          beforeEach(async () => {
+            responseBody = {
+              name: "Cat",
+              status: "Draft",
+              type: "ac",
+              data: { thisIs: "someData" },
+              returns: [{id: 1, status: "Draft"}],
+              baselines: [{id: 1, status: "Draft"}],
+              claims: [{id: 1, status: "Draft"}]
+            }
+
+            process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
+            apiKeyGateway = {
+              getApiKey: jest.fn(() => ({ apiKey: "superSecret" }))
+            };
+            projectRequest = nock("http://cat.meow")
+              .matchHeader("Content-Type", "application/json")
+              .matchHeader("API_KEY", "superSecret")
+              .get("/project/1/overview")
+              .reply(200, responseBody);
+
+            let gateway = new ProjectGateway(apiKeyGateway);
+            response = await gateway.overview({projectId: 1});
+          });
+
+          it("Gets the api key from the gateway", () => {
+            expect(apiKeyGateway.getApiKey).toHaveBeenCalled();
+          });
+
+          it("Fetches the project from the API", () => {
+            expect(projectRequest.isDone()).toBeTruthy();
+          });
+
+          it("Returns the response from the api", () => {
+            expect(response).toEqual({
+              success: true,
+              overview: responseBody
+            });
+          });
+        });
+
+        describe("Connection error", () => {
+          it("Should return success as false", async () => {
+            process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
+            apiKeyGateway = {
+              getApiKey: jest.fn(() => ({ apiKey: "superSecret" }))
+            };
+            projectRequest = nock("http://cat.meow")
+              .matchHeader("Content-Type", "application/json")
+              .matchHeader("API_KEY", "superSecret")
+              .get("/project/1/overview")
+              .socketDelay(2000)
+
+            let gateway = new ProjectGateway(apiKeyGateway);
+            response = await gateway.overview({ projectId: 1 });
+            expect(response).toEqual({success: false})
+          });
+        });
+      });
+
+      describe("Example two", () => {
+        describe("Connection success", () => {
+          beforeEach(async () => {
+            responseBody = {
+              name: "Dog",
+              status: "Submitted",
+              type: "hif",
+              data: { alsoSome: "moreData" },
+              returns: [{id: 2, status: "Submitted"}],
+              baselines: [{id: 3, status: "Submitted"}],
+              claims: [{id: 4, status: "Submitted"}]
+            }
+
+            process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
+            apiKeyGateway = {
+              getApiKey: jest.fn(() => ({ apiKey: "superSecret" }))
+            };
+            projectRequest = nock("http://cat.meow")
+              .matchHeader("Content-Type", "application/json")
+              .matchHeader("API_KEY", "superSecret")
+              .get("/project/1/overview")
+              .reply(200, responseBody);
+
+            let gateway = new ProjectGateway(apiKeyGateway);
+            response = await gateway.overview({projectId: 1});
+          });
+
+          it("Gets the api key from the gateway", () => {
+            expect(apiKeyGateway.getApiKey).toHaveBeenCalled();
+          });
+
+          it("Fetches the project from the API", () => {
+            expect(projectRequest.isDone()).toBeTruthy();
+          });
+
+          it("Returns the response from the api", () => {
+            expect(response).toEqual({
+              success: true,
+              overview: responseBody
+            });
+          });
+        });
+
+        describe("Connection error", () => {
+          it("Should return success as false", async () => {
+            process.env.REACT_APP_HIF_API_URL = "http://cat.meow/";
+            apiKeyGateway = {
+              getApiKey: jest.fn(() => ({ apiKey: "superSecret" }))
+            };
+            projectRequest = nock("http://cat.meow")
+              .matchHeader("Content-Type", "application/json")
+              .matchHeader("API_KEY", "superSecret")
+              .get("/project/1/overview")
+              .socketDelay(2000)
+
+            let gateway = new ProjectGateway(apiKeyGateway);
+            response = await gateway.overview({ projectId: 1 });
+            expect(response).toEqual({success: false})
+          });
+        });
+      });
+    });
+
+    describe("Given a project is not found", () => {
+      it("Projects unsuccessful", async () => {
+        let apiKeyGateway = { getApiKey: () => ({ apiKey: "extraSecret" }) };
+        process.env.REACT_APP_HIF_API_URL = "http://dog.woof/";
+        let projectRequest = nock("http://dog.woof")
+          .matchHeader("Content-Type", "application/json")
+          .get("/project/5/overview")
+          .reply(404);
+        let gateway = new ProjectGateway(apiKeyGateway);
+        let response = await gateway.overview({projectId: 5});
+        expect(response).toEqual({ success: false });
+      });
+    });
+  })
 });

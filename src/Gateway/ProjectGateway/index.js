@@ -6,7 +6,7 @@ import runtimeEnv from "@mars/heroku-js-runtime-env";
 export default class ProjectGateway {
   constructor(apiKeyGateway, locationGateway) {
     this.apiKeyGateway = apiKeyGateway;
-    this.locationGateway = locationGateway
+    this.locationGateway = locationGateway;
     this.env = runtimeEnv();
   }
 
@@ -49,15 +49,15 @@ export default class ProjectGateway {
 
     if (rawResponse.ok) {
       let response = await rawResponse.json();
-      let infrastructures = response.infrastructures
-      let compiled_infras = []
+      let infrastructures = response.infrastructures;
+      let compiled_infras = [];
       Object.values(infrastructures).forEach(infrastructures => {
-        infrastructures.forEach(infrastructure => (
+        infrastructures.forEach(infrastructure =>
           compiled_infras.push(new Infrastructure(infrastructure))
-        ))
-      })
+        );
+      });
 
-      return { success: true, infrastructures: compiled_infras};
+      return { success: true, infrastructures: compiled_infras };
     } else {
       return { success: false };
     }
@@ -100,8 +100,12 @@ export default class ProjectGateway {
     ).catch(() => ({ ok: false }));
 
     if (response.ok) {
-      let rawResponse  = await response.json();
-      return { success: true, errors: rawResponse.errors, new_timestamp: rawResponse.timestamp};
+      let rawResponse = await response.json();
+      return {
+        success: true,
+        errors: rawResponse.errors,
+        new_timestamp: rawResponse.timestamp
+      };
     } else {
       return { success: false };
     }
@@ -116,7 +120,7 @@ export default class ProjectGateway {
           "Content-Type": "application/json",
           API_KEY: this.apiKeyGateway.getApiKey().apiKey
         },
-        body: JSON.stringify({project_id, type, data })
+        body: JSON.stringify({ project_id, type, data })
       }
     ).catch(() => ({ ok: false }));
 
@@ -126,10 +130,10 @@ export default class ProjectGateway {
         success: true,
         valid: response_json.valid,
         prettyInvalidPaths: response_json.prettyInvalidPaths,
-        invalidPaths: response_json.invalidPaths,
+        invalidPaths: response_json.invalidPaths
       };
     } else {
-      return { success: false}
+      return { success: false };
     }
   }
 
@@ -142,7 +146,7 @@ export default class ProjectGateway {
           "Content-Type": "application/json",
           API_KEY: this.apiKeyGateway.getApiKey().apiKey
         },
-        body: JSON.stringify({name, type, bid_id})
+        body: JSON.stringify({ name, type, bid_id })
       }
     ).catch(() => ({ ok: false }));
 
@@ -153,7 +157,7 @@ export default class ProjectGateway {
         id: response_json.projectId
       };
     } else {
-      return { success: false }
+      return { success: false };
     }
   }
 
@@ -161,9 +165,9 @@ export default class ProjectGateway {
     let users_to_add;
 
     if (users === undefined) {
-      users_to_add = {users: [{self: true}]};
+      users_to_add = { users: [{ self: true }] };
     } else {
-      users_to_add = {users};
+      users_to_add = { users };
     }
 
     let response = await fetch(
@@ -179,6 +183,27 @@ export default class ProjectGateway {
     ).catch(() => ({ ok: false }));
 
     if (response.ok) return { success: true };
-    return { success: false }
+    return { success: false };
+  }
+
+  async overview({ projectId }) {
+    let response = await fetch(
+      `${this.env.REACT_APP_HIF_API_URL}project/${projectId}/overview`,
+      {
+        headers: { "Content-Type": "application/json", API_KEY: this.apiKey() }
+      }
+    ).catch(() => ({ ok: false }));
+
+    if (response.ok) {
+      let jsonResponse = await response.json();
+
+      return { success: true, overview: jsonResponse };
+    } else {
+      return { success: false };
+    }
+  }
+
+  apiKey() {
+    return this.apiKeyGateway.getApiKey().apiKey;
   }
 }
