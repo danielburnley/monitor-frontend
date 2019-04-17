@@ -1703,7 +1703,9 @@ describe("<ParentForm>", () => {
             formData={{
               tab_one: {
                 cat: [
-                  {period1: "3", period2: "4"}
+                  {period1: "1", period2: "4"},
+                  {period1: "1", period2: "5"},
+                  {period1: "9", period2: "2"}
                 ]
               }
             }}
@@ -1747,19 +1749,21 @@ describe("<ParentForm>", () => {
       });
 
       it("calls the onchange spy with correct fields if one is changed", async () => {
-        let input = wrap.find(".form-control").at(0);
+        let input = wrap.find(".form-control").at(4);
 
-        await updateFormField(input, "squeaky");
+        await updateFormField(input, "1");
 
         expect(onChangeSpy).toHaveBeenCalledWith({
           formData: {
             tab_one: {
               cat: [
-                {period1: "squeaky", period2: "4"}
+                {period1: "1", period2: "4"},
+                {period1: "1", period2: "5"},
+                {period1: "1", period2: "2"}
               ]
             },
             tab_two: {
-              dog: "squeaky"
+              dog: "1"
             }
           }
         });
