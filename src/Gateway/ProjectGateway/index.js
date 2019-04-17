@@ -196,7 +196,6 @@ export default class ProjectGateway {
 
     if (response.ok) {
       let jsonResponse = await response.json();
-
       return { success: true, overview: jsonResponse };
     } else {
       return { success: false };
