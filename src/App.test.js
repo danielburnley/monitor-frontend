@@ -253,20 +253,19 @@ describe("Viewing a project", () => {
 
     it("will not show GetToken", async () => {
       api.checkApiKey(0).successfully();
-      api.getProject(projectSchema, projectData).successfully();
-      api.getReturns({returns: []}).successfully();
+      api.getProjectOverview(projectData, projectStatus, projectType).successfully();
 
       let page = new AppPage("/project/0/?token=Cats");
       await page.load();
 
       expect(page.find("GetToken").length).toEqual(0);
-      expect(page.find("ProjectPage").length).toEqual(1);
+      expect(page.find({'data-test': 'submitted-project-page'}).length).toEqual(1);
     });
 
     describe("Project Status is draft", () => {
       it("Displays the fill in baseline button", async () => {
         api.checkApiKey(0).successfully();
-        api.getProject(projectSchema, projectData, "Draft", projectType).successfully();
+        api.getProjectOverview(projectData, "Draft", projectType).successfully();
         let page = new AppPage("/project/0?token=Cats");
         await page.load();
         expect(page.find("FillInBaselineButton").length).toEqual(1)
@@ -275,7 +274,7 @@ describe("Viewing a project", () => {
       describe("A project with type other than ff", () => {
         it("Doesn't display the edit infrastructures button", async () => {
           api.checkApiKey(0).successfully();
-          api.getProject(projectSchema, projectData, "Draft", projectType).successfully();
+          api.getProjectOverview(projectData, "Draft", projectType).successfully();
           let page = new AppPage("/project/0?token=Cats");
           await page.load();
           expect(page.find('[data-test="edit-infrastructures-button"]').length).toEqual(0)
@@ -285,7 +284,7 @@ describe("Viewing a project", () => {
       describe("An ff project", () => {
         it("Displays the edit infrastructures button", async () => {
           api.checkApiKey(0).successfully();
-          api.getProject(projectSchema, projectData, "Draft", "ff").successfully();
+          api.getProjectOverview(projectData, "Draft", "ff").successfully();
           let page = new AppPage("/project/0?token=Cats");
           await page.load();
           expect(page.find('[data-test="edit-infrastructures-button"]').length).toEqual(1)
@@ -296,8 +295,7 @@ describe("Viewing a project", () => {
     describe("Project Status is submitted", () => {
       it("Renders the project summary with information from the API", async () => {
         api.checkApiKey(0).successfully();
-        api.getProject(projectSchema, projectData, projectStatus, projectType).successfully();
-        api.getReturns({returns: []}).successfully();
+        api.getProjectOverview(projectData, "Submitted", projectType).successfully();
 
         let page = new AppPage("/project/0?token=Cats");
         await page.load();
@@ -317,53 +315,38 @@ describe("Viewing a project", () => {
 
 
       it("Renders the return list within the project sumary page with information from the API", async () => {
-        let data = {
-          returns: [
-            {
-              id: 1,
-              project_id: 1,
-              status: "Draft",
-              updates: [
-                {
-                  changed: "Yes"
-                }
-              ]
-            },
-            {
-              id: 2,
-              project_id: 1,
-              status: "Submitted",
-              updates: [
-                {
-                  changed: "something"
-                }
-              ]
-            },
-            {
-              id: 3,
-              project_id: 1,
-              status: "Platypus",
-              updates: [
-                {
-                  changed: "Duck!?"
-                }
-              ]
-            },
-            {
-              id: 4,
-              project_id: 1,
-              status: "Duck",
-              updates: [
-                {
-                  changed: "Quack"
-                }
-              ]
-            }
-          ]
-        };
+        let returns = [
+          {
+            id: 1,
+            project_id: 1,
+            status: "Draft"
+          },
+          {
+            id: 2,
+            project_id: 1,
+            status: "Submitted"
+          },
+          {
+            id: 3,
+            project_id: 1,
+            status: "Platypus"
+          },
+          {
+            id: 4,
+            project_id: 1,
+            status: "Duck"
+          }
+        ];
         api.checkApiKey(0).successfully();
-        api.getProject(projectSchema, projectData, projectStatus, projectType).successfully();
-        api.getReturns(data).successfully();
+
+        api.getProjectOverview(
+          projectData, 
+          projectStatus, 
+          projectType, 
+          [], 
+          returns, 
+          []
+        ).successfully();
 
         let page = new AppPage("/project/0?token=Cats");
         await page.load();
@@ -377,8 +360,7 @@ describe("Viewing a project", () => {
 
       it("Renders the project baseline page", async () => {
         api.checkApiKey(0).successfully();
-        api.getProject(projectSchema, projectData, projectStatus, projectType).successfully();
-        api.getReturns({returns: []}).successfully();
+        api.getProjectOverview(projectData, projectStatus, projectType).successfully();
 
         let page = new AppPage("/project/0?token=Cats");
         await page.load();
@@ -392,9 +374,8 @@ describe("Viewing a project", () => {
       describe("Returns", () => {
         it("Renders the return with information from the API when creating a new return", async () => {
           api.checkApiKey(0).successfully();
-          api.getProject(projectSchema, projectData, projectStatus, projectType).successfully();
+          api.getProjectOverview(projectData, projectStatus, projectType).successfully();
           api.getBaseReturn(returnSchema, returnData).successfully();
-          api.getReturns({returns: []}).successfully();
 
           let page = new AppPage("/project/0?token=Cats");
           await page.load();
@@ -429,8 +410,7 @@ describe("Viewing a project", () => {
       describe("Claims", () => {
         it("Renders a blank claim form when creating a new claim", async () => {
           api.checkApiKey(0).successfully();
-          api.getProject(projectSchema, projectData, projectStatus, projectType).successfully();
-          api.getReturns({returns: []}).successfully();
+          api.getProjectOverview(projectData, projectStatus, projectType).successfully();
           api.getBaseClaim(claimSchema, emptyClaimData).successfully();
 
           let page = new AppPage("/project/0?token=Cats");

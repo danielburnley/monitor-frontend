@@ -56,6 +56,14 @@ class APISimulator {
     return new APIResponse(projectRequest, response);
   }
 
+  getProjectOverview(data, status, type, baselines = [], returns = [], claims = []) {
+    let response = { data, status, type, baselines, returns, claims };
+    let projectRequest = nock(this.url)
+      .matchHeader("Content-Type", "application/json")
+      .get("/project/0/overview");
+    return new APIResponse(projectRequest, response);
+  }
+
   amendBaseline(baselineId, projectId, data, timestamp = 0) {
     let response = {baselineId, timestamp}
     let request = nock(this.url)

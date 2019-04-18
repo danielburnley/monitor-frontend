@@ -27,6 +27,7 @@ import PrintReturn from "./Components/PrintReturn";
 import AdminPortal from "./Components/AdminPortal";
 import AmendBaselineButton from "./Components/AmendBaselineButton";
 import AmendProjectPage from "./Components/AmendProjectPage";
+import ProjectOverviewProvider from "./Components/ProjectOverviewProvider"
 import LogoutButton from "./Components/LogoutButton";
 
 import AddUsersToProject from "./UseCase/AddUsersToProject";
@@ -63,6 +64,7 @@ import AmendBaseline from "./UseCase/AmendBaseline";
 import GetBaselines from "./UseCase/GetBaselines";
 import SubmitBaseline from "./UseCase/SubmitBaseline";
 import Logout from "./UseCase/Logout";
+import GetProjectOverview from "./UseCase/GetProjectOverview"
 
 import ProjectGateway from "./Gateway/ProjectGateway";
 import ReturnGateway from "./Gateway/ReturnGateway";
@@ -131,6 +133,7 @@ const addUsersToProject = new AddUsersToProject(projectGateway);
 const amendBaseline = new AmendBaseline(baselineGateway);
 const getBaselines = new GetBaselines(baselineGateway);
 const submitBaseline = new SubmitBaseline(baselineGateway);
+const getProjectOverview = new GetProjectOverview({ projectGateway })
 
 const renderReturnPage = props => (
   <ReturnPage
@@ -342,7 +345,7 @@ const renderAmendBaselinePage = props => (
   </EditBaselinePage>
 );
 
-const renderNewProjectPageOverview = (props, projectStatus, formData, formSchema, projectType, formUiSchema, timestamp) => (
+const renderNewProjectPageOverview = (props, projectType) => (
   <div className="col-md-10 col-md-offset-1">
     <div className="row">
       <h1>{projectType === "ac" && "Accelerated Construction"}</h1>
@@ -353,10 +356,8 @@ const renderNewProjectPageOverview = (props, projectStatus, formData, formSchema
       <h4>This is where we will create the primary profile for your project.</h4>
     </div>
     <div className="row">
-
       <EditInfrastructuresButton {...props} type={projectType} />
     </div>
-
     <div className="row">
       <FillInBaselineButton {...props} />
     </div>
@@ -364,9 +365,9 @@ const renderNewProjectPageOverview = (props, projectStatus, formData, formSchema
   )
 
 
-const renderSubmittedProjectPage = (props, formData, formSchema) => (
-  <div className="col-md-10 col-md-offset-1">
-    <ProjectSummary data={formData} schema={formSchema} projectId={props.match.params.projectId}/>
+const renderSubmittedProjectPage = (props, formData, baselines, claims, returns) => (
+  <div className="col-md-10 col-md-offset-1" data-test="submitted-project-page">
+    <ProjectSummary data={formData} />
     <div className="row">
       <div className="col-md-2">
         <CreateReturnButton {...props} />
@@ -381,63 +382,47 @@ const renderSubmittedProjectPage = (props, formData, formSchema) => (
     </div>
     <div className="row">
       <div className="col-md-4">
-        <BaselineListProvider
-            {...props}
-            getBaselines={getBaselines}
-          >
-            {({baselines}) => (
-              <List
-                {...props}
-                items={baselines}
-                listType={"baseline"}
-                prettyListType={"Baseline Version"}
-              />
-            )}
-        </BaselineListProvider>
+        <List
+          {...props}
+          items={baselines}
+          listType={"baseline"}
+          prettyListType={"Baseline Version"}
+        />
       </div>
       <div className="col-md-4">
-        <ReturnListProvider projectId={props.match.params.projectId} getReturns={getReturnsUseCase}>
-          {({ returns }) => (
-            <List
-              {...props}
-              data-test="return-list"
-              items={returns}
-              listType={"return"}
-              prettyListType={"Return"}
-            />
-          )}
-        </ReturnListProvider>
+        <List
+          {...props}
+          data-test="return-list"
+          items={returns}
+          listType={"return"}
+          prettyListType={"Return"}
+        />
       </div>
       <div className="col-md-4">
-        <ClaimListProvider
-            {...props}
-            getClaims={getClaims}
-          >
-            {({claims}) => (
-              <List
-                {...props}
-                items={claims}
-                listType={"claim"}
-                prettyListType={"Claim"}
-              />
-            )}
-        </ClaimListProvider>
+        <List
+          {...props}
+          items={claims}
+          listType={"claim"}
+          prettyListType={"Claim"}
+        />
       </div>
     </div>
   </div>
 );
 
 const renderProjectPage = props => (
-    <ProjectPage {...props} getProject={getProjectUseCase} generateUISchema={generateUISchema} generateSubmittedUiSchema={generateDisabledUISchema}>
-    {({ projectStatus, formData, formSchema, projectType, formUiSchema, timestamp }) => {
-      if (projectStatus === "Draft") {
-        return renderNewProjectPageOverview(props, projectStatus, formData, formSchema, projectType, formUiSchema, timestamp);
+  <ProjectOverviewProvider getProjectOverview={getProjectOverview} projectId={props.match.params.projectId}>
+    {
+      ({ name, type, status, data, baselines, claims, returns }) => {
+        if (status === "Draft") {
+          return renderNewProjectPageOverview(props, type);
+        }
+        if (status === "Submitted") {
+          return renderSubmittedProjectPage(props, data, baselines, claims, returns);
+        }
       }
-      if (projectStatus === "Submitted") {
-        return renderSubmittedProjectPage(props, formData, formSchema);
-      }
-    }}
-  </ProjectPage>
+    }
+  </ProjectOverviewProvider>
 );
 
 const renderBaseline = props => (
