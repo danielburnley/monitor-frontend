@@ -8,7 +8,7 @@ export default class GetProjectOverview {
 
     if (response.success) {
       let overview = response.overview;
-      presenter.presentOverview({
+      await presenter.presentOverview({
         name: overview.name,
         type: overview.type,
         status: overview.status,

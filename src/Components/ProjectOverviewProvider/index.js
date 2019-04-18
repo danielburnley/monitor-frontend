@@ -3,11 +3,11 @@ import React from "react";
 export default class ProjectOverviewProvider extends React.Component {
   constructor() {
     super();
-    this.state = { overview: undefined };
+    this.state = {};
   }
 
-  presentOverview(overview) {
-    this.setState({ overview });
+  async presentOverview(overview) {
+    await this.setState({ overview });
   }
 
   componentDidMount() {
