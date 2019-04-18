@@ -129,7 +129,7 @@ describe("<ProjectOverviewProvider>", () => {
         );
       });
 
-      it("It passes the found overview to the children", () => {
+      it("passes the found overview to the children", () => {
         expect(childrenSpy).toHaveBeenCalledWith({
           name: "Cat",
           status: "Draft",
