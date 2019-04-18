@@ -1693,6 +1693,83 @@ describe("<ParentForm>", () => {
       });
     });
 
+    describe("With the last item in an array", () => {
+      beforeEach(() => {
+        wrap = mount(
+          <ParentForm
+            documentGateway={documentGatewaySpy}
+            getRole={getRoleUseCaseSpy}
+            onChange={onChangeSpy}
+            formData={{
+              tab_one: {
+                cat: [
+                  {period1: "1", period2: "4"},
+                  {period1: "1", period2: "5"},
+                  {period1: "9", period2: "2"}
+                ]
+              }
+            }}
+            schema={{
+              type: "object",
+              sharedData: [
+                { from: ['tab_one', 'cat', -1, 'period1'], to: ['tab_two', 'dog'] }
+              ],
+              properties: {
+                tab_one: {
+                  type: "object",
+                  properties: {
+                    cat: {
+                      type: "array",
+                      items: {
+                        type: "object",
+                        properties: {
+                          period1: {
+                            type: "string"
+                          },
+                          period2: {
+                            type: "string"
+                          }
+                        },
+                      }
+                    }
+                  }
+                },
+                tab_two: {
+                  type: "object",
+                  properties: {
+                    dog: {
+                      type: "string"
+                    }
+                  }
+                }
+              }
+            }}
+          />
+        );
+      });
+
+      it("calls the onchange spy with correct fields if one is changed", async () => {
+        let input = wrap.find(".form-control").at(4);
+
+        await updateFormField(input, "1");
+
+        expect(onChangeSpy).toHaveBeenCalledWith({
+          formData: {
+            tab_one: {
+              cat: [
+                {period1: "1", period2: "4"},
+                {period1: "1", period2: "5"},
+                {period1: "1", period2: "2"}
+              ]
+            },
+            tab_two: {
+              dog: "1"
+            }
+          }
+        });
+      });
+    });
+
     describe("With item in an array and no saved formdata", () => {
       beforeEach(() => {
         wrap = mount(
