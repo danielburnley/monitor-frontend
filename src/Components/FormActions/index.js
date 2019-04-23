@@ -194,12 +194,8 @@ export default class FormActions extends React.Component {
     }
   }
 
-  roleMatchesRequirement = () => {
-    if (this.props.roleRequirement) {
-      return this.props.roleRequirement.indexOf(this.state.userRole) !== -1;
-    }
-    return this.state.userRole === "Homes England";
-  }
+  roleMatchesRequirement = () =>
+    this.props.roleRequirement.indexOf(this.state.userRole) !== -1
 
   renderSubmitButton = () => {
     if (!this.roleMatchesRequirement()) {

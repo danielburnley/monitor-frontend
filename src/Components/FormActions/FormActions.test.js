@@ -73,6 +73,7 @@ describe("<FormActions>", () => {
         match={{params: {projectId: 1}}}
         status="Draft"
         getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+        roleRequirement={["Superuser", "Homes England"]}
       />
     );
 
@@ -94,6 +95,7 @@ describe("<FormActions>", () => {
           schema={formSchema}
           status="Draft"
           getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+          roleRequirement={["Superuser", "Homes England"]}
         />
       );
 
@@ -114,6 +116,7 @@ describe("<FormActions>", () => {
           match={{params: {projectId: 6}}}
           status="Draft"
           getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+          roleRequirement={["Superuser", "Homes England"]}
         />
       );
 
@@ -132,6 +135,7 @@ describe("<FormActions>", () => {
         schema={formSchema}
         status="New"
         getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+        roleRequirement={["Superuser", "Homes England"]}
       />
     );
 
@@ -156,7 +160,8 @@ describe("<FormActions>", () => {
               status="Submitted"
               type="ac"
               getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
-              />
+              roleRequirement={["Superuser", "Homes England"]}
+            />
           );
 
           expect(wrap.find("[data-test='save-submitted-button']").length).toEqual(1);
@@ -175,7 +180,8 @@ describe("<FormActions>", () => {
               status="Submitted"
               type="ac"
               getRole={{execute: jest.fn(() => ({role: "Homes England"}))}}
-              />
+              roleRequirement={["Superuser", "Homes England"]}
+            />
           );
 
           saveSubmitted(wrap);
@@ -196,6 +202,7 @@ describe("<FormActions>", () => {
               status="Submitted"
               type="ac"
               getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+              roleRequirement={["Superuser", "Homes England"]}
             />
           );
 
@@ -218,6 +225,7 @@ describe("<FormActions>", () => {
               status="Submitted"
               type="ac"
               getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+              roleRequirement={["Superuser", "Homes England"]}
             />
           );
 
@@ -242,6 +250,7 @@ describe("<FormActions>", () => {
               status="Submitted"
               type="ac"
               getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+              roleRequirement={["Superuser", "Homes England"]}
             />
           );
 
@@ -264,6 +273,7 @@ describe("<FormActions>", () => {
               status="Submitted"
               type="ac"
               getRole={{execute: jest.fn(() => ({role: "Homes England"}))}}
+              roleRequirement={["Superuser", "Homes England"]}
             />
           );
 
@@ -284,6 +294,7 @@ describe("<FormActions>", () => {
             status="Submitted"
             type="ac"
             getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+            roleRequirement={["Superuser", "Homes England"]}
           />
         );
         expect(wrap.find("[data-test='save-submitted-button']").length).toEqual(0);
@@ -304,6 +315,7 @@ describe("<FormActions>", () => {
             status="Submitted"
             type="ac"
             getRole={{execute: jest.fn(()=> ({role: "Local Authority"}))}}
+            roleRequirement={["Superuser", "Homes England"]}
           />
         );
         expect(wrap.find("[data-test='save-submitted-button']").length).toEqual(0);
@@ -325,6 +337,7 @@ describe("<FormActions>", () => {
           status="Draft"
           type="ac"
           getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+          roleRequirement={["Superuser", "Homes England"]}
         />
       );
 
@@ -352,6 +365,7 @@ describe("<FormActions>", () => {
           status="Draft"
           type="ac"
           getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+          roleRequirement={["Superuser", "Homes England"]}
         />)
       });
 
@@ -368,6 +382,7 @@ describe("<FormActions>", () => {
             status="Draft"
             type="ac"
             getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+            roleRequirement={["Superuser", "Homes England"]}
           />
         );
 
@@ -395,6 +410,7 @@ describe("<FormActions>", () => {
             status="Draft"
             type="ac"
             getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+            roleRequirement={["Superuser", "Homes England"]}
           />
         );
 
@@ -435,6 +451,7 @@ describe("<FormActions>", () => {
           status="Draft"
           type="ac"
           getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+          roleRequirement={["Superuser", "Homes England"]}
         />)
 
         let input = wrap.find("[type='text'] input").first();
@@ -467,7 +484,8 @@ describe("<FormActions>", () => {
                 status="Draft"
                 type="ac"
                 getRole={getRoleUseCaseSpy}
-                />
+                roleRequirement={["Superuser", "Homes England"]}
+              />
             );
           })
           it("calls the get role use case", () => {
@@ -494,7 +512,8 @@ describe("<FormActions>", () => {
                 match={{params: {projectId: 1}}}
                 status="Updating"
                 getRole={getRoleUseCaseSpy}
-                />
+                roleRequirement={["Superuser", "Homes England"]}
+              />
             );
 
             wrapper.update();
@@ -706,6 +725,7 @@ describe("<FormActions>", () => {
         status="Draft"
         type="ac"
         getRole={{execute: jest.fn(() => ({role: "Homes England"}))}}
+        roleRequirement={["Superuser", "Homes England"]}
       />);
 
       let input = wrap.find("[type='text'] input").first();
@@ -733,6 +753,7 @@ describe("<FormActions>", () => {
         status="Draft"
         type="ac"
         getRole={{execute: jest.fn(() => ({role: "Homes England"}))}}
+        roleRequirement={["Superuser", "Homes England"]}
       />);
 
       await wrap.update();
@@ -767,6 +788,7 @@ describe("<FormActions>", () => {
             status="New"
             type="ac"
             getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+            roleRequirement={["Superuser", "Homes England"]}
           />
         );
 
@@ -793,6 +815,7 @@ describe("<FormActions>", () => {
             match={{params: {projectId: 1, returnId: 3}}}
             status="Draft"
             getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+            roleRequirement={["Superuser", "Homes England"]}
           />
         );
 
@@ -816,6 +839,7 @@ describe("<FormActions>", () => {
             match={{params: {projectId: 1, returnId: 3}}}
             status="Draft"
             getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+            roleRequirement={["Superuser", "Homes England"]}
           />
         );
         let input = wrapper.find('input[type="text"]');
@@ -841,6 +865,7 @@ describe("<FormActions>", () => {
           match={{params: {projectId: 1, returnId: 3}}}
           status="Draft"
           getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+          roleRequirement={["Superuser", "Homes England"]}
         />
       );
 
@@ -871,6 +896,7 @@ describe("<FormActions>", () => {
           match={{params: {projectId: 1, returnId: 3}}}
           status="Draft"
           getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+          roleRequirement={["Superuser", "Homes England"]}
         />
       );
 
@@ -901,6 +927,7 @@ describe("<FormActions>", () => {
             status="Draft"
             getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
             history={[]}
+            roleRequirement={["Superuser", "Homes England"]}
           />);
 
         await save(wrap);
@@ -927,6 +954,7 @@ describe("<FormActions>", () => {
             status="Draft"
             getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
             history={[]}
+            roleRequirement={["Superuser", "Homes England"]}
           />);
 
         let input = wrap.find("[type='text'] input").first();
@@ -953,6 +981,7 @@ describe("<FormActions>", () => {
           status="Draft"
           getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
           history={[]}
+          roleRequirement={["Superuser", "Homes England"]}
         />);
 
       let input = wrap.find("input[type='text']").first();
@@ -980,6 +1009,7 @@ describe("<FormActions>", () => {
               submit={submitSpy}
               update={updateSpy}
               getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+              roleRequirement={["Superuser", "Homes England"]}
             />);
       await wait();
 
@@ -1005,6 +1035,7 @@ describe("<FormActions>", () => {
           status="Draft"
           type="ac"
           getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+          roleRequirement={["Superuser", "Homes England"]}
         />
       );
 
@@ -1030,6 +1061,7 @@ describe("<FormActions>", () => {
           status="Draft"
           type="ac"
           getRole={{execute: jest.fn(()=> ({role: "Homes England"}))}}
+          roleRequirement={["Superuser", "Homes England"]}
         />
       );
 

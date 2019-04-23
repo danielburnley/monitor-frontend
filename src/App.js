@@ -164,6 +164,7 @@ const renderReturnPage = props => (
         getRole={getRole}
         status={status}
         formType="return"
+        roleRequirement={["Superuser", "Homes England"]}
       />
     </div>
     }
@@ -196,6 +197,7 @@ const renderClaimPage = props => (
         getRole={getRole}
         status={status}
         formType="claim"
+        roleRequirement={["Local Authority"]}
       />
     </div>
     }
