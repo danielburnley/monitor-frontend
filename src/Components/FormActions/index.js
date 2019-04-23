@@ -195,7 +195,7 @@ export default class FormActions extends React.Component {
   }
 
   roleMatchesRequirement = () =>
-    this.props.roleRequirement.indexOf(this.state.userRole) !== -1
+    this.props.submissionRoleRequirement.indexOf(this.state.userRole) !== -1
 
   renderSubmitButton = () => {
     if (!this.roleMatchesRequirement()) {
