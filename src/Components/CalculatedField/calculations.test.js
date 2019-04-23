@@ -518,6 +518,12 @@ describe("validateCumulativeArrayPropertyIsLessThan()", () => {
       validateCumulativeArrayPropertyIsLessThan(formData, ["main"], 20);
       expect(formData).toEqual([{ _valid: true, main: "13" }]);
     });
+
+    it("Example 3", () => {
+      let formData = [{ main: "10" }, { main: "20"}];
+      validateCumulativeArrayPropertyIsLessThan(formData, ["main"], 30);
+      expect(formData).toEqual([{ _valid: true, main: "10" }, { _valid: true, main: "20" }]);
+    });
   });
 
   describe("Invalid", () => {

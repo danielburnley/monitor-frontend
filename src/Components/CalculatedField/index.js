@@ -126,7 +126,7 @@ export function validateCumulativeArrayPropertyIsLessThan(array, path, value) {
   let grandTotal = array
   .reduce((total, object) => parseMoney(get(object, ...path)) + total, 0)
 
-  let validity = value > grandTotal
+  let validity = value >= grandTotal
   array.forEach(object => {
     setCreate(
       object,
