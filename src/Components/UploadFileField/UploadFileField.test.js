@@ -155,14 +155,6 @@ describe("FileUpload", () => {
           global.URL.createObjectURL = jest.fn(() => "mynewurl");
           let fileUpload = fileUploadField([file1], true, onChangeSpy, true)
 
-          it("Create a url for blob made from the data-uri", () => {
-            expect(global.URL.createObjectURL).toHaveBeenCalled()
-          });
-
-          it("creates a hyperlink from this created link", () => {
-            expect(fileUpload.find("[data-test='file_0']").props().href).toEqual("mynewurl")
-          });
-
           it("Display the file names", () => {
             expect(fileUpload.find("[data-test='file_0']").text()).toEqual("file one")
           });
@@ -171,14 +163,6 @@ describe("FileUpload", () => {
         describe("Example 2", () => {
           global.URL.createObjectURL = jest.fn(() => "anotherurl");
           let fileUpload = fileUploadField([file2], true, onChangeSpy, true)
-
-          it("Create a url for blob made from the data-uri", () => {
-            expect(global.URL.createObjectURL).toHaveBeenCalled()
-          });
-
-          it("creates a hyperlink from this created link", () => {
-            expect(fileUpload.find("[data-test='file_0']").props().href).toEqual("anotherurl")
-          });
 
           it("Display the file names", () => {
             expect(fileUpload.find("[data-test='file_0']").text()).toEqual("file two")
@@ -269,5 +253,24 @@ describe("FileUpload", () => {
       )
       expect(fileUpload.find("[data-test='remove-file_0']").length).toEqual(0)
     });
-  })
+  });
+});
+
+describe("Downloading (via js-file-download)", () => {
+  it("IE", () => {
+    window.navigator.msSaveBlob = jest.fn();
+    let fileUpload = fileUploadField([file1], true, () => {}, true);
+    fileUpload.find("[data-test='file_0']").simulate("click");
+    expect(window.navigator.msSaveBlob).toHaveBeenCalledWith(expect.anything(), 'file one');
+    window.navigator.msSaveBlob = undefined;
+  });
+
+  it("Standard", () => {
+    window.URL.createObjectURL = jest.fn();
+    window.URL.revokeObjectURL = jest.fn();
+    let fileUpload = fileUploadField([file1], true, () => {}, true);
+    fileUpload.find("[data-test='file_0']").simulate("click");
+    expect(window.URL.createObjectURL).toHaveBeenCalled();
+    expect(window.URL.revokeObjectURL).toHaveBeenCalled();
+  });
 });
