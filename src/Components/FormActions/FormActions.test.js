@@ -448,66 +448,252 @@ describe("<FormActions>", () => {
     });
 
     describe("Only showing submit button to certain users", () => {
-      describe("When role is Local Authority", () => {
-        let getRoleUseCaseSpy, documentGatewayDummy, wrapper
-        beforeEach(()=> {
-           getRoleUseCaseSpy = {execute: jest.fn(()=> ({role: "Local Authority"}))}
-           documentGatewayDummy = jest.fn();
-           wrapper = shallow(
-            <FormActions
-              formType="return"
-              documentGateway={documentGatewayDummy}
-              data={initialData}
-              schema={formSchema}
-              validate = {validateSpyValid}
-              update={updateSpy}
-              submit={submitSpy}
-              match={{params: {projectId: 1, returnId: 3}}}
-              status="Draft"
-              type="ac"
-              getRole={getRoleUseCaseSpy}
-            />
-          );
-        })
-        it("calls the get role use case", () => {
-          wrapper.update()
-          expect(getRoleUseCaseSpy.execute).toBeCalled()
-        })
-        it("Hides the submit button", () => {
-          wrapper.update();
+      describe("As a local authority", () => {
+        describe("When the role requirement is unspecified", () => {
+          let getRoleUseCaseSpy, documentGatewayDummy, wrapper
+          beforeEach(()=> {
+            getRoleUseCaseSpy = {execute: jest.fn(()=> ({role: "Local Authority"}))}
+            documentGatewayDummy = jest.fn();
+            wrapper = shallow(
+              <FormActions
+                formType="return"
+                documentGateway={documentGatewayDummy}
+                data={initialData}
+                schema={formSchema}
+                validate = {validateSpyValid}
+                update={updateSpy}
+                submit={submitSpy}
+                match={{params: {projectId: 1, returnId: 3}}}
+                status="Draft"
+                type="ac"
+                getRole={getRoleUseCaseSpy}
+                />
+            );
+          })
+          it("calls the get role use case", () => {
+            wrapper.update()
+            expect(getRoleUseCaseSpy.execute).toBeCalled()
+          })
+          it("Hides the submit button", () => {
+            wrapper.update();
 
-          expect(wrapper.find('[data-test="disabled-submit-button"]').length).toEqual(0)
-          expect(wrapper.find('[data-test="submit-button"]').length).toEqual(0)
+            expect(wrapper.find('[data-test="disabled-submit-button"]').length).toEqual(0)
+            expect(wrapper.find('[data-test="submit-button"]').length).toEqual(0)
 
-          expect(wrapper.find('[data-test="disabled-save-button"]').length).toEqual(0)
-          expect(wrapper.find('[data-test="save-button"]').length).toEqual(1)
+            expect(wrapper.find('[data-test="disabled-save-button"]').length).toEqual(0)
+            expect(wrapper.find('[data-test="save-button"]').length).toEqual(1)
+          });
+
+          it("Hides the disabled submit button", () => {
+            wrapper = shallow(
+              <FormActions
+                formType="return"
+                documentGateway={documentGatewayDummy}
+                data={initialData}
+                schema={formSchema}
+                match={{params: {projectId: 1}}}
+                status="Updating"
+                getRole={getRoleUseCaseSpy}
+                />
+            );
+
+            wrapper.update();
+
+            expect(wrapper.find('[data-test="disabled-submit-button"]').length).toEqual(0)
+            expect(wrapper.find('[data-test="submit-button"]').length).toEqual(0)
+
+            expect(wrapper.find('[data-test="disabled-save-button"]').length).toEqual(1)
+            expect(wrapper.find('[data-test="save-button"]').length).toEqual(0)
+          });
         });
 
-        it("Hides the disabled submit button", () => {
-          wrapper = shallow(
-            <FormActions
-              formType="return"
-              documentGateway={documentGatewayDummy}
-              data={initialData}
-              schema={formSchema}
-              match={{params: {projectId: 1}}}
-              status="Updating"
-              getRole={getRoleUseCaseSpy}
-            />
-          );
+        describe("When the role requirement is Local Authority", () => {
+          let getRoleUseCaseSpy, documentGatewayDummy, wrapper
+          beforeEach(()=> {
+            getRoleUseCaseSpy = {execute: jest.fn(()=> ({role: "Local Authority"}))}
+            documentGatewayDummy = jest.fn();
+            wrapper = shallow(
+              <FormActions
+                formType="return"
+                documentGateway={documentGatewayDummy}
+                data={initialData}
+                schema={formSchema}
+                validate = {validateSpyValid}
+                update={updateSpy}
+                submit={submitSpy}
+                match={{params: {projectId: 1, returnId: 3}}}
+                status="Draft"
+                type="ac"
+                getRole={getRoleUseCaseSpy}
+                roleRequirement={["Local Authority"]}
+              />
+            );
+          })
+          it("calls the get role use case", () => {
+            wrapper.update()
+            expect(getRoleUseCaseSpy.execute).toBeCalled()
+          });
+          it("Shows the submit button", () => {
+            wrapper.update();
 
-          wrapper.update();
+            expect(wrapper.find('[data-test="disabled-submit-button"]').length).toEqual(0)
+            expect(wrapper.find('[data-test="submit-button"]').length).toEqual(1)
 
-          expect(wrapper.find('[data-test="disabled-submit-button"]').length).toEqual(0)
-          expect(wrapper.find('[data-test="submit-button"]').length).toEqual(0)
+            expect(wrapper.find('[data-test="disabled-save-button"]').length).toEqual(0)
+            expect(wrapper.find('[data-test="save-button"]').length).toEqual(1)
+          });
 
-          expect(wrapper.find('[data-test="disabled-save-button"]').length).toEqual(1)
-          expect(wrapper.find('[data-test="save-button"]').length).toEqual(0)
+          it("Shows the disabled submit button", () => {
+            wrapper = shallow(
+              <FormActions
+                formType="return"
+                documentGateway={documentGatewayDummy}
+                data={initialData}
+                schema={formSchema}
+                match={{params: {projectId: 1}}}
+                status="Updating"
+                getRole={getRoleUseCaseSpy}
+                roleRequirement={["Local Authority"]}
+                />
+            );
+
+            wrapper.update();
+
+            expect(wrapper.find('[data-test="disabled-submit-button"]').length).toEqual(1)
+            expect(wrapper.find('[data-test="submit-button"]').length).toEqual(0)
+
+            expect(wrapper.find('[data-test="disabled-save-button"]').length).toEqual(1)
+            expect(wrapper.find('[data-test="save-button"]').length).toEqual(0)
+          });
         });
-      })
+      });
+
+      describe("As a Superuser", () => {
+        describe("When included in the role requirement", () => {
+          let getRoleUseCaseSpy, documentGatewayDummy, wrapper
+          beforeEach(()=> {
+            getRoleUseCaseSpy = {execute: jest.fn(()=> ({role: "Superuser"}))}
+            documentGatewayDummy = jest.fn();
+            wrapper = shallow(
+              <FormActions
+                formType="return"
+                documentGateway={documentGatewayDummy}
+                data={initialData}
+                schema={formSchema}
+                validate = {validateSpyValid}
+                update={updateSpy}
+                submit={submitSpy}
+                match={{params: {projectId: 1, returnId: 3}}}
+                status="Draft"
+                type="ac"
+                getRole={getRoleUseCaseSpy}
+                roleRequirement={["Superuser", "Homes England"]}
+              />
+            );
+          })
+          it("calls the get role use case", () => {
+            wrapper.update()
+            expect(getRoleUseCaseSpy.execute).toBeCalled()
+          })
+          it("Shows the submit button", () => {
+            wrapper.update();
+
+            expect(wrapper.find('[data-test="disabled-submit-button"]').length).toEqual(0)
+            expect(wrapper.find('[data-test="submit-button"]').length).toEqual(1)
+
+            expect(wrapper.find('[data-test="disabled-save-button"]').length).toEqual(0)
+            expect(wrapper.find('[data-test="save-button"]').length).toEqual(1)
+          });
+
+          it("Shows the disabled submit button", () => {
+            wrapper = shallow(
+              <FormActions
+                formType="return"
+                documentGateway={documentGatewayDummy}
+                data={initialData}
+                schema={formSchema}
+                match={{params: {projectId: 1}}}
+                status="Updating"
+                getRole={getRoleUseCaseSpy}
+                roleRequirement={["Superuser", "Homes England"]}
+              />
+            );
+
+            wrapper.update();
+
+            expect(wrapper.find('[data-test="disabled-submit-button"]').length).toEqual(1)
+            expect(wrapper.find('[data-test="submit-button"]').length).toEqual(0)
+
+            expect(wrapper.find('[data-test="disabled-save-button"]').length).toEqual(1)
+            expect(wrapper.find('[data-test="save-button"]').length).toEqual(0)
+          });
+        });
+      });
+
+      describe("As a Homes England user", () => {
+        describe("When included in the role requirement", () => {
+          let getRoleUseCaseSpy, documentGatewayDummy, wrapper
+          beforeEach(()=> {
+            getRoleUseCaseSpy = {execute: jest.fn(()=> ({role: "Homes England"}))}
+            documentGatewayDummy = jest.fn();
+            wrapper = shallow(
+              <FormActions
+                formType="return"
+                documentGateway={documentGatewayDummy}
+                data={initialData}
+                schema={formSchema}
+                validate = {validateSpyValid}
+                update={updateSpy}
+                submit={submitSpy}
+                match={{params: {projectId: 1, returnId: 3}}}
+                status="Draft"
+                type="ac"
+                getRole={getRoleUseCaseSpy}
+                roleRequirement={["Superuser", "Homes England"]}
+              />
+            );
+          })
+          it("calls the get role use case", () => {
+            wrapper.update()
+            expect(getRoleUseCaseSpy.execute).toBeCalled()
+          })
+          it("Shows the submit button", () => {
+            wrapper.update();
+
+            expect(wrapper.find('[data-test="disabled-submit-button"]').length).toEqual(0)
+            expect(wrapper.find('[data-test="submit-button"]').length).toEqual(1)
+
+            expect(wrapper.find('[data-test="disabled-save-button"]').length).toEqual(0)
+            expect(wrapper.find('[data-test="save-button"]').length).toEqual(1)
+          });
+
+          it("Shows the disabled submit button", () => {
+            wrapper = shallow(
+              <FormActions
+                formType="return"
+                documentGateway={documentGatewayDummy}
+                data={initialData}
+                schema={formSchema}
+                match={{params: {projectId: 1}}}
+                status="Updating"
+                getRole={getRoleUseCaseSpy}
+                roleRequirement={["Superuser", "Homes England"]}
+              />
+            );
+
+            wrapper.update();
+
+            expect(wrapper.find('[data-test="disabled-submit-button"]').length).toEqual(1)
+            expect(wrapper.find('[data-test="submit-button"]').length).toEqual(0)
+
+            expect(wrapper.find('[data-test="disabled-save-button"]').length).toEqual(1)
+            expect(wrapper.find('[data-test="save-button"]').length).toEqual(0)
+          });
+        });
+      });
     });
 
-    it('it disables the save and submit buttons until it finishes submitting', async () => {
+    it('disables the save and submit buttons until it finishes submitting', async () => {
       let unresolvingUpdateStub = {execute: jest.fn(() => (async (presenter, request) => {await new Promise(resolve => setTimeout(resolve, 163456834159265358));}))};
       let wrap = mount(<FormActions
         formType="return"
@@ -519,7 +705,7 @@ describe("<FormActions>", () => {
         match={{params: {projectId: 1, returnId: 3}}}
         status="Draft"
         type="ac"
-        getRole={{execute: jest.fn(() => "Homes England")}}
+        getRole={{execute: jest.fn(() => ({role: "Homes England"}))}}
       />);
 
       let input = wrap.find("[type='text'] input").first();
@@ -546,9 +732,10 @@ describe("<FormActions>", () => {
         match={{params: {projectId: 1, returnId: 3}}}
         status="Draft"
         type="ac"
-        getRole={{execute: jest.fn(() => "Homes England")}}
+        getRole={{execute: jest.fn(() => ({role: "Homes England"}))}}
       />);
 
+      await wrap.update();
       await submit(wrap);
       await wait();
       await wrap.update();
