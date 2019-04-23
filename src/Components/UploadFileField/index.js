@@ -1,4 +1,5 @@
 import React from 'react';
+import fileDownload from 'js-file-download';
 import ie from 'ie-version';
 
 function dataURItoBlob(dataURI) {
@@ -17,7 +18,7 @@ function dataURItoBlob(dataURI) {
       content[i] = byteString.charCodeAt(i)
   }
 
-  return new Blob([new Uint8Array(content)], {type: fileType});
+  return new Uint8Array(content);
 }
 
 function unlinkNameFromDataURL(dataURL) {
@@ -103,10 +104,19 @@ export default class UploadFileField extends React.Component {
   }
 
   renderFileDownloadLink = (file, index) => {
-    let fileInfo = unlinkNameFromDataURL(file)
-    let link = URL.createObjectURL(dataURItoBlob(fileInfo.dataURL));
+    let fileInfo = unlinkNameFromDataURL(file);
+    let dataBlob = dataURItoBlob(fileInfo.dataURL);
+    let name = fileInfo.name;
     return <div>
-    <a data-test={`file_${index}`} href={link} target="_blank">{fileInfo.name}</a>
+    <a
+      data-test={`file_${index}`}
+      target="_blank"
+      onClick={() => {
+        fileDownload(dataBlob, name);
+      }}
+    >
+      {fileInfo.name}
+    </a>
     </div>
   }
 
