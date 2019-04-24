@@ -104,7 +104,7 @@ export default class GenerateUISchema {
     if (item.downloadURI) {
       schema["ui:widget"] = "downloadable"
     }
-    
+
     if (item.extendedText) {
       schema["ui:widget"] = "textarea"
     }
@@ -115,6 +115,10 @@ export default class GenerateUISchema {
 
     if (item.percentage) {
       schema["ui:widget"] = "percentage"
+    }
+
+    if (item.enumCheckbox) {
+      schema["ui:widget"] = "enumCheckbox";
     }
 
     if (item.hidden) {

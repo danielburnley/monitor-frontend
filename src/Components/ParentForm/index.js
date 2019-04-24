@@ -17,6 +17,7 @@ import NumberedArrayField from "../NumberedArrayField";
 import QuarterlyBreakdown from "../QuarterlyBreakdown";
 import CurrencyWidget from "../CurrencyWidget";
 import PercentageWidget from "../PercentageWidget";
+import EnumCheckboxWidget from "../EnumCheckboxWidget";
 import BritishDate from "../BritishDate";
 import WorkflowViewer from "../WorkflowViewer";
 import DownloadPseudoWidget from "../DownloadPseudoWidget";
@@ -302,6 +303,7 @@ export default class ParentForm extends React.Component {
     const widgets = {
       britishDate: BritishDate,
       currency: CurrencyWidget,
+      enumCheckbox: EnumCheckboxWidget,
       percentage: PercentageWidget,
       pickInfrastructure: PickInfrastructureWidget,
       downloadable: DownloadPseudoWidget

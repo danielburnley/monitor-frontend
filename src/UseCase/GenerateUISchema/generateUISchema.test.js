@@ -2125,4 +2125,24 @@ describe("GenerateUISchema", () => {
       });
     });
   });
+
+  describe("Enum checkbox", () => {
+    it("Marks the field as an enumCheckbox", () => {
+      let schema = {
+        type: "object",
+        properties: {
+          a: {
+            type: "object",
+            properties: {
+              b: { type: "string", enumCheckbox: true }
+            }
+          }
+        }
+      };
+      let response = useCase.execute(schema);
+      expect(response).toEqual({
+        a: { b: { "ui:widget": "enumCheckbox" } }
+      });
+    });
+  });
 });
