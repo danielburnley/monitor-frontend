@@ -194,8 +194,11 @@ export default class FormActions extends React.Component {
     }
   }
 
+  roleMatchesRequirement = () =>
+    this.props.submissionRoleRequirement.indexOf(this.state.userRole) !== -1
+
   renderSubmitButton = () => {
-    if (this.state.userRole === "Local Authority") {
+    if (!this.roleMatchesRequirement()) {
       return null;
     }
 
@@ -208,7 +211,7 @@ export default class FormActions extends React.Component {
   };
 
   renderDisabledSubmitButton = () => {
-    if (this.state.userRole === "Local Authority") {
+    if (!this.roleMatchesRequirement()) {
       return null;
     }
 
@@ -258,7 +261,7 @@ export default class FormActions extends React.Component {
     </button>
 
   renderActions = () => {
-    if (this.state.submitted && this.state.userRole === "Homes England") {
+    if (this.state.submitted && this.roleMatchesRequirement()) {
       if (this.state.status === 'Saving') {
         return <div className="col-md-offset-3 col-md-9 return-actions">
           {this.renderDisabledSaveSubmittedButton()}
