@@ -97,6 +97,7 @@ export default class PeriodsField extends React.Component {
     let newPeriod = { period: "" };
     let updatedArray = this.state.formData;
     updatedArray.push(newPeriod);
+    this.props.onChange(updatedArray);
 
     this.setState({ formData: updatedArray });
   }
@@ -104,6 +105,7 @@ export default class PeriodsField extends React.Component {
   removeEvent(index) {
     let updatedArray = this.state.formData;
     updatedArray.splice(index, 1);
+    this.props.onChange(updatedArray);
 
     this.setState({ formData: updatedArray });
   }

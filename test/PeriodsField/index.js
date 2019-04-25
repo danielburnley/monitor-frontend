@@ -69,7 +69,7 @@ export default class Periods {
     return this.page.find('[data-test="remove-button-0"]').length;
   }
 
-  pressRemove() {
-    this.page.find('[data-test="remove-button"]').simulate('click');
+  pressRemove(index) {
+    this.page.find(`[data-test="remove-button-${index}"]`).simulate('click');
   }
 }

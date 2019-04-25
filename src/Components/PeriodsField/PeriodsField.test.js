@@ -73,15 +73,6 @@ describe("Period Financials", () => {
         expect(periods.inputFieldCount("age")).toEqual(2);
       });
 
-      it("Calls the onChange method passed in with the form data", () => {
-        expect(periods.changeInputField(0, "age", "45"));
-
-        expect(periods.onChangeSpy).toHaveBeenCalledWith([
-          { age: "45", period: "Fluffy" },
-          { age: "5", period: "sparkles" }
-        ]);
-      });
-
       it("Displays an add button", () => {
         expect(periods.addButton()).toEqual(1);
       });
@@ -89,6 +80,35 @@ describe("Period Financials", () => {
       it("Pressing add increases input fields", () => {
         periods.pressAdd();
         expect(periods.inputFieldCount("age")).toEqual(3);
+      });
+
+      describe("Calls onChange", () => {
+        it("when input values are changed", () => {
+          expect(periods.changeInputField(0, "age", "45"));
+
+          expect(periods.onChangeSpy).toHaveBeenCalledWith([
+            { age: "45", period: "Fluffy" },
+            { age: "5", period: "sparkles" }
+          ]);
+        });
+
+        it("when items are added", () => {
+          periods.pressAdd();
+
+          expect(periods.onChangeSpy).toHaveBeenCalledWith([
+            { age: "12", period: "Fluffy" },
+            { age: "5", period: "sparkles" },
+            { period: "" }
+          ]);
+        });
+
+        it("when items are removed", () => {
+          periods.pressRemove(1);
+
+          expect(periods.onChangeSpy).toHaveBeenCalledWith([
+            { age: "12", period: "Fluffy" }
+          ]);
+        });
       });
 
       it("Displays a remove button", () => {
@@ -172,4 +192,3 @@ describe("Period Financials", () => {
       });
     });
   });
-
