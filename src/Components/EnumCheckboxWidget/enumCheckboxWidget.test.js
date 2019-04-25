@@ -104,25 +104,26 @@ describe("<EnumCheckboxWidget>", () => {
   });
 
   describe("When attempting to change the value", () => {
-    it("Example 1", () => {
-      let onChangeSpy = jest.fn();
+    describe("With a specified value", () => {
+      it("Example 1", () => {
+        let onChangeSpy = jest.fn();
 
-      let wrap = mount(
-        <EnumCheckboxWidget
-          schema={{
-            enum: ["Yes", "No"]
-          }}
-          value={"Yes"}
-          onChange={onChangeSpy}
-        />
-      );
+        let wrap = mount(
+          <EnumCheckboxWidget
+            schema={{
+              enum: ["Yes", "No"]
+            }}
+            value={"Yes"}
+            onChange={onChangeSpy}
+            />
+        );
 
-      wrap.find("[data-test='checkbox']").simulate("change");
+        wrap.find("[data-test='checkbox']").simulate("change");
 
-      expect(onChangeSpy).toHaveBeenCalledWith("No");
-    });
+        expect(onChangeSpy).toHaveBeenCalledWith("No");
+      });
 
-    it("Example 2", () => {
+      it("Example 2", () => {
       let onChangeSpy = jest.fn();
 
       let wrap = mount(
@@ -138,6 +139,43 @@ describe("<EnumCheckboxWidget>", () => {
       wrap.find("[data-test='checkbox']").simulate("change");
 
       expect(onChangeSpy).toHaveBeenCalledWith("Oui");
+    });
+    });
+
+    describe("With an undefined value", () => {
+      it("Example 1", () => {
+        let onChangeSpy = jest.fn();
+
+        let wrap = mount(
+          <EnumCheckboxWidget
+            schema={{
+              enum: ["Yes", "No"]
+            }}
+            onChange={onChangeSpy}
+            />
+        );
+
+        wrap.find("[data-test='checkbox']").simulate("change");
+
+        expect(onChangeSpy).toHaveBeenCalledWith("Yes");
+      });
+
+      it("Example 2", () => {
+        let onChangeSpy = jest.fn();
+
+        let wrap = mount(
+          <EnumCheckboxWidget
+            schema={{
+              enum: ["Oui", "Non"]
+            }}
+            onChange={onChangeSpy}
+          />
+        );
+
+        wrap.find("[data-test='checkbox']").simulate("change");
+
+        expect(onChangeSpy).toHaveBeenCalledWith("Oui");
+      });
     });
   });
 });
