@@ -86,6 +86,17 @@ describe("<BritishDate>", () => {
   });
 
   describe("Triggers onChange", () => {
+    describe("With empty inputs", () => {
+      it("Calls onchange with an empty string", async () => {
+        let wrapper = mount(<BritishDate value="0000-00-01" onChange={onChangeSpy}/>);
+
+        wrapper.find("input").at(0).simulate("change", {target: {value: ""}});
+        await wrapper.update();
+
+        expect(onChangeSpy).toHaveBeenCalledWith("");
+      });
+    });
+
     describe("For year", () => {
       it("Simple", async () => {
         let wrapper = mount(<BritishDate value="2007-06-29" onChange={onChangeSpy}/>);
