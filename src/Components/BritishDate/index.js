@@ -95,7 +95,7 @@ export default class BritishDate extends React.Component {
       year: this.formatYear(dateChangeObject.year, parsedDate.year)
     });
 
-    if(newDate == "0000-00-00") {
+    if(newDate === "0000-00-00") {
       this.props.onChange("");
     } else {
       this.props.onChange(newDate);
