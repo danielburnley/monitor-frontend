@@ -1,8 +1,8 @@
-import React from 'react';
+import React from "react";
 
 export default class EnumCheckboxWidget extends React.Component {
   valueMeansChecked = () =>
-    this.props.schema.enum.indexOf(this.props.value) === 0
+    this.props.schema.enum.indexOf(this.props.value) === 0;
 
   invertValue = () => {
     if (this.props.schema.enum[0] === this.props.value) {
@@ -10,15 +10,24 @@ export default class EnumCheckboxWidget extends React.Component {
     } else {
       return this.props.schema.enum[0];
     }
-  }
+  };
 
   render() {
-    return <input
-      data-test="checkbox"
-      type="checkbox"
-      checked={this.valueMeansChecked()}
-      onChange={() => {this.props.onChange(this.invertValue())}}
-      disabled={this.props.disabled}
-    />;
+    return (
+      <div>
+        <label>
+          <input
+            data-test="checkbox"
+            type="checkbox"
+            checked={this.valueMeansChecked()}
+            onChange={() => {
+              this.props.onChange(this.invertValue());
+            }}
+            disabled={this.props.disabled}
+          />
+          <span style={{marginLeft: "10px"}}>I confirm</span>
+        </label>
+      </div>
+    );
   }
 }
