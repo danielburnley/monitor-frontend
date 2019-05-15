@@ -1,33 +1,45 @@
-# Monitoring Frontend
+# Homes England Monitor - Frontend
 
-The Monitoring Frontend runs alongside the [Monitoring API][link_api_repo] to visualise the creation, updating and fetching of Projects and Returns.
+The Monitoring Frontend runs alongside the [Monitoring API][link_api_repo] to 
+visualise the status of HIF (and future) contracts for both Local Authorities 
+and Homes England.
 
-The Monitoring Frontend is written in [React][link_react] and runs on [Node][link_node].
+## Technical documentation
 
-The Monitoring project's goal is to visualise the status of HIF (and future) contracts for both Local Authorities and Homes England
+This is a [React][link_react] application that allows the user to interact with the Monitor API. It renders schemas
+provided by the API which the user can then fill out and submit.
 
-## Json Schema Form
+More in depth technical documentation can be found in [here](docs/README.md).
 
-The Monitoring Frontend currently converts the The Monitoring API json data into a [Json Schema Form][link_json_schema] React [implemention][link_react_schema] and renders the result. This logic will soon be moved into the API so the Frontend's only task is to render the Json Schema Form.
+### Dependencies
 
-## Testing the application
+- [Monitor API][link_api_repo] - The API which the application interacts with.
+- [React JSON Schema Form][link_react_schema] - Renders the schema provided by the API for all forms provided by the API.
+- [Create React App](https://github.com/facebook/create-react-app) - Contains the dependencies and configuration for running the React application.
 
-Once you have cloned the repository run all tests with the following command:
+### Running the application
 
-`make test`
+```
+make serve
+```
 
-## Running the application
+Running `make serve` will run the application in Docker in development mode. This will be running on port `3000` and will set up environment variables which assume you're running the Monitor API in it's default Docker set up. 
 
-Once you have cloned the repository you can run the application with the following command:
+To set this up without docker you will need to set up your 
+[environment variables](docs/README.md) accordingly and run the application 
+with `npm start`.
 
-`make serve`
+### Running the test suite
 
-The `docker-compose.yml` sets the Monitoring API in the `web:` `environment:` this is defaulted to : `REACT_APP_HIF_API_URL: 'http://localhost:4567/'`
+```
+make test
+```
 
-If you are running the API elsewhere you should update the field
+Running `make test` will run the tests inside docker using `npm test`, which will automatically run
+tests related to the currently changed files using [jest](https://jestjs.io/) in watch mode. 
+
 
 [link_api_repo]: https://github.com/homes-england/monitor-api
 [link_react]: https://reactjs.org/
-[link_node]: https://nodejs.org/en/
-[link_json_schema]: [https://mozilla-services.github.io/react-jsonschema-form/]
-[link_react_schema]: [https://github.com/mozilla-services/react-jsonschema-form/]
+[link_json_schema]: https://mozilla-services.github.io/react-jsonschema-form/
+[link_react_schema]: https://github.com/mozilla-services/react-jsonschema-form/
