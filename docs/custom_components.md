@@ -12,10 +12,12 @@ The [Monitor API documentation](https://github.com/homes-england/monitor-api) al
   - Uses `<textarea>`
 - `britishDate`
   - Uses `<BritishDate>`
+  - Used to split up the date into 3 distinct inputs (as IE does not support the `date` input type)
 - `percentage`
   - Uses `<PercentageWidget>`
-- `enumCheckbox`
+- `enumCheckbox
   - Uses `<EnumCheckboxWidget>`
+  - Used to allow checkboxes for choosing between two different enum text values (e.g. Yes/No)
 - `hidden`
   - Hides the field
 - `uploadFile`
