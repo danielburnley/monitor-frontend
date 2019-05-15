@@ -6,7 +6,7 @@ and Homes England.
 
 ## Technical documentation
 
-This is a [React][link_react] application that allows the user to interact with the Monitor API. It renders schema
+This is a [React][link_react] application that allows the user to interact with the Monitor API. It renders schemas
 provided by the API which the user can then fill out and submit.
 
 More in depth technical documentation can be found in [here](docs/README.md).
